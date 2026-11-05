@@ -85,9 +85,13 @@ class GuideDiagramRow {
 /// Ngoặc dưới nhóm trên (`fromStart..fromEnd`) → mũi tên → ngoặc trên nhóm
 /// dưới (`toStart..toEnd`). Chỉ số cột tính trong lưới ô, gồm cả hai đầu.
 class GuideDiagramLink {
-  const GuideDiagramLink(this.fromStart, this.fromEnd, [int? toStart, int? toEnd])
-    : toStart = toStart ?? fromStart,
-      toEnd = toEnd ?? fromEnd;
+  const GuideDiagramLink(
+    this.fromStart,
+    this.fromEnd, [
+    int? toStart,
+    int? toEnd,
+  ]) : toStart = toStart ?? fromStart,
+       toEnd = toEnd ?? fromEnd;
 
   final int fromStart;
   final int fromEnd;

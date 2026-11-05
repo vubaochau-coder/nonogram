@@ -194,10 +194,7 @@ abstract final class GuideDiagrams {
     GuideDiagram(
       groups: [
         [_r('4 3', '.......###....X')],
-        [
-          _r('4 3', '......x###xxxxX'),
-          _r('4 3', '.....xo###xoooX'),
-        ],
+        [_r('4 3', '......x###xxxxX'), _r('4 3', '.....xo###xoooX')],
         [_r('4 3', '.......###X...X')],
       ],
       links: [
@@ -208,10 +205,7 @@ abstract final class GuideDiagrams {
     GuideDiagram(
       groups: [
         [_r('1 1 2', '....#.X........')],
-        [
-          _r('1 1 2', 'oxox#oX........'),
-          _r('1 1 2', '...x#xX........'),
-        ],
+        [_r('1 1 2', 'oxox#oX........'), _r('1 1 2', '...x#xX........')],
         [_r('1 1 2', '...X#.X........')],
       ],
       links: [

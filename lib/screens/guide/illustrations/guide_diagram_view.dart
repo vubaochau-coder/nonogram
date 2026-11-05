@@ -158,7 +158,8 @@ class GuideDiagramPainter extends CustomPainter {
   }
 
   void _paintClue(Canvas canvas, Rect rect, int value, bool crossed) {
-    final color = crossed ? clueTextColor.withValues(alpha: 0.4) : clueTextColor;
+    final color =
+        crossed ? clueTextColor.withValues(alpha: 0.4) : clueTextColor;
     final tp = TextPainter(
       text: TextSpan(
         text: '$value',
@@ -171,10 +172,7 @@ class GuideDiagramPainter extends CustomPainter {
       ),
       textDirection: TextDirection.ltr,
     )..layout();
-    tp.paint(
-      canvas,
-      rect.center - Offset(tp.width / 2, tp.height / 2),
-    );
+    tp.paint(canvas, rect.center - Offset(tp.width / 2, tp.height / 2));
     if (crossed) {
       _paintX(canvas, rect.deflate(cellSize * 0.2), crossColor, 1.4);
     }
@@ -244,14 +242,7 @@ class GuideDiagramPainter extends CustomPainter {
 
     if (links.isEmpty) {
       final x = gridLeft + diagram.cellColumns * cellSize / 2;
-      _paintArrow(
-        canvas,
-        x,
-        top + pad,
-        top + height - pad,
-        stroke,
-        fill,
-      );
+      _paintArrow(canvas, x, top + pad, top + height - pad, stroke, fill);
       return;
     }
 
@@ -283,7 +274,8 @@ class GuideDiagramPainter extends CustomPainter {
       );
 
       final x = (toL + toR) / 2;
-      final fromX = ((fromL + fromR) / 2 - x).abs() < 1 ? x : (fromL + fromR) / 2;
+      final fromX =
+          ((fromL + fromR) / 2 - x).abs() < 1 ? x : (fromL + fromR) / 2;
       final startY = topY + bracketDepth;
       final endY = bottomY - bracketDepth;
       if (fromX != x) {
