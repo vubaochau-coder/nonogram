@@ -9,6 +9,7 @@ import 'package:nonogram/models/nonogram_interaction_mode.dart';
 import 'package:nonogram/models/nonogram_completed_progress.dart';
 import 'package:nonogram/data/nonogram_repository.dart';
 import 'package:nonogram/models/nonogram_puzzle.dart';
+import 'package:nonogram/screens/play/engine/nonogram_board_layout.dart';
 import 'package:nonogram/screens/play/engine/nonogram_engine.dart';
 import 'package:nonogram/core/list_ext.dart';
 import 'nonogram_play_event.dart';
@@ -23,22 +24,12 @@ class NonogramPlayBloc extends AppBloc<NonogramPlayEvent, NonogramPlayState> {
   bool _pendingAutoFit = false;
   Offset? _pendingViewport;
 
-  /// Vị trí khung nhìn cần áp dụng khi bàn chơi dựng xong (ván dở: vị trí đã
-  /// lưu; màn mới: vị trí tính theo kích thước bàn). Lấy một lần rồi xoá.
+  /// Vị trí lưới đã lưu của ván dở, để bàn chơi áp dụng khi dựng xong.
+  /// Lấy một lần rồi xoá; null nghĩa là dùng vị trí mở màn mặc định.
   Offset? takePendingViewport() {
     final value = _pendingViewport;
     _pendingViewport = null;
     return value;
-  }
-
-  Offset? _initialViewport(NonogramPuzzle puzzle, double cellSize) {
-    final viewport = _viewportSize;
-    if (viewport == null) return null;
-    return _engine.initialViewportOffset(
-      puzzle: puzzle,
-      cellSize: cellSize,
-      viewport: viewport,
-    );
   }
 
   final NonogramRepository _repository;
@@ -75,6 +66,7 @@ class NonogramPlayBloc extends AppBloc<NonogramPlayEvent, NonogramPlayState> {
       transformer: sequential(),
     );
     on<CellSizeChanged>(_onCellSizeChanged, transformer: sequential());
+    on<CellSizePreviewed>(_onCellSizePreviewed, transformer: sequential());
     on<FullscreenToggled>(_onFullscreenToggled, transformer: sequential());
     on<BoardReset>(_onBoardReset, transformer: sequential());
     on<HintRequested>(_onHintRequested, transformer: sequential());
@@ -170,10 +162,8 @@ class NonogramPlayBloc extends AppBloc<NonogramPlayEvent, NonogramPlayState> {
 
     final offsetX = snapshot?.viewportOffsetX ?? 0.0;
     final offsetY = snapshot?.viewportOffsetY ?? 0.0;
-    _pendingViewport =
-        snapshot != null
-            ? Offset(offsetX, offsetY)
-            : _initialViewport(puzzle, cellSize);
+    // Ván dở: vị trí đã lưu. Màn mới: null = bàn chơi tự đặt ở vị trí đầu.
+    _pendingViewport = snapshot != null ? Offset(offsetX, offsetY) : null;
     final satisfied = _engine.deriveSatisfiedLines(
       puzzle: puzzle,
       gridData: initialGrid,
@@ -360,15 +350,32 @@ class NonogramPlayBloc extends AppBloc<NonogramPlayEvent, NonogramPlayState> {
     final puzzle = state.puzzle;
     if (_pendingAutoFit && puzzle != null && !state.isLoading) {
       _pendingAutoFit = false;
-      final cellSize = _autoCellSize(puzzle);
-      _pendingViewport = _initialViewport(puzzle, cellSize);
-      emit(state.copyWith(cellSize: cellSize));
+      emit(state.copyWith(cellSize: _autoCellSize(puzzle)));
     }
   }
 
+  /// Cập nhật cỡ ô liên tục khi đang chụm/zoom, chưa lưu.
+  _onCellSizePreviewed(CellSizePreviewed event, Emitter emit) {
+    if (state.puzzle == null || state.isLoading) return;
+    _pendingAutoFit = false;
+    emit(
+      state.copyWith(
+        cellSize: event.cellSize.clamp(
+          NonogramBoardLayout.minZoomCellSize,
+          NonogramBoardLayout.maxZoomCellSize,
+        ),
+      ),
+    );
+  }
+
   _onCellSizeChanged(CellSizeChanged event, Emitter emit) {
-    final nextCellSize = event.cellSize.clamp(12.0, 80.0);
-    _preferredCellSize = nextCellSize;
+    final nextCellSize = event.cellSize.clamp(
+      NonogramBoardLayout.minZoomCellSize,
+      NonogramBoardLayout.maxZoomCellSize,
+    );
+    // Zoom chỉ áp dụng cho màn này; cỡ chọn trong cài đặt thì nhớ cho các
+    // màn sau.
+    if (!event.isZoom) _preferredCellSize = nextCellSize;
     _pendingAutoFit = false;
     final nextState = state.copyWith(cellSize: nextCellSize);
     emit(nextState);

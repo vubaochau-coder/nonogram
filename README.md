@@ -19,6 +19,24 @@ Bản web cần build kèm CanvasKit để chạy được khi không có mạng
 flutter build web --no-web-resources-cdn
 ```
 
+## Điều khiển
+
+| Thao tác | Chế độ tô (bút chì) | Chế độ bàn tay |
+|---|---|---|
+| Chạm | Tô / xoá một ô | – |
+| Nhấn giữ | Đánh dấu X | – |
+| Kéo một ngón | Tô liên tiếp | Kéo bàn |
+| Hai ngón | Kéo bàn, chụm để zoom | Kéo bàn, chụm để zoom |
+| Chuột / trackpad | Lăn để kéo, Ctrl/⌘ + lăn hoặc chụm trackpad để zoom | như bên trái |
+
+- Hai dải gợi ý luôn dính mép trái / mép trên khi kéo lưới đi, nên luôn
+  thấy gợi ý của hàng/cột đang tô.
+- Màn mới tự chọn cỡ ô vừa màn hình (tối thiểu 24px); zoom chỉ áp dụng cho
+  màn đang chơi và được lưu cùng ván dở. Thu nhỏ dưới 10px là chế độ xem
+  tổng thể (ẩn số gợi ý).
+- Ô trống trên hàng/cột đã khớp gợi ý hiện chấm tròn; X màu chàm là dấu
+  người chơi tự đánh.
+
 ## Cấu trúc
 
 ```
@@ -32,7 +50,7 @@ lib/
   models/                    Puzzle, snapshot ván dở, kết quả hoàn thành
   screens/
     dashboard/               Màn chính: chơi tiếp / thử thách tiếp theo, thống kê
-    play/                    Gameplay (bloc, engine, solver, UI)
+    play/                    Gameplay (bloc, engine, solver, bố cục bàn chơi, UI)
     history/                 Danh sách + chi tiết màn đã hoàn thành
     guide/                   Hướng dẫn cách giải
     painters/                CustomPainter cho lưới, gợi ý, đáp án

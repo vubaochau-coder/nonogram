@@ -35,23 +35,23 @@ class NonogramCellsPainter extends CustomPainter {
         Paint()
           ..color = filledColor
           ..style = PaintingStyle.fill;
+    // Ô trống trên hàng/cột đã khớp: chấm tròn nhỏ (gọn hơn dấu X, và phân
+    // biệt được với dấu X người chơi tự đánh).
     final markerPaint =
         Paint()
           ..color = markerColor
-          ..style = PaintingStyle.stroke
-          // Dấu X tự động (hàng/cột đã khớp): rõ nhưng mảnh hơn dấu tự đánh.
-          ..strokeWidth = (cellSize * 0.065).clamp(1.5, 2.6)
-          ..strokeCap = StrokeCap.round;
+          ..style = PaintingStyle.fill;
+    final dotRadius = (cellSize * 0.075).clamp(1.2, 3.2);
     final markedMarkerPaint =
         Paint()
           ..color = markedMarkerColor
           ..style = PaintingStyle.stroke
-          // Dấu X người chơi tự đánh: đậm, to theo cỡ ô.
-          ..strokeWidth = (cellSize * 0.1).clamp(2.0, 4.0)
+          // Dấu X người chơi tự đánh: nhỏ, nét mảnh vừa phải.
+          ..strokeWidth = (cellSize * 0.06).clamp(1.2, 2.2)
           ..strokeCap = StrokeCap.round;
     final markedBackgroundPaint =
         Paint()
-          ..color = markedMarkerColor.withValues(alpha: 0.10)
+          ..color = markedMarkerColor.withValues(alpha: 0.07)
           ..style = PaintingStyle.fill;
 
     for (int r = 0; r < rows; r++) {
@@ -76,7 +76,7 @@ class NonogramCellsPainter extends CustomPainter {
         } else if (cellState == NonogramCellState.marked) {
           canvas.drawRect(rect.deflate(0.5), markedBackgroundPaint);
 
-          final inset = cellSize * 0.26;
+          final inset = cellSize * 0.34;
           final left = c * cellSize + inset;
           final top = r * cellSize + inset;
           final right = (c + 1) * cellSize - inset;
@@ -93,27 +93,12 @@ class NonogramCellsPainter extends CustomPainter {
             markedMarkerPaint,
           );
         } else if (cellState == NonogramCellState.empty) {
-          // Auto-marker (X) for satisfied lines, only on empty cells
+          // Ô trống trên hàng/cột đã khớp gợi ý: vẽ chấm.
           final isSatisfiedRow = r < satisfiedRows.length && satisfiedRows[r];
           final isSatisfiedCol = c < satisfiedCols.length && satisfiedCols[c];
 
           if (isSatisfiedRow || isSatisfiedCol) {
-            final inset = cellSize * 0.32;
-            final left = c * cellSize + inset;
-            final top = r * cellSize + inset;
-            final right = (c + 1) * cellSize - inset;
-            final bottom = (r + 1) * cellSize - inset;
-
-            canvas.drawLine(
-              Offset(left, top),
-              Offset(right, bottom),
-              markerPaint,
-            );
-            canvas.drawLine(
-              Offset(right, top),
-              Offset(left, bottom),
-              markerPaint,
-            );
+            canvas.drawCircle(rect.center, dotRadius, markerPaint);
           }
         }
       }

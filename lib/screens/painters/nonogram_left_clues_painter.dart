@@ -15,6 +15,10 @@ class NonogramLeftCluesPainter extends CustomPainter {
   /// Màu tô nhóm 5 cột/hàng thứ 2, 4, 6...; null thì không tô dải.
   final Color? bandColor;
 
+  /// Độ dày mỗi ô số theo chiều vuông góc với lưới; mặc định bằng
+  /// [cellSize] (ô số vuông).
+  final double? clueDepth;
+
   NonogramLeftCluesPainter({
     required this.clues,
     required this.satisfiedRows,
@@ -25,6 +29,7 @@ class NonogramLeftCluesPainter extends CustomPainter {
     required this.satisfiedTextStyle,
     this.majorLineColor,
     this.bandColor,
+    this.clueDepth,
   });
 
   @override
@@ -80,10 +85,11 @@ class NonogramLeftCluesPainter extends CustomPainter {
           text: TextSpan(text: '$value', style: style),
           textDirection: TextDirection.ltr,
         )..layout();
-        final x = size.width - (i + 1) * cellSize;
+        final depth = clueDepth ?? cellSize;
+        final x = size.width - (i + 1) * depth;
         tp.paint(
           canvas,
-          Offset(x + (cellSize - tp.width) / 2, y + (cellSize - tp.height) / 2),
+          Offset(x + (depth - tp.width) / 2, y + (cellSize - tp.height) / 2),
         );
       }
     }
@@ -97,6 +103,7 @@ class NonogramLeftCluesPainter extends CustomPainter {
         oldDelegate.lineColor != lineColor ||
         oldDelegate.majorLineColor != majorLineColor ||
         oldDelegate.bandColor != bandColor ||
+        oldDelegate.clueDepth != clueDepth ||
         oldDelegate.backgroundColor != backgroundColor ||
         oldDelegate.textStyle != textStyle ||
         oldDelegate.satisfiedTextStyle != satisfiedTextStyle;
