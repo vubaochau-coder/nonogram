@@ -451,6 +451,30 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Home'**
   String get nonogramPlayActionDashboard;
+
+  /// No description provided for @appThemeTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Appearance'**
+  String get appThemeTitle;
+
+  /// No description provided for @appThemeSystem.
+  ///
+  /// In en, this message translates to:
+  /// **'System'**
+  String get appThemeSystem;
+
+  /// No description provided for @appThemeLight.
+  ///
+  /// In en, this message translates to:
+  /// **'Light'**
+  String get appThemeLight;
+
+  /// No description provided for @appThemeDark.
+  ///
+  /// In en, this message translates to:
+  /// **'Dark'**
+  String get appThemeDark;
 }
 
 class _AppLocalizationsDelegate

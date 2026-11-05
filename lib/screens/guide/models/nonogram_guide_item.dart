@@ -1,11 +1,13 @@
+import 'guide_diagram.dart';
+
 class NonogramGuideItem {
   const NonogramGuideItem({
     required this.title,
     required this.description,
-    required this.imagePaths,
+    required this.diagrams,
   });
 
   final String title;
   final String description;
-  final List<String> imagePaths;
+  final List<GuideDiagram> diagrams;
 }
