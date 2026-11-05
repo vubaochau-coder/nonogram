@@ -1,4 +1,5 @@
 import 'package:nonogram/core/context_ext.dart';
+import 'package:nonogram/screens/guide/illustrations/guide_diagram_view.dart';
 import 'package:nonogram/screens/guide/models/nonogram_guide_item.dart';
 import 'package:flutter/material.dart';
 
@@ -60,20 +61,10 @@ class GuideIllustrationCard extends StatelessWidget {
           ),
           const SizedBox(height: 8),
           Text(item.description),
-          ListView.separated(
-            shrinkWrap: true,
-            padding: EdgeInsets.only(top: 12),
-            itemCount: item.imagePaths.length,
-            physics: NeverScrollableScrollPhysics(),
-            separatorBuilder: (_, _) => const SizedBox(height: 12),
-            itemBuilder: (context, index) {
-              return Container(
-                alignment: Alignment.centerLeft,
-                constraints: BoxConstraints(maxHeight: 140),
-                child: Image.asset(item.imagePaths[index], fit: BoxFit.contain),
-              );
-            },
-          ),
+          for (final diagram in item.diagrams) ...[
+            const SizedBox(height: 16),
+            GuideDiagramView(diagram: diagram),
+          ],
         ],
       ),
     );

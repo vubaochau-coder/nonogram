@@ -2,6 +2,7 @@ import 'package:nonogram/core/app_theme.dart';
 import 'package:nonogram/core/context_ext.dart';
 import 'package:nonogram/screens/guide/illustrations/guide_illustration_card.dart';
 import 'package:nonogram/screens/guide/illustrations/guide_nonogram_illustration.dart';
+import 'package:nonogram/screens/guide/models/guide_diagrams.dart';
 import 'package:nonogram/screens/guide/models/nonogram_guide_item.dart';
 import 'package:nonogram/screens/painters/nonogram_illustration_painter.dart';
 import 'package:flutter/material.dart';
@@ -22,65 +23,44 @@ class NonogramGuidePage extends StatelessWidget {
           l10n.nonogramGuideMethodSuperpositionSimpleTitle,
         ),
         description: l10n.nonogramGuideMethodSuperpositionSimpleDesc,
-        imagePaths: ['assets/guide/solution_methods_p1 (1).png'],
+        diagrams: GuideDiagrams.superpositionSimple,
       ),
       NonogramGuideItem(
         title: _normalizedTitle(
           l10n.nonogramGuideMethodSuperpositionMultiTitle,
         ),
         description: l10n.nonogramGuideMethodSuperpositionMultiDesc,
-        imagePaths: ['assets/guide/solution_methods_p1.png'],
+        diagrams: GuideDiagrams.superpositionSingleLong,
       ),
       NonogramGuideItem(
         title: _normalizedTitle(l10n.nonogramGuideMethodWallPushingTitle),
         description: l10n.nonogramGuideMethodWallPushingDesc,
-        imagePaths: [
-          'assets/guide/solution_methods_p2.png',
-          'assets/guide/solution_methods_p2 (1).png',
-        ],
+        diagrams: GuideDiagrams.superpositionMulti,
       ),
       NonogramGuideItem(
         title: _normalizedTitle(l10n.nonogramGuideMethodInaccessibilityTitle),
         description: l10n.nonogramGuideMethodInaccessibilityDesc,
-        imagePaths: [
-          'assets/guide/solution_methods_p3.png',
-          'assets/guide/solution_methods_p3 (1).png',
-          'assets/guide/solution_methods_p3 (2).png',
-        ],
+        diagrams: GuideDiagrams.wallPushing,
       ),
       NonogramGuideItem(
         title: _normalizedTitle(l10n.nonogramGuideMethodNotFitTitle),
         description: l10n.nonogramGuideMethodNotFitDesc,
-        imagePaths: [
-          'assets/guide/solution_methods_p4.png',
-          'assets/guide/solution_methods_p4 (1).png',
-          'assets/guide/solution_methods_p4 (2).png',
-        ],
+        diagrams: GuideDiagrams.inaccessibility,
       ),
       NonogramGuideItem(
         title: _normalizedTitle(l10n.nonogramGuideMethodDivisionTitle),
         description: l10n.nonogramGuideMethodDivisionDesc,
-        imagePaths: [
-          'assets/guide/solution_methods_p5.png',
-          'assets/guide/solution_methods_p5 (1).png',
-          'assets/guide/solution_methods_p5 (2).png',
-        ],
+        diagrams: GuideDiagrams.notFit,
       ),
       NonogramGuideItem(
         title: _normalizedTitle(l10n.nonogramGuideMethodDoublePositioningTitle),
         description: l10n.nonogramGuideMethodDoublePositioningDesc,
-        imagePaths: [
-          'assets/guide/solution_methods_p6.png',
-          'assets/guide/solution_methods_p6 (1).png',
-        ],
+        diagrams: GuideDiagrams.division,
       ),
       NonogramGuideItem(
         title: _normalizedTitle(l10n.nonogramGuideMethodDoublePositioningTitle),
         description: l10n.nonogramGuideMethodDoublePositioningDesc,
-        imagePaths: [
-          'assets/guide/solution_methods_p7.png',
-          'assets/guide/solution_methods_p7 (1).png',
-        ],
+        diagrams: GuideDiagrams.doublePositioning,
       ),
     ];
   }
