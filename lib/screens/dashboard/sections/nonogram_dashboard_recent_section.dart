@@ -98,10 +98,7 @@ class _RecentTile extends StatelessWidget {
                   color: context.color.surfaceContainer,
                   borderRadius: BorderRadius.circular(16),
                 ),
-                child: NonogramPixelArt.fromSolution(
-                  solution: puzzle.solution,
-                  color: context.color.onSurface,
-                ),
+                child: NonogramPixelArt.picture(context, puzzle.solution),
               ),
               Padding(
                 padding: const EdgeInsets.fromLTRB(10, 2, 10, 0),

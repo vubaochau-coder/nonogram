@@ -246,9 +246,9 @@ class _HistoryListTile extends StatelessWidget {
                       child:
                           puzzle == null
                               ? null
-                              : NonogramPixelArt.fromSolution(
-                                solution: puzzle.solution,
-                                color: context.color.onSurface,
+                              : NonogramPixelArt.picture(
+                                context,
+                                puzzle.solution,
                               ),
                     ),
                     const SizedBox(width: 14),

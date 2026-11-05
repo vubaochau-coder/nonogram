@@ -39,17 +39,19 @@ class NonogramCellsPainter extends CustomPainter {
         Paint()
           ..color = markerColor
           ..style = PaintingStyle.stroke
-          ..strokeWidth = 1.4
+          // Dấu X tự động (hàng/cột đã khớp): rõ nhưng mảnh hơn dấu tự đánh.
+          ..strokeWidth = (cellSize * 0.065).clamp(1.5, 2.6)
           ..strokeCap = StrokeCap.round;
     final markedMarkerPaint =
         Paint()
           ..color = markedMarkerColor
           ..style = PaintingStyle.stroke
-          ..strokeWidth = 1.8
+          // Dấu X người chơi tự đánh: đậm, to theo cỡ ô.
+          ..strokeWidth = (cellSize * 0.1).clamp(2.0, 4.0)
           ..strokeCap = StrokeCap.round;
     final markedBackgroundPaint =
         Paint()
-          ..color = markedMarkerColor.withValues(alpha: 0.14)
+          ..color = markedMarkerColor.withValues(alpha: 0.10)
           ..style = PaintingStyle.fill;
 
     for (int r = 0; r < rows; r++) {
@@ -74,7 +76,7 @@ class NonogramCellsPainter extends CustomPainter {
         } else if (cellState == NonogramCellState.marked) {
           canvas.drawRect(rect.deflate(0.5), markedBackgroundPaint);
 
-          final inset = cellSize * 0.3;
+          final inset = cellSize * 0.26;
           final left = c * cellSize + inset;
           final top = r * cellSize + inset;
           final right = (c + 1) * cellSize - inset;
@@ -96,7 +98,7 @@ class NonogramCellsPainter extends CustomPainter {
           final isSatisfiedCol = c < satisfiedCols.length && satisfiedCols[c];
 
           if (isSatisfiedRow || isSatisfiedCol) {
-            final inset = cellSize * 0.38;
+            final inset = cellSize * 0.32;
             final left = c * cellSize + inset;
             final top = r * cellSize + inset;
             final right = (c + 1) * cellSize - inset;

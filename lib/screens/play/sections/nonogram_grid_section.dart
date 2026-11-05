@@ -92,10 +92,7 @@ class _NonogramGridSectionState extends State<NonogramGridSection> {
         final gridHeight = puzzle.rows * cellSize;
         final isDrawMode =
             state.interactionMode == NonogramInteractionMode.draw;
-        final markedMarkerColor =
-            Theme.of(context).brightness == Brightness.dark
-                ? const Color(0xFFF2B84B)
-                : const Color(0xFFB06A00);
+        final markedMarkerColor = context.color.primary;
 
         return IgnorePointer(
           // Ignore hits in pan mode or when loading
@@ -166,7 +163,7 @@ class _NonogramGridSectionState extends State<NonogramGridSection> {
                         filledColor: context.color.onSurface,
                         markedMarkerColor: markedMarkerColor,
                         markerColor: context.color.onSurfaceVariant.withValues(
-                          alpha: 0.55,
+                          alpha: 0.8,
                         ),
                       ),
                     ),

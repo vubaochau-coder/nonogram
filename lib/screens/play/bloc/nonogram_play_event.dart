@@ -139,3 +139,11 @@ class SolveCheckRequested extends NonogramPlayEvent {
 class PuzzleSolved extends NonogramPlayEvent {
   const PuzzleSolved();
 }
+
+/// Kích thước vùng hiển thị bàn chơi, để tự chọn cỡ ô cho màn mới.
+class BoardViewportMeasured extends NonogramPlayEvent {
+  final double width;
+  final double height;
+
+  const BoardViewportMeasured({required this.width, required this.height});
+}

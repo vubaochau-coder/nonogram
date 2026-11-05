@@ -8,6 +8,92 @@ import 'package:nonogram/models/nonogram_board_snapshot.dart';
 final class NonogramEngine {
   const NonogramEngine();
 
+  /// Cỡ ô nhỏ nhất khi tự co cho vừa màn hình; nhỏ hơn thì khó chạm trúng
+  /// trên điện thoại, nên màn lớn sẽ vượt khung và người chơi kéo để xem.
+  static const double minAutoCellSize = 24;
+
+  /// Chiều cao hàng nút công cụ nổi phía trên bàn chơi.
+  static const double toolbarOverlayHeight = 56;
+
+  /// Padding quanh bàn chơi. Phía trên chừa thêm chỗ cho hàng nút công cụ để
+  /// nút không che hàng gợi ý.
+  static const double boardSidePadding = 16;
+  static const double boardTopPadding = toolbarOverlayHeight + 8;
+  static const double boardHorizontalChrome = boardSidePadding * 2;
+  static const double boardVerticalChrome = boardTopPadding + boardSidePadding;
+
+  /// Vị trí khung nhìn ban đầu (translation) cho màn mới. Nếu bàn rộng/cao
+  /// hơn khung nhìn, dịch sao cho chỉ giữ lại một phần vùng gợi ý (các cột/
+  /// hàng sát lưới) và dành phần còn lại cho lưới, thay vì mở ra toàn gợi ý.
+  Offset initialViewportOffset({
+    required NonogramPuzzle puzzle,
+    required double cellSize,
+    required Size viewport,
+  }) {
+    int maxCount(List<List<int>> clues) =>
+        clues.fold(0, (m, c) => c.length > m ? c.length : m);
+    double axis({
+      required double clueExtent,
+      required double gridExtent,
+      required double view,
+      required double padStart,
+      required double keepFraction,
+      double coveredStart = 0,
+    }) {
+      final board = padStart + boardSidePadding + clueExtent + gridExtent;
+      if (board <= view) return 0;
+      // Phần đầu khung nhìn bị che (hàng nút công cụ) không tính là "thấy".
+      final room = view * keepFraction - coveredStart;
+      final keep = clueExtent < room ? clueExtent : (room < 0 ? 0.0 : room);
+      // Sau khi dịch, mép lưới nằm ở vị trí coveredStart + keep.
+      final shift = padStart + clueExtent - keep - coveredStart;
+      final maxShift = board - view;
+      if (shift <= 0) return 0;
+      return -(shift < maxShift ? shift : maxShift);
+    }
+
+    return Offset(
+      axis(
+        clueExtent: maxCount(puzzle.leftClues) * cellSize,
+        gridExtent: puzzle.cols * cellSize,
+        view: viewport.width,
+        padStart: boardSidePadding,
+        keepFraction: 0.4,
+      ),
+      axis(
+        clueExtent: maxCount(puzzle.topClues) * cellSize,
+        gridExtent: puzzle.rows * cellSize,
+        view: viewport.height,
+        padStart: boardTopPadding,
+        keepFraction: 0.4,
+        coveredStart: toolbarOverlayHeight,
+      ),
+    );
+  }
+
+  /// Cỡ ô để cả bàn (gợi ý + lưới) vừa [viewport], không lớn hơn
+  /// [preferred] (cỡ người chơi chọn) và không nhỏ hơn [minAutoCellSize]
+  /// (trừ khi chính người chơi chọn nhỏ hơn).
+  double fitCellSize({
+    required NonogramPuzzle puzzle,
+    required Size viewport,
+    required double preferred,
+  }) {
+    int maxCount(List<List<int>> clues) =>
+        clues.fold(0, (m, c) => c.length > m ? c.length : m);
+
+    final cols = puzzle.cols + maxCount(puzzle.leftClues);
+    final rows = puzzle.rows + maxCount(puzzle.topClues);
+    if (cols == 0 || rows == 0) return preferred;
+
+    final byWidth = (viewport.width - boardHorizontalChrome) / cols;
+    final byHeight = (viewport.height - boardVerticalChrome) / rows;
+    final fit = (byWidth < byHeight ? byWidth : byHeight).floorToDouble();
+    final floor = preferred < minAutoCellSize ? preferred : minAutoCellSize;
+    if (fit >= preferred) return preferred;
+    return fit < floor ? floor : fit;
+  }
+
   List<int> deriveLineRuns(List<NonogramCellState> line) {
     final runs = <int>[];
     var currentRun = 0;

@@ -133,14 +133,18 @@ class _Picture extends StatelessWidget {
               Transform.scale(scale: scale, child: child),
       child: Card(
         child: Padding(
-          padding: const EdgeInsets.all(20),
-          child: ConstrainedBox(
-            constraints: const BoxConstraints(maxWidth: 320, maxHeight: 320),
-            child: AspectRatio(
-              aspectRatio: aspect,
-              child: NonogramPixelArt.fromSolution(
-                solution: puzzle.solution,
-                color: context.color.onSurface,
+          padding: const EdgeInsets.all(14),
+          child: Container(
+            padding: const EdgeInsets.all(10),
+            decoration: BoxDecoration(
+              color: context.color.surfaceContainerHigh,
+              borderRadius: BorderRadius.circular(14),
+            ),
+            child: ConstrainedBox(
+              constraints: const BoxConstraints(maxWidth: 320, maxHeight: 320),
+              child: AspectRatio(
+                aspectRatio: aspect,
+                child: NonogramPixelArt.picture(context, puzzle.solution),
               ),
             ),
           ),

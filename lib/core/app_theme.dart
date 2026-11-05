@@ -12,6 +12,8 @@ class GameColors extends ThemeExtension<GameColors> {
     required this.heroEnd,
     required this.clueBackground,
     required this.clueBand,
+    required this.pictureInk,
+    required this.picturePaper,
   });
 
   /// Hàng/cột đã khớp gợi ý, màn đã giải.
@@ -31,6 +33,12 @@ class GameColors extends ThemeExtension<GameColors> {
   /// Dải tô xen kẽ mỗi nhóm 5 hàng/cột trong vùng ô số.
   final Color clueBand;
 
+  /// Màu ô tô / ô trống khi vẽ bức tranh hoàn chỉnh (ảnh thu nhỏ, màn hoàn
+  /// thành). Giữ kiểu "mực trên giấy" ở cả chế độ tối để tranh không bị đảo
+  /// màu (ví dụ màn "White Dog": con chó là phần ô trống).
+  final Color pictureInk;
+  final Color picturePaper;
+
   @override
   GameColors copyWith({
     Color? success,
@@ -40,6 +48,8 @@ class GameColors extends ThemeExtension<GameColors> {
     Color? heroEnd,
     Color? clueBackground,
     Color? clueBand,
+    Color? pictureInk,
+    Color? picturePaper,
   }) {
     return GameColors(
       success: success ?? this.success,
@@ -49,6 +59,8 @@ class GameColors extends ThemeExtension<GameColors> {
       heroEnd: heroEnd ?? this.heroEnd,
       clueBackground: clueBackground ?? this.clueBackground,
       clueBand: clueBand ?? this.clueBand,
+      pictureInk: pictureInk ?? this.pictureInk,
+      picturePaper: picturePaper ?? this.picturePaper,
     );
   }
 
@@ -63,6 +75,8 @@ class GameColors extends ThemeExtension<GameColors> {
       heroEnd: Color.lerp(heroEnd, other.heroEnd, t)!,
       clueBackground: Color.lerp(clueBackground, other.clueBackground, t)!,
       clueBand: Color.lerp(clueBand, other.clueBand, t)!,
+      pictureInk: Color.lerp(pictureInk, other.pictureInk, t)!,
+      picturePaper: Color.lerp(picturePaper, other.picturePaper, t)!,
     );
   }
 }
@@ -99,6 +113,8 @@ abstract final class AppTheme {
       heroEnd: Color(0xFF6741D9),
       clueBackground: Color(0xFFDDE4FB),
       clueBand: Color(0xFFCCD6F8),
+      pictureInk: Color(0xFF1B1F2A),
+      picturePaper: Colors.white,
     ),
   );
 
@@ -129,6 +145,8 @@ abstract final class AppTheme {
       heroEnd: Color(0xFF5F3DC4),
       clueBackground: Color(0xFF232B4A),
       clueBand: Color(0xFF2B3458),
+      pictureInk: Color(0xFF151922),
+      picturePaper: Color(0xFFCDD2DD),
     ),
   );
 

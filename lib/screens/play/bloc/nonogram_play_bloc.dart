@@ -1,3 +1,4 @@
+import 'dart:ui' show Offset, Size;
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:bloc_concurrency/bloc_concurrency.dart';
 import 'package:nonogram/core/app_bloc.dart';
@@ -7,6 +8,7 @@ import 'package:nonogram/models/nonogram_cell_state.dart';
 import 'package:nonogram/models/nonogram_interaction_mode.dart';
 import 'package:nonogram/models/nonogram_completed_progress.dart';
 import 'package:nonogram/data/nonogram_repository.dart';
+import 'package:nonogram/models/nonogram_puzzle.dart';
 import 'package:nonogram/screens/play/engine/nonogram_engine.dart';
 import 'package:nonogram/core/list_ext.dart';
 import 'nonogram_play_event.dart';
@@ -14,6 +16,31 @@ import 'nonogram_play_state.dart';
 import 'nonogram_snapshot_mapper.dart';
 
 class NonogramPlayBloc extends AppBloc<NonogramPlayEvent, NonogramPlayState> {
+  /// Cỡ ô người chơi chọn trong cài đặt (mặc định 40); màn lớn có thể dùng
+  /// cỡ nhỏ hơn để vừa màn hình.
+  double _preferredCellSize = 40;
+  Size? _viewportSize;
+  bool _pendingAutoFit = false;
+  Offset? _pendingViewport;
+
+  /// Vị trí khung nhìn cần áp dụng khi bàn chơi dựng xong (ván dở: vị trí đã
+  /// lưu; màn mới: vị trí tính theo kích thước bàn). Lấy một lần rồi xoá.
+  Offset? takePendingViewport() {
+    final value = _pendingViewport;
+    _pendingViewport = null;
+    return value;
+  }
+
+  Offset? _initialViewport(NonogramPuzzle puzzle, double cellSize) {
+    final viewport = _viewportSize;
+    if (viewport == null) return null;
+    return _engine.initialViewportOffset(
+      puzzle: puzzle,
+      cellSize: cellSize,
+      viewport: viewport,
+    );
+  }
+
   final NonogramRepository _repository;
   final NonogramEngine _engine;
 
@@ -32,6 +59,10 @@ class NonogramPlayBloc extends AppBloc<NonogramPlayEvent, NonogramPlayState> {
     on<NextLevelRequested>(_onNextLevelRequested, transformer: sequential());
     on<Started>(_onStarted, transformer: sequential());
     on<ViewportChanged>(_onViewportChanged, transformer: sequential());
+    on<BoardViewportMeasured>(
+      _onBoardViewportMeasured,
+      transformer: sequential(),
+    );
 
     // --- User Actions & Gameplay ---
     on<CellTapped>(_onCellTapped, transformer: sequential());
@@ -126,11 +157,23 @@ class NonogramPlayBloc extends AppBloc<NonogramPlayEvent, NonogramPlayState> {
 
     final startTime = snapshot?.startTime ?? DateTime.now();
     final interactionMode = snapshot?.interactionMode ?? state.interactionMode;
-    final cellSize = snapshot?.cellSize ?? state.cellSize;
+    // Ván dở giữ cỡ ô đã lưu; màn mới tự co theo khung nhìn (nếu đã biết).
+    final double cellSize;
+    if (snapshot != null) {
+      cellSize = snapshot.cellSize;
+      _pendingAutoFit = false;
+    } else {
+      cellSize = _autoCellSize(puzzle);
+      _pendingAutoFit = _viewportSize == null;
+    }
     final remainingHints = snapshot?.remainingHints ?? 3;
 
     final offsetX = snapshot?.viewportOffsetX ?? 0.0;
     final offsetY = snapshot?.viewportOffsetY ?? 0.0;
+    _pendingViewport =
+        snapshot != null
+            ? Offset(offsetX, offsetY)
+            : _initialViewport(puzzle, cellSize);
     final satisfied = _engine.deriveSatisfiedLines(
       puzzle: puzzle,
       gridData: initialGrid,
@@ -298,8 +341,35 @@ class NonogramPlayBloc extends AppBloc<NonogramPlayEvent, NonogramPlayState> {
     );
   }
 
+  double _autoCellSize(NonogramPuzzle puzzle) {
+    final viewport = _viewportSize;
+    if (viewport == null) return _preferredCellSize;
+    return _engine.fitCellSize(
+      puzzle: puzzle,
+      viewport: viewport,
+      preferred: _preferredCellSize,
+    );
+  }
+
+  _onBoardViewportMeasured(BoardViewportMeasured event, Emitter emit) {
+    final size = Size(event.width, event.height);
+    if (size == _viewportSize || size.isEmpty) return;
+    _viewportSize = size;
+
+    // Màn mới đã bắt đầu trước khi đo được khung nhìn: co lại ngay.
+    final puzzle = state.puzzle;
+    if (_pendingAutoFit && puzzle != null && !state.isLoading) {
+      _pendingAutoFit = false;
+      final cellSize = _autoCellSize(puzzle);
+      _pendingViewport = _initialViewport(puzzle, cellSize);
+      emit(state.copyWith(cellSize: cellSize));
+    }
+  }
+
   _onCellSizeChanged(CellSizeChanged event, Emitter emit) {
     final nextCellSize = event.cellSize.clamp(12.0, 80.0);
+    _preferredCellSize = nextCellSize;
+    _pendingAutoFit = false;
     final nextState = state.copyWith(cellSize: nextCellSize);
     emit(nextState);
 
