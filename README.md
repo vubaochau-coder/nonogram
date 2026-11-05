@@ -103,11 +103,9 @@ Script sẽ:
 1. Tìm App ID theo package trong project chess. Nếu chưa có app, script hỏi
    rồi tạo app Android **Nonopix** (dùng `--yes` để khỏi hỏi).
 2. Chạy `flutter analyze` và `flutter test` (`--skip-tests` để bỏ qua).
-3. Build APK release với số build = số commit trên nhánh (`git rev-list
-   --count HEAD`), giống CI: commit mới hơn luôn có số lớn hơn, nên bản sau
-   cài đè được bản trước. Không cần sửa tay số build. Bản build có thay
-   đổi chưa commit dùng số của commit hiện tại và được ghi rõ trong ghi chú
-   phát hành.
+3. Build APK release với số build = số thứ tự lần chạy gần nhất của workflow
+   Distribute trên GitHub + 1 (đọc qua `gh`; hoặc truyền `--build-number`).
+   CI dùng chính số thứ tự lần chạy làm số build, nên bản sau luôn lớn hơn.
 4. Upload kèm ghi chú (mặc định là commit mới nhất, có version và commit).
 
 Cần `android/key.properties` trỏ tới **cùng keystore** với secret

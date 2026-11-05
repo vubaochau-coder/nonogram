@@ -53,8 +53,6 @@ jobs:
       - uses: actions/checkout@v4
         with:
           ref: ${{ github.event.workflow_run.head_sha || github.sha }}
-          # Cần toàn bộ lịch sử để đếm commit làm số build.
-          fetch-depth: 0
 
       - name: Read Flutter version from .fvmrc
         id: fvm
@@ -96,14 +94,14 @@ jobs:
 
       - run: flutter pub get --enforce-lockfile
 
-      # Số build = số commit tính tới commit đang build (giống
-      # scripts/distribute_android.sh): ngắn, luôn tăng, và cùng một commit thì
-      # CI hay build trên máy đều ra cùng một số.
+      # Số build = số thứ tự lần chạy của workflow này (run number): mỗi lần
+      # phát hành tăng 1; chạy lại (re-run) một lần chạy cũ giữ nguyên số.
+      # scripts/distribute_android.sh lấy số lần chạy gần nhất + 1.
       - name: Compute build number
         id: build
         run: |
           name=$(sed -n 's/^version: *\([^+]*\).*/\1/p' pubspec.yaml)
-          number=$(git rev-list --count HEAD)
+          number=${{ github.run_number }}
           echo "number=$number" >> "$GITHUB_OUTPUT"
           echo "name=$name" >> "$GITHUB_OUTPUT"
           echo "Version: $name ($number)"

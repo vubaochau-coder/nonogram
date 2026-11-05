@@ -8,6 +8,8 @@
 # Tuỳ chọn:
 #   --notes "..."          Ghi chú phát hành (mặc định: commit mới nhất)
 #   --notes-file PATH      Đọc ghi chú phát hành từ file
+#   --build-number N       Số build (mặc định: số lần chạy gần nhất của workflow
+#                          Distribute trên GitHub + 1, đọc qua gh)
 #   --groups a,b           Nhóm tester (alias trong Firebase)
 #   --testers x@y,z@w      Email tester
 #   --skip-tests           Bỏ qua flutter analyze/test
@@ -52,6 +54,7 @@ PACKAGE_NAME="com.chauvb.nonogram"
 
 NOTES=""
 NOTES_FILE=""
+BUILD_NUMBER=""
 SKIP_TESTS=0
 DRY_RUN=0
 ASSUME_YES=0
@@ -64,6 +67,7 @@ while [[ $# -gt 0 ]]; do
   case "$1" in
     --notes) NOTES="${2:?--notes cần nội dung}"; shift 2 ;;
     --notes-file) NOTES_FILE="${2:?--notes-file cần đường dẫn}"; shift 2 ;;
+    --build-number) BUILD_NUMBER="${2:?--build-number cần giá trị}"; shift 2 ;;
     --groups) FIREBASE_TESTER_GROUPS="${2:?--groups cần giá trị}"; shift 2 ;;
     --testers) FIREBASE_TESTERS="${2:?--testers cần giá trị}"; shift 2 ;;
     --skip-tests) SKIP_TESTS=1; shift ;;
@@ -198,10 +202,19 @@ check_signing() {
 # --- Phiên bản -------------------------------------------------------------
 
 VERSION_NAME="$(sed -n 's/^version: *\([^+]*\).*/\1/p' pubspec.yaml)"
-# Số build = số commit tính tới HEAD, giống workflow Distribute trên CI: ngắn,
-# luôn tăng, và cùng một commit thì build ở đâu cũng ra cùng một số.
-BUILD_NUMBER="$(git rev-list --count HEAD 2>/dev/null || true)"
-[[ "$BUILD_NUMBER" =~ ^[0-9]+$ ]] || die "Không đếm được số commit (cần chạy trong repo git có đủ lịch sử)."
+# Số build nối tiếp số thứ tự lần chạy của workflow Distribute trên GitHub
+# (CI dùng chính run number làm số build), nên bản build từ máy vẫn lớn hơn
+# mọi bản CI đã phát hành.
+GITHUB_REPO="vubaochau-coder/nonogram"
+if [[ -z "$BUILD_NUMBER" ]]; then
+  command -v gh >/dev/null 2>&1 ||
+    die "Cần gh (GitHub CLI) để lấy số build từ workflow Distribute, hoặc truyền --build-number N."
+  last_run="$(gh api "repos/$GITHUB_REPO/actions/workflows/distribute.yml/runs?per_page=1" \
+    --jq '.workflow_runs[0].run_number // 0' 2>/dev/null)" ||
+    die "Không đọc được workflow Distribute trên GitHub (đã 'gh auth login' chưa?). Hoặc truyền --build-number N."
+  BUILD_NUMBER=$(( last_run + 1 ))
+fi
+[[ "$BUILD_NUMBER" =~ ^[0-9]+$ ]] || die "Số build không hợp lệ: $BUILD_NUMBER"
 COMMIT_SHA="$(git rev-parse --short HEAD 2>/dev/null || echo unknown)"
 DIRTY=""
 if [[ -n "$(git status --porcelain --untracked-files=no 2>/dev/null)" ]]; then
