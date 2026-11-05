@@ -1,6 +1,7 @@
 import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:nonogram/core/app_theme.dart';
 import 'package:nonogram/core/context_ext.dart';
 import '../bloc/nonogram_play_bloc.dart';
 import '../bloc/nonogram_play_state.dart';
@@ -49,17 +50,11 @@ class NonogramTopCluesSection extends StatelessWidget {
                 satisfiedColumns: state.satisfiedCols,
                 cellSize: cellSize,
                 lineColor: context.color.outlineVariant,
-                backgroundColor: context.color.onSurface.withValues(
-                  alpha: 0.05,
-                ),
-                textStyle: context.labelSmall.copyWith(
-                  fontSize: 10,
-                  fontWeight: FontWeight.normal,
-                ),
-                satisfiedTextStyle: context.labelSmall.copyWith(
-                  fontSize: 11,
-                  fontWeight: FontWeight.w800,
-                  color: Colors.green,
+                majorLineColor: context.color.outline,
+                backgroundColor: context.color.surfaceContainer,
+                textStyle: _clueStyle(context, cellSize),
+                satisfiedTextStyle: _clueStyle(context, cellSize).copyWith(
+                  color: context.gameColors.success.withValues(alpha: 0.75),
                 ),
               ),
             ),
@@ -68,4 +63,13 @@ class NonogramTopCluesSection extends StatelessWidget {
       },
     );
   }
+}
+
+TextStyle _clueStyle(BuildContext context, double cellSize) {
+  return context.labelSmall.copyWith(
+    fontSize: (cellSize * 0.4).clamp(9.0, 16.0),
+    fontWeight: FontWeight.w800,
+    color: context.color.onSurface,
+    height: 1,
+  );
 }

@@ -9,7 +9,7 @@ from pathlib import Path
 from PIL import Image, ImageDraw
 
 ROOT = Path(__file__).resolve().parent.parent
-BLUE = (9, 105, 218, 255)  # primary của AppTheme.lightTheme
+BLUE = (59, 91, 219, 255)  # AppTheme.brand
 WHITE = (255, 255, 255, 255)
 FAINT = (255, 255, 255, 56)
 # ImageDraw ghi đè pixel chứ không trộn màu, nên trên nền xanh dùng sẵn màu đã trộn.

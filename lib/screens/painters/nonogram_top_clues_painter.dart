@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+/// Gợi ý của các cột, xếp sát đáy. Cột đã khớp gợi ý đổi sang
+/// [satisfiedTextStyle]. Vạch ngăn cột đậm mỗi 5 cột, khớp với lưới.
 class NonogramTopCluesPainter extends CustomPainter {
   final List<List<int>> clues;
   final List<bool> satisfiedColumns;
@@ -8,6 +10,7 @@ class NonogramTopCluesPainter extends CustomPainter {
   final Color backgroundColor;
   final TextStyle textStyle;
   final TextStyle satisfiedTextStyle;
+  final Color? majorLineColor;
 
   NonogramTopCluesPainter({
     required this.clues,
@@ -17,65 +20,56 @@ class NonogramTopCluesPainter extends CustomPainter {
     required this.backgroundColor,
     required this.textStyle,
     required this.satisfiedTextStyle,
+    this.majorLineColor,
   });
 
   @override
   void paint(Canvas canvas, Size size) {
-    final borderPaint =
-        Paint()
-          ..color = lineColor.withValues(alpha: 0.2)
-          ..style = PaintingStyle.stroke
-          ..strokeWidth = 0.5;
-
-    final bgPaint =
-        Paint()
-          ..color = backgroundColor
-          ..style = PaintingStyle.fill;
-
     final cols = clues.length;
-    final maxClues = (size.height / cellSize).round();
+    final minor =
+        Paint()
+          ..color = lineColor
+          ..strokeWidth = 1;
+    final major =
+        Paint()
+          ..color = majorLineColor ?? lineColor
+          ..strokeWidth = 1.6;
 
-    // Fill background
-    canvas.drawRect(Offset.zero & size, bgPaint);
+    canvas.drawRRect(
+      RRect.fromRectAndCorners(
+        Offset.zero & size,
+        topLeft: const Radius.circular(10),
+        topRight: const Radius.circular(10),
+      ),
+      Paint()..color = backgroundColor,
+    );
 
-    for (int c = 0; c < cols; c++) {
+    for (var c = 1; c < cols; c++) {
+      final x = c * cellSize;
+      canvas.drawLine(
+        Offset(x, 4),
+        Offset(x, size.height),
+        c % 5 == 0 ? major : minor,
+      );
+    }
+
+    for (var c = 0; c < cols; c++) {
       final columnClues = clues[c];
+      final satisfied = c < satisfiedColumns.length && satisfiedColumns[c];
+      final style = satisfied ? satisfiedTextStyle : textStyle;
       final x = c * cellSize;
 
-      // Draw vertical lines
-      canvas.drawLine(Offset(x, 0), Offset(x, size.height), borderPaint);
-      if (c == cols - 1) {
-        canvas.drawLine(
-          Offset(x + cellSize, 0),
-          Offset(x + cellSize, size.height),
-          borderPaint,
-        );
-      }
-
-      // Draw horizontal lines for cells
-      for (int r = 0; r <= maxClues; r++) {
-        final y = r * cellSize;
-        canvas.drawLine(Offset(x, y), Offset(x + cellSize, y), borderPaint);
-      }
-
-      // Draw numbers (pinned to bottom)
-      for (int i = 0; i < columnClues.length; i++) {
-        final clueValue = columnClues[columnClues.length - 1 - i];
-        final clueStyle =
-            c < satisfiedColumns.length && satisfiedColumns[c]
-                ? satisfiedTextStyle
-                : textStyle;
-        final textPainter = TextPainter(
-          text: TextSpan(text: '$clueValue', style: clueStyle),
+      for (var i = 0; i < columnClues.length; i++) {
+        final value = columnClues[columnClues.length - 1 - i];
+        final tp = TextPainter(
+          text: TextSpan(text: '$value', style: style),
           textDirection: TextDirection.ltr,
         )..layout();
-
-        final targetY = size.height - (i + 1) * cellSize;
-        final offset = Offset(
-          x + (cellSize - textPainter.width) / 2,
-          targetY + (cellSize - textPainter.height) / 2,
+        final y = size.height - (i + 1) * cellSize;
+        tp.paint(
+          canvas,
+          Offset(x + (cellSize - tp.width) / 2, y + (cellSize - tp.height) / 2),
         );
-        textPainter.paint(canvas, offset);
       }
     }
   }
@@ -86,6 +80,7 @@ class NonogramTopCluesPainter extends CustomPainter {
         oldDelegate.satisfiedColumns != satisfiedColumns ||
         oldDelegate.cellSize != cellSize ||
         oldDelegate.lineColor != lineColor ||
+        oldDelegate.majorLineColor != majorLineColor ||
         oldDelegate.backgroundColor != backgroundColor ||
         oldDelegate.textStyle != textStyle ||
         oldDelegate.satisfiedTextStyle != satisfiedTextStyle;

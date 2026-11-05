@@ -24,7 +24,7 @@ flutter build web --no-web-resources-cdn
 ```
 lib/
   main.dart                  Khởi tạo Hive, repository, MaterialApp
-  core/                      Theme, điều hướng (AppRouteIntent), tiện ích dùng chung
+  core/                      Theme (AppTheme + GameColors), điều hướng (AppRouteIntent), tiện ích
   data/
     nonogram_puzzle_source.dart   Đọc màn chơi từ assets/levels/
     hive_nonogram_local_service.dart  Lưu ván dở + màn đã hoàn thành
@@ -40,6 +40,7 @@ lib/
 assets/
   levels/                    574 màn chơi (sinh bằng tools/build_levels.dart)
   guide/                     Ảnh minh hoạ hướng dẫn
+  fonts/                     Font Nunito (giấy phép OFL, xem Nunito-OFL.txt)
 tools/
   build_levels.dart          Dump Supabase -> assets/levels/, kiểm tra nghiệm duy nhất
   data/puzzles_dump.csv      Dump bảng puzzles từ Supabase (nguồn của assets/levels/)

@@ -28,7 +28,11 @@ class NonogramPlayAppBarSection extends StatelessWidget
         final puzzle = state.puzzle;
         final title = puzzle?.title ?? 'Nonogram';
         final level = puzzle?.level ?? state.level;
-        final difficulty = puzzle?.difficulty ?? '';
+        final subtitle = [
+          context.l10n.nonogramDashboardContinueLevel(level),
+          if (puzzle != null) '${puzzle.cols} × ${puzzle.rows}',
+          if (puzzle != null && puzzle.difficulty.isNotEmpty) puzzle.difficulty,
+        ].join('  ·  ');
 
         return AppBar(
           title: Column(
@@ -36,14 +40,16 @@ class NonogramPlayAppBarSection extends StatelessWidget
             children: [
               Text(
                 title,
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
                 style: context.titleMedium.copyWith(
-                  fontWeight: FontWeight.bold,
+                  fontWeight: FontWeight.w800,
                 ),
               ),
               if (puzzle != null)
                 Text(
-                  'Level $level • $difficulty',
-                  style: context.labelSmall.copyWith(
+                  subtitle,
+                  style: context.labelMedium.copyWith(
                     color: context.color.onSurfaceVariant,
                   ),
                 ),

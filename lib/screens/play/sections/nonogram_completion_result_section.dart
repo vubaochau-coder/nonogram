@@ -1,11 +1,12 @@
-import 'dart:math';
-import 'package:nonogram/core/app_spacing.dart';
-import 'package:nonogram/core/context_ext.dart';
-import 'package:nonogram/models/nonogram_puzzle.dart';
 import 'package:flutter/material.dart';
-import '../widgets/nonogram_completion_header.dart';
-import '../widgets/nonogram_completion_board.dart';
+import 'package:lucide_icons/lucide_icons.dart';
+import 'package:nonogram/core/app_theme.dart';
+import 'package:nonogram/core/context_ext.dart';
+import 'package:nonogram/core/duration_format.dart';
+import 'package:nonogram/models/nonogram_puzzle.dart';
+import 'package:nonogram/widgets/nonogram_pixel_art.dart';
 
+/// Màn hình khi giải xong: hình hoàn chỉnh, thời gian, nút chơi tiếp.
 class NonogramCompletionResultSection extends StatelessWidget {
   final NonogramPuzzle puzzle;
   final Duration completionDuration;
@@ -18,143 +19,247 @@ class NonogramCompletionResultSection extends StatelessWidget {
     required this.onNextLevel,
   });
 
-  int _getMaxClueCount(List<List<int>> clues) {
-    if (clues.isEmpty) return 0;
-    return clues.map((c) => c.length).reduce(max);
-  }
-
   @override
   Widget build(BuildContext context) {
-    final minutes = completionDuration.inMinutes;
-    final seconds = completionDuration.inSeconds % 60;
-    final timeStr = context.l10n.nonogramPlayDurationFormat(minutes, seconds);
-
     return LayoutBuilder(
       builder: (context, constraints) {
-        final isLandscape = constraints.maxWidth > constraints.maxHeight;
+        final isLandscape =
+            constraints.maxWidth > constraints.maxHeight &&
+            constraints.maxWidth > 560;
+        final picture = _Picture(puzzle: puzzle);
+        final info = _Info(
+          puzzle: puzzle,
+          completionDuration: completionDuration,
+        );
+        final actions = _Actions(onNextLevel: onNextLevel);
 
         if (isLandscape) {
-          return _buildLandscapeLayout(context, timeStr);
+          return Padding(
+            padding: const EdgeInsets.all(24),
+            child: Row(
+              children: [
+                Expanded(child: Center(child: picture)),
+                const SizedBox(width: 32),
+                Expanded(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [info, const SizedBox(height: 24), actions],
+                  ),
+                ),
+              ],
+            ),
+          );
         }
-        return _buildPortraitLayout(context, timeStr);
+
+        return Column(
+          children: [
+            Expanded(
+              child: SingleChildScrollView(
+                padding: const EdgeInsets.fromLTRB(20, 8, 20, 16),
+                child: Column(
+                  children: [
+                    const _SolvedBadge(),
+                    const SizedBox(height: 20),
+                    picture,
+                    const SizedBox(height: 20),
+                    info,
+                  ],
+                ),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.fromLTRB(20, 0, 20, 16),
+              child: actions,
+            ),
+          ],
+        );
       },
     );
   }
+}
 
-  Widget _buildPortraitLayout(BuildContext context, String timeStr) {
-    return Column(
-      children: [
-        NonogramCompletionHeader(
-          level: puzzle.level,
-          difficulty: puzzle.difficulty,
-          timeStr: timeStr,
-        ),
-        const SizedBox(height: 8),
-        Padding(
-          padding: const EdgeInsets.symmetric(
-            horizontal: AppSpacing.pageHorizontalPadding,
+class _SolvedBadge extends StatelessWidget {
+  const _SolvedBadge();
+
+  @override
+  Widget build(BuildContext context) {
+    final success = context.gameColors.success;
+    return TweenAnimationBuilder<double>(
+      tween: Tween(begin: 0, end: 1),
+      duration: const Duration(milliseconds: 500),
+      curve: Curves.easeOutBack,
+      builder:
+          (context, t, child) => Transform.scale(
+            scale: t,
+            child: Opacity(opacity: t.clamp(0, 1), child: child),
           ),
-          child: Text(
-            puzzle.title,
-            style: context.titleMedium.copyWith(fontWeight: FontWeight.w600),
+      child: Column(
+        children: [
+          Container(
+            width: 56,
+            height: 56,
+            decoration: BoxDecoration(
+              color: success.withValues(alpha: 0.15),
+              shape: BoxShape.circle,
+            ),
+            child: Icon(LucideIcons.checkCircle2, color: success, size: 30),
+          ),
+          const SizedBox(height: 12),
+          Text(
+            context.l10n.nonogramPlayCompletionTitle,
+            style: context.headlineSmall,
             textAlign: TextAlign.center,
           ),
-        ),
-        const SizedBox(height: 16),
-        Expanded(
-          child: NonogramCompletionBoard(
-            puzzle: puzzle,
-            cellSize: 24.0,
-            getMaxClueCount: _getMaxClueCount,
-          ),
-        ),
-        Padding(
-          padding: const EdgeInsets.all(AppSpacing.pageHorizontalPadding),
-          child: SizedBox(
-            width: double.infinity,
-            child: FilledButton(
-              onPressed: onNextLevel,
-              child: Text(context.l10n.nonogramPlayActionNextLevelFixed),
+        ],
+      ),
+    );
+  }
+}
+
+class _Picture extends StatelessWidget {
+  const _Picture({required this.puzzle});
+
+  final NonogramPuzzle puzzle;
+
+  @override
+  Widget build(BuildContext context) {
+    final aspect = puzzle.cols / puzzle.rows;
+    return TweenAnimationBuilder<double>(
+      tween: Tween(begin: 0.9, end: 1),
+      duration: const Duration(milliseconds: 600),
+      curve: Curves.easeOutCubic,
+      builder:
+          (context, scale, child) =>
+              Transform.scale(scale: scale, child: child),
+      child: Card(
+        child: Padding(
+          padding: const EdgeInsets.all(20),
+          child: ConstrainedBox(
+            constraints: const BoxConstraints(maxWidth: 320, maxHeight: 320),
+            child: AspectRatio(
+              aspectRatio: aspect,
+              child: NonogramPixelArt.fromSolution(
+                solution: puzzle.solution,
+                color: context.color.onSurface,
+              ),
             ),
           ),
+        ),
+      ),
+    );
+  }
+}
+
+class _Info extends StatelessWidget {
+  const _Info({required this.puzzle, required this.completionDuration});
+
+  final NonogramPuzzle puzzle;
+  final Duration completionDuration;
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = context.l10n;
+    return Column(
+      children: [
+        Text(
+          puzzle.title,
+          style: context.titleLarge,
+          textAlign: TextAlign.center,
+        ),
+        const SizedBox(height: 4),
+        Text(
+          l10n.nonogramPlayCompletionMessage(puzzle.level),
+          style: context.bodyMedium.copyWith(
+            color: context.color.onSurfaceVariant,
+          ),
+          textAlign: TextAlign.center,
+        ),
+        const SizedBox(height: 16),
+        Wrap(
+          alignment: WrapAlignment.center,
+          spacing: 8,
+          runSpacing: 8,
+          children: [
+            _StatChip(
+              icon: LucideIcons.timer,
+              color: context.color.primary,
+              label: context.formatPlayTime(completionDuration.inMilliseconds),
+            ),
+            if (puzzle.difficulty.isNotEmpty)
+              _StatChip(
+                icon: LucideIcons.gauge,
+                color: context.gameColors.reward,
+                label: puzzle.difficulty,
+              ),
+            _StatChip(
+              icon: LucideIcons.grid,
+              color: context.gameColors.success,
+              label: '${puzzle.cols} × ${puzzle.rows}',
+            ),
+          ],
         ),
       ],
     );
   }
+}
 
-  Widget _buildLandscapeLayout(BuildContext context, String timeStr) {
+class _StatChip extends StatelessWidget {
+  const _StatChip({
+    required this.icon,
+    required this.color,
+    required this.label,
+  });
+
+  final IconData icon;
+  final Color color;
+  final String label;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+      decoration: BoxDecoration(
+        color: context.color.surfaceContainerLow,
+        borderRadius: BorderRadius.circular(100),
+        border: Border.all(color: context.gameColors.cardBorder),
+      ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Icon(icon, size: 16, color: color),
+          const SizedBox(width: 6),
+          Text(label, style: context.labelLarge),
+        ],
+      ),
+    );
+  }
+}
+
+class _Actions extends StatelessWidget {
+  const _Actions({required this.onNextLevel});
+
+  final VoidCallback onNextLevel;
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = context.l10n;
     return Row(
       children: [
-        // Left Column: Board
         Expanded(
-          flex: 3, // Board takes more space
-          child: Container(
-            color: context.color.surfaceContainerLow.withValues(alpha: 0.5),
-            child: Center(
-              child: Padding(
-                padding: const EdgeInsets.all(AppSpacing.cardPadding),
-                child: ConstrainedBox(
-                  constraints: const BoxConstraints(
-                    maxWidth: 500,
-                    maxHeight: 500,
-                  ),
-                  child: NonogramCompletionBoard(
-                    puzzle: puzzle,
-                    cellSize: 24.0,
-                    getMaxClueCount: _getMaxClueCount,
-                  ),
-                ),
-              ),
-            ),
+          child: OutlinedButton(
+            onPressed: () => Navigator.of(context).maybePop(),
+            style: OutlinedButton.styleFrom(minimumSize: const Size(0, 52)),
+            child: Text(l10n.nonogramPlayActionDashboard),
           ),
         ),
-
-        // Right Column: Info & Action
+        const SizedBox(width: 12),
         Expanded(
           flex: 2,
-          child: Column(
-            children: [
-              Expanded(
-                child: SingleChildScrollView(
-                  child: Column(
-                    children: [
-                      NonogramCompletionHeader(
-                        level: puzzle.level,
-                        difficulty: puzzle.difficulty,
-                        timeStr: timeStr,
-                        isCompact: true,
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.fromLTRB(
-                          AppSpacing.cardPadding,
-                          0,
-                          AppSpacing.cardPadding,
-                          AppSpacing.sectionVerticalSpacing,
-                        ),
-                        child: Text(
-                          puzzle.title,
-                          style: context.titleMedium.copyWith(
-                            fontWeight: FontWeight.w600,
-                          ),
-                          textAlign: TextAlign.center,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-              const Divider(height: 1),
-              Padding(
-                padding: const EdgeInsets.all(AppSpacing.pageHorizontalPadding),
-                child: SizedBox(
-                  width: double.infinity,
-                  child: FilledButton(
-                    onPressed: onNextLevel,
-                    child: Text(context.l10n.nonogramPlayActionNextLevelFixed),
-                  ),
-                ),
-              ),
-            ],
+          child: FilledButton.icon(
+            onPressed: onNextLevel,
+            icon: const Icon(LucideIcons.arrowRight),
+            iconAlignment: IconAlignment.end,
+            label: Text(l10n.nonogramPlayActionNextLevelFixed),
           ),
         ),
       ],

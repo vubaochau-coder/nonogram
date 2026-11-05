@@ -26,36 +26,10 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
-  String get nonogramDashboardHeroSubtitle =>
-      'Reveal hidden pictures by filling cells based on numerical clues found on the side of the grid.';
-
-  @override
-  String nonogramDashboardInSessionDesc(int level) {
-    return 'You are halfway through Level $level';
-  }
-
-  @override
-  String get nonogramDashboardInSessionTitle => 'Currently in progress';
-
-  @override
   String get nonogramDashboardProgressSectionTitle => 'Your Progress';
 
   @override
-  String nonogramDashboardReadyDesc(int level) {
-    return 'Complete Level $level to unlock more challenges';
-  }
-
-  @override
-  String get nonogramDashboardReadyTitle => 'Ready for next puzzle';
-
-  @override
   String get nonogramDashboardStatCompleted => 'Completed';
-
-  @override
-  String get nonogramDashboardStatNextTarget => 'Next Target';
-
-  @override
-  String get nonogramDashboardTitle => 'Nonogram';
 
   @override
   String get nonogramGuideIntro =>
@@ -125,15 +99,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get nonogramGuideTitle => 'How to Solve';
 
   @override
-  String get nonogramHistoryBest => 'Best';
-
-  @override
   String nonogramHistoryCompletedOn(String date) {
     return 'Completed on $date';
   }
-
-  @override
-  String get nonogramHistoryCompletionDate => 'Completion Date';
 
   @override
   String get nonogramHistoryDetailNotFound => 'Level details not found.';
@@ -145,9 +113,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String nonogramHistoryLevel(int n) {
     return 'Level $n';
   }
-
-  @override
-  String get nonogramHistoryPlayTime => 'Total Play Time';
 
   @override
   String get nonogramHistoryTitle => 'Results';
@@ -183,12 +148,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String get nonogramPlayPageTitle => 'Nonogram';
 
   @override
-  String get nonogramPlayStatDifficulty => 'Difficulty';
-
-  @override
-  String get nonogramPlayStatTime => 'Time';
-
-  @override
   String get nonogramSettingsCellSize => 'Cell size';
 
   @override
@@ -207,5 +166,58 @@ class AppLocalizationsEn extends AppLocalizations {
   String get nonogramDashboardContinueNext => 'Next challenge';
 
   @override
-  String get nonogramDashboardContinueResume => 'Resume playing';
+  String get nonogramDashboardPlay => 'Play';
+
+  @override
+  String get nonogramDashboardResumeAction => 'Continue';
+
+  @override
+  String get nonogramDashboardInProgressBadge => 'In progress';
+
+  @override
+  String nonogramDashboardDifficulty(String value) {
+    return 'Difficulty $value';
+  }
+
+  @override
+  String nonogramDashboardSolvedOfTotal(int completed, int total) {
+    return '$completed of $total puzzles solved';
+  }
+
+  @override
+  String get nonogramDashboardStatFastest => 'Fastest';
+
+  @override
+  String get nonogramDashboardStatTotalTime => 'Total time';
+
+  @override
+  String get nonogramDashboardRecentTitle => 'Recently solved';
+
+  @override
+  String get nonogramDashboardSeeAll => 'See all';
+
+  @override
+  String get nonogramDashboardRecentEmpty =>
+      'Solve your first puzzle to start your picture collection.';
+
+  @override
+  String get nonogramDashboardAllDoneTitle => 'All puzzles solved!';
+
+  @override
+  String nonogramDashboardAllDoneDesc(int total) {
+    return 'You have completed all $total puzzles. Revisit your collection anytime.';
+  }
+
+  @override
+  String nonogramDurationHoursMinutes(int hours, int minutes) {
+    return '${hours}h ${minutes}m';
+  }
+
+  @override
+  String nonogramHistoryBestTime(String time) {
+    return 'Best $time';
+  }
+
+  @override
+  String get nonogramPlayActionDashboard => 'Home';
 }

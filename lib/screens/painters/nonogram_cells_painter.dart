@@ -11,8 +11,10 @@ class NonogramCellsPainter extends CustomPainter {
   final Color filledColor;
   final Color markedMarkerColor;
   final Color markerColor;
+  final Color? backgroundColor;
 
   NonogramCellsPainter({
+    this.backgroundColor,
     required this.rows,
     required this.cols,
     required this.gridData,
@@ -26,6 +28,9 @@ class NonogramCellsPainter extends CustomPainter {
 
   @override
   void paint(Canvas canvas, Size size) {
+    if (backgroundColor != null) {
+      canvas.drawRect(Offset.zero & size, Paint()..color = backgroundColor!);
+    }
     final fillPaint =
         Paint()
           ..color = filledColor
@@ -34,13 +39,13 @@ class NonogramCellsPainter extends CustomPainter {
         Paint()
           ..color = markerColor
           ..style = PaintingStyle.stroke
-          ..strokeWidth = 1.2
+          ..strokeWidth = 1.4
           ..strokeCap = StrokeCap.round;
     final markedMarkerPaint =
         Paint()
           ..color = markedMarkerColor
           ..style = PaintingStyle.stroke
-          ..strokeWidth = 1.2
+          ..strokeWidth = 1.8
           ..strokeCap = StrokeCap.round;
     final markedBackgroundPaint =
         Paint()
@@ -58,12 +63,18 @@ class NonogramCellsPainter extends CustomPainter {
         );
 
         if (cellState == NonogramCellState.filled) {
-          // Slightly deflate to avoid overlapping with grid lines
-          canvas.drawRect(rect.deflate(0.5), fillPaint);
+          // Thu nhỏ một chút và bo góc để ô tô tách khỏi đường lưới.
+          canvas.drawRRect(
+            RRect.fromRectAndRadius(
+              rect.deflate(cellSize >= 16 ? 1.5 : 0.5),
+              Radius.circular(cellSize * 0.12),
+            ),
+            fillPaint,
+          );
         } else if (cellState == NonogramCellState.marked) {
           canvas.drawRect(rect.deflate(0.5), markedBackgroundPaint);
 
-          final inset = cellSize * 0.4;
+          final inset = cellSize * 0.3;
           final left = c * cellSize + inset;
           final top = r * cellSize + inset;
           final right = (c + 1) * cellSize - inset;
@@ -85,7 +96,7 @@ class NonogramCellsPainter extends CustomPainter {
           final isSatisfiedCol = c < satisfiedCols.length && satisfiedCols[c];
 
           if (isSatisfiedRow || isSatisfiedCol) {
-            final inset = cellSize * 0.4;
+            final inset = cellSize * 0.38;
             final left = c * cellSize + inset;
             final top = r * cellSize + inset;
             final right = (c + 1) * cellSize - inset;
@@ -115,6 +126,7 @@ class NonogramCellsPainter extends CustomPainter {
         oldDelegate.filledColor != filledColor ||
         oldDelegate.markedMarkerColor != markedMarkerColor ||
         oldDelegate.markerColor != markerColor ||
+        oldDelegate.backgroundColor != backgroundColor ||
         oldDelegate.gridData != gridData ||
         oldDelegate.satisfiedRows != satisfiedRows ||
         oldDelegate.satisfiedCols != satisfiedCols;

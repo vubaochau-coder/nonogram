@@ -128,59 +128,17 @@ abstract class AppLocalizations {
   /// **'Level {level}'**
   String nonogramDashboardContinueLevel(int level);
 
-  /// No description provided for @nonogramDashboardHeroSubtitle.
-  ///
-  /// In en, this message translates to:
-  /// **'Reveal hidden pictures by filling cells based on numerical clues found on the side of the grid.'**
-  String get nonogramDashboardHeroSubtitle;
-
-  /// No description provided for @nonogramDashboardInSessionDesc.
-  ///
-  /// In en, this message translates to:
-  /// **'You are halfway through Level {level}'**
-  String nonogramDashboardInSessionDesc(int level);
-
-  /// No description provided for @nonogramDashboardInSessionTitle.
-  ///
-  /// In en, this message translates to:
-  /// **'Currently in progress'**
-  String get nonogramDashboardInSessionTitle;
-
   /// No description provided for @nonogramDashboardProgressSectionTitle.
   ///
   /// In en, this message translates to:
   /// **'Your Progress'**
   String get nonogramDashboardProgressSectionTitle;
 
-  /// No description provided for @nonogramDashboardReadyDesc.
-  ///
-  /// In en, this message translates to:
-  /// **'Complete Level {level} to unlock more challenges'**
-  String nonogramDashboardReadyDesc(int level);
-
-  /// No description provided for @nonogramDashboardReadyTitle.
-  ///
-  /// In en, this message translates to:
-  /// **'Ready for next puzzle'**
-  String get nonogramDashboardReadyTitle;
-
   /// No description provided for @nonogramDashboardStatCompleted.
   ///
   /// In en, this message translates to:
   /// **'Completed'**
   String get nonogramDashboardStatCompleted;
-
-  /// No description provided for @nonogramDashboardStatNextTarget.
-  ///
-  /// In en, this message translates to:
-  /// **'Next Target'**
-  String get nonogramDashboardStatNextTarget;
-
-  /// No description provided for @nonogramDashboardTitle.
-  ///
-  /// In en, this message translates to:
-  /// **'Nonogram'**
-  String get nonogramDashboardTitle;
 
   /// No description provided for @nonogramGuideIntro.
   ///
@@ -290,23 +248,11 @@ abstract class AppLocalizations {
   /// **'How to Solve'**
   String get nonogramGuideTitle;
 
-  /// No description provided for @nonogramHistoryBest.
-  ///
-  /// In en, this message translates to:
-  /// **'Best'**
-  String get nonogramHistoryBest;
-
   /// No description provided for @nonogramHistoryCompletedOn.
   ///
   /// In en, this message translates to:
   /// **'Completed on {date}'**
   String nonogramHistoryCompletedOn(String date);
-
-  /// No description provided for @nonogramHistoryCompletionDate.
-  ///
-  /// In en, this message translates to:
-  /// **'Completion Date'**
-  String get nonogramHistoryCompletionDate;
 
   /// No description provided for @nonogramHistoryDetailNotFound.
   ///
@@ -325,12 +271,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Level {n}'**
   String nonogramHistoryLevel(int n);
-
-  /// No description provided for @nonogramHistoryPlayTime.
-  ///
-  /// In en, this message translates to:
-  /// **'Total Play Time'**
-  String get nonogramHistoryPlayTime;
 
   /// No description provided for @nonogramHistoryTitle.
   ///
@@ -386,18 +326,6 @@ abstract class AppLocalizations {
   /// **'Nonogram'**
   String get nonogramPlayPageTitle;
 
-  /// No description provided for @nonogramPlayStatDifficulty.
-  ///
-  /// In en, this message translates to:
-  /// **'Difficulty'**
-  String get nonogramPlayStatDifficulty;
-
-  /// No description provided for @nonogramPlayStatTime.
-  ///
-  /// In en, this message translates to:
-  /// **'Time'**
-  String get nonogramPlayStatTime;
-
   /// No description provided for @nonogramSettingsCellSize.
   ///
   /// In en, this message translates to:
@@ -434,11 +362,95 @@ abstract class AppLocalizations {
   /// **'Next challenge'**
   String get nonogramDashboardContinueNext;
 
-  /// No description provided for @nonogramDashboardContinueResume.
+  /// No description provided for @nonogramDashboardPlay.
   ///
   /// In en, this message translates to:
-  /// **'Resume playing'**
-  String get nonogramDashboardContinueResume;
+  /// **'Play'**
+  String get nonogramDashboardPlay;
+
+  /// No description provided for @nonogramDashboardResumeAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Continue'**
+  String get nonogramDashboardResumeAction;
+
+  /// No description provided for @nonogramDashboardInProgressBadge.
+  ///
+  /// In en, this message translates to:
+  /// **'In progress'**
+  String get nonogramDashboardInProgressBadge;
+
+  /// No description provided for @nonogramDashboardDifficulty.
+  ///
+  /// In en, this message translates to:
+  /// **'Difficulty {value}'**
+  String nonogramDashboardDifficulty(String value);
+
+  /// No description provided for @nonogramDashboardSolvedOfTotal.
+  ///
+  /// In en, this message translates to:
+  /// **'{completed} of {total} puzzles solved'**
+  String nonogramDashboardSolvedOfTotal(int completed, int total);
+
+  /// No description provided for @nonogramDashboardStatFastest.
+  ///
+  /// In en, this message translates to:
+  /// **'Fastest'**
+  String get nonogramDashboardStatFastest;
+
+  /// No description provided for @nonogramDashboardStatTotalTime.
+  ///
+  /// In en, this message translates to:
+  /// **'Total time'**
+  String get nonogramDashboardStatTotalTime;
+
+  /// No description provided for @nonogramDashboardRecentTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Recently solved'**
+  String get nonogramDashboardRecentTitle;
+
+  /// No description provided for @nonogramDashboardSeeAll.
+  ///
+  /// In en, this message translates to:
+  /// **'See all'**
+  String get nonogramDashboardSeeAll;
+
+  /// No description provided for @nonogramDashboardRecentEmpty.
+  ///
+  /// In en, this message translates to:
+  /// **'Solve your first puzzle to start your picture collection.'**
+  String get nonogramDashboardRecentEmpty;
+
+  /// No description provided for @nonogramDashboardAllDoneTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'All puzzles solved!'**
+  String get nonogramDashboardAllDoneTitle;
+
+  /// No description provided for @nonogramDashboardAllDoneDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'You have completed all {total} puzzles. Revisit your collection anytime.'**
+  String nonogramDashboardAllDoneDesc(int total);
+
+  /// No description provided for @nonogramDurationHoursMinutes.
+  ///
+  /// In en, this message translates to:
+  /// **'{hours}h {minutes}m'**
+  String nonogramDurationHoursMinutes(int hours, int minutes);
+
+  /// No description provided for @nonogramHistoryBestTime.
+  ///
+  /// In en, this message translates to:
+  /// **'Best {time}'**
+  String nonogramHistoryBestTime(String time);
+
+  /// No description provided for @nonogramPlayActionDashboard.
+  ///
+  /// In en, this message translates to:
+  /// **'Home'**
+  String get nonogramPlayActionDashboard;
 }
 
 class _AppLocalizationsDelegate

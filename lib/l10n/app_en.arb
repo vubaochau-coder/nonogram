@@ -15,29 +15,8 @@
       }
     }
   },
-  "nonogramDashboardHeroSubtitle": "Reveal hidden pictures by filling cells based on numerical clues found on the side of the grid.",
-  "nonogramDashboardInSessionDesc": "You are halfway through Level {level}",
-  "@nonogramDashboardInSessionDesc": {
-    "placeholders": {
-      "level": {
-        "type": "int"
-      }
-    }
-  },
-  "nonogramDashboardInSessionTitle": "Currently in progress",
   "nonogramDashboardProgressSectionTitle": "Your Progress",
-  "nonogramDashboardReadyDesc": "Complete Level {level} to unlock more challenges",
-  "@nonogramDashboardReadyDesc": {
-    "placeholders": {
-      "level": {
-        "type": "int"
-      }
-    }
-  },
-  "nonogramDashboardReadyTitle": "Ready for next puzzle",
   "nonogramDashboardStatCompleted": "Completed",
-  "nonogramDashboardStatNextTarget": "Next Target",
-  "nonogramDashboardTitle": "Nonogram",
   "nonogramGuideIntro": "Nonograms are logic puzzles with simple rules and challenging solutions. The goal is to reveal hidden pictures by filling cells based on numbers on the side of the grid.",
   "nonogramGuideMethodDivisionDesc": "If joining two existing blocks would create a figure larger than any available clue, the gap between them must be an X.",
   "nonogramGuideMethodDivisionTitle": "5. Division",
@@ -56,7 +35,6 @@
   "nonogramGuideRuleDesc": "Each number represents one continuous block of filled cells in that row or column. If there are multiple numbers, they represent separate blocks, and each block must be separated from the next by at least one empty cell. For example, `3 1` means a block of 3 filled cells, then at least 1 empty cell, then a block of 1 filled cell.",
   "nonogramGuideRuleTitle": "Core rule: what the numbers mean",
   "nonogramGuideTitle": "How to Solve",
-  "nonogramHistoryBest": "Best",
   "nonogramHistoryCompletedOn": "Completed on {date}",
   "@nonogramHistoryCompletedOn": {
     "placeholders": {
@@ -65,7 +43,6 @@
       }
     }
   },
-  "nonogramHistoryCompletionDate": "Completion Date",
   "nonogramHistoryDetailNotFound": "Level details not found.",
   "nonogramHistoryEmpty": "No completed levels yet.",
   "nonogramHistoryLevel": "Level {n}",
@@ -76,7 +53,6 @@
       }
     }
   },
-  "nonogramHistoryPlayTime": "Total Play Time",
   "nonogramHistoryTitle": "Results",
   "nonogramPlayActionNextLevelFixed": "Next Level",
   "nonogramPlayActionShowClues": "Show clues",
@@ -110,13 +86,66 @@
   },
   "nonogramPlayNoNextLevelToast": "No next level available yet.",
   "nonogramPlayPageTitle": "Nonogram",
-  "nonogramPlayStatDifficulty": "Difficulty",
-  "nonogramPlayStatTime": "Time",
   "nonogramSettingsCellSize": "Cell size",
   "nonogramSettingsCellSizeCustom": "Custom size",
   "nonogramSettingsCellSizeDefault": "(default)",
   "nonogramSettingsCellSizeError": "Size must be between 12 and 80",
   "nonogramSettingsTitle": "Settings",
   "nonogramDashboardContinueNext": "Next challenge",
-  "nonogramDashboardContinueResume": "Resume playing"
+  "nonogramDashboardPlay": "Play",
+  "nonogramDashboardResumeAction": "Continue",
+  "nonogramDashboardInProgressBadge": "In progress",
+  "nonogramDashboardDifficulty": "Difficulty {value}",
+  "@nonogramDashboardDifficulty": {
+    "placeholders": {
+      "value": {
+        "type": "String"
+      }
+    }
+  },
+  "nonogramDashboardSolvedOfTotal": "{completed} of {total} puzzles solved",
+  "@nonogramDashboardSolvedOfTotal": {
+    "placeholders": {
+      "completed": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
+  "nonogramDashboardStatFastest": "Fastest",
+  "nonogramDashboardStatTotalTime": "Total time",
+  "nonogramDashboardRecentTitle": "Recently solved",
+  "nonogramDashboardSeeAll": "See all",
+  "nonogramDashboardRecentEmpty": "Solve your first puzzle to start your picture collection.",
+  "nonogramDashboardAllDoneTitle": "All puzzles solved!",
+  "nonogramDashboardAllDoneDesc": "You have completed all {total} puzzles. Revisit your collection anytime.",
+  "@nonogramDashboardAllDoneDesc": {
+    "placeholders": {
+      "total": {
+        "type": "int"
+      }
+    }
+  },
+  "nonogramDurationHoursMinutes": "{hours}h {minutes}m",
+  "@nonogramDurationHoursMinutes": {
+    "placeholders": {
+      "hours": {
+        "type": "int"
+      },
+      "minutes": {
+        "type": "int"
+      }
+    }
+  },
+  "nonogramHistoryBestTime": "Best {time}",
+  "@nonogramHistoryBestTime": {
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "nonogramPlayActionDashboard": "Home"
 }

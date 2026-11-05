@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+/// Gợi ý của các hàng, xếp sát phải. Hàng đã khớp gợi ý đổi sang
+/// [satisfiedTextStyle]. Vạch ngăn hàng đậm mỗi 5 hàng, khớp với lưới.
 class NonogramLeftCluesPainter extends CustomPainter {
   final List<List<int>> clues;
   final List<bool> satisfiedRows;
@@ -8,6 +10,7 @@ class NonogramLeftCluesPainter extends CustomPainter {
   final Color backgroundColor;
   final TextStyle textStyle;
   final TextStyle satisfiedTextStyle;
+  final Color? majorLineColor;
 
   NonogramLeftCluesPainter({
     required this.clues,
@@ -17,65 +20,56 @@ class NonogramLeftCluesPainter extends CustomPainter {
     required this.backgroundColor,
     required this.textStyle,
     required this.satisfiedTextStyle,
+    this.majorLineColor,
   });
 
   @override
   void paint(Canvas canvas, Size size) {
-    final borderPaint =
-        Paint()
-          ..color = lineColor.withValues(alpha: 0.2)
-          ..style = PaintingStyle.stroke
-          ..strokeWidth = 0.5;
-
-    final bgPaint =
-        Paint()
-          ..color = backgroundColor
-          ..style = PaintingStyle.fill;
-
     final rows = clues.length;
-    final maxClues = (size.width / cellSize).round();
+    final minor =
+        Paint()
+          ..color = lineColor
+          ..strokeWidth = 1;
+    final major =
+        Paint()
+          ..color = majorLineColor ?? lineColor
+          ..strokeWidth = 1.6;
 
-    // Fill background
-    canvas.drawRect(Offset.zero & size, bgPaint);
+    canvas.drawRRect(
+      RRect.fromRectAndCorners(
+        Offset.zero & size,
+        topLeft: const Radius.circular(10),
+        bottomLeft: const Radius.circular(10),
+      ),
+      Paint()..color = backgroundColor,
+    );
 
-    for (int r = 0; r < rows; r++) {
+    for (var r = 1; r < rows; r++) {
+      final y = r * cellSize;
+      canvas.drawLine(
+        Offset(4, y),
+        Offset(size.width, y),
+        r % 5 == 0 ? major : minor,
+      );
+    }
+
+    for (var r = 0; r < rows; r++) {
       final rowClues = clues[r];
+      final satisfied = r < satisfiedRows.length && satisfiedRows[r];
+      final style = satisfied ? satisfiedTextStyle : textStyle;
       final y = r * cellSize;
 
-      // Draw horizontal lines
-      canvas.drawLine(Offset(0, y), Offset(size.width, y), borderPaint);
-      if (r == rows - 1) {
-        canvas.drawLine(
-          Offset(0, y + cellSize),
-          Offset(size.width, y + cellSize),
-          borderPaint,
-        );
-      }
-
-      // Draw vertical lines for cells
-      for (int c = 0; c <= maxClues; c++) {
-        final x = c * cellSize;
-        canvas.drawLine(Offset(x, y), Offset(x, y + cellSize), borderPaint);
-      }
-
-      // Draw numbers (pinned to right)
-      for (int i = 0; i < rowClues.length; i++) {
-        final clueValue = rowClues[rowClues.length - 1 - i];
-        final clueStyle =
-            r < satisfiedRows.length && satisfiedRows[r]
-                ? satisfiedTextStyle
-                : textStyle;
-        final textPainter = TextPainter(
-          text: TextSpan(text: '$clueValue', style: clueStyle),
+      for (var i = 0; i < rowClues.length; i++) {
+        final value = rowClues[rowClues.length - 1 - i];
+        final tp = TextPainter(
+          text: TextSpan(text: '$value', style: style),
           textDirection: TextDirection.ltr,
         )..layout();
-
-        final targetX = size.width - (i + 1) * cellSize;
-        final offset = Offset(
-          targetX + (cellSize - textPainter.width) / 2,
-          y + (cellSize - textPainter.height) / 2,
+        final x = size.width - (i + 1) * cellSize;
+        tp.paint(
+          canvas,
+          Offset(x + (cellSize - tp.width) / 2, y + (cellSize - tp.height) / 2),
         );
-        textPainter.paint(canvas, offset);
       }
     }
   }
@@ -86,6 +80,7 @@ class NonogramLeftCluesPainter extends CustomPainter {
         oldDelegate.satisfiedRows != satisfiedRows ||
         oldDelegate.cellSize != cellSize ||
         oldDelegate.lineColor != lineColor ||
+        oldDelegate.majorLineColor != majorLineColor ||
         oldDelegate.backgroundColor != backgroundColor ||
         oldDelegate.textStyle != textStyle ||
         oldDelegate.satisfiedTextStyle != satisfiedTextStyle;

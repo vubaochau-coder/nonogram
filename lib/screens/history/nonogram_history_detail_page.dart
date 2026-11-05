@@ -1,5 +1,6 @@
 import 'dart:math';
 import 'package:nonogram/core/context_ext.dart';
+import 'package:nonogram/core/duration_format.dart';
 import 'package:nonogram/models/nonogram_completed_progress.dart';
 import 'package:nonogram/models/nonogram_puzzle.dart';
 import 'package:flutter/material.dart';
@@ -46,16 +47,10 @@ class _NonogramHistoryDetailPageState extends State<NonogramHistoryDetailPage> {
     >(
       future: _detailFuture,
       builder: (context, snapshot) {
-        final data = snapshot.data;
         final levelTitle = context.l10n.nonogramHistoryLevel(widget.level);
 
         return Scaffold(
-          appBar: AppBar(
-            title: Text(
-              data != null ? '$levelTitle: ${data.puzzle.title}' : levelTitle,
-            ),
-            centerTitle: true,
-          ),
+          appBar: AppBar(title: Text(levelTitle)),
           body: _buildBody(context, snapshot),
         );
       },
@@ -92,7 +87,7 @@ class _NonogramHistoryDetailPageState extends State<NonogramHistoryDetailPage> {
               const SizedBox(height: 16),
               FilledButton.tonal(
                 onPressed: () => setState(() => _loadDetail()),
-                child: const Text('Retry'),
+                child: Text(context.l10n.commonRetry),
               ),
             ],
           ),
@@ -112,12 +107,10 @@ class _NonogramHistoryDetailPageState extends State<NonogramHistoryDetailPage> {
       );
     }
 
-    final dateStr = DateFormat.yMMMMd().format(data.record.completedAt);
-    final duration = Duration(milliseconds: data.record.bestCompletionMs);
-    final timeStr = context.l10n.nonogramPlayDurationFormat(
-      duration.inMinutes,
-      duration.inSeconds % 60,
-    );
+    final dateStr = DateFormat.yMMMMd(
+      Localizations.localeOf(context).toLanguageTag(),
+    ).format(data.record.completedAt);
+    final timeStr = context.formatPlayTime(data.record.bestCompletionMs);
 
     return Column(
       children: [
@@ -127,35 +120,55 @@ class _NonogramHistoryDetailPageState extends State<NonogramHistoryDetailPage> {
             children: [
               Text(
                 data.puzzle.title,
-                style: context.headlineSmall.copyWith(
-                  fontWeight: FontWeight.bold,
-                ),
+                style: context.headlineSmall,
                 textAlign: TextAlign.center,
               ),
               const SizedBox(height: 4),
               Text(
                 context.l10n.nonogramHistoryCompletedOn(dateStr),
-                style: context.bodySmall.copyWith(
+                style: context.bodyMedium.copyWith(
                   color: context.color.onSurfaceVariant,
                 ),
               ),
-              Text(
-                '${context.l10n.nonogramHistoryBest}: $timeStr',
-                style: context.labelSmall.copyWith(
-                  color: context.color.primary,
-                  fontWeight: FontWeight.bold,
+              const SizedBox(height: 10),
+              Container(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 12,
+                  vertical: 6,
+                ),
+                decoration: BoxDecoration(
+                  color: context.color.primary.withValues(alpha: 0.1),
+                  borderRadius: BorderRadius.circular(100),
+                ),
+                child: Text(
+                  context.l10n.nonogramHistoryBestTime(timeStr),
+                  style: context.labelLarge.copyWith(
+                    color: context.color.primary,
+                  ),
                 ),
               ),
             ],
           ),
         ),
         Expanded(
-          child: NonogramCompletionBoard(
-            puzzle: data.puzzle,
-            cellSize: 24.0,
-            getMaxClueCount: _getMaxClueCount,
-            showClueToggle: false,
-            initialShowClues: true,
+          child: LayoutBuilder(
+            builder: (context, constraints) {
+              // Vừa khung màn hình, ô từ 12 đến 36px.
+              final puzzle = data.puzzle;
+              final cols = puzzle.cols + _getMaxClueCount(puzzle.leftClues);
+              final rows = puzzle.rows + _getMaxClueCount(puzzle.topClues);
+              final cellSize = min(
+                (constraints.maxWidth - 32) / cols,
+                (constraints.maxHeight - 32) / rows,
+              ).clamp(12.0, 36.0);
+              return NonogramCompletionBoard(
+                puzzle: puzzle,
+                cellSize: cellSize,
+                getMaxClueCount: _getMaxClueCount,
+                showClueToggle: false,
+                initialShowClues: true,
+              );
+            },
           ),
         ),
         const SizedBox(height: 32),

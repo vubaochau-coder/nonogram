@@ -1,6 +1,9 @@
-import 'package:nonogram/core/context_ext.dart';
 import 'package:flutter/material.dart';
+import 'package:nonogram/core/app_theme.dart';
+import 'package:nonogram/core/context_ext.dart';
 
+/// Nút nổi trên bàn chơi (gợi ý, chế độ, xoá, toàn màn hình).
+/// [color] khác null nghĩa là nút đang ở trạng thái bật.
 class OverlayButton extends StatelessWidget {
   final IconData icon;
   final String? label;
@@ -19,43 +22,48 @@ class OverlayButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final effectiveColor =
-        enabled
-            ? (color ?? context.color.onSurfaceVariant)
-            : context.color.onSurfaceVariant.withValues(alpha: 0.4);
+    final active = color;
+    final foreground =
+        !enabled
+            ? context.color.onSurfaceVariant.withValues(alpha: 0.45)
+            : (active ?? context.color.onSurface);
+    final background =
+        active?.withValues(alpha: 0.12) ?? context.color.surfaceContainerLow;
+    final border =
+        active?.withValues(alpha: 0.4) ?? context.gameColors.cardBorder;
 
-    return InkWell(
-      onTap: enabled ? onPressed : null,
-      borderRadius: BorderRadius.circular(20),
-      child: AnimatedOpacity(
-        duration: const Duration(milliseconds: 200),
-        opacity: enabled ? 1.0 : 0.6,
-        child: Container(
-          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+    return Material(
+      color: Colors.transparent,
+      child: InkWell(
+        onTap: enabled ? onPressed : null,
+        borderRadius: BorderRadius.circular(14),
+        child: AnimatedContainer(
+          duration: const Duration(milliseconds: 200),
+          height: 40,
+          constraints: const BoxConstraints(minWidth: 40),
+          padding: EdgeInsets.symmetric(horizontal: label == null ? 10 : 12),
           decoration: BoxDecoration(
-            color:
-                color?.withValues(alpha: 0.1) ??
-                context.color.surfaceContainerHighest.withValues(alpha: 0.6),
-            borderRadius: BorderRadius.circular(20),
-            border: Border.all(
-              color:
-                  color?.withValues(alpha: 0.3) ??
-                  context.color.outlineVariant.withValues(alpha: 0.5),
-              width: 0.5,
-            ),
+            color: background,
+            borderRadius: BorderRadius.circular(14),
+            border: Border.all(color: border),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black.withValues(alpha: 0.05),
+                blurRadius: 8,
+                offset: const Offset(0, 2),
+              ),
+            ],
           ),
           child: Row(
             mainAxisSize: MainAxisSize.min,
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Icon(icon, size: 18, color: effectiveColor),
+              Icon(icon, size: 18, color: foreground),
               if (label != null) ...[
-                const SizedBox(width: 8),
+                const SizedBox(width: 6),
                 Text(
                   label!,
-                  style: context.labelLarge.copyWith(
-                    color: effectiveColor,
-                    fontWeight: FontWeight.w600,
-                  ),
+                  style: context.labelLarge.copyWith(color: foreground),
                 ),
               ],
             ],

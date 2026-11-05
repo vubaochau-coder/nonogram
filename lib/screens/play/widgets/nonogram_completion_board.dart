@@ -89,9 +89,8 @@ class _NonogramCompletionBoardState extends State<NonogramCompletionBoard> {
                             painter: NonogramSolutionPainter(
                               solution: widget.puzzle.solution,
                               cellSize: widget.cellSize,
-                              filledColor: context.color.primary,
-                              gridLineColor: context.color.outlineVariant
-                                  .withValues(alpha: 0.2),
+                              filledColor: context.color.onSurface,
+                              gridLineColor: context.color.outlineVariant,
                             ),
                           ),
                         ),
@@ -112,15 +111,17 @@ class _NonogramCompletionBoardState extends State<NonogramCompletionBoard> {
                                 ),
                                 cellSize: widget.cellSize,
                                 lineColor: context.color.outlineVariant,
-                                backgroundColor: context.color.onSurface
-                                    .withValues(alpha: 0.05),
+                                majorLineColor: context.color.outline,
+                                backgroundColor: context.color.surfaceContainer,
                                 textStyle: context.labelSmall.copyWith(
-                                  fontSize: 10,
+                                  fontSize: (widget.cellSize * 0.4).clamp(
+                                    9.0,
+                                    15.0,
+                                  ),
+                                  fontWeight: FontWeight.w800,
+                                  height: 1,
                                 ),
-                                satisfiedTextStyle: context.labelSmall.copyWith(
-                                  fontSize: 10,
-                                  color: Colors.green.shade700,
-                                ),
+                                satisfiedTextStyle: context.labelSmall,
                               ),
                             ),
                           ),
@@ -141,15 +142,17 @@ class _NonogramCompletionBoardState extends State<NonogramCompletionBoard> {
                                 ),
                                 cellSize: widget.cellSize,
                                 lineColor: context.color.outlineVariant,
-                                backgroundColor: context.color.onSurface
-                                    .withValues(alpha: 0.05),
+                                majorLineColor: context.color.outline,
+                                backgroundColor: context.color.surfaceContainer,
                                 textStyle: context.labelSmall.copyWith(
-                                  fontSize: 10,
+                                  fontSize: (widget.cellSize * 0.4).clamp(
+                                    9.0,
+                                    15.0,
+                                  ),
+                                  fontWeight: FontWeight.w800,
+                                  height: 1,
                                 ),
-                                satisfiedTextStyle: context.labelSmall.copyWith(
-                                  fontSize: 10,
-                                  color: Colors.green.shade700,
-                                ),
+                                satisfiedTextStyle: context.labelSmall,
                               ),
                             ),
                           ),

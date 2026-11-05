@@ -26,36 +26,10 @@ class AppLocalizationsVi extends AppLocalizations {
   }
 
   @override
-  String get nonogramDashboardHeroSubtitle =>
-      'Hé lộ bức tranh ẩn bằng cách điền các ô dựa trên gợi ý số ở các cạnh của lưới.';
-
-  @override
-  String nonogramDashboardInSessionDesc(int level) {
-    return 'Bạn đang giải dở Màn $level';
-  }
-
-  @override
-  String get nonogramDashboardInSessionTitle => 'Đang giải dở';
-
-  @override
   String get nonogramDashboardProgressSectionTitle => 'Tiến trình của bạn';
 
   @override
-  String nonogramDashboardReadyDesc(int level) {
-    return 'Vượt qua Màn $level để mở khóa thêm thử thách';
-  }
-
-  @override
-  String get nonogramDashboardReadyTitle => 'Sẵn sàng cho màn mới';
-
-  @override
   String get nonogramDashboardStatCompleted => 'Đã hoàn thành';
-
-  @override
-  String get nonogramDashboardStatNextTarget => 'Mục tiêu tiếp theo';
-
-  @override
-  String get nonogramDashboardTitle => 'Nonogram';
 
   @override
   String get nonogramGuideIntro =>
@@ -124,15 +98,9 @@ class AppLocalizationsVi extends AppLocalizations {
   String get nonogramGuideTitle => 'Cách Giải Nonogram';
 
   @override
-  String get nonogramHistoryBest => 'Kỷ lục';
-
-  @override
   String nonogramHistoryCompletedOn(String date) {
     return 'Hoàn thành lúc $date';
   }
-
-  @override
-  String get nonogramHistoryCompletionDate => 'Ngày hoàn thành';
 
   @override
   String get nonogramHistoryDetailNotFound =>
@@ -145,9 +113,6 @@ class AppLocalizationsVi extends AppLocalizations {
   String nonogramHistoryLevel(int n) {
     return 'Màn $n';
   }
-
-  @override
-  String get nonogramHistoryPlayTime => 'Tổng thời gian chơi';
 
   @override
   String get nonogramHistoryTitle => 'Kết quả';
@@ -183,12 +148,6 @@ class AppLocalizationsVi extends AppLocalizations {
   String get nonogramPlayPageTitle => 'Nonogram';
 
   @override
-  String get nonogramPlayStatDifficulty => 'Độ khó';
-
-  @override
-  String get nonogramPlayStatTime => 'Thời gian';
-
-  @override
   String get nonogramSettingsCellSize => 'Kích thước ô';
 
   @override
@@ -207,5 +166,58 @@ class AppLocalizationsVi extends AppLocalizations {
   String get nonogramDashboardContinueNext => 'Thử thách tiếp theo';
 
   @override
-  String get nonogramDashboardContinueResume => 'Tiếp tục chơi';
+  String get nonogramDashboardPlay => 'Chơi';
+
+  @override
+  String get nonogramDashboardResumeAction => 'Chơi tiếp';
+
+  @override
+  String get nonogramDashboardInProgressBadge => 'Đang chơi dở';
+
+  @override
+  String nonogramDashboardDifficulty(String value) {
+    return 'Độ khó $value';
+  }
+
+  @override
+  String nonogramDashboardSolvedOfTotal(int completed, int total) {
+    return 'Đã giải $completed/$total màn';
+  }
+
+  @override
+  String get nonogramDashboardStatFastest => 'Nhanh nhất';
+
+  @override
+  String get nonogramDashboardStatTotalTime => 'Tổng thời gian';
+
+  @override
+  String get nonogramDashboardRecentTitle => 'Vừa giải xong';
+
+  @override
+  String get nonogramDashboardSeeAll => 'Xem tất cả';
+
+  @override
+  String get nonogramDashboardRecentEmpty =>
+      'Giải màn đầu tiên để bắt đầu bộ sưu tập tranh của bạn.';
+
+  @override
+  String get nonogramDashboardAllDoneTitle => 'Bạn đã giải hết mọi màn!';
+
+  @override
+  String nonogramDashboardAllDoneDesc(int total) {
+    return 'Bạn đã hoàn thành cả $total màn. Xem lại bộ sưu tập bất cứ lúc nào.';
+  }
+
+  @override
+  String nonogramDurationHoursMinutes(int hours, int minutes) {
+    return '$hours giờ $minutes phút';
+  }
+
+  @override
+  String nonogramHistoryBestTime(String time) {
+    return 'Kỷ lục $time';
+  }
+
+  @override
+  String get nonogramPlayActionDashboard => 'Trang chủ';
 }

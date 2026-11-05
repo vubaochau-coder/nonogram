@@ -1,5 +1,10 @@
+import 'package:lucide_icons/lucide_icons.dart';
 import 'package:nonogram/core/context_ext.dart';
+import 'package:nonogram/core/duration_format.dart';
+import 'package:nonogram/data/nonogram_repository.dart';
 import 'package:nonogram/models/nonogram_completed_progress.dart';
+import 'package:nonogram/models/nonogram_puzzle.dart';
+import 'package:nonogram/widgets/nonogram_pixel_art.dart';
 import 'package:nonogram/widgets/app_skeleton_box.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -50,10 +55,7 @@ class _NonogramHistoryViewState extends State<_NonogramHistoryView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text(context.l10n.nonogramHistoryTitle),
-        centerTitle: true,
-      ),
+      appBar: AppBar(title: Text(context.l10n.nonogramHistoryTitle)),
       body: BlocBuilder<NonogramHistoryBloc, NonogramHistoryState>(
         builder: (context, state) {
           if (state.isLoading) {
@@ -84,7 +86,7 @@ class _NonogramHistoryViewState extends State<_NonogramHistoryView> {
                           () => context.read<NonogramHistoryBloc>().add(
                             const HistoryInitialized(),
                           ),
-                      child: const Text('Retry'),
+                      child: Text(context.l10n.commonRetry),
                     ),
                   ],
                 ),
@@ -181,7 +183,7 @@ class _HistorySkeletonTile extends StatelessWidget {
         ),
         child: const Row(
           children: [
-            AppSkeletonBox(width: 44, height: 44, borderRadius: 100),
+            AppSkeletonBox(width: 64, height: 64, borderRadius: 14),
             SizedBox(width: 16),
             Expanded(
               child: Column(
@@ -211,81 +213,95 @@ class _HistoryListTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final dateStr = DateFormat.yMMMd().format(item.completedAt);
-
-    final duration = Duration(milliseconds: item.bestCompletionMs);
-    final timeStr = context.l10n.nonogramPlayDurationFormat(
-      duration.inMinutes,
-      duration.inSeconds % 60,
-    );
+    final dateStr = DateFormat.yMMMd(
+      Localizations.localeOf(context).toLanguageTag(),
+    ).format(item.completedAt);
+    final repository = context.read<NonogramRepository>();
 
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
-      child: InkWell(
-        onTap: () {
-          context.navigate(
-            NonogramCompletedResultDetailIntent(level: item.level),
-          );
-        },
-        borderRadius: BorderRadius.circular(16),
-        child: Container(
-          padding: const EdgeInsets.all(16),
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(16),
-            border: Border.all(
-              color: context.color.surfaceContainerHigh.withValues(alpha: 0.72),
-            ),
-          ),
-          child: Row(
-            children: [
-              Container(
-                width: 44,
-                height: 44,
-                decoration: BoxDecoration(
-                  color: context.color.primary.withValues(alpha: 0.4),
-                  shape: BoxShape.circle,
-                ),
-                alignment: Alignment.center,
-                child: Text(
-                  '${item.level}',
-                  style: context.labelLarge.copyWith(
-                    color: context.color.secondary,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ),
-              const SizedBox(width: 16),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+      child: Card(
+        child: InkWell(
+          onTap: () {
+            context.navigate(
+              NonogramCompletedResultDetailIntent(level: item.level),
+            );
+          },
+          child: Padding(
+            padding: const EdgeInsets.all(10),
+            child: FutureBuilder<NonogramPuzzle?>(
+              future: repository.getPuzzleByLevel(item.level),
+              builder: (context, snapshot) {
+                final puzzle = snapshot.data;
+                return Row(
                   children: [
-                    Text(
-                      context.l10n.nonogramHistoryLevel(item.level),
-                      style: context.bodyMedium.copyWith(
-                        fontWeight: FontWeight.bold,
+                    Container(
+                      width: 64,
+                      height: 64,
+                      padding: const EdgeInsets.all(8),
+                      decoration: BoxDecoration(
+                        color: context.color.surfaceContainer,
+                        borderRadius: BorderRadius.circular(14),
+                      ),
+                      child:
+                          puzzle == null
+                              ? null
+                              : NonogramPixelArt.fromSolution(
+                                solution: puzzle.solution,
+                                color: context.color.onSurface,
+                              ),
+                    ),
+                    const SizedBox(width: 14),
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            puzzle?.title ??
+                                context.l10n.nonogramHistoryLevel(item.level),
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                            style: context.titleSmall,
+                          ),
+                          const SizedBox(height: 2),
+                          Text(
+                            '${context.l10n.nonogramHistoryLevel(item.level)}  ·  $dateStr',
+                            style: context.labelMedium.copyWith(
+                              color: context.color.onSurfaceVariant,
+                            ),
+                          ),
+                          const SizedBox(height: 6),
+                          Row(
+                            children: [
+                              Icon(
+                                LucideIcons.timer,
+                                size: 14,
+                                color: context.color.primary,
+                              ),
+                              const SizedBox(width: 4),
+                              Text(
+                                context.l10n.nonogramHistoryBestTime(
+                                  context.formatPlayTime(item.bestCompletionMs),
+                                ),
+                                style: context.labelMedium.copyWith(
+                                  color: context.color.primary,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ],
                       ),
                     ),
-                    const SizedBox(height: 4),
-                    Text(
-                      '${context.l10n.nonogramHistoryCompletionDate}: $dateStr',
-                      style: context.labelSmall.copyWith(
-                        color: context.color.onSurfaceVariant,
-                      ),
-                    ),
-                    Text(
-                      '${context.l10n.nonogramHistoryPlayTime}: $timeStr',
-                      style: context.labelSmall.copyWith(
-                        color: context.color.primary,
+                    Icon(
+                      LucideIcons.chevronRight,
+                      color: context.color.onSurfaceVariant.withValues(
+                        alpha: 0.6,
                       ),
                     ),
                   ],
-                ),
-              ),
-              Icon(
-                Icons.chevron_right_rounded,
-                color: context.color.onSurfaceVariant.withValues(alpha: 0.5),
-              ),
-            ],
+                );
+              },
+            ),
           ),
         ),
       ),

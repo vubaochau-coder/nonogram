@@ -1,203 +1,242 @@
 import 'package:flutter/material.dart';
 import 'package:nonogram/core/app_spacing.dart';
 
-class AppTheme {
-  static final lightTheme = ThemeData(
-    brightness: Brightness.light,
-    scaffoldBackgroundColor: const Color(0xFFFFFFFF),
-    appBarTheme: const AppBarTheme(
-      backgroundColor: Color(0xFFFFFFFF),
-      foregroundColor: Color(0xFF24292F),
-      elevation: 0,
-      scrolledUnderElevation: 0,
-      surfaceTintColor: Colors.transparent,
-    ),
-    textTheme: const TextTheme(
-      displayLarge: TextStyle(fontSize: 57, color: Color(0xFF24292F)),
-      displayMedium: TextStyle(fontSize: 45, color: Color(0xFF24292F)),
-      displaySmall: TextStyle(fontSize: 36, color: Color(0xFF24292F)),
-      headlineLarge: TextStyle(fontSize: 32, color: Color(0xFF24292F)),
-      headlineMedium: TextStyle(fontSize: 28, color: Color(0xFF24292F)),
-      headlineSmall: TextStyle(fontSize: 24, color: Color(0xFF24292F)),
-      titleLarge: TextStyle(
-        fontSize: 22,
-        color: Color(0xFF24292F),
-        fontWeight: FontWeight.w500,
-      ),
-      titleMedium: TextStyle(
-        fontSize: 16,
-        color: Color(0xFF24292F),
-        fontWeight: FontWeight.w500,
-      ),
-      titleSmall: TextStyle(
-        fontSize: 14,
-        color: Color(0xFF24292F),
-        fontWeight: FontWeight.w500,
-      ),
-      labelLarge: TextStyle(
-        fontSize: 14,
-        color: Color(0xFF24292F),
-        fontWeight: FontWeight.w500,
-      ),
-      labelMedium: TextStyle(
-        fontSize: 12,
-        color: Color(0xFF24292F),
-        fontWeight: FontWeight.w500,
-      ),
-      labelSmall: TextStyle(
-        fontSize: 11,
-        color: Color(0xFF24292F),
-        fontWeight: FontWeight.w500,
-      ),
-      bodyLarge: TextStyle(fontSize: 16, color: Color(0xFF24292F)),
-      bodyMedium: TextStyle(fontSize: 14, color: Color(0xFF24292F)),
-      bodySmall: TextStyle(fontSize: 12, color: Color(0xFF57606A)),
-    ),
-    colorScheme: const ColorScheme(
-      brightness: Brightness.light,
-      primary: Color(0xFF0969DA),
-      onPrimary: Colors.white,
-      secondary: Color(0xFF57606A),
-      onSecondary: Colors.white,
-      error: Color(0xFFCF222E),
-      onError: Colors.white,
-      surface: Color(0xFFF6F8FA),
-      onSurface: Color(0xFF24292F),
-      surfaceContainerHigh: Color(0xFFD0D7DE),
-    ),
-    iconTheme: const IconThemeData(size: 18, color: Color(0xFF57606A)),
-    listTileTheme: const ListTileThemeData(iconColor: Color(0xFF57606A)),
-    dialogTheme: const DialogThemeData(
-      insetPadding: EdgeInsets.all(AppSpacing.dialogScreenInset),
-    ),
-    outlinedButtonTheme: OutlinedButtonThemeData(
-      style: OutlinedButton.styleFrom(
-        foregroundColor: const Color(0xFF24292F),
-        side: const BorderSide(color: Color(0xFFD0D7DE)),
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-        padding: const EdgeInsets.symmetric(
-          vertical: AppSpacing.buttonVerticalPadding,
-          horizontal: AppSpacing.buttonHorizontalPadding,
-        ),
-      ),
-    ),
-    filledButtonTheme: FilledButtonThemeData(
-      style: FilledButton.styleFrom(
-        backgroundColor: const Color(0xFF0969DA),
-        foregroundColor: Colors.white,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-        padding: const EdgeInsets.symmetric(
-          vertical: AppSpacing.buttonVerticalPadding,
-          horizontal: AppSpacing.buttonHorizontalPadding,
-        ),
-      ),
-    ),
+/// Màu dùng riêng cho game, ngoài ColorScheme chuẩn.
+@immutable
+class GameColors extends ThemeExtension<GameColors> {
+  const GameColors({
+    required this.success,
+    required this.reward,
+    required this.cardBorder,
+    required this.heroStart,
+    required this.heroEnd,
+  });
 
-    elevatedButtonTheme: ElevatedButtonThemeData(
-      style: ElevatedButton.styleFrom(
-        backgroundColor: const Color(0xFF0969DA),
-        foregroundColor: Colors.white,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-      ),
+  /// Hàng/cột đã khớp gợi ý, màn đã giải.
+  final Color success;
+
+  /// Cúp, ngôi sao, kỷ lục.
+  final Color reward;
+  final Color cardBorder;
+
+  /// Gradient của thẻ "màn tiếp theo" trên dashboard.
+  final Color heroStart;
+  final Color heroEnd;
+
+  @override
+  GameColors copyWith({
+    Color? success,
+    Color? reward,
+    Color? cardBorder,
+    Color? heroStart,
+    Color? heroEnd,
+  }) {
+    return GameColors(
+      success: success ?? this.success,
+      reward: reward ?? this.reward,
+      cardBorder: cardBorder ?? this.cardBorder,
+      heroStart: heroStart ?? this.heroStart,
+      heroEnd: heroEnd ?? this.heroEnd,
+    );
+  }
+
+  @override
+  GameColors lerp(GameColors? other, double t) {
+    if (other == null) return this;
+    return GameColors(
+      success: Color.lerp(success, other.success, t)!,
+      reward: Color.lerp(reward, other.reward, t)!,
+      cardBorder: Color.lerp(cardBorder, other.cardBorder, t)!,
+      heroStart: Color.lerp(heroStart, other.heroStart, t)!,
+      heroEnd: Color.lerp(heroEnd, other.heroEnd, t)!,
+    );
+  }
+}
+
+abstract final class AppTheme {
+  static const fontFamily = 'Nunito';
+
+  /// Màu chủ đạo, trùng với màu nền launcher icon.
+  static const brand = Color(0xFF3B5BDB);
+
+  static final lightTheme = _build(
+    scheme: ColorScheme.fromSeed(
+      seedColor: brand,
+      dynamicSchemeVariant: DynamicSchemeVariant.fidelity,
+    ).copyWith(
+      primary: brand,
+      onPrimary: Colors.white,
+      surface: const Color(0xFFF5F6FA),
+      onSurface: const Color(0xFF1B1F2A),
+      onSurfaceVariant: const Color(0xFF5B6274),
+      surfaceContainerLowest: Colors.white,
+      surfaceContainerLow: Colors.white,
+      surfaceContainer: const Color(0xFFEEF0F6),
+      surfaceContainerHigh: const Color(0xFFE6E9F1),
+      surfaceContainerHighest: const Color(0xFFDDE1EB),
+      outline: const Color(0xFFB5BBCB),
+      outlineVariant: const Color(0xFFDDE1EB),
+    ),
+    game: const GameColors(
+      success: Color(0xFF1F9D63),
+      reward: Color(0xFFF2A516),
+      cardBorder: Color(0xFFE3E6EE),
+      heroStart: Color(0xFF3B5BDB),
+      heroEnd: Color(0xFF6741D9),
     ),
   );
 
-  static final darkTheme = ThemeData(
-    brightness: Brightness.dark,
-    scaffoldBackgroundColor: const Color(0xFF0D1117),
-    appBarTheme: const AppBarTheme(
-      backgroundColor: Color(0xFF0D1117),
-      foregroundColor: Color(0xFFE6EDF3),
-      elevation: 0,
-      scrolledUnderElevation: 0,
-      surfaceTintColor: Colors.transparent,
-    ),
-    textTheme: const TextTheme(
-      displayLarge: TextStyle(fontSize: 57, color: Color(0xFFE6EDF3)),
-      displayMedium: TextStyle(fontSize: 45, color: Color(0xFFE6EDF3)),
-      displaySmall: TextStyle(fontSize: 36, color: Color(0xFFE6EDF3)),
-      headlineLarge: TextStyle(fontSize: 32, color: Color(0xFFE6EDF3)),
-      headlineMedium: TextStyle(fontSize: 28, color: Color(0xFFE6EDF3)),
-      headlineSmall: TextStyle(fontSize: 24, color: Color(0xFFE6EDF3)),
-      titleLarge: TextStyle(
-        fontSize: 22,
-        color: Color(0xFFE6EDF3),
-        fontWeight: FontWeight.w500,
-      ),
-      titleMedium: TextStyle(
-        fontSize: 16,
-        color: Color(0xFFE6EDF3),
-        fontWeight: FontWeight.w500,
-      ),
-      titleSmall: TextStyle(
-        fontSize: 14,
-        color: Color(0xFFE6EDF3),
-        fontWeight: FontWeight.w500,
-      ),
-      labelLarge: TextStyle(
-        fontSize: 14,
-        color: Color(0xFFE6EDF3),
-        fontWeight: FontWeight.w500,
-      ),
-      labelMedium: TextStyle(
-        fontSize: 12,
-        color: Color(0xFFE6EDF3),
-        fontWeight: FontWeight.w500,
-      ),
-      labelSmall: TextStyle(
-        fontSize: 11,
-        color: Color(0xFFE6EDF3),
-        fontWeight: FontWeight.w500,
-      ),
-      bodyLarge: TextStyle(fontSize: 16, color: Color(0xFFE6EDF3)),
-      bodyMedium: TextStyle(fontSize: 14, color: Color(0xFFE6EDF3)),
-      bodySmall: TextStyle(fontSize: 12, color: Color(0xFF8B949E)),
-    ),
-    colorScheme: const ColorScheme(
+  static final darkTheme = _build(
+    scheme: ColorScheme.fromSeed(
+      seedColor: brand,
       brightness: Brightness.dark,
-      primary: Color(0xFF2F81F7),
-      onPrimary: Colors.white,
-      secondary: Color(0xFF8B949E),
-      onSecondary: Color(0xFF0D1117),
-      error: Color(0xFFF85149),
-      onError: Colors.white,
-      surface: Color(0xFF161B22),
-      onSurface: Color(0xFFE6EDF3),
-      surfaceContainerHigh: Color(0xFF30363D),
+      dynamicSchemeVariant: DynamicSchemeVariant.fidelity,
+    ).copyWith(
+      primary: const Color(0xFF91A7FF),
+      onPrimary: const Color(0xFF0F1A4A),
+      surface: const Color(0xFF0F1218),
+      onSurface: const Color(0xFFE6E8EF),
+      onSurfaceVariant: const Color(0xFF9AA1B2),
+      surfaceContainerLowest: const Color(0xFF0B0D12),
+      surfaceContainerLow: const Color(0xFF171B23),
+      surfaceContainer: const Color(0xFF1C212B),
+      surfaceContainerHigh: const Color(0xFF242A35),
+      surfaceContainerHighest: const Color(0xFF2E3542),
+      outline: const Color(0xFF4A5263),
+      outlineVariant: const Color(0xFF2E3542),
     ),
-    iconTheme: const IconThemeData(size: 18, color: Color(0xFF8B949E)),
-    listTileTheme: const ListTileThemeData(iconColor: Color(0xFF8B949E)),
-    dialogTheme: const DialogThemeData(
-      insetPadding: EdgeInsets.all(AppSpacing.dialogScreenInset),
-    ),
-    outlinedButtonTheme: OutlinedButtonThemeData(
-      style: OutlinedButton.styleFrom(
-        foregroundColor: const Color(0xFFE6EDF3),
-        side: const BorderSide(color: Color(0xFF30363D)),
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-        padding: const EdgeInsets.symmetric(
-          vertical: AppSpacing.buttonVerticalPadding,
-          horizontal: AppSpacing.buttonHorizontalPadding,
-        ),
-      ),
-    ),
-    filledButtonTheme: FilledButtonThemeData(
-      style: FilledButton.styleFrom(
-        backgroundColor: const Color(0xFF2F81F7),
-        foregroundColor: Colors.white,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-        padding: const EdgeInsets.symmetric(
-          vertical: AppSpacing.buttonVerticalPadding,
-          horizontal: AppSpacing.buttonHorizontalPadding,
-        ),
-      ),
-    ),
-    elevatedButtonTheme: ElevatedButtonThemeData(
-      style: ElevatedButton.styleFrom(
-        backgroundColor: const Color(0xFF2F81F7),
-        foregroundColor: Colors.white,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-      ),
+    game: const GameColors(
+      success: Color(0xFF3DD68C),
+      reward: Color(0xFFFFC53D),
+      cardBorder: Color(0xFF262C38),
+      heroStart: Color(0xFF3451C7),
+      heroEnd: Color(0xFF5F3DC4),
     ),
   );
+
+  static ThemeData _build({
+    required ColorScheme scheme,
+    required GameColors game,
+  }) {
+    final base = ThemeData(
+      useMaterial3: true,
+      brightness: scheme.brightness,
+      colorScheme: scheme,
+      fontFamily: fontFamily,
+    );
+    final text = base.textTheme.apply(
+      bodyColor: scheme.onSurface,
+      displayColor: scheme.onSurface,
+    );
+    final cardShape = RoundedRectangleBorder(
+      borderRadius: BorderRadius.circular(20),
+      side: BorderSide(color: game.cardBorder),
+    );
+
+    return base.copyWith(
+      scaffoldBackgroundColor: scheme.surface,
+      extensions: [game],
+      textTheme: text.copyWith(
+        headlineMedium: text.headlineMedium?.copyWith(
+          fontWeight: FontWeight.w800,
+        ),
+        headlineSmall: text.headlineSmall?.copyWith(
+          fontWeight: FontWeight.w800,
+        ),
+        titleLarge: text.titleLarge?.copyWith(fontWeight: FontWeight.w800),
+        titleMedium: text.titleMedium?.copyWith(fontWeight: FontWeight.w700),
+        titleSmall: text.titleSmall?.copyWith(fontWeight: FontWeight.w700),
+        labelLarge: text.labelLarge?.copyWith(fontWeight: FontWeight.w700),
+        labelMedium: text.labelMedium?.copyWith(fontWeight: FontWeight.w600),
+        labelSmall: text.labelSmall?.copyWith(fontWeight: FontWeight.w600),
+      ),
+      appBarTheme: AppBarTheme(
+        backgroundColor: scheme.surface,
+        foregroundColor: scheme.onSurface,
+        elevation: 0,
+        scrolledUnderElevation: 0,
+        surfaceTintColor: Colors.transparent,
+        centerTitle: false,
+        // textTheme của ThemeData chưa có cỡ chữ ở bước này (được ghép khi
+        // Theme.of), nên đặt cỡ chữ rõ ràng.
+        titleTextStyle: TextStyle(
+          fontFamily: fontFamily,
+          fontSize: 20,
+          fontWeight: FontWeight.w800,
+          color: scheme.onSurface,
+        ),
+      ),
+      cardTheme: CardThemeData(
+        color: scheme.surfaceContainerLow,
+        elevation: 0,
+        margin: EdgeInsets.zero,
+        shape: cardShape,
+        clipBehavior: Clip.antiAlias,
+      ),
+      iconTheme: IconThemeData(size: 20, color: scheme.onSurfaceVariant),
+      dividerTheme: DividerThemeData(color: game.cardBorder, space: 1),
+      dialogTheme: DialogThemeData(
+        backgroundColor: scheme.surfaceContainerLow,
+        surfaceTintColor: Colors.transparent,
+        insetPadding: const EdgeInsets.all(AppSpacing.dialogScreenInset),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
+      ),
+      filledButtonTheme: FilledButtonThemeData(
+        style: FilledButton.styleFrom(
+          minimumSize: const Size(0, 52),
+          textStyle: const TextStyle(
+            fontFamily: fontFamily,
+            fontSize: 16,
+            fontWeight: FontWeight.w800,
+          ),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(16),
+          ),
+          padding: const EdgeInsets.symmetric(horizontal: 24),
+        ),
+      ),
+      outlinedButtonTheme: OutlinedButtonThemeData(
+        style: OutlinedButton.styleFrom(
+          minimumSize: const Size(0, 48),
+          foregroundColor: scheme.onSurface,
+          side: BorderSide(color: game.cardBorder),
+          textStyle: const TextStyle(
+            fontFamily: fontFamily,
+            fontWeight: FontWeight.w700,
+          ),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(16),
+          ),
+        ),
+      ),
+      textButtonTheme: TextButtonThemeData(
+        style: TextButton.styleFrom(
+          textStyle: const TextStyle(
+            fontFamily: fontFamily,
+            fontWeight: FontWeight.w700,
+          ),
+        ),
+      ),
+      progressIndicatorTheme: ProgressIndicatorThemeData(
+        color: scheme.primary,
+        linearTrackColor: scheme.surfaceContainerHigh,
+        borderRadius: BorderRadius.circular(8),
+      ),
+      chipTheme: ChipThemeData(
+        side: BorderSide.none,
+        shape: const StadiumBorder(),
+        labelStyle: text.labelMedium,
+      ),
+      pageTransitionsTheme: const PageTransitionsTheme(
+        builders: {
+          TargetPlatform.android: FadeForwardsPageTransitionsBuilder(),
+          TargetPlatform.iOS: CupertinoPageTransitionsBuilder(),
+        },
+      ),
+    );
+  }
+}
+
+extension GameColorsContext on BuildContext {
+  GameColors get gameColors => Theme.of(this).extension<GameColors>()!;
 }

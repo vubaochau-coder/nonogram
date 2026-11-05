@@ -69,6 +69,31 @@ class NonogramRepository {
     return (record: record, puzzle: puzzle);
   }
 
+  /// Các màn giải gần nhất (kèm puzzle để vẽ hình) và thống kê tổng.
+  Future<NonogramCompletionSummary> getCompletionSummary({
+    int recentLimit = 10,
+  }) async {
+    final completed = await _localService.getCompletedProgress();
+    completed.sort((a, b) => b.completedAt.compareTo(a.completedAt));
+
+    final recent = <NonogramSolvedPuzzle>[];
+    for (final record in completed.take(recentLimit)) {
+      final puzzle = await getPuzzleByLevel(record.level);
+      if (puzzle != null) {
+        recent.add((record: record, puzzle: puzzle));
+      }
+    }
+
+    return NonogramCompletionSummary(
+      recent: recent,
+      totalPlayMs: completed.fold(0, (sum, e) => sum + e.bestCompletionMs),
+      bestMs:
+          completed.isEmpty
+              ? null
+              : completed.map((e) => e.bestCompletionMs).reduce(min),
+    );
+  }
+
   // --- Campaign ---
 
   Future<int> getCurrentLevel() async {
@@ -125,4 +150,30 @@ class NonogramRepository {
       currentProgress: inProgressSnapshot,
     );
   }
+}
+
+typedef NonogramSolvedPuzzle =
+    ({NonogramCompletedProgress record, NonogramPuzzle puzzle});
+
+class NonogramCompletionSummary {
+  const NonogramCompletionSummary({
+    required this.recent,
+    required this.totalPlayMs,
+    required this.bestMs,
+  });
+
+  static const empty = NonogramCompletionSummary(
+    recent: [],
+    totalPlayMs: 0,
+    bestMs: null,
+  );
+
+  /// Mới nhất trước.
+  final List<NonogramSolvedPuzzle> recent;
+
+  /// Tổng thời gian (kỷ lục) của mọi màn đã giải.
+  final int totalPlayMs;
+
+  /// Thời gian giải nhanh nhất trong mọi màn.
+  final int? bestMs;
 }

@@ -28,6 +28,14 @@ class NonogramDashboardBloc
 
     try {
       final overview = await _repository.getCampaignOverview();
+      final hasTarget =
+          overview.currentProgress != null ||
+          overview.nextPlayableLevel != null;
+      final puzzle =
+          hasTarget
+              ? await _repository.getPuzzleByLevel(overview.currentLevel)
+              : null;
+      final summary = await _repository.getCompletionSummary();
       emit(
         state.copyWith(
           isLoading: false,
@@ -37,6 +45,8 @@ class NonogramDashboardBloc
           completedCount: overview.completedCount,
           hasInProgressSession: overview.currentProgress != null,
           totalLevels: overview.totalLevels,
+          currentPuzzle: Wrapper(puzzle),
+          summary: summary,
         ),
       );
     } catch (e) {
