@@ -12,6 +12,9 @@ class NonogramTopCluesPainter extends CustomPainter {
   final TextStyle satisfiedTextStyle;
   final Color? majorLineColor;
 
+  /// Màu tô nhóm 5 cột/hàng thứ 2, 4, 6...; null thì không tô dải.
+  final Color? bandColor;
+
   NonogramTopCluesPainter({
     required this.clues,
     required this.satisfiedColumns,
@@ -21,6 +24,7 @@ class NonogramTopCluesPainter extends CustomPainter {
     required this.textStyle,
     required this.satisfiedTextStyle,
     this.majorLineColor,
+    this.bandColor,
   });
 
   @override
@@ -43,6 +47,17 @@ class NonogramTopCluesPainter extends CustomPainter {
       ),
       Paint()..color = backgroundColor,
     );
+
+    if (bandColor != null) {
+      final band = Paint()..color = bandColor!;
+      for (var start = 5; start < cols; start += 10) {
+        final end = (start + 5).clamp(0, cols);
+        canvas.drawRect(
+          Rect.fromLTRB(start * cellSize, 0, end * cellSize, size.height),
+          band,
+        );
+      }
+    }
 
     for (var c = 1; c < cols; c++) {
       final x = c * cellSize;
@@ -81,6 +96,7 @@ class NonogramTopCluesPainter extends CustomPainter {
         oldDelegate.cellSize != cellSize ||
         oldDelegate.lineColor != lineColor ||
         oldDelegate.majorLineColor != majorLineColor ||
+        oldDelegate.bandColor != bandColor ||
         oldDelegate.backgroundColor != backgroundColor ||
         oldDelegate.textStyle != textStyle ||
         oldDelegate.satisfiedTextStyle != satisfiedTextStyle;

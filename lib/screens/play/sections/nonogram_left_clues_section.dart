@@ -35,9 +35,10 @@ class NonogramLeftCluesSection extends StatelessWidget {
             clues: clues,
             satisfiedRows: state.satisfiedRows,
             cellSize: cellSize,
-            lineColor: context.color.outlineVariant,
+            lineColor: context.color.surface,
             majorLineColor: context.color.outline,
-            backgroundColor: context.color.surfaceContainer,
+            backgroundColor: context.gameColors.clueBackground,
+            bandColor: context.gameColors.clueBand,
             textStyle: _clueStyle(context, cellSize),
             satisfiedTextStyle: _clueStyle(context, cellSize).copyWith(
               color: context.gameColors.success.withValues(alpha: 0.75),

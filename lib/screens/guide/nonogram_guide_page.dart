@@ -1,3 +1,4 @@
+import 'package:nonogram/core/app_theme.dart';
 import 'package:nonogram/core/context_ext.dart';
 import 'package:nonogram/screens/guide/illustrations/guide_illustration_card.dart';
 import 'package:nonogram/screens/guide/illustrations/guide_nonogram_illustration.dart';
@@ -9,11 +10,7 @@ class NonogramGuidePage extends StatelessWidget {
   const NonogramGuidePage({super.key});
 
   Color _clueBackgroundColor(BuildContext context) {
-    final isDark = Theme.of(context).brightness == Brightness.dark;
-    final overlay = context.color.onSurface.withValues(
-      alpha: isDark ? 0.14 : 0.06,
-    );
-    return Color.alphaBlend(overlay, context.color.surface);
+    return context.gameColors.clueBackground;
   }
 
   List<NonogramGuideItem> _guideItems(BuildContext context) {

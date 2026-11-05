@@ -1,4 +1,5 @@
 import 'package:nonogram/core/app_spacing.dart';
+import 'package:nonogram/core/app_theme.dart';
 import 'package:nonogram/core/context_ext.dart';
 import 'package:nonogram/models/nonogram_puzzle.dart';
 import 'package:flutter/material.dart';
@@ -110,9 +111,11 @@ class _NonogramCompletionBoardState extends State<NonogramCompletionBoard> {
                                   growable: false,
                                 ),
                                 cellSize: widget.cellSize,
-                                lineColor: context.color.outlineVariant,
+                                lineColor: context.color.surface,
                                 majorLineColor: context.color.outline,
-                                backgroundColor: context.color.surfaceContainer,
+                                backgroundColor:
+                                    context.gameColors.clueBackground,
+                                bandColor: context.gameColors.clueBand,
                                 textStyle: context.labelSmall.copyWith(
                                   fontSize: (widget.cellSize * 0.4).clamp(
                                     9.0,
@@ -141,9 +144,11 @@ class _NonogramCompletionBoardState extends State<NonogramCompletionBoard> {
                                   growable: false,
                                 ),
                                 cellSize: widget.cellSize,
-                                lineColor: context.color.outlineVariant,
+                                lineColor: context.color.surface,
                                 majorLineColor: context.color.outline,
-                                backgroundColor: context.color.surfaceContainer,
+                                backgroundColor:
+                                    context.gameColors.clueBackground,
+                                bandColor: context.gameColors.clueBand,
                                 textStyle: context.labelSmall.copyWith(
                                   fontSize: (widget.cellSize * 0.4).clamp(
                                     9.0,

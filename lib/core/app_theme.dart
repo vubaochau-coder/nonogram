@@ -10,6 +10,8 @@ class GameColors extends ThemeExtension<GameColors> {
     required this.cardBorder,
     required this.heroStart,
     required this.heroEnd,
+    required this.clueBackground,
+    required this.clueBand,
   });
 
   /// Hàng/cột đã khớp gợi ý, màn đã giải.
@@ -23,6 +25,12 @@ class GameColors extends ThemeExtension<GameColors> {
   final Color heroStart;
   final Color heroEnd;
 
+  /// Nền vùng ô số (gợi ý), tách hẳn khỏi nền trang và ô lưới trắng.
+  final Color clueBackground;
+
+  /// Dải tô xen kẽ mỗi nhóm 5 hàng/cột trong vùng ô số.
+  final Color clueBand;
+
   @override
   GameColors copyWith({
     Color? success,
@@ -30,6 +38,8 @@ class GameColors extends ThemeExtension<GameColors> {
     Color? cardBorder,
     Color? heroStart,
     Color? heroEnd,
+    Color? clueBackground,
+    Color? clueBand,
   }) {
     return GameColors(
       success: success ?? this.success,
@@ -37,6 +47,8 @@ class GameColors extends ThemeExtension<GameColors> {
       cardBorder: cardBorder ?? this.cardBorder,
       heroStart: heroStart ?? this.heroStart,
       heroEnd: heroEnd ?? this.heroEnd,
+      clueBackground: clueBackground ?? this.clueBackground,
+      clueBand: clueBand ?? this.clueBand,
     );
   }
 
@@ -49,6 +61,8 @@ class GameColors extends ThemeExtension<GameColors> {
       cardBorder: Color.lerp(cardBorder, other.cardBorder, t)!,
       heroStart: Color.lerp(heroStart, other.heroStart, t)!,
       heroEnd: Color.lerp(heroEnd, other.heroEnd, t)!,
+      clueBackground: Color.lerp(clueBackground, other.clueBackground, t)!,
+      clueBand: Color.lerp(clueBand, other.clueBand, t)!,
     );
   }
 }
@@ -83,6 +97,8 @@ abstract final class AppTheme {
       cardBorder: Color(0xFFE3E6EE),
       heroStart: Color(0xFF3B5BDB),
       heroEnd: Color(0xFF6741D9),
+      clueBackground: Color(0xFFDDE4FB),
+      clueBand: Color(0xFFCCD6F8),
     ),
   );
 
@@ -111,6 +127,8 @@ abstract final class AppTheme {
       cardBorder: Color(0xFF262C38),
       heroStart: Color(0xFF3451C7),
       heroEnd: Color(0xFF5F3DC4),
+      clueBackground: Color(0xFF232B4A),
+      clueBand: Color(0xFF2B3458),
     ),
   );
 
