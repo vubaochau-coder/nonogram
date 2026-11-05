@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:lucide_icons/lucide_icons.dart';
 import 'package:nonogram/core/app_route_intent.dart';
 import 'package:nonogram/core/context_ext.dart';
+import 'package:nonogram/widgets/app_theme_mode_selector.dart';
 
 import 'bloc/nonogram_dashboard_bloc.dart';
 import 'bloc/nonogram_dashboard_event.dart';
@@ -64,6 +65,15 @@ class _NonogramDashboardView extends StatelessWidget {
                       ),
                   icon: const Icon(LucideIcons.history),
                   tooltip: context.l10n.nonogramHistoryTitle,
+                ),
+                IconButton(
+                  onPressed: () => showAppThemeModeDialog(context),
+                  icon: Icon(
+                    Theme.of(context).brightness == Brightness.dark
+                        ? LucideIcons.moon
+                        : LucideIcons.sun,
+                  ),
+                  tooltip: context.l10n.appThemeTitle,
                 ),
                 IconButton(
                   onPressed:

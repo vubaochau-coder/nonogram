@@ -34,8 +34,9 @@ class GameColors extends ThemeExtension<GameColors> {
   final Color clueBand;
 
   /// Màu ô tô / ô trống khi vẽ bức tranh hoàn chỉnh (ảnh thu nhỏ, màn hoàn
-  /// thành). Giữ kiểu "mực trên giấy" ở cả chế độ tối để tranh không bị đảo
-  /// màu (ví dụ màn "White Dog": con chó là phần ô trống).
+  /// thành). Phải cùng quy ước với bàn chơi: ô tô dùng màu ô tô trên lưới
+  /// (`onSurface`), ô trống dùng màu nền lưới, để tranh kết quả không bị đảo
+  /// màu so với lúc chơi (ở chế độ tối ô tô là màu sáng).
   final Color pictureInk;
   final Color picturePaper;
 
@@ -145,8 +146,8 @@ abstract final class AppTheme {
       heroEnd: Color(0xFF5F3DC4),
       clueBackground: Color(0xFF232B4A),
       clueBand: Color(0xFF2B3458),
-      pictureInk: Color(0xFF151922),
-      picturePaper: Color(0xFFCDD2DD),
+      pictureInk: Color(0xFFE6E8EF),
+      picturePaper: Color(0xFF12151C),
     ),
   );
 
