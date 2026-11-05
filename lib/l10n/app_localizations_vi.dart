@@ -9,7 +9,7 @@ class AppLocalizationsVi extends AppLocalizations {
   AppLocalizationsVi([String locale = 'vi']) : super(locale);
 
   @override
-  String get appTitle => 'Nonogram';
+  String get appTitle => 'Nonopix';
 
   @override
   String get commonCancel => 'Hủy';

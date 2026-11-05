@@ -1,11 +1,11 @@
 {
-    "name": "Nonogram",
-    "short_name": "Nonogram",
+    "name": "Nonopix – Nonogram offline",
+    "short_name": "Nonopix",
     "start_url": ".",
     "display": "standalone",
-    "background_color": "#F6F8FA",
-    "theme_color": "#F6F8FA",
-    "description": "Offline nonogram (picture logic) puzzle game built with Flutter.",
+    "background_color": "#F5F6FA",
+    "theme_color": "#3B5BDB",
+    "description": "Nonopix: offline nonogram picture logic puzzles.",
     "orientation": "portrait-primary",
     "prefer_related_applications": false,
     "icons": [

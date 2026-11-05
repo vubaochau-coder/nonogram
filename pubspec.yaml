@@ -36,6 +36,7 @@ flutter:
   assets:
     - assets/levels/
     - assets/guide/
+    - assets/branding/logo.png
 
   fonts:
     - family: Nunito

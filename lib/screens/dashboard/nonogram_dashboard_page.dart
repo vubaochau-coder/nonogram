@@ -41,17 +41,14 @@ class _NonogramDashboardView extends StatelessWidget {
               titleSpacing: 20,
               title: Row(
                 children: [
-                  Container(
-                    width: 30,
-                    height: 30,
-                    decoration: BoxDecoration(
-                      color: context.color.primary,
-                      borderRadius: BorderRadius.circular(9),
-                    ),
-                    child: const Icon(
-                      LucideIcons.grid,
-                      size: 18,
-                      color: Colors.white,
+                  ClipRRect(
+                    borderRadius: BorderRadius.circular(9),
+                    child: Image.asset(
+                      'assets/branding/logo.png',
+                      width: 32,
+                      height: 32,
+                      cacheWidth: 96,
+                      filterQuality: FilterQuality.medium,
                     ),
                   ),
                   const SizedBox(width: 10),

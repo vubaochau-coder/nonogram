@@ -101,7 +101,7 @@ abstract class AppLocalizations {
   /// App name
   ///
   /// In en, this message translates to:
-  /// **'Nonogram'**
+  /// **'Nonopix'**
   String get appTitle;
 
   /// No description provided for @commonCancel.

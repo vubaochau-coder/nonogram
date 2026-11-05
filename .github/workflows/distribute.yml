@@ -36,7 +36,7 @@ permissions:
   contents: read
 
 env:
-  # Dùng chung dự án Firebase với app chess.
+  # Dùng chung dự án Firebase với app chess. Build từ máy: scripts/distribute_android.sh.
   FIREBASE_PROJECT_ID: chess-app-chauvb
   FIREBASE_APP_ID: ${{ vars.FIREBASE_APP_ID }}
 
@@ -94,14 +94,13 @@ jobs:
 
       - run: flutter pub get --enforce-lockfile
 
-      # Số build tự tăng theo số lần chạy workflow, không cần commit ngược vào
-      # repo; cộng với số build trong pubspec để không bao giờ thấp hơn nó.
+      # Số build = số phút tính từ 1970, giống scripts/distribute_android.sh,
+      # nên bản build sau luôn lớn hơn bản trước dù build trên CI hay trên máy.
       - name: Compute build number
         id: build
         run: |
-          base=$(sed -n 's/^version: *[^+]*+\([0-9]*\).*/\1/p' pubspec.yaml)
           name=$(sed -n 's/^version: *\([^+]*\).*/\1/p' pubspec.yaml)
-          number=$(( ${base:-0} + ${{ github.run_number }} ))
+          number=$(( $(date +%s) / 60 ))
           echo "number=$number" >> "$GITHUB_OUTPUT"
           echo "name=$name" >> "$GITHUB_OUTPUT"
           echo "Version: $name ($number)"

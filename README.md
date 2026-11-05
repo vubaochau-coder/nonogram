@@ -1,7 +1,10 @@
-# Nonogram
+# Nonopix
 
-Game nonogram (tô ô theo gợi ý số để lộ ra hình) viết bằng Flutter, tách ra từ
-project Nexora. **Chạy offline hoàn toàn**: màn chơi đóng gói sẵn trong app,
+<img src="assets/branding/logo.png" width="96" alt="Logo Nonopix">
+
+
+**Nonopix** là game nonogram (tô ô theo gợi ý số để lộ ra hình) viết bằng
+Flutter, tách ra từ project Nexora. **Chạy offline hoàn toàn**: màn chơi đóng gói sẵn trong app,
 tiến độ lưu trên máy, không cần tài khoản hay mạng.
 
 ## Chạy game
@@ -82,9 +85,41 @@ flutter test
 `test/data/level_assets_test.dart` kiểm tra toàn bộ dữ liệu trong
 `assets/levels/` (đủ level, đúng định dạng, mỗi màn có đúng một nghiệm).
 
-## Phát hành
+## Phát hành (Firebase App Distribution)
 
-Giống `game-2048`: workflow `CI` chạy format/analyze/test; `Distribute` build
-APK và đẩy lên Firebase App Distribution sau khi CI trên `main` xanh. Cần cấu
+App Android `com.chauvb.nonogram` nằm chung project Firebase với app chess
+(`chess-app-chauvb`).
+
+### Từ máy cá nhân
+
+```bash
+cp scripts/distribute.env.example scripts/distribute.env   # rồi điền nhóm tester
+firebase login                                              # một lần
+scripts/distribute_android.sh --notes "Sửa lỗi zoom"
+```
+
+Script sẽ:
+
+1. Tìm App ID theo package trong project chess. Nếu chưa có app, script hỏi
+   rồi tạo app Android **Nonopix** (dùng `--yes` để khỏi hỏi).
+2. Chạy `flutter analyze` và `flutter test` (`--skip-tests` để bỏ qua).
+3. Build APK release với số build = số phút tính từ 1970 (CI cũng dùng
+   cách này, nên bản sau luôn cài đè được bản trước).
+4. Upload kèm ghi chú (mặc định là commit mới nhất, có version và commit).
+
+Cần `android/key.properties` trỏ tới **cùng keystore** với secret
+`ANDROID_KEYSTORE_BASE64` của CI; thiếu thì script cảnh báo vì APK sẽ ký bằng
+debug key và tester không cài đè được. Xem `scripts/distribute_android.sh
+--help` cho mọi tuỳ chọn (`--groups`, `--testers`, `--dry-run`…).
+
+### Từ CI
+
+Workflow `CI` chạy format/analyze/test; `Distribute` build APK và đẩy lên
+Firebase sau khi CI trên `main` xanh, hoặc chạy tay từ tab Actions. Cần cấu
 hình secrets/variables như mô tả ở đầu `.github/workflows/distribute.yml`
-(app Android mới `com.chauvb.nonogram` cần `FIREBASE_APP_ID` riêng).
+(`FIREBASE_APP_ID` lấy từ lần chạy script đầu tiên hoặc Firebase Console).
+
+### Logo
+
+`tools/generate_icons.py` vẽ lại toàn bộ launcher icon, splash, icon web và
+`assets/branding/logo.png` (logo 1024px để dùng cho Firebase/store).
