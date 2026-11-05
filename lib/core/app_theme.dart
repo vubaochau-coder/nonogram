@@ -31,7 +31,6 @@ class GameColors extends ThemeExtension<GameColors> {
   /// Dải tô xen kẽ mỗi nhóm 5 hàng/cột trong vùng ô số.
   final Color clueBand;
 
-
   @override
   GameColors copyWith({
     Color? success,
