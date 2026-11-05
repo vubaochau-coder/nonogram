@@ -208,12 +208,6 @@ if [[ -n "$(git status --porcelain --untracked-files=no 2>/dev/null)" ]]; then
   DIRTY=" (có thay đổi chưa commit)"
 fi
 
-check_clean_tree() {
-  [[ -z "$DIRTY" || "$DRY_RUN" == 1 ]] && return 0
-  warn "Có thay đổi chưa commit: bản build sẽ trùng số build $BUILD_NUMBER với commit $COMMIT_SHA."
-  confirm "Vẫn phát hành?" || die "Huỷ. Commit thay đổi trước để có số build mới."
-}
-
 write_notes() {
   local out="$1"
   {
@@ -241,7 +235,6 @@ if [[ "$DRY_RUN" == 0 ]]; then
   resolve_app_id
 fi
 check_signing
-check_clean_tree
 
 step "flutter pub get"
 "${FLUTTER[@]}" pub get --enforce-lockfile

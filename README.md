@@ -105,8 +105,9 @@ Script sẽ:
 2. Chạy `flutter analyze` và `flutter test` (`--skip-tests` để bỏ qua).
 3. Build APK release với số build = số commit trên nhánh (`git rev-list
    --count HEAD`), giống CI: commit mới hơn luôn có số lớn hơn, nên bản sau
-   cài đè được bản trước. Build lại cùng một commit sẽ ra cùng số build;
-   có thay đổi chưa commit thì script cảnh báo.
+   cài đè được bản trước. Không cần sửa tay số build. Bản build có thay
+   đổi chưa commit dùng số của commit hiện tại và được ghi rõ trong ghi chú
+   phát hành.
 4. Upload kèm ghi chú (mặc định là commit mới nhất, có version và commit).
 
 Cần `android/key.properties` trỏ tới **cùng keystore** với secret
