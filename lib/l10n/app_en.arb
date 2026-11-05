@@ -1,0 +1,122 @@
+{
+  "@@locale": "en",
+  "appTitle": "Nonogram",
+  "@appTitle": {
+    "description": "App name"
+  },
+  "commonCancel": "Cancel",
+  "commonRetry": "Retry",
+  "commonSave": "Save",
+  "nonogramDashboardContinueLevel": "Level {level}",
+  "@nonogramDashboardContinueLevel": {
+    "placeholders": {
+      "level": {
+        "type": "int"
+      }
+    }
+  },
+  "nonogramDashboardHeroSubtitle": "Reveal hidden pictures by filling cells based on numerical clues found on the side of the grid.",
+  "nonogramDashboardInSessionDesc": "You are halfway through Level {level}",
+  "@nonogramDashboardInSessionDesc": {
+    "placeholders": {
+      "level": {
+        "type": "int"
+      }
+    }
+  },
+  "nonogramDashboardInSessionTitle": "Currently in progress",
+  "nonogramDashboardProgressSectionTitle": "Your Progress",
+  "nonogramDashboardReadyDesc": "Complete Level {level} to unlock more challenges",
+  "@nonogramDashboardReadyDesc": {
+    "placeholders": {
+      "level": {
+        "type": "int"
+      }
+    }
+  },
+  "nonogramDashboardReadyTitle": "Ready for next puzzle",
+  "nonogramDashboardStatCompleted": "Completed",
+  "nonogramDashboardStatNextTarget": "Next Target",
+  "nonogramDashboardTitle": "Nonogram",
+  "nonogramGuideIntro": "Nonograms are logic puzzles with simple rules and challenging solutions. The goal is to reveal hidden pictures by filling cells based on numbers on the side of the grid.",
+  "nonogramGuideMethodDivisionDesc": "If joining two existing blocks would create a figure larger than any available clue, the gap between them must be an X.",
+  "nonogramGuideMethodDivisionTitle": "5. Division",
+  "nonogramGuideMethodDoublePositioningDesc": "If a painted cell can only belong to a few specific block variants, any cells that are never filled in any of those variants must be marked with X.",
+  "nonogramGuideMethodDoublePositioningTitle": "6. Double positioning",
+  "nonogramGuideMethodInaccessibilityDesc": "Mark cells that cannot possibly belong to any remaining figure with a cross (X).",
+  "nonogramGuideMethodInaccessibilityTitle": "3. Inaccessibility",
+  "nonogramGuideMethodNotFitDesc": "If an empty space between crosses is smaller than any available clue for that line, it must be marked with X.",
+  "nonogramGuideMethodNotFitTitle": "4. Doesn't fit in",
+  "nonogramGuideMethodSuperpositionMultiDesc": "When there are several numbers, superpose the extreme left and right positions of the entire group, accounting for the mandatory minimum one-square gap between same-color blocks. Squares where a group overlaps with its own range in both variants are painted.",
+  "nonogramGuideMethodSuperpositionMultiTitle": "Superposition (Multiple Clues)",
+  "nonogramGuideMethodSuperpositionSimpleDesc": "If a number makes more than half of the length, some squares in the middle will definitely be painted. Superpose the extreme left and extreme right positions; where they overlap, the squares are painted.",
+  "nonogramGuideMethodSuperpositionSimpleTitle": "Superposition (Single Clue)",
+  "nonogramGuideMethodWallPushingDesc": "If a known painted cell is closer to a border than the size of the first clue, the figure it belongs to must extend away from that border.",
+  "nonogramGuideMethodWallPushingTitle": "2. Pushing off from the walls",
+  "nonogramGuideRuleDesc": "Each number represents one continuous block of filled cells in that row or column. If there are multiple numbers, they represent separate blocks, and each block must be separated from the next by at least one empty cell. For example, `3 1` means a block of 3 filled cells, then at least 1 empty cell, then a block of 1 filled cell.",
+  "nonogramGuideRuleTitle": "Core rule: what the numbers mean",
+  "nonogramGuideTitle": "How to Solve",
+  "nonogramHistoryBest": "Best",
+  "nonogramHistoryCompletedOn": "Completed on {date}",
+  "@nonogramHistoryCompletedOn": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "nonogramHistoryCompletionDate": "Completion Date",
+  "nonogramHistoryDetailNotFound": "Level details not found.",
+  "nonogramHistoryEmpty": "No completed levels yet.",
+  "nonogramHistoryLevel": "Level {n}",
+  "@nonogramHistoryLevel": {
+    "placeholders": {
+      "n": {
+        "type": "int"
+      }
+    }
+  },
+  "nonogramHistoryPlayTime": "Total Play Time",
+  "nonogramHistoryTitle": "Results",
+  "nonogramPlayActionNextLevelFixed": "Next Level",
+  "nonogramPlayActionShowClues": "Show clues",
+  "nonogramPlayCompletionMessage": "Congratulations! You have completed Level {level}.",
+  "@nonogramPlayCompletionMessage": {
+    "placeholders": {
+      "level": {
+        "type": "int"
+      }
+    }
+  },
+  "nonogramPlayCompletionTitle": "Puzzle Solved!",
+  "nonogramPlayDurationFormat": "{minutes}m {seconds}s",
+  "@nonogramPlayDurationFormat": {
+    "placeholders": {
+      "minutes": {
+        "type": "int"
+      },
+      "seconds": {
+        "type": "int"
+      }
+    }
+  },
+  "nonogramPlayHintLabel": "Hint {count}/3",
+  "@nonogramPlayHintLabel": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "nonogramPlayNoNextLevelToast": "No next level available yet.",
+  "nonogramPlayPageTitle": "Nonogram",
+  "nonogramPlayStatDifficulty": "Difficulty",
+  "nonogramPlayStatTime": "Time",
+  "nonogramSettingsCellSize": "Cell size",
+  "nonogramSettingsCellSizeCustom": "Custom size",
+  "nonogramSettingsCellSizeDefault": "(default)",
+  "nonogramSettingsCellSizeError": "Size must be between 12 and 80",
+  "nonogramSettingsTitle": "Settings",
+  "nonogramDashboardContinueNext": "Next challenge",
+  "nonogramDashboardContinueResume": "Resume playing"
+}

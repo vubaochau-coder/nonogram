@@ -1,0 +1,119 @@
+{
+  "@@locale": "vi",
+  "appTitle": "Nonogram",
+  "commonCancel": "Hủy",
+  "commonRetry": "Thử lại",
+  "commonSave": "Lưu",
+  "nonogramDashboardContinueLevel": "Màn {level}",
+  "@nonogramDashboardContinueLevel": {
+    "placeholders": {
+      "level": {
+        "type": "int"
+      }
+    }
+  },
+  "nonogramDashboardHeroSubtitle": "Hé lộ bức tranh ẩn bằng cách điền các ô dựa trên gợi ý số ở các cạnh của lưới.",
+  "nonogramDashboardInSessionDesc": "Bạn đang giải dở Màn {level}",
+  "@nonogramDashboardInSessionDesc": {
+    "placeholders": {
+      "level": {
+        "type": "int"
+      }
+    }
+  },
+  "nonogramDashboardInSessionTitle": "Đang giải dở",
+  "nonogramDashboardProgressSectionTitle": "Tiến trình của bạn",
+  "nonogramDashboardReadyDesc": "Vượt qua Màn {level} để mở khóa thêm thử thách",
+  "@nonogramDashboardReadyDesc": {
+    "placeholders": {
+      "level": {
+        "type": "int"
+      }
+    }
+  },
+  "nonogramDashboardReadyTitle": "Sẵn sàng cho màn mới",
+  "nonogramDashboardStatCompleted": "Đã hoàn thành",
+  "nonogramDashboardStatNextTarget": "Mục tiêu tiếp theo",
+  "nonogramDashboardTitle": "Nonogram",
+  "nonogramGuideIntro": "Nonogram là trò chơi giải đố logic với quy luật đơn giản nhưng đầy thử thách. Mục tiêu là tìm ra bức tranh ẩn sau các ô vuông bằng cách tô màu dựa trên các con số chỉ dẫn.",
+  "nonogramGuideMethodDivisionDesc": "Nếu việc nối hai khối ô đã tô tạo ra một khối lớn hơn tất cả các chỉ dẫn có sẵn, ô trống giữa chúng chắc chắn phải là dấu X.",
+  "nonogramGuideMethodDivisionTitle": "5. Sự chia cắt",
+  "nonogramGuideMethodDoublePositioningDesc": "Nếu một ô đã tô chỉ có thể thuộc về một vài phương án đặt khối nhất định, bất kỳ ô nào không nằm trong phương án nào đều phải được đánh dấu X.",
+  "nonogramGuideMethodDoublePositioningTitle": "6. Định vị kép",
+  "nonogramGuideMethodInaccessibilityDesc": "Đánh dấu X vào những ô mà chắc chắn không có bất kỳ khối màu nào có thể chạm tới.",
+  "nonogramGuideMethodInaccessibilityTitle": "3. Không thể tiếp cận",
+  "nonogramGuideMethodNotFitDesc": "Nếu một khoảng trống giữa các dấu X nhỏ hơn bất kỳ con số chỉ dẫn nào còn lại của hàng đó, khoảng trống đó chắc chắn phải được đánh dấu X.",
+  "nonogramGuideMethodNotFitTitle": "4. Không vừa khoảng trống",
+  "nonogramGuideMethodSuperpositionMultiDesc": "Khi có nhiều số chỉ dẫn, ta thử đặt toàn bộ các khối ở vị trí xa nhất bên trái và phải, luôn giữ khoảng trống tối thiểu 1 ô giữa các khối cùng màu. Ô nào mà một khối tự chồng lên chính nó trong cả hai phương án thì ô đó chắc chắn được tô.",
+  "nonogramGuideMethodSuperpositionMultiTitle": "Chồng lấp (Trường hợp đa số)",
+  "nonogramGuideMethodSuperpositionSimpleDesc": "Nếu một con số lớn hơn một nửa chiều dài hàng, một vài ô ở giữa chắc chắn sẽ được tô. Thử đặt khối ô ở vị trí xa nhất bên trái và bên phải, phần giao nhau chính là phần chắc chắn được tô.",
+  "nonogramGuideMethodSuperpositionSimpleTitle": "Chồng lấp (Trường hợp đơn số)",
+  "nonogramGuideMethodWallPushingDesc": "Nếu một ô đã được tô nằm gần biên hơn kích thước của con số chỉ dẫn đầu tiên, khối đó chắc chắn phải kéo dài ra xa phía biên đó.",
+  "nonogramGuideMethodWallPushingTitle": "2. Đẩy từ biên",
+  "nonogramGuideRuleDesc": "Mỗi con số biểu thị một nhóm ô được tô liền nhau trong hàng hoặc cột đó. Nếu có nhiều số, chúng biểu thị các nhóm riêng biệt, và giữa hai nhóm luôn phải có ít nhất 1 ô trống. Ví dụ, `3 1` nghĩa là một nhóm 3 ô tô liền nhau, sau đó là ít nhất 1 ô trống, rồi đến một nhóm 1 ô.",
+  "nonogramGuideRuleTitle": "Quy luật cốt lõi: ý nghĩa của các con số",
+  "nonogramGuideTitle": "Cách Giải Nonogram",
+  "nonogramHistoryBest": "Kỷ lục",
+  "nonogramHistoryCompletedOn": "Hoàn thành lúc {date}",
+  "@nonogramHistoryCompletedOn": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "nonogramHistoryCompletionDate": "Ngày hoàn thành",
+  "nonogramHistoryDetailNotFound": "Không tìm thấy chi tiết màn chơi.",
+  "nonogramHistoryEmpty": "Chưa có màn chơi nào hoàn thành.",
+  "nonogramHistoryLevel": "Màn {n}",
+  "@nonogramHistoryLevel": {
+    "placeholders": {
+      "n": {
+        "type": "int"
+      }
+    }
+  },
+  "nonogramHistoryPlayTime": "Tổng thời gian chơi",
+  "nonogramHistoryTitle": "Kết quả",
+  "nonogramPlayActionNextLevelFixed": "Màn Tiếp Theo",
+  "nonogramPlayActionShowClues": "Hiện gợi ý",
+  "nonogramPlayCompletionMessage": "Chúc mừng! Bạn đã hoàn thành Màn {level}.",
+  "@nonogramPlayCompletionMessage": {
+    "placeholders": {
+      "level": {
+        "type": "int"
+      }
+    }
+  },
+  "nonogramPlayCompletionTitle": "Giải đố thành công!",
+  "nonogramPlayDurationFormat": "{minutes}p {seconds}s",
+  "@nonogramPlayDurationFormat": {
+    "placeholders": {
+      "minutes": {
+        "type": "int"
+      },
+      "seconds": {
+        "type": "int"
+      }
+    }
+  },
+  "nonogramPlayHintLabel": "Gợi ý {count}/3",
+  "@nonogramPlayHintLabel": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "nonogramPlayNoNextLevelToast": "Hiện chưa có màn tiếp theo.",
+  "nonogramPlayPageTitle": "Nonogram",
+  "nonogramPlayStatDifficulty": "Độ khó",
+  "nonogramPlayStatTime": "Thời gian",
+  "nonogramSettingsCellSize": "Kích thước ô",
+  "nonogramSettingsCellSizeCustom": "Tuỳ chỉnh",
+  "nonogramSettingsCellSizeDefault": "(mặc định)",
+  "nonogramSettingsCellSizeError": "Kích thước phải từ 12 đến 80",
+  "nonogramSettingsTitle": "Cài đặt",
+  "nonogramDashboardContinueNext": "Thử thách tiếp theo",
+  "nonogramDashboardContinueResume": "Tiếp tục chơi"
+}

@@ -1,0 +1,188 @@
+[
+ {
+  "level": 1,
+  "source_puzzle_id": "",
+  "title": "Heart",
+  "author": "Nonogram",
+  "difficulty": "Easy",
+  "difficulty_score": 0.2,
+  "solution": [
+   "0110110",
+   "1111111",
+   "1111111",
+   "0111110",
+   "0011100",
+   "0001000"
+  ],
+  "status": "published"
+ },
+ {
+  "level": 2,
+  "source_puzzle_id": "",
+  "title": "Arrow",
+  "author": "Nonogram",
+  "difficulty": "Easy",
+  "difficulty_score": 0.2,
+  "solution": [
+   "00100",
+   "01110",
+   "11111",
+   "00100",
+   "00100"
+  ],
+  "status": "published"
+ },
+ {
+  "level": 3,
+  "source_puzzle_id": "",
+  "title": "Cup",
+  "author": "Nonogram",
+  "difficulty": "Easy",
+  "difficulty_score": 0.2,
+  "solution": [
+   "111110",
+   "111110",
+   "111111",
+   "111110",
+   "011100",
+   "111111"
+  ],
+  "status": "published"
+ },
+ {
+  "level": 4,
+  "source_puzzle_id": "",
+  "title": "House",
+  "author": "Nonogram",
+  "difficulty": "Easy",
+  "difficulty_score": 0.2,
+  "solution": [
+   "0001000",
+   "0011100",
+   "0111110",
+   "1111111",
+   "0110110",
+   "0110110",
+   "0111110"
+  ],
+  "status": "published"
+ },
+ {
+  "level": 5,
+  "source_puzzle_id": "",
+  "title": "Key",
+  "author": "Nonogram",
+  "difficulty": "Easy",
+  "difficulty_score": 0.2,
+  "solution": [
+   "0111000000",
+   "1101100000",
+   "1000111111",
+   "1101100101",
+   "0111000101"
+  ],
+  "status": "published"
+ },
+ {
+  "level": 6,
+  "source_puzzle_id": "",
+  "title": "Fish",
+  "author": "Nonogram",
+  "difficulty": "Medium",
+  "difficulty_score": 0.5,
+  "solution": [
+   "0011110001",
+   "0111111011",
+   "1101111111",
+   "1111111111",
+   "0111111011",
+   "0011110001"
+  ],
+  "status": "published"
+ },
+ {
+  "level": 7,
+  "source_puzzle_id": "",
+  "title": "Tree",
+  "author": "Nonogram",
+  "difficulty": "Medium",
+  "difficulty_score": 0.5,
+  "solution": [
+   "000010000",
+   "000111000",
+   "001111100",
+   "000111000",
+   "001111100",
+   "011111110",
+   "111111111",
+   "000010000",
+   "000111000"
+  ],
+  "status": "published"
+ },
+ {
+  "level": 8,
+  "source_puzzle_id": "",
+  "title": "Cat",
+  "author": "Nonogram",
+  "difficulty": "Medium",
+  "difficulty_score": 0.5,
+  "solution": [
+   "1000000010",
+   "1100000110",
+   "1111111110",
+   "1011011010",
+   "1111111110",
+   "1111011110",
+   "0111111100",
+   "0011111000",
+   "0010001001",
+   "0011111011"
+  ],
+  "status": "published"
+ },
+ {
+  "level": 9,
+  "source_puzzle_id": "",
+  "title": "Umbrella",
+  "author": "Nonogram",
+  "difficulty": "Medium",
+  "difficulty_score": 0.5,
+  "solution": [
+   "0000110000",
+   "0011111100",
+   "0111111110",
+   "1111111111",
+   "1010110101",
+   "0000110000",
+   "0000110000",
+   "0000110000",
+   "0100110000",
+   "0011100000"
+  ],
+  "status": "published"
+ },
+ {
+  "level": 10,
+  "source_puzzle_id": "",
+  "title": "Rocket",
+  "author": "Nonogram",
+  "difficulty": "Hard",
+  "difficulty_score": 0.8,
+  "solution": [
+   "000001100000",
+   "000011110000",
+   "000010010000",
+   "000011110000",
+   "000011110000",
+   "000111111000",
+   "001111111100",
+   "001101101100",
+   "001001100100",
+   "000001100000",
+   "000011110000",
+   "000110011000"
+  ],
+  "status": "published"
+ }
+]

@@ -1,0 +1,11 @@
+{
+  "version": 1,
+  "totalLevels": 10,
+  "packs": [
+    {
+      "file": "pack_001.json",
+      "firstLevel": 1,
+      "lastLevel": 10
+    }
+  ]
+}
