@@ -3,9 +3,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:lucide_icons/lucide_icons.dart';
 import 'package:nonogram/core/app_theme_mode.dart';
 import 'package:nonogram/core/context_ext.dart';
-import 'package:nonogram/widgets/dialogs/app_dialog.dart';
 
-/// Chọn Sáng / Tối / Theo hệ thống; áp dụng và lưu ngay khi bấm.
+/// Chọn Sáng / Tối; áp dụng và lưu ngay khi bấm.
 class AppThemeModeSelector extends StatelessWidget {
   const AppThemeModeSelector({super.key});
 
@@ -22,11 +21,6 @@ class AppThemeModeSelector extends StatelessWidget {
           child: SegmentedButton<ThemeMode>(
             showSelectedIcon: false,
             segments: [
-              ButtonSegment(
-                value: ThemeMode.system,
-                icon: const Icon(LucideIcons.smartphone, size: 16),
-                label: Text(l10n.appThemeSystem),
-              ),
               ButtonSegment(
                 value: ThemeMode.light,
                 icon: const Icon(LucideIcons.sun, size: 16),
@@ -47,22 +41,4 @@ class AppThemeModeSelector extends StatelessWidget {
       },
     );
   }
-}
-
-Future<void> showAppThemeModeDialog(BuildContext context) {
-  return showDialog(
-    context: context,
-    builder: (context) {
-      return AppDialog(
-        title: Text(context.l10n.appThemeTitle),
-        content: const AppThemeModeSelector(),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(context),
-            child: Text(MaterialLocalizations.of(context).closeButtonLabel),
-          ),
-        ],
-      );
-    },
-  );
 }

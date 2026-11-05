@@ -225,9 +225,6 @@ class AppLocalizationsVi extends AppLocalizations {
   String get appThemeTitle => 'Giao diện';
 
   @override
-  String get appThemeSystem => 'Theo hệ thống';
-
-  @override
   String get appThemeLight => 'Sáng';
 
   @override
