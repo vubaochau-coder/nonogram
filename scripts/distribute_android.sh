@@ -198,14 +198,21 @@ check_signing() {
 # --- Phiên bản -------------------------------------------------------------
 
 VERSION_NAME="$(sed -n 's/^version: *\([^+]*\).*/\1/p' pubspec.yaml)"
-# Số build = số phút tính từ 1970, giống workflow Distribute trên CI, nên bản
-# sau luôn lớn hơn bản trước dù build ở đâu.
-BUILD_NUMBER="$(( $(date +%s) / 60 ))"
+# Số build = số commit tính tới HEAD, giống workflow Distribute trên CI: ngắn,
+# luôn tăng, và cùng một commit thì build ở đâu cũng ra cùng một số.
+BUILD_NUMBER="$(git rev-list --count HEAD 2>/dev/null || true)"
+[[ "$BUILD_NUMBER" =~ ^[0-9]+$ ]] || die "Không đếm được số commit (cần chạy trong repo git có đủ lịch sử)."
 COMMIT_SHA="$(git rev-parse --short HEAD 2>/dev/null || echo unknown)"
 DIRTY=""
 if [[ -n "$(git status --porcelain --untracked-files=no 2>/dev/null)" ]]; then
   DIRTY=" (có thay đổi chưa commit)"
 fi
+
+check_clean_tree() {
+  [[ -z "$DIRTY" || "$DRY_RUN" == 1 ]] && return 0
+  warn "Có thay đổi chưa commit: bản build sẽ trùng số build $BUILD_NUMBER với commit $COMMIT_SHA."
+  confirm "Vẫn phát hành?" || die "Huỷ. Commit thay đổi trước để có số build mới."
+}
 
 write_notes() {
   local out="$1"
@@ -234,6 +241,7 @@ if [[ "$DRY_RUN" == 0 ]]; then
   resolve_app_id
 fi
 check_signing
+check_clean_tree
 
 step "flutter pub get"
 "${FLUTTER[@]}" pub get --enforce-lockfile
