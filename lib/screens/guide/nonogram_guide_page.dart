@@ -30,31 +30,26 @@ class NonogramGuidePage extends StatelessWidget {
           l10n.nonogramGuideMethodSuperpositionMultiTitle,
         ),
         description: l10n.nonogramGuideMethodSuperpositionMultiDesc,
-        diagrams: GuideDiagrams.superpositionSingleLong,
+        diagrams: GuideDiagrams.superpositionMulti,
       ),
       NonogramGuideItem(
         title: _normalizedTitle(l10n.nonogramGuideMethodWallPushingTitle),
         description: l10n.nonogramGuideMethodWallPushingDesc,
-        diagrams: GuideDiagrams.superpositionMulti,
+        diagrams: GuideDiagrams.wallPushing,
       ),
       NonogramGuideItem(
         title: _normalizedTitle(l10n.nonogramGuideMethodInaccessibilityTitle),
         description: l10n.nonogramGuideMethodInaccessibilityDesc,
-        diagrams: GuideDiagrams.wallPushing,
+        diagrams: GuideDiagrams.inaccessibility,
       ),
       NonogramGuideItem(
         title: _normalizedTitle(l10n.nonogramGuideMethodNotFitTitle),
         description: l10n.nonogramGuideMethodNotFitDesc,
-        diagrams: GuideDiagrams.inaccessibility,
+        diagrams: GuideDiagrams.notFit,
       ),
       NonogramGuideItem(
         title: _normalizedTitle(l10n.nonogramGuideMethodDivisionTitle),
         description: l10n.nonogramGuideMethodDivisionDesc,
-        diagrams: GuideDiagrams.notFit,
-      ),
-      NonogramGuideItem(
-        title: _normalizedTitle(l10n.nonogramGuideMethodDoublePositioningTitle),
-        description: l10n.nonogramGuideMethodDoublePositioningDesc,
         diagrams: GuideDiagrams.division,
       ),
       NonogramGuideItem(

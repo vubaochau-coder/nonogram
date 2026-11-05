@@ -9,7 +9,7 @@ abstract final class GuideDiagrams {
   static GuideDiagramRow _r(String clues, String cells) =>
       GuideDiagramRow.parse(clues, cells);
 
-  /// Chồng lấp, một số: `5` trong hàng 10 ô có X ở hai đầu.
+  /// Chồng lấp, một số: `5` trong hàng 10 ô có X ở hai đầu, và `7`.
   static final superpositionSimple = [
     GuideDiagram(
       groups: [
@@ -22,10 +22,7 @@ abstract final class GuideDiagrams {
         [GuideDiagramLink(4, 6)],
       ],
     ),
-  ];
-
-  /// Chồng lấp, một số: `7` trong hàng 10 ô.
-  static final superpositionSingleLong = [
+    // Chồng lấp, một số: `7` trong hàng 10 ô.
     GuideDiagram(
       groups: [
         [_r('7', '..........')],
