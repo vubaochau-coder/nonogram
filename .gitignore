@@ -46,6 +46,3 @@ app.*.map.json
 
 # FVM
 .fvm/
-
-# Cấu hình riêng của script phát hành
-scripts/distribute.env

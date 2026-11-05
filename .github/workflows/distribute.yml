@@ -36,7 +36,7 @@ permissions:
   contents: read
 
 env:
-  # Dùng chung dự án Firebase với app chess. Build từ máy: scripts/distribute_android.sh.
+  # Dùng chung dự án Firebase với app chess.
   FIREBASE_PROJECT_ID: chess-app-chauvb
   FIREBASE_APP_ID: ${{ vars.FIREBASE_APP_ID }}
 
@@ -96,7 +96,6 @@ jobs:
 
       # Số build = số thứ tự lần chạy của workflow này (run number): mỗi lần
       # phát hành tăng 1; chạy lại (re-run) một lần chạy cũ giữ nguyên số.
-      # scripts/distribute_android.sh lấy số lần chạy gần nhất + 1.
       - name: Compute build number
         id: build
         run: |

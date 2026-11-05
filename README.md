@@ -87,38 +87,18 @@ flutter test
 
 ## Phát hành (Firebase App Distribution)
 
-App Android `com.chauvb.nonogram` nằm chung project Firebase với app chess
-(`chess-app-chauvb`).
+Chỉ phát hành qua GitHub Actions. App Android `com.chauvb.nonogram`
+(**Nonopix**) nằm chung project Firebase với app chess (`chess-app-chauvb`).
 
-### Từ máy cá nhân
+- Workflow `CI` chạy format/analyze/test cho mỗi push và pull request.
+- Workflow `Distribute` build APK release và đẩy lên Firebase App
+  Distribution sau khi CI trên `main` xanh, hoặc chạy tay từ tab Actions
+  (có ô nhập ghi chú phát hành).
+- Số build = số thứ tự lần chạy của workflow `Distribute`, tự tăng mỗi lần
+  phát hành.
 
-```bash
-cp scripts/distribute.env.example scripts/distribute.env   # rồi điền nhóm tester
-firebase login                                              # một lần
-scripts/distribute_android.sh --notes "Sửa lỗi zoom"
-```
-
-Script sẽ:
-
-1. Tìm App ID theo package trong project chess. Nếu chưa có app, script hỏi
-   rồi tạo app Android **Nonopix** (dùng `--yes` để khỏi hỏi).
-2. Chạy `flutter analyze` và `flutter test` (`--skip-tests` để bỏ qua).
-3. Build APK release với số build = số thứ tự lần chạy gần nhất của workflow
-   Distribute trên GitHub + 1 (đọc qua `gh`; hoặc truyền `--build-number`).
-   CI dùng chính số thứ tự lần chạy làm số build, nên bản sau luôn lớn hơn.
-4. Upload kèm ghi chú (mặc định là commit mới nhất, có version và commit).
-
-Cần `android/key.properties` trỏ tới **cùng keystore** với secret
-`ANDROID_KEYSTORE_BASE64` của CI; thiếu thì script cảnh báo vì APK sẽ ký bằng
-debug key và tester không cài đè được. Xem `scripts/distribute_android.sh
---help` cho mọi tuỳ chọn (`--groups`, `--testers`, `--dry-run`…).
-
-### Từ CI
-
-Workflow `CI` chạy format/analyze/test; `Distribute` build APK và đẩy lên
-Firebase sau khi CI trên `main` xanh, hoặc chạy tay từ tab Actions. Cần cấu
-hình secrets/variables như mô tả ở đầu `.github/workflows/distribute.yml`
-(`FIREBASE_APP_ID` lấy từ lần chạy script đầu tiên hoặc Firebase Console).
+Secrets/variables cần cấu hình được mô tả ở đầu
+`.github/workflows/distribute.yml`.
 
 ### Logo
 
