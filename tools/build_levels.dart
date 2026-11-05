@@ -2,7 +2,7 @@
 // thành các file gói trong assets/levels/.
 //
 // Cách dùng:
-//   dart run tools/build_levels.dart <input.json> [tuỳ chọn]
+//   dart run tools/build_levels.dart <input.json|input.csv> [tuỳ chọn]
 //
 // Tuỳ chọn:
 //   --out=assets/levels     Thư mục ghi kết quả (mặc định assets/levels)
@@ -14,7 +14,8 @@
 //   --drop-invalid          Bỏ qua màn lỗi/không duy nhất thay vì dừng lại
 //
 // Đầu vào là một mảng JSON (hoặc {"data": [...]}, như file của
-// tools/crawl_json.js). Mỗi phần tử cần `level` và `solution`; `solution` là
+// tools/crawl_json.js), hoặc file CSV export từ Supabase SQL Editor (dòng đầu
+// là tên cột, các cột jsonb là chuỗi JSON). Mỗi phần tử cần `level` và `solution`; `solution` là
 // ma trận số (như cột jsonb trên Supabase) hoặc mảng chuỗi "0101...".
 // Các trường khác được giữ nếu có: source_puzzle_id, title, author,
 // difficulty, difficulty_score, rows, cols, status.
@@ -51,7 +52,12 @@ void main(List<String> args) {
   final checkUnique = !args.contains('--skip-unique-check');
   final dropInvalid = args.contains('--drop-invalid');
 
-  dynamic decoded = jsonDecode(File(positional.single).readAsStringSync());
+  final inputPath = positional.single;
+  final inputText = File(inputPath).readAsStringSync();
+  dynamic decoded =
+      inputPath.toLowerCase().endsWith('.csv')
+          ? _parseCsvRecords(inputText)
+          : jsonDecode(inputText);
   if (decoded is Map && decoded['data'] is List) decoded = decoded['data'];
   if (decoded is! List) {
     stderr.writeln('Input must be a JSON array of puzzles.');
@@ -62,7 +68,7 @@ void main(List<String> args) {
   if (status != null) {
     rows = rows.where((r) => r['status'] == status).toList();
   }
-  rows.sort((a, b) => (a['level'] as num).compareTo(b['level'] as num));
+  rows.sort((a, b) => _asInt(a['level']).compareTo(_asInt(b['level'])));
 
   const solver = NonogramSolver();
   final errors = <String>[];
@@ -71,7 +77,7 @@ void main(List<String> args) {
   final seenIds = <String>{};
 
   for (final row in rows) {
-    final originalLevel = (row['level'] as num).toInt();
+    final originalLevel = _asInt(row['level']);
     final level = renumber ? entries.length + 1 : originalLevel;
     final sourceId = row['source_puzzle_id']?.toString() ?? '';
     final id =
@@ -85,10 +91,13 @@ void main(List<String> args) {
       'title': (row['title'] as String?)?.trim() ?? '',
       'author': row['author'] ?? '',
       'difficulty': row['difficulty'] ?? '',
-      'difficultyScore':
-          (row['difficulty_score'] ?? row['difficultyScore'] ?? 0) as num,
-      if (row['rows'] != null) 'rows': row['rows'],
-      if (row['cols'] != null) 'cols': row['cols'],
+      'difficultyScore': _asNum(
+        row['difficulty_score'] ?? row['difficultyScore'],
+      ),
+      if (row['rows'] != null && '${row['rows']}'.isNotEmpty)
+        'rows': _asInt(row['rows']),
+      if (row['cols'] != null && '${row['cols']}'.isNotEmpty)
+        'cols': _asInt(row['cols']),
       'solution': _solutionRows(row['solution']),
     };
 
@@ -195,5 +204,65 @@ List<String> _solutionRows(dynamic solution) {
         row.map((cell) => (cell as num) > 0 ? '1' : '0').join()
       else
         '',
+  ];
+}
+
+int _asInt(dynamic value) =>
+    value is num ? value.toInt() : int.parse('$value'.trim());
+
+num _asNum(dynamic value) {
+  if (value is num) return value;
+  return num.tryParse('${value ?? ''}'.trim()) ?? 0;
+}
+
+/// Đọc CSV (RFC 4180: trường có thể nằm trong "...", "" là dấu nháy) thành
+/// danh sách map theo tên cột ở dòng đầu.
+List<Map<String, dynamic>> _parseCsvRecords(String text) {
+  final records = <List<String>>[];
+  var record = <String>[];
+  final field = StringBuffer();
+  var inQuotes = false;
+
+  for (var i = 0; i < text.length; i++) {
+    final ch = text[i];
+    if (inQuotes) {
+      if (ch == '"') {
+        if (i + 1 < text.length && text[i + 1] == '"') {
+          field.write('"');
+          i++;
+        } else {
+          inQuotes = false;
+        }
+      } else {
+        field.write(ch);
+      }
+    } else if (ch == '"') {
+      inQuotes = true;
+    } else if (ch == ',') {
+      record.add(field.toString());
+      field.clear();
+    } else if (ch == '\n' || ch == '\r') {
+      if (ch == '\r' && i + 1 < text.length && text[i + 1] == '\n') i++;
+      record.add(field.toString());
+      field.clear();
+      if (record.any((f) => f.isNotEmpty)) records.add(record);
+      record = <String>[];
+    } else {
+      field.write(ch);
+    }
+  }
+  if (field.isNotEmpty || record.isNotEmpty) {
+    record.add(field.toString());
+    if (record.any((f) => f.isNotEmpty)) records.add(record);
+  }
+  if (records.isEmpty) return const [];
+
+  final header = records.first;
+  return [
+    for (final values in records.skip(1))
+      {
+        for (var c = 0; c < header.length; c++)
+          header[c]: c < values.length ? values[c] : '',
+      },
   ];
 }

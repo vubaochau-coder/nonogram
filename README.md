@@ -38,11 +38,11 @@ lib/
     painters/                CustomPainter cho lưới, gợi ý, đáp án
   l10n/                      Chuỗi dịch (app_en.arb, app_vi.arb)
 assets/
-  levels/                    Dữ liệu màn chơi (sinh bằng tools/build_levels.dart)
+  levels/                    574 màn chơi (sinh bằng tools/build_levels.dart)
   guide/                     Ảnh minh hoạ hướng dẫn
 tools/
   build_levels.dart          Dump Supabase -> assets/levels/, kiểm tra nghiệm duy nhất
-  sample_puzzles.json        10 màn mẫu
+  data/puzzles_dump.csv      Dump bảng puzzles từ Supabase (nguồn của assets/levels/)
   generate_icons.py          Vẽ launcher icon / splash / favicon
 docs/
   level_format.md            Định dạng dữ liệu màn chơi

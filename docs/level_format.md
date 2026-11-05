@@ -48,7 +48,8 @@ Mỗi màn nằm trên một dòng để diff trên git dễ đọc:
 dart run tools/build_levels.dart path/to/puzzles.json
 ```
 
-Đầu vào là dump bảng `puzzles` của Supabase (mảng JSON, hoặc `{"data": [...]}`).
+Đầu vào là dump bảng `puzzles` của Supabase: file CSV export từ SQL Editor,
+mảng JSON, hoặc `{"data": [...]}`.
 `solution` có thể là ma trận số như cột jsonb trên Supabase, hoặc mảng chuỗi.
 Script sẽ:
 
@@ -68,8 +69,13 @@ Tuỳ chọn hay dùng:
 `test/data/level_assets_test.dart` chạy lại toàn bộ các kiểm tra trên với
 assets đã commit, nên CI sẽ chặn dữ liệu hỏng.
 
-> Hiện `assets/levels/` chứa **10 màn mẫu** (`tools/sample_puzzles.json`) để
-> app chạy được trong lúc chờ dữ liệu thật.
+> Dữ liệu hiện tại: **574 màn** sinh từ `tools/data/puzzles_dump.csv` (export
+> bảng `puzzles` trên Supabase ngày 2026-11-05, mọi màn đều `status = draft`).
+> Sinh lại bằng:
+>
+> ```bash
+> dart run tools/build_levels.dart tools/data/puzzles_dump.csv
+> ```
 
 ## Thay đổi dữ liệu sau khi đã phát hành
 
