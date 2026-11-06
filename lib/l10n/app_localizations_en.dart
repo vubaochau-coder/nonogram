@@ -220,4 +220,13 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get nonogramPlayActionDashboard => 'Home';
+
+  @override
+  String get appThemeTitle => 'Appearance';
+
+  @override
+  String get appThemeLight => 'Light';
+
+  @override
+  String get appThemeDark => 'Dark';
 }

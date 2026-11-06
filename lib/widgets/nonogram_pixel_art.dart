@@ -1,7 +1,6 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
-import 'package:nonogram/core/app_theme.dart';
 
 /// Vẽ một lưới ô (true = tô) thành hình pixel-art, tự co giãn vừa khung và
 /// căn giữa. Dùng cho ảnh thu nhỏ của màn đã giải và xem trước ván dở.
@@ -23,14 +22,16 @@ class NonogramPixelArt extends StatelessWidget {
          for (final row in solution) [for (final cell in row) cell == 1],
        ];
 
-  /// Bức tranh hoàn chỉnh theo màu mực/giấy của theme: vẽ cả ô trống, vì
-  /// có màn mà hình chủ đề chính là phần ô trống.
+  /// Bức tranh hoàn chỉnh, dùng đúng màu của bàn chơi (ô tô = màu ô tô
+  /// trên lưới, ô trống = nền lưới) ở cả chế độ sáng và tối, để tranh kết quả
+  /// trông giống hệt lúc giải. Vẽ cả ô trống, vì có màn mà hình chủ đề chính
+  /// là phần ô trống.
   static Widget picture(BuildContext context, List<List<int>> solution) {
-    final colors = context.gameColors;
+    final colors = Theme.of(context).colorScheme;
     return NonogramPixelArt.fromSolution(
       solution: solution,
-      color: colors.pictureInk,
-      emptyColor: colors.picturePaper,
+      color: colors.onSurface,
+      emptyColor: colors.surfaceContainerLow,
     );
   }
 

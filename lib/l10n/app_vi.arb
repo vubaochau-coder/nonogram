@@ -103,5 +103,8 @@
   "nonogramDashboardAllDoneDesc": "Bạn đã hoàn thành cả {total} màn. Xem lại bộ sưu tập bất cứ lúc nào.",
   "nonogramDurationHoursMinutes": "{hours} giờ {minutes} phút",
   "nonogramHistoryBestTime": "Kỷ lục {time}",
-  "nonogramPlayActionDashboard": "Trang chủ"
+  "nonogramPlayActionDashboard": "Trang chủ",
+  "appThemeTitle": "Giao diện",
+  "appThemeLight": "Sáng",
+  "appThemeDark": "Tối"
 }

@@ -1,5 +1,6 @@
 import 'package:nonogram/core/context_ext.dart';
 import 'package:nonogram/widgets/app_text_field.dart';
+import 'package:nonogram/widgets/app_theme_mode_selector.dart';
 import 'package:nonogram/widgets/dialogs/app_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -191,6 +192,13 @@ class _NonogramSettingsDialogState extends State<NonogramSettingsDialog> {
                 ),
               ),
             ],
+            const SizedBox(height: 20),
+            Text(
+              l10n.appThemeTitle,
+              style: context.titleSmall.copyWith(fontWeight: FontWeight.bold),
+            ),
+            const SizedBox(height: 10),
+            const AppThemeModeSelector(),
           ],
         ),
       ),

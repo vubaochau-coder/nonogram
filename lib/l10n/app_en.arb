@@ -147,5 +147,8 @@
       }
     }
   },
-  "nonogramPlayActionDashboard": "Home"
+  "nonogramPlayActionDashboard": "Home",
+  "appThemeTitle": "Appearance",
+  "appThemeLight": "Light",
+  "appThemeDark": "Dark"
 }
