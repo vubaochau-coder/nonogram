@@ -458,12 +458,6 @@ abstract class AppLocalizations {
   /// **'Appearance'**
   String get appThemeTitle;
 
-  /// No description provided for @appThemeSystem.
-  ///
-  /// In en, this message translates to:
-  /// **'System'**
-  String get appThemeSystem;
-
   /// No description provided for @appThemeLight.
   ///
   /// In en, this message translates to:
