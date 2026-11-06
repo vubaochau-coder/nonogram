@@ -33,7 +33,7 @@ class NonogramBoardSnapshot {
       'gridData':
           gridData.map((row) => row.map((e) => e.index).toList()).toList(),
       'startTime': startTime.toIso8601String(),
-      'interactionMode': interactionMode.index,
+      'interactionMode': interactionMode.storageCode,
       'viewportOffsetX': viewportOffsetX,
       'viewportOffsetY': viewportOffsetY,
       'cellSize': cellSize,
@@ -52,8 +52,9 @@ class NonogramBoardSnapshot {
                 .toList();
           }).toList(),
       startTime: DateTime.parse(map['startTime'] as String),
-      interactionMode:
-          NonogramInteractionMode.values[map['interactionMode'] as int],
+      interactionMode: NonogramInteractionMode.fromStorageCode(
+        map['interactionMode'] as int?,
+      ),
       viewportOffsetX: (map['viewportOffsetX'] as num).toDouble(),
       viewportOffsetY: (map['viewportOffsetY'] as num).toDouble(),
       cellSize: (map['cellSize'] as num?)?.toDouble() ?? 40.0,

@@ -33,7 +33,7 @@ void main() {
           level: 5,
           gridData: [],
           startTime: DateTime.now(),
-          interactionMode: NonogramInteractionMode.draw,
+          interactionMode: NonogramInteractionMode.fill,
         ),
       );
 
@@ -95,7 +95,7 @@ void main() {
             level: 1,
             gridData: const [],
             startTime: DateTime.now(),
-            interactionMode: NonogramInteractionMode.draw,
+            interactionMode: NonogramInteractionMode.fill,
           ),
         );
 

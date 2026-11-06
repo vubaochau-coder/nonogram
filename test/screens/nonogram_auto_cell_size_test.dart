@@ -27,35 +27,30 @@ void main() {
   const phone = Size(390, 700);
 
   group('fitCellSize', () {
-    test('small puzzle keeps the preferred size', () {
+    test('small puzzle uses the largest cell size', () {
       expect(
-        engine.fitCellSize(puzzle: _square(4), viewport: phone, preferred: 40),
-        40,
+        engine.fitCellSize(puzzle: _square(4), viewport: phone),
+        NonogramBoardLayout.maxCellSize,
       );
     });
 
-    test('medium puzzle shrinks to fit the width', () {
-      // 5 cột gợi ý, mỗi cột dày 0.65 × cỡ ô. Ở cỡ 32: dải trái 104px,
-      // (450 - 8 - 104 - 16) / 10 = 32.2 >= 32; ở cỡ 33 thì không vừa.
+    test('medium puzzle shrinks to fit, within the allowed range', () {
+      // 8×8, 4 gợi ý mỗi hàng/cột, khung 390 rộng. Cỡ 40: dải trái 4 × 26 =
+      // 104, (390 - 8 - 104 - 16) / 8 = 32.75 < 40 -> không vừa. Cỡ 38:
+      // dải 4 × 24.7 = 98.8, (390 - 8 - 98.8 - 16) / 8 = 33.4 < 38 ... nên
+      // chạm sàn 36; cao 700 thì thừa. Với khung rộng 440 thì vừa ở 39.
       final size = engine.fitCellSize(
-        puzzle: _square(10),
-        viewport: const Size(450, 900),
-        preferred: 40,
+        puzzle: _square(8),
+        viewport: const Size(440, 900),
       );
-      expect(size, 32);
+      expect(size, greaterThan(NonogramBoardLayout.minCellSize));
+      expect(size, lessThan(NonogramBoardLayout.maxCellSize));
     });
 
     test('large puzzle never goes below the minimum tap size', () {
       expect(
-        engine.fitCellSize(puzzle: _square(45), viewport: phone, preferred: 40),
-        NonogramBoardLayout.minAutoCellSize,
-      );
-    });
-
-    test('a smaller preferred size is respected', () {
-      expect(
-        engine.fitCellSize(puzzle: _square(45), viewport: phone, preferred: 16),
-        16,
+        engine.fitCellSize(puzzle: _square(45), viewport: phone),
+        NonogramBoardLayout.minCellSize,
       );
     });
   });
@@ -70,17 +65,17 @@ void main() {
       bloc.add(const BoardViewportMeasured(width: 390, height: 700));
       bloc.add(Started(puzzle: _square(45)));
       await bloc.stream.firstWhere((s) => s.puzzle != null);
-      expect(bloc.state.cellSize, NonogramBoardLayout.minAutoCellSize);
+      expect(bloc.state.cellSize, NonogramBoardLayout.minCellSize);
     });
 
     test('measurement arriving after start still fits the board', () async {
       bloc.add(Started(puzzle: _square(45)));
       await bloc.stream.firstWhere((s) => s.puzzle != null);
-      expect(bloc.state.cellSize, 40);
+      expect(bloc.state.cellSize, NonogramBoardLayout.maxCellSize);
 
       bloc.add(const BoardViewportMeasured(width: 390, height: 700));
       await bloc.stream.firstWhere(
-        (s) => s.cellSize == NonogramBoardLayout.minAutoCellSize,
+        (s) => s.cellSize == NonogramBoardLayout.minCellSize,
       );
     });
 
@@ -91,27 +86,19 @@ void main() {
       expect(bloc.takePendingViewport(), isNull);
     });
 
-    test('zoom changes the cell size but not the preferred size', () async {
+    test('zoom stays within the allowed cell size range', () async {
       bloc.add(const BoardViewportMeasured(width: 390, height: 700));
-      bloc.add(Started(puzzle: _square(4)));
+      bloc.add(Started(puzzle: _square(45)));
       await bloc.stream.firstWhere((s) => s.puzzle != null);
 
-      bloc.add(const CellSizePreviewed(60));
-      await bloc.stream.firstWhere((s) => s.cellSize == 60);
-      bloc.add(
-        const CellSizeChanged(
-          cellSize: 60,
-          offsetX: 0,
-          offsetY: 0,
-          isZoom: true,
-        ),
+      bloc.add(const CellSizePreviewed(80));
+      await bloc.stream.firstWhere(
+        (s) => s.cellSize == NonogramBoardLayout.maxCellSize,
       );
-      await Future<void>.delayed(const Duration(milliseconds: 20));
-
-      // Màn mới vẫn dùng cỡ 40 (cỡ người chơi chọn), không phải 60.
-      bloc.add(Started(puzzle: _square(5)));
-      await bloc.stream.firstWhere((s) => s.puzzle?.id == 'sq-5');
-      expect(bloc.state.cellSize, 40);
+      bloc.add(const CellSizeChanged(cellSize: 10, offsetX: 0, offsetY: 0));
+      await bloc.stream.firstWhere(
+        (s) => s.cellSize == NonogramBoardLayout.minCellSize,
+      );
     });
 
     test('restored game keeps its saved cell size', () async {
@@ -125,16 +112,35 @@ void main() {
             level: puzzle.level,
             gridData: const [],
             startTime: DateTime(2026),
-            interactionMode: NonogramInteractionMode.draw,
-            cellSize: 32,
+            interactionMode: NonogramInteractionMode.fill,
+            cellSize: 40,
             viewportOffsetX: -120,
             viewportOffsetY: -80,
           ),
         ),
       );
       await bloc.stream.firstWhere((s) => s.puzzle != null);
-      expect(bloc.state.cellSize, 32);
+      expect(bloc.state.cellSize, 40);
       expect(bloc.takePendingViewport(), const Offset(-120, -80));
+    });
+
+    test('a game saved with an old out-of-range size is clamped', () async {
+      final puzzle = _square(45);
+      bloc.add(
+        Started(
+          puzzle: puzzle,
+          snapshot: NonogramBoardSnapshot(
+            puzzleId: puzzle.id,
+            level: puzzle.level,
+            gridData: const [],
+            startTime: DateTime(2026),
+            interactionMode: NonogramInteractionMode.fill,
+            cellSize: 80,
+          ),
+        ),
+      );
+      await bloc.stream.firstWhere((s) => s.puzzle != null);
+      expect(bloc.state.cellSize, NonogramBoardLayout.maxCellSize);
     });
   });
 }

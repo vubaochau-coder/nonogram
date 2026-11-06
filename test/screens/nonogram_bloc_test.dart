@@ -285,17 +285,55 @@ void main() {
       expect(bloc.state.gridData[0][1], NonogramCellState.filled);
     });
 
-    test('Long press should do nothing in explore mode', () async {
+    test('Mark mode: tap toggles X, long press fills', () async {
       bloc.add(const LevelLoadRequested());
       await bloc.stream.firstWhere((s) => s.puzzle != null);
 
       bloc.add(const InteractionModeChanged(offsetX: 0, offsetY: 0));
       await Future<void>.delayed(const Duration(milliseconds: 10));
+      expect(bloc.state.interactionMode, NonogramInteractionMode.mark);
 
-      bloc.add(const CellLongPressed(row: 0, col: 1, offsetX: 0, offsetY: 0));
+      bloc.add(const CellTapped(0, 1, offsetX: 0, offsetY: 0));
       await Future<void>.delayed(const Duration(milliseconds: 10));
+      expect(bloc.state.gridData[0][1], NonogramCellState.marked);
 
+      bloc.add(const CellTapped(0, 1, offsetX: 0, offsetY: 0));
+      await Future<void>.delayed(const Duration(milliseconds: 10));
       expect(bloc.state.gridData[0][1], NonogramCellState.empty);
+
+      bloc.add(const CellLongPressed(row: 0, col: 0, offsetX: 0, offsetY: 0));
+      await Future<void>.delayed(const Duration(milliseconds: 10));
+      expect(bloc.state.gridData[0][0], NonogramCellState.filled);
+    });
+
+    test(
+      'Mark mode: dragging marks empty cells but keeps filled ones',
+      () async {
+        bloc.add(const LevelLoadRequested());
+        await bloc.stream.firstWhere((s) => s.puzzle != null);
+
+        bloc.add(const CellTapped(1, 1, offsetX: 0, offsetY: 0));
+        bloc.add(const InteractionModeChanged(offsetX: 0, offsetY: 0));
+        await Future<void>.delayed(const Duration(milliseconds: 10));
+
+        bloc.add(const DragStarted(1, 0));
+        bloc.add(const DragUpdated(1, 1));
+        bloc.add(const DragEnded(offsetX: 0, offsetY: 0));
+        await Future<void>.delayed(const Duration(milliseconds: 10));
+
+        expect(bloc.state.gridData[1][0], NonogramCellState.marked);
+        expect(bloc.state.gridData[1][1], NonogramCellState.filled);
+      },
+    );
+
+    test('Mode switch returns to fill', () async {
+      bloc.add(const LevelLoadRequested());
+      await bloc.stream.firstWhere((s) => s.puzzle != null);
+      expect(bloc.state.interactionMode, NonogramInteractionMode.fill);
+      bloc.add(const InteractionModeChanged(offsetX: 0, offsetY: 0));
+      bloc.add(const InteractionModeChanged(offsetX: 0, offsetY: 0));
+      await Future<void>.delayed(const Duration(milliseconds: 10));
+      expect(bloc.state.interactionMode, NonogramInteractionMode.fill);
     });
 
     test('Marked cell can still satisfy solved puzzle semantics', () async {
@@ -387,7 +425,7 @@ void main() {
               [NonogramCellState.empty, NonogramCellState.empty],
             ],
             startTime: DateTime.now(),
-            interactionMode: NonogramInteractionMode.draw,
+            interactionMode: NonogramInteractionMode.fill,
             remainingHints: 0,
           ),
         ),
@@ -478,7 +516,7 @@ void main() {
               [NonogramCellState.marked, NonogramCellState.filled],
             ],
             startTime: DateTime.now(),
-            interactionMode: NonogramInteractionMode.draw,
+            interactionMode: NonogramInteractionMode.fill,
             remainingHints: 1,
           ),
         ),

@@ -102,6 +102,6 @@ NonogramBoardSnapshot _mockSnapshot(int level) {
     level: level,
     gridData: [],
     startTime: DateTime.now(),
-    interactionMode: NonogramInteractionMode.draw,
+    interactionMode: NonogramInteractionMode.fill,
   );
 }

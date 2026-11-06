@@ -9,19 +9,15 @@ import 'package:nonogram/screens/play/engine/nonogram_board_layout.dart';
 final class NonogramEngine {
   const NonogramEngine();
 
-  /// Cỡ ô cho màn mới: cả lưới vừa khung nhìn (sau khi trừ hai dải gợi ý),
-  /// không lớn hơn [preferred] và không nhỏ hơn
-  /// [NonogramBoardLayout.minAutoCellSize] (trừ khi [preferred] nhỏ hơn).
-  double fitCellSize({
-    required NonogramPuzzle puzzle,
-    required Size viewport,
-    required double preferred,
-  }) {
+  /// Cỡ ô cho màn mới: lớn nhất có thể để cả lưới vừa khung nhìn (sau khi
+  /// trừ hai dải gợi ý), trong khoảng [NonogramBoardLayout.minCellSize] ..
+  /// [NonogramBoardLayout.maxCellSize]; lưới lớn hơn thì kéo để xem.
+  double fitCellSize({required NonogramPuzzle puzzle, required Size viewport}) {
     return NonogramBoardLayout.forPuzzle(
       puzzle: puzzle,
-      cellSize: preferred,
+      cellSize: NonogramBoardLayout.maxCellSize,
       viewport: viewport,
-    ).fitCellSize(preferred);
+    ).fitCellSize();
   }
 
   List<int> deriveLineRuns(List<NonogramCellState> line) {

@@ -148,18 +148,6 @@ class AppLocalizationsVi extends AppLocalizations {
   String get nonogramPlayPageTitle => 'Nonogram';
 
   @override
-  String get nonogramSettingsCellSize => 'Kích thước ô';
-
-  @override
-  String get nonogramSettingsCellSizeCustom => 'Tuỳ chỉnh';
-
-  @override
-  String get nonogramSettingsCellSizeDefault => '(mặc định)';
-
-  @override
-  String get nonogramSettingsCellSizeError => 'Kích thước phải từ 12 đến 80';
-
-  @override
   String get nonogramSettingsTitle => 'Cài đặt';
 
   @override
@@ -231,12 +219,24 @@ class AppLocalizationsVi extends AppLocalizations {
   String get appThemeDark => 'Tối';
 
   @override
-  String nonogramPlayRowLabel(int index) {
-    return 'Hàng $index';
-  }
+  String get nonogramPlayModeFill => 'Chế độ tô';
 
   @override
-  String nonogramPlayColumnLabel(int index) {
-    return 'Cột $index';
-  }
+  String get nonogramPlayModeMark => 'Chế độ đánh X';
+
+  @override
+  String get nonogramSettingsRestart => 'Chơi lại từ đầu';
+
+  @override
+  String get nonogramSettingsRestartConfirmTitle => 'Chơi lại từ đầu?';
+
+  @override
+  String get nonogramSettingsRestartConfirmMessage =>
+      'Toàn bộ ô đã tô và đánh X của màn này sẽ bị xoá.';
+
+  @override
+  String get commonClose => 'Đóng';
+
+  @override
+  String get nonogramSettingsRestartConfirm => 'Chơi lại';
 }

@@ -19,7 +19,9 @@ enum NonogramBoardRegion { grid, leftStrip, topStrip, empty }
 /// - Mỗi dải có trần cứng theo tỉ lệ khung nhìn ([leftStripCap],
 ///   [topStripCap]); nhiều số hơn trần thì dải chỉ hiện các số gần lưới
 ///   nhất, phần còn lại cuộn được ([leftClueOverflow], [topClueOverflow]).
-/// - [compactClues]: trần thấp hơn nữa, nhường chỗ cho lưới.
+///
+/// Cỡ ô luôn trong khoảng [minCellSize]..[maxCellSize] (đủ to để chạm
+/// chính xác); lưới lớn hơn khung nhìn thì kéo để xem.
 ///
 /// Màn hình ngang ([isLandscape]): hàng nút công cụ chuyển thành cột dọc ở
 /// mép phải, nên không chừa phía trên mà chừa [rightReserve] bên phải.
@@ -31,14 +33,12 @@ class NonogramBoardLayout {
     required this.maxLeftClues,
     required this.maxTopClues,
     required this.cellSize,
-    this.compactClues = false,
   });
 
   factory NonogramBoardLayout.forPuzzle({
     required NonogramPuzzle puzzle,
     required double cellSize,
     required Size viewport,
-    bool compactClues = false,
   }) {
     int maxCount(List<List<int>> clues) =>
         clues.fold(0, (m, c) => max(m, c.length));
@@ -49,7 +49,6 @@ class NonogramBoardLayout {
       maxLeftClues: maxCount(puzzle.leftClues),
       maxTopClues: maxCount(puzzle.topClues),
       cellSize: cellSize,
-      compactClues: compactClues,
     );
   }
 
@@ -68,30 +67,23 @@ class NonogramBoardLayout {
   static const double edgeInset = 8;
   static const double endMargin = 16;
 
-  /// Cho kéo cuối lưới lên quá mép dưới thêm một đoạn, để các ô không bị
-  /// nút "giữ để kéo" ở góc dưới che mất.
-  static const double bottomOverscroll = 64;
+  /// Khoảng cỡ ô (dp): màn mới tự chọn cỡ lớn nhất vừa khung nhìn trong
+  /// khoảng này, chụm để zoom cũng chỉ trong khoảng này.
+  static const double minCellSize = 36;
+  static const double maxCellSize = 44;
 
-  /// Cỡ ô nhỏ nhất khi tự co cho vừa màn hình (còn chạm trúng được).
-  static const double minAutoCellSize = 24;
-
-  /// Giới hạn zoom.
-  static const double maxZoomCellSize = 80;
-  static const double minZoomCellSize = 6;
+  static double clampCellSize(double size) =>
+      size.clamp(minCellSize, maxCellSize).toDouble();
 
   /// Độ dày mỗi ô số trong dải gợi ý: tỉ lệ [clueDepthRatio] với cỡ ô, trong
   /// khoảng [minClueDepth]..[maxClueDepth]. Nếu dải vượt trần thì ép dần về
   /// [minClueDepth] trước khi phải cuộn.
-  static const double minClueDepth = 12;
+  static const double minClueDepth = 18;
   static const double maxClueDepth = 26;
   static const double clueDepthRatio = 0.65;
 
   /// Trần của mỗi dải theo tỉ lệ chiều tương ứng của khung nhìn.
   static const double stripCapFraction = 0.30;
-
-  /// Trần khi thu gọn dải: tối đa bấy nhiêu số, và không quá tỉ lệ này.
-  static const int compactClueCount = 4;
-  static const double compactCapFraction = 0.16;
 
   final Size viewport;
   final int rows;
@@ -99,7 +91,6 @@ class NonogramBoardLayout {
   final int maxLeftClues;
   final int maxTopClues;
   final double cellSize;
-  final bool compactClues;
 
   bool get isLandscape => isLandscapeViewport(viewport);
 
@@ -110,18 +101,12 @@ class NonogramBoardLayout {
   double get _roomWidth => viewport.width - _startX - rightReserve;
   double get _roomHeight => viewport.height - _startY;
 
-  double _cap(double room, double depth) {
-    final full = room * stripCapFraction;
-    if (!compactClues) return full;
-    return min(full, max(room * compactCapFraction, compactClueCount * depth));
-  }
-
   double get _naturalDepth =>
       (cellSize * clueDepthRatio).clamp(minClueDepth, maxClueDepth);
 
   /// Trần chiều rộng dải trái / chiều cao dải trên.
-  double get leftStripCap => _cap(_roomWidth, minClueDepth);
-  double get topStripCap => _cap(_roomHeight, minClueDepth);
+  double get leftStripCap => _roomWidth * stripCapFraction;
+  double get topStripCap => _roomHeight * stripCapFraction;
 
   static double _depth(int count, double natural, double cap) {
     if (count == 0) return 0;
@@ -160,20 +145,19 @@ class NonogramBoardLayout {
 
   /// Khoảng hợp lệ cho một trục: nếu cả dải + lưới vừa thì cố định ở giữa,
   /// nếu không thì kéo được từ "mép lưới sát dải gợi ý" tới "mép cuối lưới
-  /// cách mép khung [endMargin] (+ [overscroll])".
+  /// cách mép khung [endMargin]".
   static ({double min, double max}) _range({
     required double end,
     required double start,
     required double strip,
     required double grid,
-    double overscroll = 0,
   }) {
     final room = end - start - endMargin;
     if (strip + grid <= room) {
       final t = start + strip + (room - strip - grid) / 2;
       return (min: t, max: t);
     }
-    return (min: end - endMargin - overscroll - grid, max: start + strip);
+    return (min: end - endMargin - grid, max: start + strip);
   }
 
   ({double min, double max}) get xRange => _range(
@@ -188,7 +172,6 @@ class NonogramBoardLayout {
     start: _startY,
     strip: topStripHeight,
     grid: gridHeight,
-    overscroll: bottomOverscroll,
   );
 
   /// Vị trí mở màn: góc trên-trái của lưới nằm sát hai dải gợi ý.
@@ -248,13 +231,12 @@ class NonogramBoardLayout {
     maxLeftClues: maxLeftClues,
     maxTopClues: maxTopClues,
     cellSize: size,
-    compactClues: compactClues,
   );
 
   /// Cỡ ô lớn nhất để cả lưới vừa phần khung nhìn còn lại sau hai dải gợi
   /// ý. Độ dày dải phụ thuộc cỡ ô nên tìm bằng chia đôi.
   double get _rawFitCellSize {
-    if (rows == 0 || cols == 0) return maxZoomCellSize;
+    if (rows == 0 || cols == 0) return maxCellSize;
     bool fits(double c) {
       final l = withCellSize(c);
       final w = _roomWidth - l.leftStripWidth - endMargin;
@@ -263,7 +245,7 @@ class NonogramBoardLayout {
     }
 
     var lo = 0.0;
-    var hi = maxZoomCellSize;
+    var hi = maxCellSize;
     if (fits(hi)) return hi;
     for (var i = 0; i < 30; i++) {
       final mid = (lo + hi) / 2;
@@ -276,19 +258,9 @@ class NonogramBoardLayout {
     return lo;
   }
 
-  /// Cỡ ô cho màn mới: không lớn hơn [preferred], không nhỏ hơn
-  /// [minAutoCellSize] (trừ khi chính [preferred] nhỏ hơn).
-  double fitCellSize(double preferred) {
-    final fit = _rawFitCellSize.floorToDouble();
-    if (fit >= preferred) return preferred;
-    final floor = min(preferred, minAutoCellSize);
-    return max(fit, floor);
-  }
-
-  /// Zoom nhỏ nhất: đủ để nhìn toàn bộ lưới (nhưng không dưới
-  /// [minZoomCellSize]), và không lớn hơn 12 để màn nhỏ vẫn thu được.
-  double get minZoom =>
-      _rawFitCellSize.floorToDouble().clamp(minZoomCellSize, 12.0);
+  /// Cỡ ô cho màn mới: lớn nhất để cả lưới vừa khung nhìn, trong khoảng
+  /// [minCellSize]..[maxCellSize].
+  double fitCellSize() => clampCellSize(_rawFitCellSize.floorToDouble());
 
   /// Vị trí mới sau khi zoom từ [cellSize] lên [newCellSize] mà giữ nguyên
   /// điểm lưới đang nằm dưới [focal].
