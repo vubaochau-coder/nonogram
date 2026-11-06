@@ -11,7 +11,8 @@ import '../bloc/nonogram_play_state.dart';
 import '../nonogram_transformation_controller_provider.dart';
 
 /// Nút gạt hai lựa chọn: chạm vào ô sẽ tô (ô vuông đặc) hay đánh X. Cả hai
-/// lựa chọn luôn hiện, lựa chọn đang bật được tô màu.
+/// lựa chọn luôn hiện, lựa chọn đang bật được tô màu. Chạm vào bên nào cũng
+/// chuyển sang chế độ còn lại, không cần chạm trúng đúng bên kia.
 class ModeToggleAction extends StatelessWidget {
   const ModeToggleAction({super.key, this.vertical = false});
 
@@ -28,8 +29,7 @@ class ModeToggleAction extends StatelessWidget {
         final l10n = context.l10n;
         final colors = context.color;
 
-        void select(NonogramInteractionMode mode) {
-          if (state.interactionMode == mode) return;
+        void toggle() {
           final t =
               NonogramTransformationControllerProvider.of(
                 context,
@@ -54,7 +54,7 @@ class ModeToggleAction extends StatelessWidget {
               message: label,
               child: InkWell(
                 key: ValueKey('nonogram-mode-${mode.name}'),
-                onTap: () => select(mode),
+                onTap: toggle,
                 borderRadius: BorderRadius.circular(11),
                 child: AnimatedContainer(
                   duration: const Duration(milliseconds: 160),

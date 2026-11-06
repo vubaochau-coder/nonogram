@@ -175,6 +175,16 @@ void main() {
 
     await tester.tap(find.byKey(const ValueKey('nonogram-mode-fill')));
     await tester.pump(const Duration(milliseconds: 50));
+    expect(_bloc(tester).state.interactionMode, NonogramInteractionMode.fill);
+
+    // Chạm lại vào bên đang bật cũng chuyển sang chế độ còn lại.
+    await tester.tap(find.byKey(const ValueKey('nonogram-mode-fill')));
+    await tester.pump(const Duration(milliseconds: 50));
+    expect(_bloc(tester).state.interactionMode, NonogramInteractionMode.mark);
+    await tester.tap(find.byKey(const ValueKey('nonogram-mode-mark')));
+    await tester.pump(const Duration(milliseconds: 50));
+    expect(_bloc(tester).state.interactionMode, NonogramInteractionMode.fill);
+
     await tester.tapAt(target + Offset(cell, 0));
     await tester.pump(const Duration(milliseconds: 400));
     expect(_bloc(tester).state.gridData[1][2], NonogramCellState.filled);
