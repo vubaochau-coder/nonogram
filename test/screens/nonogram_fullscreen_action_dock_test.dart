@@ -1,3 +1,5 @@
+import 'dart:math' as math;
+
 import 'package:nonogram/l10n/app_localizations.dart';
 import 'package:nonogram/screens/play/widgets/nonogram_fullscreen_action_dock.dart';
 import 'package:flutter/material.dart';
@@ -81,5 +83,34 @@ void main() {
       await tester.pump(const Duration(milliseconds: 1));
       expect(dockBodySize(tester).height, 0);
     });
+  });
+
+  testWidgets('handle arrow points up when expanded, down when collapsed', (
+    tester,
+  ) async {
+    await tester.pumpWidget(buildDockHarness());
+    await tester.pump();
+
+    double angle() {
+      final rotate = tester.widget<Transform>(
+        find.descendant(
+          of: find.byKey(
+            const ValueKey('nonogram-fullscreen-action-dock-handle'),
+          ),
+          matching: find.byType(Transform),
+        ),
+      );
+      // Góc quay quanh trục z từ ma trận: cos = m[0], sin = m[1].
+      final m = rotate.transform.storage;
+      return math.atan2(m[1], m[0]).abs();
+    }
+
+    // Đang mở: mũi tên (chevronDown gốc) bị quay 180° -> chỉ lên.
+    expect(angle(), closeTo(math.pi, 0.01));
+
+    await tester.pump(const Duration(milliseconds: 400));
+    await tester.pumpAndSettle();
+    // Đã tự thu lại: mũi tên chỉ xuống.
+    expect(angle(), closeTo(0, 0.01));
   });
 }

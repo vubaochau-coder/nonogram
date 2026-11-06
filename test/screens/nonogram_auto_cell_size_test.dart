@@ -35,13 +35,11 @@ void main() {
     });
 
     test('medium puzzle shrinks to fit, within the allowed range', () {
-      // 8×8, 4 gợi ý mỗi hàng/cột, khung 390 rộng. Cỡ 40: dải trái 4 × 26 =
-      // 104, (390 - 8 - 104 - 16) / 8 = 32.75 < 40 -> không vừa. Cỡ 38:
-      // dải 4 × 24.7 = 98.8, (390 - 8 - 98.8 - 16) / 8 = 33.4 < 38 ... nên
-      // chạm sàn 36; cao 700 thì thừa. Với khung rộng 440 thì vừa ở 39.
+      // 8×8, 4 gợi ý mỗi hàng: khung rộng 390 không đủ cho cỡ 44 nhưng
+      // thừa cho cỡ 28.
       final size = engine.fitCellSize(
         puzzle: _square(8),
-        viewport: const Size(440, 900),
+        viewport: const Size(390, 900),
       );
       expect(size, greaterThan(NonogramBoardLayout.minCellSize));
       expect(size, lessThan(NonogramBoardLayout.maxCellSize));
@@ -86,46 +84,9 @@ void main() {
       expect(bloc.takePendingViewport(), isNull);
     });
 
-    test('zoom stays within the allowed cell size range', () async {
-      bloc.add(const BoardViewportMeasured(width: 390, height: 700));
-      bloc.add(Started(puzzle: _square(45)));
-      await bloc.stream.firstWhere((s) => s.puzzle != null);
-
-      bloc.add(const CellSizePreviewed(80));
-      await bloc.stream.firstWhere(
-        (s) => s.cellSize == NonogramBoardLayout.maxCellSize,
-      );
-      bloc.add(const CellSizeChanged(cellSize: 10, offsetX: 0, offsetY: 0));
-      await bloc.stream.firstWhere(
-        (s) => s.cellSize == NonogramBoardLayout.minCellSize,
-      );
-    });
-
-    test('restored game keeps its saved cell size', () async {
+    test('restored game uses the fitted size, not the saved one', () async {
       final puzzle = _square(45);
       bloc.add(const BoardViewportMeasured(width: 390, height: 700));
-      bloc.add(
-        Started(
-          puzzle: puzzle,
-          snapshot: NonogramBoardSnapshot(
-            puzzleId: puzzle.id,
-            level: puzzle.level,
-            gridData: const [],
-            startTime: DateTime(2026),
-            interactionMode: NonogramInteractionMode.fill,
-            cellSize: 40,
-            viewportOffsetX: -120,
-            viewportOffsetY: -80,
-          ),
-        ),
-      );
-      await bloc.stream.firstWhere((s) => s.puzzle != null);
-      expect(bloc.state.cellSize, 40);
-      expect(bloc.takePendingViewport(), const Offset(-120, -80));
-    });
-
-    test('a game saved with an old out-of-range size is clamped', () async {
-      final puzzle = _square(45);
       bloc.add(
         Started(
           puzzle: puzzle,
@@ -136,11 +97,40 @@ void main() {
             startTime: DateTime(2026),
             interactionMode: NonogramInteractionMode.fill,
             cellSize: 80,
+            viewportOffsetX: -120,
+            viewportOffsetY: -80,
           ),
         ),
       );
       await bloc.stream.firstWhere((s) => s.puzzle != null);
-      expect(bloc.state.cellSize, NonogramBoardLayout.maxCellSize);
+      expect(bloc.state.cellSize, NonogramBoardLayout.minCellSize);
+      expect(bloc.takePendingViewport(), const Offset(-120, -80));
+    });
+
+    test('rotating the screen refits the cell size', () async {
+      // 13 × 8: dọc thì phải kéo (cỡ nhỏ nhất), ngang thì vừa ở cỡ lớn hơn.
+      final puzzle = NonogramPuzzle(
+        id: 'wide',
+        title: '',
+        author: '',
+        difficulty: '',
+        difficultyScore: 0,
+        level: 1,
+        solution: List.generate(8, (r) => List.generate(13, (c) => c % 2)),
+      );
+      bloc.add(const BoardViewportMeasured(width: 412, height: 780));
+      bloc.add(Started(puzzle: puzzle));
+      await bloc.stream.firstWhere((s) => s.puzzle != null);
+      final portrait = bloc.state.cellSize;
+      expect(portrait, NonogramBoardLayout.minCellSize);
+
+      bloc.add(const BoardViewportMeasured(width: 900, height: 412));
+      await bloc.stream.firstWhere((s) => s.cellSize != portrait);
+      expect(bloc.state.cellSize, greaterThan(portrait));
+      expect(
+        bloc.state.cellSize,
+        lessThanOrEqualTo(NonogramBoardLayout.maxCellSize),
+      );
     });
   });
 }

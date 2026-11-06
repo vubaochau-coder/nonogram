@@ -18,7 +18,6 @@ import 'nonogram_snapshot_mapper.dart';
 
 class NonogramPlayBloc extends AppBloc<NonogramPlayEvent, NonogramPlayState> {
   Size? _viewportSize;
-  bool _pendingAutoFit = false;
   Offset? _pendingViewport;
 
   /// Vị trí lưới đã lưu của ván dở, để bàn chơi áp dụng khi dựng xong.
@@ -62,8 +61,6 @@ class NonogramPlayBloc extends AppBloc<NonogramPlayEvent, NonogramPlayState> {
       _onInteractionModeChanged,
       transformer: sequential(),
     );
-    on<CellSizeChanged>(_onCellSizeChanged, transformer: sequential());
-    on<CellSizePreviewed>(_onCellSizePreviewed, transformer: sequential());
     on<FullscreenToggled>(_onFullscreenToggled, transformer: sequential());
     on<BoardReset>(_onBoardReset, transformer: sequential());
     on<HintRequested>(_onHintRequested, transformer: sequential());
@@ -146,16 +143,9 @@ class NonogramPlayBloc extends AppBloc<NonogramPlayEvent, NonogramPlayState> {
 
     final startTime = snapshot?.startTime ?? DateTime.now();
     final interactionMode = snapshot?.interactionMode ?? state.interactionMode;
-    // Ván dở giữ cỡ ô đã lưu; màn mới tự co theo khung nhìn (nếu đã biết).
-    final double cellSize;
-    if (snapshot != null) {
-      // Ván lưu từ bản cũ có thể dùng cỡ ô ngoài khoảng hiện tại.
-      cellSize = NonogramBoardLayout.clampCellSize(snapshot.cellSize);
-      _pendingAutoFit = false;
-    } else {
-      cellSize = _autoCellSize(puzzle);
-      _pendingAutoFit = _viewportSize == null;
-    }
+    // Cỡ ô không do người chơi chọn: luôn là cỡ vừa khung nhìn hiện tại
+    // (kể cả ván dở), cập nhật lại khi khung nhìn đổi (xoay màn hình...).
+    final cellSize = _autoCellSize(puzzle);
     final remainingHints = snapshot?.remainingHints ?? 3;
 
     final offsetX = snapshot?.viewportOffsetX ?? 0.0;
@@ -362,43 +352,17 @@ class NonogramPlayBloc extends AppBloc<NonogramPlayEvent, NonogramPlayState> {
     return _engine.fitCellSize(puzzle: puzzle, viewport: viewport);
   }
 
+  /// Khung nhìn đổi (lần đo đầu, xoay màn hình, bật/tắt toàn màn hình):
+  /// tính lại cỡ ô cho vừa.
   _onBoardViewportMeasured(BoardViewportMeasured event, Emitter emit) {
     final size = Size(event.width, event.height);
     if (size == _viewportSize || size.isEmpty) return;
     _viewportSize = size;
 
-    // Màn mới đã bắt đầu trước khi đo được khung nhìn: co lại ngay.
     final puzzle = state.puzzle;
-    if (_pendingAutoFit && puzzle != null && !state.isLoading) {
-      _pendingAutoFit = false;
-      emit(state.copyWith(cellSize: _autoCellSize(puzzle)));
-    }
-  }
-
-  /// Cập nhật cỡ ô liên tục khi đang chụm/zoom, chưa lưu.
-  _onCellSizePreviewed(CellSizePreviewed event, Emitter emit) {
-    if (state.puzzle == null || state.isLoading) return;
-    _pendingAutoFit = false;
-    emit(
-      state.copyWith(
-        cellSize: NonogramBoardLayout.clampCellSize(event.cellSize),
-      ),
-    );
-  }
-
-  _onCellSizeChanged(CellSizeChanged event, Emitter emit) {
-    final nextCellSize = NonogramBoardLayout.clampCellSize(event.cellSize);
-    _pendingAutoFit = false;
-    final nextState = state.copyWith(cellSize: nextCellSize);
-    emit(nextState);
-
-    add(
-      CurrentProgressSaveRequested(
-        sourceState: nextState,
-        offsetX: event.offsetX,
-        offsetY: event.offsetY,
-      ),
-    );
+    if (puzzle == null || state.isLoading) return;
+    final cellSize = _autoCellSize(puzzle);
+    if (cellSize != state.cellSize) emit(state.copyWith(cellSize: cellSize));
   }
 
   _onFullscreenToggled(FullscreenToggled event, Emitter emit) {

@@ -157,21 +157,8 @@ void main() {
       final tiny = _layout(rows: 3, cols: 3, left: 1, top: 1);
       expect(tiny.fitCellSize(), NonogramBoardLayout.maxCellSize);
       expect(NonogramBoardLayout.clampCellSize(80), 44);
-      expect(NonogramBoardLayout.clampCellSize(10), 36);
+      expect(NonogramBoardLayout.clampCellSize(10), 28);
     });
-  });
-
-  test('zoomAround keeps the point under the focal point fixed', () {
-    const t = Offset(100, 200);
-    const focal = Offset(250, 400);
-    final moved = NonogramBoardLayout.zoomAround(
-      t: t,
-      focal: focal,
-      from: 20,
-      to: 40,
-    );
-    // Điểm lưới dưới tâm: (focal - t) / cell phải giữ nguyên.
-    expect((focal - t) / 20, (focal - moved) / 40);
   });
 
   group('landscape', () {

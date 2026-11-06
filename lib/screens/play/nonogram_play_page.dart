@@ -59,7 +59,8 @@ class _NonogramPlayPageState extends State<NonogramPlayPage> {
 }
 
 /// Ẩn thanh trạng thái / điều hướng khi bật toàn màn hình hoặc khi màn
-/// ngang (chiều cao quý hơn); hiện lại khi rời trang chơi.
+/// ngang (chiều cao quý hơn); hiện lại và bỏ khoá hướng màn hình (nút xoay)
+/// khi rời trang chơi.
 class _SystemUiModeSync extends StatefulWidget {
   const _SystemUiModeSync({required this.child});
 
@@ -85,6 +86,8 @@ class _SystemUiModeSyncState extends State<_SystemUiModeSync> {
     if (_immersive == true) {
       SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
     }
+    // Bỏ khoá hướng màn hình do nút xoay đặt ra.
+    SystemChrome.setPreferredOrientations(const []);
     super.dispose();
   }
 

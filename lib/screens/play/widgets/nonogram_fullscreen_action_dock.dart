@@ -177,8 +177,10 @@ class _NonogramFullscreenActionDockState
               child: AnimatedBuilder(
                 animation: _controller,
                 builder: (context, child) {
+                  // Mũi tên chỉ hướng hàng nút sẽ đi khi bấm: đang mở thì
+                  // chỉ lên (thu lại), đang thu thì chỉ xuống (thả ra).
                   return Transform.rotate(
-                    angle: (1 - _curve.value) * 3.141592653589793,
+                    angle: _curve.value * 3.141592653589793,
                     child: child,
                   );
                 },
