@@ -17,6 +17,7 @@ import 'package:nonogram/screens/play/bloc/nonogram_play_bloc.dart';
 import 'package:nonogram/screens/play/nonogram_play_page.dart';
 import 'package:nonogram/screens/play/nonogram_transformation_controller_provider.dart';
 import 'package:nonogram/screens/play/sections/nonogram_board_viewport.dart';
+import 'package:nonogram/screens/play/sections/nonogram_landscape_info_panel.dart';
 
 import '../mocks/fake_nonogram_local_service.dart';
 
@@ -235,6 +236,50 @@ void main() {
     // Không còn chừa 64px phía trên: dải gợi ý trên bắt đầu sát mép.
     final t = _gridOffset(tester);
     expect(t.dy, lessThan(400 * 0.30 + 1));
+  });
+
+  testWidgets('landscape shows level info that can be hidden', (tester) async {
+    LandscapeInfoPanelVisibility.notifier.value = true;
+    addTearDown(() => LandscapeInfoPanelVisibility.notifier.value = true);
+
+    await _pumpPlay(tester, const Size(900, 400));
+    const panel = ValueKey('nonogram-landscape-info-panel');
+    expect(find.byKey(panel), findsOneWidget);
+    expect(find.text('Big'), findsOneWidget);
+    expect(find.text('40 × 40'), findsOneWidget);
+    final boardLeftWithPanel = _boardOrigin(tester).dx;
+    expect(boardLeftWithPanel, NonogramLandscapeInfoPanel.width);
+
+    await tester.tap(
+      find.byKey(const ValueKey('nonogram-landscape-info-hide')),
+    );
+    for (var i = 0; i < 4; i++) {
+      await tester.pump(const Duration(milliseconds: 50));
+    }
+    expect(find.byKey(panel), findsNothing);
+    expect(_boardOrigin(tester).dx, 0);
+
+    await tester.tap(find.byKey(const ValueKey('nonogram-landscape-info')));
+    await tester.pump(const Duration(milliseconds: 50));
+    expect(find.byKey(panel), findsOneWidget);
+  });
+
+  testWidgets('landscape rail keeps frequent actions at the bottom', (
+    tester,
+  ) async {
+    await _pumpPlay(tester, const Size(900, 400));
+    double y(Finder finder) => tester.getCenter(finder).dy;
+
+    final back = y(find.byIcon(LucideIcons.arrowLeft));
+    final settings = y(find.byIcon(LucideIcons.settings));
+    final hint = y(find.byIcon(LucideIcons.lightbulb));
+    final mark = y(find.byKey(const ValueKey('nonogram-mode-mark')));
+
+    expect(back, lessThan(settings));
+    expect(settings, lessThan(hint));
+    expect(hint, lessThan(mark));
+    // Tô / X nằm sát mép dưới, trong tầm ngón cái.
+    expect(mark, greaterThan(400 * 0.75));
   });
 
   testWidgets('pinching with two fingers pans but never changes cell size', (

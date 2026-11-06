@@ -310,4 +310,7 @@ class AppLocalizationsVi extends AppLocalizations {
   @override
   String get nonogramGuideTutorialCardDesc =>
       'Học luật chơi từng bước trên một câu đố 5×5 nhỏ.';
+
+  @override
+  String get nonogramPlayInfoHide => 'Ẩn thông tin màn';
 }

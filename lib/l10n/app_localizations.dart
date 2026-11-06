@@ -607,6 +607,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Learn the rules step by step on a small 5×5 puzzle.'**
   String get nonogramGuideTutorialCardDesc;
+
+  /// No description provided for @nonogramPlayInfoHide.
+  ///
+  /// In en, this message translates to:
+  /// **'Hide level info'**
+  String get nonogramPlayInfoHide;
 }
 
 class _AppLocalizationsDelegate

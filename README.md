@@ -45,8 +45,11 @@ Nút gạt **Tô / X** trên thanh công cụ chọn việc một lần chạm s
   28–44px (tính lại khi xoay màn hình); lưới lớn hơn thì kéo để xem.
 - Nút xoay màn hình (điện thoại / máy tính bảng) chuyển dọc ⇄ ngang và khoá
   ở hướng đó; rời trang chơi thì bỏ khoá.
-- Màn hình ngang tự ẩn thanh hệ thống, không có app bar; các nút (quay
-  lại, gợi ý, Tô / X, xoay màn hình, cài đặt) nằm thành cột ở mép phải.
+- Màn hình ngang tự ẩn thanh hệ thống, không có app bar. Thông tin màn
+  (tên, số màn, kích thước, độ khó) nằm thành cột bên trái, thu gọn được
+  (nhớ trên máy) và mở lại bằng nút ⓘ. Các nút nằm thành cột ở mép phải,
+  xếp theo tầm với ngón cái: nút ít dùng ở trên (quay lại, ⓘ, xoay màn
+  hình, cài đặt), nút dùng liên tục ở dưới (gợi ý, rồi Tô / X sát mép dưới).
 - "Chơi lại từ đầu" nằm trong Cài đặt và luôn hỏi xác nhận.
 - Ô trống trên hàng/cột đã khớp gợi ý hiện chấm tròn; X màu chàm là dấu
   người chơi tự đánh.
