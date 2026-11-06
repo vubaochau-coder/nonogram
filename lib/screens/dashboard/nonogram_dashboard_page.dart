@@ -13,7 +13,10 @@ import 'sections/nonogram_dashboard_progress_section.dart';
 import 'sections/nonogram_dashboard_recent_section.dart';
 
 class NonogramDashboardPage extends StatelessWidget {
-  const NonogramDashboardPage({super.key});
+  const NonogramDashboardPage({super.key, this.showTutorialOnStart = false});
+
+  /// Mở bài hướng dẫn "Cách chơi" ngay khi vào (lần đầu mở app).
+  final bool showTutorialOnStart;
 
   @override
   Widget build(BuildContext context) {
@@ -22,13 +25,38 @@ class NonogramDashboardPage extends StatelessWidget {
         return NonogramDashboardBloc(repository: context.read())
           ..add(const DashboardInitialized());
       },
-      child: const _NonogramDashboardView(),
+      child: _NonogramDashboardView(showTutorialOnStart: showTutorialOnStart),
     );
   }
 }
 
-class _NonogramDashboardView extends StatelessWidget {
-  const _NonogramDashboardView();
+class _NonogramDashboardView extends StatefulWidget {
+  const _NonogramDashboardView({required this.showTutorialOnStart});
+
+  final bool showTutorialOnStart;
+
+  @override
+  State<_NonogramDashboardView> createState() => _NonogramDashboardViewState();
+}
+
+class _NonogramDashboardViewState extends State<_NonogramDashboardView> {
+  @override
+  void initState() {
+    super.initState();
+    if (widget.showTutorialOnStart) {
+      WidgetsBinding.instance.addPostFrameCallback((_) => _openTutorial());
+    }
+  }
+
+  /// Học xong mà chọn "Xem các kỹ thuật giải" thì mở tiếp trang lý thuyết.
+  Future<void> _openTutorial() async {
+    if (!mounted) return;
+    final showTechniques = await context.navigate(
+      const NonogramTutorialIntent(),
+    );
+    if (!mounted || showTechniques != true) return;
+    await context.navigate(const NonogramGuideIntent());
+  }
 
   @override
   Widget build(BuildContext context) {

@@ -1,3 +1,4 @@
+import 'package:nonogram/core/app_route_intent.dart';
 import 'package:nonogram/core/app_theme.dart';
 import 'package:nonogram/core/context_ext.dart';
 import 'package:nonogram/screens/guide/illustrations/guide_illustration_card.dart';
@@ -6,6 +7,7 @@ import 'package:nonogram/screens/guide/models/guide_diagrams.dart';
 import 'package:nonogram/screens/guide/models/nonogram_guide_item.dart';
 import 'package:nonogram/screens/painters/nonogram_illustration_painter.dart';
 import 'package:flutter/material.dart';
+import 'package:lucide_icons/lucide_icons.dart';
 
 class NonogramGuidePage extends StatelessWidget {
   const NonogramGuidePage({super.key});
@@ -81,6 +83,8 @@ class NonogramGuidePage extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(context.l10n.nonogramGuideIntro, style: context.bodyMedium),
+            const SizedBox(height: 20),
+            const _TutorialEntryCard(),
             const SizedBox(height: 32),
             _GuideSection(
               title: context.l10n.nonogramGuideRuleTitle,
@@ -168,6 +172,66 @@ class _GuideSection extends StatelessWidget {
           const SizedBox(height: 16),
           ...examples,
         ],
+      ),
+    );
+  }
+}
+
+/// Lối vào bài hướng dẫn tương tác, đặt trước phần lý thuyết.
+class _TutorialEntryCard extends StatelessWidget {
+  const _TutorialEntryCard();
+
+  @override
+  Widget build(BuildContext context) {
+    final colors = context.color;
+
+    return Material(
+      color: colors.primaryContainer,
+      borderRadius: BorderRadius.circular(16),
+      child: InkWell(
+        key: const ValueKey('nonogram-guide-tutorial-card'),
+        borderRadius: BorderRadius.circular(16),
+        onTap: () => context.navigate(const NonogramTutorialIntent()),
+        child: Padding(
+          padding: const EdgeInsets.all(16),
+          child: Row(
+            children: [
+              Container(
+                width: 44,
+                height: 44,
+                alignment: Alignment.center,
+                decoration: BoxDecoration(
+                  color: colors.primary,
+                  shape: BoxShape.circle,
+                ),
+                child: Icon(Icons.touch_app, color: colors.onPrimary),
+              ),
+              const SizedBox(width: 14),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      context.l10n.nonogramGuideTutorialCardTitle,
+                      style: context.titleSmall.copyWith(
+                        color: colors.onPrimaryContainer,
+                        fontWeight: FontWeight.w700,
+                      ),
+                    ),
+                    const SizedBox(height: 2),
+                    Text(
+                      context.l10n.nonogramGuideTutorialCardDesc,
+                      style: context.bodySmall.copyWith(
+                        color: colors.onPrimaryContainer,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              Icon(LucideIcons.chevronRight, color: colors.onPrimaryContainer),
+            ],
+          ),
+        ),
       ),
     );
   }

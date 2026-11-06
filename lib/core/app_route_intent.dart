@@ -4,6 +4,7 @@ import 'package:nonogram/screens/guide/nonogram_guide_page.dart';
 import 'package:nonogram/screens/history/nonogram_history_detail_page.dart';
 import 'package:nonogram/screens/history/nonogram_history_page.dart';
 import 'package:nonogram/screens/play/nonogram_play_page.dart';
+import 'package:nonogram/screens/tutorial/nonogram_tutorial_page.dart';
 
 /// Các màn hình của app. Giữ cùng tên với bản trong Nexora để code UI
 /// chuyển sang không phải sửa, nhưng điều hướng chỉ là Navigator thường.
@@ -48,6 +49,15 @@ class NonogramGuideIntent extends AppRouteIntent<void> {
 
   @override
   Widget build() => const NonogramGuidePage();
+}
+
+/// Bài hướng dẫn tương tác. Kết quả `true`: người chơi muốn xem tiếp các kỹ
+/// thuật giải.
+class NonogramTutorialIntent extends AppRouteIntent<bool> {
+  const NonogramTutorialIntent();
+
+  @override
+  Widget build() => const NonogramTutorialPage();
 }
 
 extension AppRouteNavigation on BuildContext {

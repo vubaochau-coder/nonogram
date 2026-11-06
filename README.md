@@ -51,6 +51,17 @@ Nút gạt **Tô / X** trên thanh công cụ chọn việc một lần chạm s
 - Ô trống trên hàng/cột đã khớp gợi ý hiện chấm tròn; X màu chàm là dấu
   người chơi tự đánh.
 
+## Hướng dẫn chơi
+
+- Lần đầu mở app (chưa giải màn nào), bài **Cách chơi** tự mở: một câu đố
+  5×5 hiện dần từng hàng, mỗi bước có lời dẫn, viền vàng chỗ cần làm và bàn
+  tay chỉ chỗ cần chạm. Chỉ nhận đúng thao tác của bước đó; làm sai thì lời
+  dẫn rung nhẹ. Có nút **Bỏ qua**.
+- Học xong có nút **Xem các kỹ thuật giải** dẫn sang trang Hướng dẫn (lý
+  thuyết). Trên trang Hướng dẫn có thẻ **Học qua bài tập** để mở lại.
+- Kịch bản (bài 5×5, các bước) nằm trong
+  `lib/screens/tutorial/nonogram_tutorial_controller.dart`.
+
 ## Cấu trúc
 
 ```
@@ -66,12 +77,12 @@ lib/
     dashboard/               Màn chính: chơi tiếp / thử thách tiếp theo, thống kê
     play/                    Gameplay (bloc, engine, solver, bố cục bàn chơi, UI)
     history/                 Danh sách + chi tiết màn đã hoàn thành
-    guide/                   Hướng dẫn cách giải
+    guide/                   Hướng dẫn cách giải (lý thuyết, có lối vào bài tập)
+    tutorial/                Bài hướng dẫn tương tác 5×5 ("Cách chơi")
     painters/                CustomPainter cho lưới, gợi ý, đáp án
   l10n/                      Chuỗi dịch (app_en.arb, app_vi.arb)
 assets/
   levels/                    574 màn chơi (sinh bằng tools/build_levels.dart)
-  guide/                     Ảnh minh hoạ hướng dẫn
   fonts/                     Font Nunito (giấy phép OFL, xem Nunito-OFL.txt)
 tools/
   build_levels.dart          Dump Supabase -> assets/levels/, kiểm tra nghiệm duy nhất
