@@ -150,5 +150,21 @@
   "nonogramPlayActionDashboard": "Home",
   "appThemeTitle": "Appearance",
   "appThemeLight": "Light",
-  "appThemeDark": "Dark"
+  "appThemeDark": "Dark",
+  "nonogramPlayRowLabel": "Row {index}",
+  "nonogramPlayColumnLabel": "Col {index}",
+  "@nonogramPlayRowLabel": {
+    "placeholders": {
+      "index": {
+        "type": "int"
+      }
+    }
+  },
+  "@nonogramPlayColumnLabel": {
+    "placeholders": {
+      "index": {
+        "type": "int"
+      }
+    }
+  }
 }

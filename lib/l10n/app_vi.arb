@@ -106,5 +106,7 @@
   "nonogramPlayActionDashboard": "Trang chủ",
   "appThemeTitle": "Giao diện",
   "appThemeLight": "Sáng",
-  "appThemeDark": "Tối"
+  "appThemeDark": "Tối",
+  "nonogramPlayRowLabel": "Hàng {index}",
+  "nonogramPlayColumnLabel": "Cột {index}"
 }

@@ -469,6 +469,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Dark'**
   String get appThemeDark;
+
+  /// No description provided for @nonogramPlayRowLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Row {index}'**
+  String nonogramPlayRowLabel(int index);
+
+  /// No description provided for @nonogramPlayColumnLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Col {index}'**
+  String nonogramPlayColumnLabel(int index);
 }
 
 class _AppLocalizationsDelegate

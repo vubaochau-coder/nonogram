@@ -5,6 +5,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'bloc/nonogram_play_bloc.dart';
 import 'bloc/nonogram_play_event.dart';
 import 'bloc/nonogram_play_state.dart';
+import 'engine/nonogram_board_layout.dart';
+import 'nonogram_board_ui_controller.dart';
 import 'nonogram_transformation_controller_provider.dart';
 import 'widgets/board_viewport_reporter.dart';
 import 'sections/nonogram_board_shell_section.dart';
@@ -23,6 +25,7 @@ class NonogramPlayPage extends StatefulWidget {
 
 class _NonogramPlayPageState extends State<NonogramPlayPage> {
   late final TransformationController _transformationController;
+  final _boardUiController = NonogramBoardUiController();
 
   @override
   void initState() {
@@ -33,6 +36,7 @@ class _NonogramPlayPageState extends State<NonogramPlayPage> {
   @override
   void dispose() {
     _transformationController.dispose();
+    _boardUiController.dispose();
     super.dispose();
   }
 
@@ -43,6 +47,7 @@ class _NonogramPlayPageState extends State<NonogramPlayPage> {
         NonogramTransformationControllerProvider(
           controller: _transformationController,
         ),
+        NonogramBoardUiScope(controller: _boardUiController),
         BlocProvider<NonogramPlayBloc>(
           create: (context) {
             return NonogramPlayBloc(
@@ -117,23 +122,33 @@ class _NonogramPlayView extends StatelessWidget {
           );
         }
 
-        if (state.isLoading) {
-          // Có app bar giả để khung đo được khớp với lúc bàn chơi hiện ra.
-          return Scaffold(
-            appBar: state.isFullscreen ? null : AppBar(),
-            body: const BoardViewportReporter(
-              child: Center(child: CircularProgressIndicator()),
-            ),
-          );
-        }
-
         if (state.isSolved && state.puzzle != null) {
           return _NonogramCompletionView(state: state);
         }
 
+        // Màn ngang: bỏ app bar để lưới có thêm chiều cao; nút quay lại và
+        // cài đặt chuyển vào cột nút công cụ bên phải.
+        final landscape = NonogramBoardLayout.isLandscapeViewport(
+          MediaQuery.sizeOf(context),
+        );
+        final showAppBar = !state.isFullscreen && !landscape;
+
+        Widget body(Widget child) {
+          final reporter = BoardViewportReporter(child: child);
+          return landscape ? SafeArea(child: reporter) : reporter;
+        }
+
+        if (state.isLoading) {
+          // Có app bar giả để khung đo được khớp với lúc bàn chơi hiện ra.
+          return Scaffold(
+            appBar: showAppBar ? AppBar() : null,
+            body: body(const Center(child: CircularProgressIndicator())),
+          );
+        }
+
         return Scaffold(
-          appBar: state.isFullscreen ? null : const NonogramPlayAppBarSection(),
-          body: const BoardViewportReporter(child: NonogramBoardShellSection()),
+          appBar: showAppBar ? const NonogramPlayAppBarSection() : null,
+          body: body(const NonogramBoardShellSection()),
         );
       },
     );

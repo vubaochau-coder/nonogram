@@ -35,14 +35,14 @@ void main() {
     });
 
     test('medium puzzle shrinks to fit the width', () {
-      // 5 cột gợi ý, mỗi cột dày 26px (tối đa) -> dải trái 130px.
-      // (450 - 8 - 130 - 16) / 10 = 29.6 -> 29.
+      // 5 cột gợi ý, mỗi cột dày 0.65 × cỡ ô. Ở cỡ 32: dải trái 104px,
+      // (450 - 8 - 104 - 16) / 10 = 32.2 >= 32; ở cỡ 33 thì không vừa.
       final size = engine.fitCellSize(
         puzzle: _square(10),
         viewport: const Size(450, 900),
         preferred: 40,
       );
-      expect(size, 29);
+      expect(size, 32);
     });
 
     test('large puzzle never goes below the minimum tap size', () {
