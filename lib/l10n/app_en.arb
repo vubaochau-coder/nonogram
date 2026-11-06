@@ -173,5 +173,6 @@
   "nonogramTutorialShowTechniques": "See solving techniques",
   "nonogramTutorialPlay": "Start playing",
   "nonogramGuideTutorialCardTitle": "Learn by playing",
-  "nonogramGuideTutorialCardDesc": "Learn the rules step by step on a small 5×5 puzzle."
+  "nonogramGuideTutorialCardDesc": "Learn the rules step by step on a small 5×5 puzzle.",
+  "nonogramPlayInfoHide": "Hide level info"
 }

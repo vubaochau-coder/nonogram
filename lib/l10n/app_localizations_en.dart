@@ -311,4 +311,7 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get nonogramGuideTutorialCardDesc =>
       'Learn the rules step by step on a small 5×5 puzzle.';
+
+  @override
+  String get nonogramPlayInfoHide => 'Hide level info';
 }

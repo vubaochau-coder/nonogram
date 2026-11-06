@@ -129,5 +129,6 @@
   "nonogramTutorialShowTechniques": "Xem các kỹ thuật giải",
   "nonogramTutorialPlay": "Bắt đầu chơi",
   "nonogramGuideTutorialCardTitle": "Học qua bài tập",
-  "nonogramGuideTutorialCardDesc": "Học luật chơi từng bước trên một câu đố 5×5 nhỏ."
+  "nonogramGuideTutorialCardDesc": "Học luật chơi từng bước trên một câu đố 5×5 nhỏ.",
+  "nonogramPlayInfoHide": "Ẩn thông tin màn"
 }

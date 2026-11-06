@@ -11,6 +11,7 @@ import 'widgets/board_viewport_reporter.dart';
 import 'sections/nonogram_board_shell_section.dart';
 import 'sections/nonogram_play_app_bar_section.dart';
 import 'sections/nonogram_completion_result_section.dart';
+import 'sections/nonogram_landscape_info_panel.dart';
 import 'package:nested/nested.dart';
 
 class NonogramPlayPage extends StatefulWidget {
@@ -159,17 +160,33 @@ class _NonogramPlayView extends StatelessWidget {
         }
 
         // Màn ngang: bỏ app bar (và tự ẩn thanh hệ thống) để lưới có thêm
-        // chiều cao; nút quay lại và cài đặt chuyển vào cột nút bên phải.
-        final landscape = NonogramBoardLayout.isLandscapeViewport(
-          MediaQuery.sizeOf(context),
-        );
+        // chiều cao; nút quay lại và cài đặt chuyển vào cột nút bên phải,
+        // thông tin màn chuyển thành cột thu gọn được bên trái.
+        final screen = MediaQuery.sizeOf(context);
+        final landscape = NonogramBoardLayout.isLandscapeViewport(screen);
         final showAppBar = !state.isFullscreen && !landscape;
+        final roomForInfo =
+            screen.width - NonogramLandscapeInfoPanel.width > screen.height;
 
         Widget body(Widget child) {
           final reporter = BoardViewportReporter(child: child);
           // Màn dọc vẫn chừa mép dưới, để lưới không nằm dưới thanh vuốt
           // của hệ thống (vuốt ở đó sẽ thoát app thay vì tô).
-          return SafeArea(top: landscape, child: reporter);
+          if (!landscape || !roomForInfo) {
+            return SafeArea(top: landscape, child: reporter);
+          }
+          // Bảng thông tin nằm ngoài vùng đo, nên mở / thu gọn thì bàn chơi
+          // tự tính lại cỡ ô cho vừa phần còn lại. Màn gần vuông thì không
+          // chừa chỗ, để phần còn lại vẫn là khung ngang.
+          return SafeArea(
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                const NonogramLandscapeInfoPanel(),
+                Expanded(child: reporter),
+              ],
+            ),
+          );
         }
 
         if (state.isLoading) {
