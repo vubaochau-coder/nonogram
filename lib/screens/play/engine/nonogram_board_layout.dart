@@ -6,22 +6,22 @@ import 'package:nonogram/models/nonogram_puzzle.dart';
 /// Vùng của bàn chơi dưới một điểm chạm.
 enum NonogramBoardRegion { grid, leftStrip, topStrip, empty }
 
-/// Hình học của bàn chơi trong khung nhìn: lưới có thể kéo/zoom, còn hai dải
+/// Hình học của bàn chơi trong khung nhìn: lưới kéo được, còn hai dải
 /// gợi ý "dính" — nằm sát lưới, nhưng không bao giờ trôi ra khỏi mép trái /
 /// mép trên.
 ///
 /// Vị trí lưới được mô tả bằng [Offset] `t` = toạ độ góc trên-trái của lưới
-/// trong khung nhìn. Zoom thực hiện bằng cách đổi [cellSize], không phóng to
-/// hình, nên nét vẽ luôn sắc và dải gợi ý luôn thẳng hàng với lưới.
+/// trong khung nhìn.
 ///
 /// Dải gợi ý:
-/// - Độ dày mỗi ô số tỉ lệ với [cellSize] (zoom nhỏ thì số nhỏ theo).
+/// - Độ dày mỗi ô số tỉ lệ với [cellSize].
 /// - Mỗi dải có trần cứng theo tỉ lệ khung nhìn ([leftStripCap],
 ///   [topStripCap]); nhiều số hơn trần thì dải chỉ hiện các số gần lưới
 ///   nhất, phần còn lại cuộn được ([leftClueOverflow], [topClueOverflow]).
 ///
-/// Cỡ ô luôn trong khoảng [minCellSize]..[maxCellSize] (đủ to để chạm
-/// chính xác); lưới lớn hơn khung nhìn thì kéo để xem.
+/// Cỡ ô không zoom được: luôn là cỡ lớn nhất vừa khung nhìn trong khoảng
+/// [minCellSize]..[maxCellSize] ([fitCellSize]); lưới lớn hơn khung nhìn
+/// thì kéo để xem.
 ///
 /// Màn hình ngang ([isLandscape]): hàng nút công cụ chuyển thành cột dọc ở
 /// mép phải, nên không chừa phía trên mà chừa [rightReserve] bên phải.
@@ -67,9 +67,9 @@ class NonogramBoardLayout {
   static const double edgeInset = 8;
   static const double endMargin = 16;
 
-  /// Khoảng cỡ ô (dp): màn mới tự chọn cỡ lớn nhất vừa khung nhìn trong
-  /// khoảng này, chụm để zoom cũng chỉ trong khoảng này.
-  static const double minCellSize = 36;
+  /// Khoảng cỡ ô (dp): bàn chơi dùng cỡ lớn nhất vừa khung nhìn trong
+  /// khoảng này.
+  static const double minCellSize = 28;
   static const double maxCellSize = 44;
 
   static double clampCellSize(double size) =>
@@ -258,19 +258,7 @@ class NonogramBoardLayout {
     return lo;
   }
 
-  /// Cỡ ô cho màn mới: lớn nhất để cả lưới vừa khung nhìn, trong khoảng
+  /// Cỡ ô: lớn nhất để cả lưới vừa khung nhìn, trong khoảng
   /// [minCellSize]..[maxCellSize].
   double fitCellSize() => clampCellSize(_rawFitCellSize.floorToDouble());
-
-  /// Vị trí mới sau khi zoom từ [cellSize] lên [newCellSize] mà giữ nguyên
-  /// điểm lưới đang nằm dưới [focal].
-  static Offset zoomAround({
-    required Offset t,
-    required Offset focal,
-    required double from,
-    required double to,
-  }) {
-    final ratio = to / from;
-    return focal - (focal - t) * ratio;
-  }
 }

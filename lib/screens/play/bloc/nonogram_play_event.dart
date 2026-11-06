@@ -85,26 +85,6 @@ class FullscreenToggled extends NonogramPlayEvent {
   const FullscreenToggled();
 }
 
-class CellSizeChanged extends NonogramPlayEvent {
-  final double cellSize;
-  final double offsetX;
-  final double offsetY;
-
-  const CellSizeChanged({
-    required this.cellSize,
-    required this.offsetX,
-    required this.offsetY,
-  });
-}
-
-/// Cỡ ô tạm thời trong lúc đang zoom (không lưu); kết thúc bằng
-/// [CellSizeChanged].
-class CellSizePreviewed extends NonogramPlayEvent {
-  final double cellSize;
-
-  const CellSizePreviewed(this.cellSize);
-}
-
 class BoardReset extends NonogramPlayEvent {
   final double offsetX;
   final double offsetY;

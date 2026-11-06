@@ -6,6 +6,9 @@ import 'package:nonogram/core/context_ext.dart';
 /// [color] khác null nghĩa là nút đang ở trạng thái bật.
 class OverlayButton extends StatelessWidget {
   final IconData icon;
+
+  /// Xoay icon theo bội số 90° (theo chiều kim đồng hồ).
+  final int iconQuarterTurns;
   final String? label;
   final VoidCallback onPressed;
   final Color? color;
@@ -14,6 +17,7 @@ class OverlayButton extends StatelessWidget {
   const OverlayButton({
     super.key,
     required this.icon,
+    this.iconQuarterTurns = 0,
     this.label,
     required this.onPressed,
     this.color,
@@ -58,7 +62,10 @@ class OverlayButton extends StatelessWidget {
             mainAxisSize: MainAxisSize.min,
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Icon(icon, size: 18, color: foreground),
+              RotatedBox(
+                quarterTurns: iconQuarterTurns,
+                child: Icon(icon, size: 18, color: foreground),
+              ),
               if (label != null) ...[
                 const SizedBox(width: 6),
                 Text(

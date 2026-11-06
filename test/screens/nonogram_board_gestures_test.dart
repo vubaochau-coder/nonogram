@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -224,5 +225,66 @@ void main() {
     // Không còn chừa 64px phía trên: dải gợi ý trên bắt đầu sát mép.
     final t = _gridOffset(tester);
     expect(t.dy, lessThan(400 * 0.30 + 1));
+  });
+
+  testWidgets('pinching with two fingers pans but never changes cell size', (
+    tester,
+  ) async {
+    await _pumpPlay(tester, phone);
+    final cellBefore = _bloc(tester).state.cellSize;
+    final before = _gridOffset(tester);
+    final origin = _boardOrigin(tester);
+    final center = origin + before + Offset(cellBefore * 4, cellBefore * 4);
+
+    final a = await tester.startGesture(center - const Offset(30, 0));
+    final b = await tester.startGesture(
+      center + const Offset(30, 0),
+      pointer: 9,
+    );
+    for (var i = 0; i < 10; i++) {
+      // Hai ngón tách ra (chụm phóng to) và cùng trôi lên trên-trái.
+      await a.moveBy(const Offset(-12, -10));
+      await b.moveBy(const Offset(8, -10));
+      await tester.pump(const Duration(milliseconds: 16));
+    }
+    await a.up();
+    await b.up();
+    await tester.pump(const Duration(milliseconds: 50));
+
+    expect(_bloc(tester).state.cellSize, cellBefore);
+    expect(_gridOffset(tester).dy, lessThan(before.dy - 50));
+    expect(_filledCount(tester), 0);
+  });
+
+  testWidgets('rotate button locks the other orientation', (tester) async {
+    final calls = <List<Object?>>[];
+    tester.binding.defaultBinaryMessenger.setMockMethodCallHandler(
+      SystemChannels.platform,
+      (call) async {
+        if (call.method == 'SystemChrome.setPreferredOrientations') {
+          calls.add(List<Object?>.from(call.arguments as List));
+        }
+        return null;
+      },
+    );
+    addTearDown(
+      () => tester.binding.defaultBinaryMessenger.setMockMethodCallHandler(
+        SystemChannels.platform,
+        null,
+      ),
+    );
+
+    await _pumpPlay(tester, phone);
+    await tester.tap(find.byKey(const ValueKey('nonogram-rotate-screen')));
+    await tester.pump();
+    expect(calls.last, [
+      'DeviceOrientation.landscapeLeft',
+      'DeviceOrientation.landscapeRight',
+    ]);
+
+    await _pumpPlay(tester, const Size(900, 400));
+    await tester.tap(find.byKey(const ValueKey('nonogram-rotate-screen')));
+    await tester.pump();
+    expect(calls.last, ['DeviceOrientation.portraitUp']);
   });
 }

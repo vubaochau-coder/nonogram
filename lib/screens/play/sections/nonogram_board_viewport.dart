@@ -19,11 +19,11 @@ import '../bloc/nonogram_play_state.dart';
 import '../engine/nonogram_board_layout.dart';
 import '../nonogram_transformation_controller_provider.dart';
 
-/// Bàn chơi: lưới kéo/zoom được, hai dải gợi ý dính mép.
+/// Bàn chơi: lưới kéo được, hai dải gợi ý dính mép.
 ///
 /// Vị trí lưới (góc trên-trái, toạ độ khung nhìn) nằm trong
 /// [TransformationController] dùng chung, để các nút và việc lưu ván đọc
-/// được. Zoom đổi `cellSize` trong bloc chứ không phóng to hình.
+/// được. Cỡ ô cố định (vừa khung nhìn, do bloc tính), không zoom.
 ///
 /// Cử chỉ (chạm tô hay đánh X tuỳ chế độ Tô / X trong bloc):
 /// - Chạm = tô / đánh X một ô, nhấn giữ = việc ngược lại, kéo một ngón bắt
@@ -31,8 +31,8 @@ import '../nonogram_transformation_controller_provider.dart';
 /// - Kéo một ngón bắt đầu ngoài lưới: trên dải trái thì cuộn dọc (và cuộn
 ///   ngang các số bị cắt), trên dải trên thì cuộn ngang (và cuộn dọc các số
 ///   bị cắt), chỗ trống thì kéo bàn.
-/// - Hai ngón = kéo bàn và chụm để zoom.
-/// - Chuột/trackpad: lăn để kéo, Ctrl/⌘ + lăn hoặc chụm trackpad để zoom.
+/// - Hai ngón = kéo bàn.
+/// - Chuột/trackpad: lăn để kéo.
 class NonogramBoardViewport extends StatefulWidget {
   const NonogramBoardViewport({super.key});
 
@@ -55,10 +55,8 @@ class _NonogramBoardViewportState extends State<NonogramBoardViewport>
   _GestureKind _gesture = _GestureKind.none;
   Offset? _pointerDownPosition;
   ({int row, int col})? _lastDragCell;
-  double _zoomStartCell = 0;
-  Offset _zoomStartOffset = Offset.zero;
-  Offset _zoomStartFocal = Offset.zero;
-  double? _liveCellSize;
+  Offset _navStartOffset = Offset.zero;
+  Offset _navStartFocal = Offset.zero;
 
   /// Phần dải gợi ý đang cuộn để xem các số bị cắt: dx cho dải trái, dy
   /// cho dải trên (0 = đang hiện các số gần lưới nhất).
@@ -140,7 +138,7 @@ class _NonogramBoardViewportState extends State<NonogramBoardViewport>
     HapticFeedback.selectionClick();
   }
 
-  // --- Kéo để tô / kéo-zoom / cuộn dải gợi ý ---
+  // --- Kéo để tô / kéo bàn / cuộn dải gợi ý ---
 
   void _onScaleStart(ScaleStartDetails details) {
     final layout = _layout;
@@ -177,17 +175,15 @@ class _NonogramBoardViewportState extends State<NonogramBoardViewport>
 
   void _startNavigate(Offset focal) {
     _gesture = _GestureKind.navigate;
-    _zoomStartCell = _bloc.state.cellSize;
-    _zoomStartOffset = _offset;
-    _zoomStartFocal = focal;
-    _liveCellSize = null;
+    _navStartOffset = _offset;
+    _navStartFocal = focal;
   }
 
   void _onScaleUpdate(ScaleUpdateDetails details) {
     switch (_gesture) {
       case _GestureKind.draw:
         if (details.pointerCount > 1) {
-          // Thêm ngón thứ hai giữa chừng: dừng tô, chuyển sang kéo/zoom.
+          // Thêm ngón thứ hai giữa chừng: dừng tô, chuyển sang kéo bàn.
           _endDraw();
           _startNavigate(details.localFocalPoint);
           return;
@@ -195,7 +191,7 @@ class _NonogramBoardViewportState extends State<NonogramBoardViewport>
         _lastDrawPoint = details.localFocalPoint;
         _dragTo(details.localFocalPoint);
       case _GestureKind.navigate:
-        _navigate(details.localFocalPoint, details.scale);
+        _navigate(details.localFocalPoint);
       case _GestureKind.leftStrip || _GestureKind.topStrip:
         if (details.pointerCount > 1) {
           _endStripDrag();
@@ -322,75 +318,26 @@ class _NonogramBoardViewportState extends State<NonogramBoardViewport>
     _dragTo(point);
   }
 
-  // --- Kéo / zoom ---
+  // --- Kéo bàn ---
 
-  void _navigate(Offset focal, double scale) {
+  void _navigate(Offset focal) {
     final layout = _layout;
     if (layout == null) return;
-    final newCell = NonogramBoardLayout.clampCellSize(_zoomStartCell * scale);
-    // Giữ điểm lưới dưới tâm chụm ban đầu nằm dưới tâm chụm hiện tại (vừa
-    // kéo vừa zoom).
-    final moved = NonogramBoardLayout.zoomAround(
-      t: _zoomStartOffset + (focal - _zoomStartFocal),
-      focal: focal,
-      from: _zoomStartCell,
-      to: newCell,
-    );
-    if ((newCell - _bloc.state.cellSize).abs() > 0.01) {
-      _liveCellSize = newCell;
-      _bloc.add(CellSizePreviewed(newCell));
-    }
-    _setOffset(layout.withCellSize(newCell).clamp(moved));
+    _setOffset(layout.clamp(_navStartOffset + (focal - _navStartFocal)));
   }
 
   void _endNavigate() {
     final o = _offset;
-    final zoomed = _liveCellSize;
-    _liveCellSize = null;
-    if (zoomed != null) {
-      _bloc.add(
-        CellSizeChanged(cellSize: zoomed, offsetX: o.dx, offsetY: o.dy),
-      );
-    } else {
-      _bloc.add(ViewportChanged(o.dx, o.dy));
-    }
+    _bloc.add(ViewportChanged(o.dx, o.dy));
   }
 
-  // --- Chuột / trackpad ---
+  // --- Chuột / trackpad: lăn để kéo ---
 
   void _onPointerSignal(PointerSignalEvent event) {
     final layout = _layout;
-    if (layout == null) return;
-    if (event is PointerScrollEvent) {
-      final keys = HardwareKeyboard.instance;
-      if (keys.isControlPressed || keys.isMetaPressed) {
-        _zoomBy(exp(-event.scrollDelta.dy / 300), event.localPosition);
-      } else {
-        _setOffset(layout.clamp(_offset - event.scrollDelta));
-        _scheduleViewportSave();
-      }
-    } else if (event is PointerScaleEvent) {
-      _zoomBy(event.scale, event.localPosition);
-    }
-  }
-
-  void _zoomBy(double factor, Offset focal) {
-    final layout = _layout;
-    if (layout == null) return;
-    final from = _bloc.state.cellSize;
-    final to = NonogramBoardLayout.clampCellSize(from * factor);
-    if ((to - from).abs() < 0.01) return;
-    final moved = NonogramBoardLayout.zoomAround(
-      t: _offset,
-      focal: focal,
-      from: from,
-      to: to,
-    );
-    final clamped = layout.withCellSize(to).clamp(moved);
-    _setOffset(clamped);
-    _bloc.add(
-      CellSizeChanged(cellSize: to, offsetX: clamped.dx, offsetY: clamped.dy),
-    );
+    if (layout == null || event is! PointerScrollEvent) return;
+    _setOffset(layout.clamp(_offset - event.scrollDelta));
+    _scheduleViewportSave();
   }
 
   bool _saveScheduled = false;

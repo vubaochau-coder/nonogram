@@ -34,18 +34,19 @@ Nút gạt **Tô / X** trên thanh công cụ chọn việc một lần chạm s
 | Kéo một ngón trên dải gợi ý trái | Cuộn dọc; vuốt ngang để xem các số bị cắt | như bên trái |
 | Kéo một ngón trên dải gợi ý trên | Cuộn ngang; vuốt dọc để xem các số bị cắt | như bên trái |
 | Kéo một ngón trên chỗ trống | Kéo bàn | Kéo bàn |
-| Hai ngón | Kéo bàn, chụm để zoom | như bên trái |
-| Chuột / trackpad | Lăn để kéo, Ctrl/⌘ + lăn hoặc chụm trackpad để zoom | như bên trái |
+| Hai ngón | Kéo bàn | như bên trái |
+| Chuột / trackpad | Lăn để kéo | như bên trái |
 
 - Đang tô mà ngón tay tới sát mép lưới thì bàn tự trôi theo.
 - Hai dải gợi ý luôn dính mép trái / mép trên khi kéo lưới đi. Mỗi dải
   chiếm tối đa 30% chiều tương ứng; nhiều số hơn thì chỉ hiện các số gần
   lưới nhất, ô góc báo còn bao nhiêu số bị cắt (`← +N`, `↑ +N`).
-- Cỡ ô luôn trong khoảng 36–44px: màn mới tự chọn cỡ lớn nhất vừa màn
-  hình, lưới lớn hơn thì kéo để xem; chụm để zoom trong khoảng đó, được lưu
-  cùng ván dở.
+- Không có zoom: cỡ ô luôn là cỡ lớn nhất vừa màn hình trong khoảng
+  28–44px (tính lại khi xoay màn hình); lưới lớn hơn thì kéo để xem.
+- Nút xoay màn hình (điện thoại / máy tính bảng) chuyển dọc ⇄ ngang và khoá
+  ở hướng đó; rời trang chơi thì bỏ khoá.
 - Màn hình ngang tự ẩn thanh hệ thống, không có app bar; các nút (quay
-  lại, gợi ý, Tô / X, cài đặt) nằm thành cột ở mép phải.
+  lại, gợi ý, Tô / X, xoay màn hình, cài đặt) nằm thành cột ở mép phải.
 - "Chơi lại từ đầu" nằm trong Cài đặt và luôn hỏi xác nhận.
 - Ô trống trên hàng/cột đã khớp gợi ý hiện chấm tròn; X màu chàm là dấu
   người chơi tự đánh.

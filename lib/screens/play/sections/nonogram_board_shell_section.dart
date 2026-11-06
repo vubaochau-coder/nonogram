@@ -11,6 +11,7 @@ import '../nonogram_transformation_controller_provider.dart';
 import '../views/fullscreen_toggle_action.dart';
 import '../views/hint_action.dart';
 import '../views/mode_toggle_action.dart';
+import '../views/rotate_screen_action.dart';
 import '../widgets/nonogram_fullscreen_action_dock.dart';
 import '../widgets/overlay_button.dart';
 import 'nonogram_board_viewport.dart';
@@ -21,19 +22,23 @@ class NonogramBoardShellSection extends StatelessWidget {
   const NonogramBoardShellSection({super.key});
 
   Widget _buildOverlayActions() {
-    return const Row(
+    return Row(
       mainAxisSize: MainAxisSize.min,
       children: [
-        HintAction(),
-        SizedBox(width: 8),
-        ModeToggleAction(),
-        SizedBox(width: 8),
-        FullscreenToggleAction(),
+        const HintAction(),
+        const SizedBox(width: 8),
+        const ModeToggleAction(),
+        if (RotateScreenAction.isSupported) ...[
+          const SizedBox(width: 8),
+          const RotateScreenAction(),
+        ],
+        const SizedBox(width: 8),
+        const FullscreenToggleAction(),
       ],
     );
   }
 
-  /// Màn ngang: quay lại, gợi ý, Tô / X, cài đặt. Màn ngang đã tự toàn màn
+  /// Màn ngang: quay lại, gợi ý, Tô / X, xoay màn hình, cài đặt. Màn ngang đã tự toàn màn
   /// hình nên không cần nút toàn màn hình.
   Widget _buildRail(BuildContext context) {
     const gap = SizedBox(height: 10);
@@ -54,6 +59,10 @@ class NonogramBoardShellSection extends StatelessWidget {
             gap,
             const ModeToggleAction(vertical: true),
             gap,
+            if (RotateScreenAction.isSupported) ...[
+              const RotateScreenAction(),
+              gap,
+            ],
             OverlayButton(
               icon: LucideIcons.settings,
               onPressed: () => showNonogramSettingsDialog(context),
