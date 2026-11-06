@@ -229,4 +229,14 @@ class AppLocalizationsVi extends AppLocalizations {
 
   @override
   String get appThemeDark => 'Tối';
+
+  @override
+  String nonogramPlayRowLabel(int index) {
+    return 'Hàng $index';
+  }
+
+  @override
+  String nonogramPlayColumnLabel(int index) {
+    return 'Cột $index';
+  }
 }

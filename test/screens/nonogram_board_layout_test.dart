@@ -61,22 +61,102 @@ void main() {
         t.dx + layout.gridWidth,
         layout.viewport.width - NonogramBoardLayout.endMargin,
       );
+      // Phía dưới được kéo quá thêm một đoạn để nút "giữ để kéo" không che ô.
       expect(
         t.dy + layout.gridHeight,
-        layout.viewport.height - NonogramBoardLayout.endMargin,
+        layout.viewport.height -
+            NonogramBoardLayout.endMargin -
+            NonogramBoardLayout.bottomOverscroll,
       );
     });
 
-    test('clue strip depth is limited so strips do not fill the screen', () {
-      // Tối đa ~34% chiều rộng, trừ khi độ dày tối thiểu buộc phải rộng hơn.
-      final limit = [
-        390 * 0.34,
-        layout.maxLeftClues * NonogramBoardLayout.minClueDepth,
-      ].reduce((a, b) => a > b ? a : b);
-      expect(layout.leftStripWidth, lessThanOrEqualTo(limit + 0.01));
+    test('clue strips never exceed their cap', () {
+      final many = _layout(left: 35, top: 29);
       expect(
-        layout.leftClueDepth,
+        many.leftStripWidth,
+        lessThanOrEqualTo(
+          (390 - NonogramBoardLayout.edgeInset) *
+                  NonogramBoardLayout.stripCapFraction +
+              0.01,
+        ),
+      );
+      expect(many.topStripHeight, lessThanOrEqualTo(many.topStripCap + 0.01));
+      expect(
+        many.leftClueDepth,
         greaterThanOrEqualTo(NonogramBoardLayout.minClueDepth),
+      );
+      // Phần bị cắt cuộn được để xem.
+      expect(many.leftClueOverflow, greaterThan(0));
+      expect(
+        many.leftStripWidth + many.leftClueOverflow,
+        closeTo(many.leftStripContent, 0.01),
+      );
+    });
+
+    test('clue depth follows the cell size when there is room', () {
+      final small = _layout(left: 3, top: 3, cell: 20);
+      final big = _layout(left: 3, top: 3, cell: 36);
+      expect(small.leftClueDepth, closeTo(20 * 0.65, 0.01));
+      expect(big.leftClueDepth, closeTo(36 * 0.65, 0.01));
+      expect(
+        _layout(left: 3, top: 3, cell: 80).leftClueDepth,
+        NonogramBoardLayout.maxClueDepth,
+      );
+    });
+
+    test('zooming in does not grow the strips past their cap', () {
+      final zoomed = _layout(left: 16, top: 16, cell: 60);
+      expect(zoomed.leftStripWidth, lessThanOrEqualTo(zoomed.leftStripCap));
+      expect(zoomed.topStripHeight, lessThanOrEqualTo(zoomed.topStripCap));
+      expect(
+        zoomed.leftStripWidth,
+        greaterThan(zoomed.leftStripCap - zoomed.leftClueDepth),
+      );
+    });
+
+    test('a clipped strip shows whole clue columns only', () {
+      final many = _layout(left: 35, top: 29);
+      final columns = many.leftStripWidth / many.leftClueDepth;
+      expect(columns, closeTo(columns.roundToDouble(), 1e-9));
+      expect(
+        many.leftClueOverflow / many.leftClueDepth,
+        closeTo((35 - columns).roundToDouble(), 1e-9),
+      );
+    });
+
+    test('compact clues leave more room for the grid', () {
+      final full = _layout(left: 16, top: 16);
+      final compact = NonogramBoardLayout(
+        viewport: full.viewport,
+        rows: full.rows,
+        cols: full.cols,
+        maxLeftClues: 16,
+        maxTopClues: 16,
+        cellSize: full.cellSize,
+        compactClues: true,
+      );
+      expect(compact.leftStripWidth, lessThan(full.leftStripWidth));
+      expect(compact.topStripHeight, lessThan(full.topStripHeight));
+    });
+
+    test('regionAt tells grid, strips and empty space apart', () {
+      final t = layout.startOffset;
+      expect(
+        layout.regionAt(t + const Offset(5, 5), t),
+        NonogramBoardRegion.grid,
+      );
+      expect(
+        layout.regionAt(Offset(t.dx - 5, t.dy + 30), t),
+        NonogramBoardRegion.leftStrip,
+      );
+      expect(
+        layout.regionAt(Offset(t.dx + 30, t.dy - 5), t),
+        NonogramBoardRegion.topStrip,
+      );
+      // Ô góc giữa hai dải.
+      expect(
+        layout.regionAt(Offset(t.dx - 5, t.dy - 5), t),
+        NonogramBoardRegion.empty,
       );
     });
 
@@ -110,5 +190,29 @@ void main() {
     );
     // Điểm lưới dưới tâm: (focal - t) / cell phải giữ nguyên.
     expect((focal - t) / 20, (focal - moved) / 40);
+  });
+
+  group('landscape', () {
+    final layout = _layout(viewport: const Size(900, 380));
+
+    test('no toolbar row on top, a rail on the right instead', () {
+      expect(layout.isLandscape, isTrue);
+      expect(layout.topReserve, 0);
+      expect(layout.rightReserve, NonogramBoardLayout.railReserve);
+      expect(layout.startOffset.dy, layout.topStripHeight);
+    });
+
+    test('grid end stops before the rail', () {
+      final t = layout.clamp(const Offset(-99999, -99999));
+      expect(
+        t.dx + layout.gridWidth,
+        900 - NonogramBoardLayout.railReserve - NonogramBoardLayout.endMargin,
+      );
+    });
+
+    test('top strip is capped by the short height', () {
+      final many = _layout(viewport: const Size(900, 380), top: 16);
+      expect(many.topStripHeight, lessThanOrEqualTo(380 * 0.30 + 0.01));
+    });
   });
 }

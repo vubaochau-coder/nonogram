@@ -26,14 +26,22 @@ flutter build web --no-web-resources-cdn
 
 | Thao tác | Chế độ tô (bút chì) | Chế độ bàn tay |
 |---|---|---|
-| Chạm | Tô / xoá một ô | – |
+| Chạm | Tô / xoá một ô (kèm ô nổi hiện gợi ý hàng/cột) | Xem gợi ý hàng/cột |
 | Nhấn giữ | Đánh dấu X | – |
-| Kéo một ngón | Tô liên tiếp | Kéo bàn |
+| Kéo một ngón bắt đầu trên lưới | Tô liên tiếp; tới sát mép thì bàn tự trôi | Kéo bàn |
+| Kéo một ngón trên dải gợi ý trái | Cuộn dọc; vuốt ngang để xem các số bị cắt | như bên trái |
+| Kéo một ngón trên dải gợi ý trên | Cuộn ngang; vuốt dọc để xem các số bị cắt | như bên trái |
+| Kéo một ngón trên chỗ trống | Kéo bàn | Kéo bàn |
+| Giữ nút bàn tay (góc dưới-trái) + kéo ngón khác | Kéo bàn, không tô | – |
 | Hai ngón | Kéo bàn, chụm để zoom | Kéo bàn, chụm để zoom |
 | Chuột / trackpad | Lăn để kéo, Ctrl/⌘ + lăn hoặc chụm trackpad để zoom | như bên trái |
 
-- Hai dải gợi ý luôn dính mép trái / mép trên khi kéo lưới đi, nên luôn
-  thấy gợi ý của hàng/cột đang tô.
+- Hai dải gợi ý luôn dính mép trái / mép trên khi kéo lưới đi. Mỗi dải
+  chiếm tối đa 30% chiều tương ứng, độ dày số tỉ lệ với cỡ ô; nhiều số
+  hơn thì chỉ hiện các số gần lưới nhất, ô góc báo còn bao nhiêu số bị cắt
+  (`← +N`, `↑ +N`). Nút thu gọn dải số nhường thêm chỗ cho lưới.
+- Màn hình ngang: không có app bar, các nút (quay lại, gợi ý, chế độ, thu
+  gọn dải số, xoá, toàn màn hình, cài đặt) nằm thành cột ở mép phải.
 - Màn mới tự chọn cỡ ô vừa màn hình (tối thiểu 24px); zoom chỉ áp dụng cho
   màn đang chơi và được lưu cùng ván dở. Thu nhỏ dưới 10px là chế độ xem
   tổng thể (ẩn số gợi ý).

@@ -229,4 +229,14 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get appThemeDark => 'Dark';
+
+  @override
+  String nonogramPlayRowLabel(int index) {
+    return 'Row $index';
+  }
+
+  @override
+  String nonogramPlayColumnLabel(int index) {
+    return 'Col $index';
+  }
 }
