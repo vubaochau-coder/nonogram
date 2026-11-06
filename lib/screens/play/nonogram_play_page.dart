@@ -6,7 +6,6 @@ import 'bloc/nonogram_play_bloc.dart';
 import 'bloc/nonogram_play_event.dart';
 import 'bloc/nonogram_play_state.dart';
 import 'engine/nonogram_board_layout.dart';
-import 'nonogram_board_ui_controller.dart';
 import 'nonogram_transformation_controller_provider.dart';
 import 'widgets/board_viewport_reporter.dart';
 import 'sections/nonogram_board_shell_section.dart';
@@ -25,7 +24,6 @@ class NonogramPlayPage extends StatefulWidget {
 
 class _NonogramPlayPageState extends State<NonogramPlayPage> {
   late final TransformationController _transformationController;
-  final _boardUiController = NonogramBoardUiController();
 
   @override
   void initState() {
@@ -36,7 +34,6 @@ class _NonogramPlayPageState extends State<NonogramPlayPage> {
   @override
   void dispose() {
     _transformationController.dispose();
-    _boardUiController.dispose();
     super.dispose();
   }
 
@@ -47,7 +44,6 @@ class _NonogramPlayPageState extends State<NonogramPlayPage> {
         NonogramTransformationControllerProvider(
           controller: _transformationController,
         ),
-        NonogramBoardUiScope(controller: _boardUiController),
         BlocProvider<NonogramPlayBloc>(
           create: (context) {
             return NonogramPlayBloc(
@@ -56,19 +52,52 @@ class _NonogramPlayPageState extends State<NonogramPlayPage> {
             )..add(const InitialRequested());
           },
         ),
-        BlocListener<NonogramPlayBloc, NonogramPlayState>(
-          listenWhen: (p, c) => p.isFullscreen != c.isFullscreen,
-          listener: (context, state) {
-            if (state.isFullscreen) {
-              SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky);
-            } else {
-              SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
-            }
-          },
-        ),
       ],
-      child: const _NonogramPlayView(),
+      child: const _SystemUiModeSync(child: _NonogramPlayView()),
     );
+  }
+}
+
+/// Ẩn thanh trạng thái / điều hướng khi bật toàn màn hình hoặc khi màn
+/// ngang (chiều cao quý hơn); hiện lại khi rời trang chơi.
+class _SystemUiModeSync extends StatefulWidget {
+  const _SystemUiModeSync({required this.child});
+
+  final Widget child;
+
+  @override
+  State<_SystemUiModeSync> createState() => _SystemUiModeSyncState();
+}
+
+class _SystemUiModeSyncState extends State<_SystemUiModeSync> {
+  bool? _immersive;
+
+  void _apply(bool immersive) {
+    if (immersive == _immersive) return;
+    _immersive = immersive;
+    SystemChrome.setEnabledSystemUIMode(
+      immersive ? SystemUiMode.immersiveSticky : SystemUiMode.edgeToEdge,
+    );
+  }
+
+  @override
+  void dispose() {
+    if (_immersive == true) {
+      SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
+    }
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final landscape = NonogramBoardLayout.isLandscapeViewport(
+      MediaQuery.sizeOf(context),
+    );
+    final fullscreen = context.select<NonogramPlayBloc, bool>(
+      (bloc) => bloc.state.isFullscreen,
+    );
+    _apply(landscape || fullscreen);
+    return widget.child;
   }
 }
 
@@ -126,8 +155,8 @@ class _NonogramPlayView extends StatelessWidget {
           return _NonogramCompletionView(state: state);
         }
 
-        // Màn ngang: bỏ app bar để lưới có thêm chiều cao; nút quay lại và
-        // cài đặt chuyển vào cột nút công cụ bên phải.
+        // Màn ngang: bỏ app bar (và tự ẩn thanh hệ thống) để lưới có thêm
+        // chiều cao; nút quay lại và cài đặt chuyển vào cột nút bên phải.
         final landscape = NonogramBoardLayout.isLandscapeViewport(
           MediaQuery.sizeOf(context),
         );
@@ -135,7 +164,9 @@ class _NonogramPlayView extends StatelessWidget {
 
         Widget body(Widget child) {
           final reporter = BoardViewportReporter(child: child);
-          return landscape ? SafeArea(child: reporter) : reporter;
+          // Màn dọc vẫn chừa mép dưới, để lưới không nằm dưới thanh vuốt
+          // của hệ thống (vuốt ở đó sẽ thoát app thay vì tô).
+          return SafeArea(top: landscape, child: reporter);
         }
 
         if (state.isLoading) {

@@ -326,30 +326,6 @@ abstract class AppLocalizations {
   /// **'Nonogram'**
   String get nonogramPlayPageTitle;
 
-  /// No description provided for @nonogramSettingsCellSize.
-  ///
-  /// In en, this message translates to:
-  /// **'Cell size'**
-  String get nonogramSettingsCellSize;
-
-  /// No description provided for @nonogramSettingsCellSizeCustom.
-  ///
-  /// In en, this message translates to:
-  /// **'Custom size'**
-  String get nonogramSettingsCellSizeCustom;
-
-  /// No description provided for @nonogramSettingsCellSizeDefault.
-  ///
-  /// In en, this message translates to:
-  /// **'(default)'**
-  String get nonogramSettingsCellSizeDefault;
-
-  /// No description provided for @nonogramSettingsCellSizeError.
-  ///
-  /// In en, this message translates to:
-  /// **'Size must be between 12 and 80'**
-  String get nonogramSettingsCellSizeError;
-
   /// No description provided for @nonogramSettingsTitle.
   ///
   /// In en, this message translates to:
@@ -470,17 +446,47 @@ abstract class AppLocalizations {
   /// **'Dark'**
   String get appThemeDark;
 
-  /// No description provided for @nonogramPlayRowLabel.
+  /// No description provided for @nonogramPlayModeFill.
   ///
   /// In en, this message translates to:
-  /// **'Row {index}'**
-  String nonogramPlayRowLabel(int index);
+  /// **'Fill mode'**
+  String get nonogramPlayModeFill;
 
-  /// No description provided for @nonogramPlayColumnLabel.
+  /// No description provided for @nonogramPlayModeMark.
   ///
   /// In en, this message translates to:
-  /// **'Col {index}'**
-  String nonogramPlayColumnLabel(int index);
+  /// **'Mark X mode'**
+  String get nonogramPlayModeMark;
+
+  /// No description provided for @nonogramSettingsRestart.
+  ///
+  /// In en, this message translates to:
+  /// **'Restart this level'**
+  String get nonogramSettingsRestart;
+
+  /// No description provided for @nonogramSettingsRestartConfirmTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Restart this level?'**
+  String get nonogramSettingsRestartConfirmTitle;
+
+  /// No description provided for @nonogramSettingsRestartConfirmMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'All cells you have filled or marked will be cleared.'**
+  String get nonogramSettingsRestartConfirmMessage;
+
+  /// No description provided for @commonClose.
+  ///
+  /// In en, this message translates to:
+  /// **'Close'**
+  String get commonClose;
+
+  /// No description provided for @nonogramSettingsRestartConfirm.
+  ///
+  /// In en, this message translates to:
+  /// **'Restart'**
+  String get nonogramSettingsRestartConfirm;
 }
 
 class _AppLocalizationsDelegate

@@ -24,27 +24,29 @@ flutter build web --no-web-resources-cdn
 
 ## Điều khiển
 
-| Thao tác | Chế độ tô (bút chì) | Chế độ bàn tay |
+Nút gạt **Tô / X** trên thanh công cụ chọn việc một lần chạm sẽ làm:
+
+| Thao tác | Chế độ Tô (■) | Chế độ X (✕) |
 |---|---|---|
-| Chạm | Tô / xoá một ô (kèm ô nổi hiện gợi ý hàng/cột) | Xem gợi ý hàng/cột |
-| Nhấn giữ | Đánh dấu X | – |
-| Kéo một ngón bắt đầu trên lưới | Tô liên tiếp; tới sát mép thì bàn tự trôi | Kéo bàn |
+| Chạm | Tô / xoá ô tô | Đánh / bỏ X |
+| Nhấn giữ | Đánh X vào ô trống | Tô ô |
+| Kéo một ngón bắt đầu trên lưới | Tô liên tiếp | Đánh X liên tiếp (không đè ô đã tô) |
 | Kéo một ngón trên dải gợi ý trái | Cuộn dọc; vuốt ngang để xem các số bị cắt | như bên trái |
 | Kéo một ngón trên dải gợi ý trên | Cuộn ngang; vuốt dọc để xem các số bị cắt | như bên trái |
 | Kéo một ngón trên chỗ trống | Kéo bàn | Kéo bàn |
-| Giữ nút bàn tay (góc dưới-trái) + kéo ngón khác | Kéo bàn, không tô | – |
-| Hai ngón | Kéo bàn, chụm để zoom | Kéo bàn, chụm để zoom |
+| Hai ngón | Kéo bàn, chụm để zoom | như bên trái |
 | Chuột / trackpad | Lăn để kéo, Ctrl/⌘ + lăn hoặc chụm trackpad để zoom | như bên trái |
 
+- Đang tô mà ngón tay tới sát mép lưới thì bàn tự trôi theo.
 - Hai dải gợi ý luôn dính mép trái / mép trên khi kéo lưới đi. Mỗi dải
-  chiếm tối đa 30% chiều tương ứng, độ dày số tỉ lệ với cỡ ô; nhiều số
-  hơn thì chỉ hiện các số gần lưới nhất, ô góc báo còn bao nhiêu số bị cắt
-  (`← +N`, `↑ +N`). Nút thu gọn dải số nhường thêm chỗ cho lưới.
-- Màn hình ngang: không có app bar, các nút (quay lại, gợi ý, chế độ, thu
-  gọn dải số, xoá, toàn màn hình, cài đặt) nằm thành cột ở mép phải.
-- Màn mới tự chọn cỡ ô vừa màn hình (tối thiểu 24px); zoom chỉ áp dụng cho
-  màn đang chơi và được lưu cùng ván dở. Thu nhỏ dưới 10px là chế độ xem
-  tổng thể (ẩn số gợi ý).
+  chiếm tối đa 30% chiều tương ứng; nhiều số hơn thì chỉ hiện các số gần
+  lưới nhất, ô góc báo còn bao nhiêu số bị cắt (`← +N`, `↑ +N`).
+- Cỡ ô luôn trong khoảng 36–44px: màn mới tự chọn cỡ lớn nhất vừa màn
+  hình, lưới lớn hơn thì kéo để xem; chụm để zoom trong khoảng đó, được lưu
+  cùng ván dở.
+- Màn hình ngang tự ẩn thanh hệ thống, không có app bar; các nút (quay
+  lại, gợi ý, Tô / X, cài đặt) nằm thành cột ở mép phải.
+- "Chơi lại từ đầu" nằm trong Cài đặt và luôn hỏi xác nhận.
 - Ô trống trên hàng/cột đã khớp gợi ý hiện chấm tròn; X màu chàm là dấu
   người chơi tự đánh.
 

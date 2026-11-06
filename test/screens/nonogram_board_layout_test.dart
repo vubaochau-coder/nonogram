@@ -61,12 +61,9 @@ void main() {
         t.dx + layout.gridWidth,
         layout.viewport.width - NonogramBoardLayout.endMargin,
       );
-      // Phía dưới được kéo quá thêm một đoạn để nút "giữ để kéo" không che ô.
       expect(
         t.dy + layout.gridHeight,
-        layout.viewport.height -
-            NonogramBoardLayout.endMargin -
-            NonogramBoardLayout.bottomOverscroll,
+        layout.viewport.height - NonogramBoardLayout.endMargin,
       );
     });
 
@@ -94,9 +91,9 @@ void main() {
     });
 
     test('clue depth follows the cell size when there is room', () {
-      final small = _layout(left: 3, top: 3, cell: 20);
+      final small = _layout(left: 3, top: 3, cell: 30);
       final big = _layout(left: 3, top: 3, cell: 36);
-      expect(small.leftClueDepth, closeTo(20 * 0.65, 0.01));
+      expect(small.leftClueDepth, closeTo(30 * 0.65, 0.01));
       expect(big.leftClueDepth, closeTo(36 * 0.65, 0.01));
       expect(
         _layout(left: 3, top: 3, cell: 80).leftClueDepth,
@@ -122,21 +119,6 @@ void main() {
         many.leftClueOverflow / many.leftClueDepth,
         closeTo((35 - columns).roundToDouble(), 1e-9),
       );
-    });
-
-    test('compact clues leave more room for the grid', () {
-      final full = _layout(left: 16, top: 16);
-      final compact = NonogramBoardLayout(
-        viewport: full.viewport,
-        rows: full.rows,
-        cols: full.cols,
-        maxLeftClues: 16,
-        maxTopClues: 16,
-        cellSize: full.cellSize,
-        compactClues: true,
-      );
-      expect(compact.leftStripWidth, lessThan(full.leftStripWidth));
-      expect(compact.topStripHeight, lessThan(full.topStripHeight));
     });
 
     test('regionAt tells grid, strips and empty space apart', () {
@@ -170,12 +152,12 @@ void main() {
       expect(layout.cellAt(onLeftStrip, t), isNull);
     });
 
-    test('zoom can go small enough to see the whole grid', () {
-      expect(layout.minZoom, lessThanOrEqualTo(12));
-      expect(
-        layout.minZoom,
-        greaterThanOrEqualTo(NonogramBoardLayout.minZoomCellSize),
-      );
+    test('fitted cell size stays within the allowed range', () {
+      expect(layout.fitCellSize(), NonogramBoardLayout.minCellSize);
+      final tiny = _layout(rows: 3, cols: 3, left: 1, top: 1);
+      expect(tiny.fitCellSize(), NonogramBoardLayout.maxCellSize);
+      expect(NonogramBoardLayout.clampCellSize(80), 44);
+      expect(NonogramBoardLayout.clampCellSize(10), 36);
     });
   });
 

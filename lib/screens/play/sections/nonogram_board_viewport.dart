@@ -1,4 +1,3 @@
-import 'dart:async';
 import 'dart:math';
 
 import 'package:flutter/gestures.dart';
@@ -9,7 +8,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:nonogram/core/app_theme.dart';
 import 'package:nonogram/core/context_ext.dart';
 import 'package:nonogram/models/nonogram_grid_equality.dart';
-import 'package:nonogram/models/nonogram_interaction_mode.dart';
 
 import '../../painters/nonogram_cells_painter.dart';
 import '../../painters/nonogram_grid_painter.dart';
@@ -19,7 +17,6 @@ import '../bloc/nonogram_play_bloc.dart';
 import '../bloc/nonogram_play_event.dart';
 import '../bloc/nonogram_play_state.dart';
 import '../engine/nonogram_board_layout.dart';
-import '../nonogram_board_ui_controller.dart';
 import '../nonogram_transformation_controller_provider.dart';
 
 /// Bàn chơi: lưới kéo/zoom được, hai dải gợi ý dính mép.
@@ -28,15 +25,13 @@ import '../nonogram_transformation_controller_provider.dart';
 /// [TransformationController] dùng chung, để các nút và việc lưu ván đọc
 /// được. Zoom đổi `cellSize` trong bloc chứ không phóng to hình.
 ///
-/// Cử chỉ:
-/// - Chế độ tô: chạm = tô/xoá một ô, nhấn giữ = đánh dấu X, kéo một ngón
-///   bắt đầu trên lưới = tô liên tiếp (tới sát mép thì bàn tự trôi theo),
-///   hai ngón = kéo bàn và chụm để zoom.
+/// Cử chỉ (chạm tô hay đánh X tuỳ chế độ Tô / X trong bloc):
+/// - Chạm = tô / đánh X một ô, nhấn giữ = việc ngược lại, kéo một ngón bắt
+///   đầu trên lưới = tô / đánh X liên tiếp (tới sát mép thì bàn tự trôi).
 /// - Kéo một ngón bắt đầu ngoài lưới: trên dải trái thì cuộn dọc (và cuộn
 ///   ngang các số bị cắt), trên dải trên thì cuộn ngang (và cuộn dọc các số
 ///   bị cắt), chỗ trống thì kéo bàn.
-/// - Giữ nút "giữ để kéo" (hoặc chế độ bàn tay): một ngón cũng kéo bàn.
-/// - Chạm vào ô: hiện đầy đủ gợi ý của hàng và cột đó trong một ô nổi.
+/// - Hai ngón = kéo bàn và chụm để zoom.
 /// - Chuột/trackpad: lăn để kéo, Ctrl/⌘ + lăn hoặc chụm trackpad để zoom.
 class NonogramBoardViewport extends StatefulWidget {
   const NonogramBoardViewport({super.key});
@@ -46,9 +41,6 @@ class NonogramBoardViewport extends StatefulWidget {
 }
 
 enum _GestureKind { none, draw, navigate, leftStrip, topStrip }
-
-/// Ô đang được chạm, để tô sáng hàng/cột và hiện gợi ý.
-typedef _Focus = ({int row, int col, bool fingerInLowerHalf});
 
 class _NonogramBoardViewportState extends State<NonogramBoardViewport>
     with TickerProviderStateMixin {
@@ -62,7 +54,6 @@ class _NonogramBoardViewportState extends State<NonogramBoardViewport>
   // Trạng thái cử chỉ hiện tại.
   _GestureKind _gesture = _GestureKind.none;
   Offset? _pointerDownPosition;
-  int _pointersDown = 0;
   ({int row, int col})? _lastDragCell;
   double _zoomStartCell = 0;
   Offset _zoomStartOffset = Offset.zero;
@@ -72,10 +63,6 @@ class _NonogramBoardViewportState extends State<NonogramBoardViewport>
   /// Phần dải gợi ý đang cuộn để xem các số bị cắt: dx cho dải trái, dy
   /// cho dải trên (0 = đang hiện các số gần lưới nhất).
   final ValueNotifier<Offset> _clueScroll = ValueNotifier(Offset.zero);
-
-  /// Ô đang chạm (tô sáng hàng/cột + ô nổi hiện gợi ý).
-  final ValueNotifier<_Focus?> _focus = ValueNotifier(null);
-  Timer? _focusHideTimer;
 
   // Tự cuộn khi tô sát mép.
   late final Ticker _autoScroll = createTicker(_onAutoScrollTick);
@@ -100,17 +87,14 @@ class _NonogramBoardViewportState extends State<NonogramBoardViewport>
       if (!mounted) return;
       _setOffset(target);
       _clueScroll.value = Offset.zero;
-      _focus.value = null;
     });
   }
 
   @override
   void dispose() {
-    _focusHideTimer?.cancel();
     _autoScroll.dispose();
     _hintPulse.dispose();
     _clueScroll.dispose();
-    _focus.dispose();
     super.dispose();
   }
 
@@ -128,60 +112,11 @@ class _NonogramBoardViewportState extends State<NonogramBoardViewport>
 
   NonogramPlayBloc get _bloc => context.read<NonogramPlayBloc>();
 
-  bool get _isDrawMode =>
-      _bloc.state.interactionMode == NonogramInteractionMode.draw;
-
-  bool get _panHeld => NonogramBoardUiScope.read(context).panHeld;
-
-  // --- Ô đang chạm ---
-
-  void _setFocus(({int row, int col}) cell, Offset point) {
-    _focusHideTimer?.cancel();
-    final height = _layout?.viewport.height ?? 0;
-    _focus.value = (
-      row: cell.row,
-      col: cell.col,
-      fingerInLowerHalf: point.dy > height / 2,
-    );
-  }
-
-  void _clearFocus() {
-    _focusHideTimer?.cancel();
-    _focus.value = null;
-  }
-
-  void _scheduleFocusHide() {
-    _focusHideTimer?.cancel();
-    _focusHideTimer = Timer(const Duration(milliseconds: 1400), () {
-      if (mounted) _focus.value = null;
-    });
-  }
-
-  void _onPointerDown(PointerDownEvent event) {
-    _pointersDown++;
-    _pointerDownPosition = event.localPosition;
-    final layout = _layout;
-    if (layout == null) return;
-    if (_pointersDown > 1) {
-      _clearFocus();
-      return;
-    }
-    final cell = layout.cellAt(event.localPosition, _offset);
-    if (cell != null && !(_isDrawMode && _panHeld)) {
-      _setFocus(cell, event.localPosition);
-    }
-  }
-
-  void _onPointerUp(PointerEvent event) {
-    _pointersDown = max(0, _pointersDown - 1);
-    if (_pointersDown == 0 && _focus.value != null) _scheduleFocusHide();
-  }
-
   // --- Chạm / nhấn giữ ---
 
   void _onTapUp(TapUpDetails details) {
     final layout = _layout;
-    if (layout == null || !_isDrawMode || _panHeld) return;
+    if (layout == null) return;
     final cell = layout.cellAt(details.localPosition, _offset);
     if (cell == null) return;
     final o = _offset;
@@ -190,7 +125,7 @@ class _NonogramBoardViewportState extends State<NonogramBoardViewport>
 
   void _onLongPressStart(LongPressStartDetails details) {
     final layout = _layout;
-    if (layout == null || !_isDrawMode || _panHeld) return;
+    if (layout == null) return;
     final cell = layout.cellAt(details.localPosition, _offset);
     if (cell == null) return;
     final o = _offset;
@@ -219,40 +154,28 @@ class _NonogramBoardViewportState extends State<NonogramBoardViewport>
     // Xét chỗ ngón tay chạm xuống, không phải chỗ đã trượt qua ngưỡng nhận
     // cử chỉ.
     final start = _pointerDownPosition ?? details.localFocalPoint;
-    final region = layout.regionAt(start, _offset);
-
-    if (region == NonogramBoardRegion.grid && _isDrawMode && !_panHeld) {
-      final cell = layout.cellAt(start, _offset)!;
-      _gesture = _GestureKind.draw;
-      _lastDragCell = cell;
-      _drawStartPoint = start;
-      _lastDrawPoint = details.localFocalPoint;
-      _setFocus(cell, start);
-      _bloc.add(DragStarted(cell.row, cell.col));
-      _dragTo(details.localFocalPoint);
-      _autoScrollLast = Duration.zero;
-      if (!_autoScroll.isActive) _autoScroll.start();
-      return;
+    switch (layout.regionAt(start, _offset)) {
+      case NonogramBoardRegion.grid:
+        final cell = layout.cellAt(start, _offset)!;
+        _gesture = _GestureKind.draw;
+        _lastDragCell = cell;
+        _drawStartPoint = start;
+        _lastDrawPoint = details.localFocalPoint;
+        _bloc.add(DragStarted(cell.row, cell.col));
+        _dragTo(details.localFocalPoint);
+        _autoScrollLast = Duration.zero;
+        if (!_autoScroll.isActive) _autoScroll.start();
+      case NonogramBoardRegion.leftStrip when layout.leftClueOverflow > 0:
+        _gesture = _GestureKind.leftStrip;
+      case NonogramBoardRegion.topStrip when layout.topClueOverflow > 0:
+        _gesture = _GestureKind.topStrip;
+      default:
+        // Chỗ trống hoặc dải không bị cắt: kéo bàn.
+        _startNavigate(details.localFocalPoint);
     }
-
-    if (region == NonogramBoardRegion.leftStrip &&
-        layout.leftClueOverflow > 0) {
-      _clearFocus();
-      _gesture = _GestureKind.leftStrip;
-      return;
-    }
-    if (region == NonogramBoardRegion.topStrip && layout.topClueOverflow > 0) {
-      _clearFocus();
-      _gesture = _GestureKind.topStrip;
-      return;
-    }
-
-    // Chỗ trống, dải không bị cắt, chế độ bàn tay hoặc đang giữ nút kéo.
-    _startNavigate(details.localFocalPoint);
   }
 
   void _startNavigate(Offset focal) {
-    _clearFocus();
     _gesture = _GestureKind.navigate;
     _zoomStartCell = _bloc.state.cellSize;
     _zoomStartOffset = _offset;
@@ -311,7 +234,6 @@ class _NonogramBoardViewportState extends State<NonogramBoardViewport>
       _bloc.add(DragUpdated(step.row, step.col));
     }
     _lastDragCell = cell;
-    _setFocus(cell, position);
   }
 
   void _endDraw() {
@@ -405,10 +327,7 @@ class _NonogramBoardViewportState extends State<NonogramBoardViewport>
   void _navigate(Offset focal, double scale) {
     final layout = _layout;
     if (layout == null) return;
-    final newCell = (_zoomStartCell * scale).clamp(
-      layout.minZoom,
-      NonogramBoardLayout.maxZoomCellSize,
-    );
+    final newCell = NonogramBoardLayout.clampCellSize(_zoomStartCell * scale);
     // Giữ điểm lưới dưới tâm chụm ban đầu nằm dưới tâm chụm hiện tại (vừa
     // kéo vừa zoom).
     final moved = NonogramBoardLayout.zoomAround(
@@ -430,12 +349,7 @@ class _NonogramBoardViewportState extends State<NonogramBoardViewport>
     _liveCellSize = null;
     if (zoomed != null) {
       _bloc.add(
-        CellSizeChanged(
-          cellSize: zoomed,
-          offsetX: o.dx,
-          offsetY: o.dy,
-          isZoom: true,
-        ),
+        CellSizeChanged(cellSize: zoomed, offsetX: o.dx, offsetY: o.dy),
       );
     } else {
       _bloc.add(ViewportChanged(o.dx, o.dy));
@@ -464,10 +378,7 @@ class _NonogramBoardViewportState extends State<NonogramBoardViewport>
     final layout = _layout;
     if (layout == null) return;
     final from = _bloc.state.cellSize;
-    final to = (from * factor).clamp(
-      layout.minZoom,
-      NonogramBoardLayout.maxZoomCellSize,
-    );
+    final to = NonogramBoardLayout.clampCellSize(from * factor);
     if ((to - from).abs() < 0.01) return;
     final moved = NonogramBoardLayout.zoomAround(
       t: _offset,
@@ -478,12 +389,7 @@ class _NonogramBoardViewportState extends State<NonogramBoardViewport>
     final clamped = layout.withCellSize(to).clamp(moved);
     _setOffset(clamped);
     _bloc.add(
-      CellSizeChanged(
-        cellSize: to,
-        offsetX: clamped.dx,
-        offsetY: clamped.dy,
-        isZoom: true,
-      ),
+      CellSizeChanged(cellSize: to, offsetX: clamped.dx, offsetY: clamped.dy),
     );
   }
 
@@ -530,7 +436,6 @@ class _NonogramBoardViewportState extends State<NonogramBoardViewport>
             (p, c) =>
                 p.puzzle != c.puzzle ||
                 p.cellSize != c.cellSize ||
-                p.interactionMode != c.interactionMode ||
                 p.satisfiedRows != c.satisfiedRows ||
                 p.satisfiedCols != c.satisfiedCols ||
                 p.isLoading != c.isLoading ||
@@ -539,7 +444,6 @@ class _NonogramBoardViewportState extends State<NonogramBoardViewport>
         builder: (context, state) {
           final puzzle = state.puzzle;
           if (puzzle == null) return const SizedBox.shrink();
-          final ui = NonogramBoardUiScope.of(context);
 
           return LayoutBuilder(
             builder: (context, constraints) {
@@ -547,19 +451,12 @@ class _NonogramBoardViewportState extends State<NonogramBoardViewport>
                 puzzle: puzzle,
                 cellSize: state.cellSize,
                 viewport: constraints.biggest,
-                compactClues: ui.compactClues,
               );
               _layout = layout;
               _placeIfNewGame(state, layout);
 
-              final isNavMode =
-                  state.interactionMode == NonogramInteractionMode.explore ||
-                  ui.panHeld;
-
               return Listener(
-                onPointerDown: _onPointerDown,
-                onPointerUp: _onPointerUp,
-                onPointerCancel: _onPointerUp,
+                onPointerDown: (e) => _pointerDownPosition = e.localPosition,
                 onPointerSignal: _onPointerSignal,
                 child: GestureDetector(
                   behavior: HitTestBehavior.opaque,
@@ -569,16 +466,9 @@ class _NonogramBoardViewportState extends State<NonogramBoardViewport>
                   onScaleUpdate: _onScaleUpdate,
                   onScaleEnd: _onScaleEnd,
                   child: MouseRegion(
-                    cursor:
-                        isNavMode
-                            ? SystemMouseCursors.grab
-                            : SystemMouseCursors.precise,
+                    cursor: SystemMouseCursors.precise,
                     child: AnimatedBuilder(
-                      animation: Listenable.merge([
-                        _controller,
-                        _clueScroll,
-                        _focus,
-                      ]),
+                      animation: Listenable.merge([_controller, _clueScroll]),
                       builder: (context, _) {
                         final raw = _offset;
                         final offset = layout.clamp(raw);
@@ -602,7 +492,6 @@ class _NonogramBoardViewportState extends State<NonogramBoardViewport>
                             0,
                             layout.topClueOverflow,
                           ),
-                          focus: _focus.value,
                           hintAxis: _hintAxis,
                           hintIndex: _hintIndex,
                           hintPulse: _hintPulse,
@@ -644,7 +533,6 @@ class _BoardPaint extends StatelessWidget {
     required this.offset,
     required this.leftClueScroll,
     required this.topClueScroll,
-    required this.focus,
     required this.hintAxis,
     required this.hintIndex,
     required this.hintPulse,
@@ -655,7 +543,6 @@ class _BoardPaint extends StatelessWidget {
   final Offset offset;
   final double leftClueScroll;
   final double topClueScroll;
-  final _Focus? focus;
   final Axis? hintAxis;
   final int? hintIndex;
   final Animation<double> hintPulse;
@@ -676,45 +563,37 @@ class _BoardPaint extends StatelessWidget {
     final stickyTop = layout.stickyTop(offset);
     final rightReserve = layout.rightReserve;
 
-    final leftFont = min(
-      cell * 0.55,
-      layout.leftClueDepth * 0.6,
-    ).clamp(7.0, 16.0);
-    final topFont = min(
+    // Hai dải dùng chung một cỡ chữ, theo dải có ô số mỏng hơn.
+    double fontFor(double depth) => depth == 0 ? double.infinity : depth * 0.6;
+    final clueFont = min(
       cell * 0.5,
-      layout.topClueDepth * 0.62,
+      min(fontFor(layout.leftClueDepth), fontFor(layout.topClueDepth)),
     ).clamp(7.0, 16.0);
-    // Thu nhỏ quá mức (chế độ xem tổng thể): số không còn đọc được và sẽ
-    // chồng lên nhau, nên ẩn đi, chỉ giữ nền dải gợi ý.
-    final showNumbers = cell >= 10;
-    TextStyle clueStyle(double size) => context.labelSmall.copyWith(
-      fontSize: size,
+    final clueStyle = context.labelSmall.copyWith(
+      fontSize: clueFont,
       fontWeight: FontWeight.w800,
-      color: showNumbers ? colors.onSurface : Colors.transparent,
+      color: colors.onSurface,
       height: 1,
     );
-    TextStyle solvedStyle(double size) => clueStyle(size).copyWith(
-      color:
-          showNumbers
-              ? game.success.withValues(alpha: 0.75)
-              : Colors.transparent,
+    final solvedStyle = clueStyle.copyWith(
+      color: game.success.withValues(alpha: 0.75),
     );
 
-    final focusColor = colors.primary.withValues(alpha: 0.16);
-    final focus = this.focus;
-
     // Số cột/hàng số còn bị che ở phía xa lưới.
-    final hiddenLeft =
-        layout.leftClueDepth == 0
-            ? 0
-            : ((leftContent - leftW - leftClueScroll) / layout.leftClueDepth -
-                    0.01)
-                .ceil();
-    final hiddenTop =
-        layout.topClueDepth == 0
-            ? 0
-            : ((topContent - topH - topClueScroll) / layout.topClueDepth - 0.01)
-                .ceil();
+    int hidden(double content, double visible, double scroll, double depth) =>
+        depth == 0 ? 0 : ((content - visible - scroll) / depth - 0.01).ceil();
+    final hiddenLeft = hidden(
+      leftContent,
+      leftW,
+      leftClueScroll,
+      layout.leftClueDepth,
+    );
+    final hiddenTop = hidden(
+      topContent,
+      topH,
+      topClueScroll,
+      layout.topClueDepth,
+    );
 
     return Stack(
       clipBehavior: Clip.hardEdge,
@@ -751,29 +630,7 @@ class _BoardPaint extends StatelessWidget {
           ),
         ),
 
-        // 2. Tô sáng hàng/cột của ô đang chạm (trên lưới).
-        if (focus != null) ...[
-          Positioned(
-            left: offset.dx,
-            top: offset.dy + focus.row * cell,
-            width: gridW,
-            height: cell,
-            child: IgnorePointer(
-              child: ColoredBox(color: colors.primary.withValues(alpha: 0.07)),
-            ),
-          ),
-          Positioned(
-            left: offset.dx + focus.col * cell,
-            top: offset.dy,
-            width: cell,
-            height: gridH,
-            child: IgnorePointer(
-              child: ColoredBox(color: colors.primary.withValues(alpha: 0.07)),
-            ),
-          ),
-        ],
-
-        // 3. Dải gợi ý trái (dính mép trái, cuộn ngang khi bị cắt).
+        // 2. Dải gợi ý trái (dính mép trái, cuộn ngang khi bị cắt).
         if (leftW > 0)
           Positioned(
             left: stickyLeft,
@@ -798,19 +655,11 @@ class _BoardPaint extends StatelessWidget {
                       majorLineColor: colors.outline,
                       backgroundColor: game.clueBackground,
                       bandColor: game.clueBand,
-                      textStyle: clueStyle(leftFont),
-                      satisfiedTextStyle: solvedStyle(leftFont),
+                      textStyle: clueStyle,
+                      satisfiedTextStyle: solvedStyle,
                     ),
                   ),
                 ),
-                if (focus != null)
-                  Positioned(
-                    left: 0,
-                    right: 0,
-                    top: focus.row * cell,
-                    height: cell,
-                    child: ColoredBox(color: focusColor),
-                  ),
                 if (hiddenLeft > 0)
                   _StripFade(
                     axis: Axis.horizontal,
@@ -827,23 +676,7 @@ class _BoardPaint extends StatelessWidget {
             ),
           ),
 
-        // 4. Che phần lưới / dải trái trôi ra ngoài vùng bàn chơi.
-        Positioned(
-          left: 0,
-          top: 0,
-          right: 0,
-          height: stickyTop,
-          child: ColoredBox(color: colors.surface),
-        ),
-        Positioned(
-          left: 0,
-          top: 0,
-          bottom: 0,
-          width: stickyLeft,
-          child: ColoredBox(color: colors.surface),
-        ),
-
-        // 5. Dải gợi ý trên (dính ngay dưới hàng nút công cụ, cuộn dọc khi
+        // 3. Dải gợi ý trên (dính ngay dưới hàng nút công cụ, cuộn dọc khi
         // bị cắt).
         if (topH > 0)
           Positioned(
@@ -869,19 +702,11 @@ class _BoardPaint extends StatelessWidget {
                       majorLineColor: colors.outline,
                       backgroundColor: game.clueBackground,
                       bandColor: game.clueBand,
-                      textStyle: clueStyle(topFont),
-                      satisfiedTextStyle: solvedStyle(topFont),
+                      textStyle: clueStyle,
+                      satisfiedTextStyle: solvedStyle,
                     ),
                   ),
                 ),
-                if (focus != null)
-                  Positioned(
-                    top: 0,
-                    bottom: 0,
-                    left: focus.col * cell,
-                    width: cell,
-                    child: ColoredBox(color: focusColor),
-                  ),
                 if (hiddenTop > 0)
                   _StripFade(
                     axis: Axis.vertical,
@@ -898,7 +723,33 @@ class _BoardPaint extends StatelessWidget {
             ),
           ),
 
-        // 6. Ô góc: che chỗ hai dải giao nhau, kèm số lượng số đang bị cắt.
+        // 4. Che mọi thứ trôi ra ngoài vùng bàn chơi: phía trên, bên trái
+        // (vẽ sau cả hai dải để dải trên không lòi sang trái ô góc), và
+        // dưới cột nút công cụ khi màn ngang.
+        Positioned(
+          left: 0,
+          top: 0,
+          right: 0,
+          height: stickyTop,
+          child: ColoredBox(color: colors.surface),
+        ),
+        Positioned(
+          left: 0,
+          top: 0,
+          bottom: 0,
+          width: stickyLeft,
+          child: ColoredBox(color: colors.surface),
+        ),
+        if (rightReserve > 0)
+          Positioned(
+            right: 0,
+            top: 0,
+            bottom: 0,
+            width: rightReserve,
+            child: ColoredBox(color: colors.surface),
+          ),
+
+        // 5. Ô góc: che chỗ hai dải giao nhau, kèm số lượng số đang bị cắt.
         Positioned(
           left: stickyLeft,
           top: stickyTop,
@@ -913,17 +764,7 @@ class _BoardPaint extends StatelessWidget {
           ),
         ),
 
-        // 7. Che phần nằm dưới cột nút công cụ (màn ngang).
-        if (rightReserve > 0)
-          Positioned(
-            right: 0,
-            top: 0,
-            bottom: 0,
-            width: rightReserve,
-            child: ColoredBox(color: colors.surface),
-          ),
-
-        // 8. Dải sáng khi dùng gợi ý (cả lưới lẫn dải số của hàng/cột đó).
+        // 6. Dải sáng khi dùng gợi ý (cả lưới lẫn dải số của hàng/cột đó).
         if (hintAxis != null && hintIndex != null)
           _HintBand(
             rect:
@@ -941,35 +782,6 @@ class _BoardPaint extends StatelessWidget {
                       cell,
                     ),
             pulse: hintPulse,
-          ),
-
-        // 9. Ô nổi hiện đầy đủ gợi ý của hàng/cột đang chạm.
-        if (focus != null)
-          Positioned.fromRect(
-            rect: layout.gridArea(offset),
-            child: IgnorePointer(
-              child: Padding(
-                padding: const EdgeInsets.fromLTRB(8, 8, 8, 76),
-                child: Align(
-                  alignment:
-                      focus.fingerInLowerHalf
-                          ? Alignment.topCenter
-                          : Alignment.bottomCenter,
-                  child: _FocusCluesCard(
-                    row: focus.row,
-                    col: focus.col,
-                    rowClues: puzzle.leftClues[focus.row],
-                    colClues: puzzle.topClues[focus.col],
-                    rowSolved:
-                        focus.row < state.satisfiedRows.length &&
-                        state.satisfiedRows[focus.row],
-                    colSolved:
-                        focus.col < state.satisfiedCols.length &&
-                        state.satisfiedCols[focus.col],
-                  ),
-                ),
-              ),
-            ),
           ),
       ],
     );
@@ -1024,7 +836,7 @@ class _StripFade extends StatelessWidget {
   }
 }
 
-/// Trong ô góc: "‹ +N" (dải trái còn N cột số bị cắt) và "˄ +M" (dải trên).
+/// Trong ô góc: "← +N" (dải trái còn N cột số bị cắt) và "↑ +M" (dải trên).
 class _HiddenCluesBadges extends StatelessWidget {
   const _HiddenCluesBadges({required this.hiddenLeft, required this.hiddenTop});
 
@@ -1054,97 +866,6 @@ class _HiddenCluesBadges extends StatelessWidget {
               child: FittedBox(child: Text('← +$hiddenLeft', style: style)),
             ),
         ],
-      ),
-    );
-  }
-}
-
-/// Ô nổi: gợi ý đầy đủ của hàng và cột đang chạm.
-class _FocusCluesCard extends StatelessWidget {
-  const _FocusCluesCard({
-    required this.row,
-    required this.col,
-    required this.rowClues,
-    required this.colClues,
-    required this.rowSolved,
-    required this.colSolved,
-  });
-
-  final int row;
-  final int col;
-  final List<int> rowClues;
-  final List<int> colClues;
-  final bool rowSolved;
-  final bool colSolved;
-
-  @override
-  Widget build(BuildContext context) {
-    final colors = context.color;
-    final l10n = context.l10n;
-
-    Widget line(String label, List<int> clues, bool solved) {
-      final numberColor =
-          solved ? context.gameColors.success : colors.onSurface;
-      return Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          SizedBox(
-            width: 64,
-            child: Text(
-              label,
-              style: context.labelMedium.copyWith(
-                color: colors.onSurfaceVariant,
-                fontWeight: FontWeight.w700,
-              ),
-            ),
-          ),
-          Flexible(
-            child: Wrap(
-              spacing: 8,
-              runSpacing: 2,
-              children: [
-                for (final n in clues.isEmpty ? const [0] : clues)
-                  Text(
-                    '$n',
-                    style: context.titleSmall.copyWith(
-                      color: numberColor,
-                      fontWeight: FontWeight.w800,
-                    ),
-                  ),
-              ],
-            ),
-          ),
-        ],
-      );
-    }
-
-    return ConstrainedBox(
-      constraints: const BoxConstraints(maxWidth: 420),
-      child: DecoratedBox(
-        decoration: BoxDecoration(
-          color: colors.surfaceContainerHighest.withValues(alpha: 0.96),
-          borderRadius: BorderRadius.circular(14),
-          border: Border.all(color: colors.outlineVariant),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withValues(alpha: 0.12),
-              blurRadius: 12,
-              offset: const Offset(0, 3),
-            ),
-          ],
-        ),
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              line(l10n.nonogramPlayRowLabel(row + 1), rowClues, rowSolved),
-              const SizedBox(height: 4),
-              line(l10n.nonogramPlayColumnLabel(col + 1), colClues, colSolved),
-            ],
-          ),
-        ),
       ),
     );
   }

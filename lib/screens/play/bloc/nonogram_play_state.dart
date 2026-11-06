@@ -28,7 +28,7 @@ class NonogramPlayState extends Equatable {
     required this.gridData,
     this.satisfiedRows = const [],
     this.satisfiedCols = const [],
-    this.interactionMode = NonogramInteractionMode.draw,
+    this.interactionMode = NonogramInteractionMode.fill,
     this.cellSize = 40.0,
     this.isFullscreen = false,
     this.isSolved = false,

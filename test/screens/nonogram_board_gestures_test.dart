@@ -3,11 +3,14 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:lucide_icons/lucide_icons.dart';
+import 'package:provider/provider.dart';
 import 'package:nonogram/core/app_theme.dart';
+import 'package:nonogram/core/app_theme_mode.dart';
 import 'package:nonogram/data/nonogram_puzzle_source.dart';
 import 'package:nonogram/data/nonogram_repository.dart';
 import 'package:nonogram/l10n/app_localizations.dart';
 import 'package:nonogram/models/nonogram_cell_state.dart';
+import 'package:nonogram/models/nonogram_interaction_mode.dart';
 import 'package:nonogram/models/nonogram_puzzle.dart';
 import 'package:nonogram/screens/play/bloc/nonogram_play_bloc.dart';
 import 'package:nonogram/screens/play/nonogram_play_page.dart';
@@ -43,8 +46,16 @@ Future<void> _pumpPlay(WidgetTester tester, Size size) async {
   addTearDown(tester.view.reset);
 
   await tester.pumpWidget(
-    RepositoryProvider<NonogramRepository>.value(
-      value: NonogramRepository(_BigPuzzleSource(), FakeNonogramLocalService()),
+    MultiRepositoryProvider(
+      providers: [
+        RepositoryProvider<NonogramRepository>.value(
+          value: NonogramRepository(
+            _BigPuzzleSource(),
+            FakeNonogramLocalService(),
+          ),
+        ),
+        ChangeNotifierProvider.value(value: AppThemeModeController.inMemory()),
+      ],
       child: MaterialApp(
         theme: AppTheme.lightTheme,
         locale: const Locale('en'),
@@ -113,37 +124,6 @@ void main() {
     expect(_filledCount(tester), 0);
   });
 
-  testWidgets('holding the pan button turns a one-finger drag into a pan', (
-    tester,
-  ) async {
-    await _pumpPlay(tester, phone);
-    final before = _gridOffset(tester);
-    final origin = _boardOrigin(tester);
-    final cell = _bloc(tester).state.cellSize;
-
-    final hold = await tester.startGesture(
-      tester.getCenter(find.byKey(const ValueKey('nonogram-hold-to-pan'))),
-    );
-    await tester.pump();
-
-    final drag = await tester.startGesture(
-      origin + before + Offset(cell * 3.5, cell * 3.5),
-      pointer: 7,
-    );
-    for (var i = 0; i < 10; i++) {
-      await drag.moveBy(const Offset(-20, -20));
-      await tester.pump(const Duration(milliseconds: 16));
-    }
-    await drag.up();
-    await hold.up();
-    await tester.pump(const Duration(milliseconds: 50));
-
-    final after = _gridOffset(tester);
-    expect(after.dx, lessThan(before.dx - 100));
-    expect(after.dy, lessThan(before.dy - 100));
-    expect(_filledCount(tester), 0);
-  });
-
   testWidgets('drawing into the bottom edge auto-scrolls and keeps filling', (
     tester,
   ) async {
@@ -177,23 +157,57 @@ void main() {
     expect(_filledCount(tester), greaterThan(filledAtEdge));
   });
 
-  testWidgets('touching a cell shows the full clues of its row and column', (
+  testWidgets('Fill / X toggle switches what a tap does', (tester) async {
+    await _pumpPlay(tester, phone);
+    final t = _gridOffset(tester);
+    final origin = _boardOrigin(tester);
+    final cell = _bloc(tester).state.cellSize;
+    final target = origin + t + Offset(cell * 1.5, cell * 1.5);
+
+    await tester.tap(find.byKey(const ValueKey('nonogram-mode-mark')));
+    await tester.pump(const Duration(milliseconds: 50));
+    expect(_bloc(tester).state.interactionMode, NonogramInteractionMode.mark);
+
+    await tester.tapAt(target);
+    await tester.pump(const Duration(milliseconds: 400));
+    expect(_bloc(tester).state.gridData[1][1], NonogramCellState.marked);
+
+    await tester.tap(find.byKey(const ValueKey('nonogram-mode-fill')));
+    await tester.pump(const Duration(milliseconds: 50));
+    await tester.tapAt(target + Offset(cell, 0));
+    await tester.pump(const Duration(milliseconds: 400));
+    expect(_bloc(tester).state.gridData[1][2], NonogramCellState.filled);
+  });
+
+  testWidgets('restarting the level asks for confirmation first', (
     tester,
   ) async {
     await _pumpPlay(tester, phone);
     final t = _gridOffset(tester);
     final origin = _boardOrigin(tester);
     final cell = _bloc(tester).state.cellSize;
+    await tester.tapAt(origin + t + Offset(cell * 0.5, cell * 0.5));
+    await tester.pump(const Duration(milliseconds: 400));
+    expect(_filledCount(tester), 1);
 
-    final gesture = await tester.startGesture(
-      origin + t + Offset(cell * 4.5, cell * 2.5),
-    );
-    await tester.pump();
-    expect(find.text('Row 3'), findsOneWidget);
-    expect(find.text('Col 5'), findsOneWidget);
-    await gesture.up();
-    await tester.pump(const Duration(seconds: 2));
-    expect(find.text('Row 3'), findsNothing);
+    // Không còn nút xoá trên thanh công cụ.
+    expect(find.byIcon(LucideIcons.eraser), findsNothing);
+
+    await tester.tap(find.byIcon(LucideIcons.settings));
+    await tester.pumpAndSettle();
+    await tester.tap(find.byKey(const ValueKey('nonogram-restart')));
+    await tester.pumpAndSettle();
+
+    // Huỷ: bàn giữ nguyên.
+    await tester.tap(find.text('Cancel'));
+    await tester.pumpAndSettle();
+    expect(_filledCount(tester), 1);
+
+    await tester.tap(find.byKey(const ValueKey('nonogram-restart')));
+    await tester.pumpAndSettle();
+    await tester.tap(find.byKey(const ValueKey('nonogram-restart-confirm')));
+    await tester.pumpAndSettle();
+    expect(_filledCount(tester), 0);
   });
 
   testWidgets('landscape drops the app bar and uses a side rail', (
@@ -203,6 +217,9 @@ void main() {
     expect(find.byType(AppBar), findsNothing);
     expect(find.byIcon(LucideIcons.arrowLeft), findsOneWidget);
     expect(find.byIcon(LucideIcons.settings), findsOneWidget);
+    // Màn ngang tự toàn màn hình: không có nút toàn màn hình.
+    expect(find.byIcon(LucideIcons.maximize2), findsNothing);
+    expect(find.byKey(const ValueKey('nonogram-mode-mark')), findsOneWidget);
 
     // Không còn chừa 64px phía trên: dải gợi ý trên bắt đầu sát mép.
     final t = _gridOffset(tester);

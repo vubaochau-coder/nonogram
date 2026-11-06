@@ -90,20 +90,15 @@ class CellSizeChanged extends NonogramPlayEvent {
   final double offsetX;
   final double offsetY;
 
-  /// true khi đến từ thao tác zoom (chỉ áp dụng cho màn hiện tại), false khi
-  /// người chơi chọn cỡ ô trong cài đặt.
-  final bool isZoom;
-
   const CellSizeChanged({
     required this.cellSize,
     required this.offsetX,
     required this.offsetY,
-    this.isZoom = false,
   });
 }
 
 /// Cỡ ô tạm thời trong lúc đang zoom (không lưu); kết thúc bằng
-/// [CellSizeChanged] với `isZoom: true`.
+/// [CellSizeChanged].
 class CellSizePreviewed extends NonogramPlayEvent {
   final double cellSize;
 

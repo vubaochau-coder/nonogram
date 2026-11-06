@@ -86,10 +86,6 @@
   },
   "nonogramPlayNoNextLevelToast": "No next level available yet.",
   "nonogramPlayPageTitle": "Nonogram",
-  "nonogramSettingsCellSize": "Cell size",
-  "nonogramSettingsCellSizeCustom": "Custom size",
-  "nonogramSettingsCellSizeDefault": "(default)",
-  "nonogramSettingsCellSizeError": "Size must be between 12 and 80",
   "nonogramSettingsTitle": "Settings",
   "nonogramDashboardContinueNext": "Next challenge",
   "nonogramDashboardPlay": "Play",
@@ -151,20 +147,11 @@
   "appThemeTitle": "Appearance",
   "appThemeLight": "Light",
   "appThemeDark": "Dark",
-  "nonogramPlayRowLabel": "Row {index}",
-  "nonogramPlayColumnLabel": "Col {index}",
-  "@nonogramPlayRowLabel": {
-    "placeholders": {
-      "index": {
-        "type": "int"
-      }
-    }
-  },
-  "@nonogramPlayColumnLabel": {
-    "placeholders": {
-      "index": {
-        "type": "int"
-      }
-    }
-  }
+  "nonogramPlayModeFill": "Fill mode",
+  "nonogramPlayModeMark": "Mark X mode",
+  "nonogramSettingsRestart": "Restart this level",
+  "nonogramSettingsRestartConfirmTitle": "Restart this level?",
+  "nonogramSettingsRestartConfirmMessage": "All cells you have filled or marked will be cleared.",
+  "commonClose": "Close",
+  "nonogramSettingsRestartConfirm": "Restart"
 }

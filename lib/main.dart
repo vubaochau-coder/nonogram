@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:provider/provider.dart';
 import 'package:toastification/toastification.dart';
 
 import 'core/app_navigator.dart';
@@ -42,7 +43,9 @@ class NonogramApp extends StatelessWidget {
     return MultiRepositoryProvider(
       providers: [
         RepositoryProvider.value(value: repository),
-        RepositoryProvider.value(value: themeMode),
+        // ValueNotifier: phải dùng ChangeNotifierProvider, Provider thường
+        // báo lỗi (assert) ngay khi khởi động ở bản debug.
+        ChangeNotifierProvider.value(value: themeMode),
       ],
       child: ToastificationWrapper(
         child: ValueListenableBuilder<ThemeMode>(

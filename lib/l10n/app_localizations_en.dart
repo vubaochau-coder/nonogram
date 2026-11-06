@@ -148,18 +148,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String get nonogramPlayPageTitle => 'Nonogram';
 
   @override
-  String get nonogramSettingsCellSize => 'Cell size';
-
-  @override
-  String get nonogramSettingsCellSizeCustom => 'Custom size';
-
-  @override
-  String get nonogramSettingsCellSizeDefault => '(default)';
-
-  @override
-  String get nonogramSettingsCellSizeError => 'Size must be between 12 and 80';
-
-  @override
   String get nonogramSettingsTitle => 'Settings';
 
   @override
@@ -231,12 +219,24 @@ class AppLocalizationsEn extends AppLocalizations {
   String get appThemeDark => 'Dark';
 
   @override
-  String nonogramPlayRowLabel(int index) {
-    return 'Row $index';
-  }
+  String get nonogramPlayModeFill => 'Fill mode';
 
   @override
-  String nonogramPlayColumnLabel(int index) {
-    return 'Col $index';
-  }
+  String get nonogramPlayModeMark => 'Mark X mode';
+
+  @override
+  String get nonogramSettingsRestart => 'Restart this level';
+
+  @override
+  String get nonogramSettingsRestartConfirmTitle => 'Restart this level?';
+
+  @override
+  String get nonogramSettingsRestartConfirmMessage =>
+      'All cells you have filled or marked will be cleared.';
+
+  @override
+  String get commonClose => 'Close';
+
+  @override
+  String get nonogramSettingsRestartConfirm => 'Restart';
 }

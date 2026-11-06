@@ -83,10 +83,6 @@
   },
   "nonogramPlayNoNextLevelToast": "Hiện chưa có màn tiếp theo.",
   "nonogramPlayPageTitle": "Nonogram",
-  "nonogramSettingsCellSize": "Kích thước ô",
-  "nonogramSettingsCellSizeCustom": "Tuỳ chỉnh",
-  "nonogramSettingsCellSizeDefault": "(mặc định)",
-  "nonogramSettingsCellSizeError": "Kích thước phải từ 12 đến 80",
   "nonogramSettingsTitle": "Cài đặt",
   "nonogramDashboardContinueNext": "Thử thách tiếp theo",
   "nonogramDashboardPlay": "Chơi",
@@ -107,6 +103,11 @@
   "appThemeTitle": "Giao diện",
   "appThemeLight": "Sáng",
   "appThemeDark": "Tối",
-  "nonogramPlayRowLabel": "Hàng {index}",
-  "nonogramPlayColumnLabel": "Cột {index}"
+  "nonogramPlayModeFill": "Chế độ tô",
+  "nonogramPlayModeMark": "Chế độ đánh X",
+  "nonogramSettingsRestart": "Chơi lại từ đầu",
+  "nonogramSettingsRestartConfirmTitle": "Chơi lại từ đầu?",
+  "nonogramSettingsRestartConfirmMessage": "Toàn bộ ô đã tô và đánh X của màn này sẽ bị xoá.",
+  "commonClose": "Đóng",
+  "nonogramSettingsRestartConfirm": "Chơi lại"
 }
