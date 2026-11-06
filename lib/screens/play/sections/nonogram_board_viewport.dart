@@ -510,6 +510,12 @@ class _BoardPaint extends StatelessWidget {
     final stickyTop = layout.stickyTop(offset);
     final rightReserve = layout.rightReserve;
 
+    // Vùng được vẽ lưới. Khi lưới nằm sát dải (chưa trôi vào dưới dải) thì
+    // chừa thêm 2px cho nét viền ngoài.
+    final area = layout.gridArea(offset);
+    final clipLeft = offset.dx >= area.left - 0.5 ? offset.dx - 2 : area.left;
+    final clipTop = offset.dy >= area.top - 0.5 ? offset.dy - 2 : area.top;
+
     // Hai dải dùng chung một cỡ chữ, theo dải có ô số mỏng hơn.
     double fontFor(double depth) => depth == 0 ? double.infinity : depth * 0.6;
     final clueFont = min(
@@ -545,34 +551,51 @@ class _BoardPaint extends StatelessWidget {
     return Stack(
       clipBehavior: Clip.hardEdge,
       children: [
-        // 1. Lưới.
+        // 1. Lưới, chỉ vẽ trong phần nằm phải / dưới hai dải gợi ý: phần trôi
+        // xuống dưới dải không được lộ ra ở góc bo tròn hay mép dải (nét viền
+        // ngoài của lưới dày hơn mép lưới một chút).
         Positioned(
-          left: offset.dx,
-          top: offset.dy,
-          width: gridW,
-          height: gridH,
-          child: RepaintBoundary(
-            child: CustomPaint(
-              painter: NonogramCellsPainter(
-                rows: puzzle.rows,
-                cols: puzzle.cols,
-                gridData: state.gridData,
-                satisfiedRows: state.satisfiedRows,
-                satisfiedCols: state.satisfiedCols,
-                cellSize: cell,
-                backgroundColor: colors.surfaceContainerLow,
-                filledColor: colors.onSurface,
-                markedMarkerColor: colors.primary,
-                markerColor: colors.onSurfaceVariant.withValues(alpha: 0.7),
-              ),
-              foregroundPainter: NonogramGridPainter(
-                rows: puzzle.rows,
-                cols: puzzle.cols,
-                cellSize: cell,
-                themeColor: colors.primary,
-                lineColor: colors.outlineVariant,
-                majorLineColor: colors.outline,
-              ),
+          left: clipLeft,
+          top: clipTop,
+          right: 0,
+          bottom: 0,
+          child: ClipRect(
+            child: Stack(
+              clipBehavior: Clip.none,
+              children: [
+                Positioned(
+                  left: offset.dx - clipLeft,
+                  top: offset.dy - clipTop,
+                  width: gridW,
+                  height: gridH,
+                  child: RepaintBoundary(
+                    child: CustomPaint(
+                      painter: NonogramCellsPainter(
+                        rows: puzzle.rows,
+                        cols: puzzle.cols,
+                        gridData: state.gridData,
+                        satisfiedRows: state.satisfiedRows,
+                        satisfiedCols: state.satisfiedCols,
+                        cellSize: cell,
+                        backgroundColor: colors.surfaceContainerLow,
+                        filledColor: colors.onSurface,
+                        markedMarkerColor: colors.primary,
+                        markerColor: colors.onSurfaceVariant.withValues(
+                          alpha: 0.7,
+                        ),
+                      ),
+                      foregroundPainter: NonogramGridPainter(
+                        rows: puzzle.rows,
+                        cols: puzzle.cols,
+                        cellSize: cell,
+                        themeColor: colors.primary,
+                        lineColor: colors.outlineVariant,
+                        majorLineColor: colors.outline,
+                      ),
+                    ),
+                  ),
+                ),
+              ],
             ),
           ),
         ),
@@ -697,11 +720,13 @@ class _BoardPaint extends StatelessWidget {
           ),
 
         // 5. Ô góc: che chỗ hai dải giao nhau, kèm số lượng số đang bị cắt.
+        // Lấn thêm 1px lên trên / sang trái để không lộ khe mép dải (khử
+        // răng cưa) giữa ô góc và lớp che.
         Positioned(
-          left: stickyLeft,
-          top: stickyTop,
-          width: leftW,
-          height: topH,
+          left: stickyLeft - 1,
+          top: stickyTop - 1,
+          width: leftW + 1,
+          height: topH + 1,
           child: ColoredBox(
             color: colors.surface,
             child: _HiddenCluesBadges(
