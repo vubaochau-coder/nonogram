@@ -487,6 +487,126 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Restart'**
   String get nonogramSettingsRestartConfirm;
+
+  /// No description provided for @nonogramTutorialTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'How to play'**
+  String get nonogramTutorialTitle;
+
+  /// No description provided for @nonogramTutorialSkip.
+  ///
+  /// In en, this message translates to:
+  /// **'Skip'**
+  String get nonogramTutorialSkip;
+
+  /// No description provided for @nonogramTutorialWelcomeTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Welcome to Nonopix!'**
+  String get nonogramTutorialWelcomeTitle;
+
+  /// No description provided for @nonogramTutorialWelcome.
+  ///
+  /// In en, this message translates to:
+  /// **'Let's learn the basic rules with a small 5×5 puzzle.'**
+  String get nonogramTutorialWelcome;
+
+  /// No description provided for @nonogramTutorialStart.
+  ///
+  /// In en, this message translates to:
+  /// **'Start'**
+  String get nonogramTutorialStart;
+
+  /// No description provided for @nonogramTutorialSwitchToFill.
+  ///
+  /// In en, this message translates to:
+  /// **'Puzzles are solved by filling in squares. Tap the button below to switch to fill mode.'**
+  String get nonogramTutorialSwitchToFill;
+
+  /// No description provided for @nonogramTutorialClueIsCount.
+  ///
+  /// In en, this message translates to:
+  /// **'The number tells you how many squares in the row are filled. This row has 5, so fill them all!'**
+  String get nonogramTutorialClueIsCount;
+
+  /// No description provided for @nonogramTutorialEdgeCell.
+  ///
+  /// In en, this message translates to:
+  /// **'The last square is already filled. The block of 4 must include it, so there is only one way to place it: fill the 3 squares to its left.'**
+  String get nonogramTutorialEdgeCell;
+
+  /// No description provided for @nonogramTutorialMultipleClues.
+  ///
+  /// In en, this message translates to:
+  /// **'More than one number means more than one block, with at least one empty square between them. 2 2 fits these 5 squares in only one way.'**
+  String get nonogramTutorialMultipleClues;
+
+  /// No description provided for @nonogramTutorialClueOrder.
+  ///
+  /// In en, this message translates to:
+  /// **'Order matters too: 3 1 means the block of 3 comes first, then the block of 1.'**
+  String get nonogramTutorialClueOrder;
+
+  /// No description provided for @nonogramTutorialColumns.
+  ///
+  /// In en, this message translates to:
+  /// **'Columns have numbers too, read from top to bottom. Switch to X mode to mark squares that must stay empty.'**
+  String get nonogramTutorialColumns;
+
+  /// No description provided for @nonogramTutorialMarkEmpty.
+  ///
+  /// In en, this message translates to:
+  /// **'Columns with a ✓ already have all their squares. Mark their remaining empty squares with an X.'**
+  String get nonogramTutorialMarkEmpty;
+
+  /// No description provided for @nonogramTutorialOneCellLeft.
+  ///
+  /// In en, this message translates to:
+  /// **'The 1 in the last row now has only one place left. Switch back to fill mode.'**
+  String get nonogramTutorialOneCellLeft;
+
+  /// No description provided for @nonogramTutorialFinish.
+  ///
+  /// In en, this message translates to:
+  /// **'Fill the last square to finish the puzzle!'**
+  String get nonogramTutorialFinish;
+
+  /// No description provided for @nonogramTutorialDoneTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Well done!'**
+  String get nonogramTutorialDoneTitle;
+
+  /// No description provided for @nonogramTutorialDone.
+  ///
+  /// In en, this message translates to:
+  /// **'You know the rules now. The guide has more techniques for solving bigger puzzles.'**
+  String get nonogramTutorialDone;
+
+  /// No description provided for @nonogramTutorialShowTechniques.
+  ///
+  /// In en, this message translates to:
+  /// **'See solving techniques'**
+  String get nonogramTutorialShowTechniques;
+
+  /// No description provided for @nonogramTutorialPlay.
+  ///
+  /// In en, this message translates to:
+  /// **'Start playing'**
+  String get nonogramTutorialPlay;
+
+  /// No description provided for @nonogramGuideTutorialCardTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Learn by playing'**
+  String get nonogramGuideTutorialCardTitle;
+
+  /// No description provided for @nonogramGuideTutorialCardDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Learn the rules step by step on a small 5×5 puzzle.'**
+  String get nonogramGuideTutorialCardDesc;
 }
 
 class _AppLocalizationsDelegate

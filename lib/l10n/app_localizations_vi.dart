@@ -239,4 +239,75 @@ class AppLocalizationsVi extends AppLocalizations {
 
   @override
   String get nonogramSettingsRestartConfirm => 'Chơi lại';
+
+  @override
+  String get nonogramTutorialTitle => 'Cách chơi';
+
+  @override
+  String get nonogramTutorialSkip => 'Bỏ qua';
+
+  @override
+  String get nonogramTutorialWelcomeTitle => 'Chào mừng đến với Nonopix!';
+
+  @override
+  String get nonogramTutorialWelcome =>
+      'Cùng học luật chơi cơ bản qua một câu đố 5×5 nhỏ.';
+
+  @override
+  String get nonogramTutorialStart => 'Bắt đầu';
+
+  @override
+  String get nonogramTutorialSwitchToFill =>
+      'Câu đố được giải bằng cách tô các ô vuông. Chạm vào nút bên dưới để chuyển sang chế độ tô.';
+
+  @override
+  String get nonogramTutorialClueIsCount =>
+      'Con số cho biết hàng đó có bao nhiêu ô được tô. Hàng này có 5 ô, hãy tô hết!';
+
+  @override
+  String get nonogramTutorialEdgeCell =>
+      'Ô cuối đã được tô sẵn. Khối 4 ô phải chứa ô đó nên chỉ có một cách đặt: tô 3 ô bên trái nó.';
+
+  @override
+  String get nonogramTutorialMultipleClues =>
+      'Nhiều số nghĩa là nhiều khối, giữa các khối luôn có ít nhất một ô trống. 2 2 chỉ có đúng một cách xếp vừa 5 ô này.';
+
+  @override
+  String get nonogramTutorialClueOrder =>
+      'Thứ tự cũng quan trọng: 3 1 nghĩa là khối 3 ô đứng trước, rồi mới tới khối 1 ô.';
+
+  @override
+  String get nonogramTutorialColumns =>
+      'Các cột cũng có số, đọc từ trên xuống. Chuyển sang chế độ X để đánh dấu những ô chắc chắn bỏ trống.';
+
+  @override
+  String get nonogramTutorialMarkEmpty =>
+      'Cột có dấu ✓ đã đủ ô tô. Đánh X vào các ô còn trống của những cột đó.';
+
+  @override
+  String get nonogramTutorialOneCellLeft =>
+      'Số 1 của hàng cuối giờ chỉ còn đúng một chỗ. Chuyển lại sang chế độ tô.';
+
+  @override
+  String get nonogramTutorialFinish => 'Tô ô cuối cùng để hoàn thành câu đố!';
+
+  @override
+  String get nonogramTutorialDoneTitle => 'Tuyệt vời!';
+
+  @override
+  String get nonogramTutorialDone =>
+      'Bạn đã nắm được luật chơi. Trang hướng dẫn còn nhiều kỹ thuật giúp giải các màn lớn hơn.';
+
+  @override
+  String get nonogramTutorialShowTechniques => 'Xem các kỹ thuật giải';
+
+  @override
+  String get nonogramTutorialPlay => 'Bắt đầu chơi';
+
+  @override
+  String get nonogramGuideTutorialCardTitle => 'Học qua bài tập';
+
+  @override
+  String get nonogramGuideTutorialCardDesc =>
+      'Học luật chơi từng bước trên một câu đố 5×5 nhỏ.';
 }

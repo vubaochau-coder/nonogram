@@ -7,6 +7,7 @@ import 'package:toastification/toastification.dart';
 import 'core/app_navigator.dart';
 import 'core/app_theme.dart';
 import 'core/app_theme_mode.dart';
+import 'core/onboarding_preferences.dart';
 import 'data/hive_nonogram_local_service.dart';
 import 'data/nonogram_puzzle_source.dart';
 import 'data/nonogram_repository.dart';
@@ -20,12 +21,25 @@ Future<void> main() async {
   await localService.initialize();
   final themeMode = await AppThemeModeController.load();
 
+  // Bài hướng dẫn tự mở một lần, chỉ với người chưa giải màn nào. Đánh dấu
+  // ngay từ đây để không bị mở lại dù người chơi thoát app giữa chừng.
+  final onboarding = await OnboardingPreferences.load();
+  final completed = await localService.getCompletedProgress();
+  final showTutorial = !onboarding.tutorialSeen && completed.isEmpty;
+  await onboarding.markTutorialSeen();
+
   final repository = NonogramRepository(
     AssetNonogramPuzzleSource(),
     localService,
   );
 
-  runApp(NonogramApp(repository: repository, themeMode: themeMode));
+  runApp(
+    NonogramApp(
+      repository: repository,
+      themeMode: themeMode,
+      showTutorialOnStart: showTutorial,
+    ),
+  );
 }
 
 class NonogramApp extends StatelessWidget {
@@ -33,10 +47,12 @@ class NonogramApp extends StatelessWidget {
     super.key,
     required this.repository,
     required this.themeMode,
+    this.showTutorialOnStart = false,
   });
 
   final NonogramRepository repository;
   final AppThemeModeController themeMode;
+  final bool showTutorialOnStart;
 
   @override
   Widget build(BuildContext context) {
@@ -66,7 +82,9 @@ class NonogramApp extends StatelessWidget {
                   GlobalCupertinoLocalizations.delegate,
                 ],
                 supportedLocales: AppLocalizations.supportedLocales,
-                home: const NonogramDashboardPage(),
+                home: NonogramDashboardPage(
+                  showTutorialOnStart: showTutorialOnStart,
+                ),
               ),
         ),
       ),

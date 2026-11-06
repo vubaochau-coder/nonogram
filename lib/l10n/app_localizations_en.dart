@@ -239,4 +239,76 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get nonogramSettingsRestartConfirm => 'Restart';
+
+  @override
+  String get nonogramTutorialTitle => 'How to play';
+
+  @override
+  String get nonogramTutorialSkip => 'Skip';
+
+  @override
+  String get nonogramTutorialWelcomeTitle => 'Welcome to Nonopix!';
+
+  @override
+  String get nonogramTutorialWelcome =>
+      'Let\'s learn the basic rules with a small 5×5 puzzle.';
+
+  @override
+  String get nonogramTutorialStart => 'Start';
+
+  @override
+  String get nonogramTutorialSwitchToFill =>
+      'Puzzles are solved by filling in squares. Tap the button below to switch to fill mode.';
+
+  @override
+  String get nonogramTutorialClueIsCount =>
+      'The number tells you how many squares in the row are filled. This row has 5, so fill them all!';
+
+  @override
+  String get nonogramTutorialEdgeCell =>
+      'The last square is already filled. The block of 4 must include it, so there is only one way to place it: fill the 3 squares to its left.';
+
+  @override
+  String get nonogramTutorialMultipleClues =>
+      'More than one number means more than one block, with at least one empty square between them. 2 2 fits these 5 squares in only one way.';
+
+  @override
+  String get nonogramTutorialClueOrder =>
+      'Order matters too: 3 1 means the block of 3 comes first, then the block of 1.';
+
+  @override
+  String get nonogramTutorialColumns =>
+      'Columns have numbers too, read from top to bottom. Switch to X mode to mark squares that must stay empty.';
+
+  @override
+  String get nonogramTutorialMarkEmpty =>
+      'Columns with a ✓ already have all their squares. Mark their remaining empty squares with an X.';
+
+  @override
+  String get nonogramTutorialOneCellLeft =>
+      'The 1 in the last row now has only one place left. Switch back to fill mode.';
+
+  @override
+  String get nonogramTutorialFinish =>
+      'Fill the last square to finish the puzzle!';
+
+  @override
+  String get nonogramTutorialDoneTitle => 'Well done!';
+
+  @override
+  String get nonogramTutorialDone =>
+      'You know the rules now. The guide has more techniques for solving bigger puzzles.';
+
+  @override
+  String get nonogramTutorialShowTechniques => 'See solving techniques';
+
+  @override
+  String get nonogramTutorialPlay => 'Start playing';
+
+  @override
+  String get nonogramGuideTutorialCardTitle => 'Learn by playing';
+
+  @override
+  String get nonogramGuideTutorialCardDesc =>
+      'Learn the rules step by step on a small 5×5 puzzle.';
 }
