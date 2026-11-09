@@ -276,7 +276,7 @@ void main() {
     expect(_boardOrigin(tester).dx, NonogramLandscapeLeftRail.panelWidth);
   });
 
-  testWidgets('landscape: menu on the left, game actions bottom-right', (
+  testWidgets('landscape: menu on the left, game actions on the right', (
     tester,
   ) async {
     await _pumpPlay(tester, const Size(900, 400));
@@ -298,12 +298,17 @@ void main() {
     expect(rotate.dy, greaterThan(400 / 2));
     expect(rotate.dy, lessThan(settings.dy));
 
-    // Mép phải chỉ còn gợi ý và Tô / X, ở góc dưới trong tầm ngón cái.
-    for (final p in [hint, mark]) {
+    // Mép phải chỉ còn gợi ý, gậy phép và Tô / X (theo thứ tự đó), ở góc
+    // trên.
+    final wand = at(find.byKey(const ValueKey('nonogram-wand')));
+    for (final p in [hint, wand, mark]) {
       expect(p.dx, greaterThan(900 - NonogramBoardLayout.railReserve));
     }
-    expect(hint.dy, greaterThan(400 / 2));
-    expect(hint.dy, lessThan(mark.dy));
+    final hintButton = find.byIcon(LucideIcons.lightbulb);
+    expect(tester.getCenter(hintButton).dy, closeTo(back.dy, 4));
+    expect(hint.dy, lessThan(wand.dy));
+    expect(wand.dy, lessThan(mark.dy));
+    expect(mark.dy, lessThan(400 / 2));
   });
 
   testWidgets('pinching with two fingers pans but never changes cell size', (
