@@ -37,6 +37,7 @@ Future<void> main() async {
     NonogramApp(
       repository: repository,
       themeMode: themeMode,
+      onboarding: onboarding,
       showTutorialOnStart: showTutorial,
     ),
   );
@@ -47,11 +48,15 @@ class NonogramApp extends StatelessWidget {
     super.key,
     required this.repository,
     required this.themeMode,
+    this.onboarding,
     this.showTutorialOnStart = false,
   });
 
   final NonogramRepository repository;
   final AppThemeModeController themeMode;
+
+  /// Null trong test: không tự hiện hướng dẫn thao tác khi vào màn chơi.
+  final OnboardingPreferences? onboarding;
   final bool showTutorialOnStart;
 
   @override
@@ -62,6 +67,7 @@ class NonogramApp extends StatelessWidget {
         // ValueNotifier: phải dùng ChangeNotifierProvider, Provider thường
         // báo lỗi (assert) ngay khi khởi động ở bản debug.
         ChangeNotifierProvider.value(value: themeMode),
+        if (onboarding != null) Provider.value(value: onboarding!),
       ],
       child: ToastificationWrapper(
         child: ValueListenableBuilder<ThemeMode>(

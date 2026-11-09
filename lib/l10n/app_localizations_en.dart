@@ -314,4 +314,71 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get nonogramPlayInfoHide => 'Hide level info';
+
+  @override
+  String get nonogramPlayWandLabel => 'Magic wand';
+
+  @override
+  String get nonogramPlayWandSelectPrompt =>
+      'Tap the clues of the row or column to reveal';
+
+  @override
+  String get nonogramPlayWandRowSolved =>
+      'This row is already correct. Pick another row or column.';
+
+  @override
+  String get nonogramPlayWandColSolved =>
+      'This column is already correct. Pick another row or column.';
+
+  @override
+  String get nonogramSettingsControlsGuide => 'Controls guide';
+
+  @override
+  String get nonogramCoachSkip => 'Skip';
+
+  @override
+  String get nonogramCoachNext => 'Next';
+
+  @override
+  String get nonogramCoachDone => 'Got it';
+
+  @override
+  String nonogramCoachStep(int current, int total) {
+    return '$current/$total';
+  }
+
+  @override
+  String get nonogramCoachHintTitle => 'Hint';
+
+  @override
+  String get nonogramCoachHintBody =>
+      'Automatically reveals one row or column (the one with the fewest wrong squares). You get 3 per puzzle.';
+
+  @override
+  String get nonogramCoachWandTitle => 'Magic wand';
+
+  @override
+  String get nonogramCoachWandBody =>
+      'Tap the wand, then tap the clues of any row or column: the answer for exactly that line is revealed. You get 1 per puzzle.';
+
+  @override
+  String get nonogramCoachModeTitle => 'Fill or X';
+
+  @override
+  String get nonogramCoachModeBody =>
+      'Choose what a tap does: fill the square, or mark it with an X to remember it is empty. Tap the button to switch. Drag across the grid to fill or mark many squares at once.';
+
+  @override
+  String get nonogramCoachLongPressTitle => 'Press and hold for the opposite';
+
+  @override
+  String get nonogramCoachLongPressBody =>
+      'Press and hold a square to do the opposite of the current mode: X while filling, fill while marking. A short vibration means it\'s done and you can let go.';
+
+  @override
+  String get nonogramCoachScrollTitle => 'Moving around big puzzles';
+
+  @override
+  String get nonogramCoachScrollBody =>
+      'Big puzzles don\'t fit on screen: drag with two fingers, or drag from the empty space outside the grid to move the board. Drag on the clues to see hidden numbers (the \"+N\" in the corner shows how many).';
 }

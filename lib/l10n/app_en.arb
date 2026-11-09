@@ -174,5 +174,34 @@
   "nonogramTutorialPlay": "Start playing",
   "nonogramGuideTutorialCardTitle": "Learn by playing",
   "nonogramGuideTutorialCardDesc": "Learn the rules step by step on a small 5×5 puzzle.",
-  "nonogramPlayInfoHide": "Hide level info"
+  "nonogramPlayInfoHide": "Hide level info",
+  "nonogramPlayWandLabel": "Magic wand",
+  "nonogramPlayWandSelectPrompt": "Tap the clues of the row or column to reveal",
+  "nonogramPlayWandRowSolved": "This row is already correct. Pick another row or column.",
+  "nonogramPlayWandColSolved": "This column is already correct. Pick another row or column.",
+  "nonogramSettingsControlsGuide": "Controls guide",
+  "nonogramCoachSkip": "Skip",
+  "nonogramCoachNext": "Next",
+  "nonogramCoachDone": "Got it",
+  "nonogramCoachStep": "{current}/{total}",
+  "nonogramCoachHintTitle": "Hint",
+  "nonogramCoachHintBody": "Automatically reveals one row or column (the one with the fewest wrong squares). You get 3 per puzzle.",
+  "nonogramCoachWandTitle": "Magic wand",
+  "nonogramCoachWandBody": "Tap the wand, then tap the clues of any row or column: the answer for exactly that line is revealed. You get 1 per puzzle.",
+  "nonogramCoachModeTitle": "Fill or X",
+  "nonogramCoachModeBody": "Choose what a tap does: fill the square, or mark it with an X to remember it is empty. Tap the button to switch. Drag across the grid to fill or mark many squares at once.",
+  "nonogramCoachLongPressTitle": "Press and hold for the opposite",
+  "nonogramCoachLongPressBody": "Press and hold a square to do the opposite of the current mode: X while filling, fill while marking. A short vibration means it's done and you can let go.",
+  "nonogramCoachScrollTitle": "Moving around big puzzles",
+  "nonogramCoachScrollBody": "Big puzzles don't fit on screen: drag with two fingers, or drag from the empty space outside the grid to move the board. Drag on the clues to see hidden numbers (the \"+N\" in the corner shows how many).",
+  "@nonogramCoachStep": {
+    "placeholders": {
+      "current": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  }
 }

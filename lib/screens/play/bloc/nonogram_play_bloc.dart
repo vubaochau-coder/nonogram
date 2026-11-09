@@ -1,4 +1,5 @@
 import 'dart:ui' show Offset, Size;
+import 'package:flutter/painting.dart' show Axis;
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:bloc_concurrency/bloc_concurrency.dart';
 import 'package:nonogram/core/app_bloc.dart';
@@ -64,6 +65,8 @@ class NonogramPlayBloc extends AppBloc<NonogramPlayEvent, NonogramPlayState> {
     on<FullscreenToggled>(_onFullscreenToggled, transformer: sequential());
     on<BoardReset>(_onBoardReset, transformer: sequential());
     on<HintRequested>(_onHintRequested, transformer: sequential());
+    on<WandToggled>(_onWandToggled, transformer: sequential());
+    on<WandLineSelected>(_onWandLineSelected, transformer: sequential());
 
     // --- Internal/Orchestration Events ---
     on<CurrentProgressSaveRequested>(
@@ -146,7 +149,10 @@ class NonogramPlayBloc extends AppBloc<NonogramPlayEvent, NonogramPlayState> {
     // Cỡ ô không do người chơi chọn: luôn là cỡ vừa khung nhìn hiện tại
     // (kể cả ván dở), cập nhật lại khi khung nhìn đổi (xoay màn hình...).
     final cellSize = _autoCellSize(puzzle);
-    final remainingHints = snapshot?.remainingHints ?? 3;
+    final remainingHints =
+        snapshot?.remainingHints ?? NonogramPlayState.maxHints;
+    final remainingWands =
+        snapshot?.remainingWands ?? NonogramPlayState.maxWands;
 
     final offsetX = snapshot?.viewportOffsetX ?? 0.0;
     final offsetY = snapshot?.viewportOffsetY ?? 0.0;
@@ -170,6 +176,8 @@ class NonogramPlayBloc extends AppBloc<NonogramPlayEvent, NonogramPlayState> {
       isFullscreen: state.isFullscreen,
       isSolved: _engine.isSolved(puzzle: puzzle, gridData: initialGrid),
       remainingHints: remainingHints,
+      remainingWands: remainingWands,
+      isWandActive: false,
     );
 
     if (snapshot != null) {
@@ -410,6 +418,75 @@ class NonogramPlayBloc extends AppBloc<NonogramPlayEvent, NonogramPlayState> {
         offsetY: event.offsetY,
       ),
     );
+  }
+
+  _onWandToggled(WandToggled event, Emitter emit) {
+    if (state.isLoading || state.isSolved || state.puzzle == null) return;
+    if (!state.isWandActive && state.remainingWands <= 0) return;
+    _dragSession = null;
+    emit(state.copyWith(isWandActive: !state.isWandActive));
+  }
+
+  /// Gậy phép: hiện đáp án của đúng hàng / cột người chơi chọn. Hàng / cột
+  /// đã đúng thì không tốn lượt, vẫn giữ chế độ chọn để chọn hàng khác.
+  _onWandLineSelected(WandLineSelected event, Emitter emit) {
+    final puzzle = state.puzzle;
+    if (state.isLoading ||
+        state.isSolved ||
+        puzzle == null ||
+        !state.isWandActive ||
+        state.remainingWands <= 0) {
+      return;
+    }
+    final axis = event.isRow ? Axis.horizontal : Axis.vertical;
+    final length = event.isRow ? puzzle.rows : puzzle.cols;
+    if (event.index < 0 || event.index >= length) return;
+
+    if (_engine.lineMismatchCount(
+          axis: axis,
+          index: event.index,
+          puzzle: puzzle,
+          gridData: state.gridData,
+        ) ==
+        0) {
+      ToastUtils.info(
+        title:
+            event.isRow
+                ? l10n.nonogramPlayWandRowSolved
+                : l10n.nonogramPlayWandColSolved,
+      );
+      return;
+    }
+
+    final newGrid = _engine.revealLine(
+      axis: axis,
+      index: event.index,
+      puzzle: puzzle,
+      gridData: state.gridData,
+    );
+
+    final nextState = _buildGridDerivedState(
+      sourceState: state,
+      gridData: newGrid.toUnmodifiable2D(),
+    ).copyWith(remainingWands: state.remainingWands - 1, isWandActive: false);
+
+    emit(
+      NonogramPlayHintAppliedState.fromState(
+        nextState,
+        axis: axis,
+        lineIndex: event.index,
+      ),
+    );
+    emit(nextState);
+
+    add(
+      CurrentProgressSaveRequested(
+        sourceState: nextState,
+        offsetX: event.offsetX,
+        offsetY: event.offsetY,
+      ),
+    );
+    add(const SolveCheckRequested());
   }
 
   _onHintRequested(HintRequested event, Emitter emit) {

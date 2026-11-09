@@ -534,4 +534,132 @@ void main() {
       expect(bloc.state.remainingHints, 3);
     });
   });
+
+  group('NonogramPlayBloc Magic Wand Tests', () {
+    late FakeNonogramRepository repository;
+    late NonogramPlayBloc bloc;
+
+    setUp(() {
+      repository = FakeNonogramRepository();
+      bloc = NonogramPlayBloc(repository: repository);
+    });
+
+    tearDown(() async {
+      await bloc.close();
+    });
+
+    Future<void> start([NonogramBoardSnapshot? snapshot]) async {
+      bloc.add(Started(puzzle: satisfactionPuzzle, snapshot: snapshot));
+      await bloc.stream.firstWhere((s) => s.puzzle != null && !s.isLoading);
+    }
+
+    test('new level starts with one wand, not in selection mode', () async {
+      await start();
+      expect(bloc.state.remainingWands, NonogramPlayState.maxWands);
+      expect(bloc.state.isWandActive, isFalse);
+    });
+
+    test('toggling enters and leaves selection mode', () async {
+      await start();
+      bloc.add(const WandToggled());
+      await bloc.stream.firstWhere((s) => s.isWandActive);
+      bloc.add(const WandToggled());
+      await bloc.stream.firstWhere((s) => !s.isWandActive);
+      expect(bloc.state.remainingWands, 1);
+    });
+
+    test('selecting a column reveals exactly that column', () async {
+      await start();
+      bloc.add(const WandToggled());
+      await bloc.stream.firstWhere((s) => s.isWandActive);
+
+      bloc.add(
+        const WandLineSelected(isRow: false, index: 1, offsetX: 0, offsetY: 0),
+      );
+      await bloc.stream.firstWhere((s) => s.remainingWands == 0);
+
+      final grid = bloc.state.gridData;
+      // Cột 1: [0, 1] -> X rồi tô.
+      expect(grid[0][1], NonogramCellState.marked);
+      expect(grid[1][1], NonogramCellState.filled);
+      // Các cột khác không đổi.
+      expect(grid[0][0], NonogramCellState.empty);
+      expect(grid[1][0], NonogramCellState.empty);
+      expect(bloc.state.isWandActive, isFalse);
+
+      await Future<void>.delayed(const Duration(milliseconds: 20));
+      final snapshot = await repository.getCurrentProgress();
+      expect(snapshot?.remainingWands, 0);
+    });
+
+    test('selecting a row reveals exactly that row', () async {
+      await start();
+      bloc.add(const WandToggled());
+      bloc.add(
+        const WandLineSelected(isRow: true, index: 0, offsetX: 0, offsetY: 0),
+      );
+      await bloc.stream.firstWhere((s) => s.remainingWands == 0);
+      expect(bloc.state.gridData[0], const [
+        NonogramCellState.filled,
+        NonogramCellState.marked,
+        NonogramCellState.filled,
+        NonogramCellState.marked,
+        NonogramCellState.filled,
+      ]);
+      expect(
+        bloc.state.gridData[1].every((c) => c == NonogramCellState.empty),
+        isTrue,
+      );
+    });
+
+    test('selection without entering wand mode is ignored', () async {
+      await start();
+      bloc.add(
+        const WandLineSelected(isRow: true, index: 0, offsetX: 0, offsetY: 0),
+      );
+      await Future<void>.delayed(const Duration(milliseconds: 20));
+      expect(bloc.state.remainingWands, 1);
+      expect(
+        bloc.state.gridData
+            .expand((r) => r)
+            .every((c) => c == NonogramCellState.empty),
+        isTrue,
+      );
+    });
+
+    test('cannot enter wand mode with no wands left', () async {
+      await start(
+        NonogramBoardSnapshot(
+          puzzleId: satisfactionPuzzle.id,
+          level: satisfactionPuzzle.level,
+          gridData: List.generate(
+            2,
+            (_) => List.filled(5, NonogramCellState.empty),
+          ),
+          startTime: DateTime.now(),
+          interactionMode: NonogramInteractionMode.fill,
+          remainingWands: 0,
+        ),
+      );
+      expect(bloc.state.remainingWands, 0);
+      bloc.add(const WandToggled());
+      await Future<void>.delayed(const Duration(milliseconds: 20));
+      expect(bloc.state.isWandActive, isFalse);
+    });
+
+    test('old snapshots without a wand count restore one wand', () {
+      final restored = NonogramBoardSnapshot.fromMap({
+        'puzzleId': 'p',
+        'level': 1,
+        'gridData': [
+          [0],
+        ],
+        'startTime': DateTime(2026).toIso8601String(),
+        'interactionMode': null,
+        'viewportOffsetX': 0,
+        'viewportOffsetY': 0,
+      });
+      expect(restored.remainingWands, 1);
+    });
+  });
 }

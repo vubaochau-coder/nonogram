@@ -613,6 +613,120 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Hide level info'**
   String get nonogramPlayInfoHide;
+
+  /// No description provided for @nonogramPlayWandLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Magic wand'**
+  String get nonogramPlayWandLabel;
+
+  /// No description provided for @nonogramPlayWandSelectPrompt.
+  ///
+  /// In en, this message translates to:
+  /// **'Tap the clues of the row or column to reveal'**
+  String get nonogramPlayWandSelectPrompt;
+
+  /// No description provided for @nonogramPlayWandRowSolved.
+  ///
+  /// In en, this message translates to:
+  /// **'This row is already correct. Pick another row or column.'**
+  String get nonogramPlayWandRowSolved;
+
+  /// No description provided for @nonogramPlayWandColSolved.
+  ///
+  /// In en, this message translates to:
+  /// **'This column is already correct. Pick another row or column.'**
+  String get nonogramPlayWandColSolved;
+
+  /// No description provided for @nonogramSettingsControlsGuide.
+  ///
+  /// In en, this message translates to:
+  /// **'Controls guide'**
+  String get nonogramSettingsControlsGuide;
+
+  /// No description provided for @nonogramCoachSkip.
+  ///
+  /// In en, this message translates to:
+  /// **'Skip'**
+  String get nonogramCoachSkip;
+
+  /// No description provided for @nonogramCoachNext.
+  ///
+  /// In en, this message translates to:
+  /// **'Next'**
+  String get nonogramCoachNext;
+
+  /// No description provided for @nonogramCoachDone.
+  ///
+  /// In en, this message translates to:
+  /// **'Got it'**
+  String get nonogramCoachDone;
+
+  /// No description provided for @nonogramCoachStep.
+  ///
+  /// In en, this message translates to:
+  /// **'{current}/{total}'**
+  String nonogramCoachStep(int current, int total);
+
+  /// No description provided for @nonogramCoachHintTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Hint'**
+  String get nonogramCoachHintTitle;
+
+  /// No description provided for @nonogramCoachHintBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Automatically reveals one row or column (the one with the fewest wrong squares). You get 3 per puzzle.'**
+  String get nonogramCoachHintBody;
+
+  /// No description provided for @nonogramCoachWandTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Magic wand'**
+  String get nonogramCoachWandTitle;
+
+  /// No description provided for @nonogramCoachWandBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Tap the wand, then tap the clues of any row or column: the answer for exactly that line is revealed. You get 1 per puzzle.'**
+  String get nonogramCoachWandBody;
+
+  /// No description provided for @nonogramCoachModeTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Fill or X'**
+  String get nonogramCoachModeTitle;
+
+  /// No description provided for @nonogramCoachModeBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose what a tap does: fill the square, or mark it with an X to remember it is empty. Tap the button to switch. Drag across the grid to fill or mark many squares at once.'**
+  String get nonogramCoachModeBody;
+
+  /// No description provided for @nonogramCoachLongPressTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Press and hold for the opposite'**
+  String get nonogramCoachLongPressTitle;
+
+  /// No description provided for @nonogramCoachLongPressBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Press and hold a square to do the opposite of the current mode: X while filling, fill while marking. A short vibration means it\'s done and you can let go.'**
+  String get nonogramCoachLongPressBody;
+
+  /// No description provided for @nonogramCoachScrollTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Moving around big puzzles'**
+  String get nonogramCoachScrollTitle;
+
+  /// No description provided for @nonogramCoachScrollBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Big puzzles don\'t fit on screen: drag with two fingers, or drag from the empty space outside the grid to move the board. Drag on the clues to see hidden numbers (the \"+N\" in the corner shows how many).'**
+  String get nonogramCoachScrollBody;
 }
 
 class _AppLocalizationsDelegate

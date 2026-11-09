@@ -20,6 +20,16 @@ class NonogramPlayState extends Equatable {
   final bool isSolved;
   final int remainingHints;
 
+  /// Số lượt gậy phép còn lại (chọn một hàng / cột để hiện đáp án).
+  final int remainingWands;
+
+  /// Đang chờ người chơi chọn hàng / cột cho gậy phép.
+  final bool isWandActive;
+
+  /// Số lượt gợi ý / gậy phép mỗi màn.
+  static const int maxHints = 3;
+  static const int maxWands = 1;
+
   const NonogramPlayState({
     required this.isLoading,
     this.puzzle,
@@ -32,7 +42,9 @@ class NonogramPlayState extends Equatable {
     this.cellSize = 40.0,
     this.isFullscreen = false,
     this.isSolved = false,
-    this.remainingHints = 3,
+    this.remainingHints = maxHints,
+    this.remainingWands = maxWands,
+    this.isWandActive = false,
   });
 
   factory NonogramPlayState.initial({int initialLevel = 1}) {
@@ -57,6 +69,8 @@ class NonogramPlayState extends Equatable {
     bool? isFullscreen,
     bool? isSolved,
     int? remainingHints,
+    int? remainingWands,
+    bool? isWandActive,
   }) {
     return NonogramPlayState(
       isLoading: isLoading ?? this.isLoading,
@@ -71,6 +85,8 @@ class NonogramPlayState extends Equatable {
       isFullscreen: isFullscreen ?? this.isFullscreen,
       isSolved: isSolved ?? this.isSolved,
       remainingHints: remainingHints ?? this.remainingHints,
+      remainingWands: remainingWands ?? this.remainingWands,
+      isWandActive: isWandActive ?? this.isWandActive,
     );
   }
 
@@ -88,6 +104,8 @@ class NonogramPlayState extends Equatable {
     isFullscreen,
     isSolved,
     remainingHints,
+    remainingWands,
+    isWandActive,
   ];
 }
 
@@ -106,6 +124,8 @@ class NonogramPlayCompletedState extends NonogramPlayState {
     required super.isFullscreen,
     required super.isSolved,
     required super.remainingHints,
+    required super.remainingWands,
+    required super.isWandActive,
   });
 
   factory NonogramPlayCompletedState.fromState(NonogramPlayState state) {
@@ -122,6 +142,8 @@ class NonogramPlayCompletedState extends NonogramPlayState {
       isFullscreen: state.isFullscreen,
       isSolved: true,
       remainingHints: state.remainingHints,
+      remainingWands: state.remainingWands,
+      isWandActive: state.isWandActive,
     );
   }
 }
@@ -144,6 +166,8 @@ class NonogramPlayRestoredState extends NonogramPlayState {
     required super.isFullscreen,
     required super.isSolved,
     required super.remainingHints,
+    required super.remainingWands,
+    required super.isWandActive,
     required this.offsetX,
     required this.offsetY,
   });
@@ -166,6 +190,8 @@ class NonogramPlayRestoredState extends NonogramPlayState {
       isFullscreen: state.isFullscreen,
       isSolved: state.isSolved,
       remainingHints: state.remainingHints,
+      remainingWands: state.remainingWands,
+      isWandActive: state.isWandActive,
       offsetX: offsetX,
       offsetY: offsetY,
     );
@@ -192,6 +218,8 @@ class NonogramPlayErrorState extends NonogramPlayState {
     required super.isFullscreen,
     required super.isSolved,
     required super.remainingHints,
+    required super.remainingWands,
+    required super.isWandActive,
     required this.error,
   });
 
@@ -212,6 +240,8 @@ class NonogramPlayErrorState extends NonogramPlayState {
       isFullscreen: state.isFullscreen,
       isSolved: state.isSolved,
       remainingHints: state.remainingHints,
+      remainingWands: state.remainingWands,
+      isWandActive: state.isWandActive,
       error: error,
     );
   }
@@ -240,6 +270,8 @@ class NonogramPlayHintAppliedState extends NonogramPlayState {
     required super.isFullscreen,
     required super.isSolved,
     required super.remainingHints,
+    required super.remainingWands,
+    required super.isWandActive,
     required this.axis,
     required this.lineIndex,
   });
@@ -262,6 +294,8 @@ class NonogramPlayHintAppliedState extends NonogramPlayState {
       isFullscreen: state.isFullscreen,
       isSolved: state.isSolved,
       remainingHints: state.remainingHints,
+      remainingWands: state.remainingWands,
+      isWandActive: state.isWandActive,
       axis: axis,
       lineIndex: lineIndex,
     );

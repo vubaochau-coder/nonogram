@@ -7,6 +7,7 @@ import 'package:lucide_icons/lucide_icons.dart';
 import 'package:provider/provider.dart';
 import 'package:nonogram/core/app_theme.dart';
 import 'package:nonogram/core/app_theme_mode.dart';
+import 'package:nonogram/core/onboarding_preferences.dart';
 import 'package:nonogram/data/nonogram_puzzle_source.dart';
 import 'package:nonogram/data/nonogram_repository.dart';
 import 'package:nonogram/l10n/app_localizations.dart';
@@ -14,6 +15,7 @@ import 'package:nonogram/models/nonogram_cell_state.dart';
 import 'package:nonogram/models/nonogram_interaction_mode.dart';
 import 'package:nonogram/models/nonogram_puzzle.dart';
 import 'package:nonogram/screens/play/bloc/nonogram_play_bloc.dart';
+import 'package:nonogram/screens/play/coach/nonogram_play_coach.dart';
 import 'package:nonogram/screens/play/engine/nonogram_board_layout.dart';
 import 'package:nonogram/screens/play/nonogram_play_page.dart';
 import 'package:nonogram/screens/play/nonogram_transformation_controller_provider.dart';
@@ -43,7 +45,11 @@ class _BigPuzzleSource implements NonogramPuzzleSource {
   }
 }
 
-Future<void> _pumpPlay(WidgetTester tester, Size size) async {
+Future<void> _pumpPlay(
+  WidgetTester tester,
+  Size size, {
+  OnboardingPreferences? onboarding,
+}) async {
   tester.view.physicalSize = size;
   tester.view.devicePixelRatio = 1;
   addTearDown(tester.view.reset);
@@ -58,6 +64,7 @@ Future<void> _pumpPlay(WidgetTester tester, Size size) async {
           ),
         ),
         ChangeNotifierProvider.value(value: AppThemeModeController.inMemory()),
+        if (onboarding != null) Provider.value(value: onboarding),
       ],
       child: MaterialApp(
         theme: AppTheme.lightTheme,
@@ -358,5 +365,107 @@ void main() {
     await tester.tap(find.byKey(const ValueKey('nonogram-rotate-screen')));
     await tester.pump();
     expect(calls.last, ['DeviceOrientation.portraitUp']);
+  });
+
+  testWidgets('magic wand reveals the row whose clues are tapped', (
+    tester,
+  ) async {
+    await _pumpPlay(tester, phone);
+    final bloc = _bloc(tester);
+    final origin = _boardOrigin(tester);
+    final offset = _gridOffset(tester);
+    final cell = bloc.state.cellSize;
+
+    await tester.tap(find.byKey(const ValueKey('nonogram-wand')));
+    await tester.pump();
+    expect(bloc.state.isWandActive, isTrue);
+    expect(find.byKey(const ValueKey('nonogram-wand-cancel')), findsOneWidget);
+
+    // Đang chọn: chạm vào ô lưới không tô.
+    await tester.tapAt(origin + offset + Offset(cell * 0.5, cell * 0.5));
+    await tester.pump(const Duration(milliseconds: 400));
+    expect(_filledCount(tester), 0);
+    expect(bloc.state.isWandActive, isTrue);
+
+    // Chạm vào dải số trái, ngang hàng thứ 3.
+    await tester.tapAt(origin + Offset(offset.dx - 10, offset.dy + cell * 2.5));
+    await tester.pump(const Duration(milliseconds: 400));
+
+    expect(bloc.state.remainingWands, 0);
+    expect(bloc.state.isWandActive, isFalse);
+    final row = bloc.state.gridData[2];
+    for (var c = 0; c < row.length; c++) {
+      expect(
+        row[c],
+        (2 + c) % 2 == 1 ? NonogramCellState.filled : NonogramCellState.marked,
+      );
+    }
+    expect(_filledCount(tester), 20);
+    await tester.pump(const Duration(seconds: 1));
+  });
+
+  testWidgets('cancel leaves wand mode without using it', (tester) async {
+    await _pumpPlay(tester, phone);
+    await tester.tap(find.byKey(const ValueKey('nonogram-wand')));
+    await tester.pump();
+    await tester.tap(find.byKey(const ValueKey('nonogram-wand-cancel')));
+    await tester.pump(const Duration(milliseconds: 300));
+    expect(_bloc(tester).state.isWandActive, isFalse);
+    expect(_bloc(tester).state.remainingWands, 1);
+  });
+
+  testWidgets('first game shows the controls guide once, scroll tip included', (
+    tester,
+  ) async {
+    final prefs = OnboardingPreferences.inMemory();
+    await _pumpPlay(tester, phone, onboarding: prefs);
+    await tester.pump(const Duration(milliseconds: 700));
+    await tester.pump(const Duration(milliseconds: 300));
+
+    expect(find.byType(NonogramPlayCoachOverlay), findsOneWidget);
+    expect(find.text('Hint'), findsOneWidget);
+    expect(find.text('1/5'), findsOneWidget);
+    expect(prefs.playCoachSeen, isTrue);
+    expect(prefs.scrollTipSeen, isTrue);
+
+    // Lớp phủ chặn thao tác bên dưới: chạm = sang bước tiếp.
+    await tester.tap(find.byKey(const ValueKey('nonogram-coach-next')));
+    await tester.pump(const Duration(milliseconds: 300));
+    expect(find.text('2/5'), findsOneWidget);
+    expect(find.text('Magic wand'), findsWidgets);
+
+    await tester.tap(find.byKey(const ValueKey('nonogram-coach-skip')));
+    await tester.pump(const Duration(milliseconds: 300));
+    expect(find.byType(NonogramPlayCoachOverlay), findsNothing);
+    expect(_filledCount(tester), 0);
+  });
+
+  testWidgets('controls guide is not shown again once seen', (tester) async {
+    final prefs = OnboardingPreferences.inMemory(
+      playCoachSeen: true,
+      scrollTipSeen: true,
+    );
+    await _pumpPlay(tester, phone, onboarding: prefs);
+    await tester.pump(const Duration(seconds: 1));
+    expect(find.byType(NonogramPlayCoachOverlay), findsNothing);
+  });
+
+  testWidgets('settings can replay the controls guide', (tester) async {
+    final prefs = OnboardingPreferences.inMemory(
+      playCoachSeen: true,
+      scrollTipSeen: true,
+    );
+    await _pumpPlay(tester, phone, onboarding: prefs);
+    await tester.tap(find.byIcon(LucideIcons.settings));
+    await tester.pumpAndSettle();
+    await tester.tap(find.byKey(const ValueKey('nonogram-controls-guide')));
+    await tester.pumpAndSettle();
+
+    expect(find.byType(NonogramPlayCoachOverlay), findsOneWidget);
+    for (var i = 0; i < 5; i++) {
+      await tester.tap(find.byKey(const ValueKey('nonogram-coach-next')));
+      await tester.pump(const Duration(milliseconds: 300));
+    }
+    expect(find.byType(NonogramPlayCoachOverlay), findsNothing);
   });
 }

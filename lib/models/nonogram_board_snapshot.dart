@@ -13,6 +13,7 @@ class NonogramBoardSnapshot {
   final double viewportOffsetY;
   final double cellSize;
   final int remainingHints;
+  final int remainingWands;
 
   const NonogramBoardSnapshot({
     required this.puzzleId,
@@ -24,6 +25,7 @@ class NonogramBoardSnapshot {
     this.viewportOffsetY = 0,
     this.cellSize = 40.0,
     this.remainingHints = 3,
+    this.remainingWands = 1,
   });
 
   Map<String, dynamic> toMap() {
@@ -38,6 +40,7 @@ class NonogramBoardSnapshot {
       'viewportOffsetY': viewportOffsetY,
       'cellSize': cellSize,
       'remainingHints': remainingHints,
+      'remainingWands': remainingWands,
     };
   }
 
@@ -59,6 +62,8 @@ class NonogramBoardSnapshot {
       viewportOffsetY: (map['viewportOffsetY'] as num).toDouble(),
       cellSize: (map['cellSize'] as num?)?.toDouble() ?? 40.0,
       remainingHints: (map['remainingHints'] as int?) ?? 3,
+      // Ván lưu trước khi có gậy phép: coi như chưa dùng.
+      remainingWands: (map['remainingWands'] as int?) ?? 1,
     );
   }
 }

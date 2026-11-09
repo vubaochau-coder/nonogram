@@ -224,6 +224,22 @@ class NonogramBoardLayout {
     return NonogramBoardRegion.empty;
   }
 
+  /// Hàng / cột ứng với điểm [p] trên dải gợi ý trái (hàng) hoặc dải trên
+  /// (cột), dùng để chọn đường cho gậy phép. Null nếu điểm không nằm trên
+  /// dải nào.
+  ({bool isRow, int index})? clueLineAt(Offset p, Offset t) {
+    switch (regionAt(p, t)) {
+      case NonogramBoardRegion.leftStrip:
+        final row = ((p.dy - t.dy) / cellSize).floor();
+        return row >= 0 && row < rows ? (isRow: true, index: row) : null;
+      case NonogramBoardRegion.topStrip:
+        final col = ((p.dx - t.dx) / cellSize).floor();
+        return col >= 0 && col < cols ? (isRow: false, index: col) : null;
+      case NonogramBoardRegion.grid || NonogramBoardRegion.empty:
+        return null;
+    }
+  }
+
   NonogramBoardLayout withCellSize(double size) => NonogramBoardLayout(
     viewport: viewport,
     rows: rows,

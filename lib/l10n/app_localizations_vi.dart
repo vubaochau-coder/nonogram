@@ -313,4 +313,71 @@ class AppLocalizationsVi extends AppLocalizations {
 
   @override
   String get nonogramPlayInfoHide => 'Ẩn thông tin màn';
+
+  @override
+  String get nonogramPlayWandLabel => 'Gậy phép';
+
+  @override
+  String get nonogramPlayWandSelectPrompt =>
+      'Chạm vào dãy số của hàng hoặc cột cần hiện đáp án';
+
+  @override
+  String get nonogramPlayWandRowSolved =>
+      'Hàng này đã đúng rồi, hãy chọn hàng hoặc cột khác.';
+
+  @override
+  String get nonogramPlayWandColSolved =>
+      'Cột này đã đúng rồi, hãy chọn hàng hoặc cột khác.';
+
+  @override
+  String get nonogramSettingsControlsGuide => 'Hướng dẫn thao tác';
+
+  @override
+  String get nonogramCoachSkip => 'Bỏ qua';
+
+  @override
+  String get nonogramCoachNext => 'Tiếp';
+
+  @override
+  String get nonogramCoachDone => 'Đã hiểu';
+
+  @override
+  String nonogramCoachStep(int current, int total) {
+    return '$current/$total';
+  }
+
+  @override
+  String get nonogramCoachHintTitle => 'Gợi ý';
+
+  @override
+  String get nonogramCoachHintBody =>
+      'Tự động hiện đáp án của một hàng hoặc cột (hàng/cột đang sai ít ô nhất). Mỗi màn có 3 lượt.';
+
+  @override
+  String get nonogramCoachWandTitle => 'Gậy phép';
+
+  @override
+  String get nonogramCoachWandBody =>
+      'Chạm vào gậy phép, rồi chạm vào dãy số của hàng hoặc cột bạn muốn: đáp án của đúng hàng/cột đó sẽ hiện ra. Mỗi màn có 1 lượt.';
+
+  @override
+  String get nonogramCoachModeTitle => 'Tô hay đánh X';
+
+  @override
+  String get nonogramCoachModeBody =>
+      'Chọn việc sẽ làm khi chạm vào ô: tô ô, hoặc đánh X để ghi nhớ ô chắc chắn trống. Chạm vào nút để đổi chế độ. Kéo ngón tay trên lưới để tô / đánh X nhiều ô liền.';
+
+  @override
+  String get nonogramCoachLongPressTitle => 'Nhấn giữ để làm ngược lại';
+
+  @override
+  String get nonogramCoachLongPressBody =>
+      'Nhấn giữ một ô để làm việc ngược với chế độ đang chọn: đang tô thì đánh X, đang đánh X thì tô. Khi máy rung nhẹ là đã xong, có thể nhấc tay.';
+
+  @override
+  String get nonogramCoachScrollTitle => 'Di chuyển trên màn lớn';
+
+  @override
+  String get nonogramCoachScrollBody =>
+      'Màn lớn không vừa màn hình: kéo bằng hai ngón, hoặc kéo từ chỗ trống ngoài lưới để di chuyển bàn chơi. Kéo trên dãy số để xem các số bị che (số \"+N\" ở góc cho biết còn bao nhiêu).';
 }

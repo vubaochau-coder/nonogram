@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
@@ -112,9 +113,28 @@ class _NonogramBoardViewportState extends State<NonogramBoardViewport>
 
   // --- Chạm / nhấn giữ ---
 
+  /// Đang chọn hàng / cột cho gậy phép: chạm, nhấn giữ hay kéo trên lưới
+  /// đều không tô (kéo thì chuyển sang kéo bàn để tìm hàng cần chọn).
+  bool get _wandActive => _bloc.state.isWandActive;
+
   void _onTapUp(TapUpDetails details) {
     final layout = _layout;
     if (layout == null) return;
+    if (_wandActive) {
+      final line = layout.clueLineAt(details.localPosition, _offset);
+      if (line == null) return;
+      final o = _offset;
+      HapticFeedback.lightImpact();
+      _bloc.add(
+        WandLineSelected(
+          isRow: line.isRow,
+          index: line.index,
+          offsetX: o.dx,
+          offsetY: o.dy,
+        ),
+      );
+      return;
+    }
     final cell = layout.cellAt(details.localPosition, _offset);
     if (cell == null) return;
     final o = _offset;
@@ -123,9 +143,12 @@ class _NonogramBoardViewportState extends State<NonogramBoardViewport>
 
   void _onLongPressStart(LongPressStartDetails details) {
     final layout = _layout;
-    if (layout == null) return;
+    if (layout == null || _wandActive) return;
     final cell = layout.cellAt(details.localPosition, _offset);
     if (cell == null) return;
+    // Rung ngay lúc nhấn giữ được nhận, để người chơi biết đã có thể nhấc
+    // tay (khó đoán phải giữ bao lâu).
+    _longPressHaptic();
     final o = _offset;
     _bloc.add(
       CellLongPressed(
@@ -135,7 +158,17 @@ class _NonogramBoardViewportState extends State<NonogramBoardViewport>
         offsetY: o.dy,
       ),
     );
-    HapticFeedback.selectionClick();
+  }
+
+  /// Rung nhẹ nhưng đủ cảm nhận: `selectionClick` (CLOCK_TICK trên Android)
+  /// không rung trên nhiều máy, nên Android dùng hiệu ứng nhấn giữ chuẩn của
+  /// hệ thống, iOS dùng một nhịp va chạm vừa.
+  static void _longPressHaptic() {
+    if (defaultTargetPlatform == TargetPlatform.android) {
+      HapticFeedback.vibrate();
+    } else {
+      HapticFeedback.mediumImpact();
+    }
   }
 
   // --- Kéo để tô / kéo bàn / cuộn dải gợi ý ---
@@ -153,7 +186,7 @@ class _NonogramBoardViewportState extends State<NonogramBoardViewport>
     // cử chỉ.
     final start = _pointerDownPosition ?? details.localFocalPoint;
     switch (layout.regionAt(start, _offset)) {
-      case NonogramBoardRegion.grid:
+      case NonogramBoardRegion.grid when !_wandActive:
         final cell = layout.cellAt(start, _offset)!;
         _gesture = _GestureKind.draw;
         _lastDragCell = cell;
@@ -387,6 +420,7 @@ class _NonogramBoardViewportState extends State<NonogramBoardViewport>
                 p.satisfiedCols != c.satisfiedCols ||
                 p.isLoading != c.isLoading ||
                 p.startTime != c.startTime ||
+                p.isWandActive != c.isWandActive ||
                 !NonogramGridEquality.equals(p.gridData, c.gridData),
         builder: (context, state) {
           final puzzle = state.puzzle;
@@ -736,7 +770,30 @@ class _BoardPaint extends StatelessWidget {
           ),
         ),
 
-        // 6. Dải sáng khi dùng gợi ý (cả lưới lẫn dải số của hàng/cột đó).
+        // 6. Đang chọn hàng / cột cho gậy phép: tô sáng hai dải số để người
+        // chơi biết chạm vào đâu.
+        if (state.isWandActive) ...[
+          if (leftW > 0)
+            _WandStripHighlight(
+              rect: Rect.fromLTWH(
+                stickyLeft,
+                max(offset.dy, stickyTop + topH),
+                leftW,
+                offset.dy + gridH - max(offset.dy, stickyTop + topH),
+              ),
+            ),
+          if (topH > 0)
+            _WandStripHighlight(
+              rect: Rect.fromLTWH(
+                max(offset.dx, stickyLeft + leftW),
+                stickyTop,
+                offset.dx + gridW - max(offset.dx, stickyLeft + leftW),
+                topH,
+              ),
+            ),
+        ],
+
+        // 7. Dải sáng khi dùng gợi ý (cả lưới lẫn dải số của hàng/cột đó).
         if (hintAxis != null && hintIndex != null)
           _HintBand(
             rect:
@@ -838,6 +895,58 @@ class _HiddenCluesBadges extends StatelessWidget {
               child: FittedBox(child: Text('← +$hiddenLeft', style: style)),
             ),
         ],
+      ),
+    );
+  }
+}
+
+/// Lớp sáng nhấp nháy phủ lên dải số khi đang chọn hàng / cột cho gậy phép.
+class _WandStripHighlight extends StatefulWidget {
+  const _WandStripHighlight({required this.rect});
+
+  final Rect rect;
+
+  @override
+  State<_WandStripHighlight> createState() => _WandStripHighlightState();
+}
+
+class _WandStripHighlightState extends State<_WandStripHighlight>
+    with SingleTickerProviderStateMixin {
+  late final AnimationController _pulse = AnimationController(
+    vsync: this,
+    duration: const Duration(milliseconds: 1100),
+  )..repeat(reverse: true);
+
+  @override
+  void dispose() {
+    _pulse.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final rect = widget.rect;
+    if (rect.width <= 0 || rect.height <= 0) return const SizedBox.shrink();
+    final primary = context.color.primary;
+    return Positioned.fromRect(
+      rect: rect,
+      child: IgnorePointer(
+        child: AnimatedBuilder(
+          animation: _pulse,
+          builder: (context, _) {
+            final t = Curves.easeInOut.transform(_pulse.value);
+            return DecoratedBox(
+              decoration: BoxDecoration(
+                color: primary.withValues(alpha: 0.06 + 0.12 * t),
+                border: Border.all(
+                  color: primary.withValues(alpha: 0.45 + 0.4 * t),
+                  width: 2,
+                ),
+                borderRadius: BorderRadius.circular(4),
+              ),
+            );
+          },
+        ),
       ),
     );
   }
