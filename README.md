@@ -49,8 +49,8 @@ Nút gạt **Tô / X** trên thanh công cụ chọn việc một lần chạm s
   lại và ⓘ ở góc trên, xoay màn hình và cài đặt ở góc dưới. Bấm ⓘ thì bảng
   thông tin màn (tên, số màn, kích thước, độ khó) trượt ra từ trái, phủ lên
   hai nút góc trên; cột nới rộng theo bảng nên bảng không che bàn chơi.
-  Trạng thái mở / thu gọn được nhớ trên máy. Mép phải chỉ còn gợi ý và
-  Tô / X ở góc dưới, trong tầm ngón cái.
+  Trạng thái mở / thu gọn được nhớ trên máy. Mép phải chỉ còn Tô / X và
+  gợi ý (theo thứ tự đó), đặt giữa chiều cao, trong tầm ngón cái.
 - "Chơi lại từ đầu" nằm trong Cài đặt và luôn hỏi xác nhận.
 - Ô trống trên hàng/cột đã khớp gợi ý hiện chấm tròn; X màu chàm là dấu
   người chơi tự đánh.

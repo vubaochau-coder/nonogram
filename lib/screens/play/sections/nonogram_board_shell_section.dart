@@ -35,21 +35,18 @@ class NonogramBoardShellSection extends StatelessWidget {
     );
   }
 
-  /// Màn ngang: mép phải chỉ giữ hai thao tác chơi (gợi ý, Tô / X) ở góc
-  /// dưới, trong tầm ngón cái; Tô / X sát mép dưới nhất. Quay lại, thông tin
-  /// màn, xoay màn hình và cài đặt nằm ở cột trái
+  /// Màn ngang: mép phải chỉ giữ hai thao tác chơi, đặt giữa chiều cao
+  /// (chỗ ngón cái đặt tự nhiên khi cầm ngang): Tô / X trên, gợi ý dưới.
+  /// Quay lại, thông tin màn, xoay màn hình và cài đặt nằm ở cột trái
   /// (`NonogramLandscapeLeftRail`).
   Widget _buildRail() {
-    return const Padding(
-      padding: EdgeInsets.only(bottom: 12),
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          HintAction(compact: true),
-          SizedBox(height: 10),
-          ModeToggleAction(vertical: true),
-        ],
-      ),
+    return const Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        ModeToggleAction(vertical: true),
+        SizedBox(height: 12),
+        HintAction(compact: true),
+      ],
     );
   }
 
@@ -73,10 +70,11 @@ class NonogramBoardShellSection extends StatelessWidget {
               const Positioned.fill(child: NonogramBoardViewport()),
               if (landscape)
                 Positioned(
+                  top: 0,
                   bottom: 0,
                   right: 0,
                   width: NonogramBoardLayout.railReserve,
-                  child: _buildRail(),
+                  child: Center(child: _buildRail()),
                 )
               else
                 Positioned(
