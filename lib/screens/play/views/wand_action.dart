@@ -121,7 +121,10 @@ class WandSelectBanner extends StatelessWidget {
               key: const ValueKey('nonogram-wand-cancel'),
               style: TextButton.styleFrom(
                 foregroundColor: colors.onPrimaryContainer,
-                textStyle: const TextStyle(fontWeight: FontWeight.w800),
+                // Giữ font của theme, chỉ đậm hơn.
+                textStyle: context.labelLarge.copyWith(
+                  fontWeight: FontWeight.w800,
+                ),
               ),
               onPressed:
                   () =>
