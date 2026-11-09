@@ -12,6 +12,8 @@ class GameColors extends ThemeExtension<GameColors> {
     required this.heroEnd,
     required this.clueBackground,
     required this.clueBand,
+    required this.lockedStar,
+    required this.lockedMarkStar,
   });
 
   /// Hàng/cột đã khớp gợi ý, màn đã giải.
@@ -31,6 +33,11 @@ class GameColors extends ThemeExtension<GameColors> {
   /// Dải tô xen kẽ mỗi nhóm 5 hàng/cột trong vùng ô số.
   final Color clueBand;
 
+  /// Ngôi sao trên ô khoá (mở bằng gợi ý / gậy phép): trên ô tô, và ở góc
+  /// ô X. Giao diện tối dùng vàng trầm để không chói trên ô tô màu sáng.
+  final Color lockedStar;
+  final Color lockedMarkStar;
+
   @override
   GameColors copyWith({
     Color? success,
@@ -40,6 +47,8 @@ class GameColors extends ThemeExtension<GameColors> {
     Color? heroEnd,
     Color? clueBackground,
     Color? clueBand,
+    Color? lockedStar,
+    Color? lockedMarkStar,
   }) {
     return GameColors(
       success: success ?? this.success,
@@ -49,6 +58,8 @@ class GameColors extends ThemeExtension<GameColors> {
       heroEnd: heroEnd ?? this.heroEnd,
       clueBackground: clueBackground ?? this.clueBackground,
       clueBand: clueBand ?? this.clueBand,
+      lockedStar: lockedStar ?? this.lockedStar,
+      lockedMarkStar: lockedMarkStar ?? this.lockedMarkStar,
     );
   }
 
@@ -63,6 +74,8 @@ class GameColors extends ThemeExtension<GameColors> {
       heroEnd: Color.lerp(heroEnd, other.heroEnd, t)!,
       clueBackground: Color.lerp(clueBackground, other.clueBackground, t)!,
       clueBand: Color.lerp(clueBand, other.clueBand, t)!,
+      lockedStar: Color.lerp(lockedStar, other.lockedStar, t)!,
+      lockedMarkStar: Color.lerp(lockedMarkStar, other.lockedMarkStar, t)!,
     );
   }
 }
@@ -99,6 +112,8 @@ abstract final class AppTheme {
       heroEnd: Color(0xFF6741D9),
       clueBackground: Color(0xFFDDE4FB),
       clueBand: Color(0xFFCCD6F8),
+      lockedStar: Color(0xFFFFC53D),
+      lockedMarkStar: Color(0xFFFFB020),
     ),
   );
 
@@ -129,6 +144,8 @@ abstract final class AppTheme {
       heroEnd: Color(0xFF5F3DC4),
       clueBackground: Color(0xFF232B4A),
       clueBand: Color(0xFF2B3458),
+      lockedStar: Color(0xFFB7791F),
+      lockedMarkStar: Color(0xFFD9A441),
     ),
   );
 

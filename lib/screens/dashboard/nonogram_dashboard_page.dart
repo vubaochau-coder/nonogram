@@ -7,7 +7,6 @@ import 'package:nonogram/core/context_ext.dart';
 
 import 'bloc/nonogram_dashboard_bloc.dart';
 import 'bloc/nonogram_dashboard_event.dart';
-import 'dashboard_navigation.dart';
 import 'sections/nonogram_dashboard_hero_section.dart';
 import 'sections/nonogram_dashboard_progress_section.dart';
 import 'sections/nonogram_dashboard_recent_section.dart';
@@ -85,15 +84,6 @@ class _NonogramDashboardViewState extends State<_NonogramDashboardView> {
                 ],
               ),
               actions: [
-                IconButton(
-                  onPressed:
-                      () => openFromDashboard(
-                        context,
-                        const NonogramCompletedResultsIntent(),
-                      ),
-                  icon: const Icon(LucideIcons.history),
-                  tooltip: context.l10n.nonogramHistoryTitle,
-                ),
                 IconButton(
                   onPressed:
                       () => context.read<AppThemeModeController>().toggle(),

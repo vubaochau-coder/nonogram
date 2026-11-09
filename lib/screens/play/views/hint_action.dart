@@ -7,6 +7,7 @@ import '../bloc/nonogram_play_event.dart';
 import '../bloc/nonogram_play_state.dart';
 import '../nonogram_transformation_controller_provider.dart';
 import '../widgets/overlay_button.dart';
+import 'wand_action.dart';
 
 class HintAction extends StatelessWidget {
   const HintAction({super.key, this.compact = false});
@@ -47,27 +48,9 @@ class HintAction extends StatelessWidget {
               right: -4,
               top: -4,
               child: IgnorePointer(
-                child: Container(
-                  constraints: const BoxConstraints(minWidth: 16),
-                  height: 16,
-                  padding: const EdgeInsets.symmetric(horizontal: 4),
-                  alignment: Alignment.center,
-                  decoration: BoxDecoration(
-                    color:
-                        state.remainingHints > 0
-                            ? context.color.primary
-                            : context.color.outline,
-                    borderRadius: BorderRadius.circular(8),
-                  ),
-                  child: Text(
-                    '${state.remainingHints}',
-                    style: context.labelSmall.copyWith(
-                      fontSize: 10,
-                      height: 1,
-                      fontWeight: FontWeight.w800,
-                      color: context.color.onPrimary,
-                    ),
-                  ),
+                child: CountBadge(
+                  count: state.remainingHints,
+                  active: state.remainingHints > 0,
                 ),
               ),
             ),

@@ -13,6 +13,8 @@ import 'sections/nonogram_play_app_bar_section.dart';
 import 'sections/nonogram_completion_result_section.dart';
 import 'sections/nonogram_landscape_info_panel.dart';
 import 'package:nested/nested.dart';
+import 'package:provider/provider.dart';
+import 'coach/nonogram_play_coach.dart';
 
 class NonogramPlayPage extends StatefulWidget {
   final int initialLevel;
@@ -45,6 +47,7 @@ class _NonogramPlayPageState extends State<NonogramPlayPage> {
         NonogramTransformationControllerProvider(
           controller: _transformationController,
         ),
+        ChangeNotifierProvider(create: (_) => NonogramCoachReplayNotifier()),
         BlocProvider<NonogramPlayBloc>(
           create: (context) {
             return NonogramPlayBloc(

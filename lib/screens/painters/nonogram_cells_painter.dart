@@ -1,5 +1,9 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:nonogram/models/nonogram_cell_state.dart';
+
+typedef LockedCell = ({int row, int col});
 
 class NonogramCellsPainter extends CustomPainter {
   final int rows;
@@ -13,6 +17,12 @@ class NonogramCellsPainter extends CustomPainter {
   final Color markerColor;
   final Color? backgroundColor;
 
+  /// Ô khoá (mở bằng gợi ý / gậy phép): ô tô có ngôi sao giữa ô, ô X có
+  /// ngôi sao nhỏ ở góc trên-phải.
+  final Set<LockedCell> lockedCells;
+  final Color lockedStarColor;
+  final Color lockedMarkStarColor;
+
   NonogramCellsPainter({
     this.backgroundColor,
     required this.rows,
@@ -24,7 +34,26 @@ class NonogramCellsPainter extends CustomPainter {
     required this.filledColor,
     required this.markedMarkerColor,
     required this.markerColor,
+    this.lockedCells = const {},
+    this.lockedStarColor = const Color(0xFFFFC53D),
+    this.lockedMarkStarColor = const Color(0xFFFFB020),
   });
+
+  /// Ngôi sao 5 cánh tâm [center], bán kính ngoài [radius].
+  static Path starPath(Offset center, double radius) {
+    final path = Path();
+    for (var i = 0; i < 10; i++) {
+      final r = i.isEven ? radius : radius * 0.45;
+      final a = -pi / 2 + i * pi / 5;
+      final p = center + Offset(cos(a) * r, sin(a) * r);
+      if (i == 0) {
+        path.moveTo(p.dx, p.dy);
+      } else {
+        path.lineTo(p.dx, p.dy);
+      }
+    }
+    return path..close();
+  }
 
   @override
   void paint(Canvas canvas, Size size) {
@@ -73,6 +102,12 @@ class NonogramCellsPainter extends CustomPainter {
             ),
             fillPaint,
           );
+          if (lockedCells.contains((row: r, col: c))) {
+            canvas.drawPath(
+              starPath(rect.center, cellSize * 0.2),
+              Paint()..color = lockedStarColor,
+            );
+          }
         } else if (cellState == NonogramCellState.marked) {
           canvas.drawRect(rect.deflate(0.5), markedBackgroundPaint);
 
@@ -92,6 +127,15 @@ class NonogramCellsPainter extends CustomPainter {
             Offset(left, bottom),
             markedMarkerPaint,
           );
+          if (lockedCells.contains((row: r, col: c))) {
+            canvas.drawPath(
+              starPath(
+                rect.topRight + Offset(-cellSize * 0.2, cellSize * 0.2),
+                cellSize * 0.12,
+              ),
+              Paint()..color = lockedMarkStarColor,
+            );
+          }
         } else if (cellState == NonogramCellState.empty) {
           // Ô trống trên hàng/cột đã khớp gợi ý: vẽ chấm.
           final isSatisfiedRow = r < satisfiedRows.length && satisfiedRows[r];
@@ -114,6 +158,9 @@ class NonogramCellsPainter extends CustomPainter {
         oldDelegate.markedMarkerColor != markedMarkerColor ||
         oldDelegate.markerColor != markerColor ||
         oldDelegate.backgroundColor != backgroundColor ||
+        oldDelegate.lockedCells != lockedCells ||
+        oldDelegate.lockedStarColor != lockedStarColor ||
+        oldDelegate.lockedMarkStarColor != lockedMarkStarColor ||
         oldDelegate.gridData != gridData ||
         oldDelegate.satisfiedRows != satisfiedRows ||
         oldDelegate.satisfiedCols != satisfiedCols;

@@ -20,6 +20,20 @@ class NonogramPlayState extends Equatable {
   final bool isSolved;
   final int remainingHints;
 
+  /// Số lượt gậy phép còn lại (chọn một hàng / cột để hiện đáp án).
+  final int remainingWands;
+
+  /// Đang chờ người chơi chọn hàng / cột cho gậy phép.
+  final bool isWandActive;
+
+  /// Ô đã mở bằng gợi ý / gậy phép: không đổi được, và giữ lại khi chơi lại
+  /// từ đầu (người chơi đã "trả" lượt cho chúng).
+  final Set<({int row, int col})> lockedCells;
+
+  /// Số lượt gợi ý / gậy phép mỗi màn.
+  static const int maxHints = 3;
+  static const int maxWands = 1;
+
   const NonogramPlayState({
     required this.isLoading,
     this.puzzle,
@@ -32,8 +46,13 @@ class NonogramPlayState extends Equatable {
     this.cellSize = 40.0,
     this.isFullscreen = false,
     this.isSolved = false,
-    this.remainingHints = 3,
+    this.remainingHints = maxHints,
+    this.remainingWands = maxWands,
+    this.isWandActive = false,
+    this.lockedCells = const {},
   });
+
+  bool isLocked(int row, int col) => lockedCells.contains((row: row, col: col));
 
   factory NonogramPlayState.initial({int initialLevel = 1}) {
     return NonogramPlayState(
@@ -57,6 +76,9 @@ class NonogramPlayState extends Equatable {
     bool? isFullscreen,
     bool? isSolved,
     int? remainingHints,
+    int? remainingWands,
+    bool? isWandActive,
+    Set<({int row, int col})>? lockedCells,
   }) {
     return NonogramPlayState(
       isLoading: isLoading ?? this.isLoading,
@@ -71,6 +93,9 @@ class NonogramPlayState extends Equatable {
       isFullscreen: isFullscreen ?? this.isFullscreen,
       isSolved: isSolved ?? this.isSolved,
       remainingHints: remainingHints ?? this.remainingHints,
+      remainingWands: remainingWands ?? this.remainingWands,
+      isWandActive: isWandActive ?? this.isWandActive,
+      lockedCells: lockedCells ?? this.lockedCells,
     );
   }
 
@@ -88,6 +113,9 @@ class NonogramPlayState extends Equatable {
     isFullscreen,
     isSolved,
     remainingHints,
+    remainingWands,
+    isWandActive,
+    lockedCells,
   ];
 }
 
@@ -106,6 +134,9 @@ class NonogramPlayCompletedState extends NonogramPlayState {
     required super.isFullscreen,
     required super.isSolved,
     required super.remainingHints,
+    required super.remainingWands,
+    required super.isWandActive,
+    required super.lockedCells,
   });
 
   factory NonogramPlayCompletedState.fromState(NonogramPlayState state) {
@@ -122,6 +153,9 @@ class NonogramPlayCompletedState extends NonogramPlayState {
       isFullscreen: state.isFullscreen,
       isSolved: true,
       remainingHints: state.remainingHints,
+      remainingWands: state.remainingWands,
+      isWandActive: state.isWandActive,
+      lockedCells: state.lockedCells,
     );
   }
 }
@@ -144,6 +178,9 @@ class NonogramPlayRestoredState extends NonogramPlayState {
     required super.isFullscreen,
     required super.isSolved,
     required super.remainingHints,
+    required super.remainingWands,
+    required super.isWandActive,
+    required super.lockedCells,
     required this.offsetX,
     required this.offsetY,
   });
@@ -166,6 +203,9 @@ class NonogramPlayRestoredState extends NonogramPlayState {
       isFullscreen: state.isFullscreen,
       isSolved: state.isSolved,
       remainingHints: state.remainingHints,
+      remainingWands: state.remainingWands,
+      isWandActive: state.isWandActive,
+      lockedCells: state.lockedCells,
       offsetX: offsetX,
       offsetY: offsetY,
     );
@@ -192,6 +232,9 @@ class NonogramPlayErrorState extends NonogramPlayState {
     required super.isFullscreen,
     required super.isSolved,
     required super.remainingHints,
+    required super.remainingWands,
+    required super.isWandActive,
+    required super.lockedCells,
     required this.error,
   });
 
@@ -212,6 +255,9 @@ class NonogramPlayErrorState extends NonogramPlayState {
       isFullscreen: state.isFullscreen,
       isSolved: state.isSolved,
       remainingHints: state.remainingHints,
+      remainingWands: state.remainingWands,
+      isWandActive: state.isWandActive,
+      lockedCells: state.lockedCells,
       error: error,
     );
   }
@@ -222,7 +268,7 @@ class NonogramPlayErrorState extends NonogramPlayState {
   List<Object?> get props => [...super.props, error];
 }
 
-/// Pulse state emitted when a hint is applied.
+/// Pulse state emitted when a whole line is revealed (magic wand).
 class NonogramPlayHintAppliedState extends NonogramPlayState {
   final Axis axis;
   final int lineIndex;
@@ -240,6 +286,9 @@ class NonogramPlayHintAppliedState extends NonogramPlayState {
     required super.isFullscreen,
     required super.isSolved,
     required super.remainingHints,
+    required super.remainingWands,
+    required super.isWandActive,
+    required super.lockedCells,
     required this.axis,
     required this.lineIndex,
   });
@@ -262,6 +311,9 @@ class NonogramPlayHintAppliedState extends NonogramPlayState {
       isFullscreen: state.isFullscreen,
       isSolved: state.isSolved,
       remainingHints: state.remainingHints,
+      remainingWands: state.remainingWands,
+      isWandActive: state.isWandActive,
+      lockedCells: state.lockedCells,
       axis: axis,
       lineIndex: lineIndex,
     );
@@ -269,4 +321,56 @@ class NonogramPlayHintAppliedState extends NonogramPlayState {
 
   @override
   List<Object?> get props => [...super.props, axis, lineIndex];
+}
+
+/// Pulse state emitted when the hint fills some cells.
+class NonogramPlayHintCellsAppliedState extends NonogramPlayState {
+  /// Ô vừa được gợi ý tô giúp.
+  final List<({int row, int col})> cells;
+
+  const NonogramPlayHintCellsAppliedState({
+    required super.isLoading,
+    required super.puzzle,
+    required super.level,
+    required super.startTime,
+    required super.gridData,
+    required super.satisfiedRows,
+    required super.satisfiedCols,
+    required super.interactionMode,
+    required super.cellSize,
+    required super.isFullscreen,
+    required super.isSolved,
+    required super.remainingHints,
+    required super.remainingWands,
+    required super.isWandActive,
+    required super.lockedCells,
+    required this.cells,
+  });
+
+  factory NonogramPlayHintCellsAppliedState.fromState(
+    NonogramPlayState state, {
+    required List<({int row, int col})> cells,
+  }) {
+    return NonogramPlayHintCellsAppliedState(
+      isLoading: state.isLoading,
+      puzzle: state.puzzle,
+      level: state.level,
+      startTime: state.startTime,
+      gridData: state.gridData,
+      satisfiedRows: state.satisfiedRows,
+      satisfiedCols: state.satisfiedCols,
+      interactionMode: state.interactionMode,
+      cellSize: state.cellSize,
+      isFullscreen: state.isFullscreen,
+      isSolved: state.isSolved,
+      remainingHints: state.remainingHints,
+      remainingWands: state.remainingWands,
+      isWandActive: state.isWandActive,
+      lockedCells: state.lockedCells,
+      cells: cells,
+    );
+  }
+
+  @override
+  List<Object?> get props => [...super.props, cells];
 }

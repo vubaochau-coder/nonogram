@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/painting.dart';
 import 'package:nonogram/models/nonogram_cell_state.dart';
 import 'package:nonogram/models/nonogram_puzzle.dart';
@@ -135,65 +137,59 @@ final class NonogramEngine {
     return newGrid;
   }
 
-  /// Calculates which line should be hinted.
-  /// Uses "minimum mismatch count" rule, prioritizing rows over cols, then smaller index.
-  ({Axis axis, int index})? calculateHintLine({
+  /// Số ô gợi ý tô giúp mỗi lần.
+  static const int hintCellCount = 5;
+
+  /// Gợi ý: chọn ngẫu nhiên tối đa [count] ô trên toàn bàn mà đáp án là tô
+  /// nhưng người chơi chưa tô (ô trống hoặc đang đánh X nhầm). Rỗng nếu mọi
+  /// ô cần tô đều đã tô.
+  List<({int row, int col})> pickHintCells({
+    required NonogramPuzzle puzzle,
+    required List<List<NonogramCellState>> gridData,
+    int count = hintCellCount,
+    Random? random,
+  }) {
+    final candidates = [
+      for (var r = 0; r < puzzle.rows; r++)
+        for (var c = 0; c < puzzle.cols; c++)
+          if (puzzle.solution[r][c] == 1 &&
+              gridData[r][c] != NonogramCellState.filled)
+            (row: r, col: c),
+    ];
+    candidates.shuffle(random ?? Random());
+    return candidates.take(count).toList();
+  }
+
+  /// Tô các ô [cells].
+  List<List<NonogramCellState>> fillCells({
+    required List<List<NonogramCellState>> gridData,
+    required Iterable<({int row, int col})> cells,
+  }) {
+    final newGrid =
+        gridData.map((r) => List<NonogramCellState>.from(r)).toList();
+    for (final cell in cells) {
+      newGrid[cell.row][cell.col] = NonogramCellState.filled;
+    }
+    return newGrid;
+  }
+
+  /// Số ô sai so với đáp án trên một hàng ([Axis.horizontal]) hoặc cột:
+  /// ô phải tô mà chưa tô, hoặc ô không được tô mà đang tô.
+  int lineMismatchCount({
+    required Axis axis,
+    required int index,
     required NonogramPuzzle puzzle,
     required List<List<NonogramCellState>> gridData,
   }) {
-    ({Axis axis, int index, int mismatchCount})? bestCandidate;
-
-    void updateBest(Axis axis, int index, int mismatchCount) {
-      if (mismatchCount == 0) return;
-
-      if (bestCandidate == null ||
-          mismatchCount < bestCandidate!.mismatchCount) {
-        bestCandidate = (
-          axis: axis,
-          index: index,
-          mismatchCount: mismatchCount,
-        );
-      }
+    final length = axis == Axis.horizontal ? puzzle.cols : puzzle.rows;
+    var mismatch = 0;
+    for (var i = 0; i < length; i++) {
+      final r = axis == Axis.horizontal ? index : i;
+      final c = axis == Axis.horizontal ? i : index;
+      final filled = gridData[r][c] == NonogramCellState.filled;
+      if ((puzzle.solution[r][c] == 1) != filled) mismatch++;
     }
-
-    // Check rows
-    for (int r = 0; r < puzzle.rows; r++) {
-      int mismatch = 0;
-      for (int c = 0; c < puzzle.cols; c++) {
-        final solutionValue = puzzle.solution[r][c];
-        final cellState = gridData[r][c];
-        final isMismatch =
-            (solutionValue == 1)
-                ? (cellState != NonogramCellState.filled)
-                : (cellState == NonogramCellState.filled);
-
-        if (isMismatch) {
-          mismatch++;
-        }
-      }
-      updateBest(Axis.horizontal, r, mismatch);
-    }
-
-    // Check columns
-    for (int c = 0; c < puzzle.cols; c++) {
-      int mismatch = 0;
-      for (int r = 0; r < puzzle.rows; r++) {
-        final solutionValue = puzzle.solution[r][c];
-        final cellState = gridData[r][c];
-        final isMismatch =
-            (solutionValue == 1)
-                ? (cellState != NonogramCellState.filled)
-                : (cellState == NonogramCellState.filled);
-
-        if (isMismatch) {
-          mismatch++;
-        }
-      }
-      updateBest(Axis.vertical, c, mismatch);
-    }
-
-    if (bestCandidate == null) return null;
-    return (axis: bestCandidate!.axis, index: bestCandidate!.index);
+    return mismatch;
   }
 
   /// Reveals a whole line based on the solution.
