@@ -243,11 +243,12 @@ class NonogramLandscapeInfoPanel extends StatelessWidget {
               color: colors.primary.withValues(alpha: 0.7),
               width: 1.5,
             ),
+            // Bóng gọn trong lề 8px: bàn chơi bên phải vẽ đè lên phần tràn.
             boxShadow: [
               BoxShadow(
-                color: Colors.black.withValues(alpha: 0.18),
-                blurRadius: 16,
-                offset: const Offset(4, 4),
+                color: Colors.black.withValues(alpha: 0.12),
+                blurRadius: 6,
+                offset: const Offset(0, 2),
               ),
             ],
           ),
