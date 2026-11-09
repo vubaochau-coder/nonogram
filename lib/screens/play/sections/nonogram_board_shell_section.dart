@@ -36,7 +36,7 @@ class NonogramBoardShellSection extends StatelessWidget {
   }
 
   /// Màn ngang: mép phải chỉ giữ hai thao tác chơi, ở góc trên (thẳng hàng
-  /// với nút quay lại bên trái): Tô / X trên, gợi ý dưới.
+  /// với nút quay lại bên trái): gợi ý trên, Tô / X dưới.
   /// Quay lại, thông tin màn, xoay màn hình và cài đặt nằm ở cột trái
   /// (`NonogramLandscapeLeftRail`).
   Widget _buildRail() {
@@ -46,9 +46,9 @@ class NonogramBoardShellSection extends StatelessWidget {
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          ModeToggleAction(vertical: true),
-          SizedBox(height: 12),
           HintAction(compact: true),
+          SizedBox(height: 12),
+          ModeToggleAction(vertical: true),
         ],
       ),
     );

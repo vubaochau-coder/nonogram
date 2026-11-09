@@ -291,18 +291,14 @@ void main() {
     expect(rotate.dy, greaterThan(400 / 2));
     expect(rotate.dy, lessThan(settings.dy));
 
-    // Mép phải chỉ còn Tô / X (trên) và gợi ý (dưới), ở góc trên.
+    // Mép phải chỉ còn gợi ý (trên) và Tô / X (dưới), ở góc trên.
     for (final p in [hint, mark]) {
       expect(p.dx, greaterThan(900 - NonogramBoardLayout.railReserve));
     }
-    final fill = find.byKey(const ValueKey('nonogram-mode-fill'));
-    final backButton = find.byIcon(LucideIcons.arrowLeft);
-    expect(
-      tester.getTopLeft(fill).dy,
-      closeTo(tester.getTopLeft(backButton).dy, 16),
-    );
-    expect(mark.dy, lessThan(hint.dy));
-    expect(hint.dy, lessThan(400 / 2));
+    final hintButton = find.byIcon(LucideIcons.lightbulb);
+    expect(tester.getCenter(hintButton).dy, closeTo(back.dy, 4));
+    expect(hint.dy, lessThan(mark.dy));
+    expect(mark.dy, lessThan(400 / 2));
   });
 
   testWidgets('pinching with two fingers pans but never changes cell size', (
