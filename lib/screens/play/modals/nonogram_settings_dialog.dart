@@ -6,14 +6,16 @@ import 'package:nonogram/widgets/app_theme_mode_selector.dart';
 import 'package:nonogram/widgets/dialogs/app_dialog.dart';
 
 import '../bloc/nonogram_play_bloc.dart';
+import '../coach/nonogram_play_coach.dart';
 import '../bloc/nonogram_play_event.dart';
 import '../nonogram_transformation_controller_provider.dart';
 
-Future<void> showNonogramSettingsDialog(BuildContext context) {
+Future<void> showNonogramSettingsDialog(BuildContext context) async {
   final bloc = context.read<NonogramPlayBloc>();
   final controller = NonogramTransformationControllerProvider.of(context);
+  final coach = context.read<NonogramCoachReplayNotifier>();
 
-  return showDialog(
+  final result = await showDialog<_SettingsResult>(
     context: context,
     builder: (dialogContext) {
       return NonogramTransformationControllerProvider(
@@ -25,9 +27,14 @@ Future<void> showNonogramSettingsDialog(BuildContext context) {
       );
     },
   );
+  // Đóng hộp thoại xong mới hiện hướng dẫn, để vùng sáng trỏ đúng các nút.
+  if (result == _SettingsResult.showControlsGuide) coach.requestReplay();
 }
 
-/// Cài đặt khi đang chơi: giao diện sáng/tối và chơi lại màn từ đầu.
+enum _SettingsResult { showControlsGuide }
+
+/// Cài đặt khi đang chơi: giao diện sáng/tối, xem lại hướng dẫn thao tác và
+/// chơi lại màn từ đầu.
 class NonogramSettingsDialog extends StatelessWidget {
   const NonogramSettingsDialog({super.key});
 
@@ -49,7 +56,10 @@ class NonogramSettingsDialog extends StatelessWidget {
                 onPressed: () => Navigator.pop(dialogContext, true),
                 style: TextButton.styleFrom(
                   foregroundColor: dialogContext.color.error,
-                  textStyle: const TextStyle(fontWeight: FontWeight.bold),
+                  // Giữ font của theme, chỉ đậm hơn.
+                  textStyle: dialogContext.labelLarge.copyWith(
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
                 child: Text(l10n.nonogramSettingsRestartConfirm),
               ),
@@ -86,6 +96,21 @@ class NonogramSettingsDialog extends StatelessWidget {
           const SizedBox(height: 10),
           const AppThemeModeSelector(),
           const SizedBox(height: 20),
+          SizedBox(
+            width: double.infinity,
+            child: OutlinedButton.icon(
+              key: const ValueKey('nonogram-controls-guide'),
+              onPressed:
+                  () =>
+                      Navigator.pop(context, _SettingsResult.showControlsGuide),
+              icon: const Icon(LucideIcons.graduationCap, size: 18),
+              label: Text(l10n.nonogramSettingsControlsGuide),
+              style: OutlinedButton.styleFrom(
+                padding: const EdgeInsets.symmetric(vertical: 12),
+              ),
+            ),
+          ),
+          const SizedBox(height: 10),
           SizedBox(
             width: double.infinity,
             child: OutlinedButton.icon(

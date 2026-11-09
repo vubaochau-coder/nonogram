@@ -106,6 +106,26 @@ class HintRequested extends NonogramPlayEvent {
   const HintRequested({required this.offsetX, required this.offsetY});
 }
 
+/// Bật / tắt chế độ chọn hàng / cột cho gậy phép.
+class WandToggled extends NonogramPlayEvent {
+  const WandToggled();
+}
+
+/// Đã chọn hàng ([isRow]) hoặc cột thứ [index] để gậy phép hiện đáp án.
+class WandLineSelected extends NonogramPlayEvent {
+  final bool isRow;
+  final int index;
+  final double offsetX;
+  final double offsetY;
+
+  const WandLineSelected({
+    required this.isRow,
+    required this.index,
+    required this.offsetX,
+    required this.offsetY,
+  });
+}
+
 // --- Internal/Refactor Events (Phase 4.2+) ---
 
 class CurrentProgressSaveRequested extends NonogramPlayEvent {

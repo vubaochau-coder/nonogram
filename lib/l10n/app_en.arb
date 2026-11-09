@@ -151,7 +151,7 @@
   "nonogramPlayModeMark": "Mark X mode",
   "nonogramSettingsRestart": "Restart this level",
   "nonogramSettingsRestartConfirmTitle": "Restart this level?",
-  "nonogramSettingsRestartConfirmMessage": "All cells you have filled or marked will be cleared.",
+  "nonogramSettingsRestartConfirmMessage": "All cells you have filled or marked will be cleared. Cells with a star (opened by hints or the wand) are kept.",
   "commonClose": "Close",
   "nonogramSettingsRestartConfirm": "Restart",
   "nonogramTutorialTitle": "How to play",
@@ -169,10 +169,50 @@
   "nonogramTutorialOneCellLeft": "The 1 in the last row now has only one place left. Switch back to fill mode.",
   "nonogramTutorialFinish": "Fill the last square to finish the puzzle!",
   "nonogramTutorialDoneTitle": "Well done!",
-  "nonogramTutorialDone": "You know the rules now. The guide has more techniques for solving bigger puzzles.",
+  "nonogramTutorialDone": "You're all set! On big puzzles, drag with two fingers (or from the empty space outside the grid) to move the board; the app will remind you on your first big puzzle.",
   "nonogramTutorialShowTechniques": "See solving techniques",
   "nonogramTutorialPlay": "Start playing",
   "nonogramGuideTutorialCardTitle": "Learn by playing",
-  "nonogramGuideTutorialCardDesc": "Learn the rules step by step on a small 5×5 puzzle.",
-  "nonogramPlayInfoHide": "Hide level info"
+  "nonogramGuideTutorialCardDesc": "Learn the rules and controls step by step on a small 5×5 puzzle.",
+  "nonogramPlayInfoHide": "Hide level info",
+  "nonogramPlayWandLabel": "Magic wand",
+  "nonogramPlayWandSelectPrompt": "Tap the clues of the row or column to reveal",
+  "nonogramPlayWandRowSolved": "This row is already correct. Pick another row or column.",
+  "nonogramPlayWandColSolved": "This column is already correct. Pick another row or column.",
+  "nonogramSettingsControlsGuide": "Controls guide",
+  "nonogramCoachSkip": "Skip",
+  "nonogramCoachNext": "Next",
+  "nonogramCoachDone": "Got it",
+  "nonogramCoachStep": "{current}/{total}",
+  "nonogramCoachHintTitle": "Hint",
+  "nonogramCoachHintBody": "Fills 5 correct squares for you (squares that should be filled but aren't yet), picked at random across the board. They get a star: they can't be changed and are kept even if you restart. You get 3 per puzzle.",
+  "nonogramCoachWandTitle": "Magic wand",
+  "nonogramCoachWandBody": "Tap the wand, then tap the clues of any row or column: the answer for that whole line is revealed and marked with a star, kept even if you restart. You get 1 per puzzle.",
+  "nonogramCoachModeTitle": "Fill or X",
+  "nonogramCoachModeBody": "Choose what a tap does: fill the square, or mark it with an X to remember it is empty. Tap the button to switch. Drag across the grid to fill or mark many squares at once.",
+  "nonogramCoachLongPressTitle": "Press and hold for the opposite",
+  "nonogramCoachLongPressBody": "Press and hold a square to do the opposite of the current mode: X while filling, fill while marking. A short vibration means it's done and you can let go.",
+  "nonogramCoachScrollTitle": "Moving around big puzzles",
+  "nonogramCoachScrollBody": "Big puzzles don't fit on screen: drag with two fingers, or drag from the empty space outside the grid to move the board. Drag on the clues to see hidden numbers (the \"+N\" in the corner shows how many).",
+  "@nonogramCoachStep": {
+    "placeholders": {
+      "current": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
+  "nonogramTutorialRulesDoneTitle": "You know the rules!",
+  "nonogramTutorialRulesDone": "Next, let's practice the controls and helpers on another puzzle: drag to fill quickly, press and hold to mark, hints and the magic wand.",
+  "nonogramTutorialContinue": "Continue",
+  "nonogramTutorialLater": "Later, just play",
+  "nonogramTutorialDragRow": "Tip: drag your finger across squares to fill them in one go. The top row has 5, so drag across the whole row!",
+  "nonogramTutorialLongPressMark": "1 1 1 fits these 5 squares exactly, so the 2nd and 4th squares must be empty. No need to switch modes: press and hold each one to mark it with an X. A short vibration means it's done.",
+  "nonogramTutorialUseHint": "Stuck? Tap the Hint button and the app fills 5 correct squares at random. You get 3 per puzzle.",
+  "nonogramTutorialActivateWand": "The hint filled 5 squares marked with a star: they're locked and kept even if you restart. To reveal a whole row or column of your choice, use the magic wand: tap the wand button.",
+  "nonogramTutorialPickWandLine": "Now tap the clues of the bottom row to reveal that row. You get 1 wand per puzzle.",
+  "nonogramTutorialFinishTools": "Fill the remaining squares to finish. Drag down a column to fill faster.",
+  "nonogramPlayHintNothingToFill": "Every square that should be filled already is. Check for extra filled squares."
 }

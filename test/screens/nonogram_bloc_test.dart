@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:nonogram/models/nonogram_cell_state.dart';
 import 'package:nonogram/models/nonogram_completed_progress.dart';
 import 'package:nonogram/models/nonogram_interaction_mode.dart';
@@ -380,7 +382,15 @@ void main() {
     late NonogramPlayBloc bloc;
 
     setUp(() {
-      repository = FakeNonogramRepository();
+      // Đủ nhiều ô cần tô để một lượt gợi ý (5 ô) không giải xong màn.
+      repository = FakeNonogramRepository(
+        solution: const [
+          [1, 1, 1, 1],
+          [1, 0, 0, 1],
+          [1, 0, 0, 1],
+          [1, 1, 1, 1],
+        ],
+      );
       bloc = NonogramPlayBloc(repository: repository);
     });
 
@@ -388,7 +398,7 @@ void main() {
       await bloc.close();
     });
 
-    test('HintRequested should decrement hints and reveal a line', () async {
+    test('HintRequested should decrement hints and fill cells', () async {
       bloc.add(const LevelLoadRequested());
       await bloc.stream.firstWhere((s) => s.puzzle != null);
       expect(bloc.state.remainingHints, 3);
@@ -411,6 +421,37 @@ void main() {
       // Verify persistence
       final snapshot = await repository.getCurrentProgress();
       expect(snapshot?.remainingHints, 2);
+    });
+
+    test('HintRequested fills exactly 5 correct cells at random', () async {
+      final seeded = NonogramPlayBloc(
+        repository: FakeNonogramRepository(),
+        random: Random(7),
+      );
+      addTearDown(seeded.close);
+      seeded.add(Started(puzzle: satisfactionPuzzle));
+      await seeded.stream.firstWhere((s) => s.puzzle != null && !s.isLoading);
+
+      final pulse = seeded.stream.firstWhere(
+        (s) => s is NonogramPlayHintCellsAppliedState,
+      );
+      seeded.add(const HintRequested(offsetX: 0, offsetY: 0));
+      final applied = await pulse as NonogramPlayHintCellsAppliedState;
+
+      expect(applied.cells.length, 5);
+      expect(applied.remainingHints, 2);
+      final filled = <({int row, int col})>{};
+      for (var r = 0; r < 2; r++) {
+        for (var c = 0; c < 5; c++) {
+          final cell = applied.gridData[r][c];
+          if (cell == NonogramCellState.filled) filled.add((row: r, col: c));
+          // Không đánh X, không tô sai.
+          if (satisfactionPuzzle.solution[r][c] == 0) {
+            expect(cell, NonogramCellState.empty);
+          }
+        }
+      }
+      expect(filled, applied.cells.toSet());
     });
 
     test('HintRequested should be ignored when hints are 0', () async {
@@ -449,15 +490,36 @@ void main() {
       bloc.add(const HintRequested(offsetX: 0, offsetY: 0));
       await bloc.stream.firstWhere((s) => s.remainingHints == 2);
 
+      // Tự tô thêm một ô (không phải ô gợi ý) để xem chơi lại có xoá nó.
+      final hinted = bloc.state.lockedCells;
+      expect(hinted.length, 5);
+      final own =
+          [
+            for (var r = 0; r < 4; r++)
+              for (var c = 0; c < 4; c++)
+                if (!hinted.contains((row: r, col: c))) (row: r, col: c),
+          ].first;
+      bloc.add(CellLongPressed(row: own.row, col: own.col));
+      await bloc.stream.firstWhere(
+        (s) => s.gridData[own.row][own.col] != NonogramCellState.empty,
+      );
+
       bloc.add(const BoardReset(offsetX: 0, offsetY: 0));
       await bloc.stream.firstWhere(
-        (s) =>
-            !s.gridData
-                .expand((r) => r)
-                .any((c) => c == NonogramCellState.filled),
+        (s) => s.gridData[own.row][own.col] == NonogramCellState.empty,
       );
 
       expect(bloc.state.remainingHints, 2);
+      // Ô gợi ý được giữ lại, vẫn khoá.
+      expect(bloc.state.lockedCells, hinted);
+      for (var r = 0; r < 4; r++) {
+        for (var c = 0; c < 4; c++) {
+          expect(
+            bloc.state.gridData[r][c] == NonogramCellState.filled,
+            hinted.contains((row: r, col: c)),
+          );
+        }
+      }
     });
 
     test('Hint progress should restore after recreating bloc', () async {
@@ -496,11 +558,14 @@ void main() {
       await bloc.stream.firstWhere((s) => s.puzzle != null && !s.isLoading);
 
       expect(bloc.state.remainingHints, 2);
+      // Chỉ còn đúng 5 ô gợi ý (đã khoá) sau khi chơi lại và mở lại app.
+      expect(bloc.state.lockedCells.length, 5);
       expect(
         bloc.state.gridData
             .expand((row) => row)
-            .every((cell) => cell == NonogramCellState.empty),
-        isTrue,
+            .where((cell) => cell == NonogramCellState.filled)
+            .length,
+        5,
       );
     });
 
@@ -532,6 +597,256 @@ void main() {
       );
 
       expect(bloc.state.remainingHints, 3);
+    });
+  });
+
+  group('NonogramPlayBloc Magic Wand Tests', () {
+    late FakeNonogramRepository repository;
+    late NonogramPlayBloc bloc;
+
+    setUp(() {
+      repository = FakeNonogramRepository();
+      bloc = NonogramPlayBloc(repository: repository);
+    });
+
+    tearDown(() async {
+      await bloc.close();
+    });
+
+    Future<void> start([NonogramBoardSnapshot? snapshot]) async {
+      bloc.add(Started(puzzle: satisfactionPuzzle, snapshot: snapshot));
+      await bloc.stream.firstWhere((s) => s.puzzle != null && !s.isLoading);
+    }
+
+    test('new level starts with one wand, not in selection mode', () async {
+      await start();
+      expect(bloc.state.remainingWands, NonogramPlayState.maxWands);
+      expect(bloc.state.isWandActive, isFalse);
+    });
+
+    test('toggling enters and leaves selection mode', () async {
+      await start();
+      bloc.add(const WandToggled());
+      await bloc.stream.firstWhere((s) => s.isWandActive);
+      bloc.add(const WandToggled());
+      await bloc.stream.firstWhere((s) => !s.isWandActive);
+      expect(bloc.state.remainingWands, 1);
+    });
+
+    test('selecting a column reveals exactly that column', () async {
+      await start();
+      bloc.add(const WandToggled());
+      await bloc.stream.firstWhere((s) => s.isWandActive);
+
+      bloc.add(
+        const WandLineSelected(isRow: false, index: 1, offsetX: 0, offsetY: 0),
+      );
+      await bloc.stream.firstWhere((s) => s.remainingWands == 0);
+
+      final grid = bloc.state.gridData;
+      // Cột 1: [0, 1] -> X rồi tô.
+      expect(grid[0][1], NonogramCellState.marked);
+      expect(grid[1][1], NonogramCellState.filled);
+      // Các cột khác không đổi.
+      expect(grid[0][0], NonogramCellState.empty);
+      expect(grid[1][0], NonogramCellState.empty);
+      expect(bloc.state.isWandActive, isFalse);
+
+      await Future<void>.delayed(const Duration(milliseconds: 20));
+      final snapshot = await repository.getCurrentProgress();
+      expect(snapshot?.remainingWands, 0);
+    });
+
+    test('selecting a row reveals exactly that row', () async {
+      await start();
+      bloc.add(const WandToggled());
+      bloc.add(
+        const WandLineSelected(isRow: true, index: 0, offsetX: 0, offsetY: 0),
+      );
+      await bloc.stream.firstWhere((s) => s.remainingWands == 0);
+      expect(bloc.state.gridData[0], const [
+        NonogramCellState.filled,
+        NonogramCellState.marked,
+        NonogramCellState.filled,
+        NonogramCellState.marked,
+        NonogramCellState.filled,
+      ]);
+      expect(
+        bloc.state.gridData[1].every((c) => c == NonogramCellState.empty),
+        isTrue,
+      );
+    });
+
+    test('selection without entering wand mode is ignored', () async {
+      await start();
+      bloc.add(
+        const WandLineSelected(isRow: true, index: 0, offsetX: 0, offsetY: 0),
+      );
+      await Future<void>.delayed(const Duration(milliseconds: 20));
+      expect(bloc.state.remainingWands, 1);
+      expect(
+        bloc.state.gridData
+            .expand((r) => r)
+            .every((c) => c == NonogramCellState.empty),
+        isTrue,
+      );
+    });
+
+    test('cannot enter wand mode with no wands left', () async {
+      await start(
+        NonogramBoardSnapshot(
+          puzzleId: satisfactionPuzzle.id,
+          level: satisfactionPuzzle.level,
+          gridData: List.generate(
+            2,
+            (_) => List.filled(5, NonogramCellState.empty),
+          ),
+          startTime: DateTime.now(),
+          interactionMode: NonogramInteractionMode.fill,
+          remainingWands: 0,
+        ),
+      );
+      expect(bloc.state.remainingWands, 0);
+      bloc.add(const WandToggled());
+      await Future<void>.delayed(const Duration(milliseconds: 20));
+      expect(bloc.state.isWandActive, isFalse);
+    });
+
+    test('old snapshots without a wand count restore one wand', () {
+      final restored = NonogramBoardSnapshot.fromMap({
+        'puzzleId': 'p',
+        'level': 1,
+        'gridData': [
+          [0],
+        ],
+        'startTime': DateTime(2026).toIso8601String(),
+        'interactionMode': null,
+        'viewportOffsetX': 0,
+        'viewportOffsetY': 0,
+      });
+      expect(restored.remainingWands, 1);
+    });
+  });
+
+  group('NonogramPlayBloc Locked cells', () {
+    late NonogramPlayBloc bloc;
+    late FakeNonogramRepository repository;
+
+    setUp(() {
+      repository = FakeNonogramRepository();
+      bloc = NonogramPlayBloc(repository: repository, random: Random(2));
+    });
+
+    tearDown(() async {
+      await bloc.close();
+    });
+
+    // Hàng 0: 1 0 1 0 1, hàng 1: 1 1 1 1 1.
+    Future<void> startAndWandRow0() async {
+      bloc.add(Started(puzzle: satisfactionPuzzle));
+      await bloc.stream.firstWhere((s) => s.puzzle != null && !s.isLoading);
+      bloc.add(const WandToggled());
+      bloc.add(
+        const WandLineSelected(isRow: true, index: 0, offsetX: 0, offsetY: 0),
+      );
+      await bloc.stream.firstWhere((s) => s.remainingWands == 0);
+    }
+
+    test('wand locks the whole line, X cells included', () async {
+      await startAndWandRow0();
+      expect(bloc.state.lockedCells, {
+        for (var c = 0; c < 5; c++) (row: 0, col: c),
+      });
+    });
+
+    test('locked cells ignore tap, long press and mode', () async {
+      await startAndWandRow0();
+      final before = bloc.state.gridData;
+      bloc.add(const CellTapped(0, 0, offsetX: 0, offsetY: 0)); // ô tô
+      bloc.add(const CellTapped(0, 1, offsetX: 0, offsetY: 0)); // ô X
+      bloc.add(const CellLongPressed(row: 0, col: 1));
+      bloc.add(const InteractionModeChanged(offsetX: 0, offsetY: 0));
+      await bloc.stream.firstWhere(
+        (s) => s.interactionMode == NonogramInteractionMode.mark,
+      );
+      bloc.add(const CellTapped(0, 1, offsetX: 0, offsetY: 0));
+      bloc.add(const CellTapped(0, 0, offsetX: 0, offsetY: 0));
+      await Future<void>.delayed(const Duration(milliseconds: 20));
+      expect(bloc.state.gridData[0], before[0]);
+    });
+
+    test('dragging skips locked cells and keeps drawing others', () async {
+      await startAndWandRow0();
+      // Kéo dọc từ ô khoá (0,0, đang tô) xuống ô (1,0): vẫn là tô, không xoá.
+      bloc.add(const DragStarted(0, 0));
+      bloc.add(const DragUpdated(1, 0));
+      bloc.add(const DragEnded(offsetX: 0, offsetY: 0));
+      await bloc.stream.firstWhere(
+        (s) => s.gridData[1][0] == NonogramCellState.filled,
+      );
+      expect(bloc.state.gridData[0][0], NonogramCellState.filled);
+
+      // Kéo ngang hàng 1 rồi lên hàng 0 qua ô X khoá: ô X không bị tô.
+      bloc.add(const DragStarted(1, 1));
+      bloc.add(const DragUpdated(0, 1));
+      bloc.add(const DragEnded(offsetX: 0, offsetY: 0));
+      await bloc.stream.firstWhere(
+        (s) => s.gridData[1][1] == NonogramCellState.filled,
+      );
+      await Future<void>.delayed(const Duration(milliseconds: 20));
+      expect(bloc.state.gridData[0][1], NonogramCellState.marked);
+    });
+
+    test('restart keeps locked cells, clears the rest', () async {
+      await startAndWandRow0();
+      bloc.add(const CellTapped(1, 2, offsetX: 0, offsetY: 0));
+      await bloc.stream.firstWhere(
+        (s) => s.gridData[1][2] == NonogramCellState.filled,
+      );
+      bloc.add(const BoardReset(offsetX: 0, offsetY: 0));
+      await bloc.stream.firstWhere(
+        (s) => s.gridData[1][2] == NonogramCellState.empty,
+      );
+      expect(bloc.state.gridData[0], const [
+        NonogramCellState.filled,
+        NonogramCellState.marked,
+        NonogramCellState.filled,
+        NonogramCellState.marked,
+        NonogramCellState.filled,
+      ]);
+      expect(bloc.state.lockedCells.length, 5);
+    });
+
+    test('locked cells are saved and restored', () async {
+      await startAndWandRow0();
+      await Future<void>.delayed(const Duration(milliseconds: 20));
+      final snapshot = await repository.getCurrentProgress();
+      expect(snapshot!.lockedCells.length, 5);
+
+      final map = snapshot.toMap();
+      final restored = NonogramBoardSnapshot.fromMap(map);
+      expect(restored.lockedCells, snapshot.lockedCells);
+
+      final again = NonogramPlayBloc(repository: repository);
+      addTearDown(again.close);
+      again.add(Started(puzzle: satisfactionPuzzle, snapshot: restored));
+      await again.stream.firstWhere((s) => s.puzzle != null && !s.isLoading);
+      expect(again.state.lockedCells, snapshot.lockedCells);
+    });
+
+    test('old snapshots without locked cells lock nothing', () {
+      final restored = NonogramBoardSnapshot.fromMap({
+        'puzzleId': 'p',
+        'level': 1,
+        'gridData': [
+          [1],
+        ],
+        'startTime': DateTime(2026).toIso8601String(),
+        'interactionMode': null,
+        'viewportOffsetX': 0,
+        'viewportOffsetY': 0,
+      });
+      expect(restored.lockedCells, isEmpty);
     });
   });
 }

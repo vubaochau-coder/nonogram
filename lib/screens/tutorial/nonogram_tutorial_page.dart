@@ -1,10 +1,14 @@
 import 'dart:math' as math;
 
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:lucide_icons/lucide_icons.dart';
+import 'package:nonogram/core/app_haptics.dart';
 import 'package:nonogram/core/app_theme.dart';
 import 'package:nonogram/core/context_ext.dart';
+import 'package:nonogram/core/onboarding_preferences.dart';
 import 'package:nonogram/l10n/app_localizations.dart';
 import 'package:nonogram/models/nonogram_interaction_mode.dart';
 import 'package:nonogram/screens/painters/nonogram_cells_painter.dart';
@@ -14,6 +18,10 @@ import 'nonogram_tutorial_controller.dart';
 
 /// Luồng "Cách chơi": một câu đố 5×5 hiện dần từng hàng, mỗi bước có lời dẫn,
 /// viền sáng chỗ cần làm và bàn tay chỉ vào chỗ cần chạm.
+///
+/// Phần 2 (sau luật chơi) thực hành thao tác trên một câu đố khác: kéo để tô
+/// liền, nhấn giữ để đánh X, nút gợi ý, gậy phép. Làm xong phần này thì
+/// không tự hiện hướng dẫn thao tác trong màn chơi nữa.
 ///
 /// Đóng trang trả về `true` nếu người chơi bấm "Xem các kỹ thuật giải".
 class NonogramTutorialPage extends StatefulWidget {
@@ -27,9 +35,25 @@ class _NonogramTutorialPageState extends State<NonogramTutorialPage> {
   final _controller = NonogramTutorialController();
 
   @override
+  void initState() {
+    super.initState();
+    _controller.addListener(_onProgress);
+  }
+
+  @override
   void dispose() {
+    _controller.removeListener(_onProgress);
     _controller.dispose();
     super.dispose();
+  }
+
+  void _onProgress() {
+    if (!_controller.isFinished) return;
+    try {
+      context.read<OnboardingPreferences>().markPlayCoachSeen();
+    } on ProviderNotFoundException {
+      // Không có tuỳ chọn (test): bỏ qua.
+    }
   }
 
   void _close({bool showTechniques = false}) {
@@ -69,7 +93,8 @@ class _NonogramTutorialPageState extends State<NonogramTutorialPage> {
                       padding: const EdgeInsets.fromLTRB(16, 8, 16, 16),
                       child: _MessageCard(
                         text:
-                            task == TutorialTask.intro
+                            task == TutorialTask.intro ||
+                                    task == TutorialTask.rulesDone
                                 ? ''
                                 : tutorialMessageText(l10n, step.message),
                         mistakes: _controller.mistakes,
@@ -87,7 +112,34 @@ class _NonogramTutorialPageState extends State<NonogramTutorialPage> {
                     ),
                     Padding(
                       padding: const EdgeInsets.fromLTRB(16, 16, 16, 32),
-                      child: _TutorialModeToggle(controller: _controller),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          if (step.showTools) ...[
+                            _TutorialToolButton(
+                              key: const ValueKey('nonogram-tutorial-hint'),
+                              icon: LucideIcons.lightbulb,
+                              label: l10n.nonogramCoachHintTitle,
+                              count: _controller.remainingHints,
+                              active: false,
+                              pointed: task == TutorialTask.useHint,
+                              onPressed: _controller.useHint,
+                            ),
+                            const SizedBox(width: 12),
+                            _TutorialToolButton(
+                              key: const ValueKey('nonogram-tutorial-wand'),
+                              icon: LucideIcons.wand2,
+                              label: l10n.nonogramPlayWandLabel,
+                              count: _controller.remainingWands,
+                              active: _controller.isWandActive,
+                              pointed: task == TutorialTask.activateWand,
+                              onPressed: _controller.activateWand,
+                            ),
+                            const SizedBox(width: 20),
+                          ],
+                          _TutorialModeToggle(controller: _controller),
+                        ],
+                      ),
                     ),
                   ],
                 ),
@@ -102,6 +154,26 @@ class _NonogramTutorialPageState extends State<NonogramTutorialPage> {
                           key: const ValueKey('nonogram-tutorial-start'),
                           onPressed: _controller.start,
                           child: Text(l10n.nonogramTutorialStart),
+                        ),
+                      ],
+                    ),
+                  ),
+                if (task == TutorialTask.rulesDone)
+                  _Overlay(
+                    alignment: Alignment.bottomCenter,
+                    child: _OverlayCard(
+                      title: l10n.nonogramTutorialRulesDoneTitle,
+                      body: l10n.nonogramTutorialRulesDone,
+                      actions: [
+                        FilledButton(
+                          key: const ValueKey('nonogram-tutorial-continue'),
+                          onPressed: _controller.continueToTools,
+                          child: Text(l10n.nonogramTutorialContinue),
+                        ),
+                        TextButton(
+                          key: const ValueKey('nonogram-tutorial-later'),
+                          onPressed: _close,
+                          child: Text(l10n.nonogramTutorialLater),
                         ),
                       ],
                     ),
@@ -147,6 +219,13 @@ String tutorialMessageText(AppLocalizations l10n, TutorialMessage message) {
     TutorialMessage.markEmpty => l10n.nonogramTutorialMarkEmpty,
     TutorialMessage.oneCellLeft => l10n.nonogramTutorialOneCellLeft,
     TutorialMessage.finish => l10n.nonogramTutorialFinish,
+    TutorialMessage.rulesDone => l10n.nonogramTutorialRulesDone,
+    TutorialMessage.dragRow => l10n.nonogramTutorialDragRow,
+    TutorialMessage.longPressMark => l10n.nonogramTutorialLongPressMark,
+    TutorialMessage.useHint => l10n.nonogramTutorialUseHint,
+    TutorialMessage.activateWand => l10n.nonogramTutorialActivateWand,
+    TutorialMessage.pickWandLine => l10n.nonogramTutorialPickWandLine,
+    TutorialMessage.finishTools => l10n.nonogramTutorialFinishTools,
     TutorialMessage.done => l10n.nonogramTutorialDone,
   };
 }
@@ -172,7 +251,8 @@ class _MessageCard extends StatelessWidget {
       },
       child: Container(
         width: double.infinity,
-        constraints: const BoxConstraints(minHeight: 104),
+        // Đủ cho 4 dòng, để lời dẫn dài / ngắn không làm bàn nhảy lên xuống.
+        constraints: const BoxConstraints(minHeight: 128),
         padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
         alignment: Alignment.center,
         decoration: BoxDecoration(
@@ -253,7 +333,17 @@ class _TutorialBoard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final step = controller.step;
-    final activeRows = {for (final cell in step.highlightedCells) cell.row};
+    final activeRows = {
+      for (final cell in controller.highlightedCells) cell.row,
+    };
+    final wandLine = step.wandLine;
+    final picking = step.task == TutorialTask.pickWandLine;
+    bool isWandTarget(bool isRow, int index) =>
+        picking && wandLine == (isRow: isRow, index: index);
+    VoidCallback? pick(bool isRow, int index) =>
+        picking
+            ? () => controller.pickClueLine((isRow: isRow, index: index))
+            : null;
 
     return Column(
       mainAxisSize: MainAxisSize.min,
@@ -274,7 +364,9 @@ class _TutorialBoard extends StatelessWidget {
                     clues: controller.colClues[c],
                     vertical: true,
                     complete: controller.isColComplete(c),
-                    active: false,
+                    active: isWandTarget(false, c),
+                    pointed: isWandTarget(false, c),
+                    onTap: pick(false, c),
                   ),
               ],
             ),
@@ -294,7 +386,9 @@ class _TutorialBoard extends StatelessWidget {
                     clues: controller.rowClues[r],
                     vertical: false,
                     complete: controller.isRowComplete(r),
-                    active: activeRows.contains(r),
+                    active: activeRows.contains(r) || isWandTarget(true, r),
+                    pointed: isWandTarget(true, r),
+                    onTap: pick(true, r),
                   ),
               ],
             ),
@@ -316,6 +410,8 @@ class _ClueTile extends StatelessWidget {
     required this.vertical,
     required this.complete,
     required this.active,
+    this.pointed = false,
+    this.onTap,
   });
 
   final double width;
@@ -324,6 +420,12 @@ class _ClueTile extends StatelessWidget {
   final bool vertical;
   final bool complete;
   final bool active;
+
+  /// Bàn tay chỉ vào ô số này (chọn hàng / cột cho gậy phép).
+  final bool pointed;
+
+  /// Chạm vào dãy số (khi đang chọn hàng / cột cho gậy phép).
+  final VoidCallback? onTap;
 
   @override
   Widget build(BuildContext context) {
@@ -337,8 +439,9 @@ class _ClueTile extends StatelessWidget {
       color: complete ? colors.onSurfaceVariant : colors.onSurface,
     );
     final numbers = [for (final clue in clues) Text('$clue', style: style)];
+    final handSize = shortSide * 0.9;
 
-    return SizedBox(
+    final tile = SizedBox(
       width: width,
       height: height,
       child: Padding(
@@ -354,40 +457,61 @@ class _ClueTile extends StatelessWidget {
               width: active ? 2 : 1,
             ),
           ),
-          child: Stack(
+          // Dấu ✓ và các số chia chỗ với nhau (không đè lên nhau khi có
+          // nhiều số); 3 số trở lên ("1 1 1") thì thu nhỏ cho vừa ô.
+          child: Flex(
+            direction: vertical ? Axis.vertical : Axis.horizontal,
             children: [
               if (complete)
-                Align(
+                Icon(
+                  Icons.check_rounded,
+                  size: shortSide * 0.3,
+                  color: game.success,
+                ),
+              Expanded(
+                child: Align(
                   alignment:
-                      vertical ? Alignment.topCenter : Alignment.centerLeft,
-                  child: Icon(
-                    Icons.check_rounded,
-                    size: shortSide * 0.3,
-                    color: game.success,
+                      vertical ? Alignment.bottomCenter : Alignment.centerRight,
+                  child: FittedBox(
+                    fit: BoxFit.scaleDown,
+                    child:
+                        vertical
+                            ? Column(
+                              mainAxisSize: MainAxisSize.min,
+                              children: numbers,
+                            )
+                            : Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                for (var i = 0; i < numbers.length; i++) ...[
+                                  if (i > 0) SizedBox(width: shortSide * 0.12),
+                                  numbers[i],
+                                ],
+                              ],
+                            ),
                   ),
                 ),
-              Align(
-                alignment:
-                    vertical ? Alignment.bottomCenter : Alignment.centerRight,
-                child:
-                    vertical
-                        ? Column(
-                          mainAxisSize: MainAxisSize.min,
-                          children: numbers,
-                        )
-                        : Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            for (var i = 0; i < numbers.length; i++) ...[
-                              if (i > 0) SizedBox(width: shortSide * 0.12),
-                              numbers[i],
-                            ],
-                          ],
-                        ),
               ),
             ],
           ),
         ),
+      ),
+    );
+    if (onTap == null && !pointed) return tile;
+    return GestureDetector(
+      behavior: HitTestBehavior.opaque,
+      onTap: onTap,
+      child: Stack(
+        clipBehavior: Clip.none,
+        children: [
+          tile,
+          if (pointed)
+            Positioned(
+              left: width / 2 - handSize * 0.42,
+              top: height / 2 - handSize * 0.08,
+              child: IgnorePointer(child: _TapHint(size: handSize)),
+            ),
+        ],
       ),
     );
   }
@@ -426,11 +550,33 @@ class _TutorialGridState extends State<_TutorialGrid> {
     if (changed) HapticFeedback.selectionClick();
   }
 
+  void _onLongPress(Offset position) {
+    final cell = _cellAt(position);
+    if (cell == null) return;
+    if (widget.controller.longPressCell(cell.row, cell.col)) {
+      AppHaptics.longPress();
+    }
+  }
+
   void _onDrag(Offset position) {
     final cell = _cellAt(position);
     if (cell == null || cell == _lastDragCell) return;
+    final last = _lastDragCell;
     _lastDragCell = cell;
-    _apply(cell, countMiss: false);
+    if (last == null) {
+      _apply(cell, countMiss: false);
+      return;
+    }
+    // Lướt nhanh có thể nhảy qua vài ô giữa hai sự kiện: tô cả các ô đó.
+    final dr = cell.row - last.row;
+    final dc = cell.col - last.col;
+    final steps = math.max(dr.abs(), dc.abs());
+    for (var i = 1; i <= steps; i++) {
+      _apply((
+        row: last.row + (dr * i / steps).round(),
+        col: last.col + (dc * i / steps).round(),
+      ), countMiss: false);
+    }
   }
 
   @override
@@ -450,6 +596,8 @@ class _TutorialGridState extends State<_TutorialGrid> {
             ? pending.first
             : null;
     final handSize = cellSize * 0.9;
+    // Bước tập kéo: bàn tay lướt dọc theo các ô cần tô.
+    final swipe = step.message == TutorialMessage.dragRow && pointAt != null;
 
     return GestureDetector(
       key: const ValueKey('nonogram-tutorial-grid'),
@@ -457,12 +605,16 @@ class _TutorialGridState extends State<_TutorialGrid> {
       onTapUp: (details) {
         _apply(_cellAt(details.localPosition), countMiss: true);
       },
+      // Bắt đầu tính từ chỗ ngón tay chạm xuống, không phải chỗ đã trượt
+      // qua ngưỡng nhận kéo (không bỏ sót ô đầu tiên).
+      dragStartBehavior: DragStartBehavior.down,
       onPanStart: (details) {
         _lastDragCell = null;
         _onDrag(details.localPosition);
       },
       onPanUpdate: (details) => _onDrag(details.localPosition),
       onPanEnd: (_) => _lastDragCell = null,
+      onLongPressStart: (details) => _onLongPress(details.localPosition),
       child: SizedBox(
         width: cellSize * cols,
         height: cellSize * rows,
@@ -487,6 +639,9 @@ class _TutorialGridState extends State<_TutorialGrid> {
                   filledColor: colors.onSurface,
                   markedMarkerColor: colors.primary,
                   markerColor: colors.onSurfaceVariant.withValues(alpha: 0.7),
+                  lockedCells: controller.lockedCells,
+                  lockedStarColor: game.lockedStar,
+                  lockedMarkStarColor: game.lockedMarkStar,
                 ),
                 foregroundPainter: NonogramGridPainter(
                   rows: rows,
@@ -503,7 +658,7 @@ class _TutorialGridState extends State<_TutorialGrid> {
                 child: CustomPaint(
                   painter: _HighlightPainter(
                     cells: {
-                      for (final cell in step.highlightedCells)
+                      for (final cell in controller.highlightedCells)
                         if (cell.row < rows) cell,
                     },
                     cellSize: cellSize,
@@ -512,11 +667,44 @@ class _TutorialGridState extends State<_TutorialGrid> {
                 ),
               ),
             ),
-            if (pointAt != null)
+            if (controller.revealedCells.isNotEmpty)
+              Positioned.fill(
+                child: IgnorePointer(
+                  child: CustomPaint(
+                    painter: _HighlightPainter(
+                      cells: controller.revealedCells,
+                      cellSize: cellSize,
+                      color: colors.primary,
+                    ),
+                  ),
+                ),
+              ),
+            if (pointAt != null && swipe)
+              Positioned.fill(
+                child: IgnorePointer(
+                  child: _SwipeHint(
+                    from: Offset(
+                      (pending.first.col + 0.5) * cellSize - handSize * 0.42,
+                      (pending.first.row + 0.5) * cellSize - handSize * 0.08,
+                    ),
+                    to: Offset(
+                      (pending.last.col + 0.5) * cellSize - handSize * 0.42,
+                      (pending.last.row + 0.5) * cellSize - handSize * 0.08,
+                    ),
+                    size: handSize,
+                  ),
+                ),
+              )
+            else if (pointAt != null)
               Positioned(
                 left: (pointAt.col + 0.5) * cellSize - handSize * 0.42,
                 top: (pointAt.row + 0.5) * cellSize - handSize * 0.08,
-                child: IgnorePointer(child: _TapHint(size: handSize)),
+                child: IgnorePointer(
+                  child:
+                      step.task == TutorialTask.longPressMark
+                          ? _HoldHint(size: handSize)
+                          : _TapHint(size: handSize),
+                ),
               ),
           ],
         ),
@@ -545,6 +733,26 @@ class _HighlightPainter extends CustomPainter {
           ..color = color
           ..style = PaintingStyle.stroke
           ..strokeWidth = 3;
+
+    // Cả một cột (ô vừa hiện đáp án): một khung dọc.
+    final sameCol = cells.map((c) => c.col).toSet();
+    if (cells.length > 1 && sameCol.length == 1) {
+      final rows = cells.map((c) => c.row).toList()..sort();
+      if (rows.last - rows.first == rows.length - 1) {
+        final col = sameCol.first;
+        final rect = Rect.fromLTRB(
+          col * cellSize,
+          rows.first * cellSize,
+          (col + 1) * cellSize,
+          (rows.last + 1) * cellSize,
+        ).deflate(2.5);
+        canvas.drawRRect(
+          RRect.fromRectAndRadius(rect, Radius.circular(cellSize * 0.1)),
+          paint,
+        );
+        return;
+      }
+    }
 
     final byRow = <int, List<int>>{};
     for (final cell in cells) {
@@ -728,6 +936,245 @@ class _TapHintState extends State<_TapHint>
           Shadow(color: colors.surface, blurRadius: 2),
         ],
       ),
+    );
+  }
+}
+
+/// Bàn tay lướt từ [from] tới [to] (vị trí góc trên-trái của icon), lặp lại.
+class _SwipeHint extends StatefulWidget {
+  const _SwipeHint({required this.from, required this.to, required this.size});
+
+  final Offset from;
+  final Offset to;
+  final double size;
+
+  @override
+  State<_SwipeHint> createState() => _SwipeHintState();
+}
+
+class _SwipeHintState extends State<_SwipeHint>
+    with SingleTickerProviderStateMixin {
+  late final AnimationController _animation = AnimationController(
+    vsync: this,
+    duration: const Duration(milliseconds: 1600),
+  )..repeat();
+
+  @override
+  void dispose() {
+    _animation.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final colors = context.color;
+    return AnimatedBuilder(
+      animation: _animation,
+      builder: (context, _) {
+        // 0–15%: hiện ra, 15–80%: lướt, 80–100%: mờ đi.
+        final v = _animation.value;
+        final move = Curves.easeInOut.transform(
+          ((v - 0.15) / 0.65).clamp(0.0, 1.0),
+        );
+        final opacity = v < 0.15 ? v / 0.15 : (v > 0.8 ? (1 - v) / 0.2 : 1.0);
+        final p = Offset.lerp(widget.from, widget.to, move)!;
+        return Stack(
+          clipBehavior: Clip.none,
+          children: [
+            Positioned(
+              left: p.dx,
+              top: p.dy,
+              child: Opacity(
+                opacity: opacity.clamp(0.0, 1.0),
+                child: Icon(
+                  Icons.touch_app,
+                  size: widget.size,
+                  color: colors.onSurface,
+                  shadows: [
+                    Shadow(color: colors.surface, blurRadius: 6),
+                    Shadow(color: colors.surface, blurRadius: 2),
+                  ],
+                ),
+              ),
+            ),
+          ],
+        );
+      },
+    );
+  }
+}
+
+/// Bàn tay nhấn xuống và giữ, kèm vòng tròn chạy quanh đầu ngón tay cho tới
+/// lúc "rung".
+class _HoldHint extends StatefulWidget {
+  const _HoldHint({required this.size});
+
+  final double size;
+
+  @override
+  State<_HoldHint> createState() => _HoldHintState();
+}
+
+class _HoldHintState extends State<_HoldHint>
+    with SingleTickerProviderStateMixin {
+  late final AnimationController _animation = AnimationController(
+    vsync: this,
+    duration: const Duration(milliseconds: 1500),
+  )..repeat();
+
+  @override
+  void dispose() {
+    _animation.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final colors = context.color;
+    final size = widget.size;
+    final ring = size * 0.62;
+    return AnimatedBuilder(
+      animation: _animation,
+      builder: (context, child) {
+        final v = _animation.value;
+        // 0–20%: ấn xuống, 20–70%: giữ (vòng chạy), 70–100%: nhả.
+        final press = v < 0.2 ? v / 0.2 : (v > 0.7 ? (1 - v) / 0.3 : 1.0);
+        final progress = ((v - 0.2) / 0.5).clamp(0.0, 1.0);
+        return SizedBox(
+          width: size,
+          height: size,
+          child: Stack(
+            clipBehavior: Clip.none,
+            children: [
+              if (v >= 0.2 && v <= 0.85)
+                Positioned(
+                  left: size * 0.42 - ring / 2,
+                  top: size * 0.08 - ring / 2,
+                  width: ring,
+                  height: ring,
+                  child: CircularProgressIndicator(
+                    value: progress,
+                    strokeWidth: 3,
+                    color: colors.primary,
+                    backgroundColor: colors.primary.withValues(alpha: 0.2),
+                  ),
+                ),
+              Transform.translate(
+                offset: Offset(0, size * 0.12 * press),
+                child: child,
+              ),
+            ],
+          ),
+        );
+      },
+      child: Icon(
+        Icons.touch_app,
+        size: size,
+        color: colors.onSurface,
+        shadows: [
+          Shadow(color: colors.surface, blurRadius: 6),
+          Shadow(color: colors.surface, blurRadius: 2),
+        ],
+      ),
+    );
+  }
+}
+
+/// Nút gợi ý / gậy phép trong bài hướng dẫn, kèm số lượt và bàn tay chỉ.
+class _TutorialToolButton extends StatelessWidget {
+  const _TutorialToolButton({
+    super.key,
+    required this.icon,
+    required this.label,
+    required this.count,
+    required this.active,
+    required this.pointed,
+    required this.onPressed,
+  });
+
+  final IconData icon;
+  final String label;
+  final int count;
+  final bool active;
+  final bool pointed;
+  final VoidCallback onPressed;
+
+  static const double _size = 60;
+
+  @override
+  Widget build(BuildContext context) {
+    final colors = context.color;
+    final game = context.gameColors;
+    final foreground = active ? colors.primary : colors.onSurface;
+    return Stack(
+      clipBehavior: Clip.none,
+      children: [
+        Semantics(
+          button: true,
+          label: label,
+          child: Material(
+            color: Colors.transparent,
+            child: InkWell(
+              onTap: onPressed,
+              borderRadius: BorderRadius.circular(17),
+              child: AnimatedContainer(
+                duration: const Duration(milliseconds: 160),
+                width: _size,
+                height: _size,
+                alignment: Alignment.center,
+                decoration: BoxDecoration(
+                  color:
+                      active
+                          ? colors.primary.withValues(alpha: 0.12)
+                          : colors.surfaceContainerLow,
+                  borderRadius: BorderRadius.circular(17),
+                  border: Border.all(
+                    color:
+                        pointed
+                            ? game.reward
+                            : (active
+                                ? colors.primary.withValues(alpha: 0.4)
+                                : game.cardBorder),
+                    width: pointed ? 2 : 1,
+                  ),
+                ),
+                child: Icon(icon, size: 26, color: foreground),
+              ),
+            ),
+          ),
+        ),
+        Positioned(
+          right: -5,
+          top: -5,
+          child: IgnorePointer(
+            child: Container(
+              constraints: const BoxConstraints(minWidth: 20),
+              height: 20,
+              padding: const EdgeInsets.symmetric(horizontal: 5),
+              alignment: Alignment.center,
+              decoration: BoxDecoration(
+                color: count > 0 ? colors.primary : colors.outline,
+                borderRadius: BorderRadius.circular(10),
+              ),
+              child: Text(
+                '$count',
+                style: context.labelSmall.copyWith(
+                  fontSize: 11,
+                  height: 1,
+                  fontWeight: FontWeight.w800,
+                  color: colors.onPrimary,
+                ),
+              ),
+            ),
+          ),
+        ),
+        if (pointed)
+          const Positioned(
+            left: _size * 0.5 - 20,
+            top: _size * 0.45,
+            child: IgnorePointer(child: _TapHint(size: 48)),
+          ),
+      ],
     );
   }
 }

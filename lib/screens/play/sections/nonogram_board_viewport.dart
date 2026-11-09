@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:nonogram/core/app_haptics.dart';
 import 'package:nonogram/core/app_theme.dart';
 import 'package:nonogram/core/context_ext.dart';
 import 'package:nonogram/models/nonogram_grid_equality.dart';
@@ -46,10 +47,13 @@ class _NonogramBoardViewportState extends State<NonogramBoardViewport>
     with TickerProviderStateMixin {
   late final AnimationController _hintPulse = AnimationController(
     vsync: this,
-    duration: const Duration(milliseconds: 900),
+    duration: const Duration(milliseconds: 1400),
   );
   Axis? _hintAxis;
   int? _hintIndex;
+
+  /// Ô vừa được gợi ý tô giúp (nháy sáng).
+  List<({int row, int col})> _hintCells = const [];
 
   // Trạng thái cử chỉ hiện tại.
   _GestureKind _gesture = _GestureKind.none;
@@ -112,20 +116,44 @@ class _NonogramBoardViewportState extends State<NonogramBoardViewport>
 
   // --- Chạm / nhấn giữ ---
 
+  /// Đang chọn hàng / cột cho gậy phép: chạm, nhấn giữ hay kéo trên lưới
+  /// đều không tô (kéo thì chuyển sang kéo bàn để tìm hàng cần chọn).
+  bool get _wandActive => _bloc.state.isWandActive;
+
   void _onTapUp(TapUpDetails details) {
     final layout = _layout;
     if (layout == null) return;
+    if (_wandActive) {
+      final line = layout.clueLineAt(details.localPosition, _offset);
+      if (line == null) return;
+      final o = _offset;
+      HapticFeedback.lightImpact();
+      _bloc.add(
+        WandLineSelected(
+          isRow: line.isRow,
+          index: line.index,
+          offsetX: o.dx,
+          offsetY: o.dy,
+        ),
+      );
+      return;
+    }
     final cell = layout.cellAt(details.localPosition, _offset);
     if (cell == null) return;
+    if (_rejectLocked(cell)) return;
     final o = _offset;
     _bloc.add(CellTapped(cell.row, cell.col, offsetX: o.dx, offsetY: o.dy));
   }
 
   void _onLongPressStart(LongPressStartDetails details) {
     final layout = _layout;
-    if (layout == null) return;
+    if (layout == null || _wandActive) return;
     final cell = layout.cellAt(details.localPosition, _offset);
     if (cell == null) return;
+    if (_rejectLocked(cell)) return;
+    // Rung ngay lúc nhấn giữ được nhận, để người chơi biết đã có thể nhấc
+    // tay (khó đoán phải giữ bao lâu).
+    AppHaptics.longPress();
     final o = _offset;
     _bloc.add(
       CellLongPressed(
@@ -135,7 +163,15 @@ class _NonogramBoardViewportState extends State<NonogramBoardViewport>
         offsetY: o.dy,
       ),
     );
-    HapticFeedback.selectionClick();
+  }
+
+  /// Chạm / nhấn giữ vào ô khoá: không đổi gì, chỉ rung nhẹ và nháy ô đó
+  /// để báo ô đã khoá.
+  bool _rejectLocked(({int row, int col}) cell) {
+    if (!_bloc.state.isLocked(cell.row, cell.col)) return false;
+    HapticFeedback.lightImpact();
+    _showHint(cells: [cell]);
+    return true;
   }
 
   // --- Kéo để tô / kéo bàn / cuộn dải gợi ý ---
@@ -153,7 +189,7 @@ class _NonogramBoardViewportState extends State<NonogramBoardViewport>
     // cử chỉ.
     final start = _pointerDownPosition ?? details.localFocalPoint;
     switch (layout.regionAt(start, _offset)) {
-      case NonogramBoardRegion.grid:
+      case NonogramBoardRegion.grid when !_wandActive:
         final cell = layout.cellAt(start, _offset)!;
         _gesture = _GestureKind.draw;
         _lastDragCell = cell;
@@ -354,16 +390,22 @@ class _NonogramBoardViewportState extends State<NonogramBoardViewport>
 
   // --- Gợi ý (hint) ---
 
-  void _showHint(Axis axis, int index) {
+  void _showHint({
+    Axis? axis,
+    int? index,
+    List<({int row, int col})> cells = const [],
+  }) {
     setState(() {
       _hintAxis = axis;
       _hintIndex = index;
+      _hintCells = cells;
     });
     _hintPulse.forward(from: 0).then((_) {
       if (mounted) {
         setState(() {
           _hintAxis = null;
           _hintIndex = null;
+          _hintCells = const [];
         });
       }
     });
@@ -372,10 +414,15 @@ class _NonogramBoardViewportState extends State<NonogramBoardViewport>
   @override
   Widget build(BuildContext context) {
     return BlocListener<NonogramPlayBloc, NonogramPlayState>(
-      listenWhen: (p, c) => c is NonogramPlayHintAppliedState,
+      listenWhen:
+          (p, c) =>
+              c is NonogramPlayHintAppliedState ||
+              c is NonogramPlayHintCellsAppliedState,
       listener: (context, state) {
         if (state is NonogramPlayHintAppliedState) {
-          _showHint(state.axis, state.lineIndex);
+          _showHint(axis: state.axis, index: state.lineIndex);
+        } else if (state is NonogramPlayHintCellsAppliedState) {
+          _showHint(cells: state.cells);
         }
       },
       child: BlocBuilder<NonogramPlayBloc, NonogramPlayState>(
@@ -387,6 +434,8 @@ class _NonogramBoardViewportState extends State<NonogramBoardViewport>
                 p.satisfiedCols != c.satisfiedCols ||
                 p.isLoading != c.isLoading ||
                 p.startTime != c.startTime ||
+                p.isWandActive != c.isWandActive ||
+                p.lockedCells != c.lockedCells ||
                 !NonogramGridEquality.equals(p.gridData, c.gridData),
         builder: (context, state) {
           final puzzle = state.puzzle;
@@ -441,6 +490,7 @@ class _NonogramBoardViewportState extends State<NonogramBoardViewport>
                           ),
                           hintAxis: _hintAxis,
                           hintIndex: _hintIndex,
+                          hintCells: _hintCells,
                           hintPulse: _hintPulse,
                         );
                       },
@@ -482,6 +532,7 @@ class _BoardPaint extends StatelessWidget {
     required this.topClueScroll,
     required this.hintAxis,
     required this.hintIndex,
+    required this.hintCells,
     required this.hintPulse,
   });
 
@@ -492,6 +543,7 @@ class _BoardPaint extends StatelessWidget {
   final double topClueScroll;
   final Axis? hintAxis;
   final int? hintIndex;
+  final List<({int row, int col})> hintCells;
   final Animation<double> hintPulse;
 
   @override
@@ -583,6 +635,9 @@ class _BoardPaint extends StatelessWidget {
                         markerColor: colors.onSurfaceVariant.withValues(
                           alpha: 0.7,
                         ),
+                        lockedCells: state.lockedCells,
+                        lockedStarColor: game.lockedStar,
+                        lockedMarkStarColor: game.lockedMarkStar,
                       ),
                       foregroundPainter: NonogramGridPainter(
                         rows: puzzle.rows,
@@ -595,6 +650,19 @@ class _BoardPaint extends StatelessWidget {
                     ),
                   ),
                 ),
+                // Ô vừa được gợi ý tô giúp: nháy sáng (nằm trong vùng cắt
+                // nên không đè lên dải số).
+                for (final c in hintCells)
+                  _HintBand(
+                    rect: Rect.fromLTWH(
+                      offset.dx - clipLeft + c.col * cell,
+                      offset.dy - clipTop + c.row * cell,
+                      cell,
+                      cell,
+                    ).inflate(1),
+                    pulse: hintPulse,
+                    strong: true,
+                  ),
               ],
             ),
           ),
@@ -736,7 +804,30 @@ class _BoardPaint extends StatelessWidget {
           ),
         ),
 
-        // 6. Dải sáng khi dùng gợi ý (cả lưới lẫn dải số của hàng/cột đó).
+        // 6. Đang chọn hàng / cột cho gậy phép: tô sáng hai dải số để người
+        // chơi biết chạm vào đâu.
+        if (state.isWandActive) ...[
+          if (leftW > 0)
+            _WandStripHighlight(
+              rect: Rect.fromLTWH(
+                stickyLeft,
+                max(offset.dy, stickyTop + topH),
+                leftW,
+                offset.dy + gridH - max(offset.dy, stickyTop + topH),
+              ),
+            ),
+          if (topH > 0)
+            _WandStripHighlight(
+              rect: Rect.fromLTWH(
+                max(offset.dx, stickyLeft + leftW),
+                stickyTop,
+                offset.dx + gridW - max(offset.dx, stickyLeft + leftW),
+                topH,
+              ),
+            ),
+        ],
+
+        // 7. Dải sáng khi dùng gợi ý (cả lưới lẫn dải số của hàng/cột đó).
         if (hintAxis != null && hintIndex != null)
           _HintBand(
             rect:
@@ -843,11 +934,70 @@ class _HiddenCluesBadges extends StatelessWidget {
   }
 }
 
+/// Lớp sáng nhấp nháy phủ lên dải số khi đang chọn hàng / cột cho gậy phép.
+class _WandStripHighlight extends StatefulWidget {
+  const _WandStripHighlight({required this.rect});
+
+  final Rect rect;
+
+  @override
+  State<_WandStripHighlight> createState() => _WandStripHighlightState();
+}
+
+class _WandStripHighlightState extends State<_WandStripHighlight>
+    with SingleTickerProviderStateMixin {
+  late final AnimationController _pulse = AnimationController(
+    vsync: this,
+    duration: const Duration(milliseconds: 1100),
+  )..repeat(reverse: true);
+
+  @override
+  void dispose() {
+    _pulse.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final rect = widget.rect;
+    if (rect.width <= 0 || rect.height <= 0) return const SizedBox.shrink();
+    final primary = context.color.primary;
+    return Positioned.fromRect(
+      rect: rect,
+      child: IgnorePointer(
+        child: AnimatedBuilder(
+          animation: _pulse,
+          builder: (context, _) {
+            final t = Curves.easeInOut.transform(_pulse.value);
+            return DecoratedBox(
+              decoration: BoxDecoration(
+                color: primary.withValues(alpha: 0.06 + 0.12 * t),
+                border: Border.all(
+                  color: primary.withValues(alpha: 0.45 + 0.4 * t),
+                  width: 2,
+                ),
+                borderRadius: BorderRadius.circular(4),
+              ),
+            );
+          },
+        ),
+      ),
+    );
+  }
+}
+
 class _HintBand extends StatelessWidget {
-  const _HintBand({required this.rect, required this.pulse});
+  const _HintBand({
+    required this.rect,
+    required this.pulse,
+    this.strong = false,
+  });
 
   final Rect rect;
   final Animation<double> pulse;
+
+  /// Ô đơn lẻ: thêm viền để dễ thấy trên ô đã tô màu đậm.
+  final bool strong;
 
   @override
   Widget build(BuildContext context) {
@@ -858,10 +1008,18 @@ class _HintBand extends StatelessWidget {
           animation: pulse,
           builder: (context, _) {
             final opacity = (1 - pulse.value).clamp(0.0, 1.0);
+            final primary = context.color.primary;
             return DecoratedBox(
               decoration: BoxDecoration(
-                color: context.color.primary.withValues(alpha: 0.28 * opacity),
+                color: primary.withValues(alpha: 0.28 * opacity),
                 borderRadius: BorderRadius.circular(4),
+                border:
+                    strong
+                        ? Border.all(
+                          color: primary.withValues(alpha: opacity),
+                          width: 2.5,
+                        )
+                        : null,
               ),
             );
           },

@@ -21,6 +21,18 @@ void solveAll(NonogramTutorialController controller) {
         for (final cell in controller.pendingTargets) {
           controller.tapCell(cell.row, cell.col);
         }
+      case TutorialTask.rulesDone:
+        controller.continueToTools();
+      case TutorialTask.longPressMark:
+        for (final cell in controller.pendingTargets) {
+          controller.longPressCell(cell.row, cell.col);
+        }
+      case TutorialTask.useHint:
+        controller.useHint();
+      case TutorialTask.activateWand:
+        controller.activateWand();
+      case TutorialTask.pickWandLine:
+        controller.pickClueLine(step.wandLine!);
       case TutorialTask.done:
         break;
     }
@@ -29,12 +41,34 @@ void solveAll(NonogramTutorialController controller) {
 
 void main() {
   group('NonogramTutorialScript', () {
+    final allSteps = NonogramTutorialScript.steps;
+    final toolsStart = allSteps.indexWhere((s) => s.newPuzzle != null);
+    // Phần luật chơi: các bước tới hết bước "xong luật chơi".
     const solution = NonogramTutorialScript.solution;
-    final steps = NonogramTutorialScript.steps;
+    final steps = allSteps.sublist(0, toolsStart);
+    final steps0 = allSteps;
 
     test('starts with the intro and ends with done', () {
-      expect(steps.first.task, TutorialTask.intro);
-      expect(steps.last.task, TutorialTask.done);
+      expect(steps0.first.task, TutorialTask.intro);
+      expect(steps0.last.task, TutorialTask.done);
+      expect(steps.last.task, TutorialTask.rulesDone);
+      expect(
+        allSteps[toolsStart].newPuzzle,
+        NonogramTutorialScript.toolsSolution,
+      );
+    });
+
+    test('tools part targets agree with its solution', () {
+      const tools = NonogramTutorialScript.toolsSolution;
+      for (final step in allSteps.sublist(toolsStart)) {
+        expect(step.showTools, isTrue);
+        for (final cell in step.targets) {
+          expect(
+            tools[cell.row][cell.col],
+            step.task == TutorialTask.longPressMark ? 0 : 1,
+          );
+        }
+      }
     });
 
     test('targets agree with the solution', () {
@@ -76,6 +110,9 @@ void main() {
       solveAll(controller);
 
       expect(controller.isFinished, isTrue);
+      expect(controller.solution, NonogramTutorialScript.toolsSolution);
+      expect(controller.remainingHints, 2);
+      expect(controller.remainingWands, 0);
       expect(controller.mistakes, 0);
       for (var r = 0; r < controller.rows; r++) {
         expect(controller.isRowComplete(r), isTrue);
@@ -128,6 +165,96 @@ void main() {
       expect(controller.step.message, TutorialMessage.edgeCell);
       expect(controller.cellAt(1, 4), NonogramCellState.filled);
       expect(controller.pendingTargets.length, 3);
+    });
+  });
+
+  group('NonogramTutorialController tools part', () {
+    NonogramTutorialController atTools() {
+      final controller = NonogramTutorialController();
+      while (controller.step.newPuzzle == null) {
+        final step = controller.step;
+        switch (step.task) {
+          case TutorialTask.intro:
+            controller.start();
+          case TutorialTask.switchMode:
+            controller.selectMode(step.mode!);
+          case TutorialTask.rulesDone:
+            controller.continueToTools();
+          default:
+            for (final cell in controller.pendingTargets) {
+              controller.tapCell(cell.row, cell.col);
+            }
+        }
+      }
+      return controller;
+    }
+
+    test('starts a fresh board in fill mode', () {
+      final controller = atTools();
+      expect(controller.mode, NonogramInteractionMode.fill);
+      expect(
+        controller.grid
+            .expand((r) => r)
+            .every((c) => c == NonogramCellState.empty),
+        isTrue,
+      );
+      expect(controller.rowClues.first, [5]);
+    });
+
+    test('tapping instead of holding does not mark', () {
+      final controller = atTools();
+      for (var c = 0; c < 5; c++) {
+        controller.tapCell(0, c, countMiss: false);
+      }
+      expect(controller.step.task, TutorialTask.longPressMark);
+      expect(controller.tapCell(2, 1), isFalse);
+      expect(controller.cellAt(2, 1), NonogramCellState.empty);
+      expect(controller.mistakes, 1);
+
+      expect(controller.longPressCell(2, 1), isTrue);
+      expect(controller.cellAt(2, 1), NonogramCellState.marked);
+      // Nhấn giữ ô không phải mục tiêu là sai.
+      expect(controller.longPressCell(0, 0), isFalse);
+      expect(controller.mistakes, 2);
+    });
+
+    test('hint fills 5 random cells, wand reveals the chosen line', () {
+      final controller = atTools();
+      for (var c = 0; c < 5; c++) {
+        controller.tapCell(0, c);
+      }
+      controller.longPressCell(2, 1);
+      controller.longPressCell(2, 3);
+      expect(controller.step.task, TutorialTask.useHint);
+
+      controller.useHint();
+      expect(controller.remainingHints, 2);
+      // Tô giúp 5 ô đúng, chưa tô từ trước.
+      expect(controller.revealedCells.length, 5);
+      for (final c in controller.revealedCells) {
+        expect(NonogramTutorialScript.toolsSolution[c.row][c.col], 1);
+        expect(c.row == 0, isFalse);
+        expect(controller.cellAt(c.row, c.col), NonogramCellState.filled);
+      }
+
+      // Chưa cầm gậy phép thì chạm dãy số là sai.
+      controller.pickClueLine((isRow: true, index: 4));
+      expect(controller.step.task, TutorialTask.activateWand);
+      controller.activateWand();
+      expect(controller.isWandActive, isTrue);
+
+      // Chọn sai dòng: không đổi gì.
+      controller.pickClueLine((isRow: false, index: 0));
+      expect(controller.remainingWands, 1);
+
+      controller.pickClueLine((isRow: true, index: 4));
+      expect(controller.remainingWands, 0);
+      expect(controller.isWandActive, isFalse);
+      expect(
+        controller.grid[4].every((c) => c == NonogramCellState.filled),
+        isTrue,
+      );
+      expect(controller.step.message, TutorialMessage.finishTools);
     });
   });
 
@@ -198,6 +325,59 @@ void main() {
       }
       await tapMode(tester);
       await tapCell(tester, 4, 3);
+      await tester.pump(const Duration(milliseconds: 300));
+
+      expect(find.text('You know the rules!'), findsOneWidget);
+      await tester.tap(
+        find.byKey(const ValueKey('nonogram-tutorial-continue')),
+      );
+      await tester.pump(const Duration(milliseconds: 300));
+
+      // Phần thao tác. Lời dẫn đổi độ cao làm bàn dịch chỗ, nên đo lại lưới
+      // trước mỗi thao tác.
+      Rect gridRect() =>
+          tester.getRect(find.byKey(const ValueKey('nonogram-tutorial-grid')));
+
+      // Kéo qua hàng đầu.
+      var rect = gridRect();
+      var cell = rect.width / 5;
+      await tester.dragFrom(
+        rect.topLeft + Offset(cell * 0.5, cell * 0.5),
+        Offset(cell * 4, 0),
+      );
+      await tester.pump(const Duration(milliseconds: 300));
+
+      // Nhấn giữ để đánh X.
+      for (final c in [1, 3]) {
+        rect = gridRect();
+        cell = rect.width / 5;
+        await tester.longPressAt(
+          rect.topLeft + Offset((c + 0.5) * cell, 2.5 * cell),
+        );
+        await tester.pump(const Duration(milliseconds: 300));
+      }
+
+      await tester.tap(find.byKey(const ValueKey('nonogram-tutorial-hint')));
+      await tester.pump(const Duration(milliseconds: 300));
+      await tester.tap(find.byKey(const ValueKey('nonogram-tutorial-wand')));
+      await tester.pump(const Duration(milliseconds: 300));
+      // Dãy số của hàng cuối nằm ngay bên trái lưới.
+      rect = gridRect();
+      cell = rect.width / 5;
+      await tester.tapAt(rect.topLeft + Offset(-cell * 0.5, 4.5 * cell));
+      await tester.pump(const Duration(milliseconds: 300));
+
+      for (final c in [
+        (1, 0),
+        (2, 0),
+        (3, 0),
+        (2, 2),
+        (1, 4),
+        (2, 4),
+        (3, 4),
+      ]) {
+        await tapCell(tester, c.$1, c.$2);
+      }
       await tester.pump(const Duration(milliseconds: 300));
 
       expect(find.text('Well done!'), findsOneWidget);

@@ -13,6 +13,10 @@ class NonogramBoardSnapshot {
   final double viewportOffsetY;
   final double cellSize;
   final int remainingHints;
+  final int remainingWands;
+
+  /// Ô mở bằng gợi ý / gậy phép (không đổi được, giữ khi chơi lại).
+  final Set<({int row, int col})> lockedCells;
 
   const NonogramBoardSnapshot({
     required this.puzzleId,
@@ -24,6 +28,8 @@ class NonogramBoardSnapshot {
     this.viewportOffsetY = 0,
     this.cellSize = 40.0,
     this.remainingHints = 3,
+    this.remainingWands = 1,
+    this.lockedCells = const {},
   });
 
   Map<String, dynamic> toMap() {
@@ -38,6 +44,10 @@ class NonogramBoardSnapshot {
       'viewportOffsetY': viewportOffsetY,
       'cellSize': cellSize,
       'remainingHints': remainingHints,
+      'remainingWands': remainingWands,
+      'lockedCells': [
+        for (final cell in lockedCells) [cell.row, cell.col],
+      ],
     };
   }
 
@@ -59,6 +69,13 @@ class NonogramBoardSnapshot {
       viewportOffsetY: (map['viewportOffsetY'] as num).toDouble(),
       cellSize: (map['cellSize'] as num?)?.toDouble() ?? 40.0,
       remainingHints: (map['remainingHints'] as int?) ?? 3,
+      // Ván lưu trước khi có gậy phép: coi như chưa dùng.
+      remainingWands: (map['remainingWands'] as int?) ?? 1,
+      // Ván lưu trước khi có ô khoá: không khoá ô nào.
+      lockedCells: {
+        for (final cell in (map['lockedCells'] as List?) ?? const [])
+          (row: (cell as List)[0] as int, col: cell[1] as int),
+      },
     );
   }
 }

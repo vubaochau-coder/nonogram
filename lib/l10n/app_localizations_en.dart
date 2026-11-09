@@ -232,7 +232,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get nonogramSettingsRestartConfirmMessage =>
-      'All cells you have filled or marked will be cleared.';
+      'All cells you have filled or marked will be cleared. Cells with a star (opened by hints or the wand) are kept.';
 
   @override
   String get commonClose => 'Close';
@@ -297,7 +297,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get nonogramTutorialDone =>
-      'You know the rules now. The guide has more techniques for solving bigger puzzles.';
+      'You\'re all set! On big puzzles, drag with two fingers (or from the empty space outside the grid) to move the board; the app will remind you on your first big puzzle.';
 
   @override
   String get nonogramTutorialShowTechniques => 'See solving techniques';
@@ -310,8 +310,116 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get nonogramGuideTutorialCardDesc =>
-      'Learn the rules step by step on a small 5×5 puzzle.';
+      'Learn the rules and controls step by step on a small 5×5 puzzle.';
 
   @override
   String get nonogramPlayInfoHide => 'Hide level info';
+
+  @override
+  String get nonogramPlayWandLabel => 'Magic wand';
+
+  @override
+  String get nonogramPlayWandSelectPrompt =>
+      'Tap the clues of the row or column to reveal';
+
+  @override
+  String get nonogramPlayWandRowSolved =>
+      'This row is already correct. Pick another row or column.';
+
+  @override
+  String get nonogramPlayWandColSolved =>
+      'This column is already correct. Pick another row or column.';
+
+  @override
+  String get nonogramSettingsControlsGuide => 'Controls guide';
+
+  @override
+  String get nonogramCoachSkip => 'Skip';
+
+  @override
+  String get nonogramCoachNext => 'Next';
+
+  @override
+  String get nonogramCoachDone => 'Got it';
+
+  @override
+  String nonogramCoachStep(int current, int total) {
+    return '$current/$total';
+  }
+
+  @override
+  String get nonogramCoachHintTitle => 'Hint';
+
+  @override
+  String get nonogramCoachHintBody =>
+      'Fills 5 correct squares for you (squares that should be filled but aren\'t yet), picked at random across the board. They get a star: they can\'t be changed and are kept even if you restart. You get 3 per puzzle.';
+
+  @override
+  String get nonogramCoachWandTitle => 'Magic wand';
+
+  @override
+  String get nonogramCoachWandBody =>
+      'Tap the wand, then tap the clues of any row or column: the answer for that whole line is revealed and marked with a star, kept even if you restart. You get 1 per puzzle.';
+
+  @override
+  String get nonogramCoachModeTitle => 'Fill or X';
+
+  @override
+  String get nonogramCoachModeBody =>
+      'Choose what a tap does: fill the square, or mark it with an X to remember it is empty. Tap the button to switch. Drag across the grid to fill or mark many squares at once.';
+
+  @override
+  String get nonogramCoachLongPressTitle => 'Press and hold for the opposite';
+
+  @override
+  String get nonogramCoachLongPressBody =>
+      'Press and hold a square to do the opposite of the current mode: X while filling, fill while marking. A short vibration means it\'s done and you can let go.';
+
+  @override
+  String get nonogramCoachScrollTitle => 'Moving around big puzzles';
+
+  @override
+  String get nonogramCoachScrollBody =>
+      'Big puzzles don\'t fit on screen: drag with two fingers, or drag from the empty space outside the grid to move the board. Drag on the clues to see hidden numbers (the \"+N\" in the corner shows how many).';
+
+  @override
+  String get nonogramTutorialRulesDoneTitle => 'You know the rules!';
+
+  @override
+  String get nonogramTutorialRulesDone =>
+      'Next, let\'s practice the controls and helpers on another puzzle: drag to fill quickly, press and hold to mark, hints and the magic wand.';
+
+  @override
+  String get nonogramTutorialContinue => 'Continue';
+
+  @override
+  String get nonogramTutorialLater => 'Later, just play';
+
+  @override
+  String get nonogramTutorialDragRow =>
+      'Tip: drag your finger across squares to fill them in one go. The top row has 5, so drag across the whole row!';
+
+  @override
+  String get nonogramTutorialLongPressMark =>
+      '1 1 1 fits these 5 squares exactly, so the 2nd and 4th squares must be empty. No need to switch modes: press and hold each one to mark it with an X. A short vibration means it\'s done.';
+
+  @override
+  String get nonogramTutorialUseHint =>
+      'Stuck? Tap the Hint button and the app fills 5 correct squares at random. You get 3 per puzzle.';
+
+  @override
+  String get nonogramTutorialActivateWand =>
+      'The hint filled 5 squares marked with a star: they\'re locked and kept even if you restart. To reveal a whole row or column of your choice, use the magic wand: tap the wand button.';
+
+  @override
+  String get nonogramTutorialPickWandLine =>
+      'Now tap the clues of the bottom row to reveal that row. You get 1 wand per puzzle.';
+
+  @override
+  String get nonogramTutorialFinishTools =>
+      'Fill the remaining squares to finish. Drag down a column to fill faster.';
+
+  @override
+  String get nonogramPlayHintNothingToFill =>
+      'Every square that should be filled already is. Check for extra filled squares.';
 }
