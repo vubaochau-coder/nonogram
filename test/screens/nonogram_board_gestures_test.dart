@@ -468,4 +468,31 @@ void main() {
     }
     expect(find.byType(NonogramPlayCoachOverlay), findsNothing);
   });
+
+  testWidgets('cells opened by the wand cannot be changed', (tester) async {
+    await _pumpPlay(tester, phone);
+    final bloc = _bloc(tester);
+    final origin = _boardOrigin(tester);
+    final offset = _gridOffset(tester);
+    final cell = bloc.state.cellSize;
+
+    await tester.tap(find.byKey(const ValueKey('nonogram-wand')));
+    await tester.pump();
+    await tester.tapAt(origin + Offset(offset.dx - 10, offset.dy + cell * 2.5));
+    await tester.pump(const Duration(milliseconds: 400));
+    expect(bloc.state.isLocked(2, 0), isTrue);
+    final row = List.of(bloc.state.gridData[2]);
+
+    // Chạm, nhấn giữ vào ô khoá: không đổi.
+    final p0 = origin + offset + Offset(cell * 0.5, cell * 2.5);
+    final p1 = origin + offset + Offset(cell * 1.5, cell * 2.5);
+    await tester.tapAt(p0);
+    await tester.pump(const Duration(milliseconds: 400));
+    await tester.tapAt(p1);
+    await tester.pump(const Duration(milliseconds: 400));
+    await tester.longPressAt(p0);
+    await tester.pump(const Duration(milliseconds: 400));
+    expect(bloc.state.gridData[2], row);
+    await tester.pump(const Duration(seconds: 2));
+  });
 }

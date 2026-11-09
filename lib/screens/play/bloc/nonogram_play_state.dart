@@ -26,6 +26,10 @@ class NonogramPlayState extends Equatable {
   /// Đang chờ người chơi chọn hàng / cột cho gậy phép.
   final bool isWandActive;
 
+  /// Ô đã mở bằng gợi ý / gậy phép: không đổi được, và giữ lại khi chơi lại
+  /// từ đầu (người chơi đã "trả" lượt cho chúng).
+  final Set<({int row, int col})> lockedCells;
+
   /// Số lượt gợi ý / gậy phép mỗi màn.
   static const int maxHints = 3;
   static const int maxWands = 1;
@@ -45,7 +49,10 @@ class NonogramPlayState extends Equatable {
     this.remainingHints = maxHints,
     this.remainingWands = maxWands,
     this.isWandActive = false,
+    this.lockedCells = const {},
   });
+
+  bool isLocked(int row, int col) => lockedCells.contains((row: row, col: col));
 
   factory NonogramPlayState.initial({int initialLevel = 1}) {
     return NonogramPlayState(
@@ -71,6 +78,7 @@ class NonogramPlayState extends Equatable {
     int? remainingHints,
     int? remainingWands,
     bool? isWandActive,
+    Set<({int row, int col})>? lockedCells,
   }) {
     return NonogramPlayState(
       isLoading: isLoading ?? this.isLoading,
@@ -87,6 +95,7 @@ class NonogramPlayState extends Equatable {
       remainingHints: remainingHints ?? this.remainingHints,
       remainingWands: remainingWands ?? this.remainingWands,
       isWandActive: isWandActive ?? this.isWandActive,
+      lockedCells: lockedCells ?? this.lockedCells,
     );
   }
 
@@ -106,6 +115,7 @@ class NonogramPlayState extends Equatable {
     remainingHints,
     remainingWands,
     isWandActive,
+    lockedCells,
   ];
 }
 
@@ -126,6 +136,7 @@ class NonogramPlayCompletedState extends NonogramPlayState {
     required super.remainingHints,
     required super.remainingWands,
     required super.isWandActive,
+    required super.lockedCells,
   });
 
   factory NonogramPlayCompletedState.fromState(NonogramPlayState state) {
@@ -144,6 +155,7 @@ class NonogramPlayCompletedState extends NonogramPlayState {
       remainingHints: state.remainingHints,
       remainingWands: state.remainingWands,
       isWandActive: state.isWandActive,
+      lockedCells: state.lockedCells,
     );
   }
 }
@@ -168,6 +180,7 @@ class NonogramPlayRestoredState extends NonogramPlayState {
     required super.remainingHints,
     required super.remainingWands,
     required super.isWandActive,
+    required super.lockedCells,
     required this.offsetX,
     required this.offsetY,
   });
@@ -192,6 +205,7 @@ class NonogramPlayRestoredState extends NonogramPlayState {
       remainingHints: state.remainingHints,
       remainingWands: state.remainingWands,
       isWandActive: state.isWandActive,
+      lockedCells: state.lockedCells,
       offsetX: offsetX,
       offsetY: offsetY,
     );
@@ -220,6 +234,7 @@ class NonogramPlayErrorState extends NonogramPlayState {
     required super.remainingHints,
     required super.remainingWands,
     required super.isWandActive,
+    required super.lockedCells,
     required this.error,
   });
 
@@ -242,6 +257,7 @@ class NonogramPlayErrorState extends NonogramPlayState {
       remainingHints: state.remainingHints,
       remainingWands: state.remainingWands,
       isWandActive: state.isWandActive,
+      lockedCells: state.lockedCells,
       error: error,
     );
   }
@@ -272,6 +288,7 @@ class NonogramPlayHintAppliedState extends NonogramPlayState {
     required super.remainingHints,
     required super.remainingWands,
     required super.isWandActive,
+    required super.lockedCells,
     required this.axis,
     required this.lineIndex,
   });
@@ -296,6 +313,7 @@ class NonogramPlayHintAppliedState extends NonogramPlayState {
       remainingHints: state.remainingHints,
       remainingWands: state.remainingWands,
       isWandActive: state.isWandActive,
+      lockedCells: state.lockedCells,
       axis: axis,
       lineIndex: lineIndex,
     );
@@ -325,6 +343,7 @@ class NonogramPlayHintCellsAppliedState extends NonogramPlayState {
     required super.remainingHints,
     required super.remainingWands,
     required super.isWandActive,
+    required super.lockedCells,
     required this.cells,
   });
 
@@ -347,6 +366,7 @@ class NonogramPlayHintCellsAppliedState extends NonogramPlayState {
       remainingHints: state.remainingHints,
       remainingWands: state.remainingWands,
       isWandActive: state.isWandActive,
+      lockedCells: state.lockedCells,
       cells: cells,
     );
   }

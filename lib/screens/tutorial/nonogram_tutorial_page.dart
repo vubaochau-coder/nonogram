@@ -639,6 +639,9 @@ class _TutorialGridState extends State<_TutorialGrid> {
                   filledColor: colors.onSurface,
                   markedMarkerColor: colors.primary,
                   markerColor: colors.onSurfaceVariant.withValues(alpha: 0.7),
+                  lockedCells: controller.lockedCells,
+                  lockedStarColor: game.lockedStar,
+                  lockedMarkStarColor: game.lockedMarkStar,
                 ),
                 foregroundPainter: NonogramGridPainter(
                   rows: rows,

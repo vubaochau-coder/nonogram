@@ -232,7 +232,7 @@ class AppLocalizationsVi extends AppLocalizations {
 
   @override
   String get nonogramSettingsRestartConfirmMessage =>
-      'Toàn bộ ô đã tô và đánh X của màn này sẽ bị xoá.';
+      'Toàn bộ ô đã tô và đánh X của màn này sẽ bị xoá. Các ô có dấu sao (mở bằng gợi ý / gậy phép) được giữ lại.';
 
   @override
   String get commonClose => 'Đóng';
@@ -351,14 +351,14 @@ class AppLocalizationsVi extends AppLocalizations {
 
   @override
   String get nonogramCoachHintBody =>
-      'Tô giúp 5 ô đúng (ô cần tô mà bạn chưa tô), chọn ngẫu nhiên trên cả bàn chơi. Các ô đó sẽ nháy sáng. Mỗi màn có 3 lượt.';
+      'Tô giúp 5 ô đúng (ô cần tô mà bạn chưa tô), chọn ngẫu nhiên trên cả bàn chơi. Các ô này có dấu sao: không đổi được và được giữ lại kể cả khi chơi lại từ đầu. Mỗi màn có 3 lượt.';
 
   @override
   String get nonogramCoachWandTitle => 'Gậy phép';
 
   @override
   String get nonogramCoachWandBody =>
-      'Chạm vào gậy phép, rồi chạm vào dãy số của hàng hoặc cột bạn muốn: đáp án của trọn hàng/cột đó sẽ hiện ra. Mỗi màn có 1 lượt.';
+      'Chạm vào gậy phép, rồi chạm vào dãy số của hàng hoặc cột bạn muốn: đáp án của trọn hàng/cột đó sẽ hiện ra và được đánh dấu sao, giữ lại kể cả khi chơi lại. Mỗi màn có 1 lượt.';
 
   @override
   String get nonogramCoachModeTitle => 'Tô hay đánh X';
@@ -408,7 +408,7 @@ class AppLocalizationsVi extends AppLocalizations {
 
   @override
   String get nonogramTutorialActivateWand =>
-      'Gợi ý vừa tô giúp 5 ô (viền xanh). Muốn hiện trọn một hàng hoặc cột do bạn chọn thì dùng gậy phép: chạm vào nút gậy phép.';
+      'Gợi ý vừa tô giúp 5 ô có dấu sao: các ô này đã khoá, không bị xoá kể cả khi chơi lại. Muốn hiện trọn một hàng hoặc cột do bạn chọn thì dùng gậy phép: chạm vào nút gậy phép.';
 
   @override
   String get nonogramTutorialPickWandLine =>

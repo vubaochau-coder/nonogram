@@ -490,15 +490,36 @@ void main() {
       bloc.add(const HintRequested(offsetX: 0, offsetY: 0));
       await bloc.stream.firstWhere((s) => s.remainingHints == 2);
 
+      // Tự tô thêm một ô (không phải ô gợi ý) để xem chơi lại có xoá nó.
+      final hinted = bloc.state.lockedCells;
+      expect(hinted.length, 5);
+      final own =
+          [
+            for (var r = 0; r < 4; r++)
+              for (var c = 0; c < 4; c++)
+                if (!hinted.contains((row: r, col: c))) (row: r, col: c),
+          ].first;
+      bloc.add(CellLongPressed(row: own.row, col: own.col));
+      await bloc.stream.firstWhere(
+        (s) => s.gridData[own.row][own.col] != NonogramCellState.empty,
+      );
+
       bloc.add(const BoardReset(offsetX: 0, offsetY: 0));
       await bloc.stream.firstWhere(
-        (s) =>
-            !s.gridData
-                .expand((r) => r)
-                .any((c) => c == NonogramCellState.filled),
+        (s) => s.gridData[own.row][own.col] == NonogramCellState.empty,
       );
 
       expect(bloc.state.remainingHints, 2);
+      // Ô gợi ý được giữ lại, vẫn khoá.
+      expect(bloc.state.lockedCells, hinted);
+      for (var r = 0; r < 4; r++) {
+        for (var c = 0; c < 4; c++) {
+          expect(
+            bloc.state.gridData[r][c] == NonogramCellState.filled,
+            hinted.contains((row: r, col: c)),
+          );
+        }
+      }
     });
 
     test('Hint progress should restore after recreating bloc', () async {
@@ -537,11 +558,14 @@ void main() {
       await bloc.stream.firstWhere((s) => s.puzzle != null && !s.isLoading);
 
       expect(bloc.state.remainingHints, 2);
+      // Chỉ còn đúng 5 ô gợi ý (đã khoá) sau khi chơi lại và mở lại app.
+      expect(bloc.state.lockedCells.length, 5);
       expect(
         bloc.state.gridData
             .expand((row) => row)
-            .every((cell) => cell == NonogramCellState.empty),
-        isTrue,
+            .where((cell) => cell == NonogramCellState.filled)
+            .length,
+        5,
       );
     });
 
@@ -701,6 +725,128 @@ void main() {
         'viewportOffsetY': 0,
       });
       expect(restored.remainingWands, 1);
+    });
+  });
+
+  group('NonogramPlayBloc Locked cells', () {
+    late NonogramPlayBloc bloc;
+    late FakeNonogramRepository repository;
+
+    setUp(() {
+      repository = FakeNonogramRepository();
+      bloc = NonogramPlayBloc(repository: repository, random: Random(2));
+    });
+
+    tearDown(() async {
+      await bloc.close();
+    });
+
+    // Hàng 0: 1 0 1 0 1, hàng 1: 1 1 1 1 1.
+    Future<void> startAndWandRow0() async {
+      bloc.add(Started(puzzle: satisfactionPuzzle));
+      await bloc.stream.firstWhere((s) => s.puzzle != null && !s.isLoading);
+      bloc.add(const WandToggled());
+      bloc.add(
+        const WandLineSelected(isRow: true, index: 0, offsetX: 0, offsetY: 0),
+      );
+      await bloc.stream.firstWhere((s) => s.remainingWands == 0);
+    }
+
+    test('wand locks the whole line, X cells included', () async {
+      await startAndWandRow0();
+      expect(bloc.state.lockedCells, {
+        for (var c = 0; c < 5; c++) (row: 0, col: c),
+      });
+    });
+
+    test('locked cells ignore tap, long press and mode', () async {
+      await startAndWandRow0();
+      final before = bloc.state.gridData;
+      bloc.add(const CellTapped(0, 0, offsetX: 0, offsetY: 0)); // ô tô
+      bloc.add(const CellTapped(0, 1, offsetX: 0, offsetY: 0)); // ô X
+      bloc.add(const CellLongPressed(row: 0, col: 1));
+      bloc.add(const InteractionModeChanged(offsetX: 0, offsetY: 0));
+      await bloc.stream.firstWhere(
+        (s) => s.interactionMode == NonogramInteractionMode.mark,
+      );
+      bloc.add(const CellTapped(0, 1, offsetX: 0, offsetY: 0));
+      bloc.add(const CellTapped(0, 0, offsetX: 0, offsetY: 0));
+      await Future<void>.delayed(const Duration(milliseconds: 20));
+      expect(bloc.state.gridData[0], before[0]);
+    });
+
+    test('dragging skips locked cells and keeps drawing others', () async {
+      await startAndWandRow0();
+      // Kéo dọc từ ô khoá (0,0, đang tô) xuống ô (1,0): vẫn là tô, không xoá.
+      bloc.add(const DragStarted(0, 0));
+      bloc.add(const DragUpdated(1, 0));
+      bloc.add(const DragEnded(offsetX: 0, offsetY: 0));
+      await bloc.stream.firstWhere(
+        (s) => s.gridData[1][0] == NonogramCellState.filled,
+      );
+      expect(bloc.state.gridData[0][0], NonogramCellState.filled);
+
+      // Kéo ngang hàng 1 rồi lên hàng 0 qua ô X khoá: ô X không bị tô.
+      bloc.add(const DragStarted(1, 1));
+      bloc.add(const DragUpdated(0, 1));
+      bloc.add(const DragEnded(offsetX: 0, offsetY: 0));
+      await bloc.stream.firstWhere(
+        (s) => s.gridData[1][1] == NonogramCellState.filled,
+      );
+      await Future<void>.delayed(const Duration(milliseconds: 20));
+      expect(bloc.state.gridData[0][1], NonogramCellState.marked);
+    });
+
+    test('restart keeps locked cells, clears the rest', () async {
+      await startAndWandRow0();
+      bloc.add(const CellTapped(1, 2, offsetX: 0, offsetY: 0));
+      await bloc.stream.firstWhere(
+        (s) => s.gridData[1][2] == NonogramCellState.filled,
+      );
+      bloc.add(const BoardReset(offsetX: 0, offsetY: 0));
+      await bloc.stream.firstWhere(
+        (s) => s.gridData[1][2] == NonogramCellState.empty,
+      );
+      expect(bloc.state.gridData[0], const [
+        NonogramCellState.filled,
+        NonogramCellState.marked,
+        NonogramCellState.filled,
+        NonogramCellState.marked,
+        NonogramCellState.filled,
+      ]);
+      expect(bloc.state.lockedCells.length, 5);
+    });
+
+    test('locked cells are saved and restored', () async {
+      await startAndWandRow0();
+      await Future<void>.delayed(const Duration(milliseconds: 20));
+      final snapshot = await repository.getCurrentProgress();
+      expect(snapshot!.lockedCells.length, 5);
+
+      final map = snapshot.toMap();
+      final restored = NonogramBoardSnapshot.fromMap(map);
+      expect(restored.lockedCells, snapshot.lockedCells);
+
+      final again = NonogramPlayBloc(repository: repository);
+      addTearDown(again.close);
+      again.add(Started(puzzle: satisfactionPuzzle, snapshot: restored));
+      await again.stream.firstWhere((s) => s.puzzle != null && !s.isLoading);
+      expect(again.state.lockedCells, snapshot.lockedCells);
+    });
+
+    test('old snapshots without locked cells lock nothing', () {
+      final restored = NonogramBoardSnapshot.fromMap({
+        'puzzleId': 'p',
+        'level': 1,
+        'gridData': [
+          [1],
+        ],
+        'startTime': DateTime(2026).toIso8601String(),
+        'interactionMode': null,
+        'viewportOffsetX': 0,
+        'viewportOffsetY': 0,
+      });
+      expect(restored.lockedCells, isEmpty);
     });
   });
 }

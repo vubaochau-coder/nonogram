@@ -140,6 +140,7 @@ class _NonogramBoardViewportState extends State<NonogramBoardViewport>
     }
     final cell = layout.cellAt(details.localPosition, _offset);
     if (cell == null) return;
+    if (_rejectLocked(cell)) return;
     final o = _offset;
     _bloc.add(CellTapped(cell.row, cell.col, offsetX: o.dx, offsetY: o.dy));
   }
@@ -149,6 +150,7 @@ class _NonogramBoardViewportState extends State<NonogramBoardViewport>
     if (layout == null || _wandActive) return;
     final cell = layout.cellAt(details.localPosition, _offset);
     if (cell == null) return;
+    if (_rejectLocked(cell)) return;
     // Rung ngay lúc nhấn giữ được nhận, để người chơi biết đã có thể nhấc
     // tay (khó đoán phải giữ bao lâu).
     AppHaptics.longPress();
@@ -161,6 +163,15 @@ class _NonogramBoardViewportState extends State<NonogramBoardViewport>
         offsetY: o.dy,
       ),
     );
+  }
+
+  /// Chạm / nhấn giữ vào ô khoá: không đổi gì, chỉ rung nhẹ và nháy ô đó
+  /// để báo ô đã khoá.
+  bool _rejectLocked(({int row, int col}) cell) {
+    if (!_bloc.state.isLocked(cell.row, cell.col)) return false;
+    HapticFeedback.lightImpact();
+    _showHint(cells: [cell]);
+    return true;
   }
 
   // --- Kéo để tô / kéo bàn / cuộn dải gợi ý ---
@@ -424,6 +435,7 @@ class _NonogramBoardViewportState extends State<NonogramBoardViewport>
                 p.isLoading != c.isLoading ||
                 p.startTime != c.startTime ||
                 p.isWandActive != c.isWandActive ||
+                p.lockedCells != c.lockedCells ||
                 !NonogramGridEquality.equals(p.gridData, c.gridData),
         builder: (context, state) {
           final puzzle = state.puzzle;
@@ -623,6 +635,9 @@ class _BoardPaint extends StatelessWidget {
                         markerColor: colors.onSurfaceVariant.withValues(
                           alpha: 0.7,
                         ),
+                        lockedCells: state.lockedCells,
+                        lockedStarColor: game.lockedStar,
+                        lockedMarkStarColor: game.lockedMarkStar,
                       ),
                       foregroundPainter: NonogramGridPainter(
                         rows: puzzle.rows,

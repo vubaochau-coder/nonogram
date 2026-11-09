@@ -343,6 +343,7 @@ class NonogramTutorialController extends ChangeNotifier {
     _remainingWands = wandCount;
     _wandActive = false;
     _revealed = const {};
+    _locked = const {};
   }
 
   static List<List<int>> _rowClues(List<List<int>> solution) {
@@ -373,6 +374,7 @@ class NonogramTutorialController extends ChangeNotifier {
   int _remainingWands = wandCount;
   bool _wandActive = false;
   Set<TutorialCell> _revealed = const {};
+  Set<TutorialCell> _locked = const {};
   int _stepIndex = 0;
   int _mistakes = 0;
 
@@ -394,6 +396,9 @@ class NonogramTutorialController extends ChangeNotifier {
 
   /// Các ô vừa được gợi ý / gậy phép hiện đáp án (để tô sáng).
   Set<TutorialCell> get revealedCells => _revealed;
+
+  /// Mọi ô đã mở bằng gợi ý / gậy phép (vẽ dấu sao như trong màn chơi).
+  Set<TutorialCell> get lockedCells => _locked;
 
   /// Các ô được viền sáng ở bước hiện tại.
   Set<TutorialCell> get highlightedCells =>
@@ -506,6 +511,7 @@ class NonogramTutorialController extends ChangeNotifier {
     if (cells.isEmpty) return;
     _grid = _engine.fillCells(gridData: _grid, cells: cells);
     _revealed = cells.toSet();
+    _locked = {..._locked, ..._revealed};
     _remainingHints--;
     _advance();
   }
@@ -545,6 +551,7 @@ class NonogramTutorialController extends ChangeNotifier {
       else
         for (var r = 0; r < rows; r++) (row: r, col: index),
     };
+    _locked = {..._locked, ..._revealed};
   }
 
   /// Chạm vào nút Tô / X. Chỉ đổi được ở bước yêu cầu chuyển chế độ.

@@ -56,7 +56,10 @@ class NonogramSettingsDialog extends StatelessWidget {
                 onPressed: () => Navigator.pop(dialogContext, true),
                 style: TextButton.styleFrom(
                   foregroundColor: dialogContext.color.error,
-                  textStyle: const TextStyle(fontWeight: FontWeight.bold),
+                  // Giữ font của theme, chỉ đậm hơn.
+                  textStyle: dialogContext.labelLarge.copyWith(
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
                 child: Text(l10n.nonogramSettingsRestartConfirm),
               ),

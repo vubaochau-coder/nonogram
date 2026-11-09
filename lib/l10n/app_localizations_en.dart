@@ -232,7 +232,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get nonogramSettingsRestartConfirmMessage =>
-      'All cells you have filled or marked will be cleared.';
+      'All cells you have filled or marked will be cleared. Cells with a star (opened by hints or the wand) are kept.';
 
   @override
   String get commonClose => 'Close';
@@ -352,14 +352,14 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get nonogramCoachHintBody =>
-      'Fills 5 correct squares for you (squares that should be filled but aren\'t yet), picked at random across the board. They flash so you can spot them. You get 3 per puzzle.';
+      'Fills 5 correct squares for you (squares that should be filled but aren\'t yet), picked at random across the board. They get a star: they can\'t be changed and are kept even if you restart. You get 3 per puzzle.';
 
   @override
   String get nonogramCoachWandTitle => 'Magic wand';
 
   @override
   String get nonogramCoachWandBody =>
-      'Tap the wand, then tap the clues of any row or column: the answer for that whole line is revealed. You get 1 per puzzle.';
+      'Tap the wand, then tap the clues of any row or column: the answer for that whole line is revealed and marked with a star, kept even if you restart. You get 1 per puzzle.';
 
   @override
   String get nonogramCoachModeTitle => 'Fill or X';
@@ -409,7 +409,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get nonogramTutorialActivateWand =>
-      'The hint filled 5 squares (outlined in blue). To reveal a whole row or column of your choice, use the magic wand: tap the wand button.';
+      'The hint filled 5 squares marked with a star: they\'re locked and kept even if you restart. To reveal a whole row or column of your choice, use the magic wand: tap the wand button.';
 
   @override
   String get nonogramTutorialPickWandLine =>

@@ -184,6 +184,7 @@ class NonogramPlayBloc extends AppBloc<NonogramPlayEvent, NonogramPlayState> {
       remainingHints: remainingHints,
       remainingWands: remainingWands,
       isWandActive: false,
+      lockedCells: _validLocked(snapshot?.lockedCells, puzzle),
     );
 
     if (snapshot != null) {
@@ -201,6 +202,8 @@ class NonogramPlayBloc extends AppBloc<NonogramPlayEvent, NonogramPlayState> {
 
   _onCellTapped(CellTapped event, Emitter emit) {
     if (state.isLoading || state.isSolved || state.puzzle == null) return;
+    // Ô khoá (mở bằng gợi ý / gậy phép) không đổi được.
+    if (state.isLocked(event.row, event.col)) return;
 
     final currentCell = state.gridData[event.row][event.col];
     final NonogramCellState targetState;
@@ -271,6 +274,7 @@ class NonogramPlayBloc extends AppBloc<NonogramPlayEvent, NonogramPlayState> {
   /// ô trống, chế độ X thì tô ô.
   _onCellLongPressed(CellLongPressed event, Emitter emit) {
     if (state.isLoading || state.isSolved || state.puzzle == null) return;
+    if (state.isLocked(event.row, event.col)) return;
 
     final NonogramCellState targetState;
     if (state.interactionMode == NonogramInteractionMode.mark) {
@@ -312,8 +316,12 @@ class NonogramPlayBloc extends AppBloc<NonogramPlayEvent, NonogramPlayState> {
     final currentCell = state.gridData[event.row][event.col];
     final mark = state.interactionMode == NonogramInteractionMode.mark;
     final active = mark ? NonogramCellState.marked : NonogramCellState.filled;
+    // Bắt đầu kéo từ ô khoá: coi như ô trống (tô / đánh X), để không biến
+    // thành xoá các ô phía sau.
     final targetState =
-        currentCell == active ? NonogramCellState.empty : active;
+        currentCell == active && !state.isLocked(event.row, event.col)
+            ? NonogramCellState.empty
+            : active;
 
     _dragSession = _DragSession(targetState: targetState, marking: mark);
 
@@ -360,6 +368,22 @@ class NonogramPlayBloc extends AppBloc<NonogramPlayEvent, NonogramPlayState> {
     );
   }
 
+  /// Ô khoá đọc từ ván lưu, bỏ các ô nằm ngoài bàn (phòng dữ liệu hỏng).
+  static Set<({int row, int col})> _validLocked(
+    Set<({int row, int col})>? cells,
+    NonogramPuzzle puzzle,
+  ) {
+    if (cells == null || cells.isEmpty) return const {};
+    return {
+      for (final c in cells)
+        if (c.row >= 0 &&
+            c.row < puzzle.rows &&
+            c.col >= 0 &&
+            c.col < puzzle.cols)
+          c,
+    };
+  }
+
   double _autoCellSize(NonogramPuzzle puzzle) {
     final viewport = _viewportSize;
     if (viewport == null) return NonogramBoardLayout.maxCellSize;
@@ -391,10 +415,18 @@ class NonogramPlayBloc extends AppBloc<NonogramPlayEvent, NonogramPlayState> {
     if (state.puzzle == null) return;
     _dragSession = null;
 
+    // Xoá bàn nhưng giữ các ô khoá (mở bằng gợi ý / gậy phép).
+    final puzzle = state.puzzle!;
     final emptyGrid = _engine.createEmptyGrid(
-      rows: state.puzzle!.rows,
-      cols: state.puzzle!.cols,
+      rows: puzzle.rows,
+      cols: puzzle.cols,
     );
+    for (final cell in state.lockedCells) {
+      emptyGrid[cell.row][cell.col] =
+          puzzle.solution[cell.row][cell.col] == 1
+              ? NonogramCellState.filled
+              : NonogramCellState.marked;
+    }
 
     final nextState = _buildGridDerivedState(
       sourceState: state,
@@ -474,7 +506,16 @@ class NonogramPlayBloc extends AppBloc<NonogramPlayEvent, NonogramPlayState> {
     final nextState = _buildGridDerivedState(
       sourceState: state,
       gridData: newGrid.toUnmodifiable2D(),
-    ).copyWith(remainingWands: state.remainingWands - 1, isWandActive: false);
+    ).copyWith(
+      remainingWands: state.remainingWands - 1,
+      isWandActive: false,
+      lockedCells: {
+        ...state.lockedCells,
+        // Số ô trên đường: hàng có `cols` ô, cột có `rows` ô.
+        for (var i = 0; i < (event.isRow ? puzzle.cols : puzzle.rows); i++)
+          event.isRow ? (row: event.index, col: i) : (row: i, col: event.index),
+      },
+    );
 
     emit(
       NonogramPlayHintAppliedState.fromState(
@@ -520,7 +561,7 @@ class NonogramPlayBloc extends AppBloc<NonogramPlayEvent, NonogramPlayState> {
       sourceState: state,
       gridData: newGrid.toUnmodifiable2D(),
       remainingHints: state.remainingHints - 1,
-    );
+    ).copyWith(lockedCells: {...state.lockedCells, ...cells});
 
     // Pulse animation state
     emit(NonogramPlayHintCellsAppliedState.fromState(nextState, cells: cells));
@@ -612,6 +653,10 @@ class NonogramPlayBloc extends AppBloc<NonogramPlayEvent, NonogramPlayState> {
 
     final cellKey = '$row-$col';
     if (session.processedCells.contains(cellKey)) return;
+    if (state.isLocked(row, col)) {
+      session.processedCells.add(cellKey);
+      return;
+    }
 
     if (session.marking) {
       // Kéo đánh X chỉ đổi ô trống (không đè lên ô đã tô); kéo bỏ X chỉ

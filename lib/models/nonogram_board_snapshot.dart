@@ -15,6 +15,9 @@ class NonogramBoardSnapshot {
   final int remainingHints;
   final int remainingWands;
 
+  /// Ô mở bằng gợi ý / gậy phép (không đổi được, giữ khi chơi lại).
+  final Set<({int row, int col})> lockedCells;
+
   const NonogramBoardSnapshot({
     required this.puzzleId,
     required this.level,
@@ -26,6 +29,7 @@ class NonogramBoardSnapshot {
     this.cellSize = 40.0,
     this.remainingHints = 3,
     this.remainingWands = 1,
+    this.lockedCells = const {},
   });
 
   Map<String, dynamic> toMap() {
@@ -41,6 +45,9 @@ class NonogramBoardSnapshot {
       'cellSize': cellSize,
       'remainingHints': remainingHints,
       'remainingWands': remainingWands,
+      'lockedCells': [
+        for (final cell in lockedCells) [cell.row, cell.col],
+      ],
     };
   }
 
@@ -64,6 +71,11 @@ class NonogramBoardSnapshot {
       remainingHints: (map['remainingHints'] as int?) ?? 3,
       // Ván lưu trước khi có gậy phép: coi như chưa dùng.
       remainingWands: (map['remainingWands'] as int?) ?? 1,
+      // Ván lưu trước khi có ô khoá: không khoá ô nào.
+      lockedCells: {
+        for (final cell in (map['lockedCells'] as List?) ?? const [])
+          (row: (cell as List)[0] as int, col: cell[1] as int),
+      },
     );
   }
 }

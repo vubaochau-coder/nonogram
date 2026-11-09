@@ -27,6 +27,7 @@ class NonogramSnapshotMapper {
       cellSize: state.cellSize,
       remainingHints: state.remainingHints,
       remainingWands: state.remainingWands,
+      lockedCells: state.lockedCells,
     );
   }
 }
