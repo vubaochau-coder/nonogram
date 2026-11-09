@@ -15,11 +15,14 @@ import 'package:nonogram/models/nonogram_cell_state.dart';
 import 'package:nonogram/models/nonogram_interaction_mode.dart';
 import 'package:nonogram/models/nonogram_puzzle.dart';
 import 'package:nonogram/screens/play/bloc/nonogram_play_bloc.dart';
+import 'package:nonogram/screens/play/bloc/nonogram_play_event.dart';
 import 'package:nonogram/screens/play/coach/nonogram_play_coach.dart';
 import 'package:nonogram/screens/play/engine/nonogram_board_layout.dart';
 import 'package:nonogram/screens/play/nonogram_play_page.dart';
 import 'package:nonogram/screens/play/nonogram_transformation_controller_provider.dart';
+import 'package:nonogram/screens/play/sections/nonogram_board_shell_section.dart';
 import 'package:nonogram/screens/play/sections/nonogram_board_viewport.dart';
+import 'package:nonogram/screens/play/views/wand_action.dart';
 import 'package:nonogram/screens/play/sections/nonogram_landscape_info_panel.dart';
 
 import '../mocks/fake_nonogram_local_service.dart';
@@ -499,5 +502,35 @@ void main() {
     await tester.pump(const Duration(milliseconds: 400));
     expect(bloc.state.gridData[2], row);
     await tester.pump(const Duration(seconds: 2));
+  });
+
+  testWidgets('count badges are not clipped at the top of the board', (
+    tester,
+  ) async {
+    // Màn dọc hẹp: nút gợi ý gọn, số lượt hiện bằng huy hiệu.
+    await _pumpPlay(tester, const Size(360, 780));
+    final top = tester.getTopLeft(find.byType(NonogramBoardShellSection)).dy;
+    final badges = find.byType(CountBadge);
+    expect(badges, findsNWidgets(2));
+    for (final badge in badges.evaluate()) {
+      expect(
+        tester.getRect(find.byWidget(badge.widget)).top,
+        greaterThanOrEqualTo(top),
+      );
+    }
+
+    // Toàn màn hình: hàng nút nằm trong dock (dock cắt phần tràn).
+    _bloc(tester).add(const FullscreenToggled());
+    await tester.pump(const Duration(milliseconds: 400));
+    await tester.pump(const Duration(milliseconds: 400));
+    final dock = tester.getRect(
+      find.byKey(const ValueKey('nonogram-fullscreen-action-dock-body')),
+    );
+    for (final badge in find.byType(CountBadge).evaluate()) {
+      expect(
+        tester.getRect(find.byWidget(badge.widget)).top,
+        greaterThanOrEqualTo(dock.top),
+      );
+    }
   });
 }

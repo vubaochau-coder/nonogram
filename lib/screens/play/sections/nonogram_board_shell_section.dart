@@ -172,6 +172,15 @@ class _NonogramBoardShellSectionState extends State<NonogramBoardShellSection> {
   }
 
   Widget _buildOverlayActions({required bool compactHint}) {
+    // Chừa phía trên cho huy hiệu số lượt (nhô lên khỏi nút): hàng nút nằm
+    // sát mép trên vùng bàn chơi, và khung dock toàn màn hình cắt phần tràn.
+    return Padding(
+      padding: const EdgeInsets.only(top: 6),
+      child: _overlayActionsRow(compactHint: compactHint),
+    );
+  }
+
+  Widget _overlayActionsRow({required bool compactHint}) {
     return Row(
       mainAxisSize: MainAxisSize.min,
       children: [
