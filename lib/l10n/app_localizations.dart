@@ -581,7 +581,7 @@ abstract class AppLocalizations {
   /// No description provided for @nonogramTutorialDone.
   ///
   /// In en, this message translates to:
-  /// **'You know the rules now. The guide has more techniques for solving bigger puzzles.'**
+  /// **'You\'re all set! On big puzzles, drag with two fingers (or from the empty space outside the grid) to move the board; the app will remind you on your first big puzzle.'**
   String get nonogramTutorialDone;
 
   /// No description provided for @nonogramTutorialShowTechniques.
@@ -605,7 +605,7 @@ abstract class AppLocalizations {
   /// No description provided for @nonogramGuideTutorialCardDesc.
   ///
   /// In en, this message translates to:
-  /// **'Learn the rules step by step on a small 5×5 puzzle.'**
+  /// **'Learn the rules and controls step by step on a small 5×5 puzzle.'**
   String get nonogramGuideTutorialCardDesc;
 
   /// No description provided for @nonogramPlayInfoHide.
@@ -677,7 +677,7 @@ abstract class AppLocalizations {
   /// No description provided for @nonogramCoachHintBody.
   ///
   /// In en, this message translates to:
-  /// **'Automatically reveals one row or column (the one with the fewest wrong squares). You get 3 per puzzle.'**
+  /// **'The app picks a row or column and reveals its answer. You get 3 per puzzle.'**
   String get nonogramCoachHintBody;
 
   /// No description provided for @nonogramCoachWandTitle.
@@ -727,6 +727,66 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Big puzzles don\'t fit on screen: drag with two fingers, or drag from the empty space outside the grid to move the board. Drag on the clues to see hidden numbers (the \"+N\" in the corner shows how many).'**
   String get nonogramCoachScrollBody;
+
+  /// No description provided for @nonogramTutorialRulesDoneTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'You know the rules!'**
+  String get nonogramTutorialRulesDoneTitle;
+
+  /// No description provided for @nonogramTutorialRulesDone.
+  ///
+  /// In en, this message translates to:
+  /// **'Next, let\'s practice the controls and helpers on another puzzle: drag to fill quickly, press and hold to mark, hints and the magic wand.'**
+  String get nonogramTutorialRulesDone;
+
+  /// No description provided for @nonogramTutorialContinue.
+  ///
+  /// In en, this message translates to:
+  /// **'Continue'**
+  String get nonogramTutorialContinue;
+
+  /// No description provided for @nonogramTutorialLater.
+  ///
+  /// In en, this message translates to:
+  /// **'Later, just play'**
+  String get nonogramTutorialLater;
+
+  /// No description provided for @nonogramTutorialDragRow.
+  ///
+  /// In en, this message translates to:
+  /// **'Tip: drag your finger across squares to fill them in one go. The top row has 5, so drag across the whole row!'**
+  String get nonogramTutorialDragRow;
+
+  /// No description provided for @nonogramTutorialLongPressMark.
+  ///
+  /// In en, this message translates to:
+  /// **'1 1 1 fits these 5 squares exactly, so the 2nd and 4th squares must be empty. No need to switch modes: press and hold each one to mark it with an X. A short vibration means it\'s done.'**
+  String get nonogramTutorialLongPressMark;
+
+  /// No description provided for @nonogramTutorialUseHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Stuck? Tap the Hint button and the app picks a row or column and reveals its answer. You get 3 per puzzle.'**
+  String get nonogramTutorialUseHint;
+
+  /// No description provided for @nonogramTutorialActivateWand.
+  ///
+  /// In en, this message translates to:
+  /// **'The hint revealed the highlighted column. To choose the line yourself, use the magic wand: tap the wand button.'**
+  String get nonogramTutorialActivateWand;
+
+  /// No description provided for @nonogramTutorialPickWandLine.
+  ///
+  /// In en, this message translates to:
+  /// **'Now tap the clues of the bottom row to reveal that row. You get 1 wand per puzzle.'**
+  String get nonogramTutorialPickWandLine;
+
+  /// No description provided for @nonogramTutorialFinishTools.
+  ///
+  /// In en, this message translates to:
+  /// **'Fill the remaining squares to finish. Drag down a column to fill faster.'**
+  String get nonogramTutorialFinishTools;
 }
 
 class _AppLocalizationsDelegate

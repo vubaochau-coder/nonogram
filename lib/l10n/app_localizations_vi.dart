@@ -296,7 +296,7 @@ class AppLocalizationsVi extends AppLocalizations {
 
   @override
   String get nonogramTutorialDone =>
-      'Bạn đã nắm được luật chơi. Trang hướng dẫn còn nhiều kỹ thuật giúp giải các màn lớn hơn.';
+      'Bạn đã sẵn sàng! Ở các màn lớn, kéo bằng hai ngón (hoặc kéo từ chỗ trống ngoài lưới) để di chuyển bàn chơi, app sẽ nhắc khi bạn gặp màn lớn đầu tiên.';
 
   @override
   String get nonogramTutorialShowTechniques => 'Xem các kỹ thuật giải';
@@ -309,7 +309,7 @@ class AppLocalizationsVi extends AppLocalizations {
 
   @override
   String get nonogramGuideTutorialCardDesc =>
-      'Học luật chơi từng bước trên một câu đố 5×5 nhỏ.';
+      'Học luật chơi và các thao tác từng bước trên câu đố 5×5 nhỏ.';
 
   @override
   String get nonogramPlayInfoHide => 'Ẩn thông tin màn';
@@ -351,7 +351,7 @@ class AppLocalizationsVi extends AppLocalizations {
 
   @override
   String get nonogramCoachHintBody =>
-      'Tự động hiện đáp án của một hàng hoặc cột (hàng/cột đang sai ít ô nhất). Mỗi màn có 3 lượt.';
+      'App tự chọn một hàng hoặc cột và hiện đáp án của nó. Mỗi màn có 3 lượt.';
 
   @override
   String get nonogramCoachWandTitle => 'Gậy phép';
@@ -380,4 +380,41 @@ class AppLocalizationsVi extends AppLocalizations {
   @override
   String get nonogramCoachScrollBody =>
       'Màn lớn không vừa màn hình: kéo bằng hai ngón, hoặc kéo từ chỗ trống ngoài lưới để di chuyển bàn chơi. Kéo trên dãy số để xem các số bị che (số \"+N\" ở góc cho biết còn bao nhiêu).';
+
+  @override
+  String get nonogramTutorialRulesDoneTitle => 'Bạn đã nắm luật chơi!';
+
+  @override
+  String get nonogramTutorialRulesDone =>
+      'Tiếp theo, cùng thực hành các thao tác và công cụ hỗ trợ trên một câu đố khác: kéo để tô nhanh, nhấn giữ để đánh X, gợi ý và gậy phép.';
+
+  @override
+  String get nonogramTutorialContinue => 'Tiếp tục';
+
+  @override
+  String get nonogramTutorialLater => 'Để sau, chơi luôn';
+
+  @override
+  String get nonogramTutorialDragRow =>
+      'Mẹo: kéo ngón tay qua nhiều ô để tô liền một lúc. Hàng đầu có 5 ô, hãy kéo một đường qua cả hàng!';
+
+  @override
+  String get nonogramTutorialLongPressMark =>
+      '1 1 1 vừa khít 5 ô nên ô thứ 2 và thứ 4 chắc chắn trống. Không cần đổi chế độ: nhấn giữ từng ô để đánh X, máy rung nhẹ là xong.';
+
+  @override
+  String get nonogramTutorialUseHint =>
+      'Bí rồi? Chạm vào nút Gợi ý, app sẽ tự chọn một hàng hoặc cột và hiện đáp án. Mỗi màn có 3 lượt.';
+
+  @override
+  String get nonogramTutorialActivateWand =>
+      'Gợi ý vừa hiện đáp án của cột được tô sáng. Muốn tự chọn hàng hoặc cột thì dùng gậy phép: chạm vào nút gậy phép.';
+
+  @override
+  String get nonogramTutorialPickWandLine =>
+      'Giờ chạm vào dãy số của hàng cuối cùng để hiện đáp án hàng đó. Mỗi màn có 1 lượt gậy phép.';
+
+  @override
+  String get nonogramTutorialFinishTools =>
+      'Tô nốt các ô còn lại để hoàn thành. Kéo dọc theo cột để tô nhanh hơn.';
 }

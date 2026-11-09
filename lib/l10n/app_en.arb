@@ -169,11 +169,11 @@
   "nonogramTutorialOneCellLeft": "The 1 in the last row now has only one place left. Switch back to fill mode.",
   "nonogramTutorialFinish": "Fill the last square to finish the puzzle!",
   "nonogramTutorialDoneTitle": "Well done!",
-  "nonogramTutorialDone": "You know the rules now. The guide has more techniques for solving bigger puzzles.",
+  "nonogramTutorialDone": "You're all set! On big puzzles, drag with two fingers (or from the empty space outside the grid) to move the board; the app will remind you on your first big puzzle.",
   "nonogramTutorialShowTechniques": "See solving techniques",
   "nonogramTutorialPlay": "Start playing",
   "nonogramGuideTutorialCardTitle": "Learn by playing",
-  "nonogramGuideTutorialCardDesc": "Learn the rules step by step on a small 5×5 puzzle.",
+  "nonogramGuideTutorialCardDesc": "Learn the rules and controls step by step on a small 5×5 puzzle.",
   "nonogramPlayInfoHide": "Hide level info",
   "nonogramPlayWandLabel": "Magic wand",
   "nonogramPlayWandSelectPrompt": "Tap the clues of the row or column to reveal",
@@ -185,7 +185,7 @@
   "nonogramCoachDone": "Got it",
   "nonogramCoachStep": "{current}/{total}",
   "nonogramCoachHintTitle": "Hint",
-  "nonogramCoachHintBody": "Automatically reveals one row or column (the one with the fewest wrong squares). You get 3 per puzzle.",
+  "nonogramCoachHintBody": "The app picks a row or column and reveals its answer. You get 3 per puzzle.",
   "nonogramCoachWandTitle": "Magic wand",
   "nonogramCoachWandBody": "Tap the wand, then tap the clues of any row or column: the answer for exactly that line is revealed. You get 1 per puzzle.",
   "nonogramCoachModeTitle": "Fill or X",
@@ -203,5 +203,15 @@
         "type": "int"
       }
     }
-  }
+  },
+  "nonogramTutorialRulesDoneTitle": "You know the rules!",
+  "nonogramTutorialRulesDone": "Next, let's practice the controls and helpers on another puzzle: drag to fill quickly, press and hold to mark, hints and the magic wand.",
+  "nonogramTutorialContinue": "Continue",
+  "nonogramTutorialLater": "Later, just play",
+  "nonogramTutorialDragRow": "Tip: drag your finger across squares to fill them in one go. The top row has 5, so drag across the whole row!",
+  "nonogramTutorialLongPressMark": "1 1 1 fits these 5 squares exactly, so the 2nd and 4th squares must be empty. No need to switch modes: press and hold each one to mark it with an X. A short vibration means it's done.",
+  "nonogramTutorialUseHint": "Stuck? Tap the Hint button and the app picks a row or column and reveals its answer. You get 3 per puzzle.",
+  "nonogramTutorialActivateWand": "The hint revealed the highlighted column. To choose the line yourself, use the magic wand: tap the wand button.",
+  "nonogramTutorialPickWandLine": "Now tap the clues of the bottom row to reveal that row. You get 1 wand per puzzle.",
+  "nonogramTutorialFinishTools": "Fill the remaining squares to finish. Drag down a column to fill faster."
 }

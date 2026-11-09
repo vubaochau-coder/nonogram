@@ -1,11 +1,11 @@
 import 'dart:math';
 
-import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:nonogram/core/app_haptics.dart';
 import 'package:nonogram/core/app_theme.dart';
 import 'package:nonogram/core/context_ext.dart';
 import 'package:nonogram/models/nonogram_grid_equality.dart';
@@ -148,7 +148,7 @@ class _NonogramBoardViewportState extends State<NonogramBoardViewport>
     if (cell == null) return;
     // Rung ngay lúc nhấn giữ được nhận, để người chơi biết đã có thể nhấc
     // tay (khó đoán phải giữ bao lâu).
-    _longPressHaptic();
+    AppHaptics.longPress();
     final o = _offset;
     _bloc.add(
       CellLongPressed(
@@ -158,17 +158,6 @@ class _NonogramBoardViewportState extends State<NonogramBoardViewport>
         offsetY: o.dy,
       ),
     );
-  }
-
-  /// Rung nhẹ nhưng đủ cảm nhận: `selectionClick` (CLOCK_TICK trên Android)
-  /// không rung trên nhiều máy, nên Android dùng hiệu ứng nhấn giữ chuẩn của
-  /// hệ thống, iOS dùng một nhịp va chạm vừa.
-  static void _longPressHaptic() {
-    if (defaultTargetPlatform == TargetPlatform.android) {
-      HapticFeedback.vibrate();
-    } else {
-      HapticFeedback.mediumImpact();
-    }
   }
 
   // --- Kéo để tô / kéo bàn / cuộn dải gợi ý ---

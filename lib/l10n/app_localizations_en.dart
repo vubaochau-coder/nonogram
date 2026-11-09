@@ -297,7 +297,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get nonogramTutorialDone =>
-      'You know the rules now. The guide has more techniques for solving bigger puzzles.';
+      'You\'re all set! On big puzzles, drag with two fingers (or from the empty space outside the grid) to move the board; the app will remind you on your first big puzzle.';
 
   @override
   String get nonogramTutorialShowTechniques => 'See solving techniques';
@@ -310,7 +310,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get nonogramGuideTutorialCardDesc =>
-      'Learn the rules step by step on a small 5×5 puzzle.';
+      'Learn the rules and controls step by step on a small 5×5 puzzle.';
 
   @override
   String get nonogramPlayInfoHide => 'Hide level info';
@@ -352,7 +352,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get nonogramCoachHintBody =>
-      'Automatically reveals one row or column (the one with the fewest wrong squares). You get 3 per puzzle.';
+      'The app picks a row or column and reveals its answer. You get 3 per puzzle.';
 
   @override
   String get nonogramCoachWandTitle => 'Magic wand';
@@ -381,4 +381,41 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get nonogramCoachScrollBody =>
       'Big puzzles don\'t fit on screen: drag with two fingers, or drag from the empty space outside the grid to move the board. Drag on the clues to see hidden numbers (the \"+N\" in the corner shows how many).';
+
+  @override
+  String get nonogramTutorialRulesDoneTitle => 'You know the rules!';
+
+  @override
+  String get nonogramTutorialRulesDone =>
+      'Next, let\'s practice the controls and helpers on another puzzle: drag to fill quickly, press and hold to mark, hints and the magic wand.';
+
+  @override
+  String get nonogramTutorialContinue => 'Continue';
+
+  @override
+  String get nonogramTutorialLater => 'Later, just play';
+
+  @override
+  String get nonogramTutorialDragRow =>
+      'Tip: drag your finger across squares to fill them in one go. The top row has 5, so drag across the whole row!';
+
+  @override
+  String get nonogramTutorialLongPressMark =>
+      '1 1 1 fits these 5 squares exactly, so the 2nd and 4th squares must be empty. No need to switch modes: press and hold each one to mark it with an X. A short vibration means it\'s done.';
+
+  @override
+  String get nonogramTutorialUseHint =>
+      'Stuck? Tap the Hint button and the app picks a row or column and reveals its answer. You get 3 per puzzle.';
+
+  @override
+  String get nonogramTutorialActivateWand =>
+      'The hint revealed the highlighted column. To choose the line yourself, use the magic wand: tap the wand button.';
+
+  @override
+  String get nonogramTutorialPickWandLine =>
+      'Now tap the clues of the bottom row to reveal that row. You get 1 wand per puzzle.';
+
+  @override
+  String get nonogramTutorialFinishTools =>
+      'Fill the remaining squares to finish. Drag down a column to fill faster.';
 }
