@@ -14,6 +14,7 @@ import 'package:nonogram/models/nonogram_cell_state.dart';
 import 'package:nonogram/models/nonogram_interaction_mode.dart';
 import 'package:nonogram/models/nonogram_puzzle.dart';
 import 'package:nonogram/screens/play/bloc/nonogram_play_bloc.dart';
+import 'package:nonogram/screens/play/engine/nonogram_board_layout.dart';
 import 'package:nonogram/screens/play/nonogram_play_page.dart';
 import 'package:nonogram/screens/play/nonogram_transformation_controller_provider.dart';
 import 'package:nonogram/screens/play/sections/nonogram_board_viewport.dart';
@@ -247,39 +248,55 @@ void main() {
     expect(find.byKey(panel), findsOneWidget);
     expect(find.text('Big'), findsOneWidget);
     expect(find.text('40 × 40'), findsOneWidget);
-    final boardLeftWithPanel = _boardOrigin(tester).dx;
-    expect(boardLeftWithPanel, NonogramLandscapeInfoPanel.width);
+    // Cột trái nới theo bảng để bảng không che bàn chơi.
+    expect(_boardOrigin(tester).dx, NonogramLandscapeLeftRail.panelWidth);
 
     await tester.tap(
       find.byKey(const ValueKey('nonogram-landscape-info-hide')),
     );
-    for (var i = 0; i < 4; i++) {
+    // Trượt bảng vào (220ms) rồi mới thu cột về bề rộng cột nút.
+    for (var i = 0; i < 8; i++) {
       await tester.pump(const Duration(milliseconds: 50));
     }
     expect(find.byKey(panel), findsNothing);
-    expect(_boardOrigin(tester).dx, 0);
+    expect(_boardOrigin(tester).dx, NonogramBoardLayout.railReserve);
 
     await tester.tap(find.byKey(const ValueKey('nonogram-landscape-info')));
-    await tester.pump(const Duration(milliseconds: 50));
+    for (var i = 0; i < 8; i++) {
+      await tester.pump(const Duration(milliseconds: 50));
+    }
     expect(find.byKey(panel), findsOneWidget);
+    expect(_boardOrigin(tester).dx, NonogramLandscapeLeftRail.panelWidth);
   });
 
-  testWidgets('landscape rail keeps frequent actions at the bottom', (
+  testWidgets('landscape: menu on the left, game actions bottom-right', (
     tester,
   ) async {
     await _pumpPlay(tester, const Size(900, 400));
-    double y(Finder finder) => tester.getCenter(finder).dy;
+    Offset at(Finder finder) => tester.getCenter(finder);
 
-    final back = y(find.byIcon(LucideIcons.arrowLeft));
-    final settings = y(find.byIcon(LucideIcons.settings));
-    final hint = y(find.byIcon(LucideIcons.lightbulb));
-    final mark = y(find.byKey(const ValueKey('nonogram-mode-mark')));
+    final back = at(find.byIcon(LucideIcons.arrowLeft));
+    final info = at(find.byKey(const ValueKey('nonogram-landscape-info')));
+    final rotate = at(find.byKey(const ValueKey('nonogram-rotate-screen')));
+    final settings = at(find.byIcon(LucideIcons.settings));
+    final hint = at(find.byIcon(LucideIcons.lightbulb));
+    final mark = at(find.byKey(const ValueKey('nonogram-mode-mark')));
 
-    expect(back, lessThan(settings));
-    expect(settings, lessThan(hint));
-    expect(hint, lessThan(mark));
-    // Tô / X nằm sát mép dưới, trong tầm ngón cái.
-    expect(mark, greaterThan(400 * 0.75));
+    // Cột trái: quay lại, thông tin ở góc trên; xoay, cài đặt ở góc dưới.
+    for (final p in [back, info, rotate, settings]) {
+      expect(p.dx, lessThan(NonogramBoardLayout.railReserve));
+    }
+    expect(back.dy, lessThan(info.dy));
+    expect(info.dy, lessThan(400 / 2));
+    expect(rotate.dy, greaterThan(400 / 2));
+    expect(rotate.dy, lessThan(settings.dy));
+
+    // Mép phải chỉ còn gợi ý và Tô / X, ở góc dưới trong tầm ngón cái.
+    for (final p in [hint, mark]) {
+      expect(p.dx, greaterThan(900 - NonogramBoardLayout.railReserve));
+    }
+    expect(hint.dy, greaterThan(400 / 2));
+    expect(hint.dy, lessThan(mark.dy));
   });
 
   testWidgets('pinching with two fingers pans but never changes cell size', (

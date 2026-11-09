@@ -160,29 +160,30 @@ class _NonogramPlayView extends StatelessWidget {
         }
 
         // Màn ngang: bỏ app bar (và tự ẩn thanh hệ thống) để lưới có thêm
-        // chiều cao; nút quay lại và cài đặt chuyển vào cột nút bên phải,
-        // thông tin màn chuyển thành cột thu gọn được bên trái.
+        // chiều cao; quay lại, thông tin màn, xoay, cài đặt chuyển sang cột
+        // trái, gợi ý và Tô / X ở góc dưới bên phải.
         final screen = MediaQuery.sizeOf(context);
         final landscape = NonogramBoardLayout.isLandscapeViewport(screen);
         final showAppBar = !state.isFullscreen && !landscape;
-        final roomForInfo =
-            screen.width - NonogramLandscapeInfoPanel.width > screen.height;
+        // Màn gần vuông thì không chừa chỗ cho bảng thông tin, để phần còn
+        // lại vẫn là khung ngang.
+        const sides =
+            NonogramLandscapeLeftRail.panelWidth +
+            NonogramBoardLayout.railReserve;
+        final roomForInfo = screen.width - sides > screen.height;
 
         Widget body(Widget child) {
           final reporter = BoardViewportReporter(child: child);
           // Màn dọc vẫn chừa mép dưới, để lưới không nằm dưới thanh vuốt
           // của hệ thống (vuốt ở đó sẽ thoát app thay vì tô).
-          if (!landscape || !roomForInfo) {
-            return SafeArea(top: landscape, child: reporter);
-          }
-          // Bảng thông tin nằm ngoài vùng đo, nên mở / thu gọn thì bàn chơi
-          // tự tính lại cỡ ô cho vừa phần còn lại. Màn gần vuông thì không
-          // chừa chỗ, để phần còn lại vẫn là khung ngang.
+          if (!landscape) return SafeArea(top: false, child: reporter);
+          // Cột trái (quay lại, thông tin, xoay, cài đặt) nằm ngoài vùng đo,
+          // nên mở / thu gọn bảng thông tin thì bàn chơi tự tính lại cỡ ô.
           return SafeArea(
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                const NonogramLandscapeInfoPanel(),
+                NonogramLandscapeLeftRail(allowPanel: roomForInfo),
                 Expanded(child: reporter),
               ],
             ),
