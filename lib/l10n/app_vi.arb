@@ -141,9 +141,9 @@
   "nonogramCoachDone": "Đã hiểu",
   "nonogramCoachStep": "{current}/{total}",
   "nonogramCoachHintTitle": "Gợi ý",
-  "nonogramCoachHintBody": "App tự chọn một hàng hoặc cột và hiện đáp án của nó. Mỗi màn có 3 lượt.",
+  "nonogramCoachHintBody": "Tô giúp 5 ô đúng (ô cần tô mà bạn chưa tô), chọn ngẫu nhiên trên cả bàn chơi. Các ô đó sẽ nháy sáng. Mỗi màn có 3 lượt.",
   "nonogramCoachWandTitle": "Gậy phép",
-  "nonogramCoachWandBody": "Chạm vào gậy phép, rồi chạm vào dãy số của hàng hoặc cột bạn muốn: đáp án của đúng hàng/cột đó sẽ hiện ra. Mỗi màn có 1 lượt.",
+  "nonogramCoachWandBody": "Chạm vào gậy phép, rồi chạm vào dãy số của hàng hoặc cột bạn muốn: đáp án của trọn hàng/cột đó sẽ hiện ra. Mỗi màn có 1 lượt.",
   "nonogramCoachModeTitle": "Tô hay đánh X",
   "nonogramCoachModeBody": "Chọn việc sẽ làm khi chạm vào ô: tô ô, hoặc đánh X để ghi nhớ ô chắc chắn trống. Chạm vào nút để đổi chế độ. Kéo ngón tay trên lưới để tô / đánh X nhiều ô liền.",
   "nonogramCoachLongPressTitle": "Nhấn giữ để làm ngược lại",
@@ -156,8 +156,9 @@
   "nonogramTutorialLater": "Để sau, chơi luôn",
   "nonogramTutorialDragRow": "Mẹo: kéo ngón tay qua nhiều ô để tô liền một lúc. Hàng đầu có 5 ô, hãy kéo một đường qua cả hàng!",
   "nonogramTutorialLongPressMark": "1 1 1 vừa khít 5 ô nên ô thứ 2 và thứ 4 chắc chắn trống. Không cần đổi chế độ: nhấn giữ từng ô để đánh X, máy rung nhẹ là xong.",
-  "nonogramTutorialUseHint": "Bí rồi? Chạm vào nút Gợi ý, app sẽ tự chọn một hàng hoặc cột và hiện đáp án. Mỗi màn có 3 lượt.",
-  "nonogramTutorialActivateWand": "Gợi ý vừa hiện đáp án của cột được tô sáng. Muốn tự chọn hàng hoặc cột thì dùng gậy phép: chạm vào nút gậy phép.",
+  "nonogramTutorialUseHint": "Bí rồi? Chạm vào nút Gợi ý: app sẽ tô giúp 5 ô đúng ở vị trí ngẫu nhiên. Mỗi màn có 3 lượt.",
+  "nonogramTutorialActivateWand": "Gợi ý vừa tô giúp 5 ô (viền xanh). Muốn hiện trọn một hàng hoặc cột do bạn chọn thì dùng gậy phép: chạm vào nút gậy phép.",
   "nonogramTutorialPickWandLine": "Giờ chạm vào dãy số của hàng cuối cùng để hiện đáp án hàng đó. Mỗi màn có 1 lượt gậy phép.",
-  "nonogramTutorialFinishTools": "Tô nốt các ô còn lại để hoàn thành. Kéo dọc theo cột để tô nhanh hơn."
+  "nonogramTutorialFinishTools": "Tô nốt các ô còn lại để hoàn thành. Kéo dọc theo cột để tô nhanh hơn.",
+  "nonogramPlayHintNothingToFill": "Mọi ô cần tô đều đã được tô. Hãy kiểm tra những ô tô thừa."
 }

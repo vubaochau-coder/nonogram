@@ -677,7 +677,7 @@ abstract class AppLocalizations {
   /// No description provided for @nonogramCoachHintBody.
   ///
   /// In en, this message translates to:
-  /// **'The app picks a row or column and reveals its answer. You get 3 per puzzle.'**
+  /// **'Fills 5 correct squares for you (squares that should be filled but aren\'t yet), picked at random across the board. They flash so you can spot them. You get 3 per puzzle.'**
   String get nonogramCoachHintBody;
 
   /// No description provided for @nonogramCoachWandTitle.
@@ -689,7 +689,7 @@ abstract class AppLocalizations {
   /// No description provided for @nonogramCoachWandBody.
   ///
   /// In en, this message translates to:
-  /// **'Tap the wand, then tap the clues of any row or column: the answer for exactly that line is revealed. You get 1 per puzzle.'**
+  /// **'Tap the wand, then tap the clues of any row or column: the answer for that whole line is revealed. You get 1 per puzzle.'**
   String get nonogramCoachWandBody;
 
   /// No description provided for @nonogramCoachModeTitle.
@@ -767,13 +767,13 @@ abstract class AppLocalizations {
   /// No description provided for @nonogramTutorialUseHint.
   ///
   /// In en, this message translates to:
-  /// **'Stuck? Tap the Hint button and the app picks a row or column and reveals its answer. You get 3 per puzzle.'**
+  /// **'Stuck? Tap the Hint button and the app fills 5 correct squares at random. You get 3 per puzzle.'**
   String get nonogramTutorialUseHint;
 
   /// No description provided for @nonogramTutorialActivateWand.
   ///
   /// In en, this message translates to:
-  /// **'The hint revealed the highlighted column. To choose the line yourself, use the magic wand: tap the wand button.'**
+  /// **'The hint filled 5 squares (outlined in blue). To reveal a whole row or column of your choice, use the magic wand: tap the wand button.'**
   String get nonogramTutorialActivateWand;
 
   /// No description provided for @nonogramTutorialPickWandLine.
@@ -787,6 +787,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Fill the remaining squares to finish. Drag down a column to fill faster.'**
   String get nonogramTutorialFinishTools;
+
+  /// No description provided for @nonogramPlayHintNothingToFill.
+  ///
+  /// In en, this message translates to:
+  /// **'Every square that should be filled already is. Check for extra filled squares.'**
+  String get nonogramPlayHintNothingToFill;
 }
 
 class _AppLocalizationsDelegate

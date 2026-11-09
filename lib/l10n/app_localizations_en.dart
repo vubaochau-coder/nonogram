@@ -352,14 +352,14 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get nonogramCoachHintBody =>
-      'The app picks a row or column and reveals its answer. You get 3 per puzzle.';
+      'Fills 5 correct squares for you (squares that should be filled but aren\'t yet), picked at random across the board. They flash so you can spot them. You get 3 per puzzle.';
 
   @override
   String get nonogramCoachWandTitle => 'Magic wand';
 
   @override
   String get nonogramCoachWandBody =>
-      'Tap the wand, then tap the clues of any row or column: the answer for exactly that line is revealed. You get 1 per puzzle.';
+      'Tap the wand, then tap the clues of any row or column: the answer for that whole line is revealed. You get 1 per puzzle.';
 
   @override
   String get nonogramCoachModeTitle => 'Fill or X';
@@ -405,11 +405,11 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get nonogramTutorialUseHint =>
-      'Stuck? Tap the Hint button and the app picks a row or column and reveals its answer. You get 3 per puzzle.';
+      'Stuck? Tap the Hint button and the app fills 5 correct squares at random. You get 3 per puzzle.';
 
   @override
   String get nonogramTutorialActivateWand =>
-      'The hint revealed the highlighted column. To choose the line yourself, use the magic wand: tap the wand button.';
+      'The hint filled 5 squares (outlined in blue). To reveal a whole row or column of your choice, use the magic wand: tap the wand button.';
 
   @override
   String get nonogramTutorialPickWandLine =>
@@ -418,4 +418,8 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get nonogramTutorialFinishTools =>
       'Fill the remaining squares to finish. Drag down a column to fill faster.';
+
+  @override
+  String get nonogramPlayHintNothingToFill =>
+      'Every square that should be filled already is. Check for extra filled squares.';
 }

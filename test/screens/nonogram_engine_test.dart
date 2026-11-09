@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:nonogram/models/nonogram_cell_state.dart';
 import 'package:nonogram/models/nonogram_puzzle.dart';
 import 'package:nonogram/screens/play/engine/nonogram_engine.dart';
@@ -222,54 +224,79 @@ void main() {
   });
 
   group('NonogramEngine Hints', () {
-    test('calculateHintLine selects line with minimum mismatch', () {
+    test('pickHintCells picks up to 5 unfilled cells of the solution', () {
       // Solution:
       // [1, 0, 1, 0, 1],
       // [1, 1, 1, 0, 0],
       // [0, 0, 0, 0, 0],
+      final grid = List.generate(
+        3,
+        (_) => List.filled(5, NonogramCellState.empty),
+      );
+      grid[0][0] = NonogramCellState.filled; // đã tô: không chọn lại
+      grid[1][1] = NonogramCellState.marked; // đánh X nhầm: được chọn
 
+      final cells = engine.pickHintCells(
+        puzzle: puzzle,
+        gridData: grid,
+        random: Random(1),
+      );
+      expect(cells.length, 5);
+      expect(cells.toSet().length, 5);
+      for (final c in cells) {
+        expect(puzzle.solution[c.row][c.col], 1);
+        expect(grid[c.row][c.col], isNot(NonogramCellState.filled));
+      }
+      // Chỉ còn 5 ô cần tô nên phải chọn đúng cả 5.
+      expect(cells.toSet(), {
+        (row: 0, col: 2),
+        (row: 0, col: 4),
+        (row: 1, col: 0),
+        (row: 1, col: 1),
+        (row: 1, col: 2),
+      });
+    });
+
+    test('pickHintCells returns fewer cells near the end, none when done', () {
       final grid = [
-        [
-          NonogramCellState.filled,
-          NonogramCellState.empty,
-          NonogramCellState.empty,
-          NonogramCellState.empty,
-          NonogramCellState.empty,
-        ], // 2 mismatches (col 2, 4)
-        [
-          NonogramCellState.filled,
-          NonogramCellState.filled,
-          NonogramCellState.filled,
-          NonogramCellState.empty,
-          NonogramCellState.empty,
-        ], // 0 mismatches
-        [
-          NonogramCellState.filled,
-          NonogramCellState.empty,
-          NonogramCellState.empty,
-          NonogramCellState.empty,
-          NonogramCellState.empty,
-        ], // 1 mismatch (col 0)
+        for (final row in puzzle.solution)
+          [
+            for (final v in row)
+              v == 1 ? NonogramCellState.filled : NonogramCellState.empty,
+          ],
       ];
+      expect(engine.pickHintCells(puzzle: puzzle, gridData: grid), isEmpty);
+      grid[1][2] = NonogramCellState.empty;
+      grid[0][4] = NonogramCellState.empty;
+      expect(engine.pickHintCells(puzzle: puzzle, gridData: grid).toSet(), {
+        (row: 1, col: 2),
+        (row: 0, col: 4),
+      });
+    });
 
-      // With current solve semantics:
-      // - solution == 1 requires filled
-      // - solution == 0 accepts both empty and marked
-      //
-      // Row 0 has 2 mismatches.
-      // Row 1 is already matching (mismatch 0) -> should NOT be picked.
-      // Row 2 has 1 mismatch.
-      // Col 0 is already matching (mismatch 0).
-      // Col 2 has 1 mismatch.
-      // Col 4 has 1 mismatch.
-      //
-      // min mismatch is 1. Candidates: Row 2, Col 2, Col 4.
-      // Priority: Row > Col, then smaller index.
-      // Should pick Row 2.
-
-      final hint = engine.calculateHintLine(puzzle: puzzle, gridData: grid);
-      expect(hint?.axis, Axis.horizontal);
-      expect(hint?.index, 2);
+    test('pickHintCells spreads across the whole board', () {
+      final big = NonogramPuzzle(
+        id: 'big',
+        title: '',
+        author: '',
+        difficulty: '',
+        difficultyScore: 0,
+        level: 1,
+        solution: List.generate(10, (_) => List.filled(10, 1)),
+      );
+      final grid = List.generate(
+        10,
+        (_) => List.filled(10, NonogramCellState.empty),
+      );
+      final rows = <int>{};
+      for (var seed = 0; seed < 20; seed++) {
+        rows.addAll(
+          engine
+              .pickHintCells(puzzle: big, gridData: grid, random: Random(seed))
+              .map((c) => c.row),
+        );
+      }
+      expect(rows.length, greaterThan(5));
     });
 
     test('revealLine updates grid correctly for rows', () {

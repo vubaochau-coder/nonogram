@@ -1,3 +1,4 @@
+import 'dart:math' show Random;
 import 'dart:ui' show Offset, Size;
 import 'package:flutter/painting.dart' show Axis;
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -32,14 +33,19 @@ class NonogramPlayBloc extends AppBloc<NonogramPlayEvent, NonogramPlayState> {
   final NonogramRepository _repository;
   final NonogramEngine _engine;
 
+  /// Chọn ô cho gợi ý (truyền vào để test cố định kết quả).
+  final Random _random;
+
   _DragSession? _dragSession;
 
   NonogramPlayBloc({
     required NonogramRepository repository,
     NonogramEngine? engine,
+    Random? random,
     int initialLevel = 1,
   }) : _repository = repository,
        _engine = engine ?? const NonogramEngine(),
+       _random = random ?? Random(),
        super(NonogramPlayState.initial(initialLevel: initialLevel)) {
     // --- System & Lifecycle Events ---
     on<InitialRequested>(_onInitialRequested, transformer: sequential());
@@ -497,19 +503,18 @@ class NonogramPlayBloc extends AppBloc<NonogramPlayEvent, NonogramPlayState> {
       return;
     }
 
-    final hintLine = _engine.calculateHintLine(
+    final cells = _engine.pickHintCells(
       puzzle: state.puzzle!,
       gridData: state.gridData,
+      random: _random,
     );
+    if (cells.isEmpty) {
+      // Mọi ô cần tô đã tô; còn sai thì do tô thừa.
+      ToastUtils.info(title: l10n.nonogramPlayHintNothingToFill);
+      return;
+    }
 
-    if (hintLine == null) return;
-
-    final newGrid = _engine.revealLine(
-      axis: hintLine.axis,
-      index: hintLine.index,
-      puzzle: state.puzzle!,
-      gridData: state.gridData,
-    );
+    final newGrid = _engine.fillCells(gridData: state.gridData, cells: cells);
 
     final nextState = _buildGridDerivedState(
       sourceState: state,
@@ -518,13 +523,7 @@ class NonogramPlayBloc extends AppBloc<NonogramPlayEvent, NonogramPlayState> {
     );
 
     // Pulse animation state
-    emit(
-      NonogramPlayHintAppliedState.fromState(
-        nextState,
-        axis: hintLine.axis,
-        lineIndex: hintLine.index,
-      ),
-    );
+    emit(NonogramPlayHintCellsAppliedState.fromState(nextState, cells: cells));
 
     emit(nextState);
 

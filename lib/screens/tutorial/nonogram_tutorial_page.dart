@@ -333,7 +333,9 @@ class _TutorialBoard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final step = controller.step;
-    final activeRows = {for (final cell in step.highlightedCells) cell.row};
+    final activeRows = {
+      for (final cell in controller.highlightedCells) cell.row,
+    };
     final wandLine = step.wandLine;
     final picking = step.task == TutorialTask.pickWandLine;
     bool isWandTarget(bool isRow, int index) =>
@@ -653,7 +655,7 @@ class _TutorialGridState extends State<_TutorialGrid> {
                 child: CustomPaint(
                   painter: _HighlightPainter(
                     cells: {
-                      for (final cell in step.highlightedCells)
+                      for (final cell in controller.highlightedCells)
                         if (cell.row < rows) cell,
                     },
                     cellSize: cellSize,

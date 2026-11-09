@@ -252,7 +252,7 @@ class NonogramPlayErrorState extends NonogramPlayState {
   List<Object?> get props => [...super.props, error];
 }
 
-/// Pulse state emitted when a hint is applied.
+/// Pulse state emitted when a whole line is revealed (magic wand).
 class NonogramPlayHintAppliedState extends NonogramPlayState {
   final Axis axis;
   final int lineIndex;
@@ -303,4 +303,54 @@ class NonogramPlayHintAppliedState extends NonogramPlayState {
 
   @override
   List<Object?> get props => [...super.props, axis, lineIndex];
+}
+
+/// Pulse state emitted when the hint fills some cells.
+class NonogramPlayHintCellsAppliedState extends NonogramPlayState {
+  /// Ô vừa được gợi ý tô giúp.
+  final List<({int row, int col})> cells;
+
+  const NonogramPlayHintCellsAppliedState({
+    required super.isLoading,
+    required super.puzzle,
+    required super.level,
+    required super.startTime,
+    required super.gridData,
+    required super.satisfiedRows,
+    required super.satisfiedCols,
+    required super.interactionMode,
+    required super.cellSize,
+    required super.isFullscreen,
+    required super.isSolved,
+    required super.remainingHints,
+    required super.remainingWands,
+    required super.isWandActive,
+    required this.cells,
+  });
+
+  factory NonogramPlayHintCellsAppliedState.fromState(
+    NonogramPlayState state, {
+    required List<({int row, int col})> cells,
+  }) {
+    return NonogramPlayHintCellsAppliedState(
+      isLoading: state.isLoading,
+      puzzle: state.puzzle,
+      level: state.level,
+      startTime: state.startTime,
+      gridData: state.gridData,
+      satisfiedRows: state.satisfiedRows,
+      satisfiedCols: state.satisfiedCols,
+      interactionMode: state.interactionMode,
+      cellSize: state.cellSize,
+      isFullscreen: state.isFullscreen,
+      isSolved: state.isSolved,
+      remainingHints: state.remainingHints,
+      remainingWands: state.remainingWands,
+      isWandActive: state.isWandActive,
+      cells: cells,
+    );
+  }
+
+  @override
+  List<Object?> get props => [...super.props, cells];
 }

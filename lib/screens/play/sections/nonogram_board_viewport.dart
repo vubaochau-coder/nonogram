@@ -47,10 +47,13 @@ class _NonogramBoardViewportState extends State<NonogramBoardViewport>
     with TickerProviderStateMixin {
   late final AnimationController _hintPulse = AnimationController(
     vsync: this,
-    duration: const Duration(milliseconds: 900),
+    duration: const Duration(milliseconds: 1400),
   );
   Axis? _hintAxis;
   int? _hintIndex;
+
+  /// Ô vừa được gợi ý tô giúp (nháy sáng).
+  List<({int row, int col})> _hintCells = const [];
 
   // Trạng thái cử chỉ hiện tại.
   _GestureKind _gesture = _GestureKind.none;
@@ -376,16 +379,22 @@ class _NonogramBoardViewportState extends State<NonogramBoardViewport>
 
   // --- Gợi ý (hint) ---
 
-  void _showHint(Axis axis, int index) {
+  void _showHint({
+    Axis? axis,
+    int? index,
+    List<({int row, int col})> cells = const [],
+  }) {
     setState(() {
       _hintAxis = axis;
       _hintIndex = index;
+      _hintCells = cells;
     });
     _hintPulse.forward(from: 0).then((_) {
       if (mounted) {
         setState(() {
           _hintAxis = null;
           _hintIndex = null;
+          _hintCells = const [];
         });
       }
     });
@@ -394,10 +403,15 @@ class _NonogramBoardViewportState extends State<NonogramBoardViewport>
   @override
   Widget build(BuildContext context) {
     return BlocListener<NonogramPlayBloc, NonogramPlayState>(
-      listenWhen: (p, c) => c is NonogramPlayHintAppliedState,
+      listenWhen:
+          (p, c) =>
+              c is NonogramPlayHintAppliedState ||
+              c is NonogramPlayHintCellsAppliedState,
       listener: (context, state) {
         if (state is NonogramPlayHintAppliedState) {
-          _showHint(state.axis, state.lineIndex);
+          _showHint(axis: state.axis, index: state.lineIndex);
+        } else if (state is NonogramPlayHintCellsAppliedState) {
+          _showHint(cells: state.cells);
         }
       },
       child: BlocBuilder<NonogramPlayBloc, NonogramPlayState>(
@@ -464,6 +478,7 @@ class _NonogramBoardViewportState extends State<NonogramBoardViewport>
                           ),
                           hintAxis: _hintAxis,
                           hintIndex: _hintIndex,
+                          hintCells: _hintCells,
                           hintPulse: _hintPulse,
                         );
                       },
@@ -505,6 +520,7 @@ class _BoardPaint extends StatelessWidget {
     required this.topClueScroll,
     required this.hintAxis,
     required this.hintIndex,
+    required this.hintCells,
     required this.hintPulse,
   });
 
@@ -515,6 +531,7 @@ class _BoardPaint extends StatelessWidget {
   final double topClueScroll;
   final Axis? hintAxis;
   final int? hintIndex;
+  final List<({int row, int col})> hintCells;
   final Animation<double> hintPulse;
 
   @override
@@ -618,6 +635,19 @@ class _BoardPaint extends StatelessWidget {
                     ),
                   ),
                 ),
+                // Ô vừa được gợi ý tô giúp: nháy sáng (nằm trong vùng cắt
+                // nên không đè lên dải số).
+                for (final c in hintCells)
+                  _HintBand(
+                    rect: Rect.fromLTWH(
+                      offset.dx - clipLeft + c.col * cell,
+                      offset.dy - clipTop + c.row * cell,
+                      cell,
+                      cell,
+                    ).inflate(1),
+                    pulse: hintPulse,
+                    strong: true,
+                  ),
               ],
             ),
           ),
@@ -942,10 +972,17 @@ class _WandStripHighlightState extends State<_WandStripHighlight>
 }
 
 class _HintBand extends StatelessWidget {
-  const _HintBand({required this.rect, required this.pulse});
+  const _HintBand({
+    required this.rect,
+    required this.pulse,
+    this.strong = false,
+  });
 
   final Rect rect;
   final Animation<double> pulse;
+
+  /// Ô đơn lẻ: thêm viền để dễ thấy trên ô đã tô màu đậm.
+  final bool strong;
 
   @override
   Widget build(BuildContext context) {
@@ -956,10 +993,18 @@ class _HintBand extends StatelessWidget {
           animation: pulse,
           builder: (context, _) {
             final opacity = (1 - pulse.value).clamp(0.0, 1.0);
+            final primary = context.color.primary;
             return DecoratedBox(
               decoration: BoxDecoration(
-                color: context.color.primary.withValues(alpha: 0.28 * opacity),
+                color: primary.withValues(alpha: 0.28 * opacity),
                 borderRadius: BorderRadius.circular(4),
+                border:
+                    strong
+                        ? Border.all(
+                          color: primary.withValues(alpha: opacity),
+                          width: 2.5,
+                        )
+                        : null,
               ),
             );
           },

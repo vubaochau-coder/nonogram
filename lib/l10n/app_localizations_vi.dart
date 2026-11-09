@@ -351,14 +351,14 @@ class AppLocalizationsVi extends AppLocalizations {
 
   @override
   String get nonogramCoachHintBody =>
-      'App tự chọn một hàng hoặc cột và hiện đáp án của nó. Mỗi màn có 3 lượt.';
+      'Tô giúp 5 ô đúng (ô cần tô mà bạn chưa tô), chọn ngẫu nhiên trên cả bàn chơi. Các ô đó sẽ nháy sáng. Mỗi màn có 3 lượt.';
 
   @override
   String get nonogramCoachWandTitle => 'Gậy phép';
 
   @override
   String get nonogramCoachWandBody =>
-      'Chạm vào gậy phép, rồi chạm vào dãy số của hàng hoặc cột bạn muốn: đáp án của đúng hàng/cột đó sẽ hiện ra. Mỗi màn có 1 lượt.';
+      'Chạm vào gậy phép, rồi chạm vào dãy số của hàng hoặc cột bạn muốn: đáp án của trọn hàng/cột đó sẽ hiện ra. Mỗi màn có 1 lượt.';
 
   @override
   String get nonogramCoachModeTitle => 'Tô hay đánh X';
@@ -404,11 +404,11 @@ class AppLocalizationsVi extends AppLocalizations {
 
   @override
   String get nonogramTutorialUseHint =>
-      'Bí rồi? Chạm vào nút Gợi ý, app sẽ tự chọn một hàng hoặc cột và hiện đáp án. Mỗi màn có 3 lượt.';
+      'Bí rồi? Chạm vào nút Gợi ý: app sẽ tô giúp 5 ô đúng ở vị trí ngẫu nhiên. Mỗi màn có 3 lượt.';
 
   @override
   String get nonogramTutorialActivateWand =>
-      'Gợi ý vừa hiện đáp án của cột được tô sáng. Muốn tự chọn hàng hoặc cột thì dùng gậy phép: chạm vào nút gậy phép.';
+      'Gợi ý vừa tô giúp 5 ô (viền xanh). Muốn hiện trọn một hàng hoặc cột do bạn chọn thì dùng gậy phép: chạm vào nút gậy phép.';
 
   @override
   String get nonogramTutorialPickWandLine =>
@@ -417,4 +417,8 @@ class AppLocalizationsVi extends AppLocalizations {
   @override
   String get nonogramTutorialFinishTools =>
       'Tô nốt các ô còn lại để hoàn thành. Kéo dọc theo cột để tô nhanh hơn.';
+
+  @override
+  String get nonogramPlayHintNothingToFill =>
+      'Mọi ô cần tô đều đã được tô. Hãy kiểm tra những ô tô thừa.';
 }

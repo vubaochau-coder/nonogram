@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:nonogram/models/nonogram_cell_state.dart';
 import 'package:nonogram/models/nonogram_completed_progress.dart';
 import 'package:nonogram/models/nonogram_interaction_mode.dart';
@@ -380,7 +382,15 @@ void main() {
     late NonogramPlayBloc bloc;
 
     setUp(() {
-      repository = FakeNonogramRepository();
+      // Đủ nhiều ô cần tô để một lượt gợi ý (5 ô) không giải xong màn.
+      repository = FakeNonogramRepository(
+        solution: const [
+          [1, 1, 1, 1],
+          [1, 0, 0, 1],
+          [1, 0, 0, 1],
+          [1, 1, 1, 1],
+        ],
+      );
       bloc = NonogramPlayBloc(repository: repository);
     });
 
@@ -388,7 +398,7 @@ void main() {
       await bloc.close();
     });
 
-    test('HintRequested should decrement hints and reveal a line', () async {
+    test('HintRequested should decrement hints and fill cells', () async {
       bloc.add(const LevelLoadRequested());
       await bloc.stream.firstWhere((s) => s.puzzle != null);
       expect(bloc.state.remainingHints, 3);
@@ -411,6 +421,37 @@ void main() {
       // Verify persistence
       final snapshot = await repository.getCurrentProgress();
       expect(snapshot?.remainingHints, 2);
+    });
+
+    test('HintRequested fills exactly 5 correct cells at random', () async {
+      final seeded = NonogramPlayBloc(
+        repository: FakeNonogramRepository(),
+        random: Random(7),
+      );
+      addTearDown(seeded.close);
+      seeded.add(Started(puzzle: satisfactionPuzzle));
+      await seeded.stream.firstWhere((s) => s.puzzle != null && !s.isLoading);
+
+      final pulse = seeded.stream.firstWhere(
+        (s) => s is NonogramPlayHintCellsAppliedState,
+      );
+      seeded.add(const HintRequested(offsetX: 0, offsetY: 0));
+      final applied = await pulse as NonogramPlayHintCellsAppliedState;
+
+      expect(applied.cells.length, 5);
+      expect(applied.remainingHints, 2);
+      final filled = <({int row, int col})>{};
+      for (var r = 0; r < 2; r++) {
+        for (var c = 0; c < 5; c++) {
+          final cell = applied.gridData[r][c];
+          if (cell == NonogramCellState.filled) filled.add((row: r, col: c));
+          // Không đánh X, không tô sai.
+          if (satisfactionPuzzle.solution[r][c] == 0) {
+            expect(cell, NonogramCellState.empty);
+          }
+        }
+      }
+      expect(filled, applied.cells.toSet());
     });
 
     test('HintRequested should be ignored when hints are 0', () async {

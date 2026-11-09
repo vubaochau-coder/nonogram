@@ -218,7 +218,7 @@ void main() {
       expect(controller.mistakes, 2);
     });
 
-    test('hint reveals a line like the game, wand reveals the chosen one', () {
+    test('hint fills 5 random cells, wand reveals the chosen line', () {
       final controller = atTools();
       for (var c = 0; c < 5; c++) {
         controller.tapCell(0, c);
@@ -229,12 +229,13 @@ void main() {
 
       controller.useHint();
       expect(controller.remainingHints, 2);
-      // Cột 2 (chỉ còn 1 ô sai) được chọn.
-      expect(controller.revealedCells, {
-        for (var r = 0; r < 5; r++) (row: r, col: 1),
-      });
-      expect(controller.cellAt(4, 1), NonogramCellState.filled);
-      expect(controller.cellAt(1, 1), NonogramCellState.marked);
+      // Tô giúp 5 ô đúng, chưa tô từ trước.
+      expect(controller.revealedCells.length, 5);
+      for (final c in controller.revealedCells) {
+        expect(NonogramTutorialScript.toolsSolution[c.row][c.col], 1);
+        expect(c.row == 0, isFalse);
+        expect(controller.cellAt(c.row, c.col), NonogramCellState.filled);
+      }
 
       // Chưa cầm gậy phép thì chạm dãy số là sai.
       controller.pickClueLine((isRow: true, index: 4));

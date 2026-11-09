@@ -185,9 +185,9 @@
   "nonogramCoachDone": "Got it",
   "nonogramCoachStep": "{current}/{total}",
   "nonogramCoachHintTitle": "Hint",
-  "nonogramCoachHintBody": "The app picks a row or column and reveals its answer. You get 3 per puzzle.",
+  "nonogramCoachHintBody": "Fills 5 correct squares for you (squares that should be filled but aren't yet), picked at random across the board. They flash so you can spot them. You get 3 per puzzle.",
   "nonogramCoachWandTitle": "Magic wand",
-  "nonogramCoachWandBody": "Tap the wand, then tap the clues of any row or column: the answer for exactly that line is revealed. You get 1 per puzzle.",
+  "nonogramCoachWandBody": "Tap the wand, then tap the clues of any row or column: the answer for that whole line is revealed. You get 1 per puzzle.",
   "nonogramCoachModeTitle": "Fill or X",
   "nonogramCoachModeBody": "Choose what a tap does: fill the square, or mark it with an X to remember it is empty. Tap the button to switch. Drag across the grid to fill or mark many squares at once.",
   "nonogramCoachLongPressTitle": "Press and hold for the opposite",
@@ -210,8 +210,9 @@
   "nonogramTutorialLater": "Later, just play",
   "nonogramTutorialDragRow": "Tip: drag your finger across squares to fill them in one go. The top row has 5, so drag across the whole row!",
   "nonogramTutorialLongPressMark": "1 1 1 fits these 5 squares exactly, so the 2nd and 4th squares must be empty. No need to switch modes: press and hold each one to mark it with an X. A short vibration means it's done.",
-  "nonogramTutorialUseHint": "Stuck? Tap the Hint button and the app picks a row or column and reveals its answer. You get 3 per puzzle.",
-  "nonogramTutorialActivateWand": "The hint revealed the highlighted column. To choose the line yourself, use the magic wand: tap the wand button.",
+  "nonogramTutorialUseHint": "Stuck? Tap the Hint button and the app fills 5 correct squares at random. You get 3 per puzzle.",
+  "nonogramTutorialActivateWand": "The hint filled 5 squares (outlined in blue). To reveal a whole row or column of your choice, use the magic wand: tap the wand button.",
   "nonogramTutorialPickWandLine": "Now tap the clues of the bottom row to reveal that row. You get 1 wand per puzzle.",
-  "nonogramTutorialFinishTools": "Fill the remaining squares to finish. Drag down a column to fill faster."
+  "nonogramTutorialFinishTools": "Fill the remaining squares to finish. Drag down a column to fill faster.",
+  "nonogramPlayHintNothingToFill": "Every square that should be filled already is. Check for extra filled squares."
 }

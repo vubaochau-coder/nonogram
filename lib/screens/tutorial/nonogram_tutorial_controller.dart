@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/foundation.dart';
 import 'package:flutter/painting.dart' show Axis;
 import 'package:nonogram/models/nonogram_cell_state.dart';
@@ -79,6 +81,7 @@ class TutorialStep {
     this.startMode,
     this.showTools = false,
     this.wandLine,
+    this.highlightPendingOnly = false,
   });
 
   final TutorialTask task;
@@ -111,6 +114,10 @@ class TutorialStep {
 
   /// Hàng / cột cần chọn bằng gậy phép, với [TutorialTask.pickWandLine].
   final TutorialLine? wandLine;
+
+  /// Chỉ viền sáng các ô mục tiêu chưa làm (một số ô có thể đã được gợi ý
+  /// tô sẵn).
+  final bool highlightPendingOnly;
 
   Set<TutorialCell> get highlightedCells => highlight ?? targets;
 }
@@ -286,6 +293,7 @@ abstract final class NonogramTutorialScript {
       visibleRows: 5,
       showColumnClues: true,
       showTools: true,
+      highlightPendingOnly: true,
       targets: {
         _cell(1, 0),
         _cell(2, 0),
@@ -312,12 +320,15 @@ class NonogramTutorialController extends ChangeNotifier {
   NonogramTutorialController({
     List<List<int>> solution = NonogramTutorialScript.solution,
     List<TutorialStep>? steps,
-  }) : steps = steps ?? NonogramTutorialScript.steps {
+    Random? random,
+  }) : steps = steps ?? NonogramTutorialScript.steps,
+       _random = random ?? Random() {
     _loadPuzzle(solution);
     _enterStep(0);
   }
 
   static const _engine = NonogramEngine();
+  final Random _random;
 
   /// Số lượt gợi ý / gậy phép hiện trên nút ở phần thao tác.
   static const int hintCount = 3;
@@ -383,6 +394,12 @@ class NonogramTutorialController extends ChangeNotifier {
 
   /// Các ô vừa được gợi ý / gậy phép hiện đáp án (để tô sáng).
   Set<TutorialCell> get revealedCells => _revealed;
+
+  /// Các ô được viền sáng ở bước hiện tại.
+  Set<TutorialCell> get highlightedCells =>
+      step.highlightPendingOnly
+          ? pendingTargets.toSet()
+          : step.highlightedCells;
 
   /// Bản sao mới mỗi lần đổi, để painter so sánh bằng `!=`.
   List<List<NonogramCellState>> get grid => _grid;
@@ -474,17 +491,21 @@ class NonogramTutorialController extends ChangeNotifier {
     solution: solution,
   );
 
-  /// Bấm nút gợi ý: hiện đáp án của hàng / cột do app chọn, giống trong
+  /// Bấm nút gợi ý: tô giúp vài ô đúng ở vị trí ngẫu nhiên, giống trong
   /// màn chơi.
   void useHint() {
     if (step.task != TutorialTask.useHint || _remainingHints <= 0) {
       _miss();
       return;
     }
-    final puzzle = _puzzle;
-    final line = _engine.calculateHintLine(puzzle: puzzle, gridData: _grid);
-    if (line == null) return;
-    _reveal(line.axis == Axis.horizontal, line.index);
+    final cells = _engine.pickHintCells(
+      puzzle: _puzzle,
+      gridData: _grid,
+      random: _random,
+    );
+    if (cells.isEmpty) return;
+    _grid = _engine.fillCells(gridData: _grid, cells: cells);
+    _revealed = cells.toSet();
     _remainingHints--;
     _advance();
   }
