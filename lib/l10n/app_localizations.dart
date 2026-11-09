@@ -509,7 +509,7 @@ abstract class AppLocalizations {
   /// No description provided for @nonogramTutorialWelcome.
   ///
   /// In en, this message translates to:
-  /// **'Let's learn the basic rules with a small 5×5 puzzle.'**
+  /// **'Let\'s learn the basic rules with a small 5×5 puzzle.'**
   String get nonogramTutorialWelcome;
 
   /// No description provided for @nonogramTutorialStart.
