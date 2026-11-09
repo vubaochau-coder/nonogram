@@ -50,7 +50,7 @@ Nút gạt **Tô / X** trên thanh công cụ chọn việc một lần chạm s
   thông tin màn (tên, số màn, kích thước, độ khó) trượt ra từ trái, phủ lên
   hai nút góc trên; cột nới rộng theo bảng nên bảng không che bàn chơi.
   Trạng thái mở / thu gọn được nhớ trên máy. Mép phải chỉ còn Tô / X và
-  gợi ý (theo thứ tự đó), đặt giữa chiều cao, trong tầm ngón cái.
+  gợi ý (theo thứ tự đó), ở góc trên bên phải.
 - "Chơi lại từ đầu" nằm trong Cài đặt và luôn hỏi xác nhận.
 - Ô trống trên hàng/cột đã khớp gợi ý hiện chấm tròn; X màu chàm là dấu
   người chơi tự đánh.
