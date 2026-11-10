@@ -190,6 +190,8 @@ kbd { font: 600 11px var(--mono); padding: 1px 5px; border-radius: 4px; backgrou
       </div>
 
       <div class="group" id="g-pixel">
+        <label class="check"><input type="checkbox" id="half"> Thu nhỏ ½: gộp mỗi khối 2×2 thành 1 ô</label>
+        <div class="hint" id="half-hint"></div>
         <label class="check"><input type="checkbox" id="solid"> Lấp kín phần bên trong nét viền</label>
       </div>
 
@@ -307,6 +309,20 @@ function halveIfBlocky(g) {
   for (let r = 0; r < rows; r += 2) for (let c = 0; c < cols; c += 2) { const v = g[r][c]; if (g[r + 1][c] !== v || g[r][c + 1] !== v || g[r + 1][c + 1] !== v) return g; }
   return Array.from({ length: rows / 2 }, (_, r) => Array.from({ length: cols / 2 }, (_, c) => g[r * 2][c * 2]));
 }
+// Many pixel icons draw each pixel as a 2×2 block (at an odd offset): find the best
+// alignment and merge blocks by majority. mismatch = share of blocks that were not uniform.
+function halfDown(g) {
+  const H = g.length, W = g[0].length; const at = (y, x) => (y >= 0 && y < H && x >= 0 && x < W ? g[y][x] : 0);
+  let best = null;
+  for (const oy of [0, 1]) for (const ox of [0, 1]) {
+    let bad = 0, blocks = 0; const out = [];
+    for (let y = -oy; y < H; y += 2) { const row = []; for (let x = -ox; x < W; x += 2) { const s = at(y, x) + at(y + 1, x) + at(y, x + 1) + at(y + 1, x + 1); if (s) blocks++; if (s && s !== 4) bad++; row.push(s >= 2 ? 1 : 0); } out.push(row); }
+    const mismatch = blocks ? bad / blocks : 1;
+    if (!best || mismatch < best.mismatch) best = { mismatch, grid: out };
+  }
+  best.grid = cropToContent(best.grid);
+  return best;
+}
 function fillHoles(g) {
   const rows = g.length, cols = g[0].length; const out = g.map((r) => r.map(() => false)); const st = [];
   for (let r = 0; r < rows; r++) st.push([r, 0], [r, cols - 1]); for (let c = 0; c < cols; c++) st.push([0, c], [rows - 1, c]);
@@ -327,7 +343,8 @@ async function prepare(icon) {
   if (icon.mode === 'pixel') {
     const [, ctx] = makeCanvas(icon.width, icon.height); ctx.drawImage(img, 0, 0, icon.width, icon.height);
     const px = ctx.getImageData(0, 0, icon.width, icon.height).data;
-    entry.pixel = Array.from({ length: icon.height }, (_, y) => Array.from({ length: icon.width }, (_, x) => (px[(y * icon.width + x) * 4 + 3] >= 128 ? 1 : 0)));
+    entry.pixel = cropToContent(Array.from({ length: icon.height }, (_, y) => Array.from({ length: icon.width }, (_, x) => (px[(y * icon.width + x) * 4 + 3] >= 128 ? 1 : 0))));
+    entry.half = halfDown(entry.pixel);
   } else {
     const R = 512; const [big, bctx] = makeCanvas(R, R); bctx.drawImage(img, 0, 0, R, R);
     const bp = bctx.getImageData(0, 0, R, R).data;
@@ -383,7 +400,7 @@ const defaultColorsOn = (pal) => pal.centers.map((c, i) => i < pal.centers.lengt
 function buildBase(icon, entry, p) {
   let g;
   if (icon.mode === 'pixel') {
-    g = halveIfBlocky(cropToContent(entry.pixel));
+    g = p.half ? entry.half.grid : entry.pixel;
     if (p.solid) g = fillHoles(g);
   } else {
     const s = sampleAt(entry, p.size); const W = s.cols * SS; const need = p.coverage * SS * SS;
@@ -411,7 +428,7 @@ const docId = (key) => key.replace(/[^a-zA-Z0-9_-]/g, '__');
 const statusOf = (key) => picks.get(key)?.status ?? 'todo';
 
 function suggestedParams(icon, entry) {
-  if (icon.mode === 'pixel') return { mode: 'pixel', solid: icon.suggest?.variant === 'solid', cleanup: false };
+  if (icon.mode === 'pixel') return { mode: 'pixel', solid: icon.suggest?.variant === 'solid', cleanup: false, half: entry.half.mismatch <= 0.25 };
   const v = icon.suggest?.variant ?? 'cutout'; const size = icon.suggest?.size ?? 20;
   const p = { mode: 'brightness', size, threshold: entry.otsuInside, invert: true, coverage: 0.5, cleanup: true, k: 5, colorsOn: null };
   if (v === 'silhouette') p.mode = 'silhouette';
@@ -500,7 +517,11 @@ function syncControls() {
     $('invert').checked = p.invert; $('coverage').value = Math.round(p.coverage * 100); $('coverage-out').textContent = Math.round(p.coverage * 100) + '%';
     $('k').value = p.k; $('k-out').textContent = p.k;
     if (p.mode === 'color') renderSwatches();
-  } else { $('solid').checked = !!p.solid; }
+  } else {
+    $('solid').checked = !!p.solid; $('half').checked = !!p.half;
+    const m = cur.entry.half.mismatch;
+    $('half-hint').textContent = m === 0 ? 'Ảnh này vẽ bằng khối 2×2, thu nhỏ không mất chi tiết.' : `${Math.round(m * 100)}% khối 2×2 không đồng nhất: các chỗ đó sẽ bị làm tròn${m > 0.25 ? ', ảnh có thể vỡ nét' : ''}.`;
+  }
   $('cleanup').checked = !!p.cleanup;
   $('negative').checked = !!p.negative;
 }
@@ -556,6 +577,7 @@ onRange('coverage', (v) => (cur.params.coverage = v / 100));
 onRange('k', (v) => { cur.params.k = v; cur.params.colorsOn = defaultColorsOn(paletteOf(cur.entry, v)); });
 $('invert').onchange = (e) => { cur.params.invert = e.target.checked; cur.params.threshold = e.target.checked ? cur.entry.otsuInside : cur.entry.otsuAll; syncControls(); recompute(true); };
 $('solid').onchange = (e) => { cur.params.solid = e.target.checked; recompute(true); };
+$('half').onchange = (e) => { cur.params.half = e.target.checked; syncControls(); recompute(true); };
 $('cleanup').onchange = (e) => { cur.params.cleanup = e.target.checked; recompute(true); };
 $('negative').onchange = (e) => { cur.params.negative = e.target.checked; recompute(true); };
 document.addEventListener('keydown', (e) => { if ((e.key === 'n' || e.key === 'N') && !e.target.closest('input, select, textarea')) { $('negative').click(); } });
