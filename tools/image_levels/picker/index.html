@@ -198,6 +198,8 @@ kbd { font: 600 11px var(--mono); padding: 1px 5px; border-radius: 4px; backgrou
       <div class="group">
         <label class="check" id="g-cleanup"><input type="checkbox" id="cleanup"> Dọn ô lẻ loi</label>
         <label class="check"><input type="checkbox" id="negative"> Âm bản: đảo ô tô ↔ ô trống</label>
+        <div class="label"><label for="pad">Lề quanh hình</label><output id="pad-out"></output></div>
+        <input type="range" id="pad" min="0" max="5" step="1">
         <div class="row">
           <button class="btn" id="autofix">Tự sửa cho giải được</button>
           <button class="btn" id="clear-edits">Xoá sửa tay</button>
@@ -416,7 +418,10 @@ function buildBase(icon, entry, p) {
     g = cropToContent(g);
   }
   if (icon.mode === 'pixel' && p.cleanup) g = cleanup(g);
-  // Negative: swap filled and empty inside the cropped frame (size stays, so manual edits carry over).
+  // Padding: empty cells around the cropped picture (added before the negative, so a negative frame gets thicker).
+  const pad = p.pad ?? 0;
+  if (pad) { const w = g[0].length + 2 * pad; const blank = () => new Array(w).fill(0); g = [...Array.from({ length: pad }, blank), ...g.map((row) => [...new Array(pad).fill(0), ...row, ...new Array(pad).fill(0)]), ...Array.from({ length: pad }, blank)]; }
+  // Negative: swap filled and empty inside the frame (size stays, so manual edits carry over).
   if (p.negative) g = g.map((row) => row.map((v) => 1 - v));
   return g;
 }
@@ -453,8 +458,11 @@ async function open(i) {
 
 function recompute(keepEdits) {
   const base = buildBase(cur.icon, cur.entry, cur.params);
-  // Manual edits survive parameter tweaks only while the grid keeps its size.
-  const resized = cur.base && (cur.base.length !== base.length || cur.base[0].length !== base[0].length);
+  // Manual edits follow padding changes (shifted by the margin delta) and survive other
+  // tweaks only while the picture keeps its size.
+  const pad = cur.params.pad ?? 0; const d = cur.pad == null ? 0 : pad - cur.pad; cur.pad = pad;
+  if (d && keepEdits) cur.edits = new Set([...cur.edits].map((k) => k.split(',').map(Number)).filter(([r, c]) => r + d >= 0 && c + d >= 0).map(([r, c]) => (r + d) + ',' + (c + d)));
+  const resized = cur.base && (cur.base.length + 2 * d !== base.length || cur.base[0].length + 2 * d !== base[0].length);
   if (!keepEdits || resized) cur.edits = new Set();
   // Drop edits that fall outside the grid.
   for (const e of [...cur.edits]) { const [r, c] = e.split(',').map(Number); if (r >= base.length || c >= base[0].length) cur.edits.delete(e); }
@@ -524,6 +532,7 @@ function syncControls() {
   }
   $('cleanup').checked = !!p.cleanup;
   $('negative').checked = !!p.negative;
+  $('pad').value = p.pad ?? 0; $('pad-out').textContent = (p.pad ?? 0) + ' ô';
 }
 function renderSwatches() {
   const pal = paletteOf(cur.entry, cur.params.k); const box = $('swatches'); box.textContent = '';
@@ -581,7 +590,8 @@ $('half').onchange = (e) => { cur.params.half = e.target.checked; syncControls()
 $('cleanup').onchange = (e) => { cur.params.cleanup = e.target.checked; recompute(true); };
 $('negative').onchange = (e) => { cur.params.negative = e.target.checked; recompute(true); };
 document.addEventListener('keydown', (e) => { if ((e.key === 'n' || e.key === 'N') && !e.target.closest('input, select, textarea')) { $('negative').click(); } });
-$('reset').onclick = () => { cur.params = suggestedParams(cur.icon, cur.entry); cur.edits = new Set(); cur.base = null; syncControls(); recompute(false); };
+$('pad').addEventListener('input', (e) => { cur.params.pad = +e.target.value; syncControls(); recompute(true); });
+$('reset').onclick = () => { cur.params = suggestedParams(cur.icon, cur.entry); cur.edits = new Set(); cur.base = null; cur.pad = null; syncControls(); recompute(false); };
 $('clear-edits').onclick = () => { cur.edits.clear(); applyEdits(); };
 $('autofix').onclick = () => {
   const g = cur.final; const flips = repair(g, Math.max(1, Math.round(MAX_FLIP_RATIO * g.length * g[0].length)));
