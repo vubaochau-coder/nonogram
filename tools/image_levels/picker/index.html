@@ -53,7 +53,7 @@ select { background: var(--surface-2); border: 1px solid var(--line); border-rad
 .banner { margin: 12px 0 0; padding: 10px 12px; border-radius: 10px; background: var(--surface-2); color: var(--muted); font-size: 14px; }
 .banner[data-tone="bad"] { color: var(--bad); }
 
-.wrap { padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); padding-block: 16px 32px; max-width: 1240px; margin: 0 auto; }
+.wrap { padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); padding-block: 16px calc(96px + env(safe-area-inset-bottom, 0px)); max-width: 1240px; margin: 0 auto; }
 .workspace { display: grid; grid-template-columns: minmax(0, 1fr) 340px; gap: 16px; align-items: start; }
 @media (max-width: 860px) { .workspace { grid-template-columns: minmax(0, 1fr); } }
 
@@ -100,9 +100,16 @@ input[type="range"] { width: 100%; accent-color: var(--accent); }
 .btn.primary { background: var(--accent); border-color: var(--accent); color: var(--on-accent); }
 .btn.primary:hover { filter: brightness(1.05); background: var(--accent); }
 .btn.danger { color: var(--bad); }
-.actions { display: grid; grid-template-columns: 1fr 2fr; gap: 8px; border-top: 1px solid var(--line); padding-top: 16px; }
+/* Pick/skip stay on screen at all times: fixed bar at the bottom edge. */
+.actionbar { position: fixed; left: 0; right: 0; bottom: 0; z-index: 6; background: var(--surface); border-top: 1px solid var(--line);
+  box-shadow: 0 -4px 16px rgba(0, 0, 0, .06);
+  padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px));
+  padding-top: 10px; padding-bottom: calc(10px + env(safe-area-inset-bottom, 0px)); }
+.actionbar-inner { max-width: 1240px; margin: 0 auto; display: flex; align-items: center; gap: 12px; }
+.actions { display: grid; grid-template-columns: 1fr 2fr; gap: 8px; margin-left: auto; width: min(100%, 340px); flex: none; }
 .actions .btn { padding: 11px 12px; font-size: 15px; }
-.saved-note { font-size: 13px; color: var(--muted); min-height: 1.2em; }
+.saved-note { font-size: 13px; color: var(--muted); min-width: 0; flex: 1; }
+@media (max-width: 560px) { .actionbar-inner { flex-direction: column-reverse; align-items: stretch; gap: 6px; } .actions { width: 100%; } .saved-note:empty { display: none; } }
 .saved-note[data-tone="ok"] { color: var(--ok); } .saved-note[data-tone="bad"] { color: var(--bad); }
 [hidden] { display: none !important; }
 kbd { font: 600 11px var(--mono); padding: 1px 5px; border-radius: 4px; background: var(--surface-2); border: 1px solid var(--line); }
@@ -195,14 +202,19 @@ kbd { font: 600 11px var(--mono); padding: 1px 5px; border-radius: 4px; backgrou
         </div>
       </div>
 
-      <div class="actions">
-        <button class="btn danger" id="skip">Bỏ qua</button>
-        <button class="btn primary" id="pick">Chọn màn này</button>
-      </div>
-      <div class="saved-note" id="saved-note" aria-live="polite"></div>
     </aside>
   </div>
 </main>
+
+<footer class="actionbar" aria-label="Thao tác">
+  <div class="actionbar-inner">
+    <div class="saved-note" id="saved-note" aria-live="polite"></div>
+    <div class="actions">
+      <button class="btn danger" id="skip">Bỏ qua</button>
+      <button class="btn primary" id="pick">Chọn màn này</button>
+    </div>
+  </div>
+</footer>
 
 <script>
 (() => {
