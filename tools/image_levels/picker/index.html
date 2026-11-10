@@ -451,7 +451,8 @@ const cssVar = (n) => getComputedStyle(document.documentElement).getPropertyValu
 function draw() {
   const g = cur.final, rows = g.length, cols = g[0].length; const cv = $('grid');
   const box = $('board').getBoundingClientRect();
-  const avail = Math.max(160, Math.min(box.width - 8, window.innerHeight * 0.62));
+  // Fit the whole grid above the fixed action bar without scrolling.
+  const avail = Math.max(160, Math.min(box.width - 8, window.innerHeight - 390));
   const cell = Math.max(6, Math.floor(Math.min(avail / cols, avail / rows, 30)));
   const dpr = window.devicePixelRatio || 1;
   cv.width = cols * cell * dpr; cv.height = rows * cell * dpr; cv.style.width = cols * cell + 'px'; cv.style.height = rows * cell + 'px';
