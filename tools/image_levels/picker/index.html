@@ -152,7 +152,7 @@ kbd { font: 600 11px var(--mono); padding: 1px 5px; border-radius: 4px; backgrou
       </div>
       <div class="board" id="board"><canvas id="grid" aria-label="Lưới nonogram"></canvas></div>
       <div class="status" id="status"></div>
-      <div class="hint">Chạm hoặc kéo trên lưới để tô/xoá từng ô. Ô cam = suy luận chưa tới được. Chấm màu = ô đã sửa tay. Phím tắt: <kbd>←</kbd> <kbd>→</kbd> chuyển ảnh, <kbd>Enter</kbd> chọn, <kbd>S</kbd> bỏ qua.</div>
+      <div class="hint">Chạm hoặc kéo trên lưới để tô/xoá từng ô. Ô cam = suy luận chưa tới được. Chấm màu = ô đã sửa tay. Phím tắt: <kbd>←</kbd> <kbd>→</kbd> chuyển ảnh, <kbd>Enter</kbd> chọn, <kbd>S</kbd> bỏ qua, <kbd>N</kbd> âm bản.</div>
     </section>
 
     <aside class="panel" aria-label="Tuỳ chọn chuyển đổi">
@@ -195,6 +195,7 @@ kbd { font: 600 11px var(--mono); padding: 1px 5px; border-radius: 4px; backgrou
 
       <div class="group">
         <label class="check" id="g-cleanup"><input type="checkbox" id="cleanup"> Dọn ô lẻ loi</label>
+        <label class="check"><input type="checkbox" id="negative"> Âm bản: đảo ô tô ↔ ô trống</label>
         <div class="row">
           <button class="btn" id="autofix">Tự sửa cho giải được</button>
           <button class="btn" id="clear-edits">Xoá sửa tay</button>
@@ -398,6 +399,8 @@ function buildBase(icon, entry, p) {
     g = cropToContent(g);
   }
   if (icon.mode === 'pixel' && p.cleanup) g = cleanup(g);
+  // Negative: swap filled and empty inside the cropped frame (size stays, so manual edits carry over).
+  if (p.negative) g = g.map((row) => row.map((v) => 1 - v));
   return g;
 }
 
@@ -499,6 +502,7 @@ function syncControls() {
     if (p.mode === 'color') renderSwatches();
   } else { $('solid').checked = !!p.solid; }
   $('cleanup').checked = !!p.cleanup;
+  $('negative').checked = !!p.negative;
 }
 function renderSwatches() {
   const pal = paletteOf(cur.entry, cur.params.k); const box = $('swatches'); box.textContent = '';
@@ -553,6 +557,8 @@ onRange('k', (v) => { cur.params.k = v; cur.params.colorsOn = defaultColorsOn(pa
 $('invert').onchange = (e) => { cur.params.invert = e.target.checked; cur.params.threshold = e.target.checked ? cur.entry.otsuInside : cur.entry.otsuAll; syncControls(); recompute(true); };
 $('solid').onchange = (e) => { cur.params.solid = e.target.checked; recompute(true); };
 $('cleanup').onchange = (e) => { cur.params.cleanup = e.target.checked; recompute(true); };
+$('negative').onchange = (e) => { cur.params.negative = e.target.checked; recompute(true); };
+document.addEventListener('keydown', (e) => { if ((e.key === 'n' || e.key === 'N') && !e.target.closest('input, select, textarea')) { $('negative').click(); } });
 $('reset').onclick = () => { cur.params = suggestedParams(cur.icon, cur.entry); cur.edits = new Set(); cur.base = null; syncControls(); recompute(false); };
 $('clear-edits').onclick = () => { cur.edits.clear(); applyEdits(); };
 $('autofix').onclick = () => {
