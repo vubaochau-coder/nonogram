@@ -1,0 +1,619 @@
+<title>Nonopix Level Picker</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap">
+<style>
+/* Layout: sticky toolbar + thumbnail strip, then a workspace of stage (original pinned top-left, puzzle centered) and a control panel. Palette mirrors the Nonopix app theme. */
+:root {
+  --bg: #F5F6FA; --surface: #FFFFFF; --surface-2: #EEF0F6; --line: #E3E6EE;
+  --fg: #1B1F2A; --muted: #5B6274; --accent: #3B5BDB; --on-accent: #FFFFFF;
+  --ok: #1F9D63; --warn: #C98400; --bad: #D6453D; --cell: #1B1F2A; --grid: #DDE1EB;
+  --unknown: rgba(242, 165, 22, .45); --clue: #DDE4FB;
+  --paper: #FFFFFF; /* originals are shown on white in both themes, as they were drawn */
+  --font: "Nunito", ui-rounded, system-ui, -apple-system, "Segoe UI", sans-serif;
+  --mono: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+  --bg: #0F1218; --surface: #171B23; --surface-2: #1C212B; --line: #2E3542;
+  --fg: #E6E8EF; --muted: #9AA1B2; --accent: #91A7FF; --on-accent: #0F1A4A;
+  --ok: #4CC38A; --warn: #F2B544; --bad: #FF7A6E; --cell: #E6E8EF; --grid: #2E3542;
+  --unknown: rgba(242, 181, 68, .45); --clue: #242A35; color-scheme: dark;
+} }
+:root[data-theme="dark"] {
+  --bg: #0F1218; --surface: #171B23; --surface-2: #1C212B; --line: #2E3542;
+  --fg: #E6E8EF; --muted: #9AA1B2; --accent: #91A7FF; --on-accent: #0F1A4A;
+  --ok: #4CC38A; --warn: #F2B544; --bad: #FF7A6E; --cell: #E6E8EF; --grid: #2E3542;
+  --unknown: rgba(242, 181, 68, .45); --clue: #242A35; color-scheme: dark;
+}
+* { box-sizing: border-box; }
+body { background: var(--bg); color: var(--fg); font: 15px/1.45 var(--font); }
+body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px); z-index: 10; background: var(--surface); }
+button, input, select { font: inherit; color: inherit; }
+button { cursor: pointer; }
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+.top { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 5; background: var(--surface); border-bottom: 1px solid var(--line);
+  padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); padding-block: 10px; }
+.top-row { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+.brand { font-weight: 800; font-size: 17px; letter-spacing: -.01em; }
+.brand span { color: var(--muted); font-weight: 600; }
+.counts { display: flex; gap: 6px; flex-wrap: wrap; margin-left: auto; }
+.chip { display: inline-flex; align-items: center; gap: 6px; padding: 3px 10px; border-radius: 999px; background: var(--surface-2); font-size: 13px; font-weight: 700; font-variant-numeric: tabular-nums; }
+.dot { width: 8px; height: 8px; border-radius: 50%; background: var(--line); flex: none; }
+.dot.picked { background: var(--ok); } .dot.skipped { background: var(--bad); }
+select { background: var(--surface-2); border: 1px solid var(--line); border-radius: 8px; padding: 4px 8px; }
+
+.strip { display: flex; gap: 6px; overflow-x: auto; padding-top: 10px; scrollbar-width: thin; }
+.thumb { position: relative; flex: none; width: 44px; height: 44px; border-radius: 10px; border: 2px solid transparent; background: var(--paper); padding: 4px; }
+.thumb img { width: 100%; height: 100%; object-fit: contain; display: block; }
+.thumb.current { border-color: var(--accent); }
+.thumb:not(.current) { border-color: var(--line); }
+.thumb .dot { position: absolute; right: 2px; bottom: 2px; border: 2px solid var(--paper); width: 11px; height: 11px; }
+
+.banner { margin: 12px 0 0; padding: 10px 12px; border-radius: 10px; background: var(--surface-2); color: var(--muted); font-size: 14px; }
+.banner[data-tone="bad"] { color: var(--bad); }
+
+.wrap { padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); padding-block: 16px 32px; max-width: 1240px; margin: 0 auto; }
+.workspace { display: grid; grid-template-columns: minmax(0, 1fr) 340px; gap: 16px; align-items: start; }
+@media (max-width: 860px) { .workspace { grid-template-columns: minmax(0, 1fr); } }
+
+.stage { position: relative; background: var(--surface); border: 1px solid var(--line); border-radius: 16px; min-height: 420px; padding: 16px; display: flex; flex-direction: column; gap: 12px; min-width: 0; }
+.stage-head { display: flex; align-items: flex-start; gap: 12px; }
+.orig { width: 76px; height: 76px; flex: none; border-radius: 12px; background: var(--paper); border: 1px solid var(--line); padding: 6px; }
+.orig img { width: 100%; height: 100%; object-fit: contain; display: block; }
+.meta { min-width: 0; flex: 1; display: grid; gap: 4px; }
+.meta input { width: 100%; font-size: 20px; font-weight: 800; border: 1px solid transparent; border-radius: 8px; padding: 2px 6px; margin-left: -6px; background: transparent; }
+.meta input:hover, .meta input:focus { border-color: var(--line); background: var(--surface-2); }
+.meta small { color: var(--muted); font-size: 12.5px; overflow-wrap: anywhere; }
+.nav { display: flex; gap: 6px; flex: none; }
+.icon-btn { width: 38px; height: 38px; border-radius: 10px; border: 1px solid var(--line); background: var(--surface); font-size: 18px; line-height: 1; }
+.icon-btn:hover { background: var(--surface-2); }
+
+.board { flex: 1; display: grid; place-items: center; min-height: 300px; touch-action: none; }
+canvas#grid { display: block; max-width: 100%; cursor: crosshair; border-radius: 4px; }
+.status { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; font-size: 13.5px; }
+.pill { display: inline-flex; align-items: center; gap: 6px; padding: 4px 10px; border-radius: 999px; background: var(--surface-2); font-weight: 700; font-variant-numeric: tabular-nums; }
+.pill.ok { color: var(--ok); } .pill.bad { color: var(--bad); } .pill.warn { color: var(--warn); }
+.hint { color: var(--muted); font-size: 12.5px; }
+
+.panel { background: var(--surface); border: 1px solid var(--line); border-radius: 16px; padding: 16px; display: grid; gap: 16px; min-width: 0; }
+.group { display: grid; gap: 8px; }
+.label { font-size: 12px; font-weight: 800; letter-spacing: .06em; text-transform: uppercase; color: var(--muted); display: flex; justify-content: space-between; align-items: baseline; }
+.label output { font: 700 13px var(--mono); letter-spacing: 0; text-transform: none; color: var(--fg); }
+.seg { display: grid; grid-template-columns: repeat(3, 1fr); gap: 4px; background: var(--surface-2); padding: 4px; border-radius: 10px; }
+.seg button { border: 0; background: transparent; padding: 7px 4px; border-radius: 7px; font-weight: 700; font-size: 13.5px; }
+.seg button[aria-pressed="true"] { background: var(--surface); box-shadow: 0 1px 2px rgba(0,0,0,.12); color: var(--accent); }
+.seg button:disabled { opacity: .4; cursor: not-allowed; }
+input[type="range"] { width: 100%; accent-color: var(--accent); }
+.check { display: flex; align-items: center; gap: 8px; font-size: 14px; }
+.check input { accent-color: var(--accent); width: 16px; height: 16px; }
+.swatches { display: flex; flex-wrap: wrap; gap: 8px; }
+.swatch { display: grid; justify-items: center; gap: 3px; border: 2px solid var(--line); background: var(--surface); border-radius: 10px; padding: 5px; width: 56px; font: 700 11px var(--mono); color: var(--muted); }
+.swatch i { display: block; width: 36px; height: 24px; border-radius: 6px; border: 1px solid rgba(0,0,0,.15); }
+.swatch[aria-pressed="true"] { border-color: var(--accent); color: var(--fg); }
+.swatch[aria-pressed="true"]::after { content: "Tô"; font-size: 10px; color: var(--accent); }
+.swatch[aria-pressed="false"]::after { content: "Trống"; font-size: 10px; }
+.row { display: flex; gap: 8px; flex-wrap: wrap; }
+.btn { border: 1px solid var(--line); background: var(--surface); border-radius: 10px; padding: 8px 12px; font-weight: 700; font-size: 14px; }
+.btn:hover { background: var(--surface-2); }
+.btn:disabled { opacity: .45; cursor: not-allowed; }
+.btn.primary { background: var(--accent); border-color: var(--accent); color: var(--on-accent); }
+.btn.primary:hover { filter: brightness(1.05); background: var(--accent); }
+.btn.danger { color: var(--bad); }
+.actions { display: grid; grid-template-columns: 1fr 2fr; gap: 8px; border-top: 1px solid var(--line); padding-top: 16px; }
+.actions .btn { padding: 11px 12px; font-size: 15px; }
+.saved-note { font-size: 13px; color: var(--muted); min-height: 1.2em; }
+.saved-note[data-tone="ok"] { color: var(--ok); } .saved-note[data-tone="bad"] { color: var(--bad); }
+[hidden] { display: none !important; }
+kbd { font: 600 11px var(--mono); padding: 1px 5px; border-radius: 4px; background: var(--surface-2); border: 1px solid var(--line); }
+@media (prefers-reduced-motion: no-preference) { .btn, .thumb, .seg button { transition: background .12s, border-color .12s; } }
+</style>
+
+<header class="top">
+  <div class="top-row">
+    <div class="brand">Nonopix <span>· Chọn màn</span></div>
+    <div class="counts" id="counts">
+      <span class="chip"><span class="dot picked"></span><span id="c-picked">0</span> đã chọn</span>
+      <span class="chip"><span class="dot skipped"></span><span id="c-skipped">0</span> bỏ qua</span>
+      <span class="chip"><span class="dot"></span><span id="c-left">0</span> chưa duyệt</span>
+    </div>
+    <label class="hint" for="filter">Hiện</label>
+    <select id="filter">
+      <option value="all">Tất cả</option>
+      <option value="todo">Chưa duyệt</option>
+      <option value="picked">Đã chọn</option>
+      <option value="skipped">Bỏ qua</option>
+    </select>
+  </div>
+  <nav class="strip" id="strip" aria-label="Danh sách ảnh"></nav>
+</header>
+
+<main class="wrap">
+  <div class="banner" id="banner">Đang tải danh sách ảnh…</div>
+  <div class="workspace" id="workspace" hidden>
+    <section class="stage" aria-label="Kết quả chuyển đổi">
+      <div class="stage-head">
+        <div class="orig" title="Ảnh gốc"><img id="orig" alt="Ảnh gốc"></div>
+        <div class="meta">
+          <input id="title" aria-label="Tên màn" autocomplete="off">
+          <small id="source"></small>
+        </div>
+        <div class="nav">
+          <button class="icon-btn" id="prev" aria-label="Ảnh trước">←</button>
+          <button class="icon-btn" id="next" aria-label="Ảnh sau">→</button>
+        </div>
+      </div>
+      <div class="board" id="board"><canvas id="grid" aria-label="Lưới nonogram"></canvas></div>
+      <div class="status" id="status"></div>
+      <div class="hint">Chạm hoặc kéo trên lưới để tô/xoá từng ô. Ô cam = suy luận chưa tới được. Chấm màu = ô đã sửa tay. Phím tắt: <kbd>←</kbd> <kbd>→</kbd> chuyển ảnh, <kbd>Enter</kbd> chọn, <kbd>S</kbd> bỏ qua.</div>
+    </section>
+
+    <aside class="panel" aria-label="Tuỳ chọn chuyển đổi">
+      <div class="group" id="g-mode">
+        <div class="label">Cách chuyển</div>
+        <div class="seg" id="mode">
+          <button data-mode="silhouette">Hình bóng</button>
+          <button data-mode="brightness">Độ sáng</button>
+          <button data-mode="color">Theo màu</button>
+        </div>
+        <div class="hint" id="mode-hint"></div>
+      </div>
+
+      <div class="group" id="g-size">
+        <div class="label"><label for="size">Độ phân giải (cạnh dài)</label><output id="size-out"></output></div>
+        <input type="range" id="size" min="5" max="40" step="1">
+      </div>
+
+      <div class="group" id="g-threshold">
+        <div class="label"><label for="threshold">Ngưỡng sáng / tối</label><output id="threshold-out"></output></div>
+        <input type="range" id="threshold" min="0" max="100" step="1">
+        <label class="check"><input type="checkbox" id="invert"> Đục lỗ: tô phần sáng, chừa trống phần tối</label>
+      </div>
+
+      <div class="group" id="g-color">
+        <div class="label"><label for="k">Số màu gom</label><output id="k-out"></output></div>
+        <input type="range" id="k" min="2" max="8" step="1">
+        <div class="hint">Bấm từng màu để chọn tô hay để trống.</div>
+        <div class="swatches" id="swatches"></div>
+      </div>
+
+      <div class="group" id="g-coverage">
+        <div class="label"><label for="coverage">Độ phủ để tô một ô</label><output id="coverage-out"></output></div>
+        <input type="range" id="coverage" min="20" max="80" step="5">
+      </div>
+
+      <div class="group" id="g-pixel">
+        <label class="check"><input type="checkbox" id="solid"> Lấp kín phần bên trong nét viền</label>
+      </div>
+
+      <div class="group">
+        <label class="check" id="g-cleanup"><input type="checkbox" id="cleanup"> Dọn ô lẻ loi</label>
+        <div class="row">
+          <button class="btn" id="autofix">Tự sửa cho giải được</button>
+          <button class="btn" id="clear-edits">Xoá sửa tay</button>
+          <button class="btn" id="reset">Về gợi ý</button>
+        </div>
+      </div>
+
+      <div class="actions">
+        <button class="btn danger" id="skip">Bỏ qua</button>
+        <button class="btn primary" id="pick">Chọn màn này</button>
+      </div>
+      <div class="saved-note" id="saved-note" aria-live="polite"></div>
+    </aside>
+  </div>
+</main>
+
+<script>
+(() => {
+'use strict';
+const $ = (id) => document.getElementById(id);
+const SS = 8;                 // sub-pixels per cell side when sampling
+const MAX_FLIP_RATIO = 0.03;  // auto-fix budget
+
+// ---------------------------------------------------------------- solver
+function cluesOf(line) { const out = []; let run = 0; for (const v of line) { if (v === 1) run++; else if (run) { out.push(run); run = 0; } } if (run) out.push(run); return out; }
+function deriveClues(g) { const rows = g.length, cols = g[0].length; const rc = g.map(cluesOf); const cc = []; for (let c = 0; c < cols; c++) cc.push(cluesOf(Array.from({ length: rows }, (_, r) => g[r][c]))); return { rc, cc }; }
+function solveLine(line, clues) {
+  const n = line.length + 1, cells = [0, ...line], k = clues.length;
+  const canEmpty = (i) => cells[i] !== 1;
+  const blocked = new Int32Array(n + 1);
+  for (let i = 0; i < n; i++) blocked[i + 1] = blocked[i] + (cells[i] === 0 ? 1 : 0);
+  const canFill = (from, len) => { const to = from + len; return to <= n && blocked[to] - blocked[from] === 0; };
+  const fwd = Array.from({ length: n + 1 }, () => new Uint8Array(k + 1)); fwd[0][0] = 1;
+  for (let i = 0; i < n; i++) { if (!canEmpty(i)) continue; for (let j = 0; j <= k; j++) { if (!fwd[i][j]) continue; fwd[i + 1][j] = 1; if (j < k && canFill(i + 1, clues[j])) fwd[i + 1 + clues[j]][j + 1] = 1; } }
+  if (!fwd[n][k]) return null;
+  const bwd = Array.from({ length: n + 2 }, () => new Uint8Array(k + 1)); bwd[n][k] = 1;
+  for (let i = n - 1; i >= 0; i--) { if (!canEmpty(i)) continue; for (let j = k; j >= 0; j--) { let ok = bwd[i + 1][j]; if (!ok && j < k) { const end = i + 1 + clues[j]; ok = end <= n && canFill(i + 1, clues[j]) && bwd[end][j + 1]; } bwd[i][j] = ok ? 1 : 0; } }
+  const mayEmpty = new Uint8Array(n), diff = new Int32Array(n + 1);
+  for (let i = 0; i < n; i++) { if (!canEmpty(i)) continue; for (let j = 0; j <= k; j++) { if (!fwd[i][j]) continue; if (bwd[i + 1][j]) mayEmpty[i] = 1; if (j < k) { const end = i + 1 + clues[j]; if (end <= n && canFill(i + 1, clues[j]) && bwd[end][j + 1]) { mayEmpty[i] = 1; diff[i + 1]++; diff[end]--; } } } }
+  const res = new Array(line.length).fill(-1); let run = 0;
+  for (let i = 0; i < n; i++) { run += diff[i]; if (!i) continue; const mf = run > 0; if (mf && !mayEmpty[i]) res[i - 1] = 1; else if (!mf && mayEmpty[i]) res[i - 1] = 0; else if (!mf && !mayEmpty[i]) return null; }
+  return res;
+}
+function analyze(sol) {
+  const { rc, cc } = deriveClues(sol); const rows = sol.length, cols = sol[0].length;
+  const g = sol.map((r) => r.map(() => -1));
+  const dr = new Array(rows).fill(true), dc = new Array(cols).fill(true);
+  let rounds = 0, lineSolves = 0, changed = true, ok = true;
+  outer: while (changed) {
+    changed = false; rounds++;
+    for (let r = 0; r < rows; r++) { if (!dr[r]) continue; dr[r] = false; const s = solveLine(g[r], rc[r]); if (!s) { ok = false; break outer; } let p = false; for (let c = 0; c < cols; c++) if (s[c] !== g[r][c]) { g[r][c] = s[c]; dc[c] = true; changed = p = true; } if (p) lineSolves++; }
+    for (let c = 0; c < cols; c++) { if (!dc[c]) continue; dc[c] = false; const line = Array.from({ length: rows }, (_, r) => g[r][c]); const s = solveLine(line, cc[c]); if (!s) { ok = false; break outer; } let p = false; for (let r = 0; r < rows; r++) if (s[r] !== g[r][c]) { g[r][c] = s[r]; dr[r] = true; changed = p = true; } if (p) lineSolves++; }
+  }
+  const solved = ok && g.every((r) => r.every((v) => v !== -1));
+  return { lineSolvable: solved, rounds, lineSolves, partial: g };
+}
+const knownCount = (p) => p.reduce((n, r) => n + r.filter((v) => v !== -1).length, 0);
+function repair(sol, maxFlips) {
+  const g = sol.map((r) => [...r]); const rows = g.length, cols = g[0].length; const flips = [];
+  let a = analyze(g);
+  while (!a.lineSolvable) {
+    if (flips.length >= maxFlips) return null;
+    const base = knownCount(a.partial);
+    const at = (r, c) => (r >= 0 && r < rows && c >= 0 && c < cols ? g[r][c] : 0);
+    let best = null;
+    search: for (let r = 0; r < rows; r++) for (let c = 0; c < cols; c++) {
+      if (a.partial[r][c] !== -1) continue;
+      const v = g[r][c]; const n = at(r - 1, c) + at(r + 1, c) + at(r, c - 1) + at(r, c + 1);
+      if (v === 0 ? n === 0 : n === 4) continue;
+      g[r][c] = 1 - v; const b = analyze(g); g[r][c] = v;
+      const gain = b.lineSolvable ? Infinity : knownCount(b.partial) - base;
+      if (gain > 0 && (!best || gain > best.gain)) best = { r, c, gain };
+      if (gain === Infinity) break search;
+    }
+    if (!best) return null;
+    g[best.r][best.c] = 1 - g[best.r][best.c]; flips.push([best.r, best.c]); a = analyze(g);
+  }
+  return flips;
+}
+function difficultyScore(rows, cols, lineSolves, rounds) {
+  const size = Math.min(1, (rows * cols) / 900), work = Math.min(1, lineSolves / (2.5 * (rows + cols))), depth = Math.min(1, (rounds - 1) / 10);
+  return Math.round(Math.min(1, 0.55 * size + 0.25 * work + 0.2 * depth) * 100) / 100;
+}
+
+// ---------------------------------------------------------------- image helpers
+const svgUrl = (svg) => 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(svg);
+function makeCanvas(w, h) { const c = document.createElement('canvas'); c.width = w; c.height = h; return [c, c.getContext('2d', { willReadFrequently: true })]; }
+function loadImage(src) { return new Promise((res, rej) => { const i = new Image(); i.onload = () => res(i); i.onerror = rej; i.src = src; }); }
+const lumOf = (r, g, b) => (0.2126 * r + 0.7152 * g + 0.0722 * b) / 255;
+function otsu(values) {
+  const bins = 64, hist = new Array(bins).fill(0); for (const v of values) hist[Math.min(bins - 1, Math.floor(v * bins))]++;
+  const total = values.length; let sum = 0; for (let i = 0; i < bins; i++) sum += i * hist[i];
+  let sB = 0, wB = 0, best = 0, t = 0.5;
+  for (let i = 0; i < bins; i++) { wB += hist[i]; if (!wB) continue; const wF = total - wB; if (!wF) break; sB += i * hist[i]; const v = wB * wF * (sB / wB - (sum - sB) / wF) ** 2; if (v > best) { best = v; t = (i + 1) / bins; } }
+  return t;
+}
+function cropToContent(g) {
+  let r0 = g.length, r1 = -1, c0 = g[0].length, c1 = -1;
+  g.forEach((row, r) => row.forEach((v, c) => { if (v) { r0 = Math.min(r0, r); r1 = Math.max(r1, r); c0 = Math.min(c0, c); c1 = Math.max(c1, c); } }));
+  return r1 < 0 ? g : g.slice(r0, r1 + 1).map((row) => row.slice(c0, c1 + 1));
+}
+function halveIfBlocky(g) {
+  const rows = g.length, cols = g[0].length; if (rows % 2 || cols % 2) return g;
+  for (let r = 0; r < rows; r += 2) for (let c = 0; c < cols; c += 2) { const v = g[r][c]; if (g[r + 1][c] !== v || g[r][c + 1] !== v || g[r + 1][c + 1] !== v) return g; }
+  return Array.from({ length: rows / 2 }, (_, r) => Array.from({ length: cols / 2 }, (_, c) => g[r * 2][c * 2]));
+}
+function fillHoles(g) {
+  const rows = g.length, cols = g[0].length; const out = g.map((r) => r.map(() => false)); const st = [];
+  for (let r = 0; r < rows; r++) st.push([r, 0], [r, cols - 1]); for (let c = 0; c < cols; c++) st.push([0, c], [rows - 1, c]);
+  while (st.length) { const [r, c] = st.pop(); if (r < 0 || r >= rows || c < 0 || c >= cols || out[r][c] || g[r][c]) continue; out[r][c] = true; st.push([r + 1, c], [r - 1, c], [r, c + 1], [r, c - 1]); }
+  return g.map((row, r) => row.map((v, c) => (v || !out[r][c] ? 1 : 0)));
+}
+function cleanup(g) {
+  const rows = g.length, cols = g[0].length; const at = (r, c) => (r >= 0 && r < rows && c >= 0 && c < cols ? g[r][c] : 0);
+  return g.map((row, r) => row.map((v, c) => { const n = at(r - 1, c) + at(r + 1, c) + at(r, c - 1) + at(r, c + 1); if (v === 1 && n === 0) return 0; if (v === 0 && n === 4) return 1; return v; }));
+}
+
+// Per-icon cache: image, content bbox, samples by size, palettes by k.
+const cache = new Map();
+async function prepare(icon) {
+  if (cache.has(icon.key)) return cache.get(icon.key);
+  const img = await loadImage(svgUrl(icon.svg));
+  const entry = { img, samples: new Map(), palettes: new Map() };
+  if (icon.mode === 'pixel') {
+    const [, ctx] = makeCanvas(icon.width, icon.height); ctx.drawImage(img, 0, 0, icon.width, icon.height);
+    const px = ctx.getImageData(0, 0, icon.width, icon.height).data;
+    entry.pixel = Array.from({ length: icon.height }, (_, y) => Array.from({ length: icon.width }, (_, x) => (px[(y * icon.width + x) * 4 + 3] >= 128 ? 1 : 0)));
+  } else {
+    const R = 512; const [big, bctx] = makeCanvas(R, R); bctx.drawImage(img, 0, 0, R, R);
+    const bp = bctx.getImageData(0, 0, R, R).data;
+    let x0 = R, y0 = R, x1 = -1, y1 = -1;
+    for (let y = 0; y < R; y++) for (let x = 0; x < R; x++) if (bp[(y * R + x) * 4 + 3] > 24) { if (x < x0) x0 = x; if (x > x1) x1 = x; if (y < y0) y0 = y; if (y > y1) y1 = y; }
+    entry.big = big; entry.box = { x0, y0, w: x1 - x0 + 1, h: y1 - y0 + 1 };
+    // Luminance stats for threshold suggestions.
+    const all = [], inside = [];
+    for (let i = 0; i < bp.length; i += 16) { const a = bp[i + 3] / 255; const l = lumOf(bp[i], bp[i + 1], bp[i + 2]); all.push(a * l + (1 - a)); if (a >= 0.5) inside.push(l); }
+    entry.otsuAll = otsu(all); entry.otsuInside = inside.length ? otsu(inside) : 0.5;
+  }
+  cache.set(icon.key, entry);
+  return entry;
+}
+function sampleAt(entry, n) {
+  if (entry.samples.has(n)) return entry.samples.get(n);
+  const { w, h, x0, y0 } = entry.box;
+  const cols = w >= h ? n : Math.max(3, Math.round((n * w) / h));
+  const rows = h >= w ? n : Math.max(3, Math.round((n * h) / w));
+  const [, ctx] = makeCanvas(cols * SS, rows * SS);
+  ctx.drawImage(entry.big, x0, y0, w, h, 0, 0, cols * SS, rows * SS);
+  const s = { rows, cols, px: ctx.getImageData(0, 0, cols * SS, rows * SS).data };
+  entry.samples.set(n, s); return s;
+}
+function paletteOf(entry, k) {
+  if (entry.palettes.has(k)) return entry.palettes.get(k);
+  const { w, h, x0, y0 } = entry.box; const S = 128;
+  const [, ctx] = makeCanvas(S, S); ctx.drawImage(entry.big, x0, y0, w, h, 0, 0, S, S);
+  const px = ctx.getImageData(0, 0, S, S).data; const pts = [];
+  for (let i = 0; i < px.length; i += 4) if (px[i + 3] >= 128) pts.push([px[i], px[i + 1], px[i + 2]]);
+  // Deterministic k-means++ (fixed seed) so the same icon always gives the same palette.
+  let seed = 7; const rnd = () => ((seed = (seed * 16807) % 2147483647) / 2147483647);
+  const d2 = (a, b) => (a[0] - b[0]) ** 2 + (a[1] - b[1]) ** 2 + (a[2] - b[2]) ** 2;
+  const centers = [pts[Math.floor(rnd() * pts.length)].slice()];
+  while (centers.length < Math.min(k, pts.length)) {
+    const ds = pts.map((p) => Math.min(...centers.map((c) => d2(p, c)))); const tot = ds.reduce((a, b) => a + b, 0);
+    if (!tot) break; let t = rnd() * tot, i = 0; while ((t -= ds[i]) > 0 && i < ds.length - 1) i++; centers.push(pts[i].slice());
+  }
+  const counts = new Array(centers.length).fill(0);
+  for (let it = 0; it < 12; it++) {
+    const sums = centers.map(() => [0, 0, 0]); counts.fill(0);
+    for (const p of pts) { let bi = 0, bd = Infinity; centers.forEach((c, i) => { const d = d2(p, c); if (d < bd) { bd = d; bi = i; } }); sums[bi][0] += p[0]; sums[bi][1] += p[1]; sums[bi][2] += p[2]; counts[bi]++; }
+    centers.forEach((c, i) => { if (counts[i]) { c[0] = sums[i][0] / counts[i]; c[1] = sums[i][1] / counts[i]; c[2] = sums[i][2] / counts[i]; } });
+  }
+  const order = centers.map((c, i) => ({ c, share: counts[i] / Math.max(1, pts.length) })).filter((o) => o.share > 0).sort((a, b) => lumOf(...a.c) - lumOf(...b.c));
+  const pal = { centers: order.map((o) => o.c.map(Math.round)), shares: order.map((o) => o.share) };
+  entry.palettes.set(k, pal); return pal;
+}
+const nearest = (centers, r, g, b) => { let bi = 0, bd = Infinity; for (let i = 0; i < centers.length; i++) { const c = centers[i]; const d = (r - c[0]) ** 2 + (g - c[1]) ** 2 + (b - c[2]) ** 2; if (d < bd) { bd = d; bi = i; } } return bi; };
+const defaultColorsOn = (pal) => pal.centers.map((c, i) => i < pal.centers.length - 1 || pal.centers.length === 1);
+
+// Build the base grid (before manual edits) from params.
+function buildBase(icon, entry, p) {
+  let g;
+  if (icon.mode === 'pixel') {
+    g = halveIfBlocky(cropToContent(entry.pixel));
+    if (p.solid) g = fillHoles(g);
+  } else {
+    const s = sampleAt(entry, p.size); const W = s.cols * SS; const need = p.coverage * SS * SS;
+    let pred;
+    if (p.mode === 'silhouette') pred = (r, g2, b, a) => a >= 128;
+    else if (p.mode === 'brightness') pred = p.invert
+      ? (r, g2, b, a) => a >= 128 && lumOf(r, g2, b) >= p.threshold
+      : (r, g2, b, a) => { const al = a / 255; return al * lumOf(r, g2, b) + (1 - al) < p.threshold; };
+    else { const pal = paletteOf(entry, p.k); const on = p.colorsOn; pred = (r, g2, b, a) => a >= 128 && !!on[nearest(pal.centers, r, g2, b)]; }
+    g = [];
+    for (let r = 0; r < s.rows; r++) { const row = []; for (let c = 0; c < s.cols; c++) { let cnt = 0; for (let sy = 0; sy < SS; sy++) for (let sx = 0; sx < SS; sx++) { const i = ((r * SS + sy) * W + c * SS + sx) * 4; if (pred(s.px[i], s.px[i + 1], s.px[i + 2], s.px[i + 3])) cnt++; } row.push(cnt >= need ? 1 : 0); } g.push(row); }
+    if (p.cleanup) g = cleanup(g);
+    g = cropToContent(g);
+  }
+  if (icon.mode === 'pixel' && p.cleanup) g = cleanup(g);
+  return g;
+}
+
+// ---------------------------------------------------------------- state
+let icons = [], db = null, picks = new Map(), idx = 0, filter = 'all';
+let cur = null; // { icon, entry, params, base, edits:Set, final, info }
+const docId = (key) => key.replace(/[^a-zA-Z0-9_-]/g, '__');
+const statusOf = (key) => picks.get(key)?.status ?? 'todo';
+
+function suggestedParams(icon, entry) {
+  if (icon.mode === 'pixel') return { mode: 'pixel', solid: icon.suggest?.variant === 'solid', cleanup: false };
+  const v = icon.suggest?.variant ?? 'cutout'; const size = icon.suggest?.size ?? 20;
+  const p = { mode: 'brightness', size, threshold: entry.otsuInside, invert: true, coverage: 0.5, cleanup: true, k: 5, colorsOn: null };
+  if (v === 'silhouette') p.mode = 'silhouette';
+  if (v === 'ink') { p.invert = false; p.threshold = entry.otsuAll; }
+  return p;
+}
+
+async function open(i) {
+  if (!icons.length) return;
+  idx = (i + icons.length) % icons.length;
+  const icon = icons[idx]; const entry = await prepare(icon);
+  const saved = picks.get(icon.key);
+  const params = saved?.status === 'picked' && saved.params ? { ...suggestedParams(icon, entry), ...saved.params } : suggestedParams(icon, entry);
+  if (params.mode === 'color' && !params.colorsOn) params.colorsOn = defaultColorsOn(paletteOf(entry, params.k));
+  cur = { icon, entry, params, edits: new Set(saved?.status === 'picked' ? (saved.edits ?? []).map(([r, c]) => r + ',' + c) : []) };
+  $('orig').src = svgUrl(icon.svg);
+  $('title').value = saved?.title ?? icon.title;
+  $('source').textContent = `${icon.author} · ${icon.license} · ${icon.key}`;
+  syncControls(); recompute(true); renderStrip(); note('');
+  try { localStorage.setItem('nonopix-picker-last', icon.key); } catch {}
+}
+
+function recompute(keepEdits) {
+  const base = buildBase(cur.icon, cur.entry, cur.params);
+  // Manual edits survive parameter tweaks only while the grid keeps its size.
+  const resized = cur.base && (cur.base.length !== base.length || cur.base[0].length !== base[0].length);
+  if (!keepEdits || resized) cur.edits = new Set();
+  // Drop edits that fall outside the grid.
+  for (const e of [...cur.edits]) { const [r, c] = e.split(',').map(Number); if (r >= base.length || c >= base[0].length) cur.edits.delete(e); }
+  cur.base = base; applyEdits();
+}
+function applyEdits() {
+  cur.final = cur.base.map((row, r) => row.map((v, c) => (cur.edits.has(r + ',' + c) ? 1 - v : v)));
+  cur.info = analyze(cur.final);
+  draw(); renderStatus();
+}
+
+// ---------------------------------------------------------------- rendering
+const cssVar = (n) => getComputedStyle(document.documentElement).getPropertyValue(n).trim();
+function draw() {
+  const g = cur.final, rows = g.length, cols = g[0].length; const cv = $('grid');
+  const box = $('board').getBoundingClientRect();
+  const avail = Math.max(160, Math.min(box.width - 8, window.innerHeight * 0.62));
+  const cell = Math.max(6, Math.floor(Math.min(avail / cols, avail / rows, 30)));
+  const dpr = window.devicePixelRatio || 1;
+  cv.width = cols * cell * dpr; cv.height = rows * cell * dpr; cv.style.width = cols * cell + 'px'; cv.style.height = rows * cell + 'px';
+  const ctx = cv.getContext('2d'); ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  ctx.fillStyle = cssVar('--surface'); ctx.fillRect(0, 0, cols * cell, rows * cell);
+  const unknown = cssVar('--unknown'), ink = cssVar('--cell'), accent = cssVar('--accent'), gridc = cssVar('--grid');
+  for (let r = 0; r < rows; r++) for (let c = 0; c < cols; c++) {
+    if (!cur.info.lineSolvable && cur.info.partial[r][c] === -1) { ctx.fillStyle = unknown; ctx.fillRect(c * cell, r * cell, cell, cell); }
+    if (g[r][c]) { ctx.fillStyle = ink; ctx.fillRect(c * cell + 0.5, r * cell + 0.5, cell - 1, cell - 1); }
+    if (cur.edits.has(r + ',' + c)) { ctx.fillStyle = accent; const d = Math.max(3, cell * 0.28); ctx.beginPath(); ctx.arc(c * cell + cell / 2, r * cell + cell / 2, d / 2, 0, Math.PI * 2); ctx.fill(); }
+  }
+  ctx.strokeStyle = gridc; ctx.lineWidth = 1;
+  for (let c = 0; c <= cols; c++) { ctx.globalAlpha = c % 5 === 0 ? 1 : 0.55; ctx.beginPath(); ctx.moveTo(c * cell + 0.5, 0); ctx.lineTo(c * cell + 0.5, rows * cell); ctx.stroke(); }
+  for (let r = 0; r <= rows; r++) { ctx.globalAlpha = r % 5 === 0 ? 1 : 0.55; ctx.beginPath(); ctx.moveTo(0, r * cell + 0.5); ctx.lineTo(cols * cell, r * cell + 0.5); ctx.stroke(); }
+  ctx.globalAlpha = 1; cur.cell = cell;
+}
+function renderStatus() {
+  const g = cur.final, rows = g.length, cols = g[0].length; const filled = g.flat().reduce((a, b) => a + b, 0); const density = filled / (rows * cols);
+  const i = cur.info; const score = difficultyScore(rows, cols, i.lineSolves, i.rounds);
+  const densOk = density >= 0.25 && density <= 0.75;
+  const parts = [
+    `<span class="pill ${i.lineSolvable ? 'ok' : 'bad'}">${i.lineSolvable ? '✓ Giải được bằng suy luận' : '✕ Phải đoán / nhiều nghiệm'}</span>`,
+    `<span class="pill">${cols}×${rows}</span>`,
+    `<span class="pill ${densOk ? '' : 'warn'}">Tô ${Math.round(density * 100)}%${densOk ? '' : ' · nên 25–75%'}</span>`,
+    i.lineSolvable ? `<span class="pill">Độ khó ${Math.max(1, Math.round(score * 10))}/10</span>` : '',
+    cur.edits.size ? `<span class="pill">${cur.edits.size} ô sửa tay</span>` : '',
+  ];
+  $('status').innerHTML = parts.join('');
+  $('pick').disabled = !i.lineSolvable || !db || rows < 4 || cols < 4;
+  $('pick').textContent = statusOf(cur.icon.key) === 'picked' ? 'Lưu lại bản này' : 'Chọn màn này';
+  $('autofix').disabled = i.lineSolvable; $('clear-edits').disabled = !cur.edits.size;
+}
+function syncControls() {
+  const p = cur.params, pixel = cur.icon.mode === 'pixel';
+  $('g-mode').hidden = pixel; $('g-size').hidden = pixel; $('g-coverage').hidden = pixel; $('g-pixel').hidden = !pixel;
+  for (const b of $('mode').children) b.setAttribute('aria-pressed', String(b.dataset.mode === p.mode));
+  $('g-threshold').hidden = pixel || p.mode !== 'brightness'; $('g-color').hidden = pixel || p.mode !== 'color';
+  $('mode-hint').textContent = { silhouette: 'Tô mọi phần có hình, bỏ chi tiết bên trong.', brightness: 'Màu tối hơn ngưỡng thành ô tô (hoặc ngược lại nếu bật đục lỗ).', color: 'Gom ảnh thành vài màu chính, chọn màu nào được tô.' }[p.mode] ?? '';
+  if (!pixel) {
+    $('size').value = p.size; $('size-out').textContent = p.size + ' ô';
+    $('threshold').value = Math.round(p.threshold * 100); $('threshold-out').textContent = Math.round(p.threshold * 100) + '%';
+    $('invert').checked = p.invert; $('coverage').value = Math.round(p.coverage * 100); $('coverage-out').textContent = Math.round(p.coverage * 100) + '%';
+    $('k').value = p.k; $('k-out').textContent = p.k;
+    if (p.mode === 'color') renderSwatches();
+  } else { $('solid').checked = !!p.solid; }
+  $('cleanup').checked = !!p.cleanup;
+}
+function renderSwatches() {
+  const pal = paletteOf(cur.entry, cur.params.k); const box = $('swatches'); box.textContent = '';
+  pal.centers.forEach((c, i) => {
+    const b = document.createElement('button'); b.className = 'swatch'; b.setAttribute('aria-pressed', String(!!cur.params.colorsOn[i]));
+    b.setAttribute('aria-label', `Màu ${i + 1}, chiếm ${Math.round(pal.shares[i] * 100)}%`);
+    const sw = document.createElement('i'); sw.style.background = `rgb(${c.join(',')})`; b.append(sw, document.createTextNode(Math.round(pal.shares[i] * 100) + '%'));
+    b.onclick = () => { cur.params.colorsOn[i] = !cur.params.colorsOn[i]; b.setAttribute('aria-pressed', String(cur.params.colorsOn[i])); recompute(true); };
+    box.append(b);
+  });
+}
+function visible() { return icons.map((ic, i) => i).filter((i) => filter === 'all' || statusOf(icons[i].key) === filter); }
+function renderStrip() {
+  const strip = $('strip'); const list = visible();
+  if (strip.childElementCount !== list.length || strip.dataset.filter !== filter) {
+    strip.textContent = ''; strip.dataset.filter = filter;
+    for (const i of list) {
+      const b = document.createElement('button'); b.className = 'thumb'; b.dataset.i = i; b.title = icons[i].title; b.setAttribute('aria-label', icons[i].title);
+      const im = document.createElement('img'); im.alt = ''; im.loading = 'lazy'; im.src = svgUrl(icons[i].svg); const d = document.createElement('span'); d.className = 'dot';
+      b.append(im, d); b.onclick = () => open(i); strip.append(b);
+    }
+  }
+  for (const b of strip.children) { const i = +b.dataset.i; b.classList.toggle('current', i === idx); b.querySelector('.dot').className = 'dot ' + statusOf(icons[i].key); }
+  strip.querySelector('.current')?.scrollIntoView({ block: 'nearest', inline: 'nearest' });
+  const counts = { picked: 0, skipped: 0, todo: 0 }; for (const ic of icons) counts[statusOf(ic.key)]++;
+  $('c-picked').textContent = counts.picked; $('c-skipped').textContent = counts.skipped; $('c-left').textContent = counts.todo;
+}
+function note(text, tone) { const n = $('saved-note'); n.textContent = text; if (tone) n.dataset.tone = tone; else delete n.dataset.tone; }
+
+// ---------------------------------------------------------------- interactions
+function step(dir) {
+  const list = visible(); if (!list.length) return;
+  const pos = list.indexOf(idx);
+  open(pos === -1 ? list[0] : list[(pos + dir + list.length) % list.length]);
+}
+function nextTodo() {
+  for (let k = 1; k <= icons.length; k++) { const i = (idx + k) % icons.length; if (statusOf(icons[i].key) === 'todo') return open(i); }
+  step(1);
+}
+$('prev').onclick = () => step(-1); $('next').onclick = () => step(1);
+$('filter').onchange = (e) => { filter = e.target.value; renderStrip(); };
+for (const b of $('mode').children) b.onclick = () => {
+  cur.params.mode = b.dataset.mode;
+  if (cur.params.mode === 'color' && !cur.params.colorsOn) cur.params.colorsOn = defaultColorsOn(paletteOf(cur.entry, cur.params.k));
+  syncControls(); recompute(true);
+};
+const onRange = (id, fn) => $(id).addEventListener('input', (e) => { fn(+e.target.value); syncControls(); recompute(true); });
+onRange('size', (v) => (cur.params.size = v));
+onRange('threshold', (v) => (cur.params.threshold = v / 100));
+onRange('coverage', (v) => (cur.params.coverage = v / 100));
+onRange('k', (v) => { cur.params.k = v; cur.params.colorsOn = defaultColorsOn(paletteOf(cur.entry, v)); });
+$('invert').onchange = (e) => { cur.params.invert = e.target.checked; cur.params.threshold = e.target.checked ? cur.entry.otsuInside : cur.entry.otsuAll; syncControls(); recompute(true); };
+$('solid').onchange = (e) => { cur.params.solid = e.target.checked; recompute(true); };
+$('cleanup').onchange = (e) => { cur.params.cleanup = e.target.checked; recompute(true); };
+$('reset').onclick = () => { cur.params = suggestedParams(cur.icon, cur.entry); cur.edits = new Set(); cur.base = null; syncControls(); recompute(false); };
+$('clear-edits').onclick = () => { cur.edits.clear(); applyEdits(); };
+$('autofix').onclick = () => {
+  const g = cur.final; const flips = repair(g, Math.max(1, Math.round(MAX_FLIP_RATIO * g.length * g[0].length)));
+  if (!flips) { note('Không tự sửa được với ít ô. Thử đổi thông số hoặc sửa tay các ô cam.', 'bad'); return; }
+  for (const [r, c] of flips) { const k = r + ',' + c; if (cur.edits.has(k)) cur.edits.delete(k); else cur.edits.add(k); }
+  applyEdits(); note(`Đã lật ${flips.length} ô (chấm màu) để màn giải được.`, 'ok');
+};
+
+// Paint on the grid.
+let painting = null;
+function cellAt(e) { const r = $('grid').getBoundingClientRect(); const c = Math.floor((e.clientX - r.left) / cur.cell), row = Math.floor((e.clientY - r.top) / cur.cell); return row >= 0 && row < cur.final.length && c >= 0 && c < cur.final[0].length ? [row, c] : null; }
+function paint(rc) { if (!rc) return; const [r, c] = rc; const k = r + ',' + c; if (cur.final[r][c] === painting.value) return; if (cur.base[r][c] === painting.value) cur.edits.delete(k); else cur.edits.add(k); applyEdits(); }
+$('grid').addEventListener('pointerdown', (e) => { const rc = cellAt(e); if (!rc) return; e.preventDefault(); $('grid').setPointerCapture(e.pointerId); painting = { value: 1 - cur.final[rc[0]][rc[1]] }; paint(rc); });
+$('grid').addEventListener('pointermove', (e) => { if (painting) paint(cellAt(e)); });
+const stopPaint = () => { painting = null; };
+$('grid').addEventListener('pointerup', stopPaint); $('grid').addEventListener('pointercancel', stopPaint);
+
+async function save(status) {
+  if (!db) return;
+  const icon = cur.icon; const ref = db.collection('picks').doc(docId(icon.key));
+  const data = { key: icon.key, set: icon.set, icon: icon.icon, title: $('title').value.trim() || icon.title, author: icon.author, license: icon.license, status, updatedAt: new Date().toISOString() };
+  if (status === 'picked') {
+    const g = cur.final; const i = cur.info; const filled = g.flat().reduce((a, b) => a + b, 0);
+    Object.assign(data, {
+      rows: g.length, cols: g[0].length, solution: g.map((r) => r.join('')),
+      density: Math.round((filled / (g.length * g[0].length)) * 1000) / 1000,
+      difficultyScore: difficultyScore(g.length, g[0].length, i.lineSolves, i.rounds),
+      params: { ...cur.params }, edits: [...cur.edits].map((k) => k.split(',').map(Number)),
+    });
+  }
+  const btn = status === 'picked' ? $('pick') : $('skip'); btn.disabled = true;
+  try {
+    await ref.set(data); picks.set(icon.key, data); renderStrip();
+    note(status === 'picked' ? `Đã chọn “${data.title}”.` : `Đã bỏ qua “${data.title}”.`, 'ok');
+    setTimeout(nextTodo, 350);
+  } catch (err) { note('Không lưu được: ' + (err?.message ?? 'lỗi không rõ') + '. Thử lại sau.', 'bad'); }
+  finally { btn.disabled = false; renderStatus(); }
+}
+$('pick').onclick = () => save('picked');
+$('skip').onclick = () => save('skipped');
+document.addEventListener('keydown', (e) => {
+  if (e.target.closest('input, select, textarea') && e.key !== 'Enter') return;
+  if (e.key === 'ArrowLeft') { step(-1); e.preventDefault(); }
+  else if (e.key === 'ArrowRight') { step(1); e.preventDefault(); }
+  else if (e.key === 'Enter' && !$('pick').disabled) { save('picked'); e.preventDefault(); }
+  else if ((e.key === 's' || e.key === 'S') && !e.target.closest('input')) save('skipped');
+});
+window.addEventListener('resize', () => cur && draw());
+const redraw = () => cur && draw();
+matchMedia('(prefers-color-scheme: dark)').addEventListener('change', redraw);
+new MutationObserver(redraw).observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
+
+// ---------------------------------------------------------------- boot
+async function boot() {
+  try {
+    const res = await fetch('icons.json'); if (!res.ok) throw new Error('HTTP ' + res.status);
+    icons = (await res.json()).icons;
+  } catch (err) { $('banner').dataset.tone = 'bad'; $('banner').textContent = 'Không tải được danh sách ảnh (' + err.message + '). Tải lại trang để thử lại.'; return; }
+  $('workspace').hidden = false;
+  $('banner').textContent = 'Đang kết nối nơi lưu kết quả…';
+  let start = 0;
+  try { const last = localStorage.getItem('nonopix-picker-last'); const i = icons.findIndex((ic) => ic.key === last); if (i >= 0) start = i; } catch {}
+  await open(start);
+
+  const timer = setTimeout(() => { if (!db) { $('banner').dataset.tone = 'bad'; $('banner').textContent = 'Chưa kết nối được nơi lưu. Bạn vẫn thử được thông số, nhưng chưa bấm Chọn được.'; } }, 10000);
+  const cap = window.claude?.use ? await window.claude.use('db').catch(() => null) : null;
+  if (!cap) { clearTimeout(timer); $('banner').dataset.tone = 'bad'; $('banner').textContent = 'Không lưu được ở chế độ xem này. Mở trang trên claude.ai khi đã đăng nhập để chọn màn.'; renderStatus(); return; }
+  cap.collection('picks').onSnapshot((snap) => {
+    clearTimeout(timer); db = cap; $('banner').hidden = true;
+    picks = new Map(snap.docs.map((d) => [d.data().key, d.data()]));
+    renderStrip(); renderStatus();
+  }, (err) => { clearTimeout(timer); $('banner').hidden = false; $('banner').dataset.tone = 'bad'; $('banner').textContent = 'Lỗi kết nối nơi lưu: ' + err.message; });
+}
+boot();
+})();
+</script>

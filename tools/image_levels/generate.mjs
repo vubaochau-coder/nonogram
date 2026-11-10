@@ -10,6 +10,7 @@
 //   levels.json   đầu vào cho tools/build_levels.dart (mảng JSON)
 //   sources.json  nguồn + giấy phép của từng màn (để ghi công / chứng minh nguồn gốc)
 //   preview.html  trang xem trước: hình gốc cạnh lưới nonogram, để duyệt bằng mắt
+//   picker_icons.json  dữ liệu cho trang chọn màn (picker.html): SVG gốc + bản gợi ý
 //
 // Các bộ icon được tải bằng `npm pack` vào tools/image_levels/.cache/ (không commit).
 
@@ -399,6 +400,7 @@ async function main() {
   const levels = [];
   const sources = [];
   const preview = [];
+  const pickerIcons = [];
   const byKey = Object.fromEntries(rendered.map((r) => [r.key, r]));
 
   for (const item of selection.icons) {
@@ -439,6 +441,21 @@ async function main() {
       : candidates.filter((c) => c.ok).sort((a, b) => cost(a) - cost(b))[0];
 
     const title = item.title ?? titleOf(item.icon);
+    const svgInfo = jobs.find((j) => j.key === key);
+    const setInfo = sets[item.set].info;
+    pickerIcons.push({
+      key,
+      set: item.set,
+      icon: item.icon,
+      title,
+      author: meta.author,
+      license: setInfo.license?.spdx,
+      mode: meta.mode,
+      width: svgInfo.width,
+      height: svgInfo.height,
+      svg: svgInfo.svg,
+      suggest: pick ? { variant: pick.variant, size: pick.n ?? null } : null,
+    });
     preview.push({ key, title, thumb: r.thumb, candidates, pick });
     if (!pick) continue;
 
@@ -481,6 +498,10 @@ async function main() {
   fs.writeFileSync(path.join(outDir, 'levels.json'), JSON.stringify(order.map(([l]) => l), null, 1) + '\n');
   fs.writeFileSync(path.join(outDir, 'sources.json'), JSON.stringify(order.map(([, s]) => s), null, 1) + '\n');
   fs.writeFileSync(path.join(outDir, 'preview.html'), previewHtml(preview, order));
+  fs.writeFileSync(
+    path.join(outDir, 'picker_icons.json'),
+    JSON.stringify({ version: 1, generatedAt: new Date().toISOString(), icons: pickerIcons }),
+  );
   console.log(`${order.length}/${selection.icons.length} hình thành màn. Kết quả: ${outDir}`);
 }
 

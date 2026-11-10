@@ -55,3 +55,16 @@ có sẵn.
 |---|---|---|
 | Pixelarticons | MIT | Kèm thông báo giấy phép MIT trong app |
 | Noto Emoji | Apache 2.0 | Kèm thông báo giấy phép Apache 2.0 trong app |
+
+## Trang chọn màn (chọn tay từng ảnh)
+
+`picker/index.html` là trang duyệt từng ảnh, đăng trên claude.ai (riêng tư).
+Trang đọc `out/picker_icons.json` (đăng kèm dưới tên `icons.json`) và lưu
+từng lựa chọn vào cơ sở dữ liệu của trang (collection `picks`).
+
+Duyệt xong, xuất các bản ghi `picks` thành file JSON rồi chạy:
+
+```bash
+node tools/image_levels/picks_to_levels.mjs <thư mục picks>
+dart run tools/build_levels.dart tools/image_levels/out/levels.json
+```
