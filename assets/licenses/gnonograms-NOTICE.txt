@@ -1,0 +1,7 @@
+Puzzles "Spade" and "42" (from the gnonograms program):
+Copyright © 2010 Frederico Vera.
+
+From the nonogram-db collection (https://github.com/Sprunth/nonogram-db).
+Licensed under the Creative Commons Attribution-ShareAlike 4.0 International
+license (CC BY-SA 4.0): https://creativecommons.org/licenses/by-sa/4.0/
+These puzzles remain available under CC BY-SA 4.0.

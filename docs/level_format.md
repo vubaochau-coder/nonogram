@@ -69,12 +69,12 @@ Tuỳ chọn hay dùng:
 `test/data/level_assets_test.dart` chạy lại toàn bộ các kiểm tra trên với
 assets đã commit, nên CI sẽ chặn dữ liệu hỏng.
 
-> Dữ liệu hiện tại: **121 màn** vẽ từ hai bộ pixel art mở giấy phép dùng
-> thương mại, duyệt tay từng màn trên trang chọn màn (xem
+> Dữ liệu hiện tại: **129 màn** có giấy phép dùng thương mại (xem
 > `tools/image_levels/README.md`):
 >
-> - Pixelarticons (MIT): 39 màn
-> - Streamline Pixel (CC BY 4.0): 82 màn
+> - Pixelarticons (MIT): 39 màn, duyệt tay trên trang chọn màn
+> - Streamline Pixel (CC BY 4.0): 82 màn, duyệt tay trên trang chọn màn
+> - nonogram-db (CC BY 3.0 / CC BY-SA 4.0): 8 màn dùng nguyên bản
 >
 > Nguồn và giấy phép của từng màn: `tools/image_levels/out/sources.json`;
 > ghi công: `docs/credits.md`. Sinh lại bằng:

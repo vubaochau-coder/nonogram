@@ -65,6 +65,39 @@ for (const p of picks) {
     source: { id, title: p.title, set: p.set, icon: p.icon, author: p.author, license: p.license, params: p.params, editedCells: p.edits?.length ?? 0, metrics },
   });
 }
+// Màn lấy nguyên từ các bộ nonogram có giấy phép mở (không phải chuyển từ
+// icon), xem data/nonogram_db.json và docs/credits.md.
+const authorFields = {
+  'Jan Wolter': 'Jan Wolter (webpbn.com)',
+  'Michael Terry': 'Michael Terry (nonogram-db)',
+  'Frederico Vera': 'Frederico Vera (gnonograms)',
+};
+for (const p of JSON.parse(fs.readFileSync(path.join(here, 'data', 'nonogram_db.json'), 'utf8'))) {
+  const grid = p.solution.map((row) => [...row].map(Number));
+  if (!analyze(grid).lineSolvable) {
+    problems.push(p.id);
+    continue;
+  }
+  const author = authorFields[p.by];
+  if (!author) throw new Error(`Chưa có ghi công cho tác giả "${p.by}" (${p.id})`);
+  const metrics = difficultyMetrics(grid);
+  levels.push({
+    id: p.id,
+    title: p.title,
+    score: metrics.score,
+    cells: metrics.cells,
+    level: {
+      source_puzzle_id: p.id,
+      title: p.title,
+      author,
+      difficulty_score: Math.round(metrics.score * 100) / 100,
+      rows: grid.length,
+      cols: grid[0].length,
+      solution: p.solution,
+    },
+    source: { id: p.id, title: p.title, set: 'nonogram-db', author: p.by, copyright: p.copyright, license: p.license, url: p.source, catalogue: p.catalogue, metrics },
+  });
+}
 if (problems.length) console.warn(`Bỏ ${problems.length} màn không giải được bằng suy luận: ${problems.join(', ')}`);
 
 // Màn mở đầu chọn tay (danh sách id), xem tools/image_levels/README.md.

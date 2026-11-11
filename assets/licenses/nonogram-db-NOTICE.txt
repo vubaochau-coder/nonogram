@@ -1,0 +1,7 @@
+Puzzle "Bloop Bloop" (webpbn #26167):
+Copyright © 2015 Michael Terry.
+
+From the nonogram-db collection (https://github.com/Sprunth/nonogram-db).
+Licensed under the Creative Commons Attribution-ShareAlike 4.0 International
+license (CC BY-SA 4.0): https://creativecommons.org/licenses/by-sa/4.0/
+This puzzle remains available under CC BY-SA 4.0.

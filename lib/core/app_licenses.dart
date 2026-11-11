@@ -26,7 +26,8 @@ class LevelArtSource {
   final String authorField;
 }
 
-/// Các bộ hình của bộ màn có bản quyền (`assets/levels/`), xem
+/// Nguồn của bộ màn có bản quyền (`assets/levels/`): các bộ icon được chuyển
+/// thành màn, và các màn nonogram có giấy phép mở dùng nguyên bản. Xem
 /// `docs/credits.md`.
 const levelArtSources = <LevelArtSource>[
   LevelArtSource(
@@ -46,6 +47,33 @@ const levelArtSources = <LevelArtSource>[
     licenseUrl: 'https://github.com/halfmage/pixelarticons/blob/master/LICENSE',
     licenseAsset: 'assets/licenses/pixelarticons-LICENSE.txt',
     authorField: 'Pixelarticons (Gerrit Halfmann)',
+  ),
+  LevelArtSource(
+    name: 'webpbn.com',
+    author: 'Jan Wolter',
+    license: 'CC BY 3.0',
+    url: 'https://webpbn.com',
+    licenseUrl: 'https://creativecommons.org/licenses/by/3.0/',
+    licenseAsset: 'assets/licenses/webpbn-NOTICE.txt',
+    authorField: 'Jan Wolter (webpbn.com)',
+  ),
+  LevelArtSource(
+    name: 'gnonograms',
+    author: 'Frederico Vera',
+    license: 'CC BY-SA 4.0',
+    url: 'https://github.com/Sprunth/nonogram-db',
+    licenseUrl: 'https://creativecommons.org/licenses/by-sa/4.0/',
+    licenseAsset: 'assets/licenses/gnonograms-NOTICE.txt',
+    authorField: 'Frederico Vera (gnonograms)',
+  ),
+  LevelArtSource(
+    name: 'nonogram-db',
+    author: 'Michael Terry',
+    license: 'CC BY-SA 4.0',
+    url: 'https://github.com/Sprunth/nonogram-db',
+    licenseUrl: 'https://creativecommons.org/licenses/by-sa/4.0/',
+    licenseAsset: 'assets/licenses/nonogram-db-NOTICE.txt',
+    authorField: 'Michael Terry (nonogram-db)',
   ),
 ];
 

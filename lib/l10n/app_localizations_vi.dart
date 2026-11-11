@@ -432,11 +432,11 @@ class AppLocalizationsVi extends AppLocalizations {
   String get licensesTitle => 'Giấy phép';
 
   @override
-  String get licensesLevelArtHeading => 'Hình ảnh màn chơi';
+  String get licensesLevelArtHeading => 'Màn chơi';
 
   @override
   String get licensesLevelArtIntro =>
-      'Các màn chơi được chuyển thể từ những bộ icon pixel art dưới đây: thu nhỏ, chuyển sang đen trắng và chỉnh sửa để màn nào cũng giải được.';
+      'Các màn chơi lấy từ những nguồn dưới đây. Các bộ icon được thu nhỏ, chuyển sang đen trắng và chỉnh sửa để màn nào cũng giải được; các bộ nonogram được dùng nguyên bản.';
 
   @override
   String get licensesFontHeading => 'Phông chữ';

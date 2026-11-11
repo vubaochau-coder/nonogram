@@ -1,0 +1,12 @@
+Puzzles "Dancer" (webpbn #1), "Scaredy Cat" (webpbn #6), "Probably Not"
+(webpbn #16) and "Slippery Conditions" (webpbn #21):
+Copyright © 2004 Jan Wolter.
+
+Puzzle "Swing" (webpbn #529):
+Copyright © 2006 Jan Wolter.
+
+From webpbn.com (https://webpbn.com), via the nonogram-db collection
+(https://github.com/Sprunth/nonogram-db). The author granted free
+redistribution with attribution; nonogram-db lists them under the Creative
+Commons Attribution 3.0 license (CC BY 3.0):
+https://creativecommons.org/licenses/by/3.0/
