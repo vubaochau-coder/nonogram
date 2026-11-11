@@ -1,0 +1,12 @@
+{
+  "name": "nonopix-image-levels",
+  "private": true,
+  "type": "module",
+  "description": "Sinh màn nonogram từ các bộ icon có giấy phép mở",
+  "scripts": {
+    "generate": "node generate.mjs"
+  },
+  "devDependencies": {
+    "playwright": "^1.48.0"
+  }
+}

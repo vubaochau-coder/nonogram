@@ -40,6 +40,20 @@ android {
         versionName = flutter.versionName
     }
 
+    // Flavor: `dev` (bản thử nội bộ, mặc định trên GitHub Actions: có màn chọn chế
+    // độ chơi và bộ màn của chế độ nhà phát triển) và `store` (bản phát hành).
+    // Cùng applicationId: không đổi được vì đã đăng ký trên Firebase / Google Play.
+    // Build luôn kèm --flavor, vd. `flutter run --flavor dev`.
+    flavorDimensions += "track"
+    productFlavors {
+        create("dev") {
+            dimension = "track"
+        }
+        create("store") {
+            dimension = "track"
+        }
+    }
+
     signingConfigs {
         if (keystorePropertiesFile.exists()) {
             create("release") {

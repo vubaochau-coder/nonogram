@@ -4,16 +4,19 @@ import 'package:nonogram/models/nonogram_board_snapshot.dart';
 import 'package:nonogram/models/nonogram_completed_progress.dart';
 
 class HiveNonogramLocalService implements NonogramLocalService {
-  static const _boxName = 'nonogram_offline_v1';
+  /// [boxName]: mỗi chế độ chơi lưu tiến độ ở một box riêng (xem `PlayMode`).
+  HiveNonogramLocalService({this.boxName = 'nonogram_offline_v1'});
+
   static const _currentProgressKey = 'current_progress';
   static const _completedProgressKey = 'completed_progress';
 
+  final String boxName;
   Box<dynamic>? _box;
 
   @override
   Future<void> initialize() async {
     await Hive.initFlutter();
-    _box = await Hive.openBox<dynamic>(_boxName);
+    _box = await Hive.openBox<dynamic>(boxName);
   }
 
   @override

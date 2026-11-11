@@ -2,13 +2,21 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter_test/flutter_test.dart';
+import 'package:nonogram/core/play_mode.dart';
 import 'package:nonogram/data/nonogram_puzzle_source.dart';
 import 'package:nonogram/screens/play/engine/nonogram_solver.dart';
 
-/// Kiểm tra toàn bộ dữ liệu màn chơi đóng gói trong assets/levels/.
+/// Kiểm tra toàn bộ dữ liệu màn chơi đóng gói trong app: bộ màn có bản quyền
+/// (assets/levels/, chế độ người dùng) và bộ màn của chế độ nhà phát triển
+/// (assets/levels_dev/, chỉ có ở flavor dev).
 /// Dữ liệu nằm trong app nên lỗi ở đây chỉ sửa được bằng bản phát hành mới.
 void main() {
-  final dir = Directory('assets/levels');
+  for (final mode in PlayMode.values) {
+    group(mode.levelsPath, () => _checkLevels(Directory(mode.levelsPath)));
+  }
+}
+
+void _checkLevels(Directory dir) {
   final index = NonogramLevelIndex.fromJson(
     jsonDecode(File('${dir.path}/index.json').readAsStringSync()),
   );

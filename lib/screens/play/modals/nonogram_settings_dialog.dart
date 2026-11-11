@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:lucide_icons/lucide_icons.dart';
 import 'package:nonogram/core/context_ext.dart';
+import 'package:nonogram/core/play_mode.dart';
+import 'package:nonogram/screens/licenses/app_licenses_page.dart';
 import 'package:nonogram/widgets/app_theme_mode_selector.dart';
 import 'package:nonogram/widgets/dialogs/app_dialog.dart';
 
@@ -33,8 +35,8 @@ Future<void> showNonogramSettingsDialog(BuildContext context) async {
 
 enum _SettingsResult { showControlsGuide }
 
-/// Cài đặt khi đang chơi: giao diện sáng/tối, xem lại hướng dẫn thao tác và
-/// chơi lại màn từ đầu.
+/// Cài đặt khi đang chơi: giao diện sáng/tối, xem lại hướng dẫn thao tác,
+/// chơi lại màn từ đầu, giấy phép và (flavor `dev`) đổi chế độ chơi.
 class NonogramSettingsDialog extends StatelessWidget {
   const NonogramSettingsDialog({super.key});
 
@@ -78,10 +80,19 @@ class NonogramSettingsDialog extends StatelessWidget {
     Navigator.pop(context);
   }
 
+  PlayModeSwitcher? _playModeSwitcher(BuildContext context) {
+    try {
+      return context.read<PlayModeSwitcher>();
+    } on ProviderNotFoundException {
+      return null;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
     final colors = context.color;
+    final switcher = _playModeSwitcher(context);
 
     return AppDialog(
       title: Text(l10n.nonogramSettingsTitle),
@@ -125,6 +136,42 @@ class NonogramSettingsDialog extends StatelessWidget {
               ),
             ),
           ),
+          const SizedBox(height: 10),
+          SizedBox(
+            width: double.infinity,
+            child: OutlinedButton.icon(
+              key: const ValueKey('nonogram-licenses'),
+              onPressed:
+                  () => Navigator.of(context).push(
+                    MaterialPageRoute<void>(
+                      builder: (_) => const AppLicensesPage(),
+                    ),
+                  ),
+              icon: const Icon(LucideIcons.scale, size: 18),
+              label: Text(l10n.settingsLicenses),
+              style: OutlinedButton.styleFrom(
+                padding: const EdgeInsets.symmetric(vertical: 12),
+              ),
+            ),
+          ),
+          if (switcher != null) ...[
+            const SizedBox(height: 10),
+            SizedBox(
+              width: double.infinity,
+              child: OutlinedButton.icon(
+                key: const ValueKey('nonogram-switch-play-mode'),
+                onPressed: () {
+                  Navigator.pop(context);
+                  switcher.switchMode();
+                },
+                icon: const Icon(LucideIcons.repeat, size: 18),
+                label: Text(l10n.settingsSwitchPlayMode),
+                style: OutlinedButton.styleFrom(
+                  padding: const EdgeInsets.symmetric(vertical: 12),
+                ),
+              ),
+            ),
+          ],
         ],
       ),
       actions: [

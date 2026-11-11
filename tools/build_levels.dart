@@ -1,4 +1,4 @@
-// Chuyển dữ liệu màn chơi (dump bảng `puzzles` từ Supabase, hoặc file mẫu)
+// Chuyển dữ liệu màn chơi (tools/image_levels/out/levels.json, hoặc file mẫu)
 // thành các file gói trong assets/levels/.
 //
 // Cách dùng:
@@ -13,10 +13,9 @@
 //   --skip-unique-check     Bỏ kiểm tra nghiệm duy nhất (nhanh hơn)
 //   --drop-invalid          Bỏ qua màn lỗi/không duy nhất thay vì dừng lại
 //
-// Đầu vào là một mảng JSON (hoặc {"data": [...]}, như file của
-// tools/crawl_json.js), hoặc file CSV export từ Supabase SQL Editor (dòng đầu
-// là tên cột, các cột jsonb là chuỗi JSON). Mỗi phần tử cần `level` và `solution`; `solution` là
-// ma trận số (như cột jsonb trên Supabase) hoặc mảng chuỗi "0101...".
+// Đầu vào là một mảng JSON (hoặc {"data": [...]}), hoặc file CSV (dòng đầu là
+// tên cột, cột kiểu JSON là chuỗi JSON). Mỗi phần tử cần `level` và `solution`;
+// `solution` là ma trận số hoặc mảng chuỗi "0101...".
 // Các trường khác được giữ nếu có: source_puzzle_id, title, author,
 // difficulty, difficulty_score, rows, cols, status.
 

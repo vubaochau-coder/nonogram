@@ -48,9 +48,9 @@ Mỗi màn nằm trên một dòng để diff trên git dễ đọc:
 dart run tools/build_levels.dart path/to/puzzles.json
 ```
 
-Đầu vào là dump bảng `puzzles` của Supabase: file CSV export từ SQL Editor,
-mảng JSON, hoặc `{"data": [...]}`.
-`solution` có thể là ma trận số như cột jsonb trên Supabase, hoặc mảng chuỗi.
+Đầu vào là mảng JSON (như `tools/image_levels/out/levels.json`), `{"data": [...]}`,
+hoặc file CSV có dòng đầu là tên cột.
+`solution` có thể là ma trận số hoặc mảng chuỗi `"0101..."`.
 Script sẽ:
 
 1. Sắp xếp theo `level`, kiểm tra không trùng level/id.
@@ -69,13 +69,29 @@ Tuỳ chọn hay dùng:
 `test/data/level_assets_test.dart` chạy lại toàn bộ các kiểm tra trên với
 assets đã commit, nên CI sẽ chặn dữ liệu hỏng.
 
-> Dữ liệu hiện tại: **574 màn** sinh từ `tools/data/puzzles_dump.csv` (export
-> bảng `puzzles` trên Supabase ngày 2026-11-05, mọi màn đều `status = draft`).
-> Sinh lại bằng:
+> Dữ liệu hiện tại: **121 màn** vẽ từ hai bộ pixel art mở giấy phép dùng
+> thương mại, duyệt tay từng màn trên trang chọn màn (xem
+> `tools/image_levels/README.md`):
+>
+> - Pixelarticons (MIT): 39 màn
+> - Streamline Pixel (CC BY 4.0): 82 màn
+>
+> Nguồn và giấy phép của từng màn: `tools/image_levels/out/sources.json`;
+> ghi công: `docs/credits.md`. Sinh lại bằng:
 >
 > ```bash
-> dart run tools/build_levels.dart tools/data/puzzles_dump.csv
+> node tools/image_levels/picks_to_levels.mjs tools/image_levels/data/picks.json
+> dart run tools/build_levels.dart tools/image_levels/out/levels.json
 > ```
+>
+> Bộ màn cũ lấy từ nonogram.org (574 màn) đã bị gỡ vì không được dùng thương mại.
+
+## Bộ màn của chế độ nhà phát triển
+
+`assets/levels_dev/` cùng định dạng, chứa 574 màn cũ lấy từ nonogram.org (bản
+chụp `assets/levels/` của nhánh `main` trước khi đổi bộ màn; dữ liệu gốc còn ở
+nhánh `beta`). Bộ này chỉ được đóng gói khi build `--flavor dev` và không được
+đưa vào bản store. `test/data/level_assets_test.dart` kiểm tra cả hai bộ.
 
 ## Thay đổi dữ liệu sau khi đã phát hành
 

@@ -1,0 +1,8 @@
+Streamline Pixel icons by Streamline (https://www.streamlinehq.com),
+from https://github.com/webalys-hq/streamline-vectors.
+
+Licensed under the Creative Commons Attribution 4.0 International License
+(CC BY 4.0): https://creativecommons.org/licenses/by/4.0/
+
+Changes: the icons were scaled down, converted to black and white, edited cell
+by cell where needed and turned into nonogram puzzles.

@@ -1,0 +1,94 @@
+name: Store build
+
+# Bản phát hành lên Google Play: flavor `store` (không có màn chọn chế độ chơi,
+# chỉ có bộ màn có bản quyền). Chỉ chạy tay từ tab Actions; kết quả là file
+# .aab đã ký ở mục Artifacts của lần chạy, tải về rồi tự đưa lên Play Console.
+#
+# Dùng chung các secret ký app với workflow Distribute:
+#   ANDROID_KEYSTORE_BASE64, ANDROID_KEYSTORE_PASSWORD, ANDROID_KEY_ALIAS,
+#   ANDROID_KEY_PASSWORD
+on:
+  workflow_dispatch:
+    inputs:
+      build_number:
+        description: Số build (versionCode), phải lớn hơn bản đã có trên Play
+        required: true
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    name: Build store app bundle
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Read Flutter version from .fvmrc
+        id: fvm
+        run: echo "version=$(jq -r .flutter .fvmrc)" >> "$GITHUB_OUTPUT"
+
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 17
+          cache: gradle
+
+      - uses: subosito/flutter-action@v2
+        with:
+          flutter-version: ${{ steps.fvm.outputs.version }}
+          channel: stable
+          cache: true
+
+      - name: Restore upload keystore
+        env:
+          KEYSTORE_BASE64: ${{ secrets.ANDROID_KEYSTORE_BASE64 }}
+          KEYSTORE_PASSWORD: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
+          KEY_ALIAS: ${{ secrets.ANDROID_KEY_ALIAS }}
+          KEY_PASSWORD: ${{ secrets.ANDROID_KEY_PASSWORD }}
+        run: |
+          if [ -z "$KEYSTORE_BASE64" ]; then
+            echo "::error::Thiếu secret ANDROID_KEYSTORE_BASE64"
+            exit 1
+          fi
+          echo "$KEYSTORE_BASE64" | base64 --decode > android/app/upload-keystore.jks
+          cat > android/key.properties <<EOF
+          storePassword=$KEYSTORE_PASSWORD
+          keyPassword=$KEY_PASSWORD
+          keyAlias=$KEY_ALIAS
+          storeFile=upload-keystore.jks
+          EOF
+
+      - run: flutter pub get --enforce-lockfile
+
+      - name: Check build number
+        env:
+          BUILD_NUMBER: ${{ github.event.inputs.build_number }}
+        run: |
+          case "$BUILD_NUMBER" in
+            ''|*[!0-9]*) echo "::error::Số build phải là số nguyên dương"; exit 1 ;;
+          esac
+
+      - run: flutter build appbundle --release --flavor store --build-number=${{ github.event.inputs.build_number }}
+
+      # Bộ màn của chế độ nhà phát triển (lấy từ nonogram.org) không được có
+      # trong bản store.
+      - name: Check developer levels are not bundled
+        run: |
+          aab=build/app/outputs/bundle/storeRelease/app-store-release.aab
+          if unzip -l "$aab" | grep -q "assets/levels_dev/"; then
+            echo "::error::Bản store đang chứa assets/levels_dev/"
+            exit 1
+          fi
+          unzip -l "$aab" | grep -q "assets/levels/index.json"
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: nonopix-store-${{ github.event.inputs.build_number }}
+          path: build/app/outputs/bundle/storeRelease/app-store-release.aab
+          if-no-files-found: error
+
+      - name: Remove credentials
+        if: always()
+        run: rm -f android/key.properties android/app/upload-keystore.jks

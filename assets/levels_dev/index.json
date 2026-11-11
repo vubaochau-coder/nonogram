@@ -1,0 +1,36 @@
+{
+  "version": 1,
+  "totalLevels": 574,
+  "packs": [
+    {
+      "file": "pack_001.json",
+      "firstLevel": 1,
+      "lastLevel": 100
+    },
+    {
+      "file": "pack_002.json",
+      "firstLevel": 101,
+      "lastLevel": 200
+    },
+    {
+      "file": "pack_003.json",
+      "firstLevel": 201,
+      "lastLevel": 300
+    },
+    {
+      "file": "pack_004.json",
+      "firstLevel": 301,
+      "lastLevel": 400
+    },
+    {
+      "file": "pack_005.json",
+      "firstLevel": 401,
+      "lastLevel": 500
+    },
+    {
+      "file": "pack_006.json",
+      "firstLevel": 501,
+      "lastLevel": 574
+    }
+  ]
+}

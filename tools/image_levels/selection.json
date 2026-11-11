@@ -1,0 +1,1237 @@
+{
+ "_comment": "Danh sách hình được chọn để sinh màn. set = tên bộ icon Iconify (gói npm @iconify-json/<set>); icon = tên icon trong bộ; title = tên màn (tuỳ chọn, mặc định suy từ tên icon); sizes = các cạnh lưới thử (tuỳ chọn); grid (ở sets) = số ô thật của bộ pixel art trên mỗi cạnh khung; variant + size = ép chọn một bản cụ thể khi bản tự chọn không đẹp (xem preview.html). Không đưa logo/nhãn hiệu vào đây.",
+ "sets": {
+  "pixelarticons": {
+   "mode": "pixel",
+   "author": "Pixelarticons (Gerrit Halfmann)"
+  },
+  "streamline-pixel": {
+   "mode": "pixel",
+   "grid": 42,
+   "author": "Streamline Pixel (Streamline)"
+  },
+  "game-icons": {
+   "mode": "emoji",
+   "author": "Game-icons.net (Lorc, Delapouite & contributors)",
+   "sizes": [
+    15,
+    20,
+    25
+   ]
+  }
+ },
+ "icons": [
+  {
+   "set": "pixelarticons",
+   "icon": "heart"
+  },
+  {
+   "set": "pixelarticons",
+   "icon": "anchor"
+  },
+  {
+   "set": "pixelarticons",
+   "icon": "apple"
+  },
+  {
+   "set": "pixelarticons",
+   "icon": "balloon"
+  },
+  {
+   "set": "pixelarticons",
+   "icon": "bell"
+  },
+  {
+   "set": "pixelarticons",
+   "icon": "bomb"
+  },
+  {
+   "set": "pixelarticons",
+   "icon": "bug"
+  },
+  {
+   "set": "pixelarticons",
+   "icon": "cake"
+  },
+  {
+   "set": "pixelarticons",
+   "icon": "car"
+  },
+  {
+   "set": "pixelarticons",
+   "icon": "castle"
+  },
+  {
+   "set": "pixelarticons",
+   "icon": "chess",
+   "title": "Chess Knight"
+  },
+  {
+   "set": "pixelarticons",
+   "icon": "coffee"
+  },
+  {
+   "set": "pixelarticons",
+   "icon": "crown"
+  },
+  {
+   "set": "pixelarticons",
+   "icon": "dice"
+  },
+  {
+   "set": "pixelarticons",
+   "icon": "dog"
+  },
+  {
+   "set": "pixelarticons",
+   "icon": "downasaur",
+   "title": "Dino"
+  },
+  {
+   "set": "pixelarticons",
+   "icon": "earth"
+  },
+  {
+   "set": "pixelarticons",
+   "icon": "feather"
+  },
+  {
+   "set": "pixelarticons",
+   "icon": "fire"
+  },
+  {
+   "set": "pixelarticons",
+   "icon": "fish"
+  },
+  {
+   "set": "pixelarticons",
+   "icon": "gamepad"
+  },
+  {
+   "set": "pixelarticons",
+   "icon": "gift"
+  },
+  {
+   "set": "pixelarticons",
+   "icon": "headphone",
+   "title": "Headphones"
+  },
+  {
+   "set": "pixelarticons",
+   "icon": "helicopter"
+  },
+  {
+   "set": "pixelarticons",
+   "icon": "home",
+   "title": "House"
+  },
+  {
+   "set": "pixelarticons",
+   "icon": "hourglass"
+  },
+  {
+   "set": "pixelarticons",
+   "icon": "key"
+  },
+  {
+   "set": "pixelarticons",
+   "icon": "leaf"
+  },
+  {
+   "set": "pixelarticons",
+   "icon": "lightbulb",
+   "title": "Light Bulb"
+  },
+  {
+   "set": "pixelarticons",
+   "icon": "moon"
+  },
+  {
+   "set": "pixelarticons",
+   "icon": "music",
+   "title": "Music Note"
+  },
+  {
+   "set": "pixelarticons",
+   "icon": "potion"
+  },
+  {
+   "set": "pixelarticons",
+   "icon": "robot"
+  },
+  {
+   "set": "pixelarticons",
+   "icon": "ship"
+  },
+  {
+   "set": "pixelarticons",
+   "icon": "shirt",
+   "title": "T-Shirt"
+  },
+  {
+   "set": "pixelarticons",
+   "icon": "skull"
+  },
+  {
+   "set": "pixelarticons",
+   "icon": "snail"
+  },
+  {
+   "set": "pixelarticons",
+   "icon": "snowflake"
+  },
+  {
+   "set": "pixelarticons",
+   "icon": "star"
+  },
+  {
+   "set": "pixelarticons",
+   "icon": "sun"
+  },
+  {
+   "set": "pixelarticons",
+   "icon": "sunglasses"
+  },
+  {
+   "set": "pixelarticons",
+   "icon": "sword"
+  },
+  {
+   "set": "pixelarticons",
+   "icon": "t-rex",
+   "title": "T-Rex"
+  },
+  {
+   "set": "pixelarticons",
+   "icon": "tent"
+  },
+  {
+   "set": "pixelarticons",
+   "icon": "tree-pine",
+   "title": "Pine Tree"
+  },
+  {
+   "set": "pixelarticons",
+   "icon": "trophy"
+  },
+  {
+   "set": "pixelarticons",
+   "icon": "truck"
+  },
+  {
+   "set": "pixelarticons",
+   "icon": "diamond-gem",
+   "title": "Diamond"
+  },
+  {
+   "set": "pixelarticons",
+   "icon": "joystick"
+  },
+  {
+   "set": "streamline-pixel",
+   "icon": "pet-animals-bear",
+   "title": "Bear"
+  },
+  {
+   "set": "streamline-pixel",
+   "icon": "pet-animals-buffalo",
+   "title": "Buffalo"
+  },
+  {
+   "set": "streamline-pixel",
+   "icon": "pet-animals-cat",
+   "title": "Cat"
+  },
+  {
+   "set": "streamline-pixel",
+   "icon": "pet-animals-dog",
+   "title": "Dog"
+  },
+  {
+   "set": "streamline-pixel",
+   "icon": "pet-animals-frog",
+   "title": "Frog"
+  },
+  {
+   "set": "streamline-pixel",
+   "icon": "pet-animals-gorilla",
+   "title": "Gorilla"
+  },
+  {
+   "set": "streamline-pixel",
+   "icon": "pet-animals-ox",
+   "title": "Ox"
+  },
+  {
+   "set": "streamline-pixel",
+   "icon": "pet-animals-pig",
+   "title": "Pig"
+  },
+  {
+   "set": "streamline-pixel",
+   "icon": "pet-animals-rabbit-1",
+   "title": "Rabbit"
+  },
+  {
+   "set": "streamline-pixel",
+   "icon": "pet-animals-turtle",
+   "title": "Turtle"
+  },
+  {
+   "set": "streamline-pixel",
+   "icon": "food-drink-bread",
+   "title": "Bread"
+  },
+  {
+   "set": "streamline-pixel",
+   "icon": "food-drink-coffee-cup",
+   "title": "Coffee Cup"
+  },
+  {
+   "set": "streamline-pixel",
+   "icon": "food-drink-desert-cake",
+   "title": "Cake"
+  },
+  {
+   "set": "streamline-pixel",
+   "icon": "food-drink-desert-cupcake",
+   "title": "Cupcake"
+  },
+  {
+   "set": "streamline-pixel",
+   "icon": "food-drink-desert-donut",
+   "title": "Donut"
+  },
+  {
+   "set": "streamline-pixel",
+   "icon": "food-drink-desert-icecream",
+   "title": "Ice Cream"
+  },
+  {
+   "set": "streamline-pixel",
+   "icon": "food-drink-egg",
+   "title": "Egg"
+  },
+  {
+   "set": "streamline-pixel",
+   "icon": "food-drink-fish",
+   "title": "Fish"
+  },
+  {
+   "set": "streamline-pixel",
+   "icon": "food-drink-fish-bone",
+   "title": "Fish Bone"
+  },
+  {
+   "set": "streamline-pixel",
+   "icon": "food-drink-fried-chicken",
+   "title": "Fried Chicken"
+  },
+  {
+   "set": "streamline-pixel",
+   "icon": "food-drink-fruit-cherry",
+   "title": "Cherry"
+  },
+  {
+   "set": "streamline-pixel",
+   "icon": "food-drink-hamburger",
+   "title": "Hamburger"
+  },
+  {
+   "set": "streamline-pixel",
+   "icon": "food-drink-milk",
+   "title": "Milk"
+  },
+  {
+   "set": "streamline-pixel",
+   "icon": "food-drink-pizza",
+   "title": "Pizza"
+  },
+  {
+   "set": "streamline-pixel",
+   "icon": "food-drink-rice-ball",
+   "title": "Rice Ball"
+  },
+  {
+   "set": "streamline-pixel",
+   "icon": "food-drink-sushi",
+   "title": "Sushi"
+  },
+  {
+   "set": "streamline-pixel",
+   "icon": "food-drink-tea",
+   "title": "Tea"
+  },
+  {
+   "set": "streamline-pixel",
+   "icon": "entertainment-events-hobbies-board-game-dice",
+   "title": "Dice"
+  },
+  {
+   "set": "streamline-pixel",
+   "icon": "entertainment-events-hobbies-chess-knight",
+   "title": "Knight"
+  },
+  {
+   "set": "streamline-pixel",
+   "icon": "entertainment-events-hobbies-chess-rook",
+   "title": "Rook"
+  },
+  {
+   "set": "streamline-pixel",
+   "icon": "entertainment-events-hobbies-horror-ghost",
+   "title": "Ghost"
+  },
+  {
+   "set": "streamline-pixel",
+   "icon": "entertainment-events-hobbies-popcorn",
+   "title": "Popcorn"
+  },
+  {
+   "set": "streamline-pixel",
+   "icon": "entertainment-events-hobbies-record-player",
+   "title": "Record Player"
+  },
+  {
+   "set": "streamline-pixel",
+   "icon": "entertainment-events-hobbies-ticket",
+   "title": "Ticket"
+  },
+  {
+   "set": "streamline-pixel",
+   "icon": "entertainment-events-hobbies-game-machines-arcade-1",
+   "title": "Arcade"
+  },
+  {
+   "set": "streamline-pixel",
+   "icon": "ecology-cactus",
+   "title": "Cactus"
+  },
+  {
+   "set": "streamline-pixel",
+   "icon": "ecology-tree",
+   "title": "Tree"
+  },
+  {
+   "set": "streamline-pixel",
+   "icon": "ecology-windmill-1",
+   "title": "Windmill"
+  },
+  {
+   "set": "streamline-pixel",
+   "icon": "transportation-bicycle",
+   "title": "Bicycle"
+  },
+  {
+   "set": "streamline-pixel",
+   "icon": "transportation-helicopter",
+   "title": "Helicopter"
+  },
+  {
+   "set": "streamline-pixel",
+   "icon": "transportation-motorcycle",
+   "title": "Motorcycle"
+  },
+  {
+   "set": "streamline-pixel",
+   "icon": "transportation-plane",
+   "title": "Plane"
+  },
+  {
+   "set": "streamline-pixel",
+   "icon": "transportation-train",
+   "title": "Train"
+  },
+  {
+   "set": "streamline-pixel",
+   "icon": "transportation-vintage-train",
+   "title": "Steam Train"
+  },
+  {
+   "set": "streamline-pixel",
+   "icon": "travel-wayfinding-balloon",
+   "title": "Hot Air Balloon"
+  },
+  {
+   "set": "streamline-pixel",
+   "icon": "travel-wayfinding-beach-coconut-tree",
+   "title": "Palm Tree"
+  },
+  {
+   "set": "streamline-pixel",
+   "icon": "travel-wayfinding-beach-umbrella",
+   "title": "Beach Umbrella"
+  },
+  {
+   "set": "streamline-pixel",
+   "icon": "weather-snowman",
+   "title": "Snowman"
+  },
+  {
+   "set": "streamline-pixel",
+   "icon": "weather-rainbow",
+   "title": "Rainbow"
+  },
+  {
+   "set": "streamline-pixel",
+   "icon": "weather-cresent-moon-stars",
+   "title": "Moon and Stars"
+  },
+  {
+   "set": "streamline-pixel",
+   "icon": "weather-umbrella",
+   "title": "Umbrella"
+  },
+  {
+   "set": "streamline-pixel",
+   "icon": "weather-cloud-sun-fine",
+   "title": "Sunny Day"
+  },
+  {
+   "set": "streamline-pixel",
+   "icon": "music-vinyl-record",
+   "title": "Vinyl Record"
+  },
+  {
+   "set": "streamline-pixel",
+   "icon": "music-walkman-cassette",
+   "title": "Cassette Player"
+  },
+  {
+   "set": "streamline-pixel",
+   "icon": "music-radio-stereo",
+   "title": "Radio"
+  },
+  {
+   "set": "streamline-pixel",
+   "icon": "music-clef-sheet",
+   "title": "Treble Clef"
+  },
+  {
+   "set": "streamline-pixel",
+   "icon": "music-microphone-1",
+   "title": "Microphone"
+  },
+  {
+   "set": "streamline-pixel",
+   "icon": "vintage-phone",
+   "title": "Old Phone"
+  },
+  {
+   "set": "streamline-pixel",
+   "icon": "video-movies-vintage-tv-1",
+   "title": "Old TV"
+  },
+  {
+   "set": "streamline-pixel",
+   "icon": "photography-camera-1",
+   "title": "Camera"
+  },
+  {
+   "set": "streamline-pixel",
+   "icon": "photography-picture-polaroid",
+   "title": "Instant Photo"
+  },
+  {
+   "set": "streamline-pixel",
+   "icon": "school-science-graduation-cap",
+   "title": "Graduation Cap"
+  },
+  {
+   "set": "streamline-pixel",
+   "icon": "school-science-test-flask",
+   "title": "Flask"
+  },
+  {
+   "set": "streamline-pixel",
+   "icon": "romance-love-letter-open",
+   "title": "Love Letter"
+  },
+  {
+   "set": "streamline-pixel",
+   "icon": "social-rewards-vip-crown-king",
+   "title": "Crown"
+  },
+  {
+   "set": "streamline-pixel",
+   "icon": "social-rewards-trends-hot-flame",
+   "title": "Flame"
+  },
+  {
+   "set": "streamline-pixel",
+   "icon": "interface-essential-trophy",
+   "title": "Trophy"
+  },
+  {
+   "set": "streamline-pixel",
+   "icon": "interface-essential-light-bulb",
+   "title": "Light Bulb"
+  },
+  {
+   "set": "streamline-pixel",
+   "icon": "interface-essential-magnet",
+   "title": "Magnet"
+  },
+  {
+   "set": "streamline-pixel",
+   "icon": "interface-essential-skull-1",
+   "title": "Skull"
+  },
+  {
+   "set": "streamline-pixel",
+   "icon": "interface-essential-hammer-1",
+   "title": "Hammer"
+  },
+  {
+   "set": "streamline-pixel",
+   "icon": "technology-robot-ai",
+   "title": "Robot"
+  },
+  {
+   "set": "streamline-pixel",
+   "icon": "shopping-shipping-basket",
+   "title": "Basket"
+  },
+  {
+   "set": "streamline-pixel",
+   "icon": "shopping-shipping-shop",
+   "title": "Shop"
+  },
+  {
+   "set": "streamline-pixel",
+   "icon": "money-payments-saving-treasure",
+   "title": "Treasure"
+  },
+  {
+   "set": "streamline-pixel",
+   "icon": "beauty-perfume-1",
+   "title": "Perfume"
+  },
+  {
+   "set": "streamline-pixel",
+   "icon": "beauty-mirror-1",
+   "title": "Hand Mirror"
+  },
+  {
+   "set": "streamline-pixel",
+   "icon": "health-dentistry-tooth",
+   "title": "Tooth"
+  },
+  {
+   "set": "streamline-pixel",
+   "icon": "health-brain-1",
+   "title": "Brain"
+  },
+  {
+   "set": "streamline-pixel",
+   "icon": "content-files-quill-ink",
+   "title": "Quill"
+  },
+  {
+   "set": "streamline-pixel",
+   "icon": "content-files-typing-machine",
+   "title": "Typewriter"
+  },
+  {
+   "set": "streamline-pixel",
+   "icon": "design-color-painting-palette",
+   "title": "Palette"
+  },
+  {
+   "set": "streamline-pixel",
+   "icon": "interface-essential-stopwatch",
+   "title": "Stopwatch"
+  },
+  {
+   "set": "streamline-pixel",
+   "icon": "real-estate-building-house",
+   "title": "House"
+  },
+  {
+   "set": "streamline-pixel",
+   "icon": "business-products-magic-rabbit",
+   "title": "Magic Hat"
+  },
+  {
+   "set": "streamline-pixel",
+   "icon": "business-product-piggy-bank",
+   "title": "Piggy Bank"
+  },
+  {
+   "set": "game-icons",
+   "icon": "cat"
+  },
+  {
+   "set": "game-icons",
+   "icon": "fox-head",
+   "title": "Fox"
+  },
+  {
+   "set": "game-icons",
+   "icon": "owl"
+  },
+  {
+   "set": "game-icons",
+   "icon": "frog"
+  },
+  {
+   "set": "game-icons",
+   "icon": "penguin"
+  },
+  {
+   "set": "game-icons",
+   "icon": "rabbit"
+  },
+  {
+   "set": "game-icons",
+   "icon": "bear-head",
+   "title": "Bear"
+  },
+  {
+   "set": "game-icons",
+   "icon": "elephant"
+  },
+  {
+   "set": "game-icons",
+   "icon": "turtle"
+  },
+  {
+   "set": "game-icons",
+   "icon": "octopus"
+  },
+  {
+   "set": "game-icons",
+   "icon": "sperm-whale",
+   "title": "Whale"
+  },
+  {
+   "set": "game-icons",
+   "icon": "butterfly"
+  },
+  {
+   "set": "game-icons",
+   "icon": "snail"
+  },
+  {
+   "set": "game-icons",
+   "icon": "ladybug"
+  },
+  {
+   "set": "game-icons",
+   "icon": "bee"
+  },
+  {
+   "set": "game-icons",
+   "icon": "crab"
+  },
+  {
+   "set": "game-icons",
+   "icon": "unicorn"
+  },
+  {
+   "set": "game-icons",
+   "icon": "rooster"
+  },
+  {
+   "set": "game-icons",
+   "icon": "duck"
+  },
+  {
+   "set": "game-icons",
+   "icon": "cactus"
+  },
+  {
+   "set": "game-icons",
+   "icon": "sunflower"
+  },
+  {
+   "set": "game-icons",
+   "icon": "mushroom"
+  },
+  {
+   "set": "game-icons",
+   "icon": "maple-leaf"
+  },
+  {
+   "set": "game-icons",
+   "icon": "palm-tree"
+  },
+  {
+   "set": "game-icons",
+   "icon": "shiny-apple",
+   "title": "Apple"
+  },
+  {
+   "set": "game-icons",
+   "icon": "banana"
+  },
+  {
+   "set": "game-icons",
+   "icon": "strawberry"
+  },
+  {
+   "set": "game-icons",
+   "icon": "cherry"
+  },
+  {
+   "set": "game-icons",
+   "icon": "carrot"
+  },
+  {
+   "set": "game-icons",
+   "icon": "hamburger"
+  },
+  {
+   "set": "game-icons",
+   "icon": "cupcake"
+  },
+  {
+   "set": "game-icons",
+   "icon": "umbrella"
+  },
+  {
+   "set": "game-icons",
+   "icon": "sailboat"
+  },
+  {
+   "set": "game-icons",
+   "icon": "anchor"
+  },
+  {
+   "set": "game-icons",
+   "icon": "ghost"
+  },
+  {
+   "set": "game-icons",
+   "icon": "snowman"
+  },
+  {
+   "set": "game-icons",
+   "icon": "lion"
+  },
+  {
+   "set": "game-icons",
+   "icon": "panda"
+  },
+  {
+   "set": "game-icons",
+   "icon": "pig-face",
+   "title": "Pig"
+  },
+  {
+   "set": "game-icons",
+   "icon": "monkey"
+  },
+  {
+   "set": "game-icons",
+   "icon": "koala"
+  },
+  {
+   "set": "game-icons",
+   "icon": "tiger-head",
+   "title": "Tiger"
+  },
+  {
+   "set": "game-icons",
+   "icon": "sitting-dog",
+   "title": "Dog"
+  },
+  {
+   "set": "game-icons",
+   "icon": "horse-head",
+   "title": "Horse"
+  },
+  {
+   "set": "game-icons",
+   "icon": "kangaroo"
+  },
+  {
+   "set": "game-icons",
+   "icon": "camel"
+  },
+  {
+   "set": "game-icons",
+   "icon": "cow"
+  },
+  {
+   "set": "game-icons",
+   "icon": "sheep"
+  },
+  {
+   "set": "game-icons",
+   "icon": "goat"
+  },
+  {
+   "set": "game-icons",
+   "icon": "deer"
+  },
+  {
+   "set": "game-icons",
+   "icon": "hedgehog"
+  },
+  {
+   "set": "game-icons",
+   "icon": "squirrel"
+  },
+  {
+   "set": "game-icons",
+   "icon": "mouse"
+  },
+  {
+   "set": "game-icons",
+   "icon": "bat"
+  },
+  {
+   "set": "game-icons",
+   "icon": "dolphin"
+  },
+  {
+   "set": "game-icons",
+   "icon": "seahorse"
+  },
+  {
+   "set": "game-icons",
+   "icon": "jellyfish"
+  },
+  {
+   "set": "game-icons",
+   "icon": "scorpion"
+  },
+  {
+   "set": "game-icons",
+   "icon": "dragonfly"
+  },
+  {
+   "set": "game-icons",
+   "icon": "ant"
+  },
+  {
+   "set": "game-icons",
+   "icon": "flamingo"
+  },
+  {
+   "set": "game-icons",
+   "icon": "swan"
+  },
+  {
+   "set": "game-icons",
+   "icon": "dinosaur-rex",
+   "title": "T-Rex"
+  },
+  {
+   "set": "game-icons",
+   "icon": "snake"
+  },
+  {
+   "set": "game-icons",
+   "icon": "chicken"
+  },
+  {
+   "set": "game-icons",
+   "icon": "teapot"
+  },
+  {
+   "set": "game-icons",
+   "icon": "coffee-cup"
+  },
+  {
+   "set": "game-icons",
+   "icon": "wine-glass"
+  },
+  {
+   "set": "game-icons",
+   "icon": "cake-slice",
+   "title": "Cake Slice"
+  },
+  {
+   "set": "game-icons",
+   "icon": "pear"
+  },
+  {
+   "set": "game-icons",
+   "icon": "grapes"
+  },
+  {
+   "set": "game-icons",
+   "icon": "lemon"
+  },
+  {
+   "set": "game-icons",
+   "icon": "watermelon"
+  },
+  {
+   "set": "game-icons",
+   "icon": "corn"
+  },
+  {
+   "set": "game-icons",
+   "icon": "acorn"
+  },
+  {
+   "set": "game-icons",
+   "icon": "house"
+  },
+  {
+   "set": "game-icons",
+   "icon": "castle"
+  },
+  {
+   "set": "game-icons",
+   "icon": "lighthouse"
+  },
+  {
+   "set": "game-icons",
+   "icon": "windmill"
+  },
+  {
+   "set": "game-icons",
+   "icon": "igloo"
+  },
+  {
+   "set": "game-icons",
+   "icon": "camping-tent",
+   "title": "Tent"
+  },
+  {
+   "set": "game-icons",
+   "icon": "air-balloon",
+   "title": "Hot Air Balloon"
+  },
+  {
+   "set": "game-icons",
+   "icon": "steam-locomotive",
+   "title": "Locomotive"
+  },
+  {
+   "set": "game-icons",
+   "icon": "city-car",
+   "title": "Car"
+  },
+  {
+   "set": "game-icons",
+   "icon": "bus"
+  },
+  {
+   "set": "game-icons",
+   "icon": "commercial-airplane",
+   "title": "Airplane"
+  },
+  {
+   "set": "game-icons",
+   "icon": "helicopter"
+  },
+  {
+   "set": "game-icons",
+   "icon": "submarine"
+  },
+  {
+   "set": "game-icons",
+   "icon": "key"
+  },
+  {
+   "set": "game-icons",
+   "icon": "padlock"
+  },
+  {
+   "set": "game-icons",
+   "icon": "light-bulb"
+  },
+  {
+   "set": "game-icons",
+   "icon": "crown"
+  },
+  {
+   "set": "game-icons",
+   "icon": "cut-diamond",
+   "title": "Diamond"
+  },
+  {
+   "set": "game-icons",
+   "icon": "ringing-bell",
+   "title": "Bell"
+  },
+  {
+   "set": "game-icons",
+   "icon": "hourglass"
+  },
+  {
+   "set": "game-icons",
+   "icon": "alarm-clock"
+  },
+  {
+   "set": "game-icons",
+   "icon": "magnifying-glass"
+  },
+  {
+   "set": "game-icons",
+   "icon": "scissors"
+  },
+  {
+   "set": "game-icons",
+   "icon": "paint-brush",
+   "title": "Paintbrush"
+  },
+  {
+   "set": "game-icons",
+   "icon": "pencil"
+  },
+  {
+   "set": "game-icons",
+   "icon": "open-book"
+  },
+  {
+   "set": "game-icons",
+   "icon": "envelope"
+  },
+  {
+   "set": "game-icons",
+   "icon": "present"
+  },
+  {
+   "set": "game-icons",
+   "icon": "balloons"
+  },
+  {
+   "set": "game-icons",
+   "icon": "trophy-cup",
+   "title": "Trophy"
+  },
+  {
+   "set": "game-icons",
+   "icon": "medal"
+  },
+  {
+   "set": "game-icons",
+   "icon": "soccer-ball"
+  },
+  {
+   "set": "game-icons",
+   "icon": "basketball-ball",
+   "title": "Basketball"
+  },
+  {
+   "set": "game-icons",
+   "icon": "tennis-racket"
+  },
+  {
+   "set": "game-icons",
+   "icon": "chess-knight"
+  },
+  {
+   "set": "game-icons",
+   "icon": "chess-king"
+  },
+  {
+   "set": "game-icons",
+   "icon": "rolling-dices",
+   "title": "Dice"
+  },
+  {
+   "set": "game-icons",
+   "icon": "musical-notes",
+   "title": "Music Notes"
+  },
+  {
+   "set": "game-icons",
+   "icon": "drum"
+  },
+  {
+   "set": "game-icons",
+   "icon": "violin"
+  },
+  {
+   "set": "game-icons",
+   "icon": "trumpet"
+  },
+  {
+   "set": "game-icons",
+   "icon": "headphones"
+  },
+  {
+   "set": "game-icons",
+   "icon": "photo-camera",
+   "title": "Camera"
+  },
+  {
+   "set": "game-icons",
+   "icon": "world",
+   "title": "Globe"
+  },
+  {
+   "set": "game-icons",
+   "icon": "sun"
+  },
+  {
+   "set": "game-icons",
+   "icon": "moon"
+  },
+  {
+   "set": "game-icons",
+   "icon": "snowflake-1",
+   "title": "Snowflake"
+  },
+  {
+   "set": "game-icons",
+   "icon": "rose"
+  },
+  {
+   "set": "game-icons",
+   "icon": "daisy"
+  },
+  {
+   "set": "game-icons",
+   "icon": "oak",
+   "title": "Oak Tree"
+  },
+  {
+   "set": "game-icons",
+   "icon": "pine-tree"
+  },
+  {
+   "set": "game-icons",
+   "icon": "feather"
+  },
+  {
+   "set": "game-icons",
+   "icon": "whale-tail",
+   "title": "Whale Tail"
+  },
+  {
+   "set": "game-icons",
+   "icon": "clownfish"
+  },
+  {
+   "set": "game-icons",
+   "icon": "fluffy-cloud",
+   "title": "Cloud"
+  },
+  {
+   "set": "game-icons",
+   "icon": "grand-piano",
+   "title": "Piano"
+  },
+  {
+   "set": "game-icons",
+   "icon": "hummingbird"
+  },
+  {
+   "set": "game-icons",
+   "icon": "flower-pot",
+   "title": "Flower Pot"
+  },
+  {
+   "set": "game-icons",
+   "icon": "fruit-tree",
+   "title": "Fruit Tree"
+  },
+  {
+   "set": "game-icons",
+   "icon": "kiwi-bird",
+   "title": "Kiwi"
+  },
+  {
+   "set": "game-icons",
+   "icon": "biplane"
+  }
+ ]
+}

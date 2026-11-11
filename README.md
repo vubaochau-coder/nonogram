@@ -11,8 +11,25 @@ tiến độ lưu trên máy, không cần tài khoản hay mạng.
 
 ```bash
 flutter pub get
-flutter run
+flutter run --flavor dev      # Android: luôn phải chọn flavor
 ```
+
+### Flavor
+
+| Flavor | Dùng cho | Màn chọn chế độ chơi | Bộ màn |
+|---|---|---|---|
+| `dev` | Bản thử nội bộ, mặc định trên GitHub Actions (workflow Distribute) | Có | Chế độ người dùng (`assets/levels/`) + chế độ nhà phát triển (`assets/levels_dev/`) |
+| `store` | Bản phát hành lên store (workflow "Store build", chạy tay) | Không | Chỉ `assets/levels/` |
+
+- Mỗi chế độ chơi lưu tiến độ riêng. Chế độ nhà phát triển dùng lại box tiến
+  độ cũ (`nonogram_offline_v1`), nên tiến độ của các bản thử trước đây vẫn còn.
+- `assets/levels_dev/` (574 màn lấy từ nonogram.org, không được dùng thương
+  mại) chỉ được đóng gói khi build `--flavor dev`.
+- Build bản store: `flutter build appbundle --release --flavor store`.
+- iOS và web chưa cấu hình flavor: build không có `--flavor` chạy như bản
+  `store` (không có chế độ nhà phát triển).
+- Nhánh `beta` giữ nguyên trạng thái `main` trước khi đổi bộ màn (vẫn dùng bộ
+  màn crawl).
 
 Hỗ trợ Android, iOS và Web. Giao diện có tiếng Việt và tiếng Anh (theo ngôn ngữ máy).
 
@@ -86,14 +103,17 @@ lib/
     painters/                CustomPainter cho lưới, gợi ý, đáp án
   l10n/                      Chuỗi dịch (app_en.arb, app_vi.arb)
 assets/
-  levels/                    574 màn chơi (sinh bằng tools/build_levels.dart)
+  levels/                    121 màn chơi có bản quyền (sinh bằng tools/build_levels.dart)
+  levels_dev/                574 màn crawl, chỉ có ở flavor dev (chế độ nhà phát triển)
+  licenses/                  Văn bản giấy phép hình màn chơi (hiện ở Cài đặt → Giấy phép)
   fonts/                     Font Nunito (giấy phép OFL, xem Nunito-OFL.txt)
 tools/
-  build_levels.dart          Dump Supabase -> assets/levels/, kiểm tra nghiệm duy nhất
-  data/puzzles_dump.csv      Dump bảng puzzles từ Supabase (nguồn của assets/levels/)
+  build_levels.dart          levels.json -> assets/levels/, kiểm tra nghiệm duy nhất
+  image_levels/              Sinh + duyệt màn từ bộ icon mở giấy phép (nguồn của assets/levels/)
   generate_icons.py          Vẽ launcher icon / splash / favicon
 docs/
   level_format.md            Định dạng dữ liệu màn chơi
+  credits.md                 Ghi công + giấy phép hình dùng làm màn chơi
   gameplay_rules.md          Quy tắc campaign, snapshot, hint
 ```
 

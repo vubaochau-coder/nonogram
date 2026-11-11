@@ -1,0 +1,1947 @@
+[
+ {
+  "id": "pixelarticons-tree-pine",
+  "title": "Pine Tree",
+  "set": "pixelarticons",
+  "icon": "tree-pine",
+  "author": "Pixelarticons (Gerrit Halfmann)",
+  "license": "MIT",
+  "params": {
+   "cleanup": false,
+   "half": true,
+   "mode": "pixel",
+   "negative": true,
+   "solid": false
+  },
+  "editedCells": 0
+ },
+ {
+  "id": "pixelarticons-sword",
+  "title": "Sword",
+  "set": "pixelarticons",
+  "icon": "sword",
+  "author": "Pixelarticons (Gerrit Halfmann)",
+  "license": "MIT",
+  "params": {
+   "cleanup": false,
+   "half": true,
+   "mode": "pixel",
+   "solid": false
+  },
+  "editedCells": 0
+ },
+ {
+  "id": "pixelarticons-dice",
+  "title": "Dice",
+  "set": "pixelarticons",
+  "icon": "dice",
+  "author": "Pixelarticons (Gerrit Halfmann)",
+  "license": "MIT",
+  "params": {
+   "cleanup": false,
+   "half": true,
+   "mode": "pixel",
+   "negative": true,
+   "solid": false
+  },
+  "editedCells": 0
+ },
+ {
+  "id": "pixelarticons-hourglass",
+  "title": "Hourglass",
+  "set": "pixelarticons",
+  "icon": "hourglass",
+  "author": "Pixelarticons (Gerrit Halfmann)",
+  "license": "MIT",
+  "params": {
+   "cleanup": false,
+   "half": true,
+   "mode": "pixel",
+   "negative": true,
+   "pad": 1,
+   "solid": false
+  },
+  "editedCells": 0
+ },
+ {
+  "id": "pixelarticons-tent",
+  "title": "Tent",
+  "set": "pixelarticons",
+  "icon": "tent",
+  "author": "Pixelarticons (Gerrit Halfmann)",
+  "license": "MIT",
+  "params": {
+   "cleanup": false,
+   "half": true,
+   "mode": "pixel",
+   "negative": true,
+   "solid": false
+  },
+  "editedCells": 0
+ },
+ {
+  "id": "pixelarticons-crown",
+  "title": "Crown",
+  "set": "pixelarticons",
+  "icon": "crown",
+  "author": "Pixelarticons (Gerrit Halfmann)",
+  "license": "MIT",
+  "params": {
+   "cleanup": false,
+   "half": true,
+   "mode": "pixel",
+   "negative": true,
+   "pad": 1,
+   "solid": false
+  },
+  "editedCells": 0
+ },
+ {
+  "id": "pixelarticons-balloon",
+  "title": "Balloon",
+  "set": "pixelarticons",
+  "icon": "balloon",
+  "author": "Pixelarticons (Gerrit Halfmann)",
+  "license": "MIT",
+  "params": {
+   "cleanup": false,
+   "half": true,
+   "mode": "pixel",
+   "negative": true,
+   "pad": 1,
+   "solid": false
+  },
+  "editedCells": 0
+ },
+ {
+  "id": "pixelarticons-fire",
+  "title": "Fire",
+  "set": "pixelarticons",
+  "icon": "fire",
+  "author": "Pixelarticons (Gerrit Halfmann)",
+  "license": "MIT",
+  "params": {
+   "cleanup": false,
+   "half": true,
+   "mode": "pixel",
+   "negative": true,
+   "pad": 1,
+   "solid": false
+  },
+  "editedCells": 0
+ },
+ {
+  "id": "pixelarticons-snail",
+  "title": "Snail",
+  "set": "pixelarticons",
+  "icon": "snail",
+  "author": "Pixelarticons (Gerrit Halfmann)",
+  "license": "MIT",
+  "params": {
+   "cleanup": false,
+   "half": true,
+   "mode": "pixel",
+   "negative": true,
+   "pad": 1,
+   "solid": false
+  },
+  "editedCells": 0
+ },
+ {
+  "id": "pixelarticons-lightbulb",
+  "title": "Light Bulb",
+  "set": "pixelarticons",
+  "icon": "lightbulb",
+  "author": "Pixelarticons (Gerrit Halfmann)",
+  "license": "MIT",
+  "params": {
+   "cleanup": false,
+   "half": true,
+   "mode": "pixel",
+   "negative": true,
+   "solid": false
+  },
+  "editedCells": 0
+ },
+ {
+  "id": "pixelarticons-downasaur",
+  "title": "Dino",
+  "set": "pixelarticons",
+  "icon": "downasaur",
+  "author": "Pixelarticons (Gerrit Halfmann)",
+  "license": "MIT",
+  "params": {
+   "cleanup": false,
+   "half": true,
+   "mode": "pixel",
+   "negative": false,
+   "solid": false
+  },
+  "editedCells": 0
+ },
+ {
+  "id": "pixelarticons-leaf",
+  "title": "Leaf",
+  "set": "pixelarticons",
+  "icon": "leaf",
+  "author": "Pixelarticons (Gerrit Halfmann)",
+  "license": "MIT",
+  "params": {
+   "cleanup": false,
+   "half": true,
+   "mode": "pixel",
+   "negative": true,
+   "pad": 1,
+   "solid": false
+  },
+  "editedCells": 0
+ },
+ {
+  "id": "pixelarticons-diamond-gem",
+  "title": "Diamond",
+  "set": "pixelarticons",
+  "icon": "diamond-gem",
+  "author": "Pixelarticons (Gerrit Halfmann)",
+  "license": "MIT",
+  "params": {
+   "cleanup": false,
+   "half": true,
+   "mode": "pixel",
+   "negative": true,
+   "solid": false
+  },
+  "editedCells": 0
+ },
+ {
+  "id": "pixelarticons-feather",
+  "title": "Feather",
+  "set": "pixelarticons",
+  "icon": "feather",
+  "author": "Pixelarticons (Gerrit Halfmann)",
+  "license": "MIT",
+  "params": {
+   "cleanup": false,
+   "half": true,
+   "mode": "pixel",
+   "negative": true,
+   "solid": false
+  },
+  "editedCells": 0
+ },
+ {
+  "id": "pixelarticons-potion",
+  "title": "Potion",
+  "set": "pixelarticons",
+  "icon": "potion",
+  "author": "Pixelarticons (Gerrit Halfmann)",
+  "license": "MIT",
+  "params": {
+   "cleanup": false,
+   "half": true,
+   "mode": "pixel",
+   "negative": true,
+   "solid": false
+  },
+  "editedCells": 0
+ },
+ {
+  "id": "pixelarticons-home",
+  "title": "House",
+  "set": "pixelarticons",
+  "icon": "home",
+  "author": "Pixelarticons (Gerrit Halfmann)",
+  "license": "MIT",
+  "params": {
+   "cleanup": false,
+   "half": true,
+   "mode": "pixel",
+   "negative": true,
+   "solid": false
+  },
+  "editedCells": 0
+ },
+ {
+  "id": "pixelarticons-joystick",
+  "title": "Joystick",
+  "set": "pixelarticons",
+  "icon": "joystick",
+  "author": "Pixelarticons (Gerrit Halfmann)",
+  "license": "MIT",
+  "params": {
+   "cleanup": false,
+   "half": true,
+   "mode": "pixel",
+   "negative": true,
+   "solid": false
+  },
+  "editedCells": 0
+ },
+ {
+  "id": "pixelarticons-skull",
+  "title": "Skull",
+  "set": "pixelarticons",
+  "icon": "skull",
+  "author": "Pixelarticons (Gerrit Halfmann)",
+  "license": "MIT",
+  "params": {
+   "cleanup": false,
+   "half": true,
+   "mode": "pixel",
+   "negative": true,
+   "pad": 0,
+   "solid": false
+  },
+  "editedCells": 4
+ },
+ {
+  "id": "pixelarticons-t-rex",
+  "title": "T-Rex",
+  "set": "pixelarticons",
+  "icon": "t-rex",
+  "author": "Pixelarticons (Gerrit Halfmann)",
+  "license": "MIT",
+  "params": {
+   "cleanup": false,
+   "half": true,
+   "mode": "pixel",
+   "negative": true,
+   "solid": false
+  },
+  "editedCells": 0
+ },
+ {
+  "id": "pixelarticons-shirt",
+  "title": "T-Shirt",
+  "set": "pixelarticons",
+  "icon": "shirt",
+  "author": "Pixelarticons (Gerrit Halfmann)",
+  "license": "MIT",
+  "params": {
+   "cleanup": false,
+   "half": true,
+   "mode": "pixel",
+   "solid": false
+  },
+  "editedCells": 0
+ },
+ {
+  "id": "pixelarticons-moon",
+  "title": "Moon",
+  "set": "pixelarticons",
+  "icon": "moon",
+  "author": "Pixelarticons (Gerrit Halfmann)",
+  "license": "MIT",
+  "params": {
+   "cleanup": false,
+   "half": true,
+   "mode": "pixel",
+   "negative": true,
+   "solid": false
+  },
+  "editedCells": 0
+ },
+ {
+  "id": "pixelarticons-cake",
+  "title": "Cake",
+  "set": "pixelarticons",
+  "icon": "cake",
+  "author": "Pixelarticons (Gerrit Halfmann)",
+  "license": "MIT",
+  "params": {
+   "cleanup": false,
+   "half": true,
+   "mode": "pixel",
+   "solid": false
+  },
+  "editedCells": 0
+ },
+ {
+  "id": "pixelarticons-bell",
+  "title": "Bell",
+  "set": "pixelarticons",
+  "icon": "bell",
+  "author": "Pixelarticons (Gerrit Halfmann)",
+  "license": "MIT",
+  "params": {
+   "cleanup": false,
+   "half": true,
+   "mode": "pixel",
+   "solid": false
+  },
+  "editedCells": 0
+ },
+ {
+  "id": "pixelarticons-castle",
+  "title": "Castle",
+  "set": "pixelarticons",
+  "icon": "castle",
+  "author": "Pixelarticons (Gerrit Halfmann)",
+  "license": "MIT",
+  "params": {
+   "cleanup": false,
+   "half": true,
+   "mode": "pixel",
+   "solid": false
+  },
+  "editedCells": 4
+ },
+ {
+  "id": "pixelarticons-coffee",
+  "title": "Coffee",
+  "set": "pixelarticons",
+  "icon": "coffee",
+  "author": "Pixelarticons (Gerrit Halfmann)",
+  "license": "MIT",
+  "params": {
+   "cleanup": false,
+   "half": true,
+   "mode": "pixel",
+   "solid": false
+  },
+  "editedCells": 0
+ },
+ {
+  "id": "pixelarticons-heart",
+  "title": "Heart",
+  "set": "pixelarticons",
+  "icon": "heart",
+  "author": "Pixelarticons (Gerrit Halfmann)",
+  "license": "MIT",
+  "params": {
+   "cleanup": false,
+   "mode": "pixel",
+   "solid": true
+  },
+  "editedCells": 0
+ },
+ {
+  "id": "pixelarticons-trophy",
+  "title": "Trophy",
+  "set": "pixelarticons",
+  "icon": "trophy",
+  "author": "Pixelarticons (Gerrit Halfmann)",
+  "license": "MIT",
+  "params": {
+   "cleanup": false,
+   "half": true,
+   "mode": "pixel",
+   "solid": false
+  },
+  "editedCells": 0
+ },
+ {
+  "id": "pixelarticons-truck",
+  "title": "Truck",
+  "set": "pixelarticons",
+  "icon": "truck",
+  "author": "Pixelarticons (Gerrit Halfmann)",
+  "license": "MIT",
+  "params": {
+   "cleanup": false,
+   "half": true,
+   "mode": "pixel",
+   "solid": false
+  },
+  "editedCells": 0
+ },
+ {
+  "id": "pixelarticons-bug",
+  "title": "Bug",
+  "set": "pixelarticons",
+  "icon": "bug",
+  "author": "Pixelarticons (Gerrit Halfmann)",
+  "license": "MIT",
+  "params": {
+   "cleanup": false,
+   "half": true,
+   "mode": "pixel",
+   "negative": false,
+   "solid": false
+  },
+  "editedCells": 0
+ },
+ {
+  "id": "pixelarticons-music",
+  "title": "Music Note",
+  "set": "pixelarticons",
+  "icon": "music",
+  "author": "Pixelarticons (Gerrit Halfmann)",
+  "license": "MIT",
+  "params": {
+   "cleanup": false,
+   "half": true,
+   "mode": "pixel",
+   "negative": false,
+   "solid": false
+  },
+  "editedCells": 1
+ },
+ {
+  "id": "streamline-pixel-food-drink-fish-bone",
+  "title": "Fish Bone",
+  "set": "streamline-pixel",
+  "icon": "food-drink-fish-bone",
+  "author": "Streamline Pixel (Streamline)",
+  "license": "CC-BY-4.0",
+  "params": {
+   "cleanup": false,
+   "half": true,
+   "mode": "pixel",
+   "negative": true,
+   "solid": false
+  },
+  "editedCells": 0
+ },
+ {
+  "id": "streamline-pixel-pet-animals-cat",
+  "title": "Cat",
+  "set": "streamline-pixel",
+  "icon": "pet-animals-cat",
+  "author": "Streamline Pixel (Streamline)",
+  "license": "CC-BY-4.0",
+  "params": {
+   "cleanup": false,
+   "half": true,
+   "mode": "pixel",
+   "negative": true,
+   "solid": false
+  },
+  "editedCells": 0
+ },
+ {
+  "id": "streamline-pixel-interface-essential-magnet",
+  "title": "Magnet",
+  "set": "streamline-pixel",
+  "icon": "interface-essential-magnet",
+  "author": "Streamline Pixel (Streamline)",
+  "license": "CC-BY-4.0",
+  "params": {
+   "cleanup": false,
+   "half": true,
+   "mode": "pixel",
+   "negative": true,
+   "solid": false
+  },
+  "editedCells": 0
+ },
+ {
+  "id": "streamline-pixel-travel-wayfinding-balloon",
+  "title": "Hot Air Balloon",
+  "set": "streamline-pixel",
+  "icon": "travel-wayfinding-balloon",
+  "author": "Streamline Pixel (Streamline)",
+  "license": "CC-BY-4.0",
+  "params": {
+   "cleanup": false,
+   "half": true,
+   "mode": "pixel",
+   "negative": true,
+   "pad": 1,
+   "solid": false
+  },
+  "editedCells": 0
+ },
+ {
+  "id": "pixelarticons-car",
+  "title": "Car",
+  "set": "pixelarticons",
+  "icon": "car",
+  "author": "Pixelarticons (Gerrit Halfmann)",
+  "license": "MIT",
+  "params": {
+   "cleanup": false,
+   "half": true,
+   "mode": "pixel",
+   "solid": false
+  },
+  "editedCells": 0
+ },
+ {
+  "id": "pixelarticons-dog",
+  "title": "Dog",
+  "set": "pixelarticons",
+  "icon": "dog",
+  "author": "Pixelarticons (Gerrit Halfmann)",
+  "license": "MIT",
+  "params": {
+   "cleanup": false,
+   "half": true,
+   "mode": "pixel",
+   "negative": false,
+   "solid": false
+  },
+  "editedCells": 2
+ },
+ {
+  "id": "streamline-pixel-transportation-bicycle",
+  "title": "Bicycle",
+  "set": "streamline-pixel",
+  "icon": "transportation-bicycle",
+  "author": "Streamline Pixel (Streamline)",
+  "license": "CC-BY-4.0",
+  "params": {
+   "cleanup": false,
+   "half": true,
+   "mode": "pixel",
+   "negative": true,
+   "pad": 0,
+   "solid": false
+  },
+  "editedCells": 0
+ },
+ {
+  "id": "streamline-pixel-ecology-tree",
+  "title": "Tree",
+  "set": "streamline-pixel",
+  "icon": "ecology-tree",
+  "author": "Streamline Pixel (Streamline)",
+  "license": "CC-BY-4.0",
+  "params": {
+   "cleanup": false,
+   "half": true,
+   "mode": "pixel",
+   "negative": true,
+   "solid": false
+  },
+  "editedCells": 0
+ },
+ {
+  "id": "streamline-pixel-food-drink-hamburger",
+  "title": "Hamburger",
+  "set": "streamline-pixel",
+  "icon": "food-drink-hamburger",
+  "author": "Streamline Pixel (Streamline)",
+  "license": "CC-BY-4.0",
+  "params": {
+   "cleanup": false,
+   "half": true,
+   "mode": "pixel",
+   "negative": true,
+   "solid": false
+  },
+  "editedCells": 0
+ },
+ {
+  "id": "streamline-pixel-weather-cresent-moon-stars",
+  "title": "Moon and Stars",
+  "set": "streamline-pixel",
+  "icon": "weather-cresent-moon-stars",
+  "author": "Streamline Pixel (Streamline)",
+  "license": "CC-BY-4.0",
+  "params": {
+   "cleanup": false,
+   "half": true,
+   "mode": "pixel",
+   "negative": true,
+   "solid": false
+  },
+  "editedCells": 0
+ },
+ {
+  "id": "streamline-pixel-entertainment-events-hobbies-chess-rook",
+  "title": "Rook",
+  "set": "streamline-pixel",
+  "icon": "entertainment-events-hobbies-chess-rook",
+  "author": "Streamline Pixel (Streamline)",
+  "license": "CC-BY-4.0",
+  "params": {
+   "cleanup": false,
+   "half": true,
+   "mode": "pixel",
+   "negative": true,
+   "solid": false
+  },
+  "editedCells": 0
+ },
+ {
+  "id": "streamline-pixel-weather-snowman",
+  "title": "Snowman",
+  "set": "streamline-pixel",
+  "icon": "weather-snowman",
+  "author": "Streamline Pixel (Streamline)",
+  "license": "CC-BY-4.0",
+  "params": {
+   "cleanup": false,
+   "half": true,
+   "mode": "pixel",
+   "negative": true,
+   "solid": false
+  },
+  "editedCells": 0
+ },
+ {
+  "id": "streamline-pixel-interface-essential-light-bulb",
+  "title": "Light Bulb",
+  "set": "streamline-pixel",
+  "icon": "interface-essential-light-bulb",
+  "author": "Streamline Pixel (Streamline)",
+  "license": "CC-BY-4.0",
+  "params": {
+   "cleanup": false,
+   "half": true,
+   "mode": "pixel",
+   "negative": true,
+   "solid": false
+  },
+  "editedCells": 0
+ },
+ {
+  "id": "streamline-pixel-school-science-test-flask",
+  "title": "Flask",
+  "set": "streamline-pixel",
+  "icon": "school-science-test-flask",
+  "author": "Streamline Pixel (Streamline)",
+  "license": "CC-BY-4.0",
+  "params": {
+   "cleanup": false,
+   "half": true,
+   "mode": "pixel",
+   "negative": true,
+   "solid": false
+  },
+  "editedCells": 0
+ },
+ {
+  "id": "streamline-pixel-shopping-shipping-basket",
+  "title": "Basket",
+  "set": "streamline-pixel",
+  "icon": "shopping-shipping-basket",
+  "author": "Streamline Pixel (Streamline)",
+  "license": "CC-BY-4.0",
+  "params": {
+   "cleanup": false,
+   "half": true,
+   "mode": "pixel",
+   "negative": true,
+   "solid": false
+  },
+  "editedCells": 0
+ },
+ {
+  "id": "streamline-pixel-food-drink-fish",
+  "title": "Fish",
+  "set": "streamline-pixel",
+  "icon": "food-drink-fish",
+  "author": "Streamline Pixel (Streamline)",
+  "license": "CC-BY-4.0",
+  "params": {
+   "cleanup": false,
+   "half": true,
+   "mode": "pixel",
+   "negative": true,
+   "solid": false
+  },
+  "editedCells": 0
+ },
+ {
+  "id": "streamline-pixel-food-drink-rice-ball",
+  "title": "Rice Ball",
+  "set": "streamline-pixel",
+  "icon": "food-drink-rice-ball",
+  "author": "Streamline Pixel (Streamline)",
+  "license": "CC-BY-4.0",
+  "params": {
+   "cleanup": false,
+   "half": true,
+   "mode": "pixel",
+   "negative": true,
+   "solid": false
+  },
+  "editedCells": 0
+ },
+ {
+  "id": "streamline-pixel-photography-camera-1",
+  "title": "Camera",
+  "set": "streamline-pixel",
+  "icon": "photography-camera-1",
+  "author": "Streamline Pixel (Streamline)",
+  "license": "CC-BY-4.0",
+  "params": {
+   "cleanup": false,
+   "half": true,
+   "mode": "pixel",
+   "negative": true,
+   "pad": 1,
+   "solid": false
+  },
+  "editedCells": 0
+ },
+ {
+  "id": "streamline-pixel-food-drink-coffee-cup",
+  "title": "Coffee Cup",
+  "set": "streamline-pixel",
+  "icon": "food-drink-coffee-cup",
+  "author": "Streamline Pixel (Streamline)",
+  "license": "CC-BY-4.0",
+  "params": {
+   "cleanup": false,
+   "half": true,
+   "mode": "pixel",
+   "negative": true,
+   "pad": 1,
+   "solid": false
+  },
+  "editedCells": 1
+ },
+ {
+  "id": "pixelarticons-helicopter",
+  "title": "Helicopter",
+  "set": "pixelarticons",
+  "icon": "helicopter",
+  "author": "Pixelarticons (Gerrit Halfmann)",
+  "license": "MIT",
+  "params": {
+   "cleanup": false,
+   "half": true,
+   "mode": "pixel",
+   "solid": false
+  },
+  "editedCells": 0
+ },
+ {
+  "id": "streamline-pixel-interface-essential-stopwatch",
+  "title": "Stopwatch",
+  "set": "streamline-pixel",
+  "icon": "interface-essential-stopwatch",
+  "author": "Streamline Pixel (Streamline)",
+  "license": "CC-BY-4.0",
+  "params": {
+   "cleanup": false,
+   "half": true,
+   "mode": "pixel",
+   "negative": true,
+   "solid": false
+  },
+  "editedCells": 0
+ },
+ {
+  "id": "streamline-pixel-beauty-mirror-1",
+  "title": "Hand Mirror",
+  "set": "streamline-pixel",
+  "icon": "beauty-mirror-1",
+  "author": "Streamline Pixel (Streamline)",
+  "license": "CC-BY-4.0",
+  "params": {
+   "cleanup": false,
+   "half": true,
+   "mode": "pixel",
+   "negative": true,
+   "solid": false
+  },
+  "editedCells": 0
+ },
+ {
+  "id": "streamline-pixel-food-drink-desert-icecream",
+  "title": "Ice Cream",
+  "set": "streamline-pixel",
+  "icon": "food-drink-desert-icecream",
+  "author": "Streamline Pixel (Streamline)",
+  "license": "CC-BY-4.0",
+  "params": {
+   "cleanup": false,
+   "half": true,
+   "mode": "pixel",
+   "negative": true,
+   "pad": 1,
+   "solid": false
+  },
+  "editedCells": 2
+ },
+ {
+  "id": "streamline-pixel-interface-essential-skull-1",
+  "title": "Skull",
+  "set": "streamline-pixel",
+  "icon": "interface-essential-skull-1",
+  "author": "Streamline Pixel (Streamline)",
+  "license": "CC-BY-4.0",
+  "params": {
+   "cleanup": false,
+   "half": true,
+   "mode": "pixel",
+   "negative": true,
+   "solid": false
+  },
+  "editedCells": 0
+ },
+ {
+  "id": "pixelarticons-ship",
+  "title": "Ship",
+  "set": "pixelarticons",
+  "icon": "ship",
+  "author": "Pixelarticons (Gerrit Halfmann)",
+  "license": "MIT",
+  "params": {
+   "cleanup": false,
+   "half": true,
+   "mode": "pixel",
+   "solid": false
+  },
+  "editedCells": 2
+ },
+ {
+  "id": "streamline-pixel-food-drink-egg",
+  "title": "Egg",
+  "set": "streamline-pixel",
+  "icon": "food-drink-egg",
+  "author": "Streamline Pixel (Streamline)",
+  "license": "CC-BY-4.0",
+  "params": {
+   "cleanup": false,
+   "half": true,
+   "mode": "pixel",
+   "negative": true,
+   "pad": 1,
+   "solid": false
+  },
+  "editedCells": 0
+ },
+ {
+  "id": "streamline-pixel-weather-cloud-sun-fine",
+  "title": "Sunny Day",
+  "set": "streamline-pixel",
+  "icon": "weather-cloud-sun-fine",
+  "author": "Streamline Pixel (Streamline)",
+  "license": "CC-BY-4.0",
+  "params": {
+   "cleanup": false,
+   "half": true,
+   "mode": "pixel",
+   "negative": true,
+   "solid": false
+  },
+  "editedCells": 0
+ },
+ {
+  "id": "streamline-pixel-music-clef-sheet",
+  "title": "Treble Clef",
+  "set": "streamline-pixel",
+  "icon": "music-clef-sheet",
+  "author": "Streamline Pixel (Streamline)",
+  "license": "CC-BY-4.0",
+  "params": {
+   "cleanup": false,
+   "half": true,
+   "mode": "pixel",
+   "negative": true,
+   "solid": false
+  },
+  "editedCells": 0
+ },
+ {
+  "id": "streamline-pixel-entertainment-events-hobbies-chess-knight",
+  "title": "Knight",
+  "set": "streamline-pixel",
+  "icon": "entertainment-events-hobbies-chess-knight",
+  "author": "Streamline Pixel (Streamline)",
+  "license": "CC-BY-4.0",
+  "params": {
+   "cleanup": false,
+   "half": true,
+   "mode": "pixel",
+   "negative": true,
+   "solid": false
+  },
+  "editedCells": 0
+ },
+ {
+  "id": "streamline-pixel-transportation-plane",
+  "title": "Plane",
+  "set": "streamline-pixel",
+  "icon": "transportation-plane",
+  "author": "Streamline Pixel (Streamline)",
+  "license": "CC-BY-4.0",
+  "params": {
+   "cleanup": false,
+   "half": true,
+   "mode": "pixel",
+   "negative": true,
+   "solid": false
+  },
+  "editedCells": 0
+ },
+ {
+  "id": "pixelarticons-robot",
+  "title": "Robot",
+  "set": "pixelarticons",
+  "icon": "robot",
+  "author": "Pixelarticons (Gerrit Halfmann)",
+  "license": "MIT",
+  "params": {
+   "cleanup": false,
+   "half": false,
+   "mode": "pixel",
+   "negative": true,
+   "solid": false
+  },
+  "editedCells": 0
+ },
+ {
+  "id": "streamline-pixel-business-products-magic-rabbit",
+  "title": "Magic Hat",
+  "set": "streamline-pixel",
+  "icon": "business-products-magic-rabbit",
+  "author": "Streamline Pixel (Streamline)",
+  "license": "CC-BY-4.0",
+  "params": {
+   "cleanup": false,
+   "half": true,
+   "mode": "pixel",
+   "negative": true,
+   "solid": false
+  },
+  "editedCells": 0
+ },
+ {
+  "id": "streamline-pixel-interface-essential-trophy",
+  "title": "Trophy",
+  "set": "streamline-pixel",
+  "icon": "interface-essential-trophy",
+  "author": "Streamline Pixel (Streamline)",
+  "license": "CC-BY-4.0",
+  "params": {
+   "cleanup": false,
+   "half": true,
+   "mode": "pixel",
+   "negative": true,
+   "solid": false
+  },
+  "editedCells": 0
+ },
+ {
+  "id": "streamline-pixel-shopping-shipping-shop",
+  "title": "Shop",
+  "set": "streamline-pixel",
+  "icon": "shopping-shipping-shop",
+  "author": "Streamline Pixel (Streamline)",
+  "license": "CC-BY-4.0",
+  "params": {
+   "cleanup": false,
+   "half": true,
+   "mode": "pixel",
+   "negative": true,
+   "solid": false
+  },
+  "editedCells": 0
+ },
+ {
+  "id": "streamline-pixel-technology-robot-ai",
+  "title": "Robot",
+  "set": "streamline-pixel",
+  "icon": "technology-robot-ai",
+  "author": "Streamline Pixel (Streamline)",
+  "license": "CC-BY-4.0",
+  "params": {
+   "cleanup": false,
+   "half": true,
+   "mode": "pixel",
+   "negative": true,
+   "solid": false
+  },
+  "editedCells": 0
+ },
+ {
+  "id": "streamline-pixel-health-dentistry-tooth",
+  "title": "Tooth",
+  "set": "streamline-pixel",
+  "icon": "health-dentistry-tooth",
+  "author": "Streamline Pixel (Streamline)",
+  "license": "CC-BY-4.0",
+  "params": {
+   "cleanup": false,
+   "half": true,
+   "mode": "pixel",
+   "negative": true,
+   "solid": false
+  },
+  "editedCells": 0
+ },
+ {
+  "id": "streamline-pixel-transportation-helicopter",
+  "title": "Helicopter",
+  "set": "streamline-pixel",
+  "icon": "transportation-helicopter",
+  "author": "Streamline Pixel (Streamline)",
+  "license": "CC-BY-4.0",
+  "params": {
+   "cleanup": false,
+   "half": true,
+   "mode": "pixel",
+   "negative": true,
+   "solid": false
+  },
+  "editedCells": 0
+ },
+ {
+  "id": "streamline-pixel-food-drink-fruit-cherry",
+  "title": "Cherry",
+  "set": "streamline-pixel",
+  "icon": "food-drink-fruit-cherry",
+  "author": "Streamline Pixel (Streamline)",
+  "license": "CC-BY-4.0",
+  "params": {
+   "cleanup": false,
+   "half": true,
+   "mode": "pixel",
+   "negative": true,
+   "solid": false
+  },
+  "editedCells": 0
+ },
+ {
+  "id": "streamline-pixel-food-drink-fried-chicken",
+  "title": "Fried Chicken",
+  "set": "streamline-pixel",
+  "icon": "food-drink-fried-chicken",
+  "author": "Streamline Pixel (Streamline)",
+  "license": "CC-BY-4.0",
+  "params": {
+   "cleanup": false,
+   "half": true,
+   "mode": "pixel",
+   "negative": true,
+   "solid": false
+  },
+  "editedCells": 1
+ },
+ {
+  "id": "streamline-pixel-pet-animals-bear",
+  "title": "Bear",
+  "set": "streamline-pixel",
+  "icon": "pet-animals-bear",
+  "author": "Streamline Pixel (Streamline)",
+  "license": "CC-BY-4.0",
+  "params": {
+   "cleanup": false,
+   "half": true,
+   "mode": "pixel",
+   "negative": true,
+   "pad": 1,
+   "solid": false
+  },
+  "editedCells": 0
+ },
+ {
+  "id": "streamline-pixel-weather-umbrella",
+  "title": "Umbrella",
+  "set": "streamline-pixel",
+  "icon": "weather-umbrella",
+  "author": "Streamline Pixel (Streamline)",
+  "license": "CC-BY-4.0",
+  "params": {
+   "cleanup": false,
+   "half": true,
+   "mode": "pixel",
+   "negative": true,
+   "solid": false
+  },
+  "editedCells": 0
+ },
+ {
+  "id": "streamline-pixel-pet-animals-pig",
+  "title": "Pig",
+  "set": "streamline-pixel",
+  "icon": "pet-animals-pig",
+  "author": "Streamline Pixel (Streamline)",
+  "license": "CC-BY-4.0",
+  "params": {
+   "cleanup": false,
+   "half": true,
+   "mode": "pixel",
+   "negative": true,
+   "pad": 1,
+   "solid": false
+  },
+  "editedCells": 0
+ },
+ {
+  "id": "streamline-pixel-video-movies-vintage-tv-1",
+  "title": "Old TV",
+  "set": "streamline-pixel",
+  "icon": "video-movies-vintage-tv-1",
+  "author": "Streamline Pixel (Streamline)",
+  "license": "CC-BY-4.0",
+  "params": {
+   "cleanup": false,
+   "half": true,
+   "mode": "pixel",
+   "negative": true,
+   "pad": 1,
+   "solid": false
+  },
+  "editedCells": 6
+ },
+ {
+  "id": "streamline-pixel-food-drink-milk",
+  "title": "Milk",
+  "set": "streamline-pixel",
+  "icon": "food-drink-milk",
+  "author": "Streamline Pixel (Streamline)",
+  "license": "CC-BY-4.0",
+  "params": {
+   "cleanup": false,
+   "half": true,
+   "mode": "pixel",
+   "negative": true,
+   "pad": 1,
+   "solid": false
+  },
+  "editedCells": 0
+ },
+ {
+  "id": "streamline-pixel-social-rewards-vip-crown-king",
+  "title": "Crown",
+  "set": "streamline-pixel",
+  "icon": "social-rewards-vip-crown-king",
+  "author": "Streamline Pixel (Streamline)",
+  "license": "CC-BY-4.0",
+  "params": {
+   "cleanup": false,
+   "half": true,
+   "mode": "pixel",
+   "negative": true,
+   "solid": false
+  },
+  "editedCells": 0
+ },
+ {
+  "id": "streamline-pixel-entertainment-events-hobbies-horror-ghost",
+  "title": "Ghost",
+  "set": "streamline-pixel",
+  "icon": "entertainment-events-hobbies-horror-ghost",
+  "author": "Streamline Pixel (Streamline)",
+  "license": "CC-BY-4.0",
+  "params": {
+   "cleanup": false,
+   "half": true,
+   "mode": "pixel",
+   "negative": true,
+   "solid": false
+  },
+  "editedCells": 1
+ },
+ {
+  "id": "streamline-pixel-food-drink-tea",
+  "title": "Tea",
+  "set": "streamline-pixel",
+  "icon": "food-drink-tea",
+  "author": "Streamline Pixel (Streamline)",
+  "license": "CC-BY-4.0",
+  "params": {
+   "cleanup": false,
+   "half": true,
+   "mode": "pixel",
+   "negative": true,
+   "solid": false
+  },
+  "editedCells": 2
+ },
+ {
+  "id": "streamline-pixel-pet-animals-dog",
+  "title": "Dog",
+  "set": "streamline-pixel",
+  "icon": "pet-animals-dog",
+  "author": "Streamline Pixel (Streamline)",
+  "license": "CC-BY-4.0",
+  "params": {
+   "cleanup": false,
+   "half": true,
+   "mode": "pixel",
+   "negative": true,
+   "solid": false
+  },
+  "editedCells": 0
+ },
+ {
+  "id": "streamline-pixel-photography-picture-polaroid",
+  "title": "Instant Photo",
+  "set": "streamline-pixel",
+  "icon": "photography-picture-polaroid",
+  "author": "Streamline Pixel (Streamline)",
+  "license": "CC-BY-4.0",
+  "params": {
+   "cleanup": false,
+   "half": true,
+   "mode": "pixel",
+   "negative": true,
+   "pad": 1,
+   "solid": false
+  },
+  "editedCells": 0
+ },
+ {
+  "id": "streamline-pixel-transportation-motorcycle",
+  "title": "Motorcycle",
+  "set": "streamline-pixel",
+  "icon": "transportation-motorcycle",
+  "author": "Streamline Pixel (Streamline)",
+  "license": "CC-BY-4.0",
+  "params": {
+   "cleanup": false,
+   "half": true,
+   "mode": "pixel",
+   "negative": true,
+   "solid": false
+  },
+  "editedCells": 0
+ },
+ {
+  "id": "streamline-pixel-entertainment-events-hobbies-board-game-dice",
+  "title": "Dice",
+  "set": "streamline-pixel",
+  "icon": "entertainment-events-hobbies-board-game-dice",
+  "author": "Streamline Pixel (Streamline)",
+  "license": "CC-BY-4.0",
+  "params": {
+   "cleanup": false,
+   "half": true,
+   "mode": "pixel",
+   "negative": true,
+   "solid": false
+  },
+  "editedCells": 0
+ },
+ {
+  "id": "streamline-pixel-social-rewards-trends-hot-flame",
+  "title": "Flame",
+  "set": "streamline-pixel",
+  "icon": "social-rewards-trends-hot-flame",
+  "author": "Streamline Pixel (Streamline)",
+  "license": "CC-BY-4.0",
+  "params": {
+   "cleanup": false,
+   "half": true,
+   "mode": "pixel",
+   "negative": true,
+   "solid": false
+  },
+  "editedCells": 0
+ },
+ {
+  "id": "streamline-pixel-music-walkman-cassette",
+  "title": "Cassette Player",
+  "set": "streamline-pixel",
+  "icon": "music-walkman-cassette",
+  "author": "Streamline Pixel (Streamline)",
+  "license": "CC-BY-4.0",
+  "params": {
+   "cleanup": false,
+   "half": true,
+   "mode": "pixel",
+   "negative": true,
+   "pad": 1,
+   "solid": false
+  },
+  "editedCells": 0
+ },
+ {
+  "id": "streamline-pixel-content-files-quill-ink",
+  "title": "Quill",
+  "set": "streamline-pixel",
+  "icon": "content-files-quill-ink",
+  "author": "Streamline Pixel (Streamline)",
+  "license": "CC-BY-4.0",
+  "params": {
+   "cleanup": false,
+   "half": true,
+   "mode": "pixel",
+   "negative": true,
+   "pad": 0,
+   "solid": false
+  },
+  "editedCells": 3
+ },
+ {
+  "id": "streamline-pixel-ecology-cactus",
+  "title": "Cactus",
+  "set": "streamline-pixel",
+  "icon": "ecology-cactus",
+  "author": "Streamline Pixel (Streamline)",
+  "license": "CC-BY-4.0",
+  "params": {
+   "cleanup": false,
+   "half": true,
+   "mode": "pixel",
+   "negative": true,
+   "solid": false
+  },
+  "editedCells": 0
+ },
+ {
+  "id": "streamline-pixel-transportation-train",
+  "title": "Train",
+  "set": "streamline-pixel",
+  "icon": "transportation-train",
+  "author": "Streamline Pixel (Streamline)",
+  "license": "CC-BY-4.0",
+  "params": {
+   "cleanup": false,
+   "half": true,
+   "mode": "pixel",
+   "negative": true,
+   "solid": false
+  },
+  "editedCells": 0
+ },
+ {
+  "id": "streamline-pixel-interface-essential-hammer-1",
+  "title": "Hammer",
+  "set": "streamline-pixel",
+  "icon": "interface-essential-hammer-1",
+  "author": "Streamline Pixel (Streamline)",
+  "license": "CC-BY-4.0",
+  "params": {
+   "cleanup": false,
+   "half": true,
+   "mode": "pixel",
+   "negative": true,
+   "solid": false
+  },
+  "editedCells": 0
+ },
+ {
+  "id": "streamline-pixel-pet-animals-turtle",
+  "title": "Turtle",
+  "set": "streamline-pixel",
+  "icon": "pet-animals-turtle",
+  "author": "Streamline Pixel (Streamline)",
+  "license": "CC-BY-4.0",
+  "params": {
+   "cleanup": false,
+   "half": true,
+   "mode": "pixel",
+   "negative": true,
+   "pad": 1,
+   "solid": false
+  },
+  "editedCells": 1
+ },
+ {
+  "id": "streamline-pixel-health-brain-1",
+  "title": "Brain",
+  "set": "streamline-pixel",
+  "icon": "health-brain-1",
+  "author": "Streamline Pixel (Streamline)",
+  "license": "CC-BY-4.0",
+  "params": {
+   "cleanup": false,
+   "half": true,
+   "mode": "pixel",
+   "negative": true,
+   "solid": false
+  },
+  "editedCells": 0
+ },
+ {
+  "id": "streamline-pixel-pet-animals-ox",
+  "title": "Ox",
+  "set": "streamline-pixel",
+  "icon": "pet-animals-ox",
+  "author": "Streamline Pixel (Streamline)",
+  "license": "CC-BY-4.0",
+  "params": {
+   "cleanup": false,
+   "half": true,
+   "mode": "pixel",
+   "negative": true,
+   "solid": false
+  },
+  "editedCells": 0
+ },
+ {
+  "id": "streamline-pixel-school-science-graduation-cap",
+  "title": "Graduation Cap",
+  "set": "streamline-pixel",
+  "icon": "school-science-graduation-cap",
+  "author": "Streamline Pixel (Streamline)",
+  "license": "CC-BY-4.0",
+  "params": {
+   "cleanup": false,
+   "half": true,
+   "mode": "pixel",
+   "negative": true,
+   "solid": false
+  },
+  "editedCells": 0
+ },
+ {
+  "id": "streamline-pixel-transportation-vintage-train",
+  "title": "Steam Train",
+  "set": "streamline-pixel",
+  "icon": "transportation-vintage-train",
+  "author": "Streamline Pixel (Streamline)",
+  "license": "CC-BY-4.0",
+  "params": {
+   "cleanup": false,
+   "half": true,
+   "mode": "pixel",
+   "negative": true,
+   "solid": false
+  },
+  "editedCells": 0
+ },
+ {
+  "id": "streamline-pixel-entertainment-events-hobbies-popcorn",
+  "title": "Popcorn",
+  "set": "streamline-pixel",
+  "icon": "entertainment-events-hobbies-popcorn",
+  "author": "Streamline Pixel (Streamline)",
+  "license": "CC-BY-4.0",
+  "params": {
+   "cleanup": false,
+   "half": true,
+   "mode": "pixel",
+   "negative": true,
+   "solid": false
+  },
+  "editedCells": 0
+ },
+ {
+  "id": "streamline-pixel-music-microphone-1",
+  "title": "Microphone",
+  "set": "streamline-pixel",
+  "icon": "music-microphone-1",
+  "author": "Streamline Pixel (Streamline)",
+  "license": "CC-BY-4.0",
+  "params": {
+   "cleanup": false,
+   "half": true,
+   "mode": "pixel",
+   "negative": true,
+   "solid": false
+  },
+  "editedCells": 0
+ },
+ {
+  "id": "streamline-pixel-ecology-windmill-1",
+  "title": "Windmill",
+  "set": "streamline-pixel",
+  "icon": "ecology-windmill-1",
+  "author": "Streamline Pixel (Streamline)",
+  "license": "CC-BY-4.0",
+  "params": {
+   "cleanup": false,
+   "half": true,
+   "mode": "pixel",
+   "negative": true,
+   "solid": false
+  },
+  "editedCells": 0
+ },
+ {
+  "id": "streamline-pixel-travel-wayfinding-beach-umbrella",
+  "title": "Beach Umbrella",
+  "set": "streamline-pixel",
+  "icon": "travel-wayfinding-beach-umbrella",
+  "author": "Streamline Pixel (Streamline)",
+  "license": "CC-BY-4.0",
+  "params": {
+   "cleanup": false,
+   "half": true,
+   "mode": "pixel",
+   "negative": true,
+   "solid": false
+  },
+  "editedCells": 0
+ },
+ {
+  "id": "streamline-pixel-pet-animals-rabbit-1",
+  "title": "Rabbit",
+  "set": "streamline-pixel",
+  "icon": "pet-animals-rabbit-1",
+  "author": "Streamline Pixel (Streamline)",
+  "license": "CC-BY-4.0",
+  "params": {
+   "cleanup": false,
+   "half": true,
+   "mode": "pixel",
+   "negative": true,
+   "pad": 1,
+   "solid": false
+  },
+  "editedCells": 0
+ },
+ {
+  "id": "streamline-pixel-business-product-piggy-bank",
+  "title": "Piggy Bank",
+  "set": "streamline-pixel",
+  "icon": "business-product-piggy-bank",
+  "author": "Streamline Pixel (Streamline)",
+  "license": "CC-BY-4.0",
+  "params": {
+   "cleanup": false,
+   "half": true,
+   "mode": "pixel",
+   "negative": true,
+   "solid": false
+  },
+  "editedCells": 0
+ },
+ {
+  "id": "streamline-pixel-food-drink-bread",
+  "title": "Bread",
+  "set": "streamline-pixel",
+  "icon": "food-drink-bread",
+  "author": "Streamline Pixel (Streamline)",
+  "license": "CC-BY-4.0",
+  "params": {
+   "cleanup": false,
+   "half": true,
+   "mode": "pixel",
+   "negative": true,
+   "pad": 1,
+   "solid": false
+  },
+  "editedCells": 5
+ },
+ {
+  "id": "streamline-pixel-vintage-phone",
+  "title": "Old Phone",
+  "set": "streamline-pixel",
+  "icon": "vintage-phone",
+  "author": "Streamline Pixel (Streamline)",
+  "license": "CC-BY-4.0",
+  "params": {
+   "cleanup": false,
+   "half": true,
+   "mode": "pixel",
+   "negative": true,
+   "solid": false
+  },
+  "editedCells": 0
+ },
+ {
+  "id": "streamline-pixel-entertainment-events-hobbies-game-machines-arcade-1",
+  "title": "Arcade",
+  "set": "streamline-pixel",
+  "icon": "entertainment-events-hobbies-game-machines-arcade-1",
+  "author": "Streamline Pixel (Streamline)",
+  "license": "CC-BY-4.0",
+  "params": {
+   "cleanup": false,
+   "half": true,
+   "mode": "pixel",
+   "negative": true,
+   "solid": false
+  },
+  "editedCells": 2
+ },
+ {
+  "id": "streamline-pixel-romance-love-letter-open",
+  "title": "Love Letter",
+  "set": "streamline-pixel",
+  "icon": "romance-love-letter-open",
+  "author": "Streamline Pixel (Streamline)",
+  "license": "CC-BY-4.0",
+  "params": {
+   "cleanup": false,
+   "half": true,
+   "mode": "pixel",
+   "negative": true,
+   "solid": false
+  },
+  "editedCells": 0
+ },
+ {
+  "id": "streamline-pixel-travel-wayfinding-beach-coconut-tree",
+  "title": "Palm Tree",
+  "set": "streamline-pixel",
+  "icon": "travel-wayfinding-beach-coconut-tree",
+  "author": "Streamline Pixel (Streamline)",
+  "license": "CC-BY-4.0",
+  "params": {
+   "cleanup": false,
+   "half": true,
+   "mode": "pixel",
+   "negative": true,
+   "solid": false
+  },
+  "editedCells": 0
+ },
+ {
+  "id": "streamline-pixel-pet-animals-frog",
+  "title": "Frog",
+  "set": "streamline-pixel",
+  "icon": "pet-animals-frog",
+  "author": "Streamline Pixel (Streamline)",
+  "license": "CC-BY-4.0",
+  "params": {
+   "cleanup": false,
+   "half": true,
+   "mode": "pixel",
+   "negative": true,
+   "solid": false
+  },
+  "editedCells": 0
+ },
+ {
+  "id": "pixelarticons-anchor",
+  "title": "Anchor",
+  "set": "pixelarticons",
+  "icon": "anchor",
+  "author": "Pixelarticons (Gerrit Halfmann)",
+  "license": "MIT",
+  "params": {
+   "cleanup": false,
+   "mode": "pixel",
+   "solid": false
+  },
+  "editedCells": 0
+ },
+ {
+  "id": "streamline-pixel-food-drink-desert-donut",
+  "title": "Donut",
+  "set": "streamline-pixel",
+  "icon": "food-drink-desert-donut",
+  "author": "Streamline Pixel (Streamline)",
+  "license": "CC-BY-4.0",
+  "params": {
+   "cleanup": false,
+   "half": true,
+   "mode": "pixel",
+   "negative": true,
+   "solid": false
+  },
+  "editedCells": 0
+ },
+ {
+  "id": "streamline-pixel-food-drink-desert-cupcake",
+  "title": "Cupcake",
+  "set": "streamline-pixel",
+  "icon": "food-drink-desert-cupcake",
+  "author": "Streamline Pixel (Streamline)",
+  "license": "CC-BY-4.0",
+  "params": {
+   "cleanup": false,
+   "half": true,
+   "mode": "pixel",
+   "negative": true,
+   "solid": false
+  },
+  "editedCells": 0
+ },
+ {
+  "id": "streamline-pixel-pet-animals-buffalo",
+  "title": "Buffalo",
+  "set": "streamline-pixel",
+  "icon": "pet-animals-buffalo",
+  "author": "Streamline Pixel (Streamline)",
+  "license": "CC-BY-4.0",
+  "params": {
+   "cleanup": false,
+   "half": true,
+   "mode": "pixel",
+   "negative": true,
+   "solid": false
+  },
+  "editedCells": 0
+ },
+ {
+  "id": "pixelarticons-key",
+  "title": "Key",
+  "set": "pixelarticons",
+  "icon": "key",
+  "author": "Pixelarticons (Gerrit Halfmann)",
+  "license": "MIT",
+  "params": {
+   "cleanup": false,
+   "half": false,
+   "mode": "pixel",
+   "solid": false
+  },
+  "editedCells": 0
+ },
+ {
+  "id": "pixelarticons-gift",
+  "title": "Gift",
+  "set": "pixelarticons",
+  "icon": "gift",
+  "author": "Pixelarticons (Gerrit Halfmann)",
+  "license": "MIT",
+  "params": {
+   "cleanup": false,
+   "half": false,
+   "mode": "pixel",
+   "negative": true,
+   "pad": 0,
+   "solid": false
+  },
+  "editedCells": 0
+ },
+ {
+  "id": "streamline-pixel-content-files-typing-machine",
+  "title": "Typewriter",
+  "set": "streamline-pixel",
+  "icon": "content-files-typing-machine",
+  "author": "Streamline Pixel (Streamline)",
+  "license": "CC-BY-4.0",
+  "params": {
+   "cleanup": false,
+   "half": true,
+   "mode": "pixel",
+   "negative": true,
+   "pad": 1,
+   "solid": false
+  },
+  "editedCells": 0
+ },
+ {
+  "id": "streamline-pixel-food-drink-pizza",
+  "title": "Pizza",
+  "set": "streamline-pixel",
+  "icon": "food-drink-pizza",
+  "author": "Streamline Pixel (Streamline)",
+  "license": "CC-BY-4.0",
+  "params": {
+   "cleanup": false,
+   "half": true,
+   "mode": "pixel",
+   "negative": true,
+   "pad": 0,
+   "solid": false
+  },
+  "editedCells": 0
+ },
+ {
+  "id": "streamline-pixel-weather-rainbow",
+  "title": "Rainbow",
+  "set": "streamline-pixel",
+  "icon": "weather-rainbow",
+  "author": "Streamline Pixel (Streamline)",
+  "license": "CC-BY-4.0",
+  "params": {
+   "cleanup": false,
+   "half": true,
+   "mode": "pixel",
+   "negative": true,
+   "solid": false
+  },
+  "editedCells": 0
+ },
+ {
+  "id": "streamline-pixel-entertainment-events-hobbies-ticket",
+  "title": "Ticket",
+  "set": "streamline-pixel",
+  "icon": "entertainment-events-hobbies-ticket",
+  "author": "Streamline Pixel (Streamline)",
+  "license": "CC-BY-4.0",
+  "params": {
+   "cleanup": false,
+   "half": true,
+   "mode": "pixel",
+   "negative": true,
+   "solid": false
+  },
+  "editedCells": 0
+ },
+ {
+  "id": "streamline-pixel-design-color-painting-palette",
+  "title": "Palette",
+  "set": "streamline-pixel",
+  "icon": "design-color-painting-palette",
+  "author": "Streamline Pixel (Streamline)",
+  "license": "CC-BY-4.0",
+  "params": {
+   "cleanup": false,
+   "half": true,
+   "mode": "pixel",
+   "negative": true,
+   "solid": false
+  },
+  "editedCells": 0
+ },
+ {
+  "id": "pixelarticons-snowflake",
+  "title": "Snowflake",
+  "set": "pixelarticons",
+  "icon": "snowflake",
+  "author": "Pixelarticons (Gerrit Halfmann)",
+  "license": "MIT",
+  "params": {
+   "cleanup": false,
+   "half": false,
+   "mode": "pixel",
+   "negative": true,
+   "solid": false
+  },
+  "editedCells": 0
+ },
+ {
+  "id": "streamline-pixel-beauty-perfume-1",
+  "title": "Perfume",
+  "set": "streamline-pixel",
+  "icon": "beauty-perfume-1",
+  "author": "Streamline Pixel (Streamline)",
+  "license": "CC-BY-4.0",
+  "params": {
+   "cleanup": false,
+   "half": true,
+   "mode": "pixel",
+   "negative": true,
+   "solid": false
+  },
+  "editedCells": 0
+ },
+ {
+  "id": "streamline-pixel-food-drink-desert-cake",
+  "title": "Cake",
+  "set": "streamline-pixel",
+  "icon": "food-drink-desert-cake",
+  "author": "Streamline Pixel (Streamline)",
+  "license": "CC-BY-4.0",
+  "params": {
+   "cleanup": false,
+   "half": true,
+   "mode": "pixel",
+   "negative": true,
+   "pad": 0,
+   "solid": false
+  },
+  "editedCells": 1
+ },
+ {
+  "id": "streamline-pixel-entertainment-events-hobbies-record-player",
+  "title": "Record Player",
+  "set": "streamline-pixel",
+  "icon": "entertainment-events-hobbies-record-player",
+  "author": "Streamline Pixel (Streamline)",
+  "license": "CC-BY-4.0",
+  "params": {
+   "cleanup": false,
+   "half": true,
+   "mode": "pixel",
+   "negative": false,
+   "solid": false
+  },
+  "editedCells": 2
+ },
+ {
+  "id": "streamline-pixel-food-drink-sushi",
+  "title": "Sushi",
+  "set": "streamline-pixel",
+  "icon": "food-drink-sushi",
+  "author": "Streamline Pixel (Streamline)",
+  "license": "CC-BY-4.0",
+  "params": {
+   "cleanup": false,
+   "half": true,
+   "mode": "pixel",
+   "solid": false
+  },
+  "editedCells": 3
+ },
+ {
+  "id": "streamline-pixel-real-estate-building-house",
+  "title": "House",
+  "set": "streamline-pixel",
+  "icon": "real-estate-building-house",
+  "author": "Streamline Pixel (Streamline)",
+  "license": "CC-BY-4.0",
+  "params": {
+   "cleanup": false,
+   "half": true,
+   "mode": "pixel",
+   "solid": false
+  },
+  "editedCells": 0
+ }
+]
