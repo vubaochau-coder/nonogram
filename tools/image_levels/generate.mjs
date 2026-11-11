@@ -208,17 +208,35 @@ function cropToContent(grid) {
   return grid.slice(r0, r1 + 1).map((row) => row.slice(c0, c1 + 1));
 }
 
-/** Pixelarticons vẽ mỗi "điểm ảnh" bằng khối 2×2 đơn vị: thu về 1×1 nếu đúng vậy. */
+/**
+ * Nhiều icon pixel vẽ mỗi "điểm ảnh" bằng khối 2×2 (có thể lệch 1 đơn vị): tìm
+ * cách chia khối khớp nhất rồi gộp theo số đông. Chỉ thu nhỏ khi tối đa 25% khối
+ * không đồng nhất (giống mặc định của trang chọn màn).
+ */
 function halveIfBlocky(grid) {
-  const rows = grid.length;
-  const cols = grid[0].length;
-  if (rows % 2 || cols % 2) return grid;
-  for (let r = 0; r < rows; r += 2)
-    for (let c = 0; c < cols; c += 2) {
-      const v = grid[r][c];
-      if (grid[r + 1][c] !== v || grid[r][c + 1] !== v || grid[r + 1][c + 1] !== v) return grid;
+  const H = grid.length;
+  const W = grid[0].length;
+  const at = (y, x) => (y >= 0 && y < H && x >= 0 && x < W ? grid[y][x] : 0);
+  let best = null;
+  for (const oy of [0, 1])
+    for (const ox of [0, 1]) {
+      let bad = 0;
+      let blocks = 0;
+      const out = [];
+      for (let y = -oy; y < H; y += 2) {
+        const row = [];
+        for (let x = -ox; x < W; x += 2) {
+          const s = at(y, x) + at(y + 1, x) + at(y, x + 1) + at(y + 1, x + 1);
+          if (s) blocks++;
+          if (s && s !== 4) bad++;
+          row.push(s >= 2 ? 1 : 0);
+        }
+        out.push(row);
+      }
+      const mismatch = blocks ? bad / blocks : 1;
+      if (!best || mismatch < best.mismatch) best = { mismatch, grid: out };
     }
-  return Array.from({ length: rows / 2 }, (_, r) => Array.from({ length: cols / 2 }, (_, c) => grid[r * 2][c * 2]));
+  return best.mismatch <= 0.25 ? cropToContent(best.grid) : grid;
 }
 
 /** Ngưỡng Otsu trên các giá trị trong [0, 1]. */
@@ -380,6 +398,9 @@ async function main() {
       mode: meta.mode,
       sizes: item.sizes ?? meta.sizes ?? [15],
       ...svg,
+      // `grid`: số ô thật của bộ pixel art trên mỗi cạnh khung (vd. Streamline Pixel vẽ
+      // trên lưới 21 ô trong khung 32 đơn vị; lấy mẫu ở 42 rồi gộp 2×2 cho nét sạch).
+      ...(meta.grid ? { width: meta.grid, height: meta.grid } : {}),
     });
   }
   if (missing.length) console.warn(`Không tìm thấy icon: ${missing.join(', ')}`);

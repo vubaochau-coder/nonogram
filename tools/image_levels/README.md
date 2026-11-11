@@ -21,9 +21,10 @@ Kết quả ở `tools/image_levels/out/`:
 ## Cách làm
 
 1. Vẽ SVG trong Chromium (Playwright) rồi lấy mẫu theo ô:
-   - `pixel`: pixel art (Pixelarticons), lấy đúng từng điểm ảnh. Bản `solid`
+   - `pixel`: pixel art (Pixelarticons, Streamline Pixel với `grid: 42`), lấy đúng từng điểm ảnh rồi
+     gộp khối 2×2 nếu ảnh vẽ bằng khối 2×2. Bản `solid`
      lấp kín phần bên trong nét viền.
-   - Emoji màu (Noto): thử các cỡ 15/20/25 và ba kiểu chuyển sang đen trắng:
+   - Ảnh vector (game-icons, `mode: "emoji"`): thử các cỡ 15/20/25 và ba kiểu chuyển sang đen trắng:
      - `silhouette`: hình bóng;
      - `ink`: ô tối hơn ngưỡng Otsu;
      - `cutout`: hình bóng đục lỗ ở các chi tiết tối.
@@ -54,7 +55,12 @@ có sẵn.
 | Bộ | Giấy phép | Yêu cầu |
 |---|---|---|
 | Pixelarticons | MIT | Kèm thông báo giấy phép MIT trong app |
-| Noto Emoji | Apache 2.0 | Kèm thông báo giấy phép Apache 2.0 trong app |
+| Streamline Pixel | CC BY 4.0 | Ghi công "Streamline" + link giấy phép trong app |
+| Game-icons.net | CC BY 3.0 | Ghi công "Lorc, Delapouite & contributors, game-icons.net" + link giấy phép |
+
+Đã thử và bỏ Noto Emoji: emoji màu nhận ra nhờ màu sắc và đổ bóng, chuyển
+sang đen trắng 15–25 ô thì không còn nhận ra được. Nên dùng icon vốn vẽ một
+màu (hình bóng) hoặc pixel art.
 
 ## Trang chọn màn (chọn tay từng ảnh)
 

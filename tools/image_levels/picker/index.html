@@ -453,6 +453,12 @@ async function open(i) {
   $('title').value = saved?.title ?? icon.title;
   $('source').textContent = `${icon.author} · ${icon.license} · ${icon.key}`;
   syncControls(); recompute(true); renderStrip(); note('');
+  // A fresh (not yet picked) icon that the suggested settings leave unsolvable gets one
+  // auto-fix pass, as the batch generator does; the flipped cells show as manual edits.
+  if (saved?.status !== 'picked' && !cur.info.lineSolvable) {
+    const g = cur.final; const flips = repair(g, Math.max(1, Math.round(MAX_FLIP_RATIO * g.length * g[0].length)));
+    if (flips) { for (const [r, c] of flips) cur.edits.add(r + ',' + c); applyEdits(); note(`Đã tự sửa ${flips.length} ô (chấm màu) để màn giải được. Bấm “Xoá sửa tay” để xem bản gốc.`, 'ok'); }
+  }
   try { localStorage.setItem('nonopix-picker-last', icon.key); } catch {}
 }
 
