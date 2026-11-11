@@ -75,8 +75,14 @@ https://nikoichu.itch.io/pixel-icons), bỏ các nhóm logo/giao diện:
 ```bash
 node tools/image_levels/import_png_icons.mjs <thư mục Sprites> --set=nikoichu-1bit \
   --author="1-bit Pixel Icons (Nikoichu)" --license=CC0-1.0 \
-  --exclude=Platforms,Software,Controller,Arrows --exclude-words=tetris
+  --exclude=Platforms,Software,Controller,Arrows --exclude-words=tetris \
+  --include=Platforms_Linux_GNU_Penguin_Full,Platforms_Linux_GNU_Penguin_Head \
+  --titles="Platforms_Linux_GNU_Penguin_Full:Tux,Platforms_Linux_GNU_Penguin_Head:Tux Head"
 ```
+
+Tux (chim cánh cụt Linux) là ngoại lệ trong nhóm logo: Larry Ewing cho phép dùng
+và sửa hình với điều kiện ghi công "Larry Ewing (lewing@isc.tamu.edu) and The
+GIMP". Nếu chọn màn Tux, phải thêm ghi công này vào trang Giấy phép.
 
 Duyệt xong, xuất các bản ghi `picks` thành file JSON rồi chạy:
 

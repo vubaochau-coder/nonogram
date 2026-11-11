@@ -4,7 +4,8 @@
 // Cách dùng (chạy từ thư mục gốc repo, sau generate.mjs):
 //   node tools/image_levels/import_png_icons.mjs <thư mục PNG> --set=<id bộ> \
 //     --author="<ghi công>" --license=<SPDX> [--exclude=Prefix1,Prefix2] \
-//     [--exclude-words=word1,word2] [--out=tools/image_levels/out/picker_icons.json]
+//     [--exclude-words=word1,word2] [--include=Ten_file1,Ten_file2]
+//     [--titles=Ten_file:Tiêu đề,...] [--out=tools/image_levels/out/picker_icons.json]
 //
 // Mỗi điểm ảnh màu đen (gần đen) thành một ô tô; nền trong suốt và phần ruột
 // màu trắng thành ô trống. Trên trang chọn màn, "Lấp kín" sẽ lấp phần ruột để
@@ -38,12 +39,24 @@ if (!dir || !args.set || !args.author || !args.license) {
 const outFile = args.out ?? path.join(here, 'out', 'picker_icons.json');
 const excludePrefixes = (args.exclude ?? '').split(',').filter(Boolean);
 const excludeWords = (args['exclude-words'] ?? '').split(',').filter(Boolean).map((w) => w.toLowerCase());
+// Tên file (không có .png) được giữ dù thuộc nhóm bị loại, vd. Tux trong nhóm Platforms.
+const include = new Set((args.include ?? '').split(',').filter(Boolean));
+// Đặt lại tên màn: --titles=Tên_file:Tiêu đề,...
+const titles = Object.fromEntries(
+  (args.titles ?? '')
+    .split(',')
+    .filter(Boolean)
+    .map((pair) => pair.split(':')),
+);
 
 const files = fs
   .readdirSync(dir)
   .filter((f) => f.toLowerCase().endsWith('.png'))
-  .filter((f) => !excludePrefixes.some((p) => f.startsWith(p + '_')))
-  .filter((f) => !excludeWords.some((w) => f.toLowerCase().includes(w)))
+  .filter(
+    (f) =>
+      include.has(f.replace(/\.png$/i, '')) ||
+      (!excludePrefixes.some((p) => f.startsWith(p + '_')) && !excludeWords.some((w) => f.toLowerCase().includes(w))),
+  )
   .sort();
 
 const require = createRequire(import.meta.url);
@@ -133,7 +146,7 @@ const icons = decoded.map((d) => {
     key: `${args.set}:${icon}`,
     set: args.set,
     icon,
-    title: titleOf(d.name),
+    title: titles[icon] ?? titleOf(d.name),
     author: args.author,
     license: args.license,
     mode: 'pixel',
