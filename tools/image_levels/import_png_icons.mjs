@@ -5,7 +5,7 @@
 //   node tools/image_levels/import_png_icons.mjs <thư mục PNG> --set=<id bộ> \
 //     --author="<ghi công>" --license=<SPDX> [--exclude=Prefix1,Prefix2] \
 //     [--exclude-words=word1,word2] [--include=Ten_file1,Ten_file2]
-//     [--titles=Ten_file:Tiêu đề,...] [--out=tools/image_levels/out/picker_icons.json]
+//     [--titles=Ten_file:Tiêu đề,...] [--only] [--out=tools/image_levels/out/picker_icons.json]
 //
 // Mỗi điểm ảnh màu đen (gần đen) thành một ô tô; nền trong suốt và phần ruột
 // màu trắng thành ô trống. Trên trang chọn màn, "Lấp kín" sẽ lấp phần ruột để
@@ -158,7 +158,10 @@ const icons = decoded.map((d) => {
 });
 
 const data = fs.existsSync(outFile) ? JSON.parse(fs.readFileSync(outFile, 'utf8')) : { version: 1, icons: [] };
-data.icons = [...data.icons.filter((i) => i.set !== args.set), ...icons];
+// --only: trang chọn màn chỉ còn bộ này (bỏ các bộ khác khỏi file picker; kết
+// quả đã chọn trước đó vẫn nằm trong cơ sở dữ liệu của trang và data/picks.json).
+const keep = 'only' in args ? [] : data.icons.filter((i) => i.set !== args.set);
+data.icons = [...keep, ...icons];
 data.generatedAt = new Date().toISOString();
 fs.writeFileSync(outFile, JSON.stringify(data));
 const counts = icons.reduce((m, i) => ((m[i.suggest.variant] = (m[i.suggest.variant] ?? 0) + 1), m), {});
