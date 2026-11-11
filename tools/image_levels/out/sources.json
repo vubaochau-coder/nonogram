@@ -1,5 +1,26 @@
 [
  {
+  "id": "pixelarticons-sword",
+  "title": "Sword",
+  "set": "pixelarticons",
+  "icon": "sword",
+  "author": "Pixelarticons (Gerrit Halfmann)",
+  "license": "MIT",
+  "params": {
+   "cleanup": false,
+   "half": true,
+   "mode": "pixel",
+   "solid": false
+  },
+  "editedCells": 0,
+  "metrics": {
+   "cells": 50,
+   "startRatio": 0.26,
+   "rounds": 2,
+   "score": 0.3015170068027211
+  }
+ },
+ {
   "id": "pixelarticons-tree-pine",
   "title": "Pine Tree",
   "set": "pixelarticons",
@@ -422,27 +443,6 @@
    "startRatio": 0.5272727272727272,
    "rounds": 2,
    "score": 0.26307359307359307
-  }
- },
- {
-  "id": "pixelarticons-sword",
-  "title": "Sword",
-  "set": "pixelarticons",
-  "icon": "sword",
-  "author": "Pixelarticons (Gerrit Halfmann)",
-  "license": "MIT",
-  "params": {
-   "cleanup": false,
-   "half": true,
-   "mode": "pixel",
-   "solid": false
-  },
-  "editedCells": 0,
-  "metrics": {
-   "cells": 50,
-   "startRatio": 0.26,
-   "rounds": 2,
-   "score": 0.3015170068027211
   }
  },
  {

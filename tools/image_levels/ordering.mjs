@@ -54,10 +54,17 @@ const subjectOf = (title) => title.trim().toLowerCase();
  * Xếp màn từ dễ tới khó theo `score`, nhưng không để hai màn cùng chủ đề
  * (vd. "Skull" của hai bộ hình) cách nhau dưới [minGap] màn: tại mỗi vị trí
  * chọn màn dễ nhất trong [window] màn dễ nhất còn lại mà chưa trùng chủ đề.
+ * Các màn trong [pinnedFirst] (id) được đặt lên đầu, trước mọi màn khác.
  */
-export function orderLevels(items, { window = 4, minGap = 12 } = {}) {
+export function orderLevels(items, { window = 4, minGap = 12, pinnedFirst = [] } = {}) {
   const remaining = [...items].sort((a, b) => a.score - b.score || a.cells - b.cells);
+  // Màn chọn tay để mở đầu (theo id, đúng thứ tự trong danh sách).
   const ordered = [];
+  for (const id of pinnedFirst) {
+    const index = remaining.findIndex((it) => it.id === id);
+    if (index === -1) throw new Error(`Màn mở đầu "${id}" không có trong danh sách`);
+    ordered.push(remaining.splice(index, 1)[0]);
+  }
   while (remaining.length) {
     const recent = new Set(ordered.slice(-minGap).map((it) => subjectOf(it.title)));
     let index = remaining.slice(0, window).findIndex((it) => !recent.has(subjectOf(it.title)));

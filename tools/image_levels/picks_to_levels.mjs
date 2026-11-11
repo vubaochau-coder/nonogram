@@ -49,6 +49,7 @@ for (const p of picks) {
   const id = p.key.replace(':', '-');
   const metrics = difficultyMetrics(grid);
   levels.push({
+    id,
     title: p.title,
     score: metrics.score,
     cells: metrics.cells,
@@ -66,7 +67,10 @@ for (const p of picks) {
 }
 if (problems.length) console.warn(`Bỏ ${problems.length} màn không giải được bằng suy luận: ${problems.join(', ')}`);
 
-const ordered = orderLevels(levels);
+// Màn mở đầu chọn tay (danh sách id), xem tools/image_levels/README.md.
+const pinnedFile = path.join(here, 'data', 'pinned_first.json');
+const pinnedFirst = fs.existsSync(pinnedFile) ? JSON.parse(fs.readFileSync(pinnedFile, 'utf8')) : [];
+const ordered = orderLevels(levels, { pinnedFirst });
 const labels = difficultyLabels(ordered);
 const order = ordered.map((it, i) => {
   it.level.level = i + 1;
