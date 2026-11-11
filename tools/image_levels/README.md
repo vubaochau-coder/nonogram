@@ -68,6 +68,16 @@ màu (hình bóng) hoặc pixel art.
 Trang đọc `out/picker_icons.json` (đăng kèm dưới tên `icons.json`) và lưu
 từng lựa chọn vào cơ sở dữ liệu của trang (collection `picks`).
 
+Bộ icon PNG (mỗi icon một file, nét đen) nạp vào trang bằng
+`import_png_icons.mjs`. Ví dụ bộ 1-bit Pixel Icons của Nikoichu (CC0,
+https://nikoichu.itch.io/pixel-icons), bỏ các nhóm logo/giao diện:
+
+```bash
+node tools/image_levels/import_png_icons.mjs <thư mục Sprites> --set=nikoichu-1bit \
+  --author="1-bit Pixel Icons (Nikoichu)" --license=CC0-1.0 \
+  --exclude=Platforms,Software,Controller,Arrows --exclude-words=tetris
+```
+
 Duyệt xong, xuất các bản ghi `picks` thành file JSON rồi chạy:
 
 ```bash

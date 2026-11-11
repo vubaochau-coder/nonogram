@@ -1,0 +1,152 @@
+#!/usr/bin/env node
+// Nạp một bộ icon pixel art dạng PNG (mỗi icon một file) vào trang chọn màn.
+//
+// Cách dùng (chạy từ thư mục gốc repo, sau generate.mjs):
+//   node tools/image_levels/import_png_icons.mjs <thư mục PNG> --set=<id bộ> \
+//     --author="<ghi công>" --license=<SPDX> [--exclude=Prefix1,Prefix2] \
+//     [--exclude-words=word1,word2] [--out=tools/image_levels/out/picker_icons.json]
+//
+// Mỗi điểm ảnh màu đen (gần đen) thành một ô tô; nền trong suốt và phần ruột
+// màu trắng thành ô trống. Trên trang chọn màn, "Lấp kín" sẽ lấp phần ruột để
+// ra hình bóng. Các icon của bộ này được thay thế (hoặc thêm) trong file picker
+// mà không đụng tới các bộ khác.
+
+import fs from 'node:fs';
+import path from 'node:path';
+import { createRequire } from 'node:module';
+import { fileURLToPath } from 'node:url';
+
+import { analyze, repair } from './solver.mjs';
+
+const here = path.dirname(fileURLToPath(import.meta.url));
+const args = Object.fromEntries(
+  process.argv
+    .slice(2)
+    .filter((a) => a.startsWith('--'))
+    .map((a) => {
+      const [k, ...v] = a.slice(2).split('=');
+      return [k, v.join('=')];
+    }),
+);
+const dir = process.argv.slice(2).find((a) => !a.startsWith('--'));
+if (!dir || !args.set || !args.author || !args.license) {
+  console.error(
+    'Usage: node tools/image_levels/import_png_icons.mjs <dir> --set=<id> --author="..." --license=<SPDX> [--exclude=A,B] [--exclude-words=a,b]',
+  );
+  process.exit(64);
+}
+const outFile = args.out ?? path.join(here, 'out', 'picker_icons.json');
+const excludePrefixes = (args.exclude ?? '').split(',').filter(Boolean);
+const excludeWords = (args['exclude-words'] ?? '').split(',').filter(Boolean).map((w) => w.toLowerCase());
+
+const files = fs
+  .readdirSync(dir)
+  .filter((f) => f.toLowerCase().endsWith('.png'))
+  .filter((f) => !excludePrefixes.some((p) => f.startsWith(p + '_')))
+  .filter((f) => !excludeWords.some((w) => f.toLowerCase().includes(w)))
+  .sort();
+
+const require = createRequire(import.meta.url);
+const { chromium } = require('playwright');
+const browser = await chromium.launch();
+const page = await browser.newPage();
+await page.setContent('<!doctype html><body></body>');
+const decoded = await page.evaluate(
+  async (images) => {
+    const out = [];
+    for (const { name, data } of images) {
+      const img = new Image();
+      img.src = 'data:image/png;base64,' + data;
+      await img.decode();
+      const c = document.createElement('canvas');
+      c.width = img.width;
+      c.height = img.height;
+      const ctx = c.getContext('2d');
+      ctx.drawImage(img, 0, 0);
+      const px = ctx.getImageData(0, 0, c.width, c.height).data;
+      const ink = [];
+      const shape = [];
+      for (let y = 0; y < c.height; y++) {
+        const a = [];
+        const b = [];
+        for (let x = 0; x < c.width; x++) {
+          const i = (y * c.width + x) * 4;
+          const opaque = px[i + 3] >= 128;
+          const dark = opaque && px[i] + px[i + 1] + px[i + 2] < 3 * 96;
+          a.push(dark ? 1 : 0);
+          b.push(opaque ? 1 : 0);
+        }
+        ink.push(a);
+        shape.push(b);
+      }
+      out.push({ name, width: c.width, height: c.height, ink, shape });
+    }
+    return out;
+  },
+  files.map((f) => ({ name: f, data: fs.readFileSync(path.join(dir, f)).toString('base64') })),
+);
+await browser.close();
+
+const crop = (g) => {
+  let r0 = g.length, r1 = -1, c0 = g[0].length, c1 = -1;
+  g.forEach((row, r) => row.forEach((v, c) => {
+    if (v) ((r0 = Math.min(r0, r)), (r1 = Math.max(r1, r)), (c0 = Math.min(c0, c)), (c1 = Math.max(c1, c)));
+  }));
+  return r1 < 0 ? g : g.slice(r0, r1 + 1).map((row) => row.slice(c0, c1 + 1));
+};
+// Giải được bằng suy luận, hoặc sửa được bằng cách lật ít ô (như trang chọn
+// màn tự làm khi mở ảnh).
+const solvable = (g) => {
+  const c = crop(g);
+  if (c.length < 4 || c[0].length < 4) return false;
+  return analyze(c).lineSolvable || repair(c, Math.max(1, Math.round(0.03 * c.length * c[0].length))) !== null;
+};
+const density = (g) => {
+  const c = crop(g);
+  return c.flat().reduce((a, b) => a + b, 0) / (c.length * c[0].length);
+};
+const titleOf = (name) => {
+  const parts = name.replace(/\.png$/i, '').split('_');
+  const skip = parts[0] === 'Map' && parts[1] === 'Markers' ? 2 : 1;
+  return parts
+    .slice(skip)
+    .filter((p) => !/^\d+$/.test(p))
+    .join(' ');
+};
+
+const icons = decoded.map((d) => {
+  let rects = '';
+  d.ink.forEach((row, y) => row.forEach((v, x) => v && (rects += `M${x} ${y}h1v1h-1z`)));
+  // Phần ruột trắng vẽ mờ để ảnh gốc trên trang vẫn giống icon thật; trang chỉ
+  // lấy ô có độ đục >= 50% nên phần này không thành ô tô.
+  let fill = '';
+  d.shape.forEach((row, y) => row.forEach((v, x) => v && !d.ink[y][x] && (fill += `M${x} ${y}h1v1h-1z`)));
+  const svg =
+    `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${d.width} ${d.height}" width="${d.width}" height="${d.height}" shape-rendering="crispEdges">` +
+    (fill ? `<path fill="#000" fill-opacity="0.12" d="${fill}"/>` : '') +
+    `<path fill="#000" d="${rects}"/></svg>`;
+  // Ưu tiên giữ nét viền (nhiều chi tiết); chỉ gợi ý hình bóng khi nét viền
+  // không giải được và hình bóng không quá đặc.
+  const variant = !solvable(d.ink) && density(d.shape) <= 0.75 && solvable(d.shape) ? 'solid' : 'pixel';
+  const icon = d.name.replace(/\.png$/i, '');
+  return {
+    key: `${args.set}:${icon}`,
+    set: args.set,
+    icon,
+    title: titleOf(d.name),
+    author: args.author,
+    license: args.license,
+    mode: 'pixel',
+    width: d.width,
+    height: d.height,
+    svg,
+    suggest: { variant, size: null },
+  };
+});
+
+const data = fs.existsSync(outFile) ? JSON.parse(fs.readFileSync(outFile, 'utf8')) : { version: 1, icons: [] };
+data.icons = [...data.icons.filter((i) => i.set !== args.set), ...icons];
+data.generatedAt = new Date().toISOString();
+fs.writeFileSync(outFile, JSON.stringify(data));
+const counts = icons.reduce((m, i) => ((m[i.suggest.variant] = (m[i.suggest.variant] ?? 0) + 1), m), {});
+console.log(`${icons.length} icon (${JSON.stringify(counts)}) → ${outFile}`);
