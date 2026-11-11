@@ -36,6 +36,13 @@ flutter:
 
   assets:
     - assets/levels/
+    # Bộ màn của chế độ nhà phát triển (lấy từ nonogram.org, không được dùng
+    # thương mại): chỉ đóng gói khi build `--flavor dev`, không có ở bản store.
+    - path: assets/levels_dev/
+      flavors:
+        - dev
+    - assets/licenses/
+    - assets/fonts/Nunito-OFL.txt
     - assets/branding/logo.png
 
   fonts:

@@ -9,8 +9,9 @@ Nguồn và giấy phép của từng màn nằm trong `tools/image_levels/out/s
 | [Pixelarticons](https://github.com/halfmage/pixelarticons) | Gerrit Halfmann | [MIT](https://github.com/halfmage/pixelarticons/blob/master/LICENSE) | 39 |
 | [Streamline Pixel](https://github.com/webalys-hq/streamline-vectors) | Streamline | [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/) | 82 |
 
-Khi phát hành, app phải hiện nội dung ghi công này cho người chơi (ví dụ trong
-màn Cài đặt → Giấy phép):
+App hiện nội dung ghi công này ở Cài đặt → Giấy phép (`AppLicensesPage`);
+văn bản giấy phép đầy đủ nằm trong `assets/licenses/` và được đăng ký vào trang
+giấy phép phần mềm của Flutter:
 
 - "Pixel art icons by Streamline (streamlinehq.com), licensed under CC BY 4.0.
   Modified: converted to nonogram puzzles."

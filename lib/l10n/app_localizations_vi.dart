@@ -421,4 +421,68 @@ class AppLocalizationsVi extends AppLocalizations {
   @override
   String get nonogramPlayHintNothingToFill =>
       'Mọi ô cần tô đều đã được tô. Hãy kiểm tra những ô tô thừa.';
+
+  @override
+  String get settingsLicenses => 'Giấy phép';
+
+  @override
+  String get settingsSwitchPlayMode => 'Đổi chế độ chơi';
+
+  @override
+  String get licensesTitle => 'Giấy phép';
+
+  @override
+  String get licensesLevelArtHeading => 'Hình ảnh màn chơi';
+
+  @override
+  String get licensesLevelArtIntro =>
+      'Các màn chơi được chuyển thể từ những bộ icon pixel art dưới đây: thu nhỏ, chuyển sang đen trắng và chỉnh sửa để màn nào cũng giải được.';
+
+  @override
+  String get licensesFontHeading => 'Phông chữ';
+
+  @override
+  String get licensesSoftwareButton => 'Giấy phép phần mềm mã nguồn mở';
+
+  @override
+  String get licensesDeveloperLevelsNote =>
+      'Các màn ở chế độ nhà phát triển lấy từ nonogram.org, chỉ dùng để thử nội bộ và không có trong bản phát hành trên store.';
+
+  @override
+  String get playModeTitle => 'Chọn chế độ chơi';
+
+  @override
+  String get playModeSubtitle => 'Tiến độ của mỗi chế độ được lưu riêng.';
+
+  @override
+  String get playModeUserTitle => 'Chế độ người dùng';
+
+  @override
+  String get playModeUserBody =>
+      'Bộ màn có bản quyền, giống bản phát hành trên store.';
+
+  @override
+  String get playModeDeveloperTitle => 'Chế độ nhà phát triển';
+
+  @override
+  String get playModeDeveloperBody =>
+      'Bộ màn gốc từ nonogram.org, chỉ dùng để thử nội bộ. Giữ tiến độ chơi trước đây.';
+
+  @override
+  String get playModeLastUsed => 'Lần trước';
+
+  @override
+  String licensesBy(String author) {
+    return 'Tác giả: $author';
+  }
+
+  @override
+  String licensesLevelCount(int count) {
+    return '$count màn';
+  }
+
+  @override
+  String playModeProgress(int solved, int total) {
+    return 'Đã giải $solved/$total màn';
+  }
 }

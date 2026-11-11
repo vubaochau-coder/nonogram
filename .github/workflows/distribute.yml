@@ -42,7 +42,7 @@ env:
 
 jobs:
   distribute:
-    name: Build APK and upload to Firebase App Distribution
+    name: Build dev APK and upload to Firebase App Distribution
     if: >-
       github.event_name == 'workflow_dispatch' ||
       (github.event.workflow_run.conclusion == 'success' &&
@@ -105,7 +105,9 @@ jobs:
           echo "name=$name" >> "$GITHUB_OUTPUT"
           echo "Version: $name ($number)"
 
-      - run: flutter build apk --release --build-number=${{ steps.build.outputs.number }}
+      # Flavor dev: bản thử nội bộ, có màn chọn chế độ chơi và bộ màn của chế
+      # độ nhà phát triển. Bản lên store build bằng workflow "Store build".
+      - run: flutter build apk --release --flavor dev --build-number=${{ steps.build.outputs.number }}
 
       - name: Write release notes
         env:
@@ -164,7 +166,7 @@ jobs:
           [ -n "$GROUPS" ] && args+=(--groups "$GROUPS")
 
           npx -y firebase-tools@15.34.1 appdistribution:distribute \
-            build/app/outputs/flutter-apk/app-release.apk \
+            build/app/outputs/flutter-apk/app-dev-release.apk \
             --app "$FIREBASE_APP_ID" \
             --project "$FIREBASE_PROJECT_ID" \
             --release-notes-file release-notes.txt \

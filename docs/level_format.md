@@ -86,6 +86,13 @@ assets đã commit, nên CI sẽ chặn dữ liệu hỏng.
 >
 > Bộ màn cũ lấy từ nonogram.org (574 màn) đã bị gỡ vì không được dùng thương mại.
 
+## Bộ màn của chế độ nhà phát triển
+
+`assets/levels_dev/` cùng định dạng, chứa 574 màn cũ lấy từ nonogram.org (bản
+chụp `assets/levels/` của nhánh `main` trước khi đổi bộ màn; dữ liệu gốc còn ở
+nhánh `beta`). Bộ này chỉ được đóng gói khi build `--flavor dev` và không được
+đưa vào bản store. `test/data/level_assets_test.dart` kiểm tra cả hai bộ.
+
 ## Thay đổi dữ liệu sau khi đã phát hành
 
 Tiến độ người chơi lưu theo `level` (và `id` trong snapshot ván dở). Vì vậy:

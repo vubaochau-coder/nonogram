@@ -793,6 +793,114 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Every square that should be filled already is. Check for extra filled squares.'**
   String get nonogramPlayHintNothingToFill;
+
+  /// No description provided for @settingsLicenses.
+  ///
+  /// In en, this message translates to:
+  /// **'Licenses'**
+  String get settingsLicenses;
+
+  /// No description provided for @settingsSwitchPlayMode.
+  ///
+  /// In en, this message translates to:
+  /// **'Switch play mode'**
+  String get settingsSwitchPlayMode;
+
+  /// No description provided for @licensesTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Licenses'**
+  String get licensesTitle;
+
+  /// No description provided for @licensesLevelArtHeading.
+  ///
+  /// In en, this message translates to:
+  /// **'Puzzle artwork'**
+  String get licensesLevelArtHeading;
+
+  /// No description provided for @licensesLevelArtIntro.
+  ///
+  /// In en, this message translates to:
+  /// **'The puzzles are adapted from these pixel-art icon sets: scaled, converted to black and white, and edited so every puzzle can be solved.'**
+  String get licensesLevelArtIntro;
+
+  /// No description provided for @licensesFontHeading.
+  ///
+  /// In en, this message translates to:
+  /// **'Font'**
+  String get licensesFontHeading;
+
+  /// No description provided for @licensesSoftwareButton.
+  ///
+  /// In en, this message translates to:
+  /// **'Open-source software licenses'**
+  String get licensesSoftwareButton;
+
+  /// No description provided for @licensesDeveloperLevelsNote.
+  ///
+  /// In en, this message translates to:
+  /// **'Developer mode puzzles come from nonogram.org and are for internal testing only. They are not included in the store version.'**
+  String get licensesDeveloperLevelsNote;
+
+  /// No description provided for @playModeTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose a play mode'**
+  String get playModeTitle;
+
+  /// No description provided for @playModeSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Progress is saved separately for each mode.'**
+  String get playModeSubtitle;
+
+  /// No description provided for @playModeUserTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Player mode'**
+  String get playModeUserTitle;
+
+  /// No description provided for @playModeUserBody.
+  ///
+  /// In en, this message translates to:
+  /// **'The licensed puzzles that ship in the store version.'**
+  String get playModeUserBody;
+
+  /// No description provided for @playModeDeveloperTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Developer mode'**
+  String get playModeDeveloperTitle;
+
+  /// No description provided for @playModeDeveloperBody.
+  ///
+  /// In en, this message translates to:
+  /// **'The original puzzles from nonogram.org, for internal testing. Keeps your earlier progress.'**
+  String get playModeDeveloperBody;
+
+  /// No description provided for @playModeLastUsed.
+  ///
+  /// In en, this message translates to:
+  /// **'Last used'**
+  String get playModeLastUsed;
+
+  /// No description provided for @licensesBy.
+  ///
+  /// In en, this message translates to:
+  /// **'By {author}'**
+  String licensesBy(String author);
+
+  /// No description provided for @licensesLevelCount.
+  ///
+  /// In en, this message translates to:
+  /// **'{count} puzzles'**
+  String licensesLevelCount(int count);
+
+  /// No description provided for @playModeProgress.
+  ///
+  /// In en, this message translates to:
+  /// **'{solved}/{total} solved'**
+  String playModeProgress(int solved, int total);
 }
 
 class _AppLocalizationsDelegate
