@@ -86,14 +86,15 @@ lib/
     painters/                CustomPainter cho lưới, gợi ý, đáp án
   l10n/                      Chuỗi dịch (app_en.arb, app_vi.arb)
 assets/
-  levels/                    574 màn chơi (sinh bằng tools/build_levels.dart)
+  levels/                    121 màn chơi (sinh bằng tools/build_levels.dart)
   fonts/                     Font Nunito (giấy phép OFL, xem Nunito-OFL.txt)
 tools/
-  build_levels.dart          Dump Supabase -> assets/levels/, kiểm tra nghiệm duy nhất
-  data/puzzles_dump.csv      Dump bảng puzzles từ Supabase (nguồn của assets/levels/)
+  build_levels.dart          levels.json -> assets/levels/, kiểm tra nghiệm duy nhất
+  image_levels/              Sinh + duyệt màn từ bộ icon mở giấy phép (nguồn của assets/levels/)
   generate_icons.py          Vẽ launcher icon / splash / favicon
 docs/
   level_format.md            Định dạng dữ liệu màn chơi
+  credits.md                 Ghi công + giấy phép hình dùng làm màn chơi
   gameplay_rules.md          Quy tắc campaign, snapshot, hint
 ```
 

@@ -3,7 +3,9 @@
 // dữ liệu của trang) thành đầu vào cho tools/build_levels.dart.
 //
 // Cách dùng:
-//   node tools/image_levels/picks_to_levels.mjs <thư mục chứa picks/*.json> [--out=tools/image_levels/out]
+//   node tools/image_levels/picks_to_levels.mjs <picks.json | thư mục chứa picks/*.json> [--out=tools/image_levels/out]
+//
+// Bản chụp kết quả duyệt đang dùng cho app: tools/image_levels/data/picks.json.
 //
 // Ghi ra levels.json (xếp theo độ khó) và sources.json (nguồn + giấy phép).
 // Mỗi màn được kiểm tra lại: phải giải được hoàn toàn bằng suy luận.
@@ -19,13 +21,18 @@ const positional = process.argv.slice(2).filter((a) => !a.startsWith('--'));
 const outArg = process.argv.find((a) => a.startsWith('--out='));
 const outDir = outArg ? outArg.slice(6) : path.join(here, 'out');
 if (positional.length !== 1) {
-  console.error('Usage: node tools/image_levels/picks_to_levels.mjs <picks-dir> [--out=dir]');
+  console.error('Usage: node tools/image_levels/picks_to_levels.mjs <picks.json|picks-dir> [--out=dir]');
   process.exit(64);
 }
 
-const files = fs.readdirSync(positional[0], { recursive: true }).filter((f) => String(f).endsWith('.json'));
-const picks = files
-  .map((f) => JSON.parse(fs.readFileSync(path.join(positional[0], String(f)), 'utf8')))
+const input = positional[0];
+const docs = fs.statSync(input).isDirectory()
+  ? fs
+      .readdirSync(input, { recursive: true })
+      .filter((f) => String(f).endsWith('.json'))
+      .map((f) => JSON.parse(fs.readFileSync(path.join(input, String(f)), 'utf8')))
+  : JSON.parse(fs.readFileSync(input, 'utf8'));
+const picks = docs
   .map((doc) => doc.data ?? doc)
   .filter((p) => p.status === 'picked');
 
