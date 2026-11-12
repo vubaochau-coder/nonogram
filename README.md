@@ -80,7 +80,9 @@ Nút gạt **Tô / X** trên thanh công cụ chọn việc một lần chạm s
 - Đang tô mà ngón tay tới sát mép lưới thì bàn tự trôi theo.
 - Hai dải gợi ý luôn dính mép trái / mép trên khi kéo lưới đi. Mỗi dải
   chiếm tối đa 30% chiều tương ứng; nhiều số hơn thì chỉ hiện các số gần
-  lưới nhất, ô góc báo còn bao nhiêu số bị cắt (`← +N`, `↑ +N`).
+  lưới nhất. Hàng / cột nào còn số khuất thì ở mép phía đó (xa lưới, hoặc
+  sát lưới khi đã cuộn dải ra) có chip cam `+n` to bằng một ô số; n đếm cả
+  số nằm dưới chip (`ClueOverflow`).
 - Không có zoom: cỡ ô luôn là cỡ lớn nhất vừa màn hình trong khoảng
   28–44px (tính lại khi xoay màn hình); lưới lớn hơn thì kéo để xem.
 - Nút xoay màn hình (điện thoại / máy tính bảng) chuyển dọc ⇄ ngang và khoá
