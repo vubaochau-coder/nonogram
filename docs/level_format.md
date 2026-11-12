@@ -38,6 +38,7 @@ Mỗi màn nằm trên một dòng để diff trên git dễ đọc:
 | `solution` | có | Mỗi hàng là một chuỗi `0`/`1` (`1` = ô được tô), các hàng dài bằng nhau |
 | `rows`, `cols` | không | Nếu có thì phải khớp với `solution` |
 | `title`, `author`, `difficulty`, `difficultyScore` | không | Hiển thị trên UI; `title` trống thì dùng `Level N` |
+| `pinned` | không | Ô ghim sẵn: danh sách `[hàng, cột]` (đếm từ 0). Ô ghim hiện đúng theo `solution` ngay từ đầu màn (ô tô, hoặc dấu X nếu là ô trống), có chấm ghim tròn và không đổi được. Dùng cho màn có nhiều cách tô khớp gợi ý, để chỉ còn một nghiệm mà không phải sửa hình. Tối đa 5% số ô. |
 
 **Không lưu gợi ý (clue).** `topClues`/`leftClues` được tính lại từ
 `solution` khi đọc (`NonogramPuzzle.deriveClues`), nên không bao giờ lệch đáp án.
@@ -54,7 +55,7 @@ hoặc file CSV có dòng đầu là tên cột.
 Script sẽ:
 
 1. Sắp xếp theo `level`, kiểm tra không trùng level/id.
-2. Kiểm tra từng màn hợp lệ và **có đúng một nghiệm** (`NonogramSolver`).
+2. Kiểm tra từng màn hợp lệ và **có đúng một nghiệm** khi đã tính các ô `pinned` (`NonogramSolver`).
    Màn có nhiều nghiệm thì người chơi có thể tô ra hình khác đáp án mà vẫn
    khớp mọi gợi ý.
 3. Ghi `index.json` và các `pack_XXX.json` (mặc định 100 màn/gói).
@@ -69,12 +70,12 @@ Tuỳ chọn hay dùng:
 `test/data/level_assets_test.dart` chạy lại toàn bộ các kiểm tra trên với
 assets đã commit, nên CI sẽ chặn dữ liệu hỏng.
 
-> Dữ liệu hiện tại: **121 màn** vẽ từ hai bộ pixel art mở giấy phép dùng
-> thương mại, duyệt tay từng màn trên trang chọn màn (xem
+> Dữ liệu hiện tại: **129 màn** có giấy phép dùng thương mại (xem
 > `tools/image_levels/README.md`):
 >
-> - Pixelarticons (MIT): 39 màn
-> - Streamline Pixel (CC BY 4.0): 82 màn
+> - Pixelarticons (MIT): 39 màn, duyệt tay trên trang chọn màn
+> - Streamline Pixel (CC BY 4.0): 82 màn, duyệt tay trên trang chọn màn
+> - nonogram-db (CC BY 3.0 / CC BY-SA 4.0): 8 màn dùng nguyên bản
 >
 > Nguồn và giấy phép của từng màn: `tools/image_levels/out/sources.json`;
 > ghi công: `docs/credits.md`. Sinh lại bằng:

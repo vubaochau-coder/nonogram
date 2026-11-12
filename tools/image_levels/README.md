@@ -22,8 +22,8 @@ Kết quả ở `tools/image_levels/out/`:
 
 1. Vẽ SVG trong Chromium (Playwright) rồi lấy mẫu theo ô:
    - `pixel`: pixel art (Pixelarticons, Streamline Pixel với `grid: 42`), lấy đúng từng điểm ảnh rồi
-     gộp khối 2×2 nếu ảnh vẽ bằng khối 2×2. Bản `solid`
-     lấp kín phần bên trong nét viền.
+     gộp khối 2×2 nếu ảnh vẽ bằng khối 2×2. Không dùng chế độ
+     lấp kín phần bên trong nét viền (đã bỏ: làm mất chi tiết của hình).
    - Ảnh vector (game-icons, `mode: "emoji"`): thử các cỡ 15/20/25 và ba kiểu chuyển sang đen trắng:
      - `silhouette`: hình bóng;
      - `ink`: ô tối hơn ngưỡng Otsu;
@@ -67,6 +67,44 @@ màu (hình bóng) hoặc pixel art.
 `picker/index.html` là trang duyệt từng ảnh, đăng trên claude.ai (riêng tư).
 Trang đọc `out/picker_icons.json` (đăng kèm dưới tên `icons.json`) và lưu
 từng lựa chọn vào cơ sở dữ liệu của trang (collection `picks`).
+
+Bộ icon PNG (mỗi icon một file, nét đen) nạp vào trang bằng
+`import_png_icons.mjs`. Ví dụ bộ 1-bit Pixel Icons của Nikoichu (CC0,
+https://nikoichu.itch.io/pixel-icons), bỏ các nhóm logo/giao diện:
+
+```bash
+node tools/image_levels/import_png_icons.mjs <thư mục Sprites> --set=nikoichu-1bit \
+  --author="1-bit Pixel Icons (Nikoichu)" --license=CC0-1.0 \
+  --exclude=Platforms,Software,Controller,Arrows --exclude-words=tetris \
+  --include=Platforms_Linux_GNU_Penguin_Full,Platforms_Linux_GNU_Penguin_Head \
+  --titles="Platforms_Linux_GNU_Penguin_Full:Tux,Platforms_Linux_GNU_Penguin_Head:Tux Head" \
+  --auto-accept --max-pins=3
+```
+
+`--auto-accept` tự chấp nhận icon có nét viền giải được bằng suy luận mà không
+cần sửa ô nào (dùng bản thu nhỏ ½ nếu thu nhỏ được trọn vẹn, không thì giữ
+nguyên kích thước). Trang chọn màn hiện các icon này là "đã chọn"; bấm Bỏ qua
+để loại. `picks_to_levels.mjs` tính chúng là đã chọn, trừ khi trong dữ liệu
+duyệt đã có quyết định khác. Với bộ Nikoichu: 652/1.022 icon được tự chấp nhận.
+
+Màn chưa giải được có thể dùng **ô ghim sẵn** thay vì sửa hình: trường `pins`
+([hàng, cột], chỉ ô tô, tối đa 5% số ô) đi vào trường `pinned` của màn, game hiện
+sẵn và khoá các ô này. `--auto-accept` cho phép ghim tối đa `--max-pins` ô (mặc
+định 2). Trên trang chọn màn: nút "Tự ghim ô" / "Bỏ ghim"; icon chưa duyệt mà chưa
+giải được sẽ được thử ghim khi mở.
+
+`--only` bỏ các bộ khác khỏi trang chọn màn (hiện trang chỉ còn bộ của
+Nikoichu). Các màn đã chọn từ Pixelarticons/Streamline Pixel vẫn nằm trong
+`data/picks.json` nên không mất khi sinh lại bộ màn.
+
+Tux (chim cánh cụt Linux) là ngoại lệ trong nhóm logo: Larry Ewing cho phép dùng
+và sửa hình với điều kiện ghi công "Larry Ewing (lewing@isc.tamu.edu) and The
+GIMP". Nếu chọn màn Tux, phải thêm ghi công này vào trang Giấy phép.
+
+Các màn đã chọn từ Pixelarticons và Streamline Pixel được đưa về bản gốc bằng
+`import_iconify_pixel.mjs`: bỏ mọi chỉnh sửa cũ, tự chấp nhận màn thu nhỏ ½
+trọn vẹn và giải được bằng suy luận (8/121 màn), các màn còn lại vào nhóm chờ
+duyệt trên trang. Quyết định cũ của chúng bị bỏ qua nhờ trường `resetBefore`.
 
 Duyệt xong, xuất các bản ghi `picks` thành file JSON rồi chạy:
 

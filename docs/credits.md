@@ -9,6 +9,20 @@ Nguồn và giấy phép của từng màn nằm trong `tools/image_levels/out/s
 | [Pixelarticons](https://github.com/halfmage/pixelarticons) | Gerrit Halfmann | [MIT](https://github.com/halfmage/pixelarticons/blob/master/LICENSE) | 39 |
 | [Streamline Pixel](https://github.com/webalys-hq/streamline-vectors) | Streamline | [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/) | 82 |
 
+Ngoài ra có 8 màn nonogram dùng nguyên bản (không chuyển từ icon), lấy từ bộ
+[nonogram-db](https://github.com/Sprunth/nonogram-db). Dữ liệu ở
+`tools/image_levels/data/nonogram_db.json`.
+
+| Màn | Tác giả | Giấy phép |
+|---|---|---|
+| Dancer, Scaredy Cat, Probably Not, Slippery Conditions (© 2004), Swing (© 2006), từ webpbn.com | Jan Wolter | [CC BY 3.0](https://creativecommons.org/licenses/by/3.0/) |
+| Spade, 42 (© 2010), từ gnonograms | Frederico Vera | [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/) |
+| Bloop Bloop (© 2015, webpbn #26167) | Michael Terry | [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/) |
+
+Các màn CC BY-SA phải tiếp tục để dưới CC BY-SA 4.0. Không dùng các màn GPL
+của nonogram-db (nhóm qnonograms) và các màn là logo (Blender, GNOME, KDE,
+Ubuntu, Wikimedia).
+
 App hiện nội dung ghi công này ở Cài đặt → Giấy phép (`AppLicensesPage`);
 văn bản giấy phép đầy đủ nằm trong `assets/licenses/` và được đăng ký vào trang
 giấy phép phần mềm của Flutter:

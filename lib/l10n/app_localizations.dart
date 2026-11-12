@@ -815,13 +815,13 @@ abstract class AppLocalizations {
   /// No description provided for @licensesLevelArtHeading.
   ///
   /// In en, this message translates to:
-  /// **'Puzzle artwork'**
+  /// **'Puzzles'**
   String get licensesLevelArtHeading;
 
   /// No description provided for @licensesLevelArtIntro.
   ///
   /// In en, this message translates to:
-  /// **'The puzzles are adapted from these pixel-art icon sets: scaled, converted to black and white, and edited so every puzzle can be solved.'**
+  /// **'The puzzles come from these sources. Icon sets were scaled down, converted to black and white and edited so every puzzle can be solved; the nonogram collections are used as they are.'**
   String get licensesLevelArtIntro;
 
   /// No description provided for @licensesFontHeading.

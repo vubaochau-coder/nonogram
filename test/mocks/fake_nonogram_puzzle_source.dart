@@ -3,7 +3,11 @@ import 'package:nonogram/models/nonogram_puzzle.dart';
 
 /// Nguồn màn chơi trong bộ nhớ: [levelCount] màn giống nhau (mặc định 2x2).
 class FakeNonogramPuzzleSource implements NonogramPuzzleSource {
-  FakeNonogramPuzzleSource({this.levelCount = 10, this.solution = _small});
+  FakeNonogramPuzzleSource({
+    this.levelCount = 10,
+    this.solution = _small,
+    this.pinnedCells = const {},
+  });
 
   static const _small = [
     [1, 0],
@@ -12,6 +16,7 @@ class FakeNonogramPuzzleSource implements NonogramPuzzleSource {
 
   final int levelCount;
   final List<List<int>> solution;
+  final Set<({int row, int col})> pinnedCells;
 
   @override
   Future<int> totalLevels() async => levelCount;
@@ -27,6 +32,7 @@ class FakeNonogramPuzzleSource implements NonogramPuzzleSource {
       difficultyScore: 1.0,
       level: level,
       solution: solution,
+      pinnedCells: pinnedCells,
     );
   }
 }

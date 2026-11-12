@@ -34,21 +34,41 @@ const docs = fs.statSync(input).isDirectory()
       .filter((f) => String(f).endsWith('.json'))
       .map((f) => JSON.parse(fs.readFileSync(path.join(input, String(f)), 'utf8')))
   : JSON.parse(fs.readFileSync(input, 'utf8'));
-const picks = docs
+// Icon tự chấp nhận trong dữ liệu trang chọn màn (out/picker_icons.json, trường
+// `auto`) được tính là đã chọn, trừ khi người duyệt đã lưu quyết định khác.
+// Quyết định lưu trước `resetBefore` của icon (màn đã đưa về bản gốc) bị bỏ qua.
+const pickerFile = path.join(here, 'out', 'picker_icons.json');
+const pickerIcons = fs.existsSync(pickerFile) ? JSON.parse(fs.readFileSync(pickerFile, 'utf8')).icons : [];
+const resetBefore = new Map(pickerIcons.filter((ic) => ic.resetBefore).map((ic) => [ic.key, ic.resetBefore]));
+const decided = docs
   .map((doc) => doc.data ?? doc)
-  .filter((p) => p.status === 'picked');
+  .filter((p) => !resetBefore.has(p.key) || (p.updatedAt ?? '') >= resetBefore.get(p.key));
+const decidedKeys = new Set(decided.map((p) => p.key));
+const autoPicks = pickerIcons.length
+  ? pickerIcons
+      .filter((ic) => ic.auto && !decidedKeys.has(ic.key))
+      .map((ic) => ({ key: ic.key, set: ic.set, icon: ic.icon, title: ic.title, author: ic.author, license: ic.license, status: 'picked', ...ic.auto, edits: [] }))
+  : [];
+const picks = [...decided, ...autoPicks].filter((p) => p.status === 'picked');
 
 const levels = [];
 const problems = [];
 for (const p of picks) {
   const grid = p.solution.map((row) => [...row].map(Number));
-  if (!analyze(grid).lineSolvable) {
+  // Ô ghim sẵn ([hàng, cột]) để màn chỉ còn một cách giải.
+  const pins = p.pins ?? [];
+  if (!analyze(grid, pins).lineSolvable) {
     problems.push(p.key);
     continue;
   }
+  if (pins.length > Math.floor(0.05 * grid.length * grid[0].length)) {
+    problems.push(`${p.key} (ghim quá 5% số ô)`);
+    continue;
+  }
   const id = p.key.replace(':', '-');
-  const metrics = difficultyMetrics(grid);
+  const metrics = difficultyMetrics(grid, pins);
   levels.push({
+    id,
     title: p.title,
     score: metrics.score,
     cells: metrics.cells,
@@ -60,13 +80,50 @@ for (const p of picks) {
       rows: p.rows,
       cols: p.cols,
       solution: p.solution,
+      ...(pins.length ? { pinned: pins } : {}),
     },
-    source: { id, title: p.title, set: p.set, icon: p.icon, author: p.author, license: p.license, params: p.params, editedCells: p.edits?.length ?? 0, metrics },
+    source: { id, title: p.title, set: p.set, pinnedCells: pins.length, icon: p.icon, author: p.author, license: p.license, params: p.params, editedCells: p.edits?.length ?? 0, metrics },
+  });
+}
+// Màn lấy nguyên từ các bộ nonogram có giấy phép mở (không phải chuyển từ
+// icon), xem data/nonogram_db.json và docs/credits.md.
+const authorFields = {
+  'Jan Wolter': 'Jan Wolter (webpbn.com)',
+  'Michael Terry': 'Michael Terry (nonogram-db)',
+  'Frederico Vera': 'Frederico Vera (gnonograms)',
+};
+for (const p of JSON.parse(fs.readFileSync(path.join(here, 'data', 'nonogram_db.json'), 'utf8'))) {
+  const grid = p.solution.map((row) => [...row].map(Number));
+  if (!analyze(grid).lineSolvable) {
+    problems.push(p.id);
+    continue;
+  }
+  const author = authorFields[p.by];
+  if (!author) throw new Error(`Chưa có ghi công cho tác giả "${p.by}" (${p.id})`);
+  const metrics = difficultyMetrics(grid);
+  levels.push({
+    id: p.id,
+    title: p.title,
+    score: metrics.score,
+    cells: metrics.cells,
+    level: {
+      source_puzzle_id: p.id,
+      title: p.title,
+      author,
+      difficulty_score: Math.round(metrics.score * 100) / 100,
+      rows: grid.length,
+      cols: grid[0].length,
+      solution: p.solution,
+    },
+    source: { id: p.id, title: p.title, set: 'nonogram-db', author: p.by, copyright: p.copyright, license: p.license, url: p.source, catalogue: p.catalogue, metrics },
   });
 }
 if (problems.length) console.warn(`Bỏ ${problems.length} màn không giải được bằng suy luận: ${problems.join(', ')}`);
 
-const ordered = orderLevels(levels);
+// Màn mở đầu chọn tay (danh sách id), xem tools/image_levels/README.md.
+const pinnedFile = path.join(here, 'data', 'pinned_first.json');
+const pinnedFirst = fs.existsSync(pinnedFile) ? JSON.parse(fs.readFileSync(pinnedFile, 'utf8')) : [];
+const ordered = orderLevels(levels, { pinnedFirst });
 const labels = difficultyLabels(ordered);
 const order = ordered.map((it, i) => {
   it.level.level = i + 1;

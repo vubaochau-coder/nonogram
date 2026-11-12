@@ -57,6 +57,7 @@ void _checkLevels(Directory dir) {
             solver.countSolutions(
               rowClues: puzzle.leftClues,
               colClues: puzzle.topClues,
+              fixedCells: puzzle.pinnedValues,
             ),
             1,
             reason:
@@ -67,6 +68,21 @@ void _checkLevels(Directory dir) {
       },
     );
   }
+
+  test('pinned cells cover at most 5% of each puzzle', () {
+    for (final pack in index.packs) {
+      final puzzles = AssetNonogramPuzzleSource.parsePack(
+        jsonDecode(File('${dir.path}/${pack.file}').readAsStringSync()),
+      );
+      for (final p in puzzles.values) {
+        expect(
+          p.pinnedCells.length,
+          lessThanOrEqualTo((p.rows * p.cols * 0.05).floor()),
+          reason: 'level ${p.level} (${p.id}) pins too many cells',
+        );
+      }
+    }
+  });
 
   test('puzzle ids are unique across packs', () {
     final ids = <String>{};

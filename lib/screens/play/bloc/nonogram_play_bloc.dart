@@ -184,7 +184,11 @@ class NonogramPlayBloc extends AppBloc<NonogramPlayEvent, NonogramPlayState> {
       remainingHints: remainingHints,
       remainingWands: remainingWands,
       isWandActive: false,
-      lockedCells: _validLocked(snapshot?.lockedCells, puzzle),
+      // Ô ghim sẵn của màn luôn khoá, cùng với các ô mở bằng gợi ý / gậy phép.
+      lockedCells: {
+        ..._validLocked(snapshot?.lockedCells, puzzle),
+        ...puzzle.pinnedCells,
+      },
     );
 
     if (snapshot != null) {

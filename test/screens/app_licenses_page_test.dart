@@ -44,8 +44,13 @@ void main() {
     }
     expect(find.textContaining('By Streamline · CC BY 4.0'), findsOneWidget);
     expect(find.textContaining('By Gerrit Halfmann · MIT'), findsOneWidget);
-    expect(find.textContaining(RegExp(r'· \d+ puzzles')), findsNWidgets(2));
+    expect(
+      find.textContaining(RegExp(r'· \d+ puzzles')),
+      findsNWidgets(levelArtSources.length),
+    );
     expect(find.text('Nunito'), findsOneWidget);
+    expect(find.textContaining('By Jan Wolter · CC BY 3.0'), findsOneWidget);
+    expect(find.textContaining('CC BY-SA 4.0'), findsNWidgets(2));
     expect(find.textContaining('nonogram.org'), findsNothing);
   });
 
@@ -72,7 +77,7 @@ void main() {
     }
     expect(
       packages,
-      containsAll(['Streamline Pixel', 'Pixelarticons', 'Nunito']),
+      containsAll([...levelArtSources.map((s) => s.name), 'Nunito']),
     );
   });
 }

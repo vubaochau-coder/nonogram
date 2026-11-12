@@ -251,15 +251,29 @@ final class NonogramEngine {
     required NonogramPuzzle puzzle,
     required NonogramBoardSnapshot? snapshot,
   }) {
-    if (snapshot != null &&
-        snapshot.puzzleId == puzzle.id &&
-        snapshot.gridData.length == puzzle.rows &&
-        snapshot.gridData.every((row) => row.length == puzzle.cols)) {
-      return snapshot.gridData
-          .map((row) => List<NonogramCellState>.from(row))
-          .toList();
-    }
+    final grid =
+        snapshot != null &&
+                snapshot.puzzleId == puzzle.id &&
+                snapshot.gridData.length == puzzle.rows &&
+                snapshot.gridData.every((row) => row.length == puzzle.cols)
+            ? snapshot.gridData
+                .map((row) => List<NonogramCellState>.from(row))
+                .toList()
+            : createEmptyGrid(rows: puzzle.rows, cols: puzzle.cols);
+    applyPinnedCells(puzzle: puzzle, grid: grid);
+    return grid;
+  }
 
-    return createEmptyGrid(rows: puzzle.rows, cols: puzzle.cols);
+  /// Đặt các ô ghim sẵn của màn đúng theo đáp án (ô tô hoặc ô X).
+  void applyPinnedCells({
+    required NonogramPuzzle puzzle,
+    required List<List<NonogramCellState>> grid,
+  }) {
+    for (final cell in puzzle.pinnedCells) {
+      grid[cell.row][cell.col] =
+          puzzle.solution[cell.row][cell.col] == 1
+              ? NonogramCellState.filled
+              : NonogramCellState.marked;
+    }
   }
 }

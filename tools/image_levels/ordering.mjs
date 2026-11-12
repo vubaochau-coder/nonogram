@@ -12,7 +12,7 @@ import { deriveClues, solveLine } from './solver.mjs';
 const clamp01 = (x) => Math.max(0, Math.min(1, x));
 
 /** Các chỉ số độ khó của một lời giải (mảng hàng 0/1). */
-export function difficultyMetrics(solution) {
+export function difficultyMetrics(solution, pins = []) {
   const rows = solution.length;
   const cols = solution[0].length;
   const { rowClues, colClues } = deriveClues(solution);
@@ -21,12 +21,16 @@ export function difficultyMetrics(solution) {
 
   // Điểm bắt đầu: ô suy ra được từ lưới trống bằng một hàng hoặc một cột.
   const start = solution.map(() => new Array(cols).fill(false));
-  rowClues.forEach((clues, r) => solveLine(blankRow, clues).forEach((v, c) => v !== -1 && (start[r][c] = true)));
-  colClues.forEach((clues, c) => solveLine(blankCol, clues).forEach((v, r) => v !== -1 && (start[r][c] = true)));
+  const pinned = solution.map((row) => row.map(() => -1));
+  for (const [r, c] of pins) ((pinned[r][c] = solution[r][c]), (start[r][c] = true));
+  rowClues.forEach((clues, r) => solveLine(pins.length ? pinned[r] : blankRow, clues).forEach((v, c) => v !== -1 && (start[r][c] = true)));
+  colClues.forEach((clues, c) =>
+    solveLine(pins.length ? pinned.map((row) => row[c]) : blankCol, clues).forEach((v, r) => v !== -1 && (start[r][c] = true)),
+  );
   const startRatio = start.flat().filter(Boolean).length / (rows * cols);
 
   // Độ sâu: số vòng quét (mỗi vòng giải lại mọi hàng rồi mọi cột) tới khi xong.
-  const grid = solution.map((row) => row.map(() => -1));
+  const grid = pinned.map((row) => [...row]);
   let rounds = 0;
   for (let changed = true; changed; ) {
     changed = false;
@@ -54,10 +58,17 @@ const subjectOf = (title) => title.trim().toLowerCase();
  * Xếp màn từ dễ tới khó theo `score`, nhưng không để hai màn cùng chủ đề
  * (vd. "Skull" của hai bộ hình) cách nhau dưới [minGap] màn: tại mỗi vị trí
  * chọn màn dễ nhất trong [window] màn dễ nhất còn lại mà chưa trùng chủ đề.
+ * Các màn trong [pinnedFirst] (id) được đặt lên đầu, trước mọi màn khác.
  */
-export function orderLevels(items, { window = 4, minGap = 12 } = {}) {
+export function orderLevels(items, { window = 4, minGap = 12, pinnedFirst = [] } = {}) {
   const remaining = [...items].sort((a, b) => a.score - b.score || a.cells - b.cells);
+  // Màn chọn tay để mở đầu (theo id, đúng thứ tự trong danh sách).
   const ordered = [];
+  for (const id of pinnedFirst) {
+    const index = remaining.findIndex((it) => it.id === id);
+    if (index === -1) throw new Error(`Màn mở đầu "${id}" không có trong danh sách`);
+    ordered.push(remaining.splice(index, 1)[0]);
+  }
   while (remaining.length) {
     const recent = new Set(ordered.slice(-minGap).map((it) => subjectOf(it.title)));
     let index = remaining.slice(0, window).findIndex((it) => !recent.has(subjectOf(it.title)));

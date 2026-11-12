@@ -1,5 +1,26 @@
 [
  {
+  "id": "pixelarticons-sword",
+  "title": "Sword",
+  "set": "pixelarticons",
+  "icon": "sword",
+  "author": "Pixelarticons (Gerrit Halfmann)",
+  "license": "MIT",
+  "params": {
+   "cleanup": false,
+   "half": true,
+   "mode": "pixel",
+   "solid": false
+  },
+  "editedCells": 0,
+  "metrics": {
+   "cells": 50,
+   "startRatio": 0.26,
+   "rounds": 2,
+   "score": 0.3015170068027211
+  }
+ },
+ {
   "id": "pixelarticons-tree-pine",
   "title": "Pine Tree",
   "set": "pixelarticons",
@@ -425,27 +446,6 @@
   }
  },
  {
-  "id": "pixelarticons-sword",
-  "title": "Sword",
-  "set": "pixelarticons",
-  "icon": "sword",
-  "author": "Pixelarticons (Gerrit Halfmann)",
-  "license": "MIT",
-  "params": {
-   "cleanup": false,
-   "half": true,
-   "mode": "pixel",
-   "solid": false
-  },
-  "editedCells": 0,
-  "metrics": {
-   "cells": 50,
-   "startRatio": 0.26,
-   "rounds": 2,
-   "score": 0.3015170068027211
-  }
- },
- {
   "id": "pixelarticons-heart",
   "title": "Heart",
   "set": "pixelarticons",
@@ -747,6 +747,22 @@
    "startRatio": 0.6476190476190476,
    "rounds": 2,
    "score": 0.40921768707482986
+  }
+ },
+ {
+  "id": "nonogram-db-webpbn-1",
+  "title": "Dancer",
+  "set": "nonogram-db",
+  "author": "Jan Wolter",
+  "copyright": "© 2004 Jan Wolter",
+  "license": "CC-BY-3.0",
+  "url": "https://github.com/Sprunth/nonogram-db/blob/master/db/webpbn/1.non",
+  "catalogue": "webpbn #1",
+  "metrics": {
+   "cells": 50,
+   "startRatio": 0.14,
+   "rounds": 4,
+   "score": 0.4101836734693878
   }
  },
  {
@@ -2321,6 +2337,22 @@
   }
  },
  {
+  "id": "nonogram-db-webpbn-26167",
+  "title": "Bloop Bloop",
+  "set": "nonogram-db",
+  "author": "Michael Terry",
+  "copyright": "© 2015 Michael Terry",
+  "license": "CC-BY-SA-4.0",
+  "url": "https://github.com/Sprunth/nonogram-db/blob/master/db/webpbn/26167.non",
+  "catalogue": "webpbn #26167",
+  "metrics": {
+   "cells": 100,
+   "startRatio": 0.02,
+   "rounds": 7,
+   "score": 0.5981020408163265
+  }
+ },
+ {
   "id": "streamline-pixel-ecology-windmill-1",
   "title": "Windmill",
   "set": "streamline-pixel",
@@ -2587,6 +2619,22 @@
   }
  },
  {
+  "id": "nonogram-db-gnonograms-spade",
+  "title": "Spade",
+  "set": "nonogram-db",
+  "author": "Frederico Vera",
+  "copyright": "© 2010 Frederico Vera",
+  "license": "CC-BY-SA-4.0",
+  "url": "https://github.com/Sprunth/nonogram-db/blob/master/db/gnonograms/spade.non",
+  "catalogue": "gnonograms spade",
+  "metrics": {
+   "cells": 529,
+   "startRatio": 0.5085066162570888,
+   "rounds": 4,
+   "score": 0.7211043169630801
+  }
+ },
+ {
   "id": "pixelarticons-anchor",
   "title": "Anchor",
   "set": "pixelarticons",
@@ -2604,6 +2652,22 @@
    "startRatio": 0.11666666666666667,
    "rounds": 5,
    "score": 0.736377551020408
+  }
+ },
+ {
+  "id": "nonogram-db-webpbn-21",
+  "title": "Slippery Conditions",
+  "set": "nonogram-db",
+  "author": "Jan Wolter",
+  "copyright": "© 2004 Jan Wolter",
+  "license": "CC-BY-3.0",
+  "url": "https://github.com/Sprunth/nonogram-db/blob/master/db/webpbn/21.non",
+  "catalogue": "webpbn #21",
+  "metrics": {
+   "cells": 350,
+   "startRatio": 0.20285714285714285,
+   "rounds": 8,
+   "score": 0.7636938775510205
   }
  },
  {
@@ -2629,6 +2693,22 @@
   }
  },
  {
+  "id": "nonogram-db-webpbn-6",
+  "title": "Scaredy Cat",
+  "set": "nonogram-db",
+  "author": "Jan Wolter",
+  "copyright": "© 2004 Jan Wolter",
+  "license": "CC-BY-3.0",
+  "url": "https://github.com/Sprunth/nonogram-db/blob/master/db/webpbn/6.non",
+  "catalogue": "webpbn #6",
+  "metrics": {
+   "cells": 400,
+   "startRatio": 0.1575,
+   "rounds": 9,
+   "score": 0.8254872448979591
+  }
+ },
+ {
   "id": "streamline-pixel-food-drink-sushi",
   "title": "Sushi",
   "set": "streamline-pixel",
@@ -2650,6 +2730,22 @@
   }
  },
  {
+  "id": "nonogram-db-gnonograms-42",
+  "title": "42",
+  "set": "nonogram-db",
+  "author": "Frederico Vera",
+  "copyright": "© 2010 Frederico Vera",
+  "license": "CC-BY-SA-4.0",
+  "url": "https://github.com/Sprunth/nonogram-db/blob/master/db/gnonograms/42.non",
+  "catalogue": "gnonograms 42",
+  "metrics": {
+   "cells": 805,
+   "startRatio": 0.19627329192546583,
+   "rounds": 5,
+   "score": 0.8646376811594203
+  }
+ },
+ {
   "id": "streamline-pixel-real-estate-building-house",
   "title": "House",
   "set": "streamline-pixel",
@@ -2668,6 +2764,38 @@
    "startRatio": 0.13151927437641722,
    "rounds": 9,
    "score": 0.872233560090703
+  }
+ },
+ {
+  "id": "nonogram-db-webpbn-16",
+  "title": "Probably Not",
+  "set": "nonogram-db",
+  "author": "Jan Wolter",
+  "copyright": "© 2004 Jan Wolter",
+  "license": "CC-BY-3.0",
+  "url": "https://github.com/Sprunth/nonogram-db/blob/master/db/webpbn/16.non",
+  "catalogue": "webpbn #16",
+  "metrics": {
+   "cells": 1156,
+   "startRatio": 0.12110726643598616,
+   "rounds": 6,
+   "score": 0.9242791234140715
+  }
+ },
+ {
+  "id": "nonogram-db-webpbn-529",
+  "title": "Swing",
+  "set": "nonogram-db",
+  "author": "Jan Wolter",
+  "copyright": "© 2006 Jan Wolter",
+  "license": "CC-BY-3.0",
+  "url": "https://github.com/Sprunth/nonogram-db/blob/master/db/webpbn/529.non",
+  "catalogue": "webpbn #529",
+  "metrics": {
+   "cells": 2025,
+   "startRatio": 0.1654320987654321,
+   "rounds": 16,
+   "score": 0.9420987654320987
   }
  }
 ]
