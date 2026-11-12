@@ -164,7 +164,7 @@ thử nghiệm). iOS, web và test không có (`createAdService` trong
 | Loại | Khi nào |
 |---|---|
 | Có thưởng | Kho gợi ý / gậy phép hết: badge hiện icon quảng cáo, bấm là phát quảng cáo, xem xong dùng luôn một lượt (xem [docs/gameplay_rules.md](docs/gameplay_rules.md)) |
-| Xen kẽ | Bấm "Màn tiếp" / "Trang chính" ở màn hoàn thành, nếu đã qua 5 phút kể từ quảng cáo toàn màn hình trước đó (kể cả có thưởng), hoặc từ lúc mở app nếu chưa có quảng cáo nào (`lib/ads/interstitial_policy.dart`) |
+| Xen kẽ | Bấm "Màn tiếp" / "Trang chính" ở màn hoàn thành, nếu đã qua 5 phút kể từ quảng cáo xen kẽ trước đó (quảng cáo có thưởng không tính), hoặc từ lúc mở app nếu chưa có quảng cáo nào (`lib/ads/interstitial_policy.dart`) |
 
 - Khi mở app, SDK hỏi ý kiến đồng ý theo GDPR (UMP, chỉ ở vùng bắt buộc).
   Người dùng ở các vùng đó thấy thêm nút **Quyền riêng tư quảng cáo** trong

@@ -1,8 +1,8 @@
 /// Quyết định khi nào hiện quảng cáo xen kẽ lúc rời màn hoàn thành: chỉ theo
 /// thời gian, không đếm số màn.
 ///
-/// - Hiện khi đã qua [minInterval] kể từ quảng cáo toàn màn hình trước đó
-///   (kể cả quảng cáo có thưởng người chơi tự chọn xem).
+/// - Hiện khi đã qua [minInterval] kể từ quảng cáo xen kẽ trước đó. Quảng
+///   cáo có thưởng (người chơi tự chọn xem) không tính.
 /// - Chưa có quảng cáo nào thì tính từ lúc mở app, để người chơi không gặp
 ///   quảng cáo ngay khi vừa vào game.
 /// - Đến lúc mà quảng cáo chưa tải xong thì lần rời màn sau thử lại.
@@ -18,14 +18,14 @@ class InterstitialPolicy {
   final Duration minInterval;
   final DateTime Function() _clock;
 
-  /// Lúc mở app, hoặc lúc hiện quảng cáo toàn màn hình gần nhất.
+  /// Lúc mở app, hoặc lúc hiện quảng cáo xen kẽ gần nhất.
   late DateTime _since;
 
   /// Người chơi vừa rời màn hoàn thành: có nên hiện quảng cáo xen kẽ không.
   bool shouldShowOnLevelExit() => _clock().difference(_since) >= minInterval;
 
-  /// Ghi nhận vừa hiện một quảng cáo toàn màn hình (xen kẽ hoặc có thưởng).
-  void recordFullScreenAdShown() => _since = _clock();
+  /// Ghi nhận vừa hiện một quảng cáo xen kẽ.
+  void recordInterstitialShown() => _since = _clock();
 }
 
 /// Thông số của [InterstitialPolicy] (đọc được từ Remote Config).

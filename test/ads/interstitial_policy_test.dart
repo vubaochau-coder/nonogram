@@ -22,22 +22,13 @@ void main() {
   test('then one every 5 minutes, however many levels are solved', () {
     wait(5);
     expect(policy.shouldShowOnLevelExit(), isTrue);
-    policy.recordFullScreenAdShown();
+    policy.recordInterstitialShown();
 
     // Giải nhiều màn nhanh: không có quảng cáo cho tới khi đủ 5 phút.
     for (var i = 0; i < 10; i++) {
       expect(policy.shouldShowOnLevelExit(), isFalse);
     }
     wait(5);
-    expect(policy.shouldShowOnLevelExit(), isTrue);
-  });
-
-  test('a rewarded ad restarts the 5 minutes', () {
-    wait(4);
-    policy.recordFullScreenAdShown();
-    wait(4);
-    expect(policy.shouldShowOnLevelExit(), isFalse);
-    wait(1);
     expect(policy.shouldShowOnLevelExit(), isTrue);
   });
 
