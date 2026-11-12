@@ -1,3 +1,4 @@
+import 'package:nonogram/ads/ad_service.dart';
 import 'package:nonogram/models/nonogram_puzzle.dart';
 import 'package:nonogram/models/nonogram_board_snapshot.dart';
 import 'nonogram_play_state.dart';
@@ -121,6 +122,19 @@ class WandLineSelected extends NonogramPlayEvent {
   const WandLineSelected({
     required this.isRow,
     required this.index,
+    required this.offsetX,
+    required this.offsetY,
+  });
+}
+
+/// Người chơi xem xong quảng cáo có thưởng: cộng thêm lượt gợi ý / gậy phép.
+class RewardGranted extends NonogramPlayEvent {
+  final AdReward reward;
+  final double offsetX;
+  final double offsetY;
+
+  const RewardGranted({
+    required this.reward,
     required this.offsetX,
     required this.offsetY,
   });

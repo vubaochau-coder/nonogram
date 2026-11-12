@@ -3,6 +3,7 @@ import 'dart:ui' show Offset, Size;
 import 'package:flutter/painting.dart' show Axis;
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:bloc_concurrency/bloc_concurrency.dart';
+import 'package:nonogram/ads/ad_service.dart';
 import 'package:nonogram/core/app_bloc.dart';
 import 'package:nonogram/core/toast_utils.dart';
 import 'package:nonogram/models/nonogram_board_snapshot.dart';
@@ -73,6 +74,7 @@ class NonogramPlayBloc extends AppBloc<NonogramPlayEvent, NonogramPlayState> {
     on<HintRequested>(_onHintRequested, transformer: sequential());
     on<WandToggled>(_onWandToggled, transformer: sequential());
     on<WandLineSelected>(_onWandLineSelected, transformer: sequential());
+    on<RewardGranted>(_onRewardGranted, transformer: sequential());
 
     // --- Internal/Orchestration Events ---
     on<CurrentProgressSaveRequested>(
@@ -538,6 +540,29 @@ class NonogramPlayBloc extends AppBloc<NonogramPlayEvent, NonogramPlayState> {
       ),
     );
     add(const SolveCheckRequested());
+  }
+
+  /// Mỗi quảng cáo có thưởng cho thêm [rewardAmount] lượt.
+  static const int rewardAmount = 1;
+
+  _onRewardGranted(RewardGranted event, Emitter emit) {
+    if (state.isLoading || state.isSolved || state.puzzle == null) return;
+    final nextState = switch (event.reward) {
+      AdReward.hint => state.copyWith(
+        remainingHints: state.remainingHints + rewardAmount,
+      ),
+      AdReward.wand => state.copyWith(
+        remainingWands: state.remainingWands + rewardAmount,
+      ),
+    };
+    emit(nextState);
+    add(
+      CurrentProgressSaveRequested(
+        sourceState: nextState,
+        offsetX: event.offsetX,
+        offsetY: event.offsetY,
+      ),
+    );
   }
 
   _onHintRequested(HintRequested event, Emitter emit) {

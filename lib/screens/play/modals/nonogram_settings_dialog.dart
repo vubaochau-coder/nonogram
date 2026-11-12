@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:lucide_icons/lucide_icons.dart';
+import 'package:nonogram/ads/ad_scope.dart';
 import 'package:nonogram/core/context_ext.dart';
 import 'package:nonogram/core/play_mode.dart';
 import 'package:nonogram/screens/licenses/app_licenses_page.dart';
@@ -36,7 +37,8 @@ Future<void> showNonogramSettingsDialog(BuildContext context) async {
 enum _SettingsResult { showControlsGuide }
 
 /// Cài đặt khi đang chơi: giao diện sáng/tối, xem lại hướng dẫn thao tác,
-/// chơi lại màn từ đầu, giấy phép và (flavor `dev`) đổi chế độ chơi.
+/// chơi lại màn từ đầu, giấy phép, quyền riêng tư quảng cáo (khi bắt buộc)
+/// và (flavor `dev`) đổi chế độ chơi.
 class NonogramSettingsDialog extends StatelessWidget {
   const NonogramSettingsDialog({super.key});
 
@@ -153,6 +155,32 @@ class NonogramSettingsDialog extends StatelessWidget {
                 padding: const EdgeInsets.symmetric(vertical: 12),
               ),
             ),
+          ),
+          // Người dùng ở vùng áp dụng GDPR phải đổi lại được lựa chọn đồng ý.
+          ValueListenableBuilder<bool>(
+            valueListenable: context.ads.privacyOptionsRequired,
+            builder: (context, required, _) {
+              if (!required) return const SizedBox.shrink();
+              return Padding(
+                padding: const EdgeInsets.only(top: 10),
+                child: SizedBox(
+                  width: double.infinity,
+                  child: OutlinedButton.icon(
+                    key: const ValueKey('nonogram-ad-privacy'),
+                    onPressed: () {
+                      final ads = context.ads;
+                      Navigator.pop(context);
+                      ads.showPrivacyOptions();
+                    },
+                    icon: const Icon(LucideIcons.shieldCheck, size: 18),
+                    label: Text(l10n.settingsAdPrivacy),
+                    style: OutlinedButton.styleFrom(
+                      padding: const EdgeInsets.symmetric(vertical: 12),
+                    ),
+                  ),
+                ),
+              );
+            },
           ),
           if (switcher != null) ...[
             const SizedBox(height: 10),

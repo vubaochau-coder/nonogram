@@ -4,8 +4,9 @@
 
 
 **Nonopix** là game nonogram (tô ô theo gợi ý số để lộ ra hình) viết bằng
-Flutter, tách ra từ project Nexora. **Chạy offline hoàn toàn**: màn chơi đóng gói sẵn trong app,
-tiến độ lưu trên máy, không cần tài khoản hay mạng.
+Flutter, tách ra từ project Nexora. **Chơi được khi không có mạng**: màn chơi đóng gói sẵn trong app,
+tiến độ lưu trên máy, không cần tài khoản. Mạng chỉ dùng để tải quảng cáo
+(bản store trên Android, xem [Quảng cáo](#quảng-cáo-admob)).
 
 ## Chạy game
 
@@ -87,7 +88,8 @@ Nút gạt **Tô / X** trên thanh công cụ chọn việc một lần chạm s
 
 ```
 lib/
-  main.dart                  Khởi tạo Hive, repository, MaterialApp
+  main.dart                  Khởi tạo Hive, repository, quảng cáo, MaterialApp
+  ads/                       Quảng cáo AdMob (có thưởng + xen kẽ), tần suất, ID
   core/                      Theme (AppTheme + GameColors), điều hướng (AppRouteIntent), tiện ích
   data/
     nonogram_puzzle_source.dart   Đọc màn chơi từ assets/levels/
@@ -130,6 +132,36 @@ flutter test
 
 `test/data/level_assets_test.dart` kiểm tra toàn bộ dữ liệu trong
 `assets/levels/` (đủ level, đúng định dạng, mỗi màn có đúng một nghiệm).
+
+## Quảng cáo (AdMob)
+
+Chỉ **bản `store` trên Android** có quảng cáo; bản `dev`, iOS, web và test
+không có (`createAdService` trong `lib/main.dart`).
+
+| Loại | Khi nào |
+|---|---|
+| Có thưởng | Hết lượt gợi ý / gậy phép: nút vẫn bấm được (huy hiệu ▶), hỏi người chơi có muốn xem quảng cáo để nhận thêm 1 lượt không |
+| Xen kẽ | Bấm "Màn tiếp" / "Trang chính" ở màn hoàn thành. Hai màn đầu mỗi lần mở app không có; sau đó tối đa 1 lần / 3 màn và cách quảng cáo toàn màn hình trước đó ít nhất 3 phút (`lib/ads/interstitial_policy.dart`) |
+
+- Khi mở app, SDK hỏi ý kiến đồng ý theo GDPR (UMP, chỉ ở vùng bắt buộc).
+  Người dùng ở các vùng đó thấy thêm nút **Quyền riêng tư quảng cáo** trong
+  Cài đặt.
+- Không có mạng: game chạy bình thường, hộp thoại xem quảng cáo báo chưa tải
+  được và nút xem bị vô hiệu hoá cho tới khi tải xong.
+- **ID quảng cáo:** mặc định là ID thử nghiệm của Google (luôn hiện quảng cáo
+  mẫu, không ra tiền). Bản phát hành lấy ID thật từ Variables của repo:
+  `ADMOB_APP_ID` (`ca-app-pub-xxx~yyy`), `ADMOB_REWARDED_ID`,
+  `ADMOB_INTERSTITIAL_ID` (`ca-app-pub-xxx/zzz`); xem đầu
+  `.github/workflows/store_build.yml`. Build tay:
+
+  ```bash
+  ADMOB_APP_ID=ca-app-pub-xxx~yyy flutter build appbundle --release --flavor store \
+    --dart-define=ADMOB_REWARDED_ID=ca-app-pub-xxx/zzz \
+    --dart-define=ADMOB_INTERSTITIAL_ID=ca-app-pub-xxx/www
+  ```
+- Thử quảng cáo trên máy: `flutter run --flavor store` (dùng ID thử nghiệm).
+  **Đừng bấm vào quảng cáo thật của chính mình**, AdMob sẽ khoá tài khoản;
+  muốn thử với ID thật thì thêm máy vào mục thiết bị thử nghiệm trong AdMob.
 
 ## Phát hành (Firebase App Distribution)
 

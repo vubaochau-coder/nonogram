@@ -486,4 +486,29 @@ class AppLocalizationsEn extends AppLocalizations {
   String playModeProgress(int solved, int total) {
     return '$solved/$total solved';
   }
+
+  @override
+  String get adRewardHintTitle => 'Out of hints';
+
+  @override
+  String get adRewardWandTitle => 'Out of magic wands';
+
+  @override
+  String get adRewardMessage => 'Watch a short ad to get one more?';
+
+  @override
+  String get adRewardWatch => 'Watch ad';
+
+  @override
+  String get adRewardNotReady =>
+      'The ad isn\'t ready yet. Check your internet connection and try again in a moment.';
+
+  @override
+  String get adRewardHintGranted => '+1 hint';
+
+  @override
+  String get adRewardWandGranted => '+1 magic wand';
+
+  @override
+  String get settingsAdPrivacy => 'Ad privacy';
 }

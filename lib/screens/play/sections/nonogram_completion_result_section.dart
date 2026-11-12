@@ -12,11 +12,15 @@ class NonogramCompletionResultSection extends StatelessWidget {
   final Duration completionDuration;
   final VoidCallback onNextLevel;
 
+  /// Nút về trang chính; null thì chỉ đóng trang chơi.
+  final VoidCallback? onDashboard;
+
   const NonogramCompletionResultSection({
     super.key,
     required this.puzzle,
     required this.completionDuration,
     required this.onNextLevel,
+    this.onDashboard,
   });
 
   @override
@@ -31,7 +35,10 @@ class NonogramCompletionResultSection extends StatelessWidget {
           puzzle: puzzle,
           completionDuration: completionDuration,
         );
-        final actions = _Actions(onNextLevel: onNextLevel);
+        final actions = _Actions(
+          onNextLevel: onNextLevel,
+          onDashboard: onDashboard,
+        );
 
         if (isLandscape) {
           return Padding(
@@ -240,9 +247,10 @@ class _StatChip extends StatelessWidget {
 }
 
 class _Actions extends StatelessWidget {
-  const _Actions({required this.onNextLevel});
+  const _Actions({required this.onNextLevel, this.onDashboard});
 
   final VoidCallback onNextLevel;
+  final VoidCallback? onDashboard;
 
   @override
   Widget build(BuildContext context) {
@@ -251,7 +259,7 @@ class _Actions extends StatelessWidget {
       children: [
         Expanded(
           child: OutlinedButton(
-            onPressed: () => Navigator.of(context).maybePop(),
+            onPressed: onDashboard ?? () => Navigator.of(context).maybePop(),
             style: OutlinedButton.styleFrom(minimumSize: const Size(0, 52)),
             child: Text(l10n.nonogramPlayActionDashboard),
           ),

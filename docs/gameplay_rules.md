@@ -28,6 +28,7 @@ Tài liệu này chốt lại các rule vận hành hiện tại của Nonogram 
 - Mỗi màn có `3` lượt gợi ý.
 - `remainingHints` được lưu local trong snapshot.
 - `BoardReset` không reset quota hint.
+- Bản có quảng cáo: hết lượt gợi ý / gậy phép thì xem một quảng cáo có thưởng để nhận thêm `1` lượt (`RewardGranted`), lượt nhận được lưu vào snapshot như lượt thường.
 - Sang màn mới mà không có snapshot restore thì quota trở về `3`.
 - Hint v1 mở **cả line**:
   - `solution == 1 -> filled`

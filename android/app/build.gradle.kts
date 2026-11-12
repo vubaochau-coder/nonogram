@@ -38,6 +38,13 @@ android {
         targetSdk = flutter.targetSdkVersion
         versionCode = flutter.versionCode
         versionName = flutter.versionName
+
+        // AdMob App ID (dạng ca-app-pub-xxx~yyy). Bản phát hành truyền ID thật
+        // qua biến môi trường ADMOB_APP_ID; không có thì dùng App ID thử
+        // nghiệm của Google (chỉ hiện quảng cáo mẫu).
+        manifestPlaceholders["admobAppId"] =
+            System.getenv("ADMOB_APP_ID")?.takeIf { it.isNotBlank() }
+                ?: "ca-app-pub-3940256099942544~3347511713"
     }
 
     // Flavor: `dev` (bản thử nội bộ, mặc định trên GitHub Actions: có màn chọn chế

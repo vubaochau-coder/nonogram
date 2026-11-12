@@ -485,4 +485,30 @@ class AppLocalizationsVi extends AppLocalizations {
   String playModeProgress(int solved, int total) {
     return 'Đã giải $solved/$total màn';
   }
+
+  @override
+  String get adRewardHintTitle => 'Hết lượt gợi ý';
+
+  @override
+  String get adRewardWandTitle => 'Hết lượt gậy phép';
+
+  @override
+  String get adRewardMessage =>
+      'Xem một quảng cáo ngắn để nhận thêm một lượt nhé?';
+
+  @override
+  String get adRewardWatch => 'Xem quảng cáo';
+
+  @override
+  String get adRewardNotReady =>
+      'Quảng cáo chưa sẵn sàng. Hãy kiểm tra kết nối mạng rồi thử lại sau giây lát.';
+
+  @override
+  String get adRewardHintGranted => '+1 lượt gợi ý';
+
+  @override
+  String get adRewardWandGranted => '+1 lượt gậy phép';
+
+  @override
+  String get settingsAdPrivacy => 'Quyền riêng tư quảng cáo';
 }

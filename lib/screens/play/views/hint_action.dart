@@ -1,3 +1,5 @@
+import 'package:nonogram/ads/ad_scope.dart';
+import 'package:nonogram/ads/ad_service.dart';
 import 'package:nonogram/core/context_ext.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -7,6 +9,7 @@ import '../bloc/nonogram_play_event.dart';
 import '../bloc/nonogram_play_state.dart';
 import '../nonogram_transformation_controller_provider.dart';
 import '../widgets/overlay_button.dart';
+import 'rewarded_offer.dart';
 import 'wand_action.dart';
 
 class HintAction extends StatelessWidget {
@@ -24,12 +27,19 @@ class HintAction extends StatelessWidget {
               p.remainingHints != c.remainingHints || p.isSolved != c.isSolved,
       builder: (context, state) {
         final l10n = context.l10n;
+        // Hết lượt mà có quảng cáo: nút vẫn bấm được, để xem quảng cáo lấy
+        // thêm lượt.
+        final adOffer = state.remainingHints <= 0 && context.ads.isEnabled;
         final button = OverlayButton(
           icon: LucideIcons.lightbulb,
           label:
               compact ? null : l10n.nonogramPlayHintLabel(state.remainingHints),
-          enabled: state.remainingHints > 0 && !state.isSolved,
+          enabled: (state.remainingHints > 0 || adOffer) && !state.isSolved,
           onPressed: () {
+            if (adOffer) {
+              offerRewardedAd(context, AdReward.hint);
+              return;
+            }
             final controller = NonogramTransformationControllerProvider.of(
               context,
             );
@@ -39,7 +49,7 @@ class HintAction extends StatelessWidget {
             );
           },
         );
-        if (!compact) return button;
+        if (!compact && !adOffer) return button;
         return Stack(
           clipBehavior: Clip.none,
           children: [
@@ -51,6 +61,7 @@ class HintAction extends StatelessWidget {
                 child: CountBadge(
                   count: state.remainingHints,
                   active: state.remainingHints > 0,
+                  adOffer: adOffer,
                 ),
               ),
             ),

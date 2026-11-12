@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import 'package:nonogram/ads/ad_service.dart';
 import 'package:nonogram/models/nonogram_cell_state.dart';
 import 'package:nonogram/models/nonogram_completed_progress.dart';
 import 'package:nonogram/models/nonogram_interaction_mode.dart';
@@ -452,6 +453,43 @@ void main() {
         }
       }
       expect(filled, applied.cells.toSet());
+    });
+
+    test('RewardGranted adds a hint or a wand and saves it', () async {
+      bloc.add(
+        Started(
+          puzzle: dummyPuzzle,
+          snapshot: NonogramBoardSnapshot(
+            puzzleId: dummyPuzzle.id,
+            level: dummyPuzzle.level,
+            gridData: const [
+              [NonogramCellState.empty, NonogramCellState.empty],
+              [NonogramCellState.empty, NonogramCellState.empty],
+            ],
+            startTime: DateTime.now(),
+            interactionMode: NonogramInteractionMode.fill,
+            remainingHints: 0,
+            remainingWands: 0,
+          ),
+        ),
+      );
+      await bloc.stream.firstWhere((s) => s.puzzle != null);
+
+      bloc.add(
+        const RewardGranted(reward: AdReward.hint, offsetX: 0, offsetY: 0),
+      );
+      await bloc.stream.firstWhere((s) => s.remainingHints == 1);
+      expect(bloc.state.remainingWands, 0);
+
+      bloc.add(
+        const RewardGranted(reward: AdReward.wand, offsetX: 0, offsetY: 0),
+      );
+      await bloc.stream.firstWhere((s) => s.remainingWands == 1);
+      await Future.delayed(const Duration(milliseconds: 10));
+
+      final snapshot = await repository.getCurrentProgress();
+      expect(snapshot?.remainingHints, 1);
+      expect(snapshot?.remainingWands, 1);
     });
 
     test('HintRequested should be ignored when hints are 0', () async {

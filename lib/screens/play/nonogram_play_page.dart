@@ -1,3 +1,4 @@
+import 'package:nonogram/ads/ad_scope.dart';
 import 'package:nonogram/core/context_ext.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -226,8 +227,17 @@ class _NonogramCompletionView extends StatelessWidget {
         child: NonogramCompletionResultSection(
           puzzle: puzzle,
           completionDuration: duration,
-          onNextLevel: () {
-            context.read<NonogramPlayBloc>().add(const NextLevelRequested());
+          // Rời màn hoàn thành là lúc nghỉ tự nhiên: có thể hiện quảng cáo
+          // xen kẽ (đã giới hạn tần suất) trước khi đi tiếp.
+          onNextLevel: () async {
+            final bloc = context.read<NonogramPlayBloc>();
+            await context.ads.onLevelCompleteExit();
+            if (!bloc.isClosed) bloc.add(const NextLevelRequested());
+          },
+          onDashboard: () async {
+            final navigator = Navigator.of(context);
+            await context.ads.onLevelCompleteExit();
+            navigator.maybePop();
           },
         ),
       ),

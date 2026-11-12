@@ -5,6 +5,7 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:lucide_icons/lucide_icons.dart';
 import 'package:provider/provider.dart';
+import 'package:nonogram/ads/ad_service.dart';
 import 'package:nonogram/core/app_theme.dart';
 import 'package:nonogram/core/app_theme_mode.dart';
 import 'package:nonogram/core/onboarding_preferences.dart';
@@ -27,6 +28,7 @@ import 'package:nonogram/screens/play/sections/nonogram_board_viewport.dart';
 import 'package:nonogram/screens/play/views/wand_action.dart';
 import 'package:nonogram/screens/play/sections/nonogram_landscape_info_panel.dart';
 
+import '../mocks/fake_ad_service.dart';
 import '../mocks/fake_nonogram_local_service.dart';
 
 /// Một màn 40x40 hàng/cột xen kẽ (20 gợi ý mỗi hàng/cột), đủ lớn để phải
@@ -55,6 +57,7 @@ Future<void> _pumpPlay(
   Size size, {
   OnboardingPreferences? onboarding,
   PlayModeSwitcher? playModeSwitcher,
+  AdService? ads,
 }) async {
   tester.view.physicalSize = size;
   tester.view.devicePixelRatio = 1;
@@ -72,6 +75,7 @@ Future<void> _pumpPlay(
         ChangeNotifierProvider.value(value: AppThemeModeController.inMemory()),
         if (onboarding != null) Provider.value(value: onboarding),
         if (playModeSwitcher != null) Provider.value(value: playModeSwitcher),
+        if (ads != null) Provider<AdService>.value(value: ads),
       ],
       child: MaterialApp(
         theme: AppTheme.lightTheme,
@@ -424,6 +428,111 @@ void main() {
     await tester.pump(const Duration(milliseconds: 300));
     expect(_bloc(tester).state.isWandActive, isFalse);
     expect(_bloc(tester).state.remainingWands, 1);
+  });
+
+  /// Dùng hết lượt gậy phép (hiện đáp án hàng thứ 3).
+  Future<void> useUpWand(WidgetTester tester) async {
+    final bloc = _bloc(tester);
+    bloc.add(const WandToggled());
+    bloc.add(
+      const WandLineSelected(isRow: true, index: 2, offsetX: 0, offsetY: 0),
+    );
+    await tester.pump(const Duration(milliseconds: 400));
+    expect(bloc.state.remainingWands, 0);
+  }
+
+  testWidgets('without ads an empty wand stays disabled', (tester) async {
+    await _pumpPlay(tester, phone);
+    await useUpWand(tester);
+    await tester.tap(find.byKey(const ValueKey('nonogram-wand')));
+    await tester.pumpAndSettle();
+    expect(find.byKey(const ValueKey('nonogram-watch-ad')), findsNothing);
+    expect(_bloc(tester).state.isWandActive, isFalse);
+  });
+
+  testWidgets('empty wand offers a rewarded ad that adds a wand', (
+    tester,
+  ) async {
+    final ads = FakeAdService();
+    await _pumpPlay(tester, phone, ads: ads);
+    await useUpWand(tester);
+
+    await tester.tap(find.byKey(const ValueKey('nonogram-wand')));
+    await tester.pumpAndSettle();
+    await tester.tap(find.byKey(const ValueKey('nonogram-watch-ad')));
+    await tester.pumpAndSettle();
+
+    expect(ads.rewardedShown, 1);
+    expect(_bloc(tester).state.remainingWands, 1);
+    // Lượt mới dùng như bình thường.
+    await tester.tap(find.byKey(const ValueKey('nonogram-wand')));
+    await tester.pump();
+    expect(_bloc(tester).state.isWandActive, isTrue);
+  });
+
+  testWidgets('closing the ad early gives no reward', (tester) async {
+    final ads = FakeAdService(earnReward: false);
+    await _pumpPlay(tester, phone, ads: ads);
+    await useUpWand(tester);
+
+    await tester.tap(find.byKey(const ValueKey('nonogram-wand')));
+    await tester.pumpAndSettle();
+    await tester.tap(find.byKey(const ValueKey('nonogram-watch-ad')));
+    await tester.pumpAndSettle();
+    expect(ads.rewardedShown, 1);
+    expect(_bloc(tester).state.remainingWands, 0);
+  });
+
+  testWidgets('watch button waits until the ad has loaded', (tester) async {
+    final ads = FakeAdService(ready: false);
+    await _pumpPlay(tester, phone, ads: ads);
+    await useUpWand(tester);
+
+    await tester.tap(find.byKey(const ValueKey('nonogram-wand')));
+    await tester.pumpAndSettle();
+    final watch = find.byKey(const ValueKey('nonogram-watch-ad'));
+    expect(tester.widget<ButtonStyleButton>(watch).onPressed, isNull);
+
+    ads.ready = true;
+    await tester.pump();
+    expect(tester.widget<ButtonStyleButton>(watch).onPressed, isNotNull);
+  });
+
+  testWidgets('empty hint offers a rewarded ad that adds a hint', (
+    tester,
+  ) async {
+    final ads = FakeAdService();
+    await _pumpPlay(tester, phone, ads: ads);
+    final bloc = _bloc(tester);
+    for (var i = 0; i < 3; i++) {
+      bloc.add(const HintRequested(offsetX: 0, offsetY: 0));
+    }
+    await tester.pump(const Duration(milliseconds: 400));
+    expect(bloc.state.remainingHints, 0);
+
+    await tester.tap(find.byIcon(LucideIcons.lightbulb));
+    await tester.pumpAndSettle();
+    await tester.tap(find.byKey(const ValueKey('nonogram-watch-ad')));
+    await tester.pumpAndSettle();
+    expect(bloc.state.remainingHints, 1);
+  });
+
+  testWidgets('settings show ad privacy only when it is required', (
+    tester,
+  ) async {
+    final ads = FakeAdService();
+    await _pumpPlay(tester, phone, ads: ads);
+    await tester.tap(find.byIcon(LucideIcons.settings));
+    await tester.pumpAndSettle();
+    final privacy = find.byKey(const ValueKey('nonogram-ad-privacy'));
+    expect(privacy, findsNothing);
+
+    ads.privacyRequired = true;
+    await tester.pump();
+    await tester.ensureVisible(privacy);
+    await tester.tap(privacy);
+    await tester.pumpAndSettle();
+    expect(ads.privacyShown, 1);
   });
 
   testWidgets('first game shows the controls guide once, scroll tip included', (

@@ -6,6 +6,10 @@
 	<true/>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>$(DEVELOPMENT_LANGUAGE)</string>
+	<key>GADApplicationIdentifier</key>
+	<!-- App ID thử nghiệm của Google: iOS chưa bật quảng cáo, nhưng SDK vẫn
+	     được liên kết và cần khoá này để app không crash khi mở. -->
+	<string>ca-app-pub-3940256099942544~1458002511</string>
 	<key>CFBundleDisplayName</key>
 	<string>Nonopix</string>
 	<key>CFBundleExecutable</key>

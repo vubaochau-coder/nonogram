@@ -25,6 +25,12 @@
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
+        <!-- AdMob App ID: lấy từ biến môi trường ADMOB_APP_ID lúc build, mặc
+             định là App ID thử nghiệm của Google (xem app/build.gradle.kts).
+             Thiếu dòng này thì SDK quảng cáo làm app crash ngay khi mở. -->
+        <meta-data
+            android:name="com.google.android.gms.ads.APPLICATION_ID"
+            android:value="${admobAppId}" />
         <!-- Don't delete the meta-data below.
              This is used by the Flutter tool to generate GeneratedPluginRegistrant.java -->
         <meta-data

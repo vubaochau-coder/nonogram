@@ -901,6 +901,54 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'{solved}/{total} solved'**
   String playModeProgress(int solved, int total);
+
+  /// No description provided for @adRewardHintTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Out of hints'**
+  String get adRewardHintTitle;
+
+  /// No description provided for @adRewardWandTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Out of magic wands'**
+  String get adRewardWandTitle;
+
+  /// No description provided for @adRewardMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Watch a short ad to get one more?'**
+  String get adRewardMessage;
+
+  /// No description provided for @adRewardWatch.
+  ///
+  /// In en, this message translates to:
+  /// **'Watch ad'**
+  String get adRewardWatch;
+
+  /// No description provided for @adRewardNotReady.
+  ///
+  /// In en, this message translates to:
+  /// **'The ad isn\'t ready yet. Check your internet connection and try again in a moment.'**
+  String get adRewardNotReady;
+
+  /// No description provided for @adRewardHintGranted.
+  ///
+  /// In en, this message translates to:
+  /// **'+1 hint'**
+  String get adRewardHintGranted;
+
+  /// No description provided for @adRewardWandGranted.
+  ///
+  /// In en, this message translates to:
+  /// **'+1 magic wand'**
+  String get adRewardWandGranted;
+
+  /// No description provided for @settingsAdPrivacy.
+  ///
+  /// In en, this message translates to:
+  /// **'Ad privacy'**
+  String get settingsAdPrivacy;
 }
 
 class _AppLocalizationsDelegate
