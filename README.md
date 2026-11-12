@@ -174,20 +174,19 @@ Game ──AdPlacement──▶ AdService (ad_service.dart)
   nối Firebase Analytics / AppsFlyer bằng một sink mới.
 - **Cấu hình** (`AdConfig`, `InterstitialPolicyConfig`) tách khỏi code, sẵn
   sàng đọc từ Remote Config.
-- **ID quảng cáo:** mặc định là ID thử nghiệm của Google (luôn hiện quảng cáo
-  mẫu, không ra tiền). Bản phát hành lấy ID thật từ Variables của repo:
-  `ADMOB_APP_ID` (`ca-app-pub-xxx~yyy`), `ADMOB_REWARDED_ID`,
-  `ADMOB_INTERSTITIAL_ID` (`ca-app-pub-xxx/zzz`); xem đầu
-  `.github/workflows/store_build.yml`. Build tay:
+- **ID quảng cáo:** bản `store` dùng ID thật của Nonopix, bản `dev` dùng ID
+  thử nghiệm của Google (luôn hiện quảng cáo mẫu, không ra tiền). ID đơn vị
+  quảng cáo ở `lib/ads/ad_config.dart`, App ID ở `android/app/build.gradle.kts`
+  (theo flavor).
+- Thử quảng cáo trên máy: `flutter run --flavor dev`. Chạy `--flavor store`
+  là **quảng cáo thật**: đừng bấm vào, AdMob sẽ khoá tài khoản vì lượt bấm
+  không hợp lệ; muốn thử bản store thì thêm máy vào **Cài đặt → Thiết bị thử
+  nghiệm** trong AdMob trước.
 
-  ```bash
-  ADMOB_APP_ID=ca-app-pub-xxx~yyy flutter build appbundle --release --flavor store \
-    --dart-define=ADMOB_REWARDED_ID=ca-app-pub-xxx/zzz \
-    --dart-define=ADMOB_INTERSTITIAL_ID=ca-app-pub-xxx/www
-  ```
-- Thử quảng cáo trên máy: `flutter run --flavor store` (dùng ID thử nghiệm).
-  **Đừng bấm vào quảng cáo thật của chính mình**, AdMob sẽ khoá tài khoản;
-  muốn thử với ID thật thì thêm máy vào mục thiết bị thử nghiệm trong AdMob.
+- **Privacy policy:** `docs/privacy/index.html`, đăng bằng GitHub Pages tại
+  https://vubaochau-coder.github.io/nonogram/privacy/ (Settings → Pages →
+  Deploy from a branch → `main` / `/docs`). Dùng URL này cho Play Console và
+  thông báo GDPR trên AdMob. Thêm SDK / dữ liệu mới thì cập nhật trang này.
 
 ## Đánh giá app
 

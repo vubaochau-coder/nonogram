@@ -47,13 +47,12 @@ Future<void> main() async {
   await launcher.launch();
 }
 
-/// Quảng cáo AdMob chỉ có trên Android (chưa cấu hình cho iOS). Bản `dev`
-/// luôn dùng ID thử nghiệm (không truyền ID thật khi build), để thử được
-/// luồng xem quảng cáo nhận lượt.
+/// Quảng cáo AdMob chỉ có trên Android (chưa cấu hình cho iOS). Bản `store`
+/// dùng ID thật, bản `dev` dùng ID thử nghiệm (xem [AdConfig.forFlavor]).
 AdService createAdService(AppFlavor flavor) {
   final android = !kIsWeb && defaultTargetPlatform == TargetPlatform.android;
   if (!android) return NoAdService();
-  return AdManager(network: AdMobNetwork(), config: AdConfig.fromEnvironment());
+  return AdManager(network: AdMobNetwork(), config: AdConfig.forFlavor(flavor));
 }
 
 /// Khởi động app: flavor `dev` hiện màn chọn chế độ chơi trước, flavor

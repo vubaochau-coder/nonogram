@@ -7,12 +7,6 @@ name: Store build
 # Dùng chung các secret ký app với workflow Distribute:
 #   ANDROID_KEYSTORE_BASE64, ANDROID_KEYSTORE_PASSWORD, ANDROID_KEY_ALIAS,
 #   ANDROID_KEY_PASSWORD
-#
-# ID quảng cáo AdMob lấy từ Variables của repo (Settings → Secrets and
-# variables → Actions → tab Variables; không phải bí mật nên không cần dùng
-# secret): ADMOB_APP_ID, ADMOB_REWARDED_ID, ADMOB_INTERSTITIAL_ID. Thiếu thì
-# bản build dùng ID thử nghiệm của Google (chỉ hiện quảng cáo mẫu, không ra
-# tiền) và có cảnh báo trong lần chạy.
 on:
   workflow_dispatch:
     inputs:
@@ -76,29 +70,7 @@ jobs:
             ''|*[!0-9]*) echo "::error::Số build phải là số nguyên dương"; exit 1 ;;
           esac
 
-      - name: Check AdMob IDs
-        env:
-          ADMOB_APP_ID: ${{ vars.ADMOB_APP_ID }}
-          ADMOB_REWARDED_ID: ${{ vars.ADMOB_REWARDED_ID }}
-          ADMOB_INTERSTITIAL_ID: ${{ vars.ADMOB_INTERSTITIAL_ID }}
-        run: |
-          for name in ADMOB_APP_ID ADMOB_REWARDED_ID ADMOB_INTERSTITIAL_ID; do
-            if [ -z "${!name}" ]; then
-              echo "::warning::Chưa đặt variable $name: bản build dùng quảng cáo thử nghiệm, không ra tiền"
-            fi
-          done
-
-      - name: Build app bundle
-        env:
-          ADMOB_APP_ID: ${{ vars.ADMOB_APP_ID }}
-          ADMOB_REWARDED_ID: ${{ vars.ADMOB_REWARDED_ID }}
-          ADMOB_INTERSTITIAL_ID: ${{ vars.ADMOB_INTERSTITIAL_ID }}
-        run: |
-          args=()
-          [ -n "$ADMOB_REWARDED_ID" ] && args+=("--dart-define=ADMOB_REWARDED_ID=$ADMOB_REWARDED_ID")
-          [ -n "$ADMOB_INTERSTITIAL_ID" ] && args+=("--dart-define=ADMOB_INTERSTITIAL_ID=$ADMOB_INTERSTITIAL_ID")
-          flutter build appbundle --release --flavor store \
-            --build-number=${{ github.event.inputs.build_number }} "${args[@]}"
+      - run: flutter build appbundle --release --flavor store --build-number=${{ github.event.inputs.build_number }}
 
       # Bộ màn của chế độ nhà phát triển (lấy từ nonogram.org) không được có
       # trong bản store.

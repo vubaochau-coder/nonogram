@@ -1,3 +1,5 @@
+import 'package:nonogram/core/app_flavor.dart';
+
 import 'ad_placement.dart';
 import 'interstitial_policy.dart';
 
@@ -15,31 +17,36 @@ class AdConfig {
 
   final InterstitialPolicyConfig interstitial;
 
-  /// ID truyền lúc build (`--dart-define`), mặc định là ID thử nghiệm.
-  factory AdConfig.fromEnvironment() => const AdConfig(
-    unitIds: {
-      AdFormat.rewarded: String.fromEnvironment(
-        'ADMOB_REWARDED_ID',
-        defaultValue: AdMobTestIds.rewarded,
-      ),
-      AdFormat.interstitial: String.fromEnvironment(
-        'ADMOB_INTERSTITIAL_ID',
-        defaultValue: AdMobTestIds.interstitial,
-      ),
+  /// Bản `store` dùng ID thật của Nonopix; bản `dev` dùng ID thử nghiệm của
+  /// Google, để người thử nội bộ không bấm nhầm vào quảng cáo thật (AdMob có
+  /// thể khoá tài khoản vì lượt bấm không hợp lệ).
+  factory AdConfig.forFlavor(AppFlavor flavor) => AdConfig(
+    unitIds: switch (flavor) {
+      AppFlavor.store => const {
+        AdFormat.rewarded: NonopixAdMobIds.rewarded,
+        AdFormat.interstitial: NonopixAdMobIds.interstitial,
+      },
+      AppFlavor.dev => const {
+        AdFormat.rewarded: AdMobTestIds.rewarded,
+        AdFormat.interstitial: AdMobTestIds.interstitial,
+      },
     },
   );
 }
 
+/// ID đơn vị quảng cáo thật của Nonopix trên AdMob (không phải bí mật: chúng
+/// nằm sẵn trong APK). App ID tương ứng nằm trong android/app/build.gradle.kts.
+class NonopixAdMobIds {
+  NonopixAdMobIds._();
+
+  /// Đơn vị "power_up_refill" (Quảng cáo có tặng thưởng).
+  static const rewarded = 'ca-app-pub-8391885617554349/6022270752';
+
+  /// Đơn vị "level_complete" (Trung gian).
+  static const interstitial = 'ca-app-pub-8391885617554349/6489349626';
+}
+
 /// ID thử nghiệm của Google: luôn hiện quảng cáo mẫu, không tính tiền.
-///
-/// Bản phát hành truyền ID thật lúc build:
-///
-/// ```bash
-/// ADMOB_APP_ID=ca-app-pub-xxx~yyy flutter build appbundle --release \
-///   --flavor store \
-///   --dart-define=ADMOB_REWARDED_ID=ca-app-pub-xxx/zzz \
-///   --dart-define=ADMOB_INTERSTITIAL_ID=ca-app-pub-xxx/www
-/// ```
 class AdMobTestIds {
   AdMobTestIds._();
 
