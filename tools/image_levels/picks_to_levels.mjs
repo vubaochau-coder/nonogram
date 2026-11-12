@@ -34,14 +34,19 @@ const docs = fs.statSync(input).isDirectory()
       .filter((f) => String(f).endsWith('.json'))
       .map((f) => JSON.parse(fs.readFileSync(path.join(input, String(f)), 'utf8')))
   : JSON.parse(fs.readFileSync(input, 'utf8'));
-const decided = docs.map((doc) => doc.data ?? doc);
 // Icon tự chấp nhận trong dữ liệu trang chọn màn (out/picker_icons.json, trường
 // `auto`) được tính là đã chọn, trừ khi người duyệt đã lưu quyết định khác.
+// Quyết định lưu trước `resetBefore` của icon (màn đã đưa về bản gốc) bị bỏ qua.
 const pickerFile = path.join(here, 'out', 'picker_icons.json');
+const pickerIcons = fs.existsSync(pickerFile) ? JSON.parse(fs.readFileSync(pickerFile, 'utf8')).icons : [];
+const resetBefore = new Map(pickerIcons.filter((ic) => ic.resetBefore).map((ic) => [ic.key, ic.resetBefore]));
+const decided = docs
+  .map((doc) => doc.data ?? doc)
+  .filter((p) => !resetBefore.has(p.key) || (p.updatedAt ?? '') >= resetBefore.get(p.key));
 const decidedKeys = new Set(decided.map((p) => p.key));
-const autoPicks = fs.existsSync(pickerFile)
-  ? JSON.parse(fs.readFileSync(pickerFile, 'utf8'))
-      .icons.filter((ic) => ic.auto && !decidedKeys.has(ic.key))
+const autoPicks = pickerIcons.length
+  ? pickerIcons
+      .filter((ic) => ic.auto && !decidedKeys.has(ic.key))
       .map((ic) => ({ key: ic.key, set: ic.set, icon: ic.icon, title: ic.title, author: ic.author, license: ic.license, status: 'picked', ...ic.auto, edits: [] }))
   : [];
 const picks = [...decided, ...autoPicks].filter((p) => p.status === 'picked');

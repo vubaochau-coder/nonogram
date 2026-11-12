@@ -437,7 +437,13 @@ const autoDecision = (key) => {
   const ic = iconByKey.get(key);
   return ic?.auto ? { status: 'picked', params: ic.auto.params, edits: [], title: ic.title, auto: true } : undefined;
 };
-const decisionOf = (key) => picks.get(key) ?? autoDecision(key);
+// icon.resetBefore: quyết định lưu trước thời điểm này bị bỏ qua (màn đã được đưa về bản gốc).
+const savedDecision = (key) => {
+  const doc = picks.get(key);
+  const reset = iconByKey.get(key)?.resetBefore;
+  return doc && reset && (doc.updatedAt ?? '') < reset ? undefined : doc;
+};
+const decisionOf = (key) => savedDecision(key) ?? autoDecision(key);
 const statusOf = (key) => decisionOf(key)?.status ?? 'todo';
 
 function suggestedParams(icon, entry) {

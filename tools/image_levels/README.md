@@ -95,6 +95,11 @@ Tux (chim cánh cụt Linux) là ngoại lệ trong nhóm logo: Larry Ewing cho 
 và sửa hình với điều kiện ghi công "Larry Ewing (lewing@isc.tamu.edu) and The
 GIMP". Nếu chọn màn Tux, phải thêm ghi công này vào trang Giấy phép.
 
+Các màn đã chọn từ Pixelarticons và Streamline Pixel được đưa về bản gốc bằng
+`import_iconify_pixel.mjs`: bỏ mọi chỉnh sửa cũ, tự chấp nhận màn thu nhỏ ½
+trọn vẹn và giải được bằng suy luận (8/121 màn), các màn còn lại vào nhóm chờ
+duyệt trên trang. Quyết định cũ của chúng bị bỏ qua nhờ trường `resetBefore`.
+
 Duyệt xong, xuất các bản ghi `picks` thành file JSON rồi chạy:
 
 ```bash
