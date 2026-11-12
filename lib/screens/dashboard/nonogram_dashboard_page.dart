@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:lucide_icons/lucide_icons.dart';
+import 'package:nonogram/core/app_locale.dart';
 import 'package:nonogram/core/app_route_intent.dart';
 import 'package:nonogram/core/app_theme_mode.dart';
 import 'package:nonogram/core/context_ext.dart';
+import 'package:nonogram/widgets/app_language_selector.dart';
 
 import 'bloc/nonogram_dashboard_bloc.dart';
 import 'bloc/nonogram_dashboard_event.dart';
@@ -94,6 +96,13 @@ class _NonogramDashboardViewState extends State<_NonogramDashboardView> {
                   ),
                   tooltip: context.l10n.appThemeTitle,
                 ),
+                if (_localeController(context) case final controller?)
+                  IconButton(
+                    key: const ValueKey('dashboard-language'),
+                    onPressed: () => showAppLanguageDialog(context, controller),
+                    icon: const Icon(LucideIcons.globe),
+                    tooltip: context.l10n.settingsLanguage,
+                  ),
                 IconButton(
                   onPressed:
                       () => context.navigate(const NonogramGuideIntent()),
@@ -119,5 +128,14 @@ class _NonogramDashboardViewState extends State<_NonogramDashboardView> {
         ),
       ),
     );
+  }
+}
+
+/// Null trong test dựng trang chính mà không cấp [AppLocaleController].
+AppLocaleController? _localeController(BuildContext context) {
+  try {
+    return context.read<AppLocaleController>();
+  } on ProviderNotFoundException {
+    return null;
   }
 }

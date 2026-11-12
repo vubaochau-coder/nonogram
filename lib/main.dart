@@ -13,6 +13,7 @@ import 'ads/ad_service.dart';
 import 'ads/network/admob/admob_network.dart';
 import 'core/app_flavor.dart';
 import 'core/app_licenses.dart';
+import 'core/app_locale.dart';
 import 'core/app_navigator.dart';
 import 'core/app_theme.dart';
 import 'core/app_theme_mode.dart';
@@ -41,6 +42,7 @@ Future<void> main() async {
             ? await AppRatingController.load()
             : null,
     themeMode: await AppThemeModeController.load(),
+    locale: await AppLocaleController.load(),
     onboarding: await OnboardingPreferences.load(),
     playModes: await PlayModePreferences.load(),
   );
@@ -63,6 +65,7 @@ class AppLauncher {
     required this.adService,
     this.rating,
     required this.themeMode,
+    required this.locale,
     required this.onboarding,
     required this.playModes,
   });
@@ -71,6 +74,7 @@ class AppLauncher {
   final AdService adService;
   final AppRatingController? rating;
   final AppThemeModeController themeMode;
+  final AppLocaleController locale;
   final OnboardingPreferences onboarding;
   final PlayModePreferences playModes;
 
@@ -86,6 +90,7 @@ class AppLauncher {
     runApp(
       PlayModeSelectionApp(
         themeMode: themeMode,
+        locale: locale,
         lastMode: playModes.lastMode,
         loadStats: loadPlayModeStats,
         onSelected: (mode) async {
@@ -117,6 +122,7 @@ class AppLauncher {
       NonogramApp(
         repository: repository,
         themeMode: themeMode,
+        locale: locale,
         adService: adService,
         rating: rating,
         onboarding: onboarding,
@@ -156,27 +162,29 @@ class AppLauncher {
 class _AppMaterial extends StatelessWidget {
   const _AppMaterial({
     required this.themeMode,
+    required this.locale,
     required this.home,
     this.navigatorKey,
   });
 
   final AppThemeModeController themeMode;
+  final AppLocaleController locale;
   final Widget home;
   final GlobalKey<NavigatorState>? navigatorKey;
 
   @override
   Widget build(BuildContext context) {
-    return ValueListenableBuilder<ThemeMode>(
-      valueListenable: themeMode,
+    return ListenableBuilder(
+      listenable: Listenable.merge([themeMode, locale]),
       builder:
-          (context, mode, _) => MaterialApp(
+          (context, _) => MaterialApp(
             navigatorKey: navigatorKey,
             onGenerateTitle:
                 (context) => AppLocalizations.of(context)!.appTitle,
             debugShowCheckedModeBanner: false,
             theme: AppTheme.lightTheme,
             darkTheme: AppTheme.darkTheme,
-            themeMode: mode,
+            themeMode: themeMode.value,
             localizationsDelegates: const [
               AppLocalizations.delegate,
               GlobalMaterialLocalizations.delegate,
@@ -184,6 +192,9 @@ class _AppMaterial extends StatelessWidget {
               GlobalCupertinoLocalizations.delegate,
             ],
             supportedLocales: AppLocalizations.supportedLocales,
+            // null = theo ngôn ngữ của máy (chọn bằng resolveAppLocale).
+            locale: locale.value,
+            localeListResolutionCallback: resolveAppLocale,
             home: home,
           ),
     );
@@ -195,12 +206,14 @@ class PlayModeSelectionApp extends StatelessWidget {
   const PlayModeSelectionApp({
     super.key,
     required this.themeMode,
+    required this.locale,
     required this.onSelected,
     required this.loadStats,
     this.lastMode,
   });
 
   final AppThemeModeController themeMode;
+  final AppLocaleController locale;
   final ValueChanged<PlayMode> onSelected;
   final PlayModeStatsLoader loadStats;
   final PlayMode? lastMode;
@@ -209,6 +222,7 @@ class PlayModeSelectionApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return _AppMaterial(
       themeMode: themeMode,
+      locale: locale,
       home: PlayModeSelectionPage(
         onSelected: onSelected,
         loadStats: loadStats,
@@ -223,6 +237,7 @@ class NonogramApp extends StatelessWidget {
     super.key,
     required this.repository,
     required this.themeMode,
+    required this.locale,
     this.adService,
     this.rating,
     this.onboarding,
@@ -232,6 +247,7 @@ class NonogramApp extends StatelessWidget {
 
   final NonogramRepository repository;
   final AppThemeModeController themeMode;
+  final AppLocaleController locale;
 
   /// Null trong test: không có quảng cáo.
   final AdService? adService;
@@ -254,6 +270,7 @@ class NonogramApp extends StatelessWidget {
         // ValueNotifier: phải dùng ChangeNotifierProvider, Provider thường
         // báo lỗi (assert) ngay khi khởi động ở bản debug.
         ChangeNotifierProvider.value(value: themeMode),
+        ChangeNotifierProvider.value(value: locale),
         Provider<AdService>.value(value: adService ?? NoAdService()),
         if (rating != null) Provider.value(value: rating!),
         if (onboarding != null) Provider.value(value: onboarding!),
@@ -262,6 +279,7 @@ class NonogramApp extends StatelessWidget {
       child: ToastificationWrapper(
         child: _AppMaterial(
           themeMode: themeMode,
+          locale: locale,
           navigatorKey: AppNavigator.navigatorKey,
           home: NonogramDashboardPage(showTutorialOnStart: showTutorialOnStart),
         ),

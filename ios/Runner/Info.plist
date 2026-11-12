@@ -6,6 +6,26 @@
 	<true/>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>$(DEVELOPMENT_LANGUAGE)</string>
+	<!-- Ngôn ngữ giao diện có trong app (lib/l10n/*.arb); thiếu thì iOS và
+	     App Store coi app chỉ có tiếng Anh. -->
+	<key>CFBundleLocalizations</key>
+	<array>
+		<string>en</string>
+		<string>vi</string>
+		<string>es</string>
+		<string>pt</string>
+		<string>fr</string>
+		<string>de</string>
+		<string>it</string>
+		<string>ru</string>
+		<string>tr</string>
+		<string>id</string>
+		<string>th</string>
+		<string>ja</string>
+		<string>ko</string>
+		<string>zh-Hans</string>
+		<string>zh-Hant</string>
+	</array>
 	<key>GADApplicationIdentifier</key>
 	<!-- App ID thử nghiệm của Google: iOS chưa bật quảng cáo, nhưng SDK vẫn
 	     được liên kết và cần khoá này để app không crash khi mở. -->

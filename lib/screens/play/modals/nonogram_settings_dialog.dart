@@ -2,9 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:lucide_icons/lucide_icons.dart';
 import 'package:nonogram/ads/ad_scope.dart';
+import 'package:nonogram/core/app_locale.dart';
 import 'package:nonogram/core/context_ext.dart';
 import 'package:nonogram/core/play_mode.dart';
 import 'package:nonogram/screens/licenses/app_licenses_page.dart';
+import 'package:nonogram/widgets/app_language_selector.dart';
 import 'package:nonogram/widgets/app_theme_mode_selector.dart';
 import 'package:nonogram/widgets/dialogs/app_dialog.dart';
 
@@ -36,7 +38,7 @@ Future<void> showNonogramSettingsDialog(BuildContext context) async {
 
 enum _SettingsResult { showControlsGuide }
 
-/// Cài đặt khi đang chơi: giao diện sáng/tối, xem lại hướng dẫn thao tác,
+/// Cài đặt khi đang chơi: giao diện sáng/tối, ngôn ngữ, xem lại hướng dẫn thao tác,
 /// chơi lại màn từ đầu, giấy phép, quyền riêng tư quảng cáo (khi bắt buộc)
 /// và (flavor `dev`) đổi chế độ chơi.
 class NonogramSettingsDialog extends StatelessWidget {
@@ -82,6 +84,15 @@ class NonogramSettingsDialog extends StatelessWidget {
     Navigator.pop(context);
   }
 
+  bool _hasLocaleController(BuildContext context) {
+    try {
+      context.read<AppLocaleController>();
+      return true;
+    } on ProviderNotFoundException {
+      return false;
+    }
+  }
+
   PlayModeSwitcher? _playModeSwitcher(BuildContext context) {
     try {
       return context.read<PlayModeSwitcher>();
@@ -109,6 +120,11 @@ class NonogramSettingsDialog extends StatelessWidget {
           const SizedBox(height: 10),
           const AppThemeModeSelector(),
           const SizedBox(height: 20),
+          // Không có trong test dựng trang chơi mà không cấp AppLocaleController.
+          if (_hasLocaleController(context)) ...[
+            const AppLanguageSelector(),
+            const SizedBox(height: 10),
+          ],
           SizedBox(
             width: double.infinity,
             child: OutlinedButton.icon(
