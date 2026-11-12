@@ -77,7 +77,7 @@ void main() {
     network: network,
     config: AdConfig.forFlavor(AppFlavor.dev),
     policy: InterstitialPolicy(
-      config: const InterstitialPolicyConfig(graceLevels: 0, everyLevels: 1),
+      config: const InterstitialPolicyConfig(),
       clock: () => now,
     ),
   );

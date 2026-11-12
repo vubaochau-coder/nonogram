@@ -3,55 +3,47 @@ import 'package:nonogram/ads/interstitial_policy.dart';
 
 void main() {
   late DateTime now;
-  InterstitialPolicy policy() => InterstitialPolicy(clock: () => now);
+  late InterstitialPolicy policy;
 
-  setUp(() => now = DateTime(2026, 1, 1, 12));
-
-  test('no interstitial during the first levels of a session', () {
-    final p = policy();
-    expect(p.recordLevelCompleted(), isFalse);
-    expect(p.recordLevelCompleted(), isFalse);
-    // Màn thứ 3: đã qua 2 màn miễn và đủ 3 màn.
-    expect(p.recordLevelCompleted(), isTrue);
+  setUp(() {
+    now = DateTime(2026, 1, 1, 12);
+    policy = InterstitialPolicy(clock: () => now);
   });
 
-  test('then at most one every 3 levels', () {
-    final p = policy();
-    for (var i = 0; i < 2; i++) {
-      p.recordLevelCompleted();
-    }
-    expect(p.recordLevelCompleted(), isTrue);
-    p.recordFullScreenAdShown();
+  void wait(int minutes) => now = now.add(Duration(minutes: minutes));
 
-    now = now.add(const Duration(minutes: 10));
-    expect(p.recordLevelCompleted(), isFalse);
-    expect(p.recordLevelCompleted(), isFalse);
-    expect(p.recordLevelCompleted(), isTrue);
+  test('no interstitial in the first 5 minutes after opening the app', () {
+    wait(4);
+    expect(policy.shouldShowOnLevelExit(), isFalse);
+    wait(1);
+    expect(policy.shouldShowOnLevelExit(), isTrue);
   });
 
-  test('waits at least 3 minutes after any full-screen ad', () {
-    final p = policy();
-    for (var i = 0; i < 2; i++) {
-      p.recordLevelCompleted();
+  test('then one every 5 minutes, however many levels are solved', () {
+    wait(5);
+    expect(policy.shouldShowOnLevelExit(), isTrue);
+    policy.recordFullScreenAdShown();
+
+    // Giải nhiều màn nhanh: không có quảng cáo cho tới khi đủ 5 phút.
+    for (var i = 0; i < 10; i++) {
+      expect(policy.shouldShowOnLevelExit(), isFalse);
     }
-    // Người chơi vừa xem quảng cáo có thưởng.
-    p.recordFullScreenAdShown();
-    for (var i = 0; i < 2; i++) {
-      expect(p.recordLevelCompleted(), isFalse);
-    }
-    now = now.add(const Duration(minutes: 1));
-    expect(p.recordLevelCompleted(), isFalse);
-    now = now.add(const Duration(minutes: 2));
-    expect(p.recordLevelCompleted(), isTrue);
+    wait(5);
+    expect(policy.shouldShowOnLevelExit(), isTrue);
   });
 
-  test('an ad that failed to load is offered on the next level', () {
-    final p = policy();
-    for (var i = 0; i < 2; i++) {
-      p.recordLevelCompleted();
-    }
-    expect(p.recordLevelCompleted(), isTrue);
-    // Không hiện được (chưa tải xong): màn sau thử lại.
-    expect(p.recordLevelCompleted(), isTrue);
+  test('a rewarded ad restarts the 5 minutes', () {
+    wait(4);
+    policy.recordFullScreenAdShown();
+    wait(4);
+    expect(policy.shouldShowOnLevelExit(), isFalse);
+    wait(1);
+    expect(policy.shouldShowOnLevelExit(), isTrue);
+  });
+
+  test('an ad that was not ready is offered on the next level exit', () {
+    wait(5);
+    expect(policy.shouldShowOnLevelExit(), isTrue);
+    expect(policy.shouldShowOnLevelExit(), isTrue);
   });
 }

@@ -86,7 +86,7 @@ class AdManager extends AdService {
 
   @override
   Future<void> onLevelCompleteExit() async {
-    if (!_policy.recordLevelCompleted()) return;
+    if (!_policy.shouldShowOnLevelExit()) return;
     await _show(AdPlacement.levelComplete);
   }
 
