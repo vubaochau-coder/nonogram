@@ -154,7 +154,7 @@ thử nghiệm). iOS, web và test không có (`createAdService` trong
 
 ```
 Game ──AdPlacement──▶ AdService (ad_service.dart)
-                         │  AdManager: đồng ý → NoAds → tần suất → đã tải?
+                         │  AdManager: đồng ý → tần suất → đã tải?
                          ▼
                       AdNetwork (network/ad_network.dart)
                          │  ConsentGate + FullScreenAdSlot cho mỗi dạng
@@ -174,8 +174,6 @@ Game ──AdPlacement──▶ AdService (ad_service.dart)
   nối Firebase Analytics / AppsFlyer bằng một sink mới.
 - **Cấu hình** (`AdConfig`, `InterstitialPolicyConfig`) tách khỏi code, sẵn
   sàng đọc từ Remote Config.
-- **Gói xoá quảng cáo:** `AdEntitlements.adsRemoved` tắt quảng cáo xen kẽ,
-  giữ quảng cáo có thưởng; hiện chưa bán (`NoAdEntitlements`).
 - **ID quảng cáo:** mặc định là ID thử nghiệm của Google (luôn hiện quảng cáo
   mẫu, không ra tiền). Bản phát hành lấy ID thật từ Variables của repo:
   `ADMOB_APP_ID` (`ca-app-pub-xxx~yyy`), `ADMOB_REWARDED_ID`,
