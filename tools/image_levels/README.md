@@ -22,8 +22,8 @@ Kết quả ở `tools/image_levels/out/`:
 
 1. Vẽ SVG trong Chromium (Playwright) rồi lấy mẫu theo ô:
    - `pixel`: pixel art (Pixelarticons, Streamline Pixel với `grid: 42`), lấy đúng từng điểm ảnh rồi
-     gộp khối 2×2 nếu ảnh vẽ bằng khối 2×2. Bản `solid`
-     lấp kín phần bên trong nét viền.
+     gộp khối 2×2 nếu ảnh vẽ bằng khối 2×2. Không dùng chế độ
+     lấp kín phần bên trong nét viền (đã bỏ: làm mất chi tiết của hình).
    - Ảnh vector (game-icons, `mode: "emoji"`): thử các cỡ 15/20/25 và ba kiểu chuyển sang đen trắng:
      - `silhouette`: hình bóng;
      - `ink`: ô tối hơn ngưỡng Otsu;
@@ -78,7 +78,7 @@ node tools/image_levels/import_png_icons.mjs <thư mục Sprites> --set=nikoichu
   --exclude=Platforms,Software,Controller,Arrows --exclude-words=tetris \
   --include=Platforms_Linux_GNU_Penguin_Full,Platforms_Linux_GNU_Penguin_Head \
   --titles="Platforms_Linux_GNU_Penguin_Full:Tux,Platforms_Linux_GNU_Penguin_Head:Tux Head" \
-  --only --auto-accept
+  --auto-accept --max-pins=3
 ```
 
 `--auto-accept` tự chấp nhận icon có nét viền giải được bằng suy luận mà không

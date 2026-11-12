@@ -192,7 +192,6 @@ kbd { font: 600 11px var(--mono); padding: 1px 5px; border-radius: 4px; backgrou
       <div class="group" id="g-pixel">
         <label class="check"><input type="checkbox" id="half"> Thu nhỏ ½: gộp mỗi khối 2×2 thành 1 ô</label>
         <div class="hint" id="half-hint"></div>
-        <label class="check"><input type="checkbox" id="solid"> Lấp kín phần bên trong nét viền</label>
       </div>
 
       <div class="group">
@@ -347,12 +346,6 @@ function halfDown(g) {
   best.grid = cropToContent(best.grid);
   return best;
 }
-function fillHoles(g) {
-  const rows = g.length, cols = g[0].length; const out = g.map((r) => r.map(() => false)); const st = [];
-  for (let r = 0; r < rows; r++) st.push([r, 0], [r, cols - 1]); for (let c = 0; c < cols; c++) st.push([0, c], [rows - 1, c]);
-  while (st.length) { const [r, c] = st.pop(); if (r < 0 || r >= rows || c < 0 || c >= cols || out[r][c] || g[r][c]) continue; out[r][c] = true; st.push([r + 1, c], [r - 1, c], [r, c + 1], [r, c - 1]); }
-  return g.map((row, r) => row.map((v, c) => (v || !out[r][c] ? 1 : 0)));
-}
 function cleanup(g) {
   const rows = g.length, cols = g[0].length; const at = (r, c) => (r >= 0 && r < rows && c >= 0 && c < cols ? g[r][c] : 0);
   return g.map((row, r) => row.map((v, c) => { const n = at(r - 1, c) + at(r + 1, c) + at(r, c - 1) + at(r, c + 1); if (v === 1 && n === 0) return 0; if (v === 0 && n === 4) return 1; return v; }));
@@ -425,7 +418,7 @@ function buildBase(icon, entry, p) {
   let g;
   if (icon.mode === 'pixel') {
     g = p.half ? entry.half.grid : entry.pixel;
-    if (p.solid) g = fillHoles(g);
+    // Chế độ lấp kín đã bỏ: luôn giữ nguyên nét viền như hình gốc.
   } else {
     const s = sampleAt(entry, p.size); const W = s.cols * SS; const need = p.coverage * SS * SS;
     let pred;
@@ -469,7 +462,7 @@ const decisionOf = (key) => savedDecision(key) ?? autoDecision(key);
 const statusOf = (key) => decisionOf(key)?.status ?? 'todo';
 
 function suggestedParams(icon, entry) {
-  if (icon.mode === 'pixel') return { mode: 'pixel', solid: icon.suggest?.variant === 'solid', cleanup: false, half: entry.half.mismatch <= 0.25 };
+  if (icon.mode === 'pixel') return { mode: 'pixel', solid: false, cleanup: false, half: entry.half.mismatch <= 0.25 };
   const v = icon.suggest?.variant ?? 'cutout'; const size = icon.suggest?.size ?? 20;
   const p = { mode: 'brightness', size, threshold: entry.otsuInside, invert: true, coverage: 0.5, cleanup: true, k: 5, colorsOn: null };
   if (v === 'silhouette') p.mode = 'silhouette';
@@ -576,7 +569,7 @@ function syncControls() {
     $('k').value = p.k; $('k-out').textContent = p.k;
     if (p.mode === 'color') renderSwatches();
   } else {
-    $('solid').checked = !!p.solid; $('half').checked = !!p.half;
+    $('half').checked = !!p.half;
     const m = cur.entry.half.mismatch;
     $('half-hint').textContent = m === 0 ? 'Ảnh này vẽ bằng khối 2×2, thu nhỏ không mất chi tiết.' : `${Math.round(m * 100)}% khối 2×2 không đồng nhất: các chỗ đó sẽ bị làm tròn${m > 0.25 ? ', ảnh có thể vỡ nét' : ''}.`;
   }
@@ -635,7 +628,6 @@ onRange('threshold', (v) => (cur.params.threshold = v / 100));
 onRange('coverage', (v) => (cur.params.coverage = v / 100));
 onRange('k', (v) => { cur.params.k = v; cur.params.colorsOn = defaultColorsOn(paletteOf(cur.entry, v)); });
 $('invert').onchange = (e) => { cur.params.invert = e.target.checked; cur.params.threshold = e.target.checked ? cur.entry.otsuInside : cur.entry.otsuAll; syncControls(); recompute(true); };
-$('solid').onchange = (e) => { cur.params.solid = e.target.checked; recompute(true); };
 $('half').onchange = (e) => { cur.params.half = e.target.checked; syncControls(); recompute(true); };
 $('cleanup').onchange = (e) => { cur.params.cleanup = e.target.checked; recompute(true); };
 $('negative').onchange = (e) => { cur.params.negative = e.target.checked; recompute(true); };

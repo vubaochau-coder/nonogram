@@ -206,7 +206,8 @@ const icons = decoded.map((d) => {
     `<path fill="#000" d="${rects}"/></svg>`;
   // Ưu tiên giữ nét viền (nhiều chi tiết); chỉ gợi ý hình bóng khi nét viền
   // không giải được và hình bóng không quá đặc.
-  const variant = !solvable(d.ink) && density(d.shape) <= 0.75 && solvable(d.shape) ? 'solid' : 'pixel';
+  // Không còn gợi ý "lấp kín": luôn giữ nét viền như hình gốc.
+  const variant = 'pixel';
   const icon = d.name.replace(/\.png$/i, '');
   const auto = 'auto-accept' in args ? autoAccept(d.ink) : null;
   return {
