@@ -138,7 +138,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String nonogramPlayHintLabel(int count) {
-    return 'Hint $count/3';
+    return 'Hint ($count)';
   }
 
   @override
@@ -488,26 +488,8 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
-  String get adRewardHintTitle => 'Out of hints';
-
-  @override
-  String get adRewardWandTitle => 'Out of magic wands';
-
-  @override
-  String get adRewardMessage => 'Watch a short ad to get one more?';
-
-  @override
-  String get adRewardWatch => 'Watch ad';
-
-  @override
   String get adRewardNotReady =>
-      'The ad isn\'t ready yet. Check your internet connection and try again in a moment.';
-
-  @override
-  String get adRewardHintGranted => '+1 hint';
-
-  @override
-  String get adRewardWandGranted => '+1 magic wand';
+      'The ad isn\'t ready yet. Check your internet connection and try again.';
 
   @override
   String get settingsAdPrivacy => 'Ad privacy';

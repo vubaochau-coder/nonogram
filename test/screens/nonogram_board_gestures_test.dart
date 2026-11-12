@@ -441,64 +441,66 @@ void main() {
     expect(bloc.state.remainingWands, 0);
   }
 
-  testWidgets('without ads an empty wand stays disabled', (tester) async {
-    await _pumpPlay(tester, phone);
-    await useUpWand(tester);
-    await tester.tap(find.byKey(const ValueKey('nonogram-wand')));
-    await tester.pumpAndSettle();
-    expect(find.byKey(const ValueKey('nonogram-watch-ad')), findsNothing);
-    expect(_bloc(tester).state.isWandActive, isFalse);
-  });
-
-  testWidgets('empty wand offers a rewarded ad that adds a wand', (
+  testWidgets('empty wand shows an ad badge and plays an ad at once', (
     tester,
   ) async {
     final ads = FakeAdService();
     await _pumpPlay(tester, phone, ads: ads);
     await useUpWand(tester);
+    final wand = find.byKey(const ValueKey('nonogram-wand'));
+    expect(
+      find.descendant(
+        of: find.ancestor(of: wand, matching: find.byType(Stack)).first,
+        matching: find.byIcon(LucideIcons.video),
+      ),
+      findsOneWidget,
+    );
 
-    await tester.tap(find.byKey(const ValueKey('nonogram-wand')));
-    await tester.pumpAndSettle();
-    await tester.tap(find.byKey(const ValueKey('nonogram-watch-ad')));
-    await tester.pumpAndSettle();
-
-    expect(ads.rewardedShown, 1);
-    expect(_bloc(tester).state.remainingWands, 1);
-    // Lượt mới dùng như bình thường.
-    await tester.tap(find.byKey(const ValueKey('nonogram-wand')));
+    await tester.tap(wand);
     await tester.pump();
+    await tester.pump(const Duration(milliseconds: 300));
+
+    // Không có hộp thoại hỏi: quảng cáo phát ngay, xem xong vào chế độ chọn.
+    expect(ads.rewardedShown, [AdPlacement.wandRefill]);
     expect(_bloc(tester).state.isWandActive, isTrue);
+    expect(_bloc(tester).state.remainingWands, 1);
   });
 
-  testWidgets('closing the ad early gives no reward', (tester) async {
+  testWidgets('closing the ad early gives no wand', (tester) async {
     final ads = FakeAdService(earnReward: false);
     await _pumpPlay(tester, phone, ads: ads);
     await useUpWand(tester);
 
     await tester.tap(find.byKey(const ValueKey('nonogram-wand')));
     await tester.pumpAndSettle();
-    await tester.tap(find.byKey(const ValueKey('nonogram-watch-ad')));
-    await tester.pumpAndSettle();
-    expect(ads.rewardedShown, 1);
+    expect(ads.rewardedShown, hasLength(1));
+    expect(_bloc(tester).state.isWandActive, isFalse);
     expect(_bloc(tester).state.remainingWands, 0);
   });
 
-  testWidgets('watch button waits until the ad has loaded', (tester) async {
+  testWidgets('no ad loaded yet: nothing is granted', (tester) async {
     final ads = FakeAdService(ready: false);
     await _pumpPlay(tester, phone, ads: ads);
     await useUpWand(tester);
 
     await tester.tap(find.byKey(const ValueKey('nonogram-wand')));
     await tester.pumpAndSettle();
-    final watch = find.byKey(const ValueKey('nonogram-watch-ad'));
-    expect(tester.widget<ButtonStyleButton>(watch).onPressed, isNull);
-
-    ads.ready = true;
-    await tester.pump();
-    expect(tester.widget<ButtonStyleButton>(watch).onPressed, isNotNull);
+    expect(ads.rewardedShown, isEmpty);
+    expect(_bloc(tester).state.isWandActive, isFalse);
   });
 
-  testWidgets('empty hint offers a rewarded ad that adds a hint', (
+  testWidgets('builds without ads (web) give an empty wand for free', (
+    tester,
+  ) async {
+    await _pumpPlay(tester, phone);
+    await useUpWand(tester);
+    await tester.tap(find.byKey(const ValueKey('nonogram-wand')));
+    await tester.pump();
+    await tester.pump(const Duration(milliseconds: 300));
+    expect(_bloc(tester).state.isWandActive, isTrue);
+  });
+
+  testWidgets('empty hint plays an ad and opens a hint without storing it', (
     tester,
   ) async {
     final ads = FakeAdService();
@@ -509,12 +511,13 @@ void main() {
     }
     await tester.pump(const Duration(milliseconds: 400));
     expect(bloc.state.remainingHints, 0);
+    final filled = _filledCount(tester);
 
     await tester.tap(find.byIcon(LucideIcons.lightbulb));
     await tester.pumpAndSettle();
-    await tester.tap(find.byKey(const ValueKey('nonogram-watch-ad')));
-    await tester.pumpAndSettle();
-    expect(bloc.state.remainingHints, 1);
+    expect(ads.rewardedShown, [AdPlacement.hintRefill]);
+    expect(_filledCount(tester), filled + 5);
+    expect(bloc.state.remainingHints, 0);
   });
 
   testWidgets('settings show ad privacy only when it is required', (

@@ -135,19 +135,47 @@ flutter test
 
 ## Quảng cáo (AdMob)
 
-Chỉ **bản `store` trên Android** có quảng cáo; bản `dev`, iOS, web và test
-không có (`createAdService` trong `lib/main.dart`).
+Có quảng cáo trên **Android** (cả `store` và `dev`; bản `dev` luôn dùng ID
+thử nghiệm). iOS, web và test không có (`createAdService` trong
+`lib/main.dart`).
 
 | Loại | Khi nào |
 |---|---|
-| Có thưởng | Hết lượt gợi ý / gậy phép: nút vẫn bấm được (huy hiệu ▶), hỏi người chơi có muốn xem quảng cáo để nhận thêm 1 lượt không |
-| Xen kẽ | Bấm "Màn tiếp" / "Trang chính" ở màn hoàn thành. Hai màn đầu mỗi lần mở app không có; sau đó tối đa 1 lần / 3 màn và cách quảng cáo toàn màn hình trước đó ít nhất 3 phút (`lib/ads/interstitial_policy.dart`) |
+| Có thưởng | Kho gợi ý / gậy phép hết: badge hiện icon quảng cáo, bấm là phát quảng cáo, xem xong dùng luôn một lượt (xem [docs/gameplay_rules.md](docs/gameplay_rules.md)) |
+| Xen kẽ | Bấm "Màn tiếp" / "Trang chính" ở màn hoàn thành. Hai màn đầu mỗi lần mở app không có; sau đó tối đa 1 lần / 3 màn và cách quảng cáo toàn màn hình trước đó (kể cả có thưởng) ít nhất 3 phút |
 
 - Khi mở app, SDK hỏi ý kiến đồng ý theo GDPR (UMP, chỉ ở vùng bắt buộc).
   Người dùng ở các vùng đó thấy thêm nút **Quyền riêng tư quảng cáo** trong
   Cài đặt.
-- Không có mạng: game chạy bình thường, hộp thoại xem quảng cáo báo chưa tải
-  được và nút xem bị vô hiệu hoá cho tới khi tải xong.
+- Không có mạng / quảng cáo chưa tải xong: bấm vào báo chưa sẵn sàng, không
+  trừ gì; khe quảng cáo tự tải lại (giãn cách 10 s → ~5 phút).
+
+### Kiến trúc (`lib/ads/`)
+
+```
+Game ──AdPlacement──▶ AdService (ad_service.dart)
+                         │  AdManager: đồng ý → NoAds → tần suất → đã tải?
+                         ▼
+                      AdNetwork (network/ad_network.dart)
+                         │  ConsentGate + FullScreenAdSlot cho mỗi dạng
+                         ▼
+                      AdMobNetwork (network/admob/) ──▶ đấu giá / mediation
+```
+
+- Game chỉ biết **vị trí** (`AdPlacement`: `hint_refill`, `wand_refill`,
+  `level_complete`), không biết mạng quảng cáo nào.
+- **Bật đấu giá trên AdMob:** cấu hình mediation group / bidding trên web
+  AdMob và thêm package adapter `gma_mediation_*` (Meta, AppLovin, Unity,
+  Pangle...). Không phải sửa code game.
+- **Đổi sang AppLovin MAX / LevelPlay:** viết một `AdNetwork` mới (consent +
+  slot) rồi đổi một dòng trong `createAdService`.
+- **Doanh thu:** mỗi lượt hiển thị phát `AdPaid` (giá trị, tiền tệ, nguồn
+  thắng thầu, vị trí) qua `AdEventSink`; hiện chỉ ghi log khi debug, sau này
+  nối Firebase Analytics / AppsFlyer bằng một sink mới.
+- **Cấu hình** (`AdConfig`, `InterstitialPolicyConfig`) tách khỏi code, sẵn
+  sàng đọc từ Remote Config.
+- **Gói xoá quảng cáo:** `AdEntitlements.adsRemoved` tắt quảng cáo xen kẽ,
+  giữ quảng cáo có thưởng; hiện chưa bán (`NoAdEntitlements`).
 - **ID quảng cáo:** mặc định là ID thử nghiệm của Google (luôn hiện quảng cáo
   mẫu, không ra tiền). Bản phát hành lấy ID thật từ Variables của repo:
   `ADMOB_APP_ID` (`ca-app-pub-xxx~yyy`), `ADMOB_REWARDED_ID`,

@@ -73,7 +73,7 @@
       }
     }
   },
-  "nonogramPlayHintLabel": "Gợi ý {count}/3",
+  "nonogramPlayHintLabel": "Gợi ý ({count})",
   "@nonogramPlayHintLabel": {
     "placeholders": {
       "count": {
@@ -179,12 +179,6 @@
   "licensesBy": "Tác giả: {author}",
   "licensesLevelCount": "{count} màn",
   "playModeProgress": "Đã giải {solved}/{total} màn",
-  "adRewardHintTitle": "Hết lượt gợi ý",
-  "adRewardWandTitle": "Hết lượt gậy phép",
-  "adRewardMessage": "Xem một quảng cáo ngắn để nhận thêm một lượt nhé?",
-  "adRewardWatch": "Xem quảng cáo",
-  "adRewardNotReady": "Quảng cáo chưa sẵn sàng. Hãy kiểm tra kết nối mạng rồi thử lại sau giây lát.",
-  "adRewardHintGranted": "+1 lượt gợi ý",
-  "adRewardWandGranted": "+1 lượt gậy phép",
+  "adRewardNotReady": "Quảng cáo chưa sẵn sàng. Hãy kiểm tra kết nối mạng rồi thử lại.",
   "settingsAdPrivacy": "Quyền riêng tư quảng cáo"
 }

@@ -4,17 +4,15 @@ import 'package:nonogram/ads/ad_service.dart';
 /// Quảng cáo giả cho test: bật sẵn, tuỳ chỉnh được đã tải xong chưa và người
 /// chơi có xem hết không.
 class FakeAdService extends AdService {
-  FakeAdService({bool ready = true, this.earnReward = true})
-    : _ready = ValueNotifier(ready);
+  FakeAdService({this.ready = true, this.earnReward = true});
 
-  final ValueNotifier<bool> _ready;
-  final _privacy = ValueNotifier(false);
+  bool ready;
   bool earnReward;
+  final _privacy = ValueNotifier(false);
 
-  int rewardedShown = 0;
+  final List<AdPlacement> rewardedShown = [];
   int levelExits = 0;
-
-  set ready(bool value) => _ready.value = value;
+  int privacyShown = 0;
 
   set privacyRequired(bool value) => _privacy.value = value;
 
@@ -22,7 +20,7 @@ class FakeAdService extends AdService {
   bool get isEnabled => true;
 
   @override
-  ValueListenable<bool> get rewardedReady => _ready;
+  bool isReady(AdPlacement placement) => ready;
 
   @override
   ValueListenable<bool> get privacyOptionsRequired => _privacy;
@@ -31,15 +29,13 @@ class FakeAdService extends AdService {
   Future<void> initialize() async {}
 
   @override
-  Future<bool> showRewarded() async {
-    rewardedShown++;
+  Future<bool> showRewarded(AdPlacement placement) async {
+    rewardedShown.add(placement);
     return earnReward;
   }
 
   @override
   Future<void> onLevelCompleteExit() async => levelExits++;
-
-  int privacyShown = 0;
 
   @override
   Future<void> showPrivacyOptions() async => privacyShown++;

@@ -7,8 +7,10 @@ import 'package:toastification/toastification.dart';
 
 import 'package:hive_flutter/hive_flutter.dart';
 
+import 'ads/ad_config.dart';
+import 'ads/ad_manager.dart';
 import 'ads/ad_service.dart';
-import 'ads/admob_ad_service.dart';
+import 'ads/network/admob/admob_network.dart';
 import 'core/app_flavor.dart';
 import 'core/app_licenses.dart';
 import 'core/app_navigator.dart';
@@ -39,11 +41,13 @@ Future<void> main() async {
   await launcher.launch();
 }
 
-/// Quảng cáo AdMob chỉ có ở bản store trên Android (chưa cấu hình cho iOS);
-/// các bản khác không có quảng cáo.
+/// Quảng cáo AdMob chỉ có trên Android (chưa cấu hình cho iOS). Bản `dev`
+/// luôn dùng ID thử nghiệm (không truyền ID thật khi build), để thử được
+/// luồng xem quảng cáo nhận lượt.
 AdService createAdService(AppFlavor flavor) {
   final android = !kIsWeb && defaultTargetPlatform == TargetPlatform.android;
-  return flavor.hasAds && android ? AdMobAdService() : NoAdService();
+  if (!android) return NoAdService();
+  return AdManager(network: AdMobNetwork(), config: AdConfig.fromEnvironment());
 }
 
 /// Khởi động app: flavor `dev` hiện màn chọn chế độ chơi trước, flavor

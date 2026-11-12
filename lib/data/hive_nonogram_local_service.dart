@@ -2,6 +2,7 @@ import 'package:hive_flutter/hive_flutter.dart';
 import 'package:nonogram/data/nonogram_local_service.dart';
 import 'package:nonogram/models/nonogram_board_snapshot.dart';
 import 'package:nonogram/models/nonogram_completed_progress.dart';
+import 'package:nonogram/models/power_up_inventory.dart';
 
 class HiveNonogramLocalService implements NonogramLocalService {
   /// [boxName]: mỗi chế độ chơi lưu tiến độ ở một box riêng (xem `PlayMode`).
@@ -9,6 +10,7 @@ class HiveNonogramLocalService implements NonogramLocalService {
 
   static const _currentProgressKey = 'current_progress';
   static const _completedProgressKey = 'completed_progress';
+  static const _powerUpsKey = 'power_ups';
 
   final String boxName;
   Box<dynamic>? _box;
@@ -67,6 +69,22 @@ class HiveNonogramLocalService implements NonogramLocalService {
 
     map[progress.level.toString()] = progress.toMap();
     await _requiredBox().put(_completedProgressKey, map);
+  }
+
+  @override
+  Future<PowerUpInventory?> getPowerUps() async {
+    final raw = _requiredBox().get(_powerUpsKey);
+    if (raw is! Map) return null;
+    try {
+      return PowerUpInventory.fromMap(Map<String, dynamic>.from(raw));
+    } catch (_) {
+      return null;
+    }
+  }
+
+  @override
+  Future<void> savePowerUps(PowerUpInventory inventory) async {
+    await _requiredBox().put(_powerUpsKey, inventory.toMap());
   }
 
   @override

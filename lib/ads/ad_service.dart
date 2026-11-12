@@ -1,19 +1,21 @@
 import 'package:flutter/foundation.dart';
 
-/// Phần thưởng của quảng cáo có thưởng: thêm lượt gợi ý hoặc gậy phép.
-enum AdReward { hint, wand }
+import 'ad_placement.dart';
 
-/// Quảng cáo trong game. Màn chơi chỉ làm việc với lớp này, nên test và các
-/// bản không có quảng cáo (flavor `dev`, iOS, web) dùng [NoAdService].
+export 'ad_placement.dart';
+
+/// Quảng cáo nhìn từ phía game: chỉ có vị trí đặt ([AdPlacement]), không có
+/// mạng quảng cáo. Bản cài đặt thật là `AdManager`; test và các bản không có
+/// quảng cáo (iOS, web) dùng [NoAdService].
 abstract class AdService {
   const AdService();
 
-  /// Có quảng cáo hay không. Tắt thì nút gợi ý / gậy phép hết lượt vẫn bị
-  /// vô hiệu hoá như trước.
+  /// Có quảng cáo hay không. Không có thì game cho lượt miễn phí ở những chỗ
+  /// lẽ ra phải xem quảng cáo (để bản web vẫn chơi được).
   bool get isEnabled;
 
-  /// Quảng cáo có thưởng đã tải xong, sẵn sàng hiện.
-  ValueListenable<bool> get rewardedReady;
+  /// Quảng cáo cho [placement] đã tải xong, hiện được ngay.
+  bool isReady(AdPlacement placement);
 
   /// Có cần nút "Quyền riêng tư quảng cáo" trong cài đặt không (người dùng ở
   /// vùng áp dụng GDPR phải đổi được lựa chọn đồng ý).
@@ -22,12 +24,12 @@ abstract class AdService {
   /// Xin đồng ý (nếu cần), khởi động SDK và tải sẵn quảng cáo.
   Future<void> initialize();
 
-  /// Hiện quảng cáo có thưởng, đợi người chơi đóng. Trả về true nếu người
-  /// chơi đã xem đủ để nhận thưởng.
-  Future<bool> showRewarded();
+  /// Hiện quảng cáo có thưởng ở [placement], đợi người xem đóng. Trả về true
+  /// nếu đã xem đủ để nhận thưởng.
+  Future<bool> showRewarded(AdPlacement placement);
 
-  /// Gọi khi người chơi rời màn hình hoàn thành (sang màn sau / về trang
-  /// chính). Có thể hiện quảng cáo xen kẽ, đợi đến khi nó đóng.
+  /// Người chơi rời màn hình hoàn thành. Có thể hiện quảng cáo xen kẽ (theo
+  /// giới hạn tần suất), đợi đến khi nó đóng.
   Future<void> onLevelCompleteExit();
 
   /// Mở lại hộp thoại lựa chọn đồng ý quảng cáo.
@@ -44,7 +46,7 @@ class NoAdService extends AdService {
   bool get isEnabled => false;
 
   @override
-  ValueListenable<bool> get rewardedReady => _off;
+  bool isReady(AdPlacement placement) => false;
 
   @override
   ValueListenable<bool> get privacyOptionsRequired => _off;
@@ -53,7 +55,7 @@ class NoAdService extends AdService {
   Future<void> initialize() async {}
 
   @override
-  Future<bool> showRewarded() async => false;
+  Future<bool> showRewarded(AdPlacement placement) async => false;
 
   @override
   Future<void> onLevelCompleteExit() async {}

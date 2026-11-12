@@ -76,7 +76,7 @@
       }
     }
   },
-  "nonogramPlayHintLabel": "Hint {count}/3",
+  "nonogramPlayHintLabel": "Hint ({count})",
   "@nonogramPlayHintLabel": {
     "placeholders": {
       "count": {
@@ -257,12 +257,6 @@
       }
     }
   },
-  "adRewardHintTitle": "Out of hints",
-  "adRewardWandTitle": "Out of magic wands",
-  "adRewardMessage": "Watch a short ad to get one more?",
-  "adRewardWatch": "Watch ad",
-  "adRewardNotReady": "The ad isn't ready yet. Check your internet connection and try again in a moment.",
-  "adRewardHintGranted": "+1 hint",
-  "adRewardWandGranted": "+1 magic wand",
+  "adRewardNotReady": "The ad isn't ready yet. Check your internet connection and try again.",
   "settingsAdPrivacy": "Ad privacy"
 }

@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:lucide_icons/lucide_icons.dart';
-import 'package:nonogram/ads/ad_scope.dart';
-import 'package:nonogram/ads/ad_service.dart';
+import 'package:nonogram/models/power_up_inventory.dart';
 import 'package:nonogram/core/context_ext.dart';
 
 import '../bloc/nonogram_play_bloc.dart';
@@ -27,15 +26,9 @@ class WandAction extends StatelessWidget {
               p.isSolved != c.isSolved,
       builder: (context, state) {
         final colors = context.color;
-        // Hết lượt mà có quảng cáo: nút vẫn bấm được, để xem quảng cáo lấy
-        // thêm lượt.
-        final adOffer =
-            !state.isWandActive &&
-            state.remainingWands <= 0 &&
-            context.ads.isEnabled;
-        final enabled =
-            !state.isSolved &&
-            (state.isWandActive || state.remainingWands > 0 || adOffer);
+        // Hết lượt: nút vẫn bấm được, bấm là xem quảng cáo để dùng một lượt.
+        final adOffer = !state.isWandActive && state.remainingWands <= 0;
+        final enabled = !state.isSolved;
         return Tooltip(
           message: context.l10n.nonogramPlayWandLabel,
           child: Stack(
@@ -48,7 +41,7 @@ class WandAction extends StatelessWidget {
                 enabled: enabled,
                 onPressed: () {
                   if (adOffer) {
-                    offerRewardedAd(context, AdReward.wand);
+                    usePowerUpWithAd(context, PowerUp.wand);
                     return;
                   }
                   context.read<NonogramPlayBloc>().add(const WandToggled());
@@ -85,8 +78,7 @@ class CountBadge extends StatelessWidget {
   final int count;
   final bool active;
 
-  /// Hết lượt nhưng xem quảng cáo được: hiện biểu tượng phát video thay cho
-  /// số 0.
+  /// Hết lượt: hiện biểu tượng quảng cáo thay cho số 0.
   final bool adOffer;
 
   @override
@@ -103,7 +95,11 @@ class CountBadge extends StatelessWidget {
       ),
       child:
           adOffer
-              ? Icon(LucideIcons.play, size: 9, color: context.color.onPrimary)
+              ? Icon(
+                LucideIcons.video,
+                size: 10,
+                color: context.color.onPrimary,
+              )
               : Text(
                 '$count',
                 style: context.labelSmall.copyWith(

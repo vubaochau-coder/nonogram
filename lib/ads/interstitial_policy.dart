@@ -7,11 +7,12 @@
 ///   chơi tự chọn xem) ít nhất [minInterval].
 class InterstitialPolicy {
   InterstitialPolicy({
-    this.graceLevels = 2,
-    this.everyLevels = 3,
-    this.minInterval = const Duration(minutes: 3),
+    InterstitialPolicyConfig config = const InterstitialPolicyConfig(),
     DateTime Function()? clock,
-  }) : _clock = clock ?? DateTime.now;
+  }) : graceLevels = config.graceLevels,
+       everyLevels = config.everyLevels,
+       minInterval = config.minInterval,
+       _clock = clock ?? DateTime.now;
 
   final int graceLevels;
   final int everyLevels;
@@ -39,4 +40,17 @@ class InterstitialPolicy {
     _levelsSinceAd = 0;
     _lastFullScreenAd = _clock();
   }
+}
+
+/// Thông số của [InterstitialPolicy] (đọc được từ Remote Config).
+class InterstitialPolicyConfig {
+  const InterstitialPolicyConfig({
+    this.graceLevels = 2,
+    this.everyLevels = 3,
+    this.minInterval = const Duration(minutes: 3),
+  });
+
+  final int graceLevels;
+  final int everyLevels;
+  final Duration minInterval;
 }
