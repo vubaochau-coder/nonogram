@@ -6,6 +6,7 @@ import 'package:nonogram/ads/ad_manager.dart';
 import 'package:nonogram/ads/ad_service.dart';
 import 'package:nonogram/ads/interstitial_policy.dart';
 import 'package:nonogram/ads/network/ad_network.dart';
+import 'package:nonogram/core/app_flavor.dart';
 
 class _FakeConsent implements ConsentGate {
   bool allowed = true;
@@ -74,7 +75,7 @@ void main() {
 
   AdManager manager() => AdManager(
     network: network,
-    config: AdConfig.fromEnvironment(),
+    config: AdConfig.forFlavor(AppFlavor.dev),
     policy: InterstitialPolicy(
       config: const InterstitialPolicyConfig(graceLevels: 0, everyLevels: 1),
       clock: () => now,
@@ -130,5 +131,14 @@ void main() {
     now = now.add(const Duration(minutes: 5));
     await ads.onLevelCompleteExit();
     expect(interstitial.shown, [AdPlacement.levelComplete]);
+  });
+
+  test('store uses the Nonopix ad units, dev only test ads', () {
+    final store = AdConfig.forFlavor(AppFlavor.store).unitIds;
+    final dev = AdConfig.forFlavor(AppFlavor.dev).unitIds;
+    for (final format in AdFormat.values) {
+      expect(store[format], startsWith('ca-app-pub-8391885617554349/'));
+      expect(dev[format], startsWith('ca-app-pub-3940256099942544/'));
+    }
   });
 }
