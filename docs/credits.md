@@ -6,8 +6,10 @@ Nguồn và giấy phép của từng màn nằm trong `tools/image_levels/out/s
 
 | Bộ | Tác giả | Giấy phép | Số màn |
 |---|---|---|---|
-| [Pixelarticons](https://github.com/halfmage/pixelarticons) | Gerrit Halfmann | [MIT](https://github.com/halfmage/pixelarticons/blob/master/LICENSE) | 39 |
-| [Streamline Pixel](https://github.com/webalys-hq/streamline-vectors) | Streamline | [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/) | 82 |
+| [1-bit Pixel Icons](https://nikoichu.itch.io/pixel-icons) | Nikoichu | [CC0 1.0](https://creativecommons.org/publicdomain/zero/1.0/) | 1.007 |
+| Tux (bản pixel trong bộ 1-bit Pixel Icons) | Larry Ewing, The GIMP | Dùng tự do, ghi công Larry Ewing (lewing@isc.tamu.edu) và The GIMP | 2 |
+| [Streamline Pixel](https://github.com/webalys-hq/streamline-vectors) | Streamline | [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/) | 27 |
+| [Pixelarticons](https://github.com/halfmage/pixelarticons) | Gerrit Halfmann | [MIT](https://github.com/halfmage/pixelarticons/blob/master/LICENSE) | 17 |
 
 Ngoài ra có 8 màn nonogram dùng nguyên bản (không chuyển từ icon), lấy từ bộ
 [nonogram-db](https://github.com/Sprunth/nonogram-db). Dữ liệu ở

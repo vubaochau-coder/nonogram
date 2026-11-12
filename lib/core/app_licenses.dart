@@ -31,6 +31,24 @@ class LevelArtSource {
 /// `docs/credits.md`.
 const levelArtSources = <LevelArtSource>[
   LevelArtSource(
+    name: '1-bit Pixel Icons',
+    author: 'Nikoichu',
+    license: 'CC0 1.0',
+    url: 'https://nikoichu.itch.io/pixel-icons',
+    licenseUrl: 'https://creativecommons.org/publicdomain/zero/1.0/',
+    licenseAsset: 'assets/licenses/nikoichu-NOTICE.txt',
+    authorField: '1-bit Pixel Icons (Nikoichu)',
+  ),
+  LevelArtSource(
+    name: 'Tux',
+    author: 'Larry Ewing, The GIMP',
+    license: 'Free use with attribution',
+    url: 'https://isc.tamu.edu/~lewing/linux/',
+    licenseUrl: 'https://isc.tamu.edu/~lewing/linux/',
+    licenseAsset: 'assets/licenses/tux-NOTICE.txt',
+    authorField: 'Tux (Larry Ewing, The GIMP)',
+  ),
+  LevelArtSource(
     name: 'Streamline Pixel',
     author: 'Streamline',
     license: 'CC BY 4.0',

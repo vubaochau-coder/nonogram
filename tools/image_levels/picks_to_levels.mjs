@@ -51,6 +51,13 @@ const autoPicks = pickerIcons.length
   : [];
 const picks = [...decided, ...autoPicks].filter((p) => p.status === 'picked');
 
+// Màn cần ghi công riêng ngoài bộ icon (hiện trong trang Giấy phép của app).
+// Tux: Larry Ewing cho phép dùng/sửa hình với điều kiện ghi công anh và The GIMP.
+const authorOverrides = {
+  'nikoichu-1bit:Platforms_Linux_GNU_Penguin_Full': 'Tux (Larry Ewing, The GIMP)',
+  'nikoichu-1bit:Platforms_Linux_GNU_Penguin_Head': 'Tux (Larry Ewing, The GIMP)',
+};
+
 const levels = [];
 const problems = [];
 for (const p of picks) {
@@ -75,7 +82,7 @@ for (const p of picks) {
     level: {
       source_puzzle_id: id,
       title: p.title,
-      author: p.author,
+      author: authorOverrides[p.key] ?? p.author,
       difficulty_score: Math.round(metrics.score * 100) / 100,
       rows: p.rows,
       cols: p.cols,
