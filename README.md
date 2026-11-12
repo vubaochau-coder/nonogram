@@ -80,7 +80,9 @@ Nút gạt **Tô / X** trên thanh công cụ chọn việc một lần chạm s
 - Đang tô mà ngón tay tới sát mép lưới thì bàn tự trôi theo.
 - Hai dải gợi ý luôn dính mép trái / mép trên khi kéo lưới đi. Mỗi dải
   chiếm tối đa 30% chiều tương ứng; nhiều số hơn thì chỉ hiện các số gần
-  lưới nhất, ô góc báo còn bao nhiêu số bị cắt (`← +N`, `↑ +N`).
+  lưới nhất. Hàng / cột nào còn số khuất thì ở mép phía đó (xa lưới, hoặc
+  sát lưới khi đã cuộn dải ra) có chip cam `+n` to bằng một ô số; n đếm cả
+  số nằm dưới chip (`ClueOverflow`).
 - Không có zoom: cỡ ô luôn là cỡ lớn nhất vừa màn hình trong khoảng
   28–44px (tính lại khi xoay màn hình); lưới lớn hơn thì kéo để xem.
 - Nút xoay màn hình (điện thoại / máy tính bảng) chuyển dọc ⇄ ngang và khoá
@@ -164,7 +166,7 @@ thử nghiệm). iOS, web và test không có (`createAdService` trong
 | Loại | Khi nào |
 |---|---|
 | Có thưởng | Kho gợi ý / gậy phép hết: badge hiện icon quảng cáo, bấm là phát quảng cáo, xem xong dùng luôn một lượt (xem [docs/gameplay_rules.md](docs/gameplay_rules.md)) |
-| Xen kẽ | Bấm "Màn tiếp" / "Trang chính" ở màn hoàn thành. Hai màn đầu mỗi lần mở app không có; sau đó tối đa 1 lần / 3 màn và cách quảng cáo toàn màn hình trước đó (kể cả có thưởng) ít nhất 3 phút |
+| Xen kẽ | Bấm "Màn tiếp" / "Trang chính" ở màn hoàn thành, nếu đã qua 5 phút kể từ quảng cáo xen kẽ trước đó (quảng cáo có thưởng không tính), hoặc từ lúc mở app nếu chưa có quảng cáo nào (`lib/ads/interstitial_policy.dart`) |
 
 - Khi mở app, SDK hỏi ý kiến đồng ý theo GDPR (UMP, chỉ ở vùng bắt buộc).
   Người dùng ở các vùng đó thấy thêm nút **Quyền riêng tư quảng cáo** trong

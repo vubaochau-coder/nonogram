@@ -11,12 +11,14 @@ import 'package:nonogram/core/context_ext.dart';
 import 'package:nonogram/models/nonogram_grid_equality.dart';
 
 import '../../painters/nonogram_cells_painter.dart';
+import '../../painters/nonogram_clue_overflow_painter.dart';
 import '../../painters/nonogram_grid_painter.dart';
 import '../../painters/nonogram_left_clues_painter.dart';
 import '../../painters/nonogram_top_clues_painter.dart';
 import '../bloc/nonogram_play_bloc.dart';
 import '../bloc/nonogram_play_event.dart';
 import '../bloc/nonogram_play_state.dart';
+import '../engine/clue_overflow.dart';
 import '../engine/nonogram_board_layout.dart';
 import '../nonogram_transformation_controller_provider.dart';
 
@@ -584,22 +586,22 @@ class _BoardPaint extends StatelessWidget {
       color: game.success.withValues(alpha: 0.75),
     );
 
-    // Số cột/hàng số còn bị che ở phía xa lưới.
-    int hidden(double content, double visible, double scroll, double depth) =>
-        depth == 0 ? 0 : ((content - visible - scroll) / depth - 0.01).ceil();
-    final hiddenLeft = hidden(
-      leftContent,
-      leftW,
-      leftClueScroll,
-      layout.leftClueDepth,
-    );
-    final hiddenTop = hidden(
-      topContent,
-      topH,
-      topClueScroll,
-      layout.topClueDepth,
-    );
-
+    // Hàng / cột nào còn số khuất (phía xa hay phía sát lưới): chip "+n".
+    List<ClueOverflow> overflows(
+      List<List<int>> clues,
+      double visible,
+      double scroll,
+      double depth,
+    ) => [
+      for (final line in clues)
+        ClueOverflow.of(
+          count: line.length,
+          depth: depth,
+          visibleExtent: visible,
+          scroll: scroll,
+        ),
+    ];
+    final chipTextStyle = clueStyle.copyWith(color: const Color(0xFF2B1A00));
     return Stack(
       clipBehavior: Clip.hardEdge,
       children: [
@@ -700,18 +702,26 @@ class _BoardPaint extends StatelessWidget {
                     ),
                   ),
                 ),
-                if (hiddenLeft > 0)
-                  _StripFade(
-                    axis: Axis.horizontal,
-                    atStart: true,
-                    color: game.clueBackground,
+                Positioned.fill(
+                  child: IgnorePointer(
+                    child: CustomPaint(
+                      key: const ValueKey('left-clue-overflow'),
+                      painter: NonogramClueOverflowPainter(
+                        overflows: overflows(
+                          puzzle.leftClues,
+                          leftW,
+                          leftClueScroll,
+                          layout.leftClueDepth,
+                        ),
+                        axis: Axis.horizontal,
+                        cellSize: cell,
+                        clueDepth: layout.leftClueDepth,
+                        chipColor: game.reward,
+                        textStyle: chipTextStyle,
+                      ),
+                    ),
                   ),
-                if (leftClueScroll > 0.5)
-                  _StripFade(
-                    axis: Axis.horizontal,
-                    atStart: false,
-                    color: game.clueBackground,
-                  ),
+                ),
               ],
             ),
           ),
@@ -747,18 +757,26 @@ class _BoardPaint extends StatelessWidget {
                     ),
                   ),
                 ),
-                if (hiddenTop > 0)
-                  _StripFade(
-                    axis: Axis.vertical,
-                    atStart: true,
-                    color: game.clueBackground,
+                Positioned.fill(
+                  child: IgnorePointer(
+                    child: CustomPaint(
+                      key: const ValueKey('top-clue-overflow'),
+                      painter: NonogramClueOverflowPainter(
+                        overflows: overflows(
+                          puzzle.topClues,
+                          topH,
+                          topClueScroll,
+                          layout.topClueDepth,
+                        ),
+                        axis: Axis.vertical,
+                        cellSize: cell,
+                        clueDepth: layout.topClueDepth,
+                        chipColor: game.reward,
+                        textStyle: chipTextStyle,
+                      ),
+                    ),
                   ),
-                if (topClueScroll > 0.5)
-                  _StripFade(
-                    axis: Axis.vertical,
-                    atStart: false,
-                    color: game.clueBackground,
-                  ),
+                ),
               ],
             ),
           ),
@@ -789,7 +807,7 @@ class _BoardPaint extends StatelessWidget {
             child: ColoredBox(color: colors.surface),
           ),
 
-        // 5. Ô góc: che chỗ hai dải giao nhau, kèm số lượng số đang bị cắt.
+        // 5. Ô góc: che chỗ hai dải giao nhau.
         // Lấn thêm 1px lên trên / sang trái để không lộ khe mép dải (khử
         // răng cưa) giữa ô góc và lớp che.
         Positioned(
@@ -797,13 +815,7 @@ class _BoardPaint extends StatelessWidget {
           top: stickyTop - 1,
           width: leftW + 1,
           height: topH + 1,
-          child: ColoredBox(
-            color: colors.surface,
-            child: _HiddenCluesBadges(
-              hiddenLeft: hiddenLeft,
-              hiddenTop: hiddenTop,
-            ),
-          ),
+          child: ColoredBox(color: colors.surface),
         ),
 
         // 6. Đang chọn hàng / cột cho gậy phép: tô sáng hai dải số để người
@@ -849,89 +861,6 @@ class _BoardPaint extends StatelessWidget {
             pulse: hintPulse,
           ),
       ],
-    );
-  }
-}
-
-/// Viền mờ ở mép dải gợi ý, báo còn số bị cắt ở phía đó.
-class _StripFade extends StatelessWidget {
-  const _StripFade({
-    required this.axis,
-    required this.atStart,
-    required this.color,
-  });
-
-  final Axis axis;
-
-  /// Mép đầu (trái / trên) hay mép cuối (phải / dưới).
-  final bool atStart;
-  final Color color;
-
-  @override
-  Widget build(BuildContext context) {
-    const size = 10.0;
-    final horizontal = axis == Axis.horizontal;
-    final begin =
-        horizontal
-            ? (atStart ? Alignment.centerLeft : Alignment.centerRight)
-            : (atStart ? Alignment.topCenter : Alignment.bottomCenter);
-    final end =
-        horizontal
-            ? (atStart ? Alignment.centerRight : Alignment.centerLeft)
-            : (atStart ? Alignment.bottomCenter : Alignment.topCenter);
-    return Positioned(
-      left: horizontal ? (atStart ? 0 : null) : 0,
-      right: horizontal ? (atStart ? null : 0) : 0,
-      top: horizontal ? 0 : (atStart ? 0 : null),
-      bottom: horizontal ? 0 : (atStart ? null : 0),
-      width: horizontal ? size : null,
-      height: horizontal ? null : size,
-      child: IgnorePointer(
-        child: DecoratedBox(
-          decoration: BoxDecoration(
-            gradient: LinearGradient(
-              begin: begin,
-              end: end,
-              colors: [color, color.withValues(alpha: 0)],
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-/// Trong ô góc: "← +N" (dải trái còn N cột số bị cắt) và "↑ +M" (dải trên).
-class _HiddenCluesBadges extends StatelessWidget {
-  const _HiddenCluesBadges({required this.hiddenLeft, required this.hiddenTop});
-
-  final int hiddenLeft;
-  final int hiddenTop;
-
-  @override
-  Widget build(BuildContext context) {
-    if (hiddenLeft <= 0 && hiddenTop <= 0) return const SizedBox.shrink();
-    final style = context.labelSmall.copyWith(
-      fontSize: 10,
-      fontWeight: FontWeight.w800,
-      color: context.color.primary,
-    );
-    return Padding(
-      padding: const EdgeInsets.all(4),
-      child: Stack(
-        children: [
-          if (hiddenTop > 0)
-            Align(
-              alignment: Alignment.topRight,
-              child: FittedBox(child: Text('↑ +$hiddenTop', style: style)),
-            ),
-          if (hiddenLeft > 0)
-            Align(
-              alignment: Alignment.bottomLeft,
-              child: FittedBox(child: Text('← +$hiddenLeft', style: style)),
-            ),
-        ],
-      ),
     );
   }
 }

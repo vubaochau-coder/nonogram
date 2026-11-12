@@ -86,7 +86,7 @@ class AdManager extends AdService {
 
   @override
   Future<void> onLevelCompleteExit() async {
-    if (!_policy.recordLevelCompleted()) return;
+    if (!_policy.shouldShowOnLevelExit()) return;
     await _show(AdPlacement.levelComplete);
   }
 
@@ -96,9 +96,11 @@ class AdManager extends AdService {
     _showing = true;
     try {
       final result = await slot.show(placement);
-      // Mọi quảng cáo toàn màn hình (kể cả có thưởng) đều tính vào giãn
-      // cách của quảng cáo xen kẽ.
-      if (result.shown) _policy.recordFullScreenAdShown();
+      // Chỉ quảng cáo xen kẽ mới tính lại giãn cách; quảng cáo có thưởng
+      // (người chơi tự chọn xem) không ảnh hưởng.
+      if (result.shown && placement.format == AdFormat.interstitial) {
+        _policy.recordInterstitialShown();
+      }
       return result;
     } finally {
       _showing = false;

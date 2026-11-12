@@ -1,56 +1,38 @@
-/// Quyết định khi nào hiện quảng cáo xen kẽ sau khi giải xong màn, để người
-/// chơi không bị làm phiền quá nhiều:
+/// Quyết định khi nào hiện quảng cáo xen kẽ lúc rời màn hoàn thành: chỉ theo
+/// thời gian, không đếm số màn.
 ///
-/// - [graceLevels] màn đầu tiên mỗi lần mở app không có quảng cáo xen kẽ;
-/// - sau đó cứ [everyLevels] màn giải xong mới hiện một lần;
-/// - cách quảng cáo toàn màn hình trước đó (kể cả quảng cáo có thưởng người
-///   chơi tự chọn xem) ít nhất [minInterval].
+/// - Hiện khi đã qua [minInterval] kể từ quảng cáo xen kẽ trước đó. Quảng
+///   cáo có thưởng (người chơi tự chọn xem) không tính.
+/// - Chưa có quảng cáo nào thì tính từ lúc mở app, để người chơi không gặp
+///   quảng cáo ngay khi vừa vào game.
+/// - Đến lúc mà quảng cáo chưa tải xong thì lần rời màn sau thử lại.
 class InterstitialPolicy {
   InterstitialPolicy({
     InterstitialPolicyConfig config = const InterstitialPolicyConfig(),
     DateTime Function()? clock,
-  }) : graceLevels = config.graceLevels,
-       everyLevels = config.everyLevels,
-       minInterval = config.minInterval,
-       _clock = clock ?? DateTime.now;
+  }) : minInterval = config.minInterval,
+       _clock = clock ?? DateTime.now {
+    _since = _clock();
+  }
 
-  final int graceLevels;
-  final int everyLevels;
   final Duration minInterval;
   final DateTime Function() _clock;
 
-  int _completedLevels = 0;
-  int _levelsSinceAd = 0;
-  DateTime? _lastFullScreenAd;
+  /// Lúc mở app, hoặc lúc hiện quảng cáo xen kẽ gần nhất.
+  late DateTime _since;
 
-  /// Ghi nhận một màn vừa giải xong; trả về true nếu nên hiện quảng cáo xen
-  /// kẽ lúc này.
-  bool recordLevelCompleted() {
-    _completedLevels++;
-    _levelsSinceAd++;
-    if (_completedLevels <= graceLevels) return false;
-    if (_levelsSinceAd < everyLevels) return false;
-    final last = _lastFullScreenAd;
-    if (last != null && _clock().difference(last) < minInterval) return false;
-    return true;
-  }
+  /// Người chơi vừa rời màn hoàn thành: có nên hiện quảng cáo xen kẽ không.
+  bool shouldShowOnLevelExit() => _clock().difference(_since) >= minInterval;
 
-  /// Ghi nhận vừa hiện một quảng cáo toàn màn hình (xen kẽ hoặc có thưởng).
-  void recordFullScreenAdShown() {
-    _levelsSinceAd = 0;
-    _lastFullScreenAd = _clock();
-  }
+  /// Ghi nhận vừa hiện một quảng cáo xen kẽ.
+  void recordInterstitialShown() => _since = _clock();
 }
 
 /// Thông số của [InterstitialPolicy] (đọc được từ Remote Config).
 class InterstitialPolicyConfig {
   const InterstitialPolicyConfig({
-    this.graceLevels = 2,
-    this.everyLevels = 3,
-    this.minInterval = const Duration(minutes: 3),
+    this.minInterval = const Duration(minutes: 5),
   });
 
-  final int graceLevels;
-  final int everyLevels;
   final Duration minInterval;
 }

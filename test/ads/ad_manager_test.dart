@@ -77,7 +77,7 @@ void main() {
     network: network,
     config: AdConfig.forFlavor(AppFlavor.dev),
     policy: InterstitialPolicy(
-      config: const InterstitialPolicyConfig(graceLevels: 0, everyLevels: 1),
+      config: const InterstitialPolicyConfig(),
       clock: () => now,
     ),
   );
@@ -119,18 +119,23 @@ void main() {
     expect(await ads.showRewarded(AdPlacement.hintRefill), isFalse);
   });
 
-  test('a rewarded ad delays the next interstitial', () async {
+  test('rewarded ads do not delay the next interstitial', () async {
     final ads = manager();
     await ads.initialize();
     final interstitial = network.slots[AdFormat.interstitial]!;
 
+    now = now.add(const Duration(minutes: 4));
     await ads.showRewarded(AdPlacement.hintRefill);
-    await ads.onLevelCompleteExit();
-    expect(interstitial.shown, isEmpty);
-
-    now = now.add(const Duration(minutes: 5));
+    now = now.add(const Duration(minutes: 1));
     await ads.onLevelCompleteExit();
     expect(interstitial.shown, [AdPlacement.levelComplete]);
+
+    // Lần sau phải đợi thêm 5 phút kể từ quảng cáo xen kẽ vừa rồi.
+    await ads.onLevelCompleteExit();
+    expect(interstitial.shown, hasLength(1));
+    now = now.add(const Duration(minutes: 5));
+    await ads.onLevelCompleteExit();
+    expect(interstitial.shown, hasLength(2));
   });
 
   test('store uses the Nonopix ad units, dev only test ads', () {
