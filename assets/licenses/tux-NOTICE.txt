@@ -1,0 +1,6 @@
+Tux, the Linux penguin, originally drawn by Larry Ewing
+(lewing@isc.tamu.edu) with The GIMP. Pixel version from the 1-bit Pixel Icons
+pack by Nikoichu (CC0 1.0).
+
+Larry Ewing's terms: "Permission to use and/or modify this image is granted
+provided you acknowledge me lewing@isc.tamu.edu and The GIMP if someone asks."

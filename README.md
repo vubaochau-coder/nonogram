@@ -103,7 +103,7 @@ lib/
     painters/                CustomPainter cho lưới, gợi ý, đáp án
   l10n/                      Chuỗi dịch (app_en.arb, app_vi.arb)
 assets/
-  levels/                    129 màn chơi có bản quyền (sinh bằng tools/build_levels.dart)
+  levels/                    1.061 màn chơi có bản quyền (sinh bằng tools/build_levels.dart)
   levels_dev/                574 màn crawl, chỉ có ở flavor dev (chế độ nhà phát triển)
   licenses/                  Văn bản giấy phép hình màn chơi (hiện ở Cài đặt → Giấy phép)
   fonts/                     Font Nunito (giấy phép OFL, xem Nunito-OFL.txt)

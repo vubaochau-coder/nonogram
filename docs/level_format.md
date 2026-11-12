@@ -70,22 +70,23 @@ Tuỳ chọn hay dùng:
 `test/data/level_assets_test.dart` chạy lại toàn bộ các kiểm tra trên với
 assets đã commit, nên CI sẽ chặn dữ liệu hỏng.
 
-> Dữ liệu hiện tại: **129 màn** có giấy phép dùng thương mại (xem
-> `tools/image_levels/README.md`):
+> Dữ liệu hiện tại: **1.061 màn** có giấy phép dùng thương mại, 389 màn có ô
+> ghim (xem `tools/image_levels/README.md` và `docs/credits.md`):
 >
-> - Pixelarticons (MIT): 39 màn, duyệt tay trên trang chọn màn
-> - Streamline Pixel (CC BY 4.0): 82 màn, duyệt tay trên trang chọn màn
+> - 1-bit Pixel Icons của Nikoichu (CC0): 1.009 màn (gồm 2 màn Tux)
+> - Streamline Pixel (CC BY 4.0): 27 màn
+> - Pixelarticons (MIT): 17 màn
 > - nonogram-db (CC BY 3.0 / CC BY-SA 4.0): 8 màn dùng nguyên bản
 >
-> Nguồn và giấy phép của từng màn: `tools/image_levels/out/sources.json`;
-> ghi công: `docs/credits.md`. Sinh lại bằng:
+> Sinh lại bằng:
 >
 > ```bash
 > node tools/image_levels/picks_to_levels.mjs tools/image_levels/data/picks.json
 > dart run tools/build_levels.dart tools/image_levels/out/levels.json
 > ```
 >
-> Bộ màn cũ lấy từ nonogram.org (574 màn) đã bị gỡ vì không được dùng thương mại.
+> Bộ màn cũ lấy từ nonogram.org (574 màn) đã bị gỡ khỏi bộ màn chính vì không
+> được dùng thương mại.
 
 ## Bộ màn của chế độ nhà phát triển
 
