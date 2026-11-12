@@ -24,6 +24,8 @@ dependencies:
   lucide_icons: ^0.257.0
   shimmer: ^3.0.0
   toastification: ^3.0.3
+  google_mobile_ads: ^9.2.0
+  url_launcher: ^6.3.3
 
 dev_dependencies:
   flutter_test:

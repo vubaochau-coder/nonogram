@@ -18,6 +18,8 @@ class NonogramPlayState extends Equatable {
   final double cellSize;
   final bool isFullscreen;
   final bool isSolved;
+
+  /// Số lượt gợi ý còn trong kho dùng chung (xem `PowerUpInventory`).
   final int remainingHints;
 
   /// Số lượt gậy phép còn lại (chọn một hàng / cột để hiện đáp án).
@@ -29,10 +31,6 @@ class NonogramPlayState extends Equatable {
   /// Ô đã mở bằng gợi ý / gậy phép: không đổi được, và giữ lại khi chơi lại
   /// từ đầu (người chơi đã "trả" lượt cho chúng).
   final Set<({int row, int col})> lockedCells;
-
-  /// Số lượt gợi ý / gậy phép mỗi màn.
-  static const int maxHints = 3;
-  static const int maxWands = 1;
 
   const NonogramPlayState({
     required this.isLoading,
@@ -46,8 +44,8 @@ class NonogramPlayState extends Equatable {
     this.cellSize = 40.0,
     this.isFullscreen = false,
     this.isSolved = false,
-    this.remainingHints = maxHints,
-    this.remainingWands = maxWands,
+    this.remainingHints = 0,
+    this.remainingWands = 0,
     this.isWandActive = false,
     this.lockedCells = const {},
   });

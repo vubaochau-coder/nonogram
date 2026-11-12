@@ -138,7 +138,7 @@ class AppLocalizationsVi extends AppLocalizations {
 
   @override
   String nonogramPlayHintLabel(int count) {
-    return 'Gợi ý $count/3';
+    return 'Gợi ý ($count)';
   }
 
   @override
@@ -484,5 +484,33 @@ class AppLocalizationsVi extends AppLocalizations {
   @override
   String playModeProgress(int solved, int total) {
     return 'Đã giải $solved/$total màn';
+  }
+
+  @override
+  String get adRewardNotReady =>
+      'Quảng cáo chưa sẵn sàng. Hãy kiểm tra kết nối mạng rồi thử lại.';
+
+  @override
+  String get settingsAdPrivacy => 'Quyền riêng tư quảng cáo';
+
+  @override
+  String get ratingTitle => 'Bạn thấy Nonopix thế nào?';
+
+  @override
+  String get ratingMessage => 'Chạm vào số sao để đánh giá game nhé.';
+
+  @override
+  String get ratingLater => 'Để sau';
+
+  @override
+  String get ratingSubmit => 'Gửi';
+
+  @override
+  String get ratingThanks =>
+      'Cảm ơn bạn đã góp ý! Chúng mình sẽ tiếp tục làm game tốt hơn.';
+
+  @override
+  String ratingStarLabel(int count) {
+    return '$count sao';
   }
 }

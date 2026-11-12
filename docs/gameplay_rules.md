@@ -25,10 +25,12 @@ Tài liệu này chốt lại các rule vận hành hiện tại của Nonogram 
 - Không seed snapshot rỗng cho level kế tiếp.
 
 ## Hint Rules
-- Mỗi màn có `3` lượt gợi ý.
-- `remainingHints` được lưu local trong snapshot.
-- `BoardReset` không reset quota hint.
-- Sang màn mới mà không có snapshot restore thì quota trở về `3`.
+- Gợi ý và gậy phép nằm trong **kho dùng chung** cho mọi màn (`PowerUpInventory`, lưu riêng, không nằm trong snapshot).
+- Người chơi mới được tặng `3` gợi ý và `1` gậy phép, một lần duy nhất. Qua màn không reset, giải màn không được thưởng.
+- Kho hết (`0`): badge hiện icon quảng cáo, bấm là phát ngay quảng cáo có thưởng (không hỏi lại). Xem đủ thì dùng luôn một lượt (`RewardGranted`): gợi ý mở ô ngay, gậy phép vào chế độ chọn hàng / cột. Không tích luỹ được: chỉ nhận khi kho bằng `0`.
+- Không bắt xem quảng cáo cho gợi ý không mở được ô nào (`hasHintCells`).
+- Bản không có quảng cáo (web, iOS): kho hết thì dùng miễn phí.
+- `BoardReset` không trả lại lượt đã dùng.
 - Hint v1 mở **cả line**:
   - `solution == 1 -> filled`
   - `solution == 0 -> marked`

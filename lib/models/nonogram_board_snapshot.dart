@@ -12,8 +12,6 @@ class NonogramBoardSnapshot {
   final double viewportOffsetX;
   final double viewportOffsetY;
   final double cellSize;
-  final int remainingHints;
-  final int remainingWands;
 
   /// Ô mở bằng gợi ý / gậy phép (không đổi được, giữ khi chơi lại).
   final Set<({int row, int col})> lockedCells;
@@ -27,8 +25,6 @@ class NonogramBoardSnapshot {
     this.viewportOffsetX = 0,
     this.viewportOffsetY = 0,
     this.cellSize = 40.0,
-    this.remainingHints = 3,
-    this.remainingWands = 1,
     this.lockedCells = const {},
   });
 
@@ -43,8 +39,6 @@ class NonogramBoardSnapshot {
       'viewportOffsetX': viewportOffsetX,
       'viewportOffsetY': viewportOffsetY,
       'cellSize': cellSize,
-      'remainingHints': remainingHints,
-      'remainingWands': remainingWands,
       'lockedCells': [
         for (final cell in lockedCells) [cell.row, cell.col],
       ],
@@ -68,9 +62,6 @@ class NonogramBoardSnapshot {
       viewportOffsetX: (map['viewportOffsetX'] as num).toDouble(),
       viewportOffsetY: (map['viewportOffsetY'] as num).toDouble(),
       cellSize: (map['cellSize'] as num?)?.toDouble() ?? 40.0,
-      remainingHints: (map['remainingHints'] as int?) ?? 3,
-      // Ván lưu trước khi có gậy phép: coi như chưa dùng.
-      remainingWands: (map['remainingWands'] as int?) ?? 1,
       // Ván lưu trước khi có ô khoá: không khoá ô nào.
       lockedCells: {
         for (final cell in (map['lockedCells'] as List?) ?? const [])

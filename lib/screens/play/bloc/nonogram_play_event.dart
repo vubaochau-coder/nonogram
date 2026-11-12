@@ -1,3 +1,4 @@
+import 'package:nonogram/models/power_up_inventory.dart';
 import 'package:nonogram/models/nonogram_puzzle.dart';
 import 'package:nonogram/models/nonogram_board_snapshot.dart';
 import 'nonogram_play_state.dart';
@@ -121,6 +122,21 @@ class WandLineSelected extends NonogramPlayEvent {
   const WandLineSelected({
     required this.isRow,
     required this.index,
+    required this.offsetX,
+    required this.offsetY,
+  });
+}
+
+/// Kho đã hết và người chơi đã xem xong quảng cáo có thưởng (hoặc bản không
+/// có quảng cáo): dùng ngay một lượt [powerUp] mà không trừ kho. Gợi ý được
+/// mở luôn; gậy phép chuyển sang chế độ chọn hàng / cột.
+class RewardGranted extends NonogramPlayEvent {
+  final PowerUp powerUp;
+  final double offsetX;
+  final double offsetY;
+
+  const RewardGranted({
+    required this.powerUp,
     required this.offsetX,
     required this.offsetY,
   });

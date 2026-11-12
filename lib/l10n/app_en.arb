@@ -76,7 +76,7 @@
       }
     }
   },
-  "nonogramPlayHintLabel": "Hint {count}/3",
+  "nonogramPlayHintLabel": "Hint ({count})",
   "@nonogramPlayHintLabel": {
     "placeholders": {
       "count": {
@@ -253,6 +253,21 @@
         "type": "int"
       },
       "total": {
+        "type": "int"
+      }
+    }
+  },
+  "adRewardNotReady": "The ad isn't ready yet. Check your internet connection and try again.",
+  "settingsAdPrivacy": "Ad privacy",
+  "ratingTitle": "Enjoying Nonopix?",
+  "ratingMessage": "Tap a star to rate the game.",
+  "ratingLater": "Later",
+  "ratingSubmit": "Submit",
+  "ratingThanks": "Thanks for your feedback! We'll keep making the game better.",
+  "ratingStarLabel": "{count} stars",
+  "@ratingStarLabel": {
+    "placeholders": {
+      "count": {
         "type": "int"
       }
     }

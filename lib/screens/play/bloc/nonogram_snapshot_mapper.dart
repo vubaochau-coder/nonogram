@@ -25,8 +25,6 @@ class NonogramSnapshotMapper {
       viewportOffsetX: viewportOffsetX ?? 0,
       viewportOffsetY: viewportOffsetY ?? 0,
       cellSize: state.cellSize,
-      remainingHints: state.remainingHints,
-      remainingWands: state.remainingWands,
       lockedCells: state.lockedCells,
     );
   }

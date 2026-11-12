@@ -4,8 +4,9 @@
 
 
 **Nonopix** là game nonogram (tô ô theo gợi ý số để lộ ra hình) viết bằng
-Flutter, tách ra từ project Nexora. **Chạy offline hoàn toàn**: màn chơi đóng gói sẵn trong app,
-tiến độ lưu trên máy, không cần tài khoản hay mạng.
+Flutter, tách ra từ project Nexora. **Chơi được khi không có mạng**: màn chơi đóng gói sẵn trong app,
+tiến độ lưu trên máy, không cần tài khoản. Mạng chỉ dùng để tải quảng cáo
+(bản store trên Android, xem [Quảng cáo](#quảng-cáo-admob)).
 
 ## Chạy game
 
@@ -87,7 +88,8 @@ Nút gạt **Tô / X** trên thanh công cụ chọn việc một lần chạm s
 
 ```
 lib/
-  main.dart                  Khởi tạo Hive, repository, MaterialApp
+  main.dart                  Khởi tạo Hive, repository, quảng cáo, MaterialApp
+  ads/                       Quảng cáo AdMob (có thưởng + xen kẽ), tần suất, ID
   core/                      Theme (AppTheme + GameColors), điều hướng (AppRouteIntent), tiện ích
   data/
     nonogram_puzzle_source.dart   Đọc màn chơi từ assets/levels/
@@ -130,6 +132,73 @@ flutter test
 
 `test/data/level_assets_test.dart` kiểm tra toàn bộ dữ liệu trong
 `assets/levels/` (đủ level, đúng định dạng, mỗi màn có đúng một nghiệm).
+
+## Quảng cáo (AdMob)
+
+Có quảng cáo trên **Android** (cả `store` và `dev`; bản `dev` luôn dùng ID
+thử nghiệm). iOS, web và test không có (`createAdService` trong
+`lib/main.dart`).
+
+| Loại | Khi nào |
+|---|---|
+| Có thưởng | Kho gợi ý / gậy phép hết: badge hiện icon quảng cáo, bấm là phát quảng cáo, xem xong dùng luôn một lượt (xem [docs/gameplay_rules.md](docs/gameplay_rules.md)) |
+| Xen kẽ | Bấm "Màn tiếp" / "Trang chính" ở màn hoàn thành. Hai màn đầu mỗi lần mở app không có; sau đó tối đa 1 lần / 3 màn và cách quảng cáo toàn màn hình trước đó (kể cả có thưởng) ít nhất 3 phút |
+
+- Khi mở app, SDK hỏi ý kiến đồng ý theo GDPR (UMP, chỉ ở vùng bắt buộc).
+  Người dùng ở các vùng đó thấy thêm nút **Quyền riêng tư quảng cáo** trong
+  Cài đặt.
+- Không có mạng / quảng cáo chưa tải xong: bấm vào báo chưa sẵn sàng, không
+  trừ gì; khe quảng cáo tự tải lại (giãn cách 10 s → ~5 phút).
+
+### Kiến trúc (`lib/ads/`)
+
+```
+Game ──AdPlacement──▶ AdService (ad_service.dart)
+                         │  AdManager: đồng ý → tần suất → đã tải?
+                         ▼
+                      AdNetwork (network/ad_network.dart)
+                         │  ConsentGate + FullScreenAdSlot cho mỗi dạng
+                         ▼
+                      AdMobNetwork (network/admob/) ──▶ đấu giá / mediation
+```
+
+- Game chỉ biết **vị trí** (`AdPlacement`: `hint_refill`, `wand_refill`,
+  `level_complete`), không biết mạng quảng cáo nào.
+- **Bật đấu giá trên AdMob:** cấu hình mediation group / bidding trên web
+  AdMob và thêm package adapter `gma_mediation_*` (Meta, AppLovin, Unity,
+  Pangle...). Không phải sửa code game.
+- **Đổi sang AppLovin MAX / LevelPlay:** viết một `AdNetwork` mới (consent +
+  slot) rồi đổi một dòng trong `createAdService`.
+- **Doanh thu:** mỗi lượt hiển thị phát `AdPaid` (giá trị, tiền tệ, nguồn
+  thắng thầu, vị trí) qua `AdEventSink`; hiện chỉ ghi log khi debug, sau này
+  nối Firebase Analytics / AppsFlyer bằng một sink mới.
+- **Cấu hình** (`AdConfig`, `InterstitialPolicyConfig`) tách khỏi code, sẵn
+  sàng đọc từ Remote Config.
+- **ID quảng cáo:** mặc định là ID thử nghiệm của Google (luôn hiện quảng cáo
+  mẫu, không ra tiền). Bản phát hành lấy ID thật từ Variables của repo:
+  `ADMOB_APP_ID` (`ca-app-pub-xxx~yyy`), `ADMOB_REWARDED_ID`,
+  `ADMOB_INTERSTITIAL_ID` (`ca-app-pub-xxx/zzz`); xem đầu
+  `.github/workflows/store_build.yml`. Build tay:
+
+  ```bash
+  ADMOB_APP_ID=ca-app-pub-xxx~yyy flutter build appbundle --release --flavor store \
+    --dart-define=ADMOB_REWARDED_ID=ca-app-pub-xxx/zzz \
+    --dart-define=ADMOB_INTERSTITIAL_ID=ca-app-pub-xxx/www
+  ```
+- Thử quảng cáo trên máy: `flutter run --flavor store` (dùng ID thử nghiệm).
+  **Đừng bấm vào quảng cáo thật của chính mình**, AdMob sẽ khoá tài khoản;
+  muốn thử với ID thật thì thêm máy vào mục thiết bị thử nghiệm trong AdMob.
+
+## Đánh giá app
+
+Chỉ trên Android (`lib/rating/`). Khi bấm "Màn tiếp" / "Trang chính" ở màn
+hoàn thành, nếu đến lúc thì hiện hộp thoại chọn 1–5 sao, và lần đó không hiện
+quảng cáo xen kẽ.
+
+- Lần đầu sau 5 màn đã giải. "Để sau" thì hỏi lại sau 15 màn nữa, tối đa 3
+  lần (`RatingPolicy`).
+- 5 sao: mở trang app trên CH Play (`market://`, không có thì mở trang web).
+  Ít hơn: cảm ơn và ở lại trong game. Đã chọn sao thì không hỏi nữa.
 
 ## Phát hành (Firebase App Distribution)
 

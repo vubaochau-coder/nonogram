@@ -138,7 +138,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String nonogramPlayHintLabel(int count) {
-    return 'Hint $count/3';
+    return 'Hint ($count)';
   }
 
   @override
@@ -485,5 +485,33 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String playModeProgress(int solved, int total) {
     return '$solved/$total solved';
+  }
+
+  @override
+  String get adRewardNotReady =>
+      'The ad isn\'t ready yet. Check your internet connection and try again.';
+
+  @override
+  String get settingsAdPrivacy => 'Ad privacy';
+
+  @override
+  String get ratingTitle => 'Enjoying Nonopix?';
+
+  @override
+  String get ratingMessage => 'Tap a star to rate the game.';
+
+  @override
+  String get ratingLater => 'Later';
+
+  @override
+  String get ratingSubmit => 'Submit';
+
+  @override
+  String get ratingThanks =>
+      'Thanks for your feedback! We\'ll keep making the game better.';
+
+  @override
+  String ratingStarLabel(int count) {
+    return '$count stars';
   }
 }

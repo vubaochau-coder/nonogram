@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:lucide_icons/lucide_icons.dart';
+import 'package:nonogram/models/power_up_inventory.dart';
 import 'package:nonogram/core/context_ext.dart';
 
 import '../bloc/nonogram_play_bloc.dart';
 import '../bloc/nonogram_play_event.dart';
 import '../bloc/nonogram_play_state.dart';
 import '../widgets/overlay_button.dart';
+import 'rewarded_offer.dart';
 
 /// Gậy phép: bật chế độ chọn, rồi chạm vào dãy số của một hàng / cột để
 /// hiện đáp án của đúng hàng / cột đó (khác nút gợi ý tự chọn hàng).
@@ -24,8 +26,9 @@ class WandAction extends StatelessWidget {
               p.isSolved != c.isSolved,
       builder: (context, state) {
         final colors = context.color;
-        final enabled =
-            !state.isSolved && (state.isWandActive || state.remainingWands > 0);
+        // Hết lượt: nút vẫn bấm được, bấm là xem quảng cáo để dùng một lượt.
+        final adOffer = !state.isWandActive && state.remainingWands <= 0;
+        final enabled = !state.isSolved;
         return Tooltip(
           message: context.l10n.nonogramPlayWandLabel,
           child: Stack(
@@ -36,10 +39,13 @@ class WandAction extends StatelessWidget {
                 icon: LucideIcons.wand2,
                 color: state.isWandActive ? colors.primary : null,
                 enabled: enabled,
-                onPressed:
-                    () => context.read<NonogramPlayBloc>().add(
-                      const WandToggled(),
-                    ),
+                onPressed: () {
+                  if (adOffer) {
+                    usePowerUpWithAd(context, PowerUp.wand);
+                    return;
+                  }
+                  context.read<NonogramPlayBloc>().add(const WandToggled());
+                },
               ),
               Positioned(
                 right: -4,
@@ -48,6 +54,7 @@ class WandAction extends StatelessWidget {
                   child: CountBadge(
                     count: state.remainingWands,
                     active: state.remainingWands > 0,
+                    adOffer: adOffer,
                   ),
                 ),
               ),
@@ -61,10 +68,18 @@ class WandAction extends StatelessWidget {
 
 /// Huy hiệu số lượt còn lại ở góc nút.
 class CountBadge extends StatelessWidget {
-  const CountBadge({super.key, required this.count, required this.active});
+  const CountBadge({
+    super.key,
+    required this.count,
+    required this.active,
+    this.adOffer = false,
+  });
 
   final int count;
   final bool active;
+
+  /// Hết lượt: hiện biểu tượng quảng cáo thay cho số 0.
+  final bool adOffer;
 
   @override
   Widget build(BuildContext context) {
@@ -74,18 +89,26 @@ class CountBadge extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 4),
       alignment: Alignment.center,
       decoration: BoxDecoration(
-        color: active ? context.color.primary : context.color.outline,
+        color:
+            active || adOffer ? context.color.primary : context.color.outline,
         borderRadius: BorderRadius.circular(8),
       ),
-      child: Text(
-        '$count',
-        style: context.labelSmall.copyWith(
-          fontSize: 10,
-          height: 1,
-          fontWeight: FontWeight.w800,
-          color: context.color.onPrimary,
-        ),
-      ),
+      child:
+          adOffer
+              ? Icon(
+                LucideIcons.video,
+                size: 10,
+                color: context.color.onPrimary,
+              )
+              : Text(
+                '$count',
+                style: context.labelSmall.copyWith(
+                  fontSize: 10,
+                  height: 1,
+                  fontWeight: FontWeight.w800,
+                  color: context.color.onPrimary,
+                ),
+              ),
     );
   }
 }

@@ -311,7 +311,7 @@ abstract class AppLocalizations {
   /// No description provided for @nonogramPlayHintLabel.
   ///
   /// In en, this message translates to:
-  /// **'Hint {count}/3'**
+  /// **'Hint ({count})'**
   String nonogramPlayHintLabel(int count);
 
   /// No description provided for @nonogramPlayNoNextLevelToast.
@@ -901,6 +901,54 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'{solved}/{total} solved'**
   String playModeProgress(int solved, int total);
+
+  /// No description provided for @adRewardNotReady.
+  ///
+  /// In en, this message translates to:
+  /// **'The ad isn\'t ready yet. Check your internet connection and try again.'**
+  String get adRewardNotReady;
+
+  /// No description provided for @settingsAdPrivacy.
+  ///
+  /// In en, this message translates to:
+  /// **'Ad privacy'**
+  String get settingsAdPrivacy;
+
+  /// No description provided for @ratingTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Enjoying Nonopix?'**
+  String get ratingTitle;
+
+  /// No description provided for @ratingMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Tap a star to rate the game.'**
+  String get ratingMessage;
+
+  /// No description provided for @ratingLater.
+  ///
+  /// In en, this message translates to:
+  /// **'Later'**
+  String get ratingLater;
+
+  /// No description provided for @ratingSubmit.
+  ///
+  /// In en, this message translates to:
+  /// **'Submit'**
+  String get ratingSubmit;
+
+  /// No description provided for @ratingThanks.
+  ///
+  /// In en, this message translates to:
+  /// **'Thanks for your feedback! We\'ll keep making the game better.'**
+  String get ratingThanks;
+
+  /// No description provided for @ratingStarLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'{count} stars'**
+  String ratingStarLabel(int count);
 }
 
 class _AppLocalizationsDelegate

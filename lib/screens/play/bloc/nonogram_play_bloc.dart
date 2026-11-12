@@ -11,6 +11,7 @@ import 'package:nonogram/models/nonogram_interaction_mode.dart';
 import 'package:nonogram/models/nonogram_completed_progress.dart';
 import 'package:nonogram/data/nonogram_repository.dart';
 import 'package:nonogram/models/nonogram_puzzle.dart';
+import 'package:nonogram/models/power_up_inventory.dart';
 import 'package:nonogram/screens/play/engine/nonogram_board_layout.dart';
 import 'package:nonogram/screens/play/engine/nonogram_engine.dart';
 import 'package:nonogram/core/list_ext.dart';
@@ -73,6 +74,7 @@ class NonogramPlayBloc extends AppBloc<NonogramPlayEvent, NonogramPlayState> {
     on<HintRequested>(_onHintRequested, transformer: sequential());
     on<WandToggled>(_onWandToggled, transformer: sequential());
     on<WandLineSelected>(_onWandLineSelected, transformer: sequential());
+    on<RewardGranted>(_onRewardGranted, transformer: sequential());
 
     // --- Internal/Orchestration Events ---
     on<CurrentProgressSaveRequested>(
@@ -155,10 +157,8 @@ class NonogramPlayBloc extends AppBloc<NonogramPlayEvent, NonogramPlayState> {
     // Cỡ ô không do người chơi chọn: luôn là cỡ vừa khung nhìn hiện tại
     // (kể cả ván dở), cập nhật lại khi khung nhìn đổi (xoay màn hình...).
     final cellSize = _autoCellSize(puzzle);
-    final remainingHints =
-        snapshot?.remainingHints ?? NonogramPlayState.maxHints;
-    final remainingWands =
-        snapshot?.remainingWands ?? NonogramPlayState.maxWands;
+    // Kho dùng chung cho mọi màn, không theo ván.
+    final powerUps = await _repository.getPowerUps();
 
     final offsetX = snapshot?.viewportOffsetX ?? 0.0;
     final offsetY = snapshot?.viewportOffsetY ?? 0.0;
@@ -181,8 +181,8 @@ class NonogramPlayBloc extends AppBloc<NonogramPlayEvent, NonogramPlayState> {
       cellSize: cellSize,
       isFullscreen: state.isFullscreen,
       isSolved: _engine.isSolved(puzzle: puzzle, gridData: initialGrid),
-      remainingHints: remainingHints,
-      remainingWands: remainingWands,
+      remainingHints: powerUps.hints,
+      remainingWands: powerUps.wands,
       isWandActive: false,
       // Ô ghim sẵn của màn luôn khoá, cùng với các ô mở bằng gợi ý / gậy phép.
       lockedCells: {
@@ -471,7 +471,7 @@ class NonogramPlayBloc extends AppBloc<NonogramPlayEvent, NonogramPlayState> {
 
   /// Gậy phép: hiện đáp án của đúng hàng / cột người chơi chọn. Hàng / cột
   /// đã đúng thì không tốn lượt, vẫn giữ chế độ chọn để chọn hàng khác.
-  _onWandLineSelected(WandLineSelected event, Emitter emit) {
+  _onWandLineSelected(WandLineSelected event, Emitter emit) async {
     final puzzle = state.puzzle;
     if (state.isLoading ||
         state.isSolved ||
@@ -538,15 +538,66 @@ class NonogramPlayBloc extends AppBloc<NonogramPlayEvent, NonogramPlayState> {
       ),
     );
     add(const SolveCheckRequested());
+    await _savePowerUps(nextState);
   }
 
-  _onHintRequested(HintRequested event, Emitter emit) {
-    if (state.isLoading ||
-        state.isSolved ||
-        state.puzzle == null ||
-        state.remainingHints <= 0) {
-      return;
+  /// Còn ô cần tô để gợi ý mở không (để không bắt xem quảng cáo vô ích).
+  bool get hasHintCells {
+    final puzzle = state.puzzle;
+    if (puzzle == null || state.isSolved) return false;
+    for (var r = 0; r < puzzle.rows; r++) {
+      for (var c = 0; c < puzzle.cols; c++) {
+        if (puzzle.solution[r][c] == 1 &&
+            state.gridData[r][c] != NonogramCellState.filled) {
+          return true;
+        }
+      }
     }
+    return false;
+  }
+
+  /// Lượt dùng thêm (sau quảng cáo) chỉ có khi kho đã hết: không tích luỹ.
+  _onRewardGranted(RewardGranted event, Emitter emit) async {
+    if (state.isLoading || state.isSolved || state.puzzle == null) return;
+    switch (event.powerUp) {
+      case PowerUp.hint:
+        if (state.remainingHints > 0) return;
+        await _applyHint(
+          emit,
+          offsetX: event.offsetX,
+          offsetY: event.offsetY,
+          consume: false,
+        );
+      case PowerUp.wand:
+        if (state.remainingWands > 0 || state.isWandActive) return;
+        // Lượt này nằm trong kho cho tới khi chọn hàng / cột; huỷ chọn thì
+        // vẫn giữ (đã xem quảng cáo rồi).
+        _dragSession = null;
+        final nextState = state.copyWith(remainingWands: 1, isWandActive: true);
+        emit(nextState);
+        await _savePowerUps(nextState);
+    }
+  }
+
+  _onHintRequested(HintRequested event, Emitter emit) async {
+    if (state.remainingHints <= 0) return;
+    await _applyHint(
+      emit,
+      offsetX: event.offsetX,
+      offsetY: event.offsetY,
+      consume: true,
+    );
+  }
+
+  /// Mở 5 ô cần tô. [consume]: trừ một lượt trong kho (false khi người chơi
+  /// vừa xem quảng cáo để dùng lượt này).
+  Future<void> _applyHint(
+    Emitter emit, {
+    required double offsetX,
+    required double offsetY,
+    required bool consume,
+  }) async {
+    if (state.isLoading || state.isSolved || state.puzzle == null) return;
 
     final cells = _engine.pickHintCells(
       puzzle: state.puzzle!,
@@ -564,7 +615,7 @@ class NonogramPlayBloc extends AppBloc<NonogramPlayEvent, NonogramPlayState> {
     final nextState = _buildGridDerivedState(
       sourceState: state,
       gridData: newGrid.toUnmodifiable2D(),
-      remainingHints: state.remainingHints - 1,
+      remainingHints: consume ? state.remainingHints - 1 : null,
     ).copyWith(lockedCells: {...state.lockedCells, ...cells});
 
     // Pulse animation state
@@ -575,12 +626,21 @@ class NonogramPlayBloc extends AppBloc<NonogramPlayEvent, NonogramPlayState> {
     add(
       CurrentProgressSaveRequested(
         sourceState: nextState,
-        offsetX: event.offsetX,
-        offsetY: event.offsetY,
+        offsetX: offsetX,
+        offsetY: offsetY,
       ),
     );
     add(const SolveCheckRequested());
+    if (consume) await _savePowerUps(nextState);
   }
+
+  Future<void> _savePowerUps(NonogramPlayState from) =>
+      _repository.savePowerUps(
+        PowerUpInventory(
+          hints: from.remainingHints,
+          wands: from.remainingWands,
+        ),
+      );
 
   // --- Internal Handlers ---
 

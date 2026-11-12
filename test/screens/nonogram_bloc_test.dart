@@ -5,6 +5,7 @@ import 'package:nonogram/models/nonogram_completed_progress.dart';
 import 'package:nonogram/models/nonogram_interaction_mode.dart';
 import 'package:nonogram/models/nonogram_board_snapshot.dart';
 import 'package:nonogram/models/nonogram_puzzle.dart';
+import 'package:nonogram/models/power_up_inventory.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:nonogram/screens/play/bloc/nonogram_play_bloc.dart';
 import 'package:nonogram/screens/play/bloc/nonogram_play_event.dart';
@@ -418,9 +419,12 @@ void main() {
         ),
       );
 
-      // Verify persistence
-      final snapshot = await repository.getCurrentProgress();
-      expect(snapshot?.remainingHints, 2);
+      // Kho dùng chung được lưu lại.
+      await Future<void>.delayed(const Duration(milliseconds: 10));
+      expect(
+        await repository.getPowerUps(),
+        const PowerUpInventory(hints: 2, wands: 1),
+      );
     });
 
     test('HintRequested fills exactly 5 correct cells at random', () async {
@@ -454,7 +458,65 @@ void main() {
       expect(filled, applied.cells.toSet());
     });
 
+    test('out of hints: a rewarded hint is used at once, not stored', () async {
+      await repository.savePowerUps(const PowerUpInventory(hints: 0, wands: 0));
+      bloc.add(const LevelLoadRequested());
+      await bloc.stream.firstWhere((s) => s.puzzle != null && !s.isLoading);
+      expect(bloc.state.remainingHints, 0);
+
+      bloc.add(
+        const RewardGranted(powerUp: PowerUp.hint, offsetX: 0, offsetY: 0),
+      );
+      final applied = await bloc.stream.firstWhere(
+        (s) => s is NonogramPlayHintCellsAppliedState,
+      );
+      expect((applied as NonogramPlayHintCellsAppliedState).cells.length, 5);
+      expect(bloc.state.remainingHints, 0);
+      expect(
+        await repository.getPowerUps(),
+        const PowerUpInventory(hints: 0, wands: 0),
+      );
+    });
+
+    test('rewards are ignored while the inventory still has some', () async {
+      bloc.add(const LevelLoadRequested());
+      await bloc.stream.firstWhere((s) => s.puzzle != null && !s.isLoading);
+      final grid = bloc.state.gridData;
+
+      bloc.add(
+        const RewardGranted(powerUp: PowerUp.hint, offsetX: 0, offsetY: 0),
+      );
+      bloc.add(
+        const RewardGranted(powerUp: PowerUp.wand, offsetX: 0, offsetY: 0),
+      );
+      await Future<void>.delayed(const Duration(milliseconds: 20));
+      expect(bloc.state.gridData, grid);
+      expect(bloc.state.remainingHints, 3);
+      expect(bloc.state.remainingWands, 1);
+      expect(bloc.state.isWandActive, isFalse);
+    });
+
+    test('out of wands: a rewarded wand opens selection mode', () async {
+      await repository.savePowerUps(const PowerUpInventory(hints: 0, wands: 0));
+      bloc.add(const LevelLoadRequested());
+      await bloc.stream.firstWhere((s) => s.puzzle != null && !s.isLoading);
+
+      bloc.add(
+        const RewardGranted(powerUp: PowerUp.wand, offsetX: 0, offsetY: 0),
+      );
+      await bloc.stream.firstWhere((s) => s.isWandActive);
+      expect(bloc.state.remainingWands, 1);
+
+      bloc.add(
+        const WandLineSelected(isRow: true, index: 0, offsetX: 0, offsetY: 0),
+      );
+      await bloc.stream.firstWhere((s) => s.remainingWands == 0);
+      await Future<void>.delayed(const Duration(milliseconds: 10));
+      expect((await repository.getPowerUps()).wands, 0);
+    });
+
     test('HintRequested should be ignored when hints are 0', () async {
+      await repository.savePowerUps(const PowerUpInventory(hints: 0, wands: 1));
       bloc.add(
         Started(
           puzzle: dummyPuzzle,
@@ -467,7 +529,6 @@ void main() {
             ],
             startTime: DateTime.now(),
             interactionMode: NonogramInteractionMode.fill,
-            remainingHints: 0,
           ),
         ),
       );
@@ -569,34 +630,28 @@ void main() {
       );
     });
 
-    test('Starting new level should have 3 hints', () async {
-      bloc.add(
-        Started(
-          puzzle: dummyPuzzle,
-          snapshot: NonogramBoardSnapshot(
-            puzzleId: dummyPuzzle.id,
-            level: dummyPuzzle.level,
-            gridData: const [
-              [NonogramCellState.filled, NonogramCellState.marked],
-              [NonogramCellState.marked, NonogramCellState.filled],
-            ],
-            startTime: DateTime.now(),
-            interactionMode: NonogramInteractionMode.fill,
-            remainingHints: 1,
-          ),
-        ),
-      );
-      await bloc.stream.firstWhere((s) => s.puzzle != null);
-      expect(bloc.state.isSolved, isTrue);
-      expect(bloc.state.remainingHints, 1);
+    test('hints are not refilled on a new level', () async {
+      bloc.add(const LevelLoadRequested());
+      await bloc.stream.firstWhere((s) => s.puzzle != null && !s.isLoading);
+      bloc.add(const HintRequested(offsetX: 0, offsetY: 0));
+      await bloc.stream.firstWhere((s) => s.remainingHints == 2);
+      await Future<void>.delayed(const Duration(milliseconds: 10));
+      await bloc.close();
 
-      // Go to level 2
-      bloc.add(const NextLevelRequested());
-      await bloc.stream.firstWhere(
-        (s) => s.level == 2 && s.puzzle != null && !s.isLoading,
-      );
+      // Màn khác, bloc mới: vẫn là kho đã dùng.
+      bloc = NonogramPlayBloc(repository: repository, initialLevel: 2);
+      bloc.add(const LevelLoadRequested());
+      await bloc.stream.firstWhere((s) => s.puzzle != null && !s.isLoading);
+      expect(bloc.state.level, 2);
+      expect(bloc.state.remainingHints, 2);
+    });
 
+    test('a new player starts with the starter inventory', () async {
+      expect(await repository.getPowerUps(), PowerUpInventory.starter);
+      bloc.add(const LevelLoadRequested());
+      await bloc.stream.firstWhere((s) => s.puzzle != null && !s.isLoading);
       expect(bloc.state.remainingHints, 3);
+      expect(bloc.state.remainingWands, 1);
     });
   });
 
@@ -620,7 +675,7 @@ void main() {
 
     test('new level starts with one wand, not in selection mode', () async {
       await start();
-      expect(bloc.state.remainingWands, NonogramPlayState.maxWands);
+      expect(bloc.state.remainingWands, 1);
       expect(bloc.state.isWandActive, isFalse);
     });
 
@@ -653,8 +708,7 @@ void main() {
       expect(bloc.state.isWandActive, isFalse);
 
       await Future<void>.delayed(const Duration(milliseconds: 20));
-      final snapshot = await repository.getCurrentProgress();
-      expect(snapshot?.remainingWands, 0);
+      expect((await repository.getPowerUps()).wands, 0);
     });
 
     test('selecting a row reveals exactly that row', () async {
@@ -693,26 +747,15 @@ void main() {
     });
 
     test('cannot enter wand mode with no wands left', () async {
-      await start(
-        NonogramBoardSnapshot(
-          puzzleId: satisfactionPuzzle.id,
-          level: satisfactionPuzzle.level,
-          gridData: List.generate(
-            2,
-            (_) => List.filled(5, NonogramCellState.empty),
-          ),
-          startTime: DateTime.now(),
-          interactionMode: NonogramInteractionMode.fill,
-          remainingWands: 0,
-        ),
-      );
+      await repository.savePowerUps(const PowerUpInventory(hints: 3, wands: 0));
+      await start();
       expect(bloc.state.remainingWands, 0);
       bloc.add(const WandToggled());
       await Future<void>.delayed(const Duration(milliseconds: 20));
       expect(bloc.state.isWandActive, isFalse);
     });
 
-    test('old snapshots without a wand count restore one wand', () {
+    test('old snapshots with per-level counts still load', () {
       final restored = NonogramBoardSnapshot.fromMap({
         'puzzleId': 'p',
         'level': 1,
@@ -723,8 +766,10 @@ void main() {
         'interactionMode': null,
         'viewportOffsetX': 0,
         'viewportOffsetY': 0,
+        'remainingHints': 1,
+        'remainingWands': 0,
       });
-      expect(restored.remainingWands, 1);
+      expect(restored.level, 1);
     });
   });
 

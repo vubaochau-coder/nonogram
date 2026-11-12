@@ -5,6 +5,7 @@ import 'package:nonogram/data/nonogram_puzzle_source.dart';
 import 'package:nonogram/models/nonogram_board_snapshot.dart';
 import 'package:nonogram/models/nonogram_completed_progress.dart';
 import 'package:nonogram/models/nonogram_puzzle.dart';
+import 'package:nonogram/models/power_up_inventory.dart';
 
 /// Gom dữ liệu màn chơi (assets) và tiến độ người chơi (lưu trên máy).
 /// Game chạy offline hoàn toàn: không có tài khoản, không đồng bộ.
@@ -21,6 +22,15 @@ class NonogramRepository {
   }
 
   Future<int> getTotalLevels() => _puzzleSource.totalLevels();
+
+  // --- Kho gợi ý / gậy phép ---
+
+  /// Người chơi mới (chưa lưu lần nào) nhận kho khởi đầu.
+  Future<PowerUpInventory> getPowerUps() async =>
+      await _localService.getPowerUps() ?? PowerUpInventory.starter;
+
+  Future<void> savePowerUps(PowerUpInventory inventory) =>
+      _localService.savePowerUps(inventory);
 
   // --- Ván đang chơi dở ---
 
