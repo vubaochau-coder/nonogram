@@ -180,5 +180,11 @@
   "licensesLevelCount": "{count} màn",
   "playModeProgress": "Đã giải {solved}/{total} màn",
   "adRewardNotReady": "Quảng cáo chưa sẵn sàng. Hãy kiểm tra kết nối mạng rồi thử lại.",
-  "settingsAdPrivacy": "Quyền riêng tư quảng cáo"
+  "settingsAdPrivacy": "Quyền riêng tư quảng cáo",
+  "ratingTitle": "Bạn thấy Nonopix thế nào?",
+  "ratingMessage": "Chạm vào số sao để đánh giá game nhé.",
+  "ratingLater": "Để sau",
+  "ratingSubmit": "Gửi",
+  "ratingThanks": "Cảm ơn bạn đã góp ý! Chúng mình sẽ tiếp tục làm game tốt hơn.",
+  "ratingStarLabel": "{count} sao"
 }

@@ -1,4 +1,6 @@
 import 'package:nonogram/ads/ad_scope.dart';
+import 'package:nonogram/data/nonogram_repository.dart';
+import 'package:nonogram/rating/app_rating_dialog.dart';
 import 'package:nonogram/core/context_ext.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -227,20 +229,30 @@ class _NonogramCompletionView extends StatelessWidget {
         child: NonogramCompletionResultSection(
           puzzle: puzzle,
           completionDuration: duration,
-          // Rời màn hoàn thành là lúc nghỉ tự nhiên: có thể hiện quảng cáo
-          // xen kẽ (đã giới hạn tần suất) trước khi đi tiếp.
           onNextLevel: () async {
             final bloc = context.read<NonogramPlayBloc>();
-            await context.ads.onLevelCompleteExit();
+            await _onLeaveCompletion(context);
             if (!bloc.isClosed) bloc.add(const NextLevelRequested());
           },
           onDashboard: () async {
             final navigator = Navigator.of(context);
-            await context.ads.onLevelCompleteExit();
+            await _onLeaveCompletion(context);
             navigator.maybePop();
           },
         ),
       ),
     );
   }
+}
+
+/// Rời màn hoàn thành là lúc nghỉ tự nhiên: hỏi đánh giá app nếu đến lúc,
+/// không thì có thể hiện quảng cáo xen kẽ (đã giới hạn tần suất). Không hiện
+/// cả hai cùng lúc.
+Future<void> _onLeaveCompletion(BuildContext context) async {
+  final ads = context.ads;
+  final solved =
+      (await context.read<NonogramRepository>().getCompletedProgress()).length;
+  if (!context.mounted) return;
+  if (await maybeAskForRating(context, solved)) return;
+  await ads.onLevelCompleteExit();
 }

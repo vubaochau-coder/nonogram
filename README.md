@@ -189,6 +189,17 @@ Game ──AdPlacement──▶ AdService (ad_service.dart)
   **Đừng bấm vào quảng cáo thật của chính mình**, AdMob sẽ khoá tài khoản;
   muốn thử với ID thật thì thêm máy vào mục thiết bị thử nghiệm trong AdMob.
 
+## Đánh giá app
+
+Chỉ trên Android (`lib/rating/`). Khi bấm "Màn tiếp" / "Trang chính" ở màn
+hoàn thành, nếu đến lúc thì hiện hộp thoại chọn 1–5 sao, và lần đó không hiện
+quảng cáo xen kẽ.
+
+- Lần đầu sau 5 màn đã giải. "Để sau" thì hỏi lại sau 15 màn nữa, tối đa 3
+  lần (`RatingPolicy`).
+- 5 sao: mở trang app trên CH Play (`market://`, không có thì mở trang web).
+  Ít hơn: cảm ơn và ở lại trong game. Đã chọn sao thì không hỏi nữa.
+
 ## Phát hành (Firebase App Distribution)
 
 Chỉ phát hành qua GitHub Actions. App Android `com.chauvb.nonogram`

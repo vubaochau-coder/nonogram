@@ -492,4 +492,25 @@ class AppLocalizationsVi extends AppLocalizations {
 
   @override
   String get settingsAdPrivacy => 'Quyền riêng tư quảng cáo';
+
+  @override
+  String get ratingTitle => 'Bạn thấy Nonopix thế nào?';
+
+  @override
+  String get ratingMessage => 'Chạm vào số sao để đánh giá game nhé.';
+
+  @override
+  String get ratingLater => 'Để sau';
+
+  @override
+  String get ratingSubmit => 'Gửi';
+
+  @override
+  String get ratingThanks =>
+      'Cảm ơn bạn đã góp ý! Chúng mình sẽ tiếp tục làm game tốt hơn.';
+
+  @override
+  String ratingStarLabel(int count) {
+    return '$count sao';
+  }
 }

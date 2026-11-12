@@ -913,6 +913,42 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Ad privacy'**
   String get settingsAdPrivacy;
+
+  /// No description provided for @ratingTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Enjoying Nonopix?'**
+  String get ratingTitle;
+
+  /// No description provided for @ratingMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Tap a star to rate the game.'**
+  String get ratingMessage;
+
+  /// No description provided for @ratingLater.
+  ///
+  /// In en, this message translates to:
+  /// **'Later'**
+  String get ratingLater;
+
+  /// No description provided for @ratingSubmit.
+  ///
+  /// In en, this message translates to:
+  /// **'Submit'**
+  String get ratingSubmit;
+
+  /// No description provided for @ratingThanks.
+  ///
+  /// In en, this message translates to:
+  /// **'Thanks for your feedback! We\'ll keep making the game better.'**
+  String get ratingThanks;
+
+  /// No description provided for @ratingStarLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'{count} stars'**
+  String ratingStarLabel(int count);
 }
 
 class _AppLocalizationsDelegate

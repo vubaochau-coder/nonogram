@@ -22,6 +22,7 @@ import 'data/hive_nonogram_local_service.dart';
 import 'data/nonogram_puzzle_source.dart';
 import 'data/nonogram_repository.dart';
 import 'l10n/app_localizations.dart';
+import 'rating/app_rating.dart';
 import 'screens/dashboard/nonogram_dashboard_page.dart';
 import 'screens/play_mode/play_mode_selection_page.dart';
 
@@ -34,6 +35,11 @@ Future<void> main() async {
   final launcher = AppLauncher(
     flavor: flavor,
     adService: createAdService(flavor),
+    // Lời mời đánh giá mở CH Play: chỉ có trên Android.
+    rating:
+        !kIsWeb && defaultTargetPlatform == TargetPlatform.android
+            ? await AppRatingController.load()
+            : null,
     themeMode: await AppThemeModeController.load(),
     onboarding: await OnboardingPreferences.load(),
     playModes: await PlayModePreferences.load(),
@@ -56,6 +62,7 @@ class AppLauncher {
   AppLauncher({
     required this.flavor,
     required this.adService,
+    this.rating,
     required this.themeMode,
     required this.onboarding,
     required this.playModes,
@@ -63,6 +70,7 @@ class AppLauncher {
 
   final AppFlavor flavor;
   final AdService adService;
+  final AppRatingController? rating;
   final AppThemeModeController themeMode;
   final OnboardingPreferences onboarding;
   final PlayModePreferences playModes;
@@ -111,6 +119,7 @@ class AppLauncher {
         repository: repository,
         themeMode: themeMode,
         adService: adService,
+        rating: rating,
         onboarding: onboarding,
         showTutorialOnStart: showTutorial,
         playModeSwitcher:
@@ -216,6 +225,7 @@ class NonogramApp extends StatelessWidget {
     required this.repository,
     required this.themeMode,
     this.adService,
+    this.rating,
     this.onboarding,
     this.showTutorialOnStart = false,
     this.playModeSwitcher,
@@ -226,6 +236,9 @@ class NonogramApp extends StatelessWidget {
 
   /// Null trong test: không có quảng cáo.
   final AdService? adService;
+
+  /// Null trên iOS, web và trong test: không hỏi đánh giá.
+  final AppRatingController? rating;
 
   /// Null trong test: không tự hiện hướng dẫn thao tác khi vào màn chơi.
   final OnboardingPreferences? onboarding;
@@ -243,6 +256,7 @@ class NonogramApp extends StatelessWidget {
         // báo lỗi (assert) ngay khi khởi động ở bản debug.
         ChangeNotifierProvider.value(value: themeMode),
         Provider<AdService>.value(value: adService ?? NoAdService()),
+        if (rating != null) Provider.value(value: rating!),
         if (onboarding != null) Provider.value(value: onboarding!),
         if (playModeSwitcher != null) Provider.value(value: playModeSwitcher!),
       ],

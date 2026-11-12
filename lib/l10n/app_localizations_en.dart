@@ -493,4 +493,25 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get settingsAdPrivacy => 'Ad privacy';
+
+  @override
+  String get ratingTitle => 'Enjoying Nonopix?';
+
+  @override
+  String get ratingMessage => 'Tap a star to rate the game.';
+
+  @override
+  String get ratingLater => 'Later';
+
+  @override
+  String get ratingSubmit => 'Submit';
+
+  @override
+  String get ratingThanks =>
+      'Thanks for your feedback! We\'ll keep making the game better.';
+
+  @override
+  String ratingStarLabel(int count) {
+    return '$count stars';
+  }
 }
