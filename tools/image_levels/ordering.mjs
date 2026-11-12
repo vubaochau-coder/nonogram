@@ -12,7 +12,7 @@ import { deriveClues, solveLine } from './solver.mjs';
 const clamp01 = (x) => Math.max(0, Math.min(1, x));
 
 /** Các chỉ số độ khó của một lời giải (mảng hàng 0/1). */
-export function difficultyMetrics(solution) {
+export function difficultyMetrics(solution, pins = []) {
   const rows = solution.length;
   const cols = solution[0].length;
   const { rowClues, colClues } = deriveClues(solution);
@@ -21,12 +21,16 @@ export function difficultyMetrics(solution) {
 
   // Điểm bắt đầu: ô suy ra được từ lưới trống bằng một hàng hoặc một cột.
   const start = solution.map(() => new Array(cols).fill(false));
-  rowClues.forEach((clues, r) => solveLine(blankRow, clues).forEach((v, c) => v !== -1 && (start[r][c] = true)));
-  colClues.forEach((clues, c) => solveLine(blankCol, clues).forEach((v, r) => v !== -1 && (start[r][c] = true)));
+  const pinned = solution.map((row) => row.map(() => -1));
+  for (const [r, c] of pins) ((pinned[r][c] = solution[r][c]), (start[r][c] = true));
+  rowClues.forEach((clues, r) => solveLine(pins.length ? pinned[r] : blankRow, clues).forEach((v, c) => v !== -1 && (start[r][c] = true)));
+  colClues.forEach((clues, c) =>
+    solveLine(pins.length ? pinned.map((row) => row[c]) : blankCol, clues).forEach((v, r) => v !== -1 && (start[r][c] = true)),
+  );
   const startRatio = start.flat().filter(Boolean).length / (rows * cols);
 
   // Độ sâu: số vòng quét (mỗi vòng giải lại mọi hàng rồi mọi cột) tới khi xong.
-  const grid = solution.map((row) => row.map(() => -1));
+  const grid = pinned.map((row) => [...row]);
   let rounds = 0;
   for (let changed = true; changed; ) {
     changed = false;

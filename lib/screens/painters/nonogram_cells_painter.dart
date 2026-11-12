@@ -23,6 +23,11 @@ class NonogramCellsPainter extends CustomPainter {
   final Color lockedStarColor;
   final Color lockedMarkStarColor;
 
+  /// Ô ghim sẵn của màn (cũng nằm trong [lockedCells]): vẽ chấm ghim tròn thay
+  /// cho ngôi sao, để phân biệt với ô người chơi mở bằng gợi ý.
+  final Set<LockedCell> pinnedCells;
+  final Color pinColor;
+
   NonogramCellsPainter({
     this.backgroundColor,
     required this.rows,
@@ -37,6 +42,8 @@ class NonogramCellsPainter extends CustomPainter {
     this.lockedCells = const {},
     this.lockedStarColor = const Color(0xFFFFC53D),
     this.lockedMarkStarColor = const Color(0xFFFFB020),
+    this.pinnedCells = const {},
+    this.pinColor = const Color(0xFFFFFFFF),
   });
 
   /// Ngôi sao 5 cánh tâm [center], bán kính ngoài [radius].
@@ -102,7 +109,9 @@ class NonogramCellsPainter extends CustomPainter {
             ),
             fillPaint,
           );
-          if (lockedCells.contains((row: r, col: c))) {
+          if (pinnedCells.contains((row: r, col: c))) {
+            _drawPin(canvas, rect.center, cellSize * 0.16);
+          } else if (lockedCells.contains((row: r, col: c))) {
             canvas.drawPath(
               starPath(rect.center, cellSize * 0.2),
               Paint()..color = lockedStarColor,
@@ -127,7 +136,14 @@ class NonogramCellsPainter extends CustomPainter {
             Offset(left, bottom),
             markedMarkerPaint,
           );
-          if (lockedCells.contains((row: r, col: c))) {
+          if (pinnedCells.contains((row: r, col: c))) {
+            _drawPin(
+              canvas,
+              rect.topRight + Offset(-cellSize * 0.2, cellSize * 0.2),
+              cellSize * 0.1,
+              color: markedMarkerColor,
+            );
+          } else if (lockedCells.contains((row: r, col: c))) {
             canvas.drawPath(
               starPath(
                 rect.topRight + Offset(-cellSize * 0.2, cellSize * 0.2),
@@ -149,6 +165,19 @@ class NonogramCellsPainter extends CustomPainter {
     }
   }
 
+  /// Chấm ghim: hình tròn đặc có viền, như đầu đinh ghim.
+  void _drawPin(Canvas canvas, Offset center, double radius, {Color? color}) {
+    canvas.drawCircle(center, radius, Paint()..color = color ?? pinColor);
+    canvas.drawCircle(
+      center,
+      radius,
+      Paint()
+        ..style = PaintingStyle.stroke
+        ..strokeWidth = (radius * 0.35).clamp(0.8, 2.0)
+        ..color = (color ?? pinColor).withValues(alpha: 0.55),
+    );
+  }
+
   @override
   bool shouldRepaint(covariant NonogramCellsPainter oldDelegate) {
     return oldDelegate.rows != rows ||
@@ -159,6 +188,8 @@ class NonogramCellsPainter extends CustomPainter {
         oldDelegate.markerColor != markerColor ||
         oldDelegate.backgroundColor != backgroundColor ||
         oldDelegate.lockedCells != lockedCells ||
+        oldDelegate.pinnedCells != pinnedCells ||
+        oldDelegate.pinColor != pinColor ||
         oldDelegate.lockedStarColor != lockedStarColor ||
         oldDelegate.lockedMarkStarColor != lockedMarkStarColor ||
         oldDelegate.gridData != gridData ||

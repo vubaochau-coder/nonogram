@@ -55,12 +55,18 @@ const levels = [];
 const problems = [];
 for (const p of picks) {
   const grid = p.solution.map((row) => [...row].map(Number));
-  if (!analyze(grid).lineSolvable) {
+  // Ô ghim sẵn ([hàng, cột]) để màn chỉ còn một cách giải.
+  const pins = p.pins ?? [];
+  if (!analyze(grid, pins).lineSolvable) {
     problems.push(p.key);
     continue;
   }
+  if (pins.length > Math.floor(0.05 * grid.length * grid[0].length)) {
+    problems.push(`${p.key} (ghim quá 5% số ô)`);
+    continue;
+  }
   const id = p.key.replace(':', '-');
-  const metrics = difficultyMetrics(grid);
+  const metrics = difficultyMetrics(grid, pins);
   levels.push({
     id,
     title: p.title,
@@ -74,8 +80,9 @@ for (const p of picks) {
       rows: p.rows,
       cols: p.cols,
       solution: p.solution,
+      ...(pins.length ? { pinned: pins } : {}),
     },
-    source: { id, title: p.title, set: p.set, icon: p.icon, author: p.author, license: p.license, params: p.params, editedCells: p.edits?.length ?? 0, metrics },
+    source: { id, title: p.title, set: p.set, pinnedCells: pins.length, icon: p.icon, author: p.author, license: p.license, params: p.params, editedCells: p.edits?.length ?? 0, metrics },
   });
 }
 // Màn lấy nguyên từ các bộ nonogram có giấy phép mở (không phải chuyển từ

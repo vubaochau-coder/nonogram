@@ -638,6 +638,8 @@ class _BoardPaint extends StatelessWidget {
                         lockedCells: state.lockedCells,
                         lockedStarColor: game.lockedStar,
                         lockedMarkStarColor: game.lockedMarkStar,
+                        pinnedCells: puzzle.pinnedCells,
+                        pinColor: colors.surfaceContainerLow,
                       ),
                       foregroundPainter: NonogramGridPainter(
                         rows: puzzle.rows,

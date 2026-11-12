@@ -155,9 +155,11 @@ export function propagate(grid, rowClues, colClues) {
  * Kiểm tra màn giải được chỉ bằng suy luận hàng/cột (không cần đoán).
  * Điều kiện này mạnh hơn "nghiệm duy nhất" và cho trải nghiệm chơi tốt hơn.
  */
-export function analyze(solution) {
+export function analyze(solution, pins = []) {
   const { rowClues, colClues } = deriveClues(solution);
   const grid = solution.map((row) => row.map(() => -1));
+  // Ô ghim sẵn ([hàng, cột]) đã biết từ đầu, theo đáp án.
+  for (const [r, c] of pins) grid[r][c] = solution[r][c];
   const res = propagate(grid, rowClues, colClues);
   const solved = res.ok && grid.every((row) => row.every((v) => v !== -1));
   return { lineSolvable: solved, rounds: res.rounds, lineSolves: res.lineSolves, partial: grid };
@@ -203,4 +205,34 @@ export function repair(solution, maxFlips) {
     a = analyze(grid);
   }
   return { grid, flips };
+}
+
+/**
+ * Tìm ô ghim (theo đáp án) để màn giải được bằng suy luận: mỗi bước ghim ô giúp
+ * suy luận đi được xa nhất, tới khi giải xong. Trả về danh sách [hàng, cột]
+ * (rỗng nếu không cần ghim), hoặc null nếu cần nhiều hơn [maxPins] ô.
+ * [filledOnly]: chỉ ghim ô tô.
+ */
+export function findPins(solution, { maxPins = Infinity, filledOnly = true } = {}) {
+  const rows = solution.length;
+  const cols = solution[0].length;
+  const pins = [];
+  let a = analyze(solution, pins);
+  while (!a.lineSolvable) {
+    if (pins.length >= maxPins) return null;
+    let best = null;
+    for (let r = 0; r < rows; r++)
+      for (let c = 0; c < cols; c++) {
+        if (a.partial[r][c] !== -1 || (filledOnly && !solution[r][c])) continue;
+        pins.push([r, c]);
+        const b = analyze(solution, pins);
+        pins.pop();
+        const k = known(b.partial);
+        if (!best || k > best.k) best = { r, c, k };
+      }
+    if (!best) return null;
+    pins.push([best.r, best.c]);
+    a = analyze(solution, pins);
+  }
+  return pins;
 }

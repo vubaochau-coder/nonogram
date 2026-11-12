@@ -18,6 +18,11 @@ class NonogramPuzzle {
   final List<List<int>> topClues;
   final List<List<int>> leftClues;
 
+  /// Ô ghim sẵn: hiện đúng theo đáp án ngay từ đầu màn và không đổi được.
+  /// Dùng cho màn có nhiều cách tô khớp gợi ý, để chỉ còn một nghiệm duy nhất
+  /// mà không phải sửa hình (xem `docs/level_format.md`).
+  final Set<({int row, int col})> pinnedCells;
+
   NonogramPuzzle({
     required this.id,
     required this.title,
@@ -26,6 +31,7 @@ class NonogramPuzzle {
     required this.difficultyScore,
     required this.level,
     required this.solution,
+    this.pinnedCells = const {},
   }) : rows = solution.length,
        cols = solution.isEmpty ? 0 : solution.first.length,
        leftClues = [for (final row in solution) deriveClues(row)],
@@ -37,6 +43,11 @@ class NonogramPuzzle {
          )
            deriveClues([for (final row in solution) row[c]]),
        ];
+
+  /// Giá trị đáp án của các ô ghim (1 = tô, 0 = trống), cho bộ giải.
+  Map<({int row, int col}), int> get pinnedValues => {
+    for (final cell in pinnedCells) cell: solution[cell.row][cell.col],
+  };
 
   /// Các đoạn liên tiếp ô được tô trong một hàng/cột. Hàng trống → `[]`.
   static List<int> deriveClues(List<int> line) {
@@ -102,6 +113,30 @@ class NonogramPuzzle {
       );
     }
 
+    final pinnedCells = <({int row, int col})>{};
+    final rawPinned = json['pinned'];
+    if (rawPinned != null) {
+      if (rawPinned is! List) {
+        throw FormatException('Level $level: pinned must be a list');
+      }
+      for (final cell in rawPinned) {
+        if (cell is! List ||
+            cell.length != 2 ||
+            cell[0] is! int ||
+            cell[1] is! int) {
+          throw FormatException('Level $level: invalid pinned cell $cell');
+        }
+        final r = cell[0] as int;
+        final c = cell[1] as int;
+        if (r < 0 || r >= solution.length || c < 0 || c >= cols) {
+          throw FormatException('Level $level: pinned cell $cell is outside');
+        }
+        if (!pinnedCells.add((row: r, col: c))) {
+          throw FormatException('Level $level: duplicate pinned cell $cell');
+        }
+      }
+    }
+
     return NonogramPuzzle(
       id: id,
       level: level,
@@ -113,6 +148,7 @@ class NonogramPuzzle {
       difficulty: (json['difficulty'] as String?) ?? '',
       difficultyScore: (json['difficultyScore'] as num?)?.toDouble() ?? 0,
       solution: solution,
+      pinnedCells: pinnedCells,
     );
   }
 }

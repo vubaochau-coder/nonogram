@@ -5,7 +5,7 @@
 //   node tools/image_levels/import_png_icons.mjs <thư mục PNG> --set=<id bộ> \
 //     --author="<ghi công>" --license=<SPDX> [--exclude=Prefix1,Prefix2] \
 //     [--exclude-words=word1,word2] [--include=Ten_file1,Ten_file2]
-//     [--titles=Ten_file:Tiêu đề,...] [--only] [--auto-accept]
+//     [--titles=Ten_file:Tiêu đề,...] [--only] [--auto-accept] [--max-pins=2]
 //     [--out=tools/image_levels/out/picker_icons.json]
 //
 // Mỗi điểm ảnh màu đen (gần đen) thành một ô tô; nền trong suốt và phần ruột
@@ -18,7 +18,7 @@ import path from 'node:path';
 import { createRequire } from 'node:module';
 import { fileURLToPath } from 'node:url';
 
-import { analyze, repair } from './solver.mjs';
+import { analyze, findPins, repair } from './solver.mjs';
 
 const here = path.dirname(fileURLToPath(import.meta.url));
 const args = Object.fromEntries(
@@ -158,16 +158,20 @@ function pickerDifficulty(rows, cols, lineSolves, rounds) {
 /**
  * --auto-accept: icon tự được chọn khi nét viền giải được bằng suy luận mà
  * không cần sửa ô nào; dùng bản thu nhỏ ½ nếu thu nhỏ được trọn vẹn (mọi khối
- * 2×2 đồng nhất), không thì giữ nguyên kích thước.
+ * 2×2 đồng nhất), không thì giữ nguyên kích thước. Nếu chưa giải được, cho phép
+ * ghim sẵn tối đa --max-pins ô tô (mặc định 2, không quá 5% số ô).
  */
+const maxPins = args['max-pins'] === undefined ? 2 : Number(args['max-pins']);
 function autoAccept(ink) {
   const full = crop(ink);
   const half = halfDown(full);
   const useHalf = half.mismatch === 0;
   const sol = useHalf ? half.grid : full;
   if (sol.length < 4 || sol[0].length < 4) return null;
-  const a = analyze(sol);
-  if (!a.lineSolvable) return null;
+  const limit = Math.min(maxPins, Math.floor(0.05 * sol.length * sol[0].length));
+  const pins = findPins(sol, { maxPins: limit, filledOnly: true });
+  if (!pins) return null;
+  const a = analyze(sol, pins);
   const filled = sol.flat().reduce((x, y) => x + y, 0);
   return {
     rows: sol.length,
@@ -176,6 +180,7 @@ function autoAccept(ink) {
     density: Math.round((filled / (sol.length * sol[0].length)) * 1000) / 1000,
     difficultyScore: pickerDifficulty(sol.length, sol[0].length, a.lineSolves, a.rounds),
     params: { mode: 'pixel', solid: false, cleanup: false, half: useHalf, negative: false, pad: 0 },
+    ...(pins.length ? { pins } : {}),
   };
 }
 

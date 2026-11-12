@@ -152,7 +152,7 @@ kbd { font: 600 11px var(--mono); padding: 1px 5px; border-radius: 4px; backgrou
       </div>
       <div class="board" id="board"><canvas id="grid" aria-label="Lưới nonogram"></canvas></div>
       <div class="status" id="status"></div>
-      <div class="hint">Chạm hoặc kéo trên lưới để tô/xoá từng ô. Ô cam = suy luận chưa tới được. Chấm màu = ô đã sửa tay. Phím tắt: <kbd>←</kbd> <kbd>→</kbd> chuyển ảnh, <kbd>Enter</kbd> chọn, <kbd>S</kbd> bỏ qua, <kbd>N</kbd> âm bản.</div>
+      <div class="hint">Chạm hoặc kéo trên lưới để tô/xoá từng ô. Ô cam = suy luận chưa tới được. Chấm màu = ô đã sửa tay. Vòng tròn = ô ghim sẵn (hiện sẵn và khoá trong game). Phím tắt: <kbd>←</kbd> <kbd>→</kbd> chuyển ảnh, <kbd>Enter</kbd> chọn, <kbd>S</kbd> bỏ qua, <kbd>N</kbd> âm bản.</div>
     </section>
 
     <aside class="panel" aria-label="Tuỳ chọn chuyển đổi">
@@ -201,6 +201,8 @@ kbd { font: 600 11px var(--mono); padding: 1px 5px; border-radius: 4px; backgrou
         <div class="label"><label for="pad">Lề quanh hình</label><output id="pad-out"></output></div>
         <input type="range" id="pad" min="0" max="5" step="1">
         <div class="row">
+          <button class="btn" id="autopin">Tự ghim ô</button>
+          <button class="btn" id="clear-pins">Bỏ ghim</button>
           <button class="btn" id="autofix">Tự sửa cho giải được</button>
           <button class="btn" id="clear-edits">Xoá sửa tay</button>
           <button class="btn" id="reset">Về gợi ý</button>
@@ -248,9 +250,10 @@ function solveLine(line, clues) {
   for (let i = 0; i < n; i++) { run += diff[i]; if (!i) continue; const mf = run > 0; if (mf && !mayEmpty[i]) res[i - 1] = 1; else if (!mf && mayEmpty[i]) res[i - 1] = 0; else if (!mf && !mayEmpty[i]) return null; }
   return res;
 }
-function analyze(sol) {
+function analyze(sol, pins = []) {
   const { rc, cc } = deriveClues(sol); const rows = sol.length, cols = sol[0].length;
   const g = sol.map((r) => r.map(() => -1));
+  for (const [r, c] of pins) g[r][c] = sol[r][c]; // ô ghim sẵn, đã biết từ đầu
   const dr = new Array(rows).fill(true), dc = new Array(cols).fill(true);
   let rounds = 0, lineSolves = 0, changed = true, ok = true;
   outer: while (changed) {
@@ -284,6 +287,25 @@ function repair(sol, maxFlips) {
   }
   return flips;
 }
+// Ghim ô tô (theo đáp án) để suy luận đi xa nhất, tới khi giải xong; null nếu cần quá maxPins ô.
+function findPins(sol, maxPins) {
+  const rows = sol.length, cols = sol[0].length; const pins = [];
+  let a = analyze(sol, pins);
+  while (!a.lineSolvable) {
+    if (pins.length >= maxPins) return null;
+    let best = null;
+    for (let r = 0; r < rows; r++) for (let c = 0; c < cols; c++) {
+      if (a.partial[r][c] !== -1 || !sol[r][c]) continue;
+      pins.push([r, c]); const k = knownCount(analyze(sol, pins).partial); pins.pop();
+      if (!best || k > best.k) best = { r, c, k };
+    }
+    if (!best) return null;
+    pins.push([best.r, best.c]); a = analyze(sol, pins);
+  }
+  return pins;
+}
+const MAX_PIN_RATIO = 0.05; // giới hạn ô ghim: 5% số ô
+const pinBudget = (g) => Math.floor(MAX_PIN_RATIO * g.length * g[0].length);
 function difficultyScore(rows, cols, lineSolves, rounds) {
   const size = Math.min(1, (rows * cols) / 900), work = Math.min(1, lineSolves / (2.5 * (rows + cols))), depth = Math.min(1, (rounds - 1) / 10);
   return Math.round(Math.min(1, 0.55 * size + 0.25 * work + 0.2 * depth) * 100) / 100;
@@ -435,7 +457,7 @@ const docId = (key) => key.replace(/[^a-zA-Z0-9_-]/g, '__');
 let iconByKey = new Map();
 const autoDecision = (key) => {
   const ic = iconByKey.get(key);
-  return ic?.auto ? { status: 'picked', params: ic.auto.params, edits: [], title: ic.title, auto: true } : undefined;
+  return ic?.auto ? { status: 'picked', params: ic.auto.params, edits: [], pins: ic.auto.pins ?? [], title: ic.title, auto: true } : undefined;
 };
 // icon.resetBefore: quyết định lưu trước thời điểm này bị bỏ qua (màn đã được đưa về bản gốc).
 const savedDecision = (key) => {
@@ -462,20 +484,24 @@ async function open(i) {
   const saved = decisionOf(icon.key);
   const params = saved?.status === 'picked' && saved.params ? { ...suggestedParams(icon, entry), ...saved.params } : suggestedParams(icon, entry);
   if (params.mode === 'color' && !params.colorsOn) params.colorsOn = defaultColorsOn(paletteOf(entry, params.k));
-  cur = { icon, entry, params, edits: new Set(saved?.status === 'picked' ? (saved.edits ?? []).map(([r, c]) => r + ',' + c) : []) };
+  cur = { icon, entry, params, edits: new Set(saved?.status === 'picked' ? (saved.edits ?? []).map(([r, c]) => r + ',' + c) : []), pins: saved?.status === 'picked' ? (saved.pins ?? []).map(([r, c]) => [r, c]) : [] };
   $('orig').src = svgUrl(icon.svg);
   $('title').value = saved?.title ?? icon.title;
   $('source').textContent = `${icon.author} · ${icon.license} · ${icon.key}`;
-  syncControls(); recompute(true); renderStrip(); note(saved?.auto ? 'Tự chấp nhận: giải được bằng suy luận, không cần sửa ô nào. Bấm Bỏ qua nếu không muốn dùng.' : '');
-  // A fresh (not yet picked) icon that the suggested settings leave unsolvable gets one
-  // auto-fix pass, as the batch generator does; the flipped cells show as manual edits.
-  if (saved?.status !== 'picked' && !cur.info.lineSolvable) {
-    const g = cur.final; const flips = repair(g, Math.max(1, Math.round(MAX_FLIP_RATIO * g.length * g[0].length)));
-    if (flips) { for (const [r, c] of flips) cur.edits.add(r + ',' + c); applyEdits(); note(`Đã tự sửa ${flips.length} ô (chấm màu) để màn giải được. Bấm “Xoá sửa tay” để xem bản gốc.`, 'ok'); }
-  }
+  syncControls(); recompute(true); renderStrip();
+  note(saved?.auto ? `Tự chấp nhận: giải được bằng suy luận${cur.pins.length ? ` khi ghim ${cur.pins.length} ô` : ', không cần sửa ô nào'}. Bấm Bỏ qua nếu không muốn dùng.` : '');
+  // Icon chưa duyệt mà chưa giải được: thử ghim sẵn vài ô tô (không quá 5% số ô) để
+  // giữ nguyên hình; nút "Tự sửa" vẫn có nếu muốn lật ô thay vì ghim.
+  if (saved?.status !== 'picked' && !cur.info.lineSolvable) autoPin(true);
   try { localStorage.setItem('nonopix-picker-last', icon.key); } catch {}
 }
 
+function autoPin(silentFail) {
+  const pins = findPins(cur.final, pinBudget(cur.final));
+  if (!pins) { if (!silentFail) note(`Không ghim được trong giới hạn ${pinBudget(cur.final)} ô (5%). Thử đổi thông số hoặc dùng Tự sửa.`, 'bad'); return; }
+  cur.pins = pins; applyEdits();
+  note(pins.length ? `Đã ghim ${pins.length} ô (vòng tròn) để màn chỉ còn một cách giải, không phải sửa hình.` : 'Màn đã giải được, không cần ghim.', 'ok');
+}
 function recompute(keepEdits) {
   const base = buildBase(cur.icon, cur.entry, cur.params);
   // Manual edits follow padding changes (shifted by the margin delta) and survive other
@@ -490,7 +516,9 @@ function recompute(keepEdits) {
 }
 function applyEdits() {
   cur.final = cur.base.map((row, r) => row.map((v, c) => (cur.edits.has(r + ',' + c) ? 1 - v : v)));
-  cur.info = analyze(cur.final);
+  // Ô ghim chỉ nằm trên ô tô; bỏ ô ghim không còn hợp lệ sau khi đổi thông số / sửa tay.
+  cur.pins = (cur.pins ?? []).filter(([r, c]) => r < cur.final.length && c < cur.final[0].length && cur.final[r][c] === 1);
+  cur.info = analyze(cur.final, cur.pins);
   draw(); renderStatus();
 }
 
@@ -510,6 +538,7 @@ function draw() {
   for (let r = 0; r < rows; r++) for (let c = 0; c < cols; c++) {
     if (!cur.info.lineSolvable && cur.info.partial[r][c] === -1) { ctx.fillStyle = unknown; ctx.fillRect(c * cell, r * cell, cell, cell); }
     if (g[r][c]) { ctx.fillStyle = ink; ctx.fillRect(c * cell + 0.5, r * cell + 0.5, cell - 1, cell - 1); }
+    if (cur.pins.some(([pr, pc]) => pr === r && pc === c)) { ctx.strokeStyle = cssVar('--surface'); ctx.lineWidth = Math.max(1.5, cell * 0.12); ctx.beginPath(); ctx.arc(c * cell + cell / 2, r * cell + cell / 2, cell * 0.26, 0, Math.PI * 2); ctx.stroke(); }
     if (cur.edits.has(r + ',' + c)) { ctx.fillStyle = accent; const d = Math.max(3, cell * 0.28); ctx.beginPath(); ctx.arc(c * cell + cell / 2, r * cell + cell / 2, d / 2, 0, Math.PI * 2); ctx.fill(); }
   }
   ctx.strokeStyle = gridc; ctx.lineWidth = 1;
@@ -527,11 +556,12 @@ function renderStatus() {
     `<span class="pill ${densOk ? '' : 'warn'}">Tô ${Math.round(density * 100)}%${densOk ? '' : ' · nên 25–75%'}</span>`,
     i.lineSolvable ? `<span class="pill">Độ khó ${Math.max(1, Math.round(score * 10))}/10</span>` : '',
     cur.edits.size ? `<span class="pill">${cur.edits.size} ô sửa tay</span>` : '',
+    cur.pins.length ? `<span class="pill ${cur.pins.length > pinBudget(g) ? 'bad' : ''}">${cur.pins.length} ô ghim</span>` : '',
   ];
   $('status').innerHTML = parts.join('');
   $('pick').disabled = !i.lineSolvable || !db || rows < 4 || cols < 4;
   $('pick').textContent = statusOf(cur.icon.key) === 'picked' ? 'Lưu lại bản này' : 'Chọn màn này';
-  $('autofix').disabled = i.lineSolvable; $('clear-edits').disabled = !cur.edits.size;
+  $('autofix').disabled = i.lineSolvable; $('autopin').disabled = i.lineSolvable; $('clear-pins').disabled = !cur.pins.length; $('clear-edits').disabled = !cur.edits.size;
 }
 function syncControls() {
   const p = cur.params, pixel = cur.icon.mode === 'pixel';
@@ -611,8 +641,10 @@ $('cleanup').onchange = (e) => { cur.params.cleanup = e.target.checked; recomput
 $('negative').onchange = (e) => { cur.params.negative = e.target.checked; recompute(true); };
 document.addEventListener('keydown', (e) => { if ((e.key === 'n' || e.key === 'N') && !e.target.closest('input, select, textarea')) { $('negative').click(); } });
 $('pad').addEventListener('input', (e) => { cur.params.pad = +e.target.value; syncControls(); recompute(true); });
-$('reset').onclick = () => { cur.params = suggestedParams(cur.icon, cur.entry); cur.edits = new Set(); cur.base = null; cur.pad = null; syncControls(); recompute(false); };
+$('reset').onclick = () => { cur.params = suggestedParams(cur.icon, cur.entry); cur.edits = new Set(); cur.pins = []; cur.base = null; cur.pad = null; syncControls(); recompute(false); };
 $('clear-edits').onclick = () => { cur.edits.clear(); applyEdits(); };
+$('autopin').onclick = () => autoPin(false);
+$('clear-pins').onclick = () => { cur.pins = []; applyEdits(); };
 $('autofix').onclick = () => {
   const g = cur.final; const flips = repair(g, Math.max(1, Math.round(MAX_FLIP_RATIO * g.length * g[0].length)));
   if (!flips) { note('Không tự sửa được với ít ô. Thử đổi thông số hoặc sửa tay các ô cam.', 'bad'); return; }
@@ -639,7 +671,7 @@ async function save(status) {
       rows: g.length, cols: g[0].length, solution: g.map((r) => r.join('')),
       density: Math.round((filled / (g.length * g[0].length)) * 1000) / 1000,
       difficultyScore: difficultyScore(g.length, g[0].length, i.lineSolves, i.rounds),
-      params: { ...cur.params }, edits: [...cur.edits].map((k) => k.split(',').map(Number)),
+      params: { ...cur.params }, edits: [...cur.edits].map((k) => k.split(',').map(Number)), pins: cur.pins.map(([r, c]) => [r, c]),
     });
   }
   const btn = status === 'picked' ? $('pick') : $('skip'); btn.disabled = true;

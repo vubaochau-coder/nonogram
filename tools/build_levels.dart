@@ -98,6 +98,9 @@ void main(List<String> args) {
       if (row['cols'] != null && '${row['cols']}'.isNotEmpty)
         'cols': _asInt(row['cols']),
       'solution': _solutionRows(row['solution']),
+      // Ô ghim sẵn: danh sách [hàng, cột], xem docs/level_format.md.
+      if (row['pinned'] is List && (row['pinned'] as List).isNotEmpty)
+        'pinned': row['pinned'],
     };
 
     String? problem;
@@ -109,6 +112,7 @@ void main(List<String> args) {
         final count = solver.countSolutions(
           rowClues: puzzle.leftClues,
           colClues: puzzle.topClues,
+          fixedCells: puzzle.pinnedValues,
         );
         if (count != 1) {
           throw FormatException('has $count+ solutions (not unique)');

@@ -14,14 +14,21 @@ final class NonogramSolver {
   static const int _filled = 1;
 
   /// Đếm số nghiệm, tối đa [limit] (mặc định 2 là đủ để biết có duy nhất không).
+  ///
+  /// [fixedCells]: các ô đã biết trước (ô ghim sẵn của màn), giá trị 1 = tô,
+  /// 0 = trống.
   int countSolutions({
     required List<List<int>> rowClues,
     required List<List<int>> colClues,
     int limit = 2,
+    Map<({int row, int col}), int> fixedCells = const {},
   }) {
     final rows = rowClues.length;
     final cols = colClues.length;
     final grid = List.generate(rows, (_) => List.filled(cols, _unknown));
+    fixedCells.forEach((cell, value) {
+      grid[cell.row][cell.col] = value == 1 ? _filled : _empty;
+    });
     return _search(grid, rowClues, colClues, limit);
   }
 

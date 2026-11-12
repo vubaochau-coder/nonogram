@@ -87,6 +87,12 @@ nguyên kích thước). Trang chọn màn hiện các icon này là "đã chọ
 để loại. `picks_to_levels.mjs` tính chúng là đã chọn, trừ khi trong dữ liệu
 duyệt đã có quyết định khác. Với bộ Nikoichu: 652/1.022 icon được tự chấp nhận.
 
+Màn chưa giải được có thể dùng **ô ghim sẵn** thay vì sửa hình: trường `pins`
+([hàng, cột], chỉ ô tô, tối đa 5% số ô) đi vào trường `pinned` của màn, game hiện
+sẵn và khoá các ô này. `--auto-accept` cho phép ghim tối đa `--max-pins` ô (mặc
+định 2). Trên trang chọn màn: nút "Tự ghim ô" / "Bỏ ghim"; icon chưa duyệt mà chưa
+giải được sẽ được thử ghim khi mở.
+
 `--only` bỏ các bộ khác khỏi trang chọn màn (hiện trang chỉ còn bộ của
 Nikoichu). Các màn đã chọn từ Pixelarticons/Streamline Pixel vẫn nằm trong
 `data/picks.json` nên không mất khi sinh lại bộ màn.
