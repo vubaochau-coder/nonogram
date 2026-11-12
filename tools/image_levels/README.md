@@ -78,8 +78,14 @@ node tools/image_levels/import_png_icons.mjs <thư mục Sprites> --set=nikoichu
   --exclude=Platforms,Software,Controller,Arrows --exclude-words=tetris \
   --include=Platforms_Linux_GNU_Penguin_Full,Platforms_Linux_GNU_Penguin_Head \
   --titles="Platforms_Linux_GNU_Penguin_Full:Tux,Platforms_Linux_GNU_Penguin_Head:Tux Head" \
-  --only
+  --only --auto-accept
 ```
+
+`--auto-accept` tự chấp nhận icon có nét viền giải được bằng suy luận mà không
+cần sửa ô nào (dùng bản thu nhỏ ½ nếu thu nhỏ được trọn vẹn, không thì giữ
+nguyên kích thước). Trang chọn màn hiện các icon này là "đã chọn"; bấm Bỏ qua
+để loại. `picks_to_levels.mjs` tính chúng là đã chọn, trừ khi trong dữ liệu
+duyệt đã có quyết định khác. Với bộ Nikoichu: 652/1.022 icon được tự chấp nhận.
 
 `--only` bỏ các bộ khác khỏi trang chọn màn (hiện trang chỉ còn bộ của
 Nikoichu). Các màn đã chọn từ Pixelarticons/Streamline Pixel vẫn nằm trong

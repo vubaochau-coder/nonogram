@@ -430,7 +430,15 @@ function buildBase(icon, entry, p) {
 let icons = [], db = null, picks = new Map(), idx = 0, filter = 'all';
 let cur = null; // { icon, entry, params, base, edits:Set, final, info }
 const docId = (key) => key.replace(/[^a-zA-Z0-9_-]/g, '__');
-const statusOf = (key) => picks.get(key)?.status ?? 'todo';
+// Icon "tự chấp nhận" (icon.auto, do import_png_icons.mjs --auto-accept tính sẵn) coi như đã
+// chọn cho tới khi người duyệt lưu quyết định khác vào cơ sở dữ liệu.
+let iconByKey = new Map();
+const autoDecision = (key) => {
+  const ic = iconByKey.get(key);
+  return ic?.auto ? { status: 'picked', params: ic.auto.params, edits: [], title: ic.title, auto: true } : undefined;
+};
+const decisionOf = (key) => picks.get(key) ?? autoDecision(key);
+const statusOf = (key) => decisionOf(key)?.status ?? 'todo';
 
 function suggestedParams(icon, entry) {
   if (icon.mode === 'pixel') return { mode: 'pixel', solid: icon.suggest?.variant === 'solid', cleanup: false, half: entry.half.mismatch <= 0.25 };
@@ -445,14 +453,14 @@ async function open(i) {
   if (!icons.length) return;
   idx = (i + icons.length) % icons.length;
   const icon = icons[idx]; const entry = await prepare(icon);
-  const saved = picks.get(icon.key);
+  const saved = decisionOf(icon.key);
   const params = saved?.status === 'picked' && saved.params ? { ...suggestedParams(icon, entry), ...saved.params } : suggestedParams(icon, entry);
   if (params.mode === 'color' && !params.colorsOn) params.colorsOn = defaultColorsOn(paletteOf(entry, params.k));
   cur = { icon, entry, params, edits: new Set(saved?.status === 'picked' ? (saved.edits ?? []).map(([r, c]) => r + ',' + c) : []) };
   $('orig').src = svgUrl(icon.svg);
   $('title').value = saved?.title ?? icon.title;
   $('source').textContent = `${icon.author} · ${icon.license} · ${icon.key}`;
-  syncControls(); recompute(true); renderStrip(); note('');
+  syncControls(); recompute(true); renderStrip(); note(saved?.auto ? 'Tự chấp nhận: giải được bằng suy luận, không cần sửa ô nào. Bấm Bỏ qua nếu không muốn dùng.' : '');
   // A fresh (not yet picked) icon that the suggested settings leave unsolvable gets one
   // auto-fix pass, as the batch generator does; the flipped cells show as manual edits.
   if (saved?.status !== 'picked' && !cur.info.lineSolvable) {
@@ -655,6 +663,7 @@ async function boot() {
   try {
     const res = await fetch('icons.json'); if (!res.ok) throw new Error('HTTP ' + res.status);
     icons = (await res.json()).icons;
+    iconByKey = new Map(icons.map((ic) => [ic.key, ic]));
   } catch (err) { $('banner').dataset.tone = 'bad'; $('banner').textContent = 'Không tải được danh sách ảnh (' + err.message + '). Tải lại trang để thử lại.'; return; }
   $('workspace').hidden = false;
   $('banner').textContent = 'Đang kết nối nơi lưu kết quả…';

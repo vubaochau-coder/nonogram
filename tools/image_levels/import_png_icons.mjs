@@ -5,7 +5,8 @@
 //   node tools/image_levels/import_png_icons.mjs <thư mục PNG> --set=<id bộ> \
 //     --author="<ghi công>" --license=<SPDX> [--exclude=Prefix1,Prefix2] \
 //     [--exclude-words=word1,word2] [--include=Ten_file1,Ten_file2]
-//     [--titles=Ten_file:Tiêu đề,...] [--only] [--out=tools/image_levels/out/picker_icons.json]
+//     [--titles=Ten_file:Tiêu đề,...] [--only] [--auto-accept]
+//     [--out=tools/image_levels/out/picker_icons.json]
 //
 // Mỗi điểm ảnh màu đen (gần đen) thành một ô tô; nền trong suốt và phần ruột
 // màu trắng thành ô trống. Trên trang chọn màn, "Lấp kín" sẽ lấp phần ruột để
@@ -118,6 +119,66 @@ const density = (g) => {
   const c = crop(g);
   return c.flat().reduce((a, b) => a + b, 0) / (c.length * c[0].length);
 };
+/** Như trang chọn màn: chọn cách chia khối 2×2 khớp nhất rồi gộp theo số đông. */
+function halfDown(g) {
+  const H = g.length;
+  const W = g[0].length;
+  const at = (y, x) => (y >= 0 && y < H && x >= 0 && x < W ? g[y][x] : 0);
+  let best = null;
+  for (const oy of [0, 1])
+    for (const ox of [0, 1]) {
+      let bad = 0;
+      let blocks = 0;
+      const out = [];
+      for (let y = -oy; y < H; y += 2) {
+        const row = [];
+        for (let x = -ox; x < W; x += 2) {
+          const s = at(y, x) + at(y + 1, x) + at(y, x + 1) + at(y + 1, x + 1);
+          if (s) blocks++;
+          if (s && s !== 4) bad++;
+          row.push(s >= 2 ? 1 : 0);
+        }
+        out.push(row);
+      }
+      const mismatch = blocks ? bad / blocks : 1;
+      if (!best || mismatch < best.mismatch) best = { mismatch, grid: out };
+    }
+  best.grid = crop(best.grid);
+  return best;
+}
+
+/** Cùng công thức với trang chọn màn (thứ tự thật tính lại ở ordering.mjs). */
+function pickerDifficulty(rows, cols, lineSolves, rounds) {
+  const size = Math.min(1, (rows * cols) / 900);
+  const work = Math.min(1, lineSolves / (2.5 * (rows + cols)));
+  const depth = Math.min(1, (rounds - 1) / 10);
+  return Math.round(Math.min(1, 0.55 * size + 0.25 * work + 0.2 * depth) * 100) / 100;
+}
+
+/**
+ * --auto-accept: icon tự được chọn khi nét viền giải được bằng suy luận mà
+ * không cần sửa ô nào; dùng bản thu nhỏ ½ nếu thu nhỏ được trọn vẹn (mọi khối
+ * 2×2 đồng nhất), không thì giữ nguyên kích thước.
+ */
+function autoAccept(ink) {
+  const full = crop(ink);
+  const half = halfDown(full);
+  const useHalf = half.mismatch === 0;
+  const sol = useHalf ? half.grid : full;
+  if (sol.length < 4 || sol[0].length < 4) return null;
+  const a = analyze(sol);
+  if (!a.lineSolvable) return null;
+  const filled = sol.flat().reduce((x, y) => x + y, 0);
+  return {
+    rows: sol.length,
+    cols: sol[0].length,
+    solution: sol.map((r) => r.join('')),
+    density: Math.round((filled / (sol.length * sol[0].length)) * 1000) / 1000,
+    difficultyScore: pickerDifficulty(sol.length, sol[0].length, a.lineSolves, a.rounds),
+    params: { mode: 'pixel', solid: false, cleanup: false, half: useHalf, negative: false, pad: 0 },
+  };
+}
+
 const titleOf = (name) => {
   const parts = name.replace(/\.png$/i, '').split('_');
   const skip = parts[0] === 'Map' && parts[1] === 'Markers' ? 2 : 1;
@@ -142,7 +203,9 @@ const icons = decoded.map((d) => {
   // không giải được và hình bóng không quá đặc.
   const variant = !solvable(d.ink) && density(d.shape) <= 0.75 && solvable(d.shape) ? 'solid' : 'pixel';
   const icon = d.name.replace(/\.png$/i, '');
+  const auto = 'auto-accept' in args ? autoAccept(d.ink) : null;
   return {
+    ...(auto ? { auto } : {}),
     key: `${args.set}:${icon}`,
     set: args.set,
     icon,
@@ -165,4 +228,4 @@ data.icons = [...keep, ...icons];
 data.generatedAt = new Date().toISOString();
 fs.writeFileSync(outFile, JSON.stringify(data));
 const counts = icons.reduce((m, i) => ((m[i.suggest.variant] = (m[i.suggest.variant] ?? 0) + 1), m), {});
-console.log(`${icons.length} icon (${JSON.stringify(counts)}) → ${outFile}`);
+console.log(`${icons.length} icon (${JSON.stringify(counts)}, tự chấp nhận ${icons.filter((i) => i.auto).length}) → ${outFile}`);
