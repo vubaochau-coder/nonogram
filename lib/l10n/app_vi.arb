@@ -186,5 +186,7 @@
   "ratingLater": "Để sau",
   "ratingSubmit": "Gửi",
   "ratingThanks": "Cảm ơn bạn đã góp ý! Chúng mình sẽ tiếp tục làm game tốt hơn.",
-  "ratingStarLabel": "{count} sao"
+  "ratingStarLabel": "{count} sao",
+  "settingsLanguage": "Ngôn ngữ",
+  "settingsLanguageSystem": "Theo ngôn ngữ của máy"
 }

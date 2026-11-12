@@ -313,11 +313,14 @@ class _Pill extends StatelessWidget {
         children: [
           Icon(icon, size: 14, color: Colors.white),
           const SizedBox(width: 6),
-          Text(
-            label,
-            style: context.labelMedium.copyWith(
-              color: Colors.white,
-              fontWeight: FontWeight.w700,
+          // Bản dịch dài (vd. tiếng Đức) xuống dòng thay vì tràn khung.
+          Flexible(
+            child: Text(
+              label,
+              style: context.labelMedium.copyWith(
+                color: Colors.white,
+                fontWeight: FontWeight.w700,
+              ),
             ),
           ),
         ],
@@ -340,7 +343,9 @@ class _MetaTag extends StatelessWidget {
       children: [
         Icon(icon, size: 14, color: color),
         const SizedBox(width: 4),
-        Text(label, style: context.labelLarge.copyWith(color: color)),
+        Flexible(
+          child: Text(label, style: context.labelLarge.copyWith(color: color)),
+        ),
         const SizedBox(width: 6),
       ],
     );

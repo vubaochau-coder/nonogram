@@ -514,4 +514,10 @@ class AppLocalizationsEn extends AppLocalizations {
   String ratingStarLabel(int count) {
     return '$count stars';
   }
+
+  @override
+  String get settingsLanguage => 'Language';
+
+  @override
+  String get settingsLanguageSystem => 'Device language';
 }

@@ -32,7 +32,29 @@ flutter run --flavor dev      # Android: luôn phải chọn flavor
 - Nhánh `beta` giữ nguyên trạng thái `main` trước khi đổi bộ màn (vẫn dùng bộ
   màn crawl).
 
-Hỗ trợ Android, iOS và Web. Giao diện có tiếng Việt và tiếng Anh (theo ngôn ngữ máy).
+Hỗ trợ Android, iOS và Web.
+
+## Ngôn ngữ
+
+Giao diện có 15 ngôn ngữ: Anh, Việt, Tây Ban Nha, Bồ Đào Nha, Pháp, Đức, Ý,
+Nga, Thổ Nhĩ Kỳ, Indonesia, Thái, Nhật, Hàn, Trung giản thể và Trung phồn thể.
+
+- Mặc định theo ngôn ngữ của máy; máy dùng ngôn ngữ không có trong danh sách
+  thì hiện tiếng Anh. Máy báo `zh_TW` / `zh_HK` / `zh_MO` (Android cũ, không
+  có mã chữ viết) dùng tiếng Trung phồn thể (`resolveAppLocale` trong
+  `lib/core/app_locale.dart`).
+- Người chơi đổi được ngôn ngữ bằng nút quả địa cầu trên trang chính hoặc trong
+  Cài đặt khi đang chơi; lựa chọn được lưu trên máy (chọn "Theo ngôn ngữ của
+  máy" để bỏ).
+- Tên màn chơi (lấy từ tên icon gốc) giữ nguyên tiếng Anh ở mọi ngôn ngữ.
+- **Thêm ngôn ngữ:** tạo `lib/l10n/app_<mã>.arb` (đủ mọi khoá của
+  `app_en.arb`), chạy `flutter gen-l10n`, thêm vào `appLanguages` trong
+  `lib/core/app_locale.dart` và `CFBundleLocalizations` trong
+  `ios/Runner/Info.plist`.
+- `test/core/app_locale_test.dart` kiểm tra mọi file `.arb` đủ khoá, đúng
+  placeholder và khớp danh sách chọn ngôn ngữ;
+  `test/l10n/locale_layout_test.dart` dựng các màn chính bằng từng ngôn ngữ
+  trên điện thoại 360×640 (font Nunito thật) để bắt chữ dịch bị tràn.
 
 Bản web cần build kèm CanvasKit để chạy được khi không có mạng:
 
@@ -103,7 +125,7 @@ lib/
     guide/                   Hướng dẫn cách giải (lý thuyết, có lối vào bài tập)
     tutorial/                Bài hướng dẫn tương tác 5×5 ("Cách chơi")
     painters/                CustomPainter cho lưới, gợi ý, đáp án
-  l10n/                      Chuỗi dịch (app_en.arb, app_vi.arb)
+  l10n/                      Chuỗi dịch (app_<mã>.arb, 15 ngôn ngữ) + code sinh từ đó
 assets/
   levels/                    1.061 màn chơi có bản quyền (sinh bằng tools/build_levels.dart)
   levels_dev/                574 màn crawl, chỉ có ở flavor dev (chế độ nhà phát triển)

@@ -513,4 +513,10 @@ class AppLocalizationsVi extends AppLocalizations {
   String ratingStarLabel(int count) {
     return '$count sao';
   }
+
+  @override
+  String get settingsLanguage => 'Ngôn ngữ';
+
+  @override
+  String get settingsLanguageSystem => 'Theo ngôn ngữ của máy';
 }
