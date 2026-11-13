@@ -524,4 +524,45 @@ class AppLocalizationsIt extends AppLocalizations {
 
   @override
   String get settingsLanguageSystem => 'Lingua del dispositivo';
+
+  @override
+  String get premiumTitle => 'Gioca senza pubblicità';
+
+  @override
+  String get premiumBenefitNoAds => 'Niente più pubblicità tra i livelli';
+
+  @override
+  String get premiumBenefitDaily =>
+      '2 suggerimenti e 1 bacchetta magica ogni giorno';
+
+  @override
+  String premiumBuy(String price) {
+    return 'Acquista · $price';
+  }
+
+  @override
+  String get premiumOneTime => 'Pagamento unico tramite Google Play';
+
+  @override
+  String get premiumActiveTitle => 'Pacchetto senza pubblicità attivo';
+
+  @override
+  String get premiumActiveDaily =>
+      'Ogni giorno il tuo inventario viene ricaricato a 2 suggerimenti e 1 bacchetta magica.';
+
+  @override
+  String get premiumPurchased =>
+      'Grazie! La pubblicità tra i livelli è disattivata.';
+
+  @override
+  String get premiumPending =>
+      'Il pagamento è in sospeso. Il pacchetto si attiverà appena verrà completato.';
+
+  @override
+  String get premiumFailed => 'L\'acquisto non è andato a buon fine. Riprova.';
+
+  @override
+  String premiumDailyReward(int hints, int wands) {
+    return 'Regalo del giorno: ora hai $hints suggerimenti e $wands bacchetta/e magica/he.';
+  }
 }

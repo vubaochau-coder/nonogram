@@ -1,6 +1,7 @@
 import 'package:flutter/foundation.dart';
 
 import 'ad_config.dart';
+import 'ad_entitlements.dart';
 import 'ad_events.dart';
 import 'ad_service.dart';
 import 'interstitial_policy.dart';
@@ -10,23 +11,26 @@ import 'network/ad_network.dart';
 /// giới hạn tần suất, ghi sự kiện. Không phụ thuộc mạng quảng cáo cụ thể:
 /// mọi thứ riêng của AdMob nằm trong [AdNetwork].
 ///
-/// Trước khi hiện quảng cáo xen kẽ, kiểm tra lần lượt: giới hạn tần suất
-/// ([InterstitialPolicy]) → đã tải sẵn chưa. Quảng cáo có thưởng chỉ cần đã
-/// tải sẵn.
+/// Trước khi hiện quảng cáo xen kẽ, kiểm tra lần lượt: đã mua gói không
+/// quảng cáo ([AdEntitlements]) → giới hạn tần suất ([InterstitialPolicy]) →
+/// đã tải sẵn chưa. Quảng cáo có thưởng chỉ cần đã tải sẵn.
 class AdManager extends AdService {
   AdManager({
     required AdNetwork network,
     required AdConfig config,
     AdEventSink events = const DebugAdEventSink(),
+    AdEntitlements entitlements = const NoAdEntitlements(),
     InterstitialPolicy? policy,
   }) : _network = network,
        _config = config,
        _events = events,
+       _entitlements = entitlements,
        _policy = policy ?? InterstitialPolicy(config: config.interstitial);
 
   final AdNetwork _network;
   final AdConfig _config;
   final AdEventSink _events;
+  final AdEntitlements _entitlements;
   final InterstitialPolicy _policy;
 
   final _privacyOptionsRequired = ValueNotifier(false);
@@ -86,6 +90,7 @@ class AdManager extends AdService {
 
   @override
   Future<void> onLevelCompleteExit() async {
+    if (_entitlements.adsRemoved) return;
     if (!_policy.shouldShowOnLevelExit()) return;
     await _show(AdPlacement.levelComplete);
   }

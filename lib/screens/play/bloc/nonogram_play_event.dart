@@ -142,6 +142,13 @@ class RewardGranted extends NonogramPlayEvent {
   });
 }
 
+/// Kho gợi ý / gậy phép vừa thay đổi ngoài màn chơi (vd. quà hằng ngày).
+class PowerUpsChanged extends NonogramPlayEvent {
+  final PowerUpInventory inventory;
+
+  const PowerUpsChanged(this.inventory);
+}
+
 // --- Internal/Refactor Events (Phase 4.2+) ---
 
 class CurrentProgressSaveRequested extends NonogramPlayEvent {

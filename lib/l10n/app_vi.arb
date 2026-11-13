@@ -188,5 +188,16 @@
   "ratingThanks": "Cảm ơn bạn đã góp ý! Chúng mình sẽ tiếp tục làm game tốt hơn.",
   "ratingStarLabel": "{count} sao",
   "settingsLanguage": "Ngôn ngữ",
-  "settingsLanguageSystem": "Theo ngôn ngữ của máy"
+  "settingsLanguageSystem": "Theo ngôn ngữ của máy",
+  "premiumTitle": "Chơi không quảng cáo",
+  "premiumBenefitNoAds": "Không còn quảng cáo khi qua màn",
+  "premiumBenefitDaily": "Mỗi ngày có 2 gợi ý và 1 gậy phép",
+  "premiumBuy": "Mua · {price}",
+  "premiumOneTime": "Thanh toán một lần qua Google Play",
+  "premiumActiveTitle": "Gói không quảng cáo đã kích hoạt",
+  "premiumActiveDaily": "Mỗi ngày kho được nạp lên 2 gợi ý và 1 gậy phép.",
+  "premiumPurchased": "Cảm ơn bạn! Đã tắt quảng cáo khi qua màn.",
+  "premiumPending": "Giao dịch đang chờ thanh toán. Gói sẽ tự kích hoạt khi thanh toán xong.",
+  "premiumFailed": "Chưa mua được. Bạn thử lại nhé.",
+  "premiumDailyReward": "Quà hằng ngày: kho đã có {hints} gợi ý và {wands} gậy phép."
 }

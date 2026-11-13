@@ -523,4 +523,44 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get settingsLanguageSystem => 'Idioma do dispositivo';
+
+  @override
+  String get premiumTitle => 'Jogar sem anúncios';
+
+  @override
+  String get premiumBenefitNoAds => 'Sem anúncios entre os níveis';
+
+  @override
+  String get premiumBenefitDaily => '2 dicas e 1 varinha mágica todos os dias';
+
+  @override
+  String premiumBuy(String price) {
+    return 'Comprar · $price';
+  }
+
+  @override
+  String get premiumOneTime => 'Pagamento único pelo Google Play';
+
+  @override
+  String get premiumActiveTitle => 'Pacote sem anúncios ativo';
+
+  @override
+  String get premiumActiveDaily =>
+      'Todos os dias seu estoque é recarregado até 2 dicas e 1 varinha mágica.';
+
+  @override
+  String get premiumPurchased =>
+      'Obrigado! Os anúncios entre os níveis foram desativados.';
+
+  @override
+  String get premiumPending =>
+      'Seu pagamento está pendente. O pacote será ativado assim que for concluído.';
+
+  @override
+  String get premiumFailed => 'A compra não foi concluída. Tente novamente.';
+
+  @override
+  String premiumDailyReward(int hints, int wands) {
+    return 'Presente diário: agora você tem $hints dicas e $wands varinha(s) mágica(s).';
+  }
 }

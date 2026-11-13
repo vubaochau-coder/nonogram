@@ -519,4 +519,43 @@ class AppLocalizationsVi extends AppLocalizations {
 
   @override
   String get settingsLanguageSystem => 'Theo ngôn ngữ của máy';
+
+  @override
+  String get premiumTitle => 'Chơi không quảng cáo';
+
+  @override
+  String get premiumBenefitNoAds => 'Không còn quảng cáo khi qua màn';
+
+  @override
+  String get premiumBenefitDaily => 'Mỗi ngày có 2 gợi ý và 1 gậy phép';
+
+  @override
+  String premiumBuy(String price) {
+    return 'Mua · $price';
+  }
+
+  @override
+  String get premiumOneTime => 'Thanh toán một lần qua Google Play';
+
+  @override
+  String get premiumActiveTitle => 'Gói không quảng cáo đã kích hoạt';
+
+  @override
+  String get premiumActiveDaily =>
+      'Mỗi ngày kho được nạp lên 2 gợi ý và 1 gậy phép.';
+
+  @override
+  String get premiumPurchased => 'Cảm ơn bạn! Đã tắt quảng cáo khi qua màn.';
+
+  @override
+  String get premiumPending =>
+      'Giao dịch đang chờ thanh toán. Gói sẽ tự kích hoạt khi thanh toán xong.';
+
+  @override
+  String get premiumFailed => 'Chưa mua được. Bạn thử lại nhé.';
+
+  @override
+  String premiumDailyReward(int hints, int wands) {
+    return 'Quà hằng ngày: kho đã có $hints gợi ý và $wands gậy phép.';
+  }
 }

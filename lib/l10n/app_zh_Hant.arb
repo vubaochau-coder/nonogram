@@ -143,5 +143,16 @@
   "ratingThanks": "感謝你的回饋！我們會繼續改進遊戲。",
   "ratingStarLabel": "{count} 星",
   "settingsLanguage": "語言",
-  "settingsLanguageSystem": "跟隨系統"
+  "settingsLanguageSystem": "跟隨系統",
+  "premiumTitle": "無廣告暢玩",
+  "premiumBenefitNoAds": "關卡之間不再有廣告",
+  "premiumBenefitDaily": "每天 2 次提示和 1 次魔法棒",
+  "premiumBuy": "購買 · {price}",
+  "premiumOneTime": "透過 Google Play 一次性付款",
+  "premiumActiveTitle": "無廣告禮包已啟用",
+  "premiumActiveDaily": "每天庫存會補滿至 2 次提示和 1 次魔法棒。",
+  "premiumPurchased": "謝謝！關卡之間的廣告已關閉。",
+  "premiumPending": "付款處理中。付款完成後禮包將自動啟用。",
+  "premiumFailed": "購買未成功，請再試一次。",
+  "premiumDailyReward": "每日禮物：你現在有 {hints} 次提示和 {wands} 次魔法棒。"
 }

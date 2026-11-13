@@ -519,4 +519,44 @@ class AppLocalizationsTh extends AppLocalizations {
 
   @override
   String get settingsLanguageSystem => 'ภาษาของอุปกรณ์';
+
+  @override
+  String get premiumTitle => 'เล่นแบบไม่มีโฆษณา';
+
+  @override
+  String get premiumBenefitNoAds => 'ไม่มีโฆษณาระหว่างด่านอีกต่อไป';
+
+  @override
+  String get premiumBenefitDaily =>
+      'คำใบ้ 2 ครั้งและไม้กายสิทธิ์ 1 ครั้งทุกวัน';
+
+  @override
+  String premiumBuy(String price) {
+    return 'ซื้อ · $price';
+  }
+
+  @override
+  String get premiumOneTime => 'ชำระครั้งเดียวผ่าน Google Play';
+
+  @override
+  String get premiumActiveTitle => 'แพ็กไม่มีโฆษณาเปิดใช้งานแล้ว';
+
+  @override
+  String get premiumActiveDaily =>
+      'ทุกวันคลังของคุณจะเติมให้ครบคำใบ้ 2 ครั้งและไม้กายสิทธิ์ 1 ครั้ง';
+
+  @override
+  String get premiumPurchased => 'ขอบคุณ! ปิดโฆษณาระหว่างด่านแล้ว';
+
+  @override
+  String get premiumPending =>
+      'การชำระเงินกำลังรอดำเนินการ แพ็กจะเปิดใช้งานเมื่อชำระเสร็จ';
+
+  @override
+  String get premiumFailed => 'ซื้อไม่สำเร็จ โปรดลองอีกครั้ง';
+
+  @override
+  String premiumDailyReward(int hints, int wands) {
+    return 'ของขวัญประจำวัน: ตอนนี้คุณมีคำใบ้ $hints ครั้งและไม้กายสิทธิ์ $wands ครั้ง';
+  }
 }

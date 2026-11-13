@@ -506,4 +506,41 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get settingsLanguageSystem => '端末の言語';
+
+  @override
+  String get premiumTitle => '広告なしでプレイ';
+
+  @override
+  String get premiumBenefitNoAds => 'レベル間の広告がなくなります';
+
+  @override
+  String get premiumBenefitDaily => '毎日ヒント2回と魔法の杖1回';
+
+  @override
+  String premiumBuy(String price) {
+    return '購入 · $price';
+  }
+
+  @override
+  String get premiumOneTime => 'Google Play での1回払い';
+
+  @override
+  String get premiumActiveTitle => '広告なしパック有効';
+
+  @override
+  String get premiumActiveDaily => '毎日、ヒント2回と魔法の杖1回まで補充されます。';
+
+  @override
+  String get premiumPurchased => 'ありがとうございます！レベル間の広告がオフになりました。';
+
+  @override
+  String get premiumPending => '支払いが保留中です。完了するとパックが有効になります。';
+
+  @override
+  String get premiumFailed => '購入できませんでした。もう一度お試しください。';
+
+  @override
+  String premiumDailyReward(int hints, int wands) {
+    return 'デイリーギフト：ヒント$hints回と魔法の杖$wands回になりました。';
+  }
 }

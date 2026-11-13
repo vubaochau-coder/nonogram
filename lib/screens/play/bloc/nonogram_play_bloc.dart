@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:math' show Random;
 import 'dart:ui' show Offset, Size;
 import 'package:flutter/painting.dart' show Axis;
@@ -38,6 +39,13 @@ class NonogramPlayBloc extends AppBloc<NonogramPlayEvent, NonogramPlayState> {
   final Random _random;
 
   _DragSession? _dragSession;
+  StreamSubscription<PowerUpInventory>? _powerUpsSub;
+
+  @override
+  Future<void> close() async {
+    await _powerUpsSub?.cancel();
+    return super.close();
+  }
 
   NonogramPlayBloc({
     required NonogramRepository repository,
@@ -75,6 +83,10 @@ class NonogramPlayBloc extends AppBloc<NonogramPlayEvent, NonogramPlayState> {
     on<WandToggled>(_onWandToggled, transformer: sequential());
     on<WandLineSelected>(_onWandLineSelected, transformer: sequential());
     on<RewardGranted>(_onRewardGranted, transformer: sequential());
+    on<PowerUpsChanged>(_onPowerUpsChanged, transformer: sequential());
+    _powerUpsSub = repository.powerUpChanges.listen(
+      (inventory) => add(PowerUpsChanged(inventory)),
+    );
 
     // --- Internal/Orchestration Events ---
     on<CurrentProgressSaveRequested>(
@@ -554,6 +566,21 @@ class NonogramPlayBloc extends AppBloc<NonogramPlayEvent, NonogramPlayState> {
       }
     }
     return false;
+  }
+
+  _onPowerUpsChanged(PowerUpsChanged event, Emitter emit) {
+    if (state.puzzle == null || state.isLoading) return;
+    final inventory = event.inventory;
+    if (inventory.hints == state.remainingHints &&
+        inventory.wands == state.remainingWands) {
+      return;
+    }
+    emit(
+      state.copyWith(
+        remainingHints: inventory.hints,
+        remainingWands: inventory.wands,
+      ),
+    );
   }
 
   /// Lượt dùng thêm (sau quảng cáo) chỉ có khi kho đã hết: không tích luỹ.

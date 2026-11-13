@@ -143,5 +143,16 @@
   "ratingThanks": "Terima kasih atas masukanmu! Kami akan terus membuat game ini lebih baik.",
   "ratingStarLabel": "{count} bintang",
   "settingsLanguage": "Bahasa",
-  "settingsLanguageSystem": "Bahasa perangkat"
+  "settingsLanguageSystem": "Bahasa perangkat",
+  "premiumTitle": "Main tanpa iklan",
+  "premiumBenefitNoAds": "Tidak ada lagi iklan di antara level",
+  "premiumBenefitDaily": "2 petunjuk dan 1 tongkat ajaib setiap hari",
+  "premiumBuy": "Beli · {price}",
+  "premiumOneTime": "Pembayaran sekali melalui Google Play",
+  "premiumActiveTitle": "Paket bebas iklan aktif",
+  "premiumActiveDaily": "Setiap hari persediaanmu diisi hingga 2 petunjuk dan 1 tongkat ajaib.",
+  "premiumPurchased": "Terima kasih! Iklan di antara level sudah dimatikan.",
+  "premiumPending": "Pembayaranmu masih tertunda. Paket akan aktif begitu pembayaran selesai.",
+  "premiumFailed": "Pembelian gagal. Silakan coba lagi.",
+  "premiumDailyReward": "Hadiah harian: sekarang kamu punya {hints} petunjuk dan {wands} tongkat ajaib."
 }

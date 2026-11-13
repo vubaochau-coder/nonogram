@@ -143,5 +143,16 @@
   "ratingThanks": "ขอบคุณสำหรับความคิดเห็น! เราจะพัฒนาเกมให้ดียิ่งขึ้นต่อไป",
   "ratingStarLabel": "{count} ดาว",
   "settingsLanguage": "ภาษา",
-  "settingsLanguageSystem": "ภาษาของอุปกรณ์"
+  "settingsLanguageSystem": "ภาษาของอุปกรณ์",
+  "premiumTitle": "เล่นแบบไม่มีโฆษณา",
+  "premiumBenefitNoAds": "ไม่มีโฆษณาระหว่างด่านอีกต่อไป",
+  "premiumBenefitDaily": "คำใบ้ 2 ครั้งและไม้กายสิทธิ์ 1 ครั้งทุกวัน",
+  "premiumBuy": "ซื้อ · {price}",
+  "premiumOneTime": "ชำระครั้งเดียวผ่าน Google Play",
+  "premiumActiveTitle": "แพ็กไม่มีโฆษณาเปิดใช้งานแล้ว",
+  "premiumActiveDaily": "ทุกวันคลังของคุณจะเติมให้ครบคำใบ้ 2 ครั้งและไม้กายสิทธิ์ 1 ครั้ง",
+  "premiumPurchased": "ขอบคุณ! ปิดโฆษณาระหว่างด่านแล้ว",
+  "premiumPending": "การชำระเงินกำลังรอดำเนินการ แพ็กจะเปิดใช้งานเมื่อชำระเสร็จ",
+  "premiumFailed": "ซื้อไม่สำเร็จ โปรดลองอีกครั้ง",
+  "premiumDailyReward": "ของขวัญประจำวัน: ตอนนี้คุณมีคำใบ้ {hints} ครั้งและไม้กายสิทธิ์ {wands} ครั้ง"
 }

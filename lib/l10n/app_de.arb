@@ -143,5 +143,16 @@
   "ratingThanks": "Danke für dein Feedback! Wir arbeiten weiter daran, das Spiel zu verbessern.",
   "ratingStarLabel": "{count} Sterne",
   "settingsLanguage": "Sprache",
-  "settingsLanguageSystem": "Gerätesprache"
+  "settingsLanguageSystem": "Gerätesprache",
+  "premiumTitle": "Ohne Werbung spielen",
+  "premiumBenefitNoAds": "Keine Werbung mehr zwischen den Levels",
+  "premiumBenefitDaily": "Jeden Tag 2 Tipps und 1 Zauberstab",
+  "premiumBuy": "Kaufen · {price}",
+  "premiumOneTime": "Einmalige Zahlung über Google Play",
+  "premiumActiveTitle": "Werbefrei-Paket aktiv",
+  "premiumActiveDaily": "Jeden Tag wird dein Vorrat auf 2 Tipps und 1 Zauberstab aufgefüllt.",
+  "premiumPurchased": "Danke! Die Werbung zwischen den Levels ist jetzt aus.",
+  "premiumPending": "Deine Zahlung steht noch aus. Das Paket wird aktiviert, sobald sie abgeschlossen ist.",
+  "premiumFailed": "Der Kauf hat nicht geklappt. Bitte versuche es erneut.",
+  "premiumDailyReward": "Tagesgeschenk: Du hast jetzt {hints} Tipps und {wands} Zauberstab/-stäbe."
 }

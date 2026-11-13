@@ -495,6 +495,43 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get settingsLanguageSystem => '跟随系统';
+
+  @override
+  String get premiumTitle => '无广告畅玩';
+
+  @override
+  String get premiumBenefitNoAds => '关卡之间不再有广告';
+
+  @override
+  String get premiumBenefitDaily => '每天 2 次提示和 1 次魔法棒';
+
+  @override
+  String premiumBuy(String price) {
+    return '购买 · $price';
+  }
+
+  @override
+  String get premiumOneTime => '通过 Google Play 一次性付款';
+
+  @override
+  String get premiumActiveTitle => '无广告礼包已激活';
+
+  @override
+  String get premiumActiveDaily => '每天库存会补满至 2 次提示和 1 次魔法棒。';
+
+  @override
+  String get premiumPurchased => '谢谢！关卡之间的广告已关闭。';
+
+  @override
+  String get premiumPending => '付款处理中。付款完成后礼包将自动激活。';
+
+  @override
+  String get premiumFailed => '购买未成功，请重试。';
+
+  @override
+  String premiumDailyReward(int hints, int wands) {
+    return '每日礼物：你现在有 $hints 次提示和 $wands 次魔法棒。';
+  }
 }
 
 /// The translations for Chinese, using the Han script (`zh_Hant`).
@@ -988,4 +1025,41 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
 
   @override
   String get settingsLanguageSystem => '跟隨系統';
+
+  @override
+  String get premiumTitle => '無廣告暢玩';
+
+  @override
+  String get premiumBenefitNoAds => '關卡之間不再有廣告';
+
+  @override
+  String get premiumBenefitDaily => '每天 2 次提示和 1 次魔法棒';
+
+  @override
+  String premiumBuy(String price) {
+    return '購買 · $price';
+  }
+
+  @override
+  String get premiumOneTime => '透過 Google Play 一次性付款';
+
+  @override
+  String get premiumActiveTitle => '無廣告禮包已啟用';
+
+  @override
+  String get premiumActiveDaily => '每天庫存會補滿至 2 次提示和 1 次魔法棒。';
+
+  @override
+  String get premiumPurchased => '謝謝！關卡之間的廣告已關閉。';
+
+  @override
+  String get premiumPending => '付款處理中。付款完成後禮包將自動啟用。';
+
+  @override
+  String get premiumFailed => '購買未成功，請再試一次。';
+
+  @override
+  String premiumDailyReward(int hints, int wands) {
+    return '每日禮物：你現在有 $hints 次提示和 $wands 次魔法棒。';
+  }
 }

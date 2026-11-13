@@ -986,6 +986,72 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Device language'**
   String get settingsLanguageSystem;
+
+  /// No description provided for @premiumTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Play without ads'**
+  String get premiumTitle;
+
+  /// No description provided for @premiumBenefitNoAds.
+  ///
+  /// In en, this message translates to:
+  /// **'No more ads between levels'**
+  String get premiumBenefitNoAds;
+
+  /// No description provided for @premiumBenefitDaily.
+  ///
+  /// In en, this message translates to:
+  /// **'2 hints and 1 magic wand every day'**
+  String get premiumBenefitDaily;
+
+  /// No description provided for @premiumBuy.
+  ///
+  /// In en, this message translates to:
+  /// **'Buy · {price}'**
+  String premiumBuy(String price);
+
+  /// No description provided for @premiumOneTime.
+  ///
+  /// In en, this message translates to:
+  /// **'One-time payment via Google Play'**
+  String get premiumOneTime;
+
+  /// No description provided for @premiumActiveTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Ad-free pack active'**
+  String get premiumActiveTitle;
+
+  /// No description provided for @premiumActiveDaily.
+  ///
+  /// In en, this message translates to:
+  /// **'Every day your inventory is topped up to 2 hints and 1 magic wand.'**
+  String get premiumActiveDaily;
+
+  /// No description provided for @premiumPurchased.
+  ///
+  /// In en, this message translates to:
+  /// **'Thank you! Ads between levels are now off.'**
+  String get premiumPurchased;
+
+  /// No description provided for @premiumPending.
+  ///
+  /// In en, this message translates to:
+  /// **'Your payment is pending. The pack turns on as soon as it goes through.'**
+  String get premiumPending;
+
+  /// No description provided for @premiumFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'The purchase didn\'t go through. Please try again.'**
+  String get premiumFailed;
+
+  /// No description provided for @premiumDailyReward.
+  ///
+  /// In en, this message translates to:
+  /// **'Daily gift: you now have {hints} hints and {wands} magic wand(s).'**
+  String premiumDailyReward(int hints, int wands);
 }
 
 class _AppLocalizationsDelegate

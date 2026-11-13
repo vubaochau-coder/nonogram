@@ -143,5 +143,16 @@
   "ratingThanks": "ご意見ありがとうございます！これからもゲームを改善していきます。",
   "ratingStarLabel": "星{count}つ",
   "settingsLanguage": "言語",
-  "settingsLanguageSystem": "端末の言語"
+  "settingsLanguageSystem": "端末の言語",
+  "premiumTitle": "広告なしでプレイ",
+  "premiumBenefitNoAds": "レベル間の広告がなくなります",
+  "premiumBenefitDaily": "毎日ヒント2回と魔法の杖1回",
+  "premiumBuy": "購入 · {price}",
+  "premiumOneTime": "Google Play での1回払い",
+  "premiumActiveTitle": "広告なしパック有効",
+  "premiumActiveDaily": "毎日、ヒント2回と魔法の杖1回まで補充されます。",
+  "premiumPurchased": "ありがとうございます！レベル間の広告がオフになりました。",
+  "premiumPending": "支払いが保留中です。完了するとパックが有効になります。",
+  "premiumFailed": "購入できませんでした。もう一度お試しください。",
+  "premiumDailyReward": "デイリーギフト：ヒント{hints}回と魔法の杖{wands}回になりました。"
 }

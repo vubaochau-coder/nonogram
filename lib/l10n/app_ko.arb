@@ -143,5 +143,16 @@
   "ratingThanks": "의견을 주셔서 감사합니다! 계속해서 게임을 개선하겠습니다.",
   "ratingStarLabel": "별 {count}개",
   "settingsLanguage": "언어",
-  "settingsLanguageSystem": "기기 언어"
+  "settingsLanguageSystem": "기기 언어",
+  "premiumTitle": "광고 없이 플레이",
+  "premiumBenefitNoAds": "레벨 사이 광고 제거",
+  "premiumBenefitDaily": "매일 힌트 2개와 마법 지팡이 1개",
+  "premiumBuy": "구매 · {price}",
+  "premiumOneTime": "Google Play를 통한 1회 결제",
+  "premiumActiveTitle": "광고 제거 팩 활성화됨",
+  "premiumActiveDaily": "매일 힌트 2개와 마법 지팡이 1개까지 채워집니다.",
+  "premiumPurchased": "감사합니다! 레벨 사이 광고가 꺼졌습니다.",
+  "premiumPending": "결제가 대기 중입니다. 결제가 완료되면 팩이 활성화됩니다.",
+  "premiumFailed": "구매하지 못했습니다. 다시 시도해 주세요.",
+  "premiumDailyReward": "일일 선물: 이제 힌트 {hints}개와 마법 지팡이 {wands}개가 있습니다."
 }

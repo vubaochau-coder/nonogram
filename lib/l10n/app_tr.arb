@@ -143,5 +143,16 @@
   "ratingThanks": "Geri bildirimin için teşekkürler! Oyunu geliştirmeye devam edeceğiz.",
   "ratingStarLabel": "{count} yıldız",
   "settingsLanguage": "Dil",
-  "settingsLanguageSystem": "Cihaz dili"
+  "settingsLanguageSystem": "Cihaz dili",
+  "premiumTitle": "Reklamsız oyna",
+  "premiumBenefitNoAds": "Seviyeler arasında artık reklam yok",
+  "premiumBenefitDaily": "Her gün 2 ipucu ve 1 sihirli değnek",
+  "premiumBuy": "Satın al · {price}",
+  "premiumOneTime": "Google Play üzerinden tek seferlik ödeme",
+  "premiumActiveTitle": "Reklamsız paket etkin",
+  "premiumActiveDaily": "Her gün envanterin 2 ipucu ve 1 sihirli değneğe tamamlanır.",
+  "premiumPurchased": "Teşekkürler! Seviyeler arasındaki reklamlar kapatıldı.",
+  "premiumPending": "Ödemen beklemede. Tamamlanınca paket etkinleşecek.",
+  "premiumFailed": "Satın alma gerçekleşmedi. Lütfen tekrar dene.",
+  "premiumDailyReward": "Günlük hediye: artık {hints} ipucun ve {wands} sihirli değneğin var."
 }

@@ -143,5 +143,16 @@
   "ratingThanks": "¡Gracias por tu opinión! Seguiremos mejorando el juego.",
   "ratingStarLabel": "{count} estrellas",
   "settingsLanguage": "Idioma",
-  "settingsLanguageSystem": "Idioma del dispositivo"
+  "settingsLanguageSystem": "Idioma del dispositivo",
+  "premiumTitle": "Jugar sin anuncios",
+  "premiumBenefitNoAds": "Sin anuncios entre niveles",
+  "premiumBenefitDaily": "2 pistas y 1 varita mágica cada día",
+  "premiumBuy": "Comprar · {price}",
+  "premiumOneTime": "Pago único a través de Google Play",
+  "premiumActiveTitle": "Paquete sin anuncios activo",
+  "premiumActiveDaily": "Cada día tu inventario se recarga hasta 2 pistas y 1 varita mágica.",
+  "premiumPurchased": "¡Gracias! Ya no hay anuncios entre niveles.",
+  "premiumPending": "Tu pago está pendiente. El paquete se activará en cuanto se complete.",
+  "premiumFailed": "La compra no se completó. Inténtalo de nuevo.",
+  "premiumDailyReward": "Regalo diario: ahora tienes {hints} pistas y {wands} varita(s) mágica(s)."
 }

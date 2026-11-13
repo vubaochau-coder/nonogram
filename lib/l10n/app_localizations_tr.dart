@@ -520,4 +520,44 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get settingsLanguageSystem => 'Cihaz dili';
+
+  @override
+  String get premiumTitle => 'Reklamsız oyna';
+
+  @override
+  String get premiumBenefitNoAds => 'Seviyeler arasında artık reklam yok';
+
+  @override
+  String get premiumBenefitDaily => 'Her gün 2 ipucu ve 1 sihirli değnek';
+
+  @override
+  String premiumBuy(String price) {
+    return 'Satın al · $price';
+  }
+
+  @override
+  String get premiumOneTime => 'Google Play üzerinden tek seferlik ödeme';
+
+  @override
+  String get premiumActiveTitle => 'Reklamsız paket etkin';
+
+  @override
+  String get premiumActiveDaily =>
+      'Her gün envanterin 2 ipucu ve 1 sihirli değneğe tamamlanır.';
+
+  @override
+  String get premiumPurchased =>
+      'Teşekkürler! Seviyeler arasındaki reklamlar kapatıldı.';
+
+  @override
+  String get premiumPending =>
+      'Ödemen beklemede. Tamamlanınca paket etkinleşecek.';
+
+  @override
+  String get premiumFailed => 'Satın alma gerçekleşmedi. Lütfen tekrar dene.';
+
+  @override
+  String premiumDailyReward(int hints, int wands) {
+    return 'Günlük hediye: artık $hints ipucun ve $wands sihirli değneğin var.';
+  }
 }

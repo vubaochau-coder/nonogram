@@ -520,4 +520,44 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get settingsLanguageSystem => 'Язык устройства';
+
+  @override
+  String get premiumTitle => 'Играть без рекламы';
+
+  @override
+  String get premiumBenefitNoAds => 'Больше никакой рекламы между уровнями';
+
+  @override
+  String get premiumBenefitDaily =>
+      '2 подсказки и 1 волшебная палочка каждый день';
+
+  @override
+  String premiumBuy(String price) {
+    return 'Купить · $price';
+  }
+
+  @override
+  String get premiumOneTime => 'Разовый платёж через Google Play';
+
+  @override
+  String get premiumActiveTitle => 'Пакет без рекламы активен';
+
+  @override
+  String get premiumActiveDaily =>
+      'Каждый день запас пополняется до 2 подсказок и 1 волшебной палочки.';
+
+  @override
+  String get premiumPurchased => 'Спасибо! Реклама между уровнями отключена.';
+
+  @override
+  String get premiumPending =>
+      'Платёж ожидает обработки. Пакет включится, как только он пройдёт.';
+
+  @override
+  String get premiumFailed => 'Покупка не удалась. Попробуйте ещё раз.';
+
+  @override
+  String premiumDailyReward(int hints, int wands) {
+    return 'Ежедневный подарок: теперь у вас подсказок — $hints, волшебных палочек — $wands.';
+  }
 }

@@ -524,4 +524,45 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get settingsLanguageSystem => 'Langue de l\'appareil';
+
+  @override
+  String get premiumTitle => 'Jouer sans publicité';
+
+  @override
+  String get premiumBenefitNoAds => 'Plus de publicités entre les niveaux';
+
+  @override
+  String get premiumBenefitDaily =>
+      '2 indices et 1 baguette magique chaque jour';
+
+  @override
+  String premiumBuy(String price) {
+    return 'Acheter · $price';
+  }
+
+  @override
+  String get premiumOneTime => 'Paiement unique via Google Play';
+
+  @override
+  String get premiumActiveTitle => 'Pack sans publicité activé';
+
+  @override
+  String get premiumActiveDaily =>
+      'Chaque jour, ton inventaire est rechargé à 2 indices et 1 baguette magique.';
+
+  @override
+  String get premiumPurchased =>
+      'Merci ! Les publicités entre les niveaux sont désactivées.';
+
+  @override
+  String get premiumPending =>
+      'Ton paiement est en attente. Le pack s\'activera dès qu\'il sera validé.';
+
+  @override
+  String get premiumFailed => 'L\'achat n\'a pas abouti. Réessaie.';
+
+  @override
+  String premiumDailyReward(int hints, int wands) {
+    return 'Cadeau du jour : tu as maintenant $hints indices et $wands baguette(s) magique(s).';
+  }
 }

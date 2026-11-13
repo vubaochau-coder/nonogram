@@ -5,6 +5,7 @@ import 'package:nonogram/core/app_locale.dart';
 import 'package:nonogram/core/app_route_intent.dart';
 import 'package:nonogram/core/app_theme_mode.dart';
 import 'package:nonogram/core/context_ext.dart';
+import 'package:nonogram/premium/premium_card.dart';
 import 'package:nonogram/widgets/app_language_selector.dart';
 
 import 'bloc/nonogram_dashboard_bloc.dart';
@@ -117,6 +118,8 @@ class _NonogramDashboardViewState extends State<_NonogramDashboardView> {
               sliver: SliverList.list(
                 children: const [
                   NonogramDashboardHeroSection(),
+                  SizedBox(height: 20),
+                  PremiumCard(),
                   SizedBox(height: 20),
                   NonogramDashboardProgressSection(),
                   SizedBox(height: 24),

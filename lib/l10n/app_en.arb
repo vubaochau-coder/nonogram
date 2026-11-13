@@ -273,5 +273,33 @@
     }
   },
   "settingsLanguage": "Language",
-  "settingsLanguageSystem": "Device language"
+  "settingsLanguageSystem": "Device language",
+  "premiumTitle": "Play without ads",
+  "premiumBenefitNoAds": "No more ads between levels",
+  "premiumBenefitDaily": "2 hints and 1 magic wand every day",
+  "premiumBuy": "Buy · {price}",
+  "@premiumBuy": {
+    "placeholders": {
+      "price": {
+        "type": "String"
+      }
+    }
+  },
+  "premiumOneTime": "One-time payment via Google Play",
+  "premiumActiveTitle": "Ad-free pack active",
+  "premiumActiveDaily": "Every day your inventory is topped up to 2 hints and 1 magic wand.",
+  "premiumPurchased": "Thank you! Ads between levels are now off.",
+  "premiumPending": "Your payment is pending. The pack turns on as soon as it goes through.",
+  "premiumFailed": "The purchase didn't go through. Please try again.",
+  "premiumDailyReward": "Daily gift: you now have {hints} hints and {wands} magic wand(s).",
+  "@premiumDailyReward": {
+    "placeholders": {
+      "hints": {
+        "type": "int"
+      },
+      "wands": {
+        "type": "int"
+      }
+    }
+  }
 }

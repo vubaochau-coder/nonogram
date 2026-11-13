@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:math';
 
 import 'package:nonogram/data/nonogram_local_service.dart';
@@ -29,8 +30,16 @@ class NonogramRepository {
   Future<PowerUpInventory> getPowerUps() async =>
       await _localService.getPowerUps() ?? PowerUpInventory.starter;
 
-  Future<void> savePowerUps(PowerUpInventory inventory) =>
-      _localService.savePowerUps(inventory);
+  Future<void> savePowerUps(PowerUpInventory inventory) async {
+    await _localService.savePowerUps(inventory);
+    _powerUps.add(inventory);
+  }
+
+  final _powerUps = StreamController<PowerUpInventory>.broadcast(sync: true);
+
+  /// Kho vừa được lưu (từ màn chơi, hoặc quà hằng ngày của gói không quảng
+  /// cáo), để màn chơi đang mở cập nhật số lượt.
+  Stream<PowerUpInventory> get powerUpChanges => _powerUps.stream;
 
   // --- Ván đang chơi dở ---
 

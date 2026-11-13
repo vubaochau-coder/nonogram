@@ -521,4 +521,45 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get settingsLanguageSystem => 'Gerätesprache';
+
+  @override
+  String get premiumTitle => 'Ohne Werbung spielen';
+
+  @override
+  String get premiumBenefitNoAds => 'Keine Werbung mehr zwischen den Levels';
+
+  @override
+  String get premiumBenefitDaily => 'Jeden Tag 2 Tipps und 1 Zauberstab';
+
+  @override
+  String premiumBuy(String price) {
+    return 'Kaufen · $price';
+  }
+
+  @override
+  String get premiumOneTime => 'Einmalige Zahlung über Google Play';
+
+  @override
+  String get premiumActiveTitle => 'Werbefrei-Paket aktiv';
+
+  @override
+  String get premiumActiveDaily =>
+      'Jeden Tag wird dein Vorrat auf 2 Tipps und 1 Zauberstab aufgefüllt.';
+
+  @override
+  String get premiumPurchased =>
+      'Danke! Die Werbung zwischen den Levels ist jetzt aus.';
+
+  @override
+  String get premiumPending =>
+      'Deine Zahlung steht noch aus. Das Paket wird aktiviert, sobald sie abgeschlossen ist.';
+
+  @override
+  String get premiumFailed =>
+      'Der Kauf hat nicht geklappt. Bitte versuche es erneut.';
+
+  @override
+  String premiumDailyReward(int hints, int wands) {
+    return 'Tagesgeschenk: Du hast jetzt $hints Tipps und $wands Zauberstab/-stäbe.';
+  }
 }

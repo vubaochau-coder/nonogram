@@ -1,6 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:nonogram/ads/ad_config.dart';
+import 'package:nonogram/ads/ad_entitlements.dart';
 import 'package:nonogram/ads/ad_events.dart';
 import 'package:nonogram/ads/ad_manager.dart';
 import 'package:nonogram/ads/ad_service.dart';
@@ -69,13 +70,20 @@ class _FakeNetwork implements AdNetwork {
   }) => slots[format] = _FakeSlot(format);
 }
 
+class _Entitlements implements AdEntitlements {
+  @override
+  bool adsRemoved = false;
+}
+
 void main() {
+  late _Entitlements entitlements;
   late _FakeNetwork network;
   late DateTime now;
 
   AdManager manager() => AdManager(
     network: network,
     config: AdConfig.forFlavor(AppFlavor.dev),
+    entitlements: entitlements,
     policy: InterstitialPolicy(
       config: const InterstitialPolicyConfig(),
       clock: () => now,
@@ -84,6 +92,7 @@ void main() {
 
   setUp(() {
     network = _FakeNetwork();
+    entitlements = _Entitlements();
     now = DateTime(2026, 1, 1, 12);
   });
 
@@ -145,5 +154,15 @@ void main() {
       expect(store[format], startsWith('ca-app-pub-8391885617554349/'));
       expect(dev[format], startsWith('ca-app-pub-3940256099942544/'));
     }
+  });
+
+  test('the ad-free pack stops interstitials but keeps rewarded', () async {
+    entitlements.adsRemoved = true;
+    final ads = manager();
+    await ads.initialize();
+    now = now.add(const Duration(minutes: 10));
+    await ads.onLevelCompleteExit();
+    expect(network.slots[AdFormat.interstitial]!.shown, isEmpty);
+    expect(await ads.showRewarded(AdPlacement.hintRefill), isTrue);
   });
 }

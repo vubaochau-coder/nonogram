@@ -526,4 +526,43 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get settingsLanguageSystem => 'Idioma del dispositivo';
+
+  @override
+  String get premiumTitle => 'Jugar sin anuncios';
+
+  @override
+  String get premiumBenefitNoAds => 'Sin anuncios entre niveles';
+
+  @override
+  String get premiumBenefitDaily => '2 pistas y 1 varita mágica cada día';
+
+  @override
+  String premiumBuy(String price) {
+    return 'Comprar · $price';
+  }
+
+  @override
+  String get premiumOneTime => 'Pago único a través de Google Play';
+
+  @override
+  String get premiumActiveTitle => 'Paquete sin anuncios activo';
+
+  @override
+  String get premiumActiveDaily =>
+      'Cada día tu inventario se recarga hasta 2 pistas y 1 varita mágica.';
+
+  @override
+  String get premiumPurchased => '¡Gracias! Ya no hay anuncios entre niveles.';
+
+  @override
+  String get premiumPending =>
+      'Tu pago está pendiente. El paquete se activará en cuanto se complete.';
+
+  @override
+  String get premiumFailed => 'La compra no se completó. Inténtalo de nuevo.';
+
+  @override
+  String premiumDailyReward(int hints, int wands) {
+    return 'Regalo diario: ahora tienes $hints pistas y $wands varita(s) mágica(s).';
+  }
 }

@@ -143,5 +143,16 @@
   "ratingThanks": "Grazie per il tuo feedback! Continueremo a migliorare il gioco.",
   "ratingStarLabel": "{count} stelle",
   "settingsLanguage": "Lingua",
-  "settingsLanguageSystem": "Lingua del dispositivo"
+  "settingsLanguageSystem": "Lingua del dispositivo",
+  "premiumTitle": "Gioca senza pubblicità",
+  "premiumBenefitNoAds": "Niente più pubblicità tra i livelli",
+  "premiumBenefitDaily": "2 suggerimenti e 1 bacchetta magica ogni giorno",
+  "premiumBuy": "Acquista · {price}",
+  "premiumOneTime": "Pagamento unico tramite Google Play",
+  "premiumActiveTitle": "Pacchetto senza pubblicità attivo",
+  "premiumActiveDaily": "Ogni giorno il tuo inventario viene ricaricato a 2 suggerimenti e 1 bacchetta magica.",
+  "premiumPurchased": "Grazie! La pubblicità tra i livelli è disattivata.",
+  "premiumPending": "Il pagamento è in sospeso. Il pacchetto si attiverà appena verrà completato.",
+  "premiumFailed": "L'acquisto non è andato a buon fine. Riprova.",
+  "premiumDailyReward": "Regalo del giorno: ora hai {hints} suggerimenti e {wands} bacchetta/e magica/he."
 }

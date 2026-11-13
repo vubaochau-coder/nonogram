@@ -520,4 +520,44 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get settingsLanguageSystem => 'Device language';
+
+  @override
+  String get premiumTitle => 'Play without ads';
+
+  @override
+  String get premiumBenefitNoAds => 'No more ads between levels';
+
+  @override
+  String get premiumBenefitDaily => '2 hints and 1 magic wand every day';
+
+  @override
+  String premiumBuy(String price) {
+    return 'Buy · $price';
+  }
+
+  @override
+  String get premiumOneTime => 'One-time payment via Google Play';
+
+  @override
+  String get premiumActiveTitle => 'Ad-free pack active';
+
+  @override
+  String get premiumActiveDaily =>
+      'Every day your inventory is topped up to 2 hints and 1 magic wand.';
+
+  @override
+  String get premiumPurchased => 'Thank you! Ads between levels are now off.';
+
+  @override
+  String get premiumPending =>
+      'Your payment is pending. The pack turns on as soon as it goes through.';
+
+  @override
+  String get premiumFailed =>
+      'The purchase didn\'t go through. Please try again.';
+
+  @override
+  String premiumDailyReward(int hints, int wands) {
+    return 'Daily gift: you now have $hints hints and $wands magic wand(s).';
+  }
 }

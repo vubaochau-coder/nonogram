@@ -143,5 +143,16 @@
   "ratingThanks": "Спасибо за отзыв! Мы продолжим улучшать игру.",
   "ratingStarLabel": "Звёзд: {count}",
   "settingsLanguage": "Язык",
-  "settingsLanguageSystem": "Язык устройства"
+  "settingsLanguageSystem": "Язык устройства",
+  "premiumTitle": "Играть без рекламы",
+  "premiumBenefitNoAds": "Больше никакой рекламы между уровнями",
+  "premiumBenefitDaily": "2 подсказки и 1 волшебная палочка каждый день",
+  "premiumBuy": "Купить · {price}",
+  "premiumOneTime": "Разовый платёж через Google Play",
+  "premiumActiveTitle": "Пакет без рекламы активен",
+  "premiumActiveDaily": "Каждый день запас пополняется до 2 подсказок и 1 волшебной палочки.",
+  "premiumPurchased": "Спасибо! Реклама между уровнями отключена.",
+  "premiumPending": "Платёж ожидает обработки. Пакет включится, как только он пройдёт.",
+  "premiumFailed": "Покупка не удалась. Попробуйте ещё раз.",
+  "premiumDailyReward": "Ежедневный подарок: теперь у вас подсказок — {hints}, волшебных палочек — {wands}."
 }

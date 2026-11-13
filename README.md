@@ -212,6 +212,29 @@ Game ──AdPlacement──▶ AdService (ad_service.dart)
   Deploy from a branch → `main` / `/docs`). Dùng URL này cho Play Console và
   thông báo GDPR trên AdMob. Thêm SDK / dữ liệu mới thì cập nhật trang này.
 
+## Gói "Chơi không quảng cáo"
+
+Chỉ trên Android (`lib/premium/`), mua một lần qua Google Play, mã sản phẩm
+**`remove_ads`** (tạo trong Play Console → Kiếm tiền → Sản phẩm trong ứng
+dụng). Thẻ mua nằm trên trang chính, hiện giá theo tiền của người dùng; cửa
+hàng không dùng được hoặc chưa có sản phẩm thì ẩn.
+
+- Tắt quảng cáo xen kẽ (`AdEntitlements`); quảng cáo có thưởng vẫn còn để
+  lấy thêm lượt.
+- Quà hằng ngày: kho được nạp lên tối thiểu 2 gợi ý và 1 gậy phép (không
+  cộng dồn, ngày không chơi thì mất). Nhận khi mở app, khi mở lại app sau khi
+  để nền, và ngay khi mua.
+- Chống chỉnh giờ (`DailyRewardPolicy`): "hôm nay" theo giờ mạng (header
+  `Date` từ `https://www.google.com/generate_204`), mất mạng mới dùng giờ máy;
+  cộng thêm bánh cóc: chỉ phát khi sang ngày mới hơn cả ngày đã phát lẫn ngày
+  muộn nhất từng thấy, nên lùi giờ không được gì, vặn tới chỉ vay trước.
+- Trạng thái đã mua lưu trên máy (dùng được khi mất mạng), đối chiếu lại với
+  Google Play mỗi lần mở app: tự khôi phục khi cài lại, thu hồi khi đã hoàn
+  tiền. Mọi giao dịch được xác nhận (`completePurchase`), nếu không Google sẽ
+  tự hoàn tiền sau 3 ngày.
+- Thử mua thật: tải bản build lên kênh thử nghiệm nội bộ, thêm tài khoản vào
+  License testing trong Play Console.
+
 ## Đánh giá app
 
 Chỉ trên Android (`lib/rating/`). Khi bấm "Màn tiếp" / "Trang chính" ở màn

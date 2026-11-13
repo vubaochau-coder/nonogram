@@ -646,6 +646,17 @@ void main() {
       expect(bloc.state.remainingHints, 2);
     });
 
+    test('the open level follows inventory changes made elsewhere', () async {
+      await repository.savePowerUps(const PowerUpInventory(hints: 0, wands: 0));
+      bloc.add(const LevelLoadRequested());
+      await bloc.stream.firstWhere((s) => s.puzzle != null && !s.isLoading);
+
+      // Quà hằng ngày của gói không quảng cáo nạp vào kho.
+      await repository.savePowerUps(const PowerUpInventory(hints: 2, wands: 1));
+      await bloc.stream.firstWhere((s) => s.remainingHints == 2);
+      expect(bloc.state.remainingWands, 1);
+    });
+
     test('a new player starts with the starter inventory', () async {
       expect(await repository.getPowerUps(), PowerUpInventory.starter);
       bloc.add(const LevelLoadRequested());

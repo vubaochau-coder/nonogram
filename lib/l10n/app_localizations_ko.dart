@@ -507,4 +507,41 @@ class AppLocalizationsKo extends AppLocalizations {
 
   @override
   String get settingsLanguageSystem => '기기 언어';
+
+  @override
+  String get premiumTitle => '광고 없이 플레이';
+
+  @override
+  String get premiumBenefitNoAds => '레벨 사이 광고 제거';
+
+  @override
+  String get premiumBenefitDaily => '매일 힌트 2개와 마법 지팡이 1개';
+
+  @override
+  String premiumBuy(String price) {
+    return '구매 · $price';
+  }
+
+  @override
+  String get premiumOneTime => 'Google Play를 통한 1회 결제';
+
+  @override
+  String get premiumActiveTitle => '광고 제거 팩 활성화됨';
+
+  @override
+  String get premiumActiveDaily => '매일 힌트 2개와 마법 지팡이 1개까지 채워집니다.';
+
+  @override
+  String get premiumPurchased => '감사합니다! 레벨 사이 광고가 꺼졌습니다.';
+
+  @override
+  String get premiumPending => '결제가 대기 중입니다. 결제가 완료되면 팩이 활성화됩니다.';
+
+  @override
+  String get premiumFailed => '구매하지 못했습니다. 다시 시도해 주세요.';
+
+  @override
+  String premiumDailyReward(int hints, int wands) {
+    return '일일 선물: 이제 힌트 $hints개와 마법 지팡이 $wands개가 있습니다.';
+  }
 }

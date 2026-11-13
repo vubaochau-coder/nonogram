@@ -517,4 +517,45 @@ class AppLocalizationsId extends AppLocalizations {
 
   @override
   String get settingsLanguageSystem => 'Bahasa perangkat';
+
+  @override
+  String get premiumTitle => 'Main tanpa iklan';
+
+  @override
+  String get premiumBenefitNoAds => 'Tidak ada lagi iklan di antara level';
+
+  @override
+  String get premiumBenefitDaily =>
+      '2 petunjuk dan 1 tongkat ajaib setiap hari';
+
+  @override
+  String premiumBuy(String price) {
+    return 'Beli · $price';
+  }
+
+  @override
+  String get premiumOneTime => 'Pembayaran sekali melalui Google Play';
+
+  @override
+  String get premiumActiveTitle => 'Paket bebas iklan aktif';
+
+  @override
+  String get premiumActiveDaily =>
+      'Setiap hari persediaanmu diisi hingga 2 petunjuk dan 1 tongkat ajaib.';
+
+  @override
+  String get premiumPurchased =>
+      'Terima kasih! Iklan di antara level sudah dimatikan.';
+
+  @override
+  String get premiumPending =>
+      'Pembayaranmu masih tertunda. Paket akan aktif begitu pembayaran selesai.';
+
+  @override
+  String get premiumFailed => 'Pembelian gagal. Silakan coba lagi.';
+
+  @override
+  String premiumDailyReward(int hints, int wands) {
+    return 'Hadiah harian: sekarang kamu punya $hints petunjuk dan $wands tongkat ajaib.';
+  }
 }
