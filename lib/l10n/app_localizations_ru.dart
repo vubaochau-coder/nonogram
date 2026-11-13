@@ -424,6 +424,9 @@ class AppLocalizationsRu extends AppLocalizations {
       'Все клетки, которые нужно закрасить, уже закрашены. Проверьте, нет ли лишних закрашенных клеток.';
 
   @override
+  String get settingsSound => 'Звук';
+
+  @override
   String get settingsLicenses => 'Лицензии';
 
   @override

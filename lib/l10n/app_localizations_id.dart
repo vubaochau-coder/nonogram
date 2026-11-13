@@ -422,6 +422,9 @@ class AppLocalizationsId extends AppLocalizations {
       'Semua kotak yang seharusnya terisi sudah terisi. Periksa apakah ada kotak yang terisi berlebih.';
 
   @override
+  String get settingsSound => 'Suara';
+
+  @override
   String get settingsLicenses => 'Lisensi';
 
   @override

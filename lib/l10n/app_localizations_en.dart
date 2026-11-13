@@ -424,6 +424,9 @@ class AppLocalizationsEn extends AppLocalizations {
       'Every square that should be filled already is. Check for extra filled squares.';
 
   @override
+  String get settingsSound => 'Sound';
+
+  @override
   String get settingsLicenses => 'Licenses';
 
   @override

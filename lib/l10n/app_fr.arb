@@ -116,6 +116,7 @@
   "nonogramTutorialPickWandLine": "Touchez maintenant les indices de la ligne du bas pour la révéler. Vous avez 1 baguette par grille.",
   "nonogramTutorialFinishTools": "Remplissez les cases restantes pour terminer. Faites glisser vers le bas le long d'une colonne pour aller plus vite.",
   "nonogramPlayHintNothingToFill": "Toutes les cases à remplir le sont déjà. Vérifiez s'il y a des cases remplies en trop.",
+  "settingsSound": "Son",
   "settingsLicenses": "Licences",
   "settingsSwitchPlayMode": "Changer de mode de jeu",
   "licensesTitle": "Licences",

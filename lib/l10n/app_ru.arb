@@ -116,6 +116,7 @@
   "nonogramTutorialPickWandLine": "Теперь нажмите на числа нижней строки, чтобы открыть её. На каждую головоломку — 1 палочка.",
   "nonogramTutorialFinishTools": "Закрасьте оставшиеся клетки, чтобы закончить. Проведите вниз по столбцу, чтобы закрашивать быстрее.",
   "nonogramPlayHintNothingToFill": "Все клетки, которые нужно закрасить, уже закрашены. Проверьте, нет ли лишних закрашенных клеток.",
+  "settingsSound": "Звук",
   "settingsLicenses": "Лицензии",
   "settingsSwitchPlayMode": "Сменить режим игры",
   "licensesTitle": "Лицензии",

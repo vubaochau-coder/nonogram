@@ -18,6 +18,7 @@ import 'core/app_locale.dart';
 import 'core/app_navigator.dart';
 import 'core/app_theme.dart';
 import 'core/app_theme_mode.dart';
+import 'core/app_sounds.dart';
 import 'core/onboarding_preferences.dart';
 import 'core/play_mode.dart';
 import 'data/hive_nonogram_local_service.dart';
@@ -63,6 +64,7 @@ Future<void> main() async {
             ? await AppRatingController.load()
             : null,
     themeMode: await AppThemeModeController.load(),
+    sounds: await AppSoundController.load(),
     locale: await AppLocaleController.load(),
     onboarding: await OnboardingPreferences.load(),
     playModes: await PlayModePreferences.load(),
@@ -94,6 +96,7 @@ class AppLauncher {
     required this.checkIn,
     this.rating,
     required this.themeMode,
+    required this.sounds,
     required this.locale,
     required this.onboarding,
     required this.playModes,
@@ -106,6 +109,7 @@ class AppLauncher {
   final CheckInService checkIn;
   final AppRatingController? rating;
   final AppThemeModeController themeMode;
+  final AppSoundController sounds;
   final AppLocaleController locale;
   final OnboardingPreferences onboarding;
   final PlayModePreferences playModes;
@@ -162,6 +166,7 @@ class AppLauncher {
       NonogramApp(
         repository: repository,
         themeMode: themeMode,
+        sounds: sounds,
         locale: locale,
         adService: adService,
         premium: premium,
@@ -283,6 +288,7 @@ class NonogramApp extends StatelessWidget {
     required this.repository,
     required this.themeMode,
     required this.locale,
+    this.sounds,
     this.adService,
     this.premium,
     this.checkIn,
@@ -296,6 +302,9 @@ class NonogramApp extends StatelessWidget {
   final NonogramRepository repository;
   final AppThemeModeController themeMode;
   final AppLocaleController locale;
+
+  /// Null trong test: không phát tiếng.
+  final AppSoundController? sounds;
 
   /// Null trong test: không có quảng cáo.
   final AdService? adService;
@@ -326,6 +335,7 @@ class NonogramApp extends StatelessWidget {
         // báo lỗi (assert) ngay khi khởi động ở bản debug.
         ChangeNotifierProvider.value(value: themeMode),
         ChangeNotifierProvider.value(value: locale),
+        if (sounds != null) ChangeNotifierProvider.value(value: sounds!),
         Provider<AdService>.value(value: adService ?? NoAdService()),
         if (rating != null) Provider.value(value: rating!),
         if (premium != null) ChangeNotifierProvider.value(value: premium!),

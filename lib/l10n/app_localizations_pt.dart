@@ -426,6 +426,9 @@ class AppLocalizationsPt extends AppLocalizations {
       'Todos os quadrados que deveriam estar preenchidos já estão. Verifique se há quadrados preenchidos a mais.';
 
   @override
+  String get settingsSound => 'Som';
+
+  @override
   String get settingsLicenses => 'Licenças';
 
   @override

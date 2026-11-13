@@ -116,6 +116,7 @@
   "nonogramTutorialPickWandLine": "Tippe jetzt auf die Hinweise der untersten Zeile, um sie aufzudecken. Du hast 1 Zauberstab pro Rätsel.",
   "nonogramTutorialFinishTools": "Fülle die übrigen Felder aus, um das Rätsel zu lösen. Ziehe eine Spalte hinunter, um schneller auszufüllen.",
   "nonogramPlayHintNothingToFill": "Alle Felder, die ausgefüllt sein müssen, sind es schon. Prüfe, ob zu viele Felder ausgefüllt sind.",
+  "settingsSound": "Ton",
   "settingsLicenses": "Lizenzen",
   "settingsSwitchPlayMode": "Spielmodus wechseln",
   "licensesTitle": "Lizenzen",

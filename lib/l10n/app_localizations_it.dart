@@ -427,6 +427,9 @@ class AppLocalizationsIt extends AppLocalizations {
       'Tutte le caselle da riempire sono già piene. Controlla se ci sono caselle piene di troppo.';
 
   @override
+  String get settingsSound => 'Suoni';
+
+  @override
   String get settingsLicenses => 'Licenze';
 
   @override

@@ -108,6 +108,21 @@ Nút gạt **Tô / X** trên thanh công cụ chọn việc một lần chạm s
 - Kịch bản (bài 5×5, các bước) nằm trong
   `lib/screens/tutorial/nonogram_tutorial_controller.dart`.
 
+## Giải xong màn và âm thanh
+
+- Giải xong một màn: sóng lan trên lưới từ góc trái dưới lên góc phải trên,
+  từng ô tô nổi lên rồi hạ xuống, dấu X mờ dần. Sau đó sang màn kết quả: một
+  khung chạy vòng quanh tranh, tranh vừa thu nhỏ vừa bay vào thẻ kết quả,
+  khung thành viền thẻ, rồi phần còn lại của màn kết quả hiện dần. Máy bật
+  giảm chuyển động hoặc mở lại màn đã giải thì sang thẳng màn kết quả.
+  Code: `lib/screens/play/celebration/solve_celebration.dart`.
+- Âm thanh: tô ô, đánh X / xoá ô, khớp xong hàng / cột, sóng giải xong, tranh
+  bay, tranh đáp. Tắt / bật trong Cài đặt khi đang chơi (lưu trên máy). Tiếng
+  game hoà chung với nhạc đang phát, iOS im khi máy để chế độ im lặng.
+- File tiếng (`assets/sounds/*.wav`) được tổng hợp bằng code, không dùng mẫu
+  âm của bên thứ ba: `python3 tools/generate_sounds.py assets/sounds` (cần
+  numpy).
+
 ## Cấu trúc
 
 ```

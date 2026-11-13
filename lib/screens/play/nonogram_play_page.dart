@@ -19,6 +19,8 @@ import 'package:nested/nested.dart';
 import 'package:provider/provider.dart';
 import 'celebration/solve_celebration.dart';
 import 'coach/nonogram_play_coach.dart';
+import 'nonogram_play_sounds.dart';
+import 'package:nonogram/core/app_sounds.dart';
 
 class NonogramPlayPage extends StatefulWidget {
   final int initialLevel;
@@ -62,7 +64,9 @@ class _NonogramPlayPageState extends State<NonogramPlayPage> {
         ),
       ],
       child: const _SystemUiModeSync(
-        child: SolveCelebrationScope(child: _NonogramPlayView()),
+        child: SolveCelebrationScope(
+          child: NonogramPlaySounds(child: _NonogramPlayView()),
+        ),
       ),
     );
   }
@@ -133,7 +137,11 @@ class _NonogramPlayView extends StatelessWidget {
         // Chỉ khi vừa giải xong (không phải mở lại màn đã giải). Máy bật
         // giảm chuyển động thì sang thẳng màn kết quả.
         final puzzle = state.puzzle;
-        if (puzzle == null || MediaQuery.disableAnimationsOf(context)) return;
+        if (puzzle == null) return;
+        if (MediaQuery.disableAnimationsOf(context)) {
+          AppSoundController.maybeOf(context)?.play(GameSound.fanfare);
+          return;
+        }
         celebration.start(puzzle.solution);
       },
       buildWhen: (p, c) {
@@ -180,8 +188,10 @@ class _NonogramPlayView extends StatelessWidget {
           );
         }
 
-        // Đang chạy sóng giải xong thì giữ bàn chơi thêm một nhịp.
-        if (state.isSolved && state.puzzle != null && !celebration.holdsBoard) {
+        // Đang có hiệu ứng giải xong thì còn giữ bàn chơi: suốt lúc sóng
+        // chạy, và (mờ dần dưới màn kết quả) lúc tranh bay.
+        final solved = state.isSolved && state.puzzle != null;
+        if (solved && !celebration.holdsBoard && !celebration.isFlying) {
           return _NonogramCompletionView(state: state);
         }
 
@@ -224,10 +234,28 @@ class _NonogramPlayView extends StatelessWidget {
           );
         }
 
-        return Scaffold(
+        // Khoá chung giữ nguyên trạng thái bàn chơi (vị trí lưới...) khi bàn
+        // được đặt xuống dưới màn kết quả lúc tranh bay.
+        final board = Scaffold(
+          key: celebration.boardKey,
           appBar: showAppBar ? const NonogramPlayAppBarSection() : null,
           body: body(const NonogramBoardShellSection()),
         );
+        if (solved && celebration.isFlying) {
+          return Stack(
+            fit: StackFit.expand,
+            children: [
+              _NonogramCompletionView(state: state),
+              IgnorePointer(
+                child: FadeTransition(
+                  opacity: celebration.boardOpacity,
+                  child: board,
+                ),
+              ),
+            ],
+          );
+        }
+        return board;
       },
     );
   }

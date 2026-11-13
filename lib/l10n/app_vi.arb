@@ -161,6 +161,7 @@
   "nonogramTutorialPickWandLine": "Giờ chạm vào dãy số của hàng cuối cùng để hiện đáp án hàng đó. Mỗi màn có 1 lượt gậy phép.",
   "nonogramTutorialFinishTools": "Tô nốt các ô còn lại để hoàn thành. Kéo dọc theo cột để tô nhanh hơn.",
   "nonogramPlayHintNothingToFill": "Mọi ô cần tô đều đã được tô. Hãy kiểm tra những ô tô thừa.",
+  "settingsSound": "Âm thanh",
   "settingsLicenses": "Giấy phép",
   "settingsSwitchPlayMode": "Đổi chế độ chơi",
   "licensesTitle": "Giấy phép",

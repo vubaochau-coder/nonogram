@@ -424,6 +424,9 @@ class AppLocalizationsTr extends AppLocalizations {
       'Dolu olması gereken tüm kareler zaten dolu. Fazladan doldurulmuş kare olup olmadığını kontrol et.';
 
   @override
+  String get settingsSound => 'Ses';
+
+  @override
   String get settingsLicenses => 'Lisanslar';
 
   @override

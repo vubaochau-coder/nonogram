@@ -116,6 +116,7 @@
   "nonogramTutorialPickWandLine": "現在點按最下面一橫列的數字來揭開這一列。每個謎題有 1 次魔杖。",
   "nonogramTutorialFinishTools": "塗完剩下的方格就完成了。沿著一直行向下拖曳可以塗得更快。",
   "nonogramPlayHintNothingToFill": "所有該塗的方格都已經塗好了。檢查一下是否有多塗的方格。",
+  "settingsSound": "音效",
   "settingsLicenses": "授權",
   "settingsSwitchPlayMode": "切換遊戲模式",
   "licensesTitle": "授權",

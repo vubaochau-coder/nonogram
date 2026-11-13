@@ -215,6 +215,7 @@
   "nonogramTutorialPickWandLine": "Now tap the clues of the bottom row to reveal that row. You get 1 wand per puzzle.",
   "nonogramTutorialFinishTools": "Fill the remaining squares to finish. Drag down a column to fill faster.",
   "nonogramPlayHintNothingToFill": "Every square that should be filled already is. Check for extra filled squares.",
+  "settingsSound": "Sound",
   "settingsLicenses": "Licenses",
   "settingsSwitchPlayMode": "Switch play mode",
   "licensesTitle": "Licenses",

@@ -428,6 +428,9 @@ class AppLocalizationsEs extends AppLocalizations {
       'Todas las casillas que deben estar rellenas ya lo están. Revisa si sobra alguna casilla rellena.';
 
   @override
+  String get settingsSound => 'Sonido';
+
+  @override
   String get settingsLicenses => 'Licencias';
 
   @override

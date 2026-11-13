@@ -605,6 +605,8 @@ class _BoardPaint extends StatelessWidget {
     final chipTextStyle = clueStyle.copyWith(color: const Color(0xFF2B1A00));
     final celebration = SolveCelebration.maybeOf(context);
     final waving = celebration != null && celebration.holdsBoard;
+    // Tranh đang bay sang màn kết quả: lưới trên bàn (đang mờ dần) để trống.
+    final flying = celebration != null && celebration.isFlying;
     return Stack(
       clipBehavior: Clip.hardEdge,
       children: [
@@ -627,39 +629,42 @@ class _BoardPaint extends StatelessWidget {
                   height: gridH,
                   child: RepaintBoundary(
                     key: celebration?.gridKey,
-                    child: CustomPaint(
-                      painter: NonogramCellsPainter(
-                        rows: puzzle.rows,
-                        cols: puzzle.cols,
-                        gridData: state.gridData,
-                        satisfiedRows: state.satisfiedRows,
-                        satisfiedCols: state.satisfiedCols,
-                        cellSize: cell,
-                        backgroundColor: colors.surfaceContainerLow,
-                        filledColor: colors.onSurface,
-                        markedMarkerColor: colors.primary,
-                        markerColor: colors.onSurfaceVariant.withValues(
-                          alpha: 0.7,
+                    child: Opacity(
+                      opacity: flying ? 0 : 1,
+                      child: CustomPaint(
+                        painter: NonogramCellsPainter(
+                          rows: puzzle.rows,
+                          cols: puzzle.cols,
+                          gridData: state.gridData,
+                          satisfiedRows: state.satisfiedRows,
+                          satisfiedCols: state.satisfiedCols,
+                          cellSize: cell,
+                          backgroundColor: colors.surfaceContainerLow,
+                          filledColor: colors.onSurface,
+                          markedMarkerColor: colors.primary,
+                          markerColor: colors.onSurfaceVariant.withValues(
+                            alpha: 0.7,
+                          ),
+                          lockedCells: state.lockedCells,
+                          lockedStarColor: game.lockedStar,
+                          lockedMarkStarColor: game.lockedMarkStar,
+                          pinnedCells: puzzle.pinnedCells,
+                          pinColor: colors.surfaceContainerLow,
                         ),
-                        lockedCells: state.lockedCells,
-                        lockedStarColor: game.lockedStar,
-                        lockedMarkStarColor: game.lockedMarkStar,
-                        pinnedCells: puzzle.pinnedCells,
-                        pinColor: colors.surfaceContainerLow,
-                      ),
-                      foregroundPainter: NonogramGridPainter(
-                        rows: puzzle.rows,
-                        cols: puzzle.cols,
-                        cellSize: cell,
-                        themeColor: colors.primary,
-                        lineColor: colors.outlineVariant,
-                        majorLineColor: colors.outline,
+                        foregroundPainter: NonogramGridPainter(
+                          rows: puzzle.rows,
+                          cols: puzzle.cols,
+                          cellSize: cell,
+                          themeColor: colors.primary,
+                          lineColor: colors.outlineVariant,
+                          majorLineColor: colors.outline,
+                        ),
                       ),
                     ),
                   ),
                 ),
-                // Vừa giải xong: sóng sáng lan từ góc trái dưới lên góc
-                // phải trên, xoá dấu X để lộ hình.
+                // Vừa giải xong: sóng lan từ góc trái dưới lên góc phải
+                // trên, từng ô tô nổi lên rồi hạ xuống, dấu X mờ dần.
                 if (waving)
                   Positioned(
                     left: offset.dx - clipLeft,
@@ -674,7 +679,6 @@ class _BoardPaint extends StatelessWidget {
                           solution: puzzle.solution,
                           cellSize: cell,
                           filledColor: colors.onSurface,
-                          highlightColor: game.reward,
                           backgroundColor: colors.surfaceContainerLow,
                         ),
                       ),

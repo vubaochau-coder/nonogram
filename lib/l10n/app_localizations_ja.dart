@@ -413,6 +413,9 @@ class AppLocalizationsJa extends AppLocalizations {
       '塗るべきマスはすべて塗られています。余分に塗ったマスがないか確認してください。';
 
   @override
+  String get settingsSound => 'サウンド';
+
+  @override
   String get settingsLicenses => 'ライセンス';
 
   @override
