@@ -116,6 +116,7 @@
   "nonogramTutorialPickWandLine": "Ahora toca las pistas de la fila de abajo para revelarla. Tienes 1 varita por puzle.",
   "nonogramTutorialFinishTools": "Rellena las casillas restantes para terminar. Arrastra hacia abajo por una columna para rellenar más rápido.",
   "nonogramPlayHintNothingToFill": "Todas las casillas que deben estar rellenas ya lo están. Revisa si sobra alguna casilla rellena.",
+  "settingsSound": "Sonido",
   "settingsLicenses": "Licencias",
   "settingsSwitchPlayMode": "Cambiar modo de juego",
   "licensesTitle": "Licencias",

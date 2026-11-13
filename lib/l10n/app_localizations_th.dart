@@ -423,6 +423,9 @@ class AppLocalizationsTh extends AppLocalizations {
       'ช่องที่ควรระบายถูกระบายครบแล้ว ลองตรวจดูว่ามีช่องที่ระบายเกินหรือไม่';
 
   @override
+  String get settingsSound => 'เสียง';
+
+  @override
   String get settingsLicenses => 'สัญญาอนุญาต';
 
   @override

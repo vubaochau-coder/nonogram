@@ -116,6 +116,7 @@
   "nonogramTutorialPickWandLine": "一番下の行のヒント数字をタップして、その行を開きましょう。杖は1問につき1回使えます。",
   "nonogramTutorialFinishTools": "残りのマスを塗って完成させましょう。列に沿って下へドラッグすると速く塗れます。",
   "nonogramPlayHintNothingToFill": "塗るべきマスはすべて塗られています。余分に塗ったマスがないか確認してください。",
+  "settingsSound": "サウンド",
   "settingsLicenses": "ライセンス",
   "settingsSwitchPlayMode": "プレイモードを切り替え",
   "licensesTitle": "ライセンス",

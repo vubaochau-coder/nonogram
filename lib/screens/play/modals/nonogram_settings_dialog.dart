@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:lucide_icons/lucide_icons.dart';
 import 'package:nonogram/ads/ad_scope.dart';
 import 'package:nonogram/core/app_locale.dart';
+import 'package:nonogram/core/app_sounds.dart';
 import 'package:nonogram/core/context_ext.dart';
 import 'package:nonogram/core/play_mode.dart';
 import 'package:nonogram/screens/licenses/app_licenses_page.dart';
@@ -119,6 +120,12 @@ class NonogramSettingsDialog extends StatelessWidget {
           ),
           const SizedBox(height: 10),
           const AppThemeModeSelector(),
+          // Không có trong test dựng trang chơi mà không cấp
+          // AppSoundController.
+          if (AppSoundController.maybeOf(context) case final sounds?) ...[
+            const SizedBox(height: 12),
+            _SoundToggle(controller: sounds),
+          ],
           const SizedBox(height: 20),
           // Không có trong test dựng trang chơi mà không cấp AppLocaleController.
           if (_hasLocaleController(context)) ...[
@@ -224,6 +231,56 @@ class NonogramSettingsDialog extends StatelessWidget {
           child: Text(l10n.commonClose),
         ),
       ],
+    );
+  }
+}
+
+/// Bật / tắt âm thanh trong game.
+class _SoundToggle extends StatelessWidget {
+  const _SoundToggle({required this.controller});
+
+  final AppSoundController controller;
+
+  @override
+  Widget build(BuildContext context) {
+    return ValueListenableBuilder<bool>(
+      valueListenable: controller,
+      builder: (context, enabled, _) {
+        return Material(
+          color: context.color.surfaceContainer,
+          borderRadius: BorderRadius.circular(14),
+          child: InkWell(
+            borderRadius: BorderRadius.circular(14),
+            onTap: () => controller.setEnabled(!enabled),
+            child: Padding(
+              padding: const EdgeInsets.fromLTRB(14, 4, 6, 4),
+              child: Row(
+                children: [
+                  Icon(
+                    enabled ? LucideIcons.volume2 : LucideIcons.volumeX,
+                    size: 20,
+                    color: context.color.onSurfaceVariant,
+                  ),
+                  const SizedBox(width: 12),
+                  Expanded(
+                    child: Text(
+                      context.l10n.settingsSound,
+                      style: context.titleSmall.copyWith(
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+                  Switch(
+                    key: const ValueKey('nonogram-sound-toggle'),
+                    value: enabled,
+                    onChanged: controller.setEnabled,
+                  ),
+                ],
+              ),
+            ),
+          ),
+        );
+      },
     );
   }
 }

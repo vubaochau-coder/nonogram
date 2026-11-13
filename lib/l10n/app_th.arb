@@ -116,6 +116,7 @@
   "nonogramTutorialPickWandLine": "ตอนนี้แตะตัวเลขของแถวล่างสุดเพื่อเปิดแถวนั้น ได้ไม้กายสิทธิ์ 1 ครั้งต่อปริศนา",
   "nonogramTutorialFinishTools": "ระบายช่องที่เหลือให้ครบ ลากลงตามคอลัมน์เพื่อระบายได้เร็วขึ้น",
   "nonogramPlayHintNothingToFill": "ช่องที่ควรระบายถูกระบายครบแล้ว ลองตรวจดูว่ามีช่องที่ระบายเกินหรือไม่",
+  "settingsSound": "เสียง",
   "settingsLicenses": "สัญญาอนุญาต",
   "settingsSwitchPlayMode": "เปลี่ยนโหมดการเล่น",
   "licensesTitle": "สัญญาอนุญาต",

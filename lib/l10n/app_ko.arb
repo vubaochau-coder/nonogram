@@ -116,6 +116,7 @@
   "nonogramTutorialPickWandLine": "이제 맨 아랫줄의 숫자를 탭해 그 줄을 공개하세요. 지팡이는 퍼즐마다 1번 쓸 수 있습니다.",
   "nonogramTutorialFinishTools": "남은 칸을 칠해 완성하세요. 열을 따라 아래로 드래그하면 더 빨리 칠할 수 있습니다.",
   "nonogramPlayHintNothingToFill": "칠해야 할 칸은 모두 칠해져 있습니다. 잘못 칠한 칸이 없는지 확인해 보세요.",
+  "settingsSound": "사운드",
   "settingsLicenses": "라이선스",
   "settingsSwitchPlayMode": "플레이 모드 전환",
   "licensesTitle": "라이선스",

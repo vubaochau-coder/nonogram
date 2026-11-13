@@ -414,6 +414,9 @@ class AppLocalizationsKo extends AppLocalizations {
       '칠해야 할 칸은 모두 칠해져 있습니다. 잘못 칠한 칸이 없는지 확인해 보세요.';
 
   @override
+  String get settingsSound => '사운드';
+
+  @override
   String get settingsLicenses => '라이선스';
 
   @override

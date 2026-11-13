@@ -116,6 +116,7 @@
   "nonogramTutorialPickWandLine": "Şimdi en alt satırın ipuçlarına dokunarak o satırı aç. Her bulmacada 1 değnek hakkın var.",
   "nonogramTutorialFinishTools": "Bitirmek için kalan kareleri doldur. Daha hızlı doldurmak için bir sütun boyunca aşağı sürükle.",
   "nonogramPlayHintNothingToFill": "Dolu olması gereken tüm kareler zaten dolu. Fazladan doldurulmuş kare olup olmadığını kontrol et.",
+  "settingsSound": "Ses",
   "settingsLicenses": "Lisanslar",
   "settingsSwitchPlayMode": "Oyun modunu değiştir",
   "licensesTitle": "Lisanslar",

@@ -424,6 +424,9 @@ class AppLocalizationsDe extends AppLocalizations {
       'Alle Felder, die ausgefüllt sein müssen, sind es schon. Prüfe, ob zu viele Felder ausgefüllt sind.';
 
   @override
+  String get settingsSound => 'Ton';
+
+  @override
   String get settingsLicenses => 'Lizenzen';
 
   @override

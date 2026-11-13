@@ -423,6 +423,9 @@ class AppLocalizationsVi extends AppLocalizations {
       'Mọi ô cần tô đều đã được tô. Hãy kiểm tra những ô tô thừa.';
 
   @override
+  String get settingsSound => 'Âm thanh';
+
+  @override
   String get settingsLicenses => 'Giấy phép';
 
   @override

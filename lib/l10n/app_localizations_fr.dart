@@ -427,6 +427,9 @@ class AppLocalizationsFr extends AppLocalizations {
       'Toutes les cases à remplir le sont déjà. Vérifiez s\'il y a des cases remplies en trop.';
 
   @override
+  String get settingsSound => 'Son';
+
+  @override
   String get settingsLicenses => 'Licences';
 
   @override

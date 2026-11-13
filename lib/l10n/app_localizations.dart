@@ -819,6 +819,12 @@ abstract class AppLocalizations {
   /// **'Every square that should be filled already is. Check for extra filled squares.'**
   String get nonogramPlayHintNothingToFill;
 
+  /// No description provided for @settingsSound.
+  ///
+  /// In en, this message translates to:
+  /// **'Sound'**
+  String get settingsSound;
+
   /// No description provided for @settingsLicenses.
   ///
   /// In en, this message translates to:

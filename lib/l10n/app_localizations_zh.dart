@@ -403,6 +403,9 @@ class AppLocalizationsZh extends AppLocalizations {
   String get nonogramPlayHintNothingToFill => '所有该涂的方格都已经涂好了。检查一下是否有多涂的方格。';
 
   @override
+  String get settingsSound => '音效';
+
+  @override
   String get settingsLicenses => '许可';
 
   @override
@@ -1003,6 +1006,9 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
 
   @override
   String get nonogramPlayHintNothingToFill => '所有該塗的方格都已經塗好了。檢查一下是否有多塗的方格。';
+
+  @override
+  String get settingsSound => '音效';
 
   @override
   String get settingsLicenses => '授權';

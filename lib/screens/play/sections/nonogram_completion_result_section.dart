@@ -6,6 +6,8 @@ import 'package:nonogram/core/duration_format.dart';
 import 'package:nonogram/models/nonogram_puzzle.dart';
 import 'package:nonogram/widgets/nonogram_pixel_art.dart';
 
+import '../celebration/solve_celebration.dart';
+
 /// Màn hình khi giải xong: hình hoàn chỉnh, thời gian, nút chơi tiếp.
 class NonogramCompletionResultSection extends StatelessWidget {
   final NonogramPuzzle puzzle;
@@ -31,13 +33,12 @@ class NonogramCompletionResultSection extends StatelessWidget {
             constraints.maxWidth > constraints.maxHeight &&
             constraints.maxWidth > 560;
         final picture = _Picture(puzzle: puzzle);
-        final info = _Info(
-          puzzle: puzzle,
-          completionDuration: completionDuration,
+        // Vừa giải xong: mọi thứ trừ thẻ tranh hiện dần khi tranh sắp đáp.
+        final info = _Reveal(
+          child: _Info(puzzle: puzzle, completionDuration: completionDuration),
         );
-        final actions = _Actions(
-          onNextLevel: onNextLevel,
-          onDashboard: onDashboard,
+        final actions = _Reveal(
+          child: _Actions(onNextLevel: onNextLevel, onDashboard: onDashboard),
         );
 
         if (isLandscape) {
@@ -65,7 +66,7 @@ class NonogramCompletionResultSection extends StatelessWidget {
                 padding: const EdgeInsets.fromLTRB(20, 8, 20, 16),
                 child: Column(
                   children: [
-                    const _SolvedBadge(),
+                    const _Reveal(child: _SolvedBadge()),
                     const SizedBox(height: 20),
                     picture,
                     const SizedBox(height: 20),
@@ -123,14 +124,83 @@ class _SolvedBadge extends StatelessWidget {
   }
 }
 
+/// Hiện dần + trượt nhẹ lên theo hiệu ứng giải xong; không có hiệu ứng thì
+/// hiện luôn.
+class _Reveal extends StatelessWidget {
+  const _Reveal({required this.child});
+
+  final Widget child;
+
+  @override
+  Widget build(BuildContext context) {
+    final celebration = SolveCelebration.maybeOf(context);
+    if (celebration == null || !celebration.isActive) return child;
+    final reveal = celebration.reveal;
+    return FadeTransition(
+      opacity: reveal,
+      child: SlideTransition(
+        position: reveal.drive(
+          Tween(begin: const Offset(0, 0.08), end: Offset.zero),
+        ),
+        child: child,
+      ),
+    );
+  }
+}
+
 class _Picture extends StatelessWidget {
   const _Picture({required this.puzzle});
 
   final NonogramPuzzle puzzle;
 
+  /// Tranh nhỏ hơn bàn chơi, để lúc bay vào thấy rõ tranh thu nhỏ lại.
+  static const maxSize = 220.0;
+
   @override
   Widget build(BuildContext context) {
     final aspect = puzzle.cols / puzzle.rows;
+    // Vừa giải xong: khung chạy quanh tranh rồi thành viền thẻ này, tranh
+    // bay từ bàn chơi vào. Thẻ chỉ hiện nền khi khung đã chạy xong, tranh
+    // thật chỉ hiện khi bản bay đã đáp, và thẻ không tự phóng to nữa.
+    final celebration = SolveCelebration.maybeOf(context);
+    final flewIn = celebration?.isActive ?? false;
+    final flying = celebration?.isFlying ?? false;
+
+    Widget card = Card(
+      key: celebration?.cardKey,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(solveCardRadius),
+        side: BorderSide(color: solveCardBorderColor(context), width: 2),
+      ),
+      child: Padding(
+        padding: const EdgeInsets.all(14),
+        child: Container(
+          padding: const EdgeInsets.all(10),
+          decoration: BoxDecoration(
+            color: context.color.surfaceContainerHigh,
+            borderRadius: BorderRadius.circular(14),
+          ),
+          child: ConstrainedBox(
+            constraints: const BoxConstraints(
+              maxWidth: maxSize,
+              maxHeight: maxSize,
+            ),
+            child: AspectRatio(
+              key: celebration?.pictureKey,
+              aspectRatio: aspect,
+              child: Opacity(
+                opacity: flying ? 0 : 1,
+                child: NonogramBoardPicture(solution: puzzle.solution),
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+    if (flying) {
+      card = FadeTransition(opacity: celebration!.cardFill, child: card);
+    }
+    if (flewIn) return card;
     return TweenAnimationBuilder<double>(
       tween: Tween(begin: 0.9, end: 1),
       duration: const Duration(milliseconds: 600),
@@ -138,25 +208,7 @@ class _Picture extends StatelessWidget {
       builder:
           (context, scale, child) =>
               Transform.scale(scale: scale, child: child),
-      child: Card(
-        child: Padding(
-          padding: const EdgeInsets.all(14),
-          child: Container(
-            padding: const EdgeInsets.all(10),
-            decoration: BoxDecoration(
-              color: context.color.surfaceContainerHigh,
-              borderRadius: BorderRadius.circular(14),
-            ),
-            child: ConstrainedBox(
-              constraints: const BoxConstraints(maxWidth: 320, maxHeight: 320),
-              child: AspectRatio(
-                aspectRatio: aspect,
-                child: NonogramPixelArt.picture(context, puzzle.solution),
-              ),
-            ),
-          ),
-        ),
-      ),
+      child: card,
     );
   }
 }
