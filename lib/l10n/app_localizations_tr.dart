@@ -601,6 +601,40 @@ class AppLocalizationsTr extends AppLocalizations {
   String get checkInMonthGifts => 'Bu ayın hediyeleri';
 
   @override
+  String get navHome => 'Ana sayfa';
+
+  @override
+  String get navMe => 'Ben';
+
+  @override
+  String get meHelp => 'Yardım';
+
+  @override
+  String get meMore => 'Diğer';
+
+  @override
+  String get checkInNotYetToday => 'Bugün henüz giriş yapılmadı';
+
+  @override
+  String get checkInTodayButton => 'Bugün giriş yap';
+
+  @override
+  String checkInGiftsLeftShort(int count) {
+    return 'Hediyeye $count giriş kaldı';
+  }
+
+  @override
+  String get checkInGiftToday => 'Bugün hediye var!';
+
+  @override
+  String checkInGiftMilestone(int count) {
+    return '$count giriş hediyesi';
+  }
+
+  @override
+  String get checkInGiftCollect => 'Al';
+
+  @override
   String get checkInTotalHints => 'İpuçları';
 
   @override

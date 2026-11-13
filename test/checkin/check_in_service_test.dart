@@ -121,15 +121,4 @@ void main() {
     device = device.subtract(const Duration(days: 3));
     expect(s.canCheckIn, isFalse);
   });
-
-  test('auto-opens once a day while a check-in is available', () async {
-    final s = service();
-    expect(s.shouldAutoOpen, isTrue);
-    await s.markAutoOpened();
-    expect(s.shouldAutoOpen, isFalse);
-    nextDay();
-    expect(s.shouldAutoOpen, isTrue);
-    await s.checkIn();
-    expect(s.shouldAutoOpen, isFalse);
-  });
 }

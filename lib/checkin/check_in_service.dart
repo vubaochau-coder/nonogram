@@ -23,18 +23,15 @@ class CheckInService extends ChangeNotifier with WidgetsBindingObserver {
     required Map<int, List<CheckInReward>> history,
     required int startDay,
     int? maxSeenDay,
-    int? autoOpenDay,
   }) : _isPremium = isPremium,
        _history = history,
        _startDay = startDay,
-       _maxSeenDay = maxSeenDay,
-       _autoOpenDay = autoOpenDay;
+       _maxSeenDay = maxSeenDay;
 
   static const _boxName = 'nonogram_preferences_v1';
   static const _historyKey = 'checkin_history';
   static const _startKey = 'checkin_start_day';
   static const _maxSeenKey = 'checkin_max_seen_day';
-  static const _autoOpenKey = 'checkin_auto_open_day';
 
   final Box<dynamic>? _box;
   final GameClock clock;
@@ -42,7 +39,6 @@ class CheckInService extends ChangeNotifier with WidgetsBindingObserver {
   final Map<int, List<CheckInReward>> _history;
   final int _startDay;
   int? _maxSeenDay;
-  int? _autoOpenDay;
   NonogramRepository? _repository;
   bool _busy = false;
 
@@ -78,7 +74,6 @@ class CheckInService extends ChangeNotifier with WidgetsBindingObserver {
       history: history,
       startDay: start,
       maxSeenDay: box?.get(_maxSeenKey) as int?,
-      autoOpenDay: box?.get(_autoOpenKey) as int?,
     );
   }
 
@@ -94,8 +89,7 @@ class CheckInService extends ChangeNotifier with WidgetsBindingObserver {
        _isPremium = isPremium ?? (() => false),
        _history = history ?? {},
        _startDay = startDay ?? clock.today,
-       _maxSeenDay = maxSeenDay,
-       _autoOpenDay = null;
+       _maxSeenDay = maxSeenDay;
 
   int get today => clock.today;
 
@@ -116,15 +110,7 @@ class CheckInService extends ChangeNotifier with WidgetsBindingObserver {
     maxSeenDay: _maxSeenDay,
   );
 
-  /// Hôm nay chưa tự mở màn điểm danh và còn điểm danh được.
-  bool get shouldAutoOpen => canCheckIn && _autoOpenDay != today;
-
   bool get isPremium => _isPremium();
-
-  Future<void> markAutoOpened() async {
-    _autoOpenDay = today;
-    await _box?.put(_autoOpenKey, today);
-  }
 
   /// Gọi khi mở app: đồng bộ giờ mạng ở nền, theo dõi lúc mở lại app.
   Future<void> initialize() async {

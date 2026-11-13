@@ -1113,6 +1113,66 @@ abstract class AppLocalizations {
   /// **'Gifts this month'**
   String get checkInMonthGifts;
 
+  /// No description provided for @navHome.
+  ///
+  /// In en, this message translates to:
+  /// **'Home'**
+  String get navHome;
+
+  /// No description provided for @navMe.
+  ///
+  /// In en, this message translates to:
+  /// **'Me'**
+  String get navMe;
+
+  /// No description provided for @meHelp.
+  ///
+  /// In en, this message translates to:
+  /// **'Help'**
+  String get meHelp;
+
+  /// No description provided for @meMore.
+  ///
+  /// In en, this message translates to:
+  /// **'More'**
+  String get meMore;
+
+  /// No description provided for @checkInNotYetToday.
+  ///
+  /// In en, this message translates to:
+  /// **'Not checked in today'**
+  String get checkInNotYetToday;
+
+  /// No description provided for @checkInTodayButton.
+  ///
+  /// In en, this message translates to:
+  /// **'Check in today'**
+  String get checkInTodayButton;
+
+  /// No description provided for @checkInGiftsLeftShort.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =1{1 more for a gift} other{{count} more for a gift}}'**
+  String checkInGiftsLeftShort(int count);
+
+  /// No description provided for @checkInGiftToday.
+  ///
+  /// In en, this message translates to:
+  /// **'Gift today!'**
+  String get checkInGiftToday;
+
+  /// No description provided for @checkInGiftMilestone.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =1{Gift for 1 check-in} other{Gift for {count} check-ins}}'**
+  String checkInGiftMilestone(int count);
+
+  /// No description provided for @checkInGiftCollect.
+  ///
+  /// In en, this message translates to:
+  /// **'Collect'**
+  String get checkInGiftCollect;
+
   /// No description provided for @checkInTotalHints.
   ///
   /// In en, this message translates to:

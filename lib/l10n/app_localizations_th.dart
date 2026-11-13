@@ -599,6 +599,40 @@ class AppLocalizationsTh extends AppLocalizations {
   String get checkInMonthGifts => 'ของขวัญเดือนนี้';
 
   @override
+  String get navHome => 'หน้าหลัก';
+
+  @override
+  String get navMe => 'ฉัน';
+
+  @override
+  String get meHelp => 'ช่วยเหลือ';
+
+  @override
+  String get meMore => 'อื่น ๆ';
+
+  @override
+  String get checkInNotYetToday => 'วันนี้ยังไม่ได้เช็กอิน';
+
+  @override
+  String get checkInTodayButton => 'เช็กอินวันนี้';
+
+  @override
+  String checkInGiftsLeftShort(int count) {
+    return 'อีก $count ครั้งได้ของขวัญ';
+  }
+
+  @override
+  String get checkInGiftToday => 'วันนี้มีของขวัญ!';
+
+  @override
+  String checkInGiftMilestone(int count) {
+    return 'ของขวัญเช็กอินครบ $count ครั้ง';
+  }
+
+  @override
+  String get checkInGiftCollect => 'รับ';
+
+  @override
   String get checkInTotalHints => 'คำใบ้';
 
   @override

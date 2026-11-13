@@ -65,36 +65,17 @@ void main() {
 
   tearDown(() => service.dispose());
 
-  testWidgets('opens the check-in screen once a day by itself', (tester) async {
+  testWidgets('the home page no longer opens check-in by itself', (
+    tester,
+  ) async {
     await pump(tester);
-    expect(find.byType(CheckInPage), findsOneWidget);
-    expect(service.shouldAutoOpen, isFalse);
-
-    final material = MaterialLocalizations.of(
-      tester.element(find.byType(CheckInPage)),
-    );
-    await tester.tap(find.byTooltip(material.backButtonTooltip));
-    await tester.pumpAndSettle();
-    expect(find.byType(CheckInPage), findsNothing);
-    // Chưa điểm danh: nút trên thanh tiêu đề có chấm đỏ.
-    final badge = tester.widget<Badge>(
-      find.descendant(
-        of: find.byKey(const ValueKey('dashboard-check-in')),
-        matching: find.byType(Badge),
-      ),
-    );
-    expect(badge.isLabelVisible, isTrue);
-  });
-
-  testWidgets('not on the very first launch (tutorial first)', (tester) async {
-    await pump(tester, showTutorial: true);
-    expect(find.byType(CheckInPage), findsNothing);
+    expect(find.byType(CheckInTab), findsNothing);
+    expect(find.byKey(const ValueKey('dashboard-check-in')), findsNothing);
   });
 
   testWidgets('reminds premium players of unused today-only uses', (
     tester,
   ) async {
-    await service.markAutoOpened();
     await repository.savePowerUps(
       const PowerUpInventory(
         hints: 0,

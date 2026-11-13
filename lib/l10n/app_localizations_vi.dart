@@ -599,6 +599,40 @@ class AppLocalizationsVi extends AppLocalizations {
   String get checkInMonthGifts => 'Quà trong tháng';
 
   @override
+  String get navHome => 'Chính';
+
+  @override
+  String get navMe => 'Tôi';
+
+  @override
+  String get meHelp => 'Trợ giúp';
+
+  @override
+  String get meMore => 'Khác';
+
+  @override
+  String get checkInNotYetToday => 'Hôm nay chưa điểm danh';
+
+  @override
+  String get checkInTodayButton => 'Điểm danh hôm nay';
+
+  @override
+  String checkInGiftsLeftShort(int count) {
+    return 'Còn $count lần nữa có quà';
+  }
+
+  @override
+  String get checkInGiftToday => 'Hôm nay có quà!';
+
+  @override
+  String checkInGiftMilestone(int count) {
+    return 'Quà mốc $count lần điểm danh';
+  }
+
+  @override
+  String get checkInGiftCollect => 'Nhận';
+
+  @override
   String get checkInTotalHints => 'Gợi ý';
 
   @override

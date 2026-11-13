@@ -34,6 +34,17 @@ flutter run --flavor dev      # Android: luôn phải chọn flavor
 
 Hỗ trợ Android, iOS và Web.
 
+## Điều hướng
+
+Thanh điều hướng dưới có 3 tab (`lib/screens/home/app_home_page.dart`):
+
+- **Chính** (`NonogramDashboardPage`): màn tiếp theo kèm nút Chơi, tiến trình,
+  vừa giải xong.
+- **Điểm danh** (`CheckInTab`): xem [Điểm danh hằng ngày](#điểm-danh-hằng-ngày).
+- **Tôi** (`MePage`): gói không quảng cáo; cài đặt (giao diện: bấm là đổi
+  Sáng ⇄ Tối, ngôn ngữ, âm thanh); trợ giúp (cách chơi, kỹ thuật giải); quyền
+  riêng tư quảng cáo (khi bắt buộc), giấy phép, đổi chế độ chơi (bản `dev`).
+
 ## Ngôn ngữ
 
 Giao diện có 15 ngôn ngữ: Anh, Việt, Tây Ban Nha, Bồ Đào Nha, Pháp, Đức, Ý,
@@ -43,8 +54,7 @@ Nga, Thổ Nhĩ Kỳ, Indonesia, Thái, Nhật, Hàn, Trung giản thể và Tru
   thì hiện tiếng Anh. Máy báo `zh_TW` / `zh_HK` / `zh_MO` (Android cũ, không
   có mã chữ viết) dùng tiếng Trung phồn thể (`resolveAppLocale` trong
   `lib/core/app_locale.dart`).
-- Người chơi đổi được ngôn ngữ bằng nút quả địa cầu trên trang chính hoặc trong
-  Cài đặt khi đang chơi; lựa chọn được lưu trên máy (chọn "Theo ngôn ngữ của
+- Người chơi đổi được ngôn ngữ ở tab **Tôi** hoặc trong Cài đặt khi đang chơi; lựa chọn được lưu trên máy (chọn "Theo ngôn ngữ của
   máy" để bỏ).
 - Tên màn chơi (lấy từ tên icon gốc) giữ nguyên tiếng Anh ở mọi ngôn ngữ.
 - **Thêm ngôn ngữ:** tạo `lib/l10n/app_<mã>.arb` (đủ mọi khoá của
@@ -229,9 +239,16 @@ Game ──AdPlacement──▶ AdService (ad_service.dart)
 
 ## Điểm danh hằng ngày
 
-`lib/checkin/`. Màn điểm danh tự mở lần đầu mỗi ngày (trừ lần đầu mở app,
-khi bài hướng dẫn hiện trước); trên trang chính có nút lịch, chấm đỏ khi hôm
-nay chưa điểm danh.
+`lib/checkin/`. Điểm danh là tab thứ 2 của app (không tự mở); icon tab có
+chấm đỏ khi hôm nay chưa điểm danh. Nút **"Điểm danh hôm nay"** nổi ở cuối
+tab, ẩn khi đã điểm danh.
+
+- **Hiệu ứng** (`check_in_celebration.dart`): bấm nút thì nút vỡ như bong
+  bóng, một quả cầu sáng bay lên ô hôm nay và đóng dấu tích. Ngày có quà mốc:
+  huy hiệu quà lắc, hộp quà bay ra giữa màn hình, rung, bật nắp (tia sáng,
+  pháo giấy), bấm **Nhận** (hoặc nút quay lại) thì phần quà bay về thẻ "Quà
+  trong tháng". Quà trong ngày của gói không quảng cáo chỉ báo bằng thông báo
+  nhỏ. Máy bật giảm chuyển động: điểm danh ngay, không hiệu ứng.
 
 - **Mọi người chơi:** cứ 5 lần điểm danh (cộng dồn số ngày, bỏ lỡ không mất
   tiến độ) nhận một quà mốc **vĩnh viễn**, xoay vòng gợi ý → gợi ý → gậy phép.
@@ -241,11 +258,11 @@ nay chưa điểm danh.
   và lượt trong ngày; dùng lượt trong ngày trước. Badge trên nút gợi ý / gậy
   phép màu vàng khi còn lượt trong ngày, màu primary khi chỉ còn lượt vĩnh
   viễn. Trang chính có thẻ nhắc khi còn lượt trong ngày chưa dùng.
-- **Lịch:** ngày đã điểm danh tô nền nhạt, chưa điểm danh chỉ có viền, hôm nay
-  viền đậm; ô có quà mốc có badge quà ở góc; mỗi ô liệt kê quà (vàng = trong
-  ngày, primary = vĩnh viễn). Ngày đã qua hiện quà thực tế, ngày tới hiện quà
-  dự kiến (vẽ mờ, giả sử từ nay ngày nào cũng điểm danh). Xem được các tháng
-  từ lúc cài app; cuối trang là tổng quà tháng (đã nhận / tối đa).
+- **Lịch:** ngày đã điểm danh nền gradient với số nhỏ và dấu tích trắng, chưa
+  điểm danh chỉ có viền, hôm nay viền đậm. Không ghi quà trong ô: ngày có quà
+  mốc có huy hiệu hộp quà ở góc (đã nhận: dấu tích vàng; ngày tới tính theo
+  giả sử từ nay ngày nào cũng điểm danh). Xem được các tháng từ lúc cài app;
+  cuối trang là tổng quà tháng (đã nhận / tối đa).
 - **Chống chỉnh giờ:** giờ của game = giờ máy + độ lệch so với giờ mạng
   (`GameClock`, header `Date` từ `https://www.google.com/generate_204`, đo lại
   mỗi lần mở app); thêm bánh cóc: chỉ điểm danh khi hôm nay sau ngày điểm danh
@@ -255,7 +272,7 @@ nay chưa điểm danh.
 
 Chỉ trên Android (`lib/premium/`), mua một lần qua Google Play, mã sản phẩm
 **`remove_ads`** (tạo trong Play Console → Kiếm tiền → Sản phẩm trong ứng
-dụng). Thẻ mua nằm trên trang chính, hiện giá theo tiền của người dùng; cửa
+dụng). Thẻ mua nằm ở tab Tôi, hiện giá theo tiền của người dùng; cửa
 hàng không dùng được hoặc chưa có sản phẩm thì ẩn.
 
 - Tắt quảng cáo xen kẽ (`AdEntitlements`); quảng cáo có thưởng vẫn còn để

@@ -583,6 +583,40 @@ class AppLocalizationsJa extends AppLocalizations {
   String get checkInMonthGifts => '今月のプレゼント';
 
   @override
+  String get navHome => 'ホーム';
+
+  @override
+  String get navMe => 'マイページ';
+
+  @override
+  String get meHelp => 'ヘルプ';
+
+  @override
+  String get meMore => 'その他';
+
+  @override
+  String get checkInNotYetToday => '今日はまだチェックインしていません';
+
+  @override
+  String get checkInTodayButton => '今日のチェックイン';
+
+  @override
+  String checkInGiftsLeftShort(int count) {
+    return 'あと$count回でプレゼント';
+  }
+
+  @override
+  String get checkInGiftToday => '今日はプレゼントあり！';
+
+  @override
+  String checkInGiftMilestone(int count) {
+    return 'チェックイン$count回達成のプレゼント';
+  }
+
+  @override
+  String get checkInGiftCollect => '受け取る';
+
+  @override
   String get checkInTotalHints => 'ヒント';
 
   @override
