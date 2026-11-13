@@ -32,11 +32,7 @@ void main() {
   }
 
   PremiumController premium(FakePurchaseGateway gateway, {bool owned = false}) {
-    final c = PremiumController.inMemory(
-      gateway: gateway,
-      clock: FakeTrustedClock(DateTime(2026, 11, 13)),
-      owned: owned,
-    );
+    final c = PremiumController.inMemory(gateway: gateway, owned: owned);
     addTearDown(c.dispose);
     return c;
   }

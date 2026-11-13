@@ -514,7 +514,7 @@ class AppLocalizationsJa extends AppLocalizations {
   String get premiumBenefitNoAds => 'レベル間の広告がなくなります';
 
   @override
-  String get premiumBenefitDaily => '毎日ヒント2回と魔法の杖1回';
+  String get premiumBenefitDaily => 'チェックインした日はヒント2回と魔法の杖1回';
 
   @override
   String premiumBuy(String price) {
@@ -528,7 +528,7 @@ class AppLocalizationsJa extends AppLocalizations {
   String get premiumActiveTitle => '広告なしパック有効';
 
   @override
-  String get premiumActiveDaily => '毎日、ヒント2回と魔法の杖1回まで補充されます。';
+  String get premiumActiveDaily => '毎日チェックインすると、その日使えるヒント2回と魔法の杖1回がもらえます。';
 
   @override
   String get premiumPurchased => 'ありがとうございます！レベル間の広告がオフになりました。';
@@ -540,7 +540,79 @@ class AppLocalizationsJa extends AppLocalizations {
   String get premiumFailed => '購入できませんでした。もう一度お試しください。';
 
   @override
-  String premiumDailyReward(int hints, int wands) {
-    return 'デイリーギフト：ヒント$hints回と魔法の杖$wands回になりました。';
+  String get checkInTitle => '毎日チェックイン';
+
+  @override
+  String get checkInAction => 'チェックイン';
+
+  @override
+  String get checkInDoneToday => '今日はチェックイン済み';
+
+  @override
+  String checkInNextGift(int count) {
+    return 'あと$count回のチェックインで次のプレゼント';
   }
+
+  @override
+  String get checkInCheckedIn => 'チェックインしました！';
+
+  @override
+  String checkInReceived(String rewards) {
+    return '$rewardsを受け取りました。';
+  }
+
+  @override
+  String rewardHints(int count) {
+    return 'ヒント$count回';
+  }
+
+  @override
+  String rewardWands(int count) {
+    return '魔法の杖$count回';
+  }
+
+  @override
+  String rewardTodayOnly(String reward) {
+    return '$reward（今日のみ）';
+  }
+
+  @override
+  String get checkInMonthGifts => '今月のプレゼント';
+
+  @override
+  String get checkInTotalHints => 'ヒント';
+
+  @override
+  String get checkInTotalWands => '魔法の杖';
+
+  @override
+  String get checkInTotalDailyHints => 'ヒント（今日のみ）';
+
+  @override
+  String get checkInTotalDailyWands => '魔法の杖（今日のみ）';
+
+  @override
+  String get checkInPremiumToday => '広告なしパックの今日の分';
+
+  @override
+  String get checkInPremiumNotYet => 'チェックインすると今日使えるヒント2回と魔法の杖1回がもらえます。';
+
+  @override
+  String get checkInPremiumUsedUp => '今日の分は使い切りました。また明日！';
+
+  @override
+  String checkInExpiresIn(String time) {
+    return 'あと$timeで期限切れ';
+  }
+
+  @override
+  String dashboardDailyReminder(String rewards, String time) {
+    return '今日はまだ$rewards残っています。あと$timeで期限切れになるので、今すぐプレイして無駄にしないで！';
+  }
+
+  @override
+  String get dashboardDailyReminderTitle => '今日の分が待っています';
+
+  @override
+  String get dashboardDailyReminderPlay => '今すぐプレイ';
 }

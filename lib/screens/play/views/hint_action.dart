@@ -23,7 +23,9 @@ class HintAction extends StatelessWidget {
     return BlocBuilder<NonogramPlayBloc, NonogramPlayState>(
       buildWhen:
           (p, c) =>
-              p.remainingHints != c.remainingHints || p.isSolved != c.isSolved,
+              p.remainingHints != c.remainingHints ||
+              p.dailyHints != c.dailyHints ||
+              p.isSolved != c.isSolved,
       builder: (context, state) {
         final l10n = context.l10n;
         // Hết lượt: nút vẫn bấm được, bấm là xem quảng cáo để dùng một lượt.
@@ -47,7 +49,9 @@ class HintAction extends StatelessWidget {
             );
           },
         );
-        if (!compact && !adOffer) return button;
+        // Nút rộng đã ghi số lượt; chỉ thêm badge khi hết lượt hoặc có lượt
+        // trong ngày (badge vàng).
+        if (!compact && !adOffer && state.dailyHints == 0) return button;
         return Stack(
           clipBehavior: Clip.none,
           children: [
@@ -60,6 +64,7 @@ class HintAction extends StatelessWidget {
                   count: state.remainingHints,
                   active: state.remainingHints > 0,
                   adOffer: adOffer,
+                  daily: state.dailyHints > 0,
                 ),
               ),
             ),

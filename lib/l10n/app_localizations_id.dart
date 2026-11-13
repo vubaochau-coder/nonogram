@@ -526,7 +526,7 @@ class AppLocalizationsId extends AppLocalizations {
 
   @override
   String get premiumBenefitDaily =>
-      '2 petunjuk dan 1 tongkat ajaib setiap hari';
+      '2 petunjuk dan 1 tongkat ajaib setiap hari kamu absen';
 
   @override
   String premiumBuy(String price) {
@@ -541,7 +541,7 @@ class AppLocalizationsId extends AppLocalizations {
 
   @override
   String get premiumActiveDaily =>
-      'Setiap hari persediaanmu diisi hingga 2 petunjuk dan 1 tongkat ajaib.';
+      'Absen setiap hari untuk mendapat 2 petunjuk dan 1 tongkat ajaib untuk hari itu.';
 
   @override
   String get premiumPurchased =>
@@ -555,7 +555,87 @@ class AppLocalizationsId extends AppLocalizations {
   String get premiumFailed => 'Pembelian gagal. Silakan coba lagi.';
 
   @override
-  String premiumDailyReward(int hints, int wands) {
-    return 'Hadiah harian: sekarang kamu punya $hints petunjuk dan $wands tongkat ajaib.';
+  String get checkInTitle => 'Absen harian';
+
+  @override
+  String get checkInAction => 'Absen';
+
+  @override
+  String get checkInDoneToday => 'Sudah absen hari ini';
+
+  @override
+  String checkInNextGift(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Hadiah berikutnya dalam $count kali absen',
+      one: 'Hadiah berikutnya di absen berikutnya',
+    );
+    return '$_temp0';
   }
+
+  @override
+  String get checkInCheckedIn => 'Berhasil absen!';
+
+  @override
+  String checkInReceived(String rewards) {
+    return 'Kamu mendapat $rewards.';
+  }
+
+  @override
+  String rewardHints(int count) {
+    return '$count petunjuk';
+  }
+
+  @override
+  String rewardWands(int count) {
+    return '$count tongkat ajaib';
+  }
+
+  @override
+  String rewardTodayOnly(String reward) {
+    return '$reward (hanya hari ini)';
+  }
+
+  @override
+  String get checkInMonthGifts => 'Hadiah bulan ini';
+
+  @override
+  String get checkInTotalHints => 'Petunjuk';
+
+  @override
+  String get checkInTotalWands => 'Tongkat ajaib';
+
+  @override
+  String get checkInTotalDailyHints => 'Petunjuk (hanya hari ini)';
+
+  @override
+  String get checkInTotalDailyWands => 'Tongkat ajaib (hanya hari ini)';
+
+  @override
+  String get checkInPremiumToday => 'Hari ini dari paket bebas iklan';
+
+  @override
+  String get checkInPremiumNotYet =>
+      'Absen untuk mendapat 2 petunjuk dan 1 tongkat ajaib hari ini.';
+
+  @override
+  String get checkInPremiumUsedUp =>
+      'Semua sudah dipakai hari ini. Sampai besok!';
+
+  @override
+  String checkInExpiresIn(String time) {
+    return 'Berakhir dalam $time';
+  }
+
+  @override
+  String dashboardDailyReminder(String rewards, String time) {
+    return 'Kamu masih punya $rewards untuk hari ini. Berakhir dalam $time, main sekarang supaya tidak terbuang!';
+  }
+
+  @override
+  String get dashboardDailyReminderTitle => 'Bantuan hari ini menunggumu';
+
+  @override
+  String get dashboardDailyReminderPlay => 'Main sekarang';
 }

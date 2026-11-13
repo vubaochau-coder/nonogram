@@ -11,10 +11,23 @@ import 'package:nonogram/models/power_up_inventory.dart';
 /// Gom dữ liệu màn chơi (assets) và tiến độ người chơi (lưu trên máy).
 /// Game chạy offline hoàn toàn: không có tài khoản, không đồng bộ.
 class NonogramRepository {
-  NonogramRepository(this._puzzleSource, this._localService);
+  NonogramRepository(
+    this._puzzleSource,
+    this._localService, {
+    int Function()? today,
+  }) : _today = today ?? _deviceToday;
 
   final NonogramPuzzleSource _puzzleSource;
   final NonogramLocalService _localService;
+
+  /// "Hôm nay" (số ngày kể từ 1970-01-01, lịch địa phương), để biết lượt
+  /// trong ngày còn hạn không. App truyền giờ đã hiệu chỉnh theo giờ mạng
+  /// (`GameClock`); mặc định là giờ máy.
+  final int Function() _today;
+
+  int get today => _today();
+
+  static int _deviceToday() => dayNumberOf(DateTime.now());
 
   // --- Puzzles ---
 
@@ -26,19 +39,22 @@ class NonogramRepository {
 
   // --- Kho gợi ý / gậy phép ---
 
-  /// Người chơi mới (chưa lưu lần nào) nhận kho khởi đầu.
+  /// Kho hôm nay (lượt trong ngày đã hết hạn thì bỏ). Người chơi mới (chưa
+  /// lưu lần nào) nhận kho khởi đầu.
   Future<PowerUpInventory> getPowerUps() async =>
-      await _localService.getPowerUps() ?? PowerUpInventory.starter;
+      (await _localService.getPowerUps() ?? PowerUpInventory.starter).activeOn(
+        today,
+      );
 
   Future<void> savePowerUps(PowerUpInventory inventory) async {
     await _localService.savePowerUps(inventory);
-    _powerUps.add(inventory);
+    _powerUps.add(inventory.activeOn(today));
   }
 
   final _powerUps = StreamController<PowerUpInventory>.broadcast(sync: true);
 
-  /// Kho vừa được lưu (từ màn chơi, hoặc quà hằng ngày của gói không quảng
-  /// cáo), để màn chơi đang mở cập nhật số lượt.
+  /// Kho vừa được lưu (từ màn chơi, hoặc quà điểm danh), để màn chơi và
+  /// trang chính đang mở cập nhật số lượt.
   Stream<PowerUpInventory> get powerUpChanges => _powerUps.stream;
 
   // --- Ván đang chơi dở ---
@@ -196,3 +212,18 @@ class NonogramCompletionSummary {
   /// Thời gian giải nhanh nhất trong mọi màn.
   final int? bestMs;
 }
+
+/// Số ngày kể từ 1970-01-01 theo lịch địa phương của [time].
+int dayNumberOf(DateTime time) {
+  final local = time.toLocal();
+  return DateTime.utc(
+        local.year,
+        local.month,
+        local.day,
+      ).millisecondsSinceEpoch ~/
+      Duration.millisecondsPerDay;
+}
+
+/// Ngày lịch (UTC, 0 giờ) của số ngày [day].
+DateTime dateOfDayNumber(int day) =>
+    DateTime.utc(1970).add(Duration(days: day));

@@ -1,7 +1,7 @@
 import 'dart:async';
 
 import 'package:nonogram/premium/purchase_gateway.dart';
-import 'package:nonogram/premium/trusted_clock.dart';
+import 'package:nonogram/checkin/trusted_clock.dart';
 
 class FakePurchaseGateway implements PurchaseGateway {
   FakePurchaseGateway({

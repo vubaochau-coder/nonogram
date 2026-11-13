@@ -503,7 +503,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get premiumBenefitNoAds => '关卡之间不再有广告';
 
   @override
-  String get premiumBenefitDaily => '每天 2 次提示和 1 次魔法棒';
+  String get premiumBenefitDaily => '每次签到都有 2 次提示和 1 次魔法棒';
 
   @override
   String premiumBuy(String price) {
@@ -517,7 +517,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get premiumActiveTitle => '无广告礼包已激活';
 
   @override
-  String get premiumActiveDaily => '每天库存会补满至 2 次提示和 1 次魔法棒。';
+  String get premiumActiveDaily => '每天签到即可获得当天可用的 2 次提示和 1 次魔法棒。';
 
   @override
   String get premiumPurchased => '谢谢！关卡之间的广告已关闭。';
@@ -529,9 +529,81 @@ class AppLocalizationsZh extends AppLocalizations {
   String get premiumFailed => '购买未成功，请重试。';
 
   @override
-  String premiumDailyReward(int hints, int wands) {
-    return '每日礼物：你现在有 $hints 次提示和 $wands 次魔法棒。';
+  String get checkInTitle => '每日签到';
+
+  @override
+  String get checkInAction => '签到';
+
+  @override
+  String get checkInDoneToday => '今天已签到';
+
+  @override
+  String checkInNextGift(int count) {
+    return '再签到 $count 次即可获得下一份礼物';
   }
+
+  @override
+  String get checkInCheckedIn => '签到成功！';
+
+  @override
+  String checkInReceived(String rewards) {
+    return '你获得了 $rewards。';
+  }
+
+  @override
+  String rewardHints(int count) {
+    return '$count 次提示';
+  }
+
+  @override
+  String rewardWands(int count) {
+    return '$count 次魔法棒';
+  }
+
+  @override
+  String rewardTodayOnly(String reward) {
+    return '$reward（仅限今天）';
+  }
+
+  @override
+  String get checkInMonthGifts => '本月礼物';
+
+  @override
+  String get checkInTotalHints => '提示';
+
+  @override
+  String get checkInTotalWands => '魔法棒';
+
+  @override
+  String get checkInTotalDailyHints => '提示（仅限今天）';
+
+  @override
+  String get checkInTotalDailyWands => '魔法棒（仅限今天）';
+
+  @override
+  String get checkInPremiumToday => '今天来自无广告礼包';
+
+  @override
+  String get checkInPremiumNotYet => '签到即可获得今天可用的 2 次提示和 1 次魔法棒。';
+
+  @override
+  String get checkInPremiumUsedUp => '今天的已用完，明天见！';
+
+  @override
+  String checkInExpiresIn(String time) {
+    return '$time后过期';
+  }
+
+  @override
+  String dashboardDailyReminder(String rewards, String time) {
+    return '你今天还有 $rewards，将在 $time后过期，快来玩别浪费了！';
+  }
+
+  @override
+  String get dashboardDailyReminderTitle => '今天的道具在等你';
+
+  @override
+  String get dashboardDailyReminderPlay => '立即游玩';
 }
 
 /// The translations for Chinese, using the Han script (`zh_Hant`).
@@ -1033,7 +1105,7 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
   String get premiumBenefitNoAds => '關卡之間不再有廣告';
 
   @override
-  String get premiumBenefitDaily => '每天 2 次提示和 1 次魔法棒';
+  String get premiumBenefitDaily => '每次簽到都有 2 次提示和 1 次魔法棒';
 
   @override
   String premiumBuy(String price) {
@@ -1047,7 +1119,7 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
   String get premiumActiveTitle => '無廣告禮包已啟用';
 
   @override
-  String get premiumActiveDaily => '每天庫存會補滿至 2 次提示和 1 次魔法棒。';
+  String get premiumActiveDaily => '每天簽到即可獲得當天可用的 2 次提示和 1 次魔法棒。';
 
   @override
   String get premiumPurchased => '謝謝！關卡之間的廣告已關閉。';
@@ -1059,7 +1131,79 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
   String get premiumFailed => '購買未成功，請再試一次。';
 
   @override
-  String premiumDailyReward(int hints, int wands) {
-    return '每日禮物：你現在有 $hints 次提示和 $wands 次魔法棒。';
+  String get checkInTitle => '每日簽到';
+
+  @override
+  String get checkInAction => '簽到';
+
+  @override
+  String get checkInDoneToday => '今天已簽到';
+
+  @override
+  String checkInNextGift(int count) {
+    return '再簽到 $count 次即可獲得下一份禮物';
   }
+
+  @override
+  String get checkInCheckedIn => '簽到成功！';
+
+  @override
+  String checkInReceived(String rewards) {
+    return '你獲得了 $rewards。';
+  }
+
+  @override
+  String rewardHints(int count) {
+    return '$count 次提示';
+  }
+
+  @override
+  String rewardWands(int count) {
+    return '$count 次魔法棒';
+  }
+
+  @override
+  String rewardTodayOnly(String reward) {
+    return '$reward（僅限今天）';
+  }
+
+  @override
+  String get checkInMonthGifts => '本月禮物';
+
+  @override
+  String get checkInTotalHints => '提示';
+
+  @override
+  String get checkInTotalWands => '魔法棒';
+
+  @override
+  String get checkInTotalDailyHints => '提示（僅限今天）';
+
+  @override
+  String get checkInTotalDailyWands => '魔法棒（僅限今天）';
+
+  @override
+  String get checkInPremiumToday => '今天來自無廣告禮包';
+
+  @override
+  String get checkInPremiumNotYet => '簽到即可獲得今天可用的 2 次提示和 1 次魔法棒。';
+
+  @override
+  String get checkInPremiumUsedUp => '今天的已用完，明天見！';
+
+  @override
+  String checkInExpiresIn(String time) {
+    return '$time後過期';
+  }
+
+  @override
+  String dashboardDailyReminder(String rewards, String time) {
+    return '你今天還有 $rewards，將在 $time後過期，快來玩別浪費了！';
+  }
+
+  @override
+  String get dashboardDailyReminderTitle => '今天的道具在等你';
+
+  @override
+  String get dashboardDailyReminderPlay => '立即遊玩';
 }

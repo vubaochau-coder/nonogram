@@ -534,7 +534,8 @@ class AppLocalizationsEs extends AppLocalizations {
   String get premiumBenefitNoAds => 'Sin anuncios entre niveles';
 
   @override
-  String get premiumBenefitDaily => '2 pistas y 1 varita mágica cada día';
+  String get premiumBenefitDaily =>
+      '2 pistas y 1 varita mágica cada día que te registres';
 
   @override
   String premiumBuy(String price) {
@@ -549,7 +550,7 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get premiumActiveDaily =>
-      'Cada día tu inventario se recarga hasta 2 pistas y 1 varita mágica.';
+      'Regístrate cada día para recibir 2 pistas y 1 varita mágica para ese día.';
 
   @override
   String get premiumPurchased => '¡Gracias! Ya no hay anuncios entre niveles.';
@@ -562,7 +563,98 @@ class AppLocalizationsEs extends AppLocalizations {
   String get premiumFailed => 'La compra no se completó. Inténtalo de nuevo.';
 
   @override
-  String premiumDailyReward(int hints, int wands) {
-    return 'Regalo diario: ahora tienes $hints pistas y $wands varita(s) mágica(s).';
+  String get checkInTitle => 'Registro diario';
+
+  @override
+  String get checkInAction => 'Registrarme';
+
+  @override
+  String get checkInDoneToday => 'Ya te registraste hoy';
+
+  @override
+  String checkInNextGift(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Próximo regalo en $count registros',
+      one: 'Próximo regalo en tu próximo registro',
+    );
+    return '$_temp0';
   }
+
+  @override
+  String get checkInCheckedIn => '¡Registrado!';
+
+  @override
+  String checkInReceived(String rewards) {
+    return 'Recibiste $rewards.';
+  }
+
+  @override
+  String rewardHints(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count pistas',
+      one: '1 pista',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String rewardWands(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count varitas mágicas',
+      one: '1 varita mágica',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String rewardTodayOnly(String reward) {
+    return '$reward (solo hoy)';
+  }
+
+  @override
+  String get checkInMonthGifts => 'Regalos de este mes';
+
+  @override
+  String get checkInTotalHints => 'Pistas';
+
+  @override
+  String get checkInTotalWands => 'Varitas mágicas';
+
+  @override
+  String get checkInTotalDailyHints => 'Pistas (solo hoy)';
+
+  @override
+  String get checkInTotalDailyWands => 'Varitas mágicas (solo hoy)';
+
+  @override
+  String get checkInPremiumToday => 'Hoy de tu paquete sin anuncios';
+
+  @override
+  String get checkInPremiumNotYet =>
+      'Regístrate para recibir 2 pistas y 1 varita mágica para hoy.';
+
+  @override
+  String get checkInPremiumUsedUp => 'Ya usaste todo por hoy. ¡Hasta mañana!';
+
+  @override
+  String checkInExpiresIn(String time) {
+    return 'Caduca en $time';
+  }
+
+  @override
+  String dashboardDailyReminder(String rewards, String time) {
+    return 'Aún tienes $rewards para hoy. Caducan en $time, ¡juega ahora para no desperdiciarlas!';
+  }
+
+  @override
+  String get dashboardDailyReminderTitle => 'Tus ayudas de hoy te esperan';
+
+  @override
+  String get dashboardDailyReminderPlay => 'Jugar ahora';
 }

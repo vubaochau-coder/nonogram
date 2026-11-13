@@ -533,7 +533,7 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get premiumBenefitDaily =>
-      '2 indices et 1 baguette magique chaque jour';
+      '2 indices et 1 baguette magique chaque jour de présence';
 
   @override
   String premiumBuy(String price) {
@@ -548,7 +548,7 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get premiumActiveDaily =>
-      'Chaque jour, ton inventaire est rechargé à 2 indices et 1 baguette magique.';
+      'Valide ta présence chaque jour pour recevoir 2 indices et 1 baguette magique pour la journée.';
 
   @override
   String get premiumPurchased =>
@@ -562,7 +562,101 @@ class AppLocalizationsFr extends AppLocalizations {
   String get premiumFailed => 'L\'achat n\'a pas abouti. Réessaie.';
 
   @override
-  String premiumDailyReward(int hints, int wands) {
-    return 'Cadeau du jour : tu as maintenant $hints indices et $wands baguette(s) magique(s).';
+  String get checkInTitle => 'Connexion quotidienne';
+
+  @override
+  String get checkInAction => 'Valider ma présence';
+
+  @override
+  String get checkInDoneToday => 'Présence validée aujourd\'hui';
+
+  @override
+  String checkInNextGift(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Prochain cadeau dans $count présences',
+      one: 'Prochain cadeau à ta prochaine présence',
+    );
+    return '$_temp0';
   }
+
+  @override
+  String get checkInCheckedIn => 'Présence validée !';
+
+  @override
+  String checkInReceived(String rewards) {
+    return 'Tu as reçu $rewards.';
+  }
+
+  @override
+  String rewardHints(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count indices',
+      one: '1 indice',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String rewardWands(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count baguettes magiques',
+      one: '1 baguette magique',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String rewardTodayOnly(String reward) {
+    return '$reward (aujourd\'hui seulement)';
+  }
+
+  @override
+  String get checkInMonthGifts => 'Cadeaux du mois';
+
+  @override
+  String get checkInTotalHints => 'Indices';
+
+  @override
+  String get checkInTotalWands => 'Baguettes magiques';
+
+  @override
+  String get checkInTotalDailyHints => 'Indices (aujourd\'hui seulement)';
+
+  @override
+  String get checkInTotalDailyWands =>
+      'Baguettes magiques (aujourd\'hui seulement)';
+
+  @override
+  String get checkInPremiumToday =>
+      'Aujourd\'hui grâce à ton pack sans publicité';
+
+  @override
+  String get checkInPremiumNotYet =>
+      'Valide ta présence pour recevoir 2 indices et 1 baguette magique pour aujourd\'hui.';
+
+  @override
+  String get checkInPremiumUsedUp =>
+      'Tout est utilisé pour aujourd\'hui. À demain !';
+
+  @override
+  String checkInExpiresIn(String time) {
+    return 'Expire dans $time';
+  }
+
+  @override
+  String dashboardDailyReminder(String rewards, String time) {
+    return 'Il te reste $rewards pour aujourd\'hui. Ils expirent dans $time : joue maintenant pour ne rien perdre !';
+  }
+
+  @override
+  String get dashboardDailyReminderTitle => 'Tes aides du jour t\'attendent';
+
+  @override
+  String get dashboardDailyReminderPlay => 'Jouer';
 }

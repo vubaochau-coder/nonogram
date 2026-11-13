@@ -19,8 +19,14 @@ class NonogramPlayState extends Equatable {
   final bool isFullscreen;
   final bool isSolved;
 
-  /// Số lượt gợi ý còn trong kho dùng chung (xem `PowerUpInventory`).
+  /// Tổng số lượt gợi ý còn trong kho dùng chung (xem `PowerUpInventory`),
+  /// gồm cả [dailyHints].
   final int remainingHints;
+
+  /// Phần lượt chỉ dùng được trong hôm nay (quà điểm danh của gói không
+  /// quảng cáo): badge hiện màu vàng khi còn.
+  final int dailyHints;
+  final int dailyWands;
 
   /// Số lượt gậy phép còn lại (chọn một hàng / cột để hiện đáp án).
   final int remainingWands;
@@ -46,6 +52,8 @@ class NonogramPlayState extends Equatable {
     this.isSolved = false,
     this.remainingHints = 0,
     this.remainingWands = 0,
+    this.dailyHints = 0,
+    this.dailyWands = 0,
     this.isWandActive = false,
     this.lockedCells = const {},
   });
@@ -75,6 +83,8 @@ class NonogramPlayState extends Equatable {
     bool? isSolved,
     int? remainingHints,
     int? remainingWands,
+    int? dailyHints,
+    int? dailyWands,
     bool? isWandActive,
     Set<({int row, int col})>? lockedCells,
   }) {
@@ -92,6 +102,8 @@ class NonogramPlayState extends Equatable {
       isSolved: isSolved ?? this.isSolved,
       remainingHints: remainingHints ?? this.remainingHints,
       remainingWands: remainingWands ?? this.remainingWands,
+      dailyHints: dailyHints ?? this.dailyHints,
+      dailyWands: dailyWands ?? this.dailyWands,
       isWandActive: isWandActive ?? this.isWandActive,
       lockedCells: lockedCells ?? this.lockedCells,
     );
@@ -112,6 +124,8 @@ class NonogramPlayState extends Equatable {
     isSolved,
     remainingHints,
     remainingWands,
+    dailyHints,
+    dailyWands,
     isWandActive,
     lockedCells,
   ];
@@ -133,6 +147,8 @@ class NonogramPlayCompletedState extends NonogramPlayState {
     required super.isSolved,
     required super.remainingHints,
     required super.remainingWands,
+    super.dailyHints,
+    super.dailyWands,
     required super.isWandActive,
     required super.lockedCells,
   });
@@ -152,6 +168,8 @@ class NonogramPlayCompletedState extends NonogramPlayState {
       isSolved: true,
       remainingHints: state.remainingHints,
       remainingWands: state.remainingWands,
+      dailyHints: state.dailyHints,
+      dailyWands: state.dailyWands,
       isWandActive: state.isWandActive,
       lockedCells: state.lockedCells,
     );
@@ -177,6 +195,8 @@ class NonogramPlayRestoredState extends NonogramPlayState {
     required super.isSolved,
     required super.remainingHints,
     required super.remainingWands,
+    super.dailyHints,
+    super.dailyWands,
     required super.isWandActive,
     required super.lockedCells,
     required this.offsetX,
@@ -202,6 +222,8 @@ class NonogramPlayRestoredState extends NonogramPlayState {
       isSolved: state.isSolved,
       remainingHints: state.remainingHints,
       remainingWands: state.remainingWands,
+      dailyHints: state.dailyHints,
+      dailyWands: state.dailyWands,
       isWandActive: state.isWandActive,
       lockedCells: state.lockedCells,
       offsetX: offsetX,
@@ -231,6 +253,8 @@ class NonogramPlayErrorState extends NonogramPlayState {
     required super.isSolved,
     required super.remainingHints,
     required super.remainingWands,
+    super.dailyHints,
+    super.dailyWands,
     required super.isWandActive,
     required super.lockedCells,
     required this.error,
@@ -254,6 +278,8 @@ class NonogramPlayErrorState extends NonogramPlayState {
       isSolved: state.isSolved,
       remainingHints: state.remainingHints,
       remainingWands: state.remainingWands,
+      dailyHints: state.dailyHints,
+      dailyWands: state.dailyWands,
       isWandActive: state.isWandActive,
       lockedCells: state.lockedCells,
       error: error,
@@ -285,6 +311,8 @@ class NonogramPlayHintAppliedState extends NonogramPlayState {
     required super.isSolved,
     required super.remainingHints,
     required super.remainingWands,
+    super.dailyHints,
+    super.dailyWands,
     required super.isWandActive,
     required super.lockedCells,
     required this.axis,
@@ -310,6 +338,8 @@ class NonogramPlayHintAppliedState extends NonogramPlayState {
       isSolved: state.isSolved,
       remainingHints: state.remainingHints,
       remainingWands: state.remainingWands,
+      dailyHints: state.dailyHints,
+      dailyWands: state.dailyWands,
       isWandActive: state.isWandActive,
       lockedCells: state.lockedCells,
       axis: axis,
@@ -340,6 +370,8 @@ class NonogramPlayHintCellsAppliedState extends NonogramPlayState {
     required super.isSolved,
     required super.remainingHints,
     required super.remainingWands,
+    super.dailyHints,
+    super.dailyWands,
     required super.isWandActive,
     required super.lockedCells,
     required this.cells,
@@ -363,6 +395,8 @@ class NonogramPlayHintCellsAppliedState extends NonogramPlayState {
       isSolved: state.isSolved,
       remainingHints: state.remainingHints,
       remainingWands: state.remainingWands,
+      dailyHints: state.dailyHints,
+      dailyWands: state.dailyWands,
       isWandActive: state.isWandActive,
       lockedCells: state.lockedCells,
       cells: cells,

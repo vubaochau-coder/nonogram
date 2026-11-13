@@ -515,7 +515,7 @@ class AppLocalizationsKo extends AppLocalizations {
   String get premiumBenefitNoAds => '레벨 사이 광고 제거';
 
   @override
-  String get premiumBenefitDaily => '매일 힌트 2개와 마법 지팡이 1개';
+  String get premiumBenefitDaily => '출석하는 날마다 힌트 2개와 마법 지팡이 1개';
 
   @override
   String premiumBuy(String price) {
@@ -529,7 +529,7 @@ class AppLocalizationsKo extends AppLocalizations {
   String get premiumActiveTitle => '광고 제거 팩 활성화됨';
 
   @override
-  String get premiumActiveDaily => '매일 힌트 2개와 마법 지팡이 1개까지 채워집니다.';
+  String get premiumActiveDaily => '매일 출석하면 그날 쓸 수 있는 힌트 2개와 마법 지팡이 1개를 받아요.';
 
   @override
   String get premiumPurchased => '감사합니다! 레벨 사이 광고가 꺼졌습니다.';
@@ -541,7 +541,79 @@ class AppLocalizationsKo extends AppLocalizations {
   String get premiumFailed => '구매하지 못했습니다. 다시 시도해 주세요.';
 
   @override
-  String premiumDailyReward(int hints, int wands) {
-    return '일일 선물: 이제 힌트 $hints개와 마법 지팡이 $wands개가 있습니다.';
+  String get checkInTitle => '매일 출석 체크';
+
+  @override
+  String get checkInAction => '출석 체크';
+
+  @override
+  String get checkInDoneToday => '오늘 출석 완료';
+
+  @override
+  String checkInNextGift(int count) {
+    return '다음 선물까지 출석 $count번 남음';
   }
+
+  @override
+  String get checkInCheckedIn => '출석 완료!';
+
+  @override
+  String checkInReceived(String rewards) {
+    return '$rewards을(를) 받았습니다.';
+  }
+
+  @override
+  String rewardHints(int count) {
+    return '힌트 $count개';
+  }
+
+  @override
+  String rewardWands(int count) {
+    return '마법 지팡이 $count개';
+  }
+
+  @override
+  String rewardTodayOnly(String reward) {
+    return '$reward (오늘만)';
+  }
+
+  @override
+  String get checkInMonthGifts => '이번 달 선물';
+
+  @override
+  String get checkInTotalHints => '힌트';
+
+  @override
+  String get checkInTotalWands => '마법 지팡이';
+
+  @override
+  String get checkInTotalDailyHints => '힌트 (오늘만)';
+
+  @override
+  String get checkInTotalDailyWands => '마법 지팡이 (오늘만)';
+
+  @override
+  String get checkInPremiumToday => '광고 제거 팩의 오늘 선물';
+
+  @override
+  String get checkInPremiumNotYet => '출석하면 오늘 쓸 수 있는 힌트 2개와 마법 지팡이 1개를 받아요.';
+
+  @override
+  String get checkInPremiumUsedUp => '오늘 몫을 모두 사용했어요. 내일 또 만나요!';
+
+  @override
+  String checkInExpiresIn(String time) {
+    return '$time 후 만료';
+  }
+
+  @override
+  String dashboardDailyReminder(String rewards, String time) {
+    return '오늘 쓸 수 있는 $rewards이(가) 남아 있어요. $time 후 만료되니 지금 플레이해서 놓치지 마세요!';
+  }
+
+  @override
+  String get dashboardDailyReminderTitle => '오늘의 아이템이 기다려요';
+
+  @override
+  String get dashboardDailyReminderPlay => '지금 플레이';
 }

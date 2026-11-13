@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:lucide_icons/lucide_icons.dart';
 import 'package:nonogram/models/power_up_inventory.dart';
+import 'package:nonogram/core/app_theme.dart';
 import 'package:nonogram/core/context_ext.dart';
 
 import '../bloc/nonogram_play_bloc.dart';
@@ -22,6 +23,7 @@ class WandAction extends StatelessWidget {
       buildWhen:
           (p, c) =>
               p.remainingWands != c.remainingWands ||
+              p.dailyWands != c.dailyWands ||
               p.isWandActive != c.isWandActive ||
               p.isSolved != c.isSolved,
       builder: (context, state) {
@@ -55,6 +57,7 @@ class WandAction extends StatelessWidget {
                     count: state.remainingWands,
                     active: state.remainingWands > 0,
                     adOffer: adOffer,
+                    daily: state.dailyWands > 0,
                   ),
                 ),
               ),
@@ -73,6 +76,7 @@ class CountBadge extends StatelessWidget {
     required this.count,
     required this.active,
     this.adOffer = false,
+    this.daily = false,
   });
 
   final int count;
@@ -81,8 +85,17 @@ class CountBadge extends StatelessWidget {
   /// Hết lượt: hiện biểu tượng quảng cáo thay cho số 0.
   final bool adOffer;
 
+  /// Còn lượt chỉ dùng được hôm nay (quà điểm danh của gói không quảng
+  /// cáo): badge màu vàng, cùng màu với lượt có hạn ở màn điểm danh.
+  final bool daily;
+
+  /// Chữ tối trên nền vàng cho dễ đọc.
+  static const dailyForeground = Color(0xFF2B1A00);
+
   @override
   Widget build(BuildContext context) {
+    final yellow = daily && active && !adOffer;
+    final foreground = yellow ? dailyForeground : context.color.onPrimary;
     return Container(
       constraints: const BoxConstraints(minWidth: 16),
       height: 16,
@@ -90,23 +103,23 @@ class CountBadge extends StatelessWidget {
       alignment: Alignment.center,
       decoration: BoxDecoration(
         color:
-            active || adOffer ? context.color.primary : context.color.outline,
+            yellow
+                ? context.gameColors.reward
+                : active || adOffer
+                ? context.color.primary
+                : context.color.outline,
         borderRadius: BorderRadius.circular(8),
       ),
       child:
           adOffer
-              ? Icon(
-                LucideIcons.video,
-                size: 10,
-                color: context.color.onPrimary,
-              )
+              ? Icon(LucideIcons.video, size: 10, color: foreground)
               : Text(
                 '$count',
                 style: context.labelSmall.copyWith(
                   fontSize: 10,
                   height: 1,
                   fontWeight: FontWeight.w800,
-                  color: context.color.onPrimary,
+                  color: foreground,
                 ),
               ),
     );

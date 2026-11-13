@@ -276,7 +276,7 @@
   "settingsLanguageSystem": "Device language",
   "premiumTitle": "Play without ads",
   "premiumBenefitNoAds": "No more ads between levels",
-  "premiumBenefitDaily": "2 hints and 1 magic wand every day",
+  "premiumBenefitDaily": "2 hints and 1 magic wand each day you check in",
   "premiumBuy": "Buy · {price}",
   "@premiumBuy": {
     "placeholders": {
@@ -287,19 +287,81 @@
   },
   "premiumOneTime": "One-time payment via Google Play",
   "premiumActiveTitle": "Ad-free pack active",
-  "premiumActiveDaily": "Every day your inventory is topped up to 2 hints and 1 magic wand.",
+  "premiumActiveDaily": "Check in every day to get 2 hints and 1 magic wand for that day.",
   "premiumPurchased": "Thank you! Ads between levels are now off.",
   "premiumPending": "Your payment is pending. The pack turns on as soon as it goes through.",
   "premiumFailed": "The purchase didn't go through. Please try again.",
-  "premiumDailyReward": "Daily gift: you now have {hints} hints and {wands} magic wand(s).",
-  "@premiumDailyReward": {
+  "checkInTitle": "Daily check-in",
+  "checkInAction": "Check in",
+  "checkInDoneToday": "Checked in today",
+  "checkInNextGift": "{count, plural, =1{Next gift on your next check-in} other{Next gift in {count} check-ins}}",
+  "@checkInNextGift": {
     "placeholders": {
-      "hints": {
-        "type": "int"
-      },
-      "wands": {
+      "count": {
         "type": "int"
       }
     }
-  }
+  },
+  "checkInCheckedIn": "Checked in!",
+  "checkInReceived": "You got {rewards}.",
+  "@checkInReceived": {
+    "placeholders": {
+      "rewards": {
+        "type": "String"
+      }
+    }
+  },
+  "rewardHints": "{count, plural, =1{1 hint} other{{count} hints}}",
+  "@rewardHints": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "rewardWands": "{count, plural, =1{1 magic wand} other{{count} magic wands}}",
+  "@rewardWands": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "rewardTodayOnly": "{reward} (today only)",
+  "@rewardTodayOnly": {
+    "placeholders": {
+      "reward": {
+        "type": "String"
+      }
+    }
+  },
+  "checkInMonthGifts": "Gifts this month",
+  "checkInTotalHints": "Hints",
+  "checkInTotalWands": "Magic wands",
+  "checkInTotalDailyHints": "Hints (today only)",
+  "checkInTotalDailyWands": "Magic wands (today only)",
+  "checkInPremiumToday": "Today from your ad-free pack",
+  "checkInPremiumNotYet": "Check in to get 2 hints and 1 magic wand for today.",
+  "checkInPremiumUsedUp": "All used for today. See you tomorrow!",
+  "checkInExpiresIn": "Expires in {time}",
+  "@checkInExpiresIn": {
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "dashboardDailyReminder": "You still have {rewards} for today. They expire in {time}, so play now and don't let them go to waste!",
+  "@dashboardDailyReminder": {
+    "placeholders": {
+      "rewards": {
+        "type": "String"
+      },
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "dashboardDailyReminderTitle": "Today's uses are waiting",
+  "dashboardDailyReminderPlay": "Play now"
 }

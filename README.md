@@ -212,6 +212,30 @@ Game ──AdPlacement──▶ AdService (ad_service.dart)
   Deploy from a branch → `main` / `/docs`). Dùng URL này cho Play Console và
   thông báo GDPR trên AdMob. Thêm SDK / dữ liệu mới thì cập nhật trang này.
 
+## Điểm danh hằng ngày
+
+`lib/checkin/`. Màn điểm danh tự mở lần đầu mỗi ngày (trừ lần đầu mở app,
+khi bài hướng dẫn hiện trước); trên trang chính có nút lịch, chấm đỏ khi hôm
+nay chưa điểm danh.
+
+- **Mọi người chơi:** cứ 5 lần điểm danh (cộng dồn số ngày, bỏ lỡ không mất
+  tiến độ) nhận một quà mốc **vĩnh viễn**, xoay vòng gợi ý → gợi ý → gậy phép.
+- **Người mua gói không quảng cáo:** thêm 2 gợi ý + 1 gậy phép **trong ngày**
+  mỗi lần điểm danh, hết hạn cuối ngày, không cộng dồn; vẫn nhận quà mốc.
+- **Kho 2 phần** (`PowerUpInventory`): lượt vĩnh viễn (tặng ban đầu, quà mốc)
+  và lượt trong ngày; dùng lượt trong ngày trước. Badge trên nút gợi ý / gậy
+  phép màu vàng khi còn lượt trong ngày, màu primary khi chỉ còn lượt vĩnh
+  viễn. Trang chính có thẻ nhắc khi còn lượt trong ngày chưa dùng.
+- **Lịch:** ngày đã điểm danh tô nền nhạt, chưa điểm danh chỉ có viền, hôm nay
+  viền đậm; ô có quà mốc có badge quà ở góc; mỗi ô liệt kê quà (vàng = trong
+  ngày, primary = vĩnh viễn). Ngày đã qua hiện quà thực tế, ngày tới hiện quà
+  dự kiến (vẽ mờ, giả sử từ nay ngày nào cũng điểm danh). Xem được các tháng
+  từ lúc cài app; cuối trang là tổng quà tháng (đã nhận / tối đa).
+- **Chống chỉnh giờ:** giờ của game = giờ máy + độ lệch so với giờ mạng
+  (`GameClock`, header `Date` từ `https://www.google.com/generate_204`, đo lại
+  mỗi lần mở app); thêm bánh cóc: chỉ điểm danh khi hôm nay sau ngày điểm danh
+  gần nhất và không sớm hơn ngày muộn nhất từng thấy.
+
 ## Gói "Chơi không quảng cáo"
 
 Chỉ trên Android (`lib/premium/`), mua một lần qua Google Play, mã sản phẩm
@@ -221,13 +245,7 @@ hàng không dùng được hoặc chưa có sản phẩm thì ẩn.
 
 - Tắt quảng cáo xen kẽ (`AdEntitlements`); quảng cáo có thưởng vẫn còn để
   lấy thêm lượt.
-- Quà hằng ngày: kho được nạp lên tối thiểu 2 gợi ý và 1 gậy phép (không
-  cộng dồn, ngày không chơi thì mất). Nhận khi mở app, khi mở lại app sau khi
-  để nền, và ngay khi mua.
-- Chống chỉnh giờ (`DailyRewardPolicy`): "hôm nay" theo giờ mạng (header
-  `Date` từ `https://www.google.com/generate_204`), mất mạng mới dùng giờ máy;
-  cộng thêm bánh cóc: chỉ phát khi sang ngày mới hơn cả ngày đã phát lẫn ngày
-  muộn nhất từng thấy, nên lùi giờ không được gì, vặn tới chỉ vay trước.
+- Quà trong ngày khi điểm danh (xem [Điểm danh](#điểm-danh-hằng-ngày)).
 - Trạng thái đã mua lưu trên máy (dùng được khi mất mạng), đối chiếu lại với
   Google Play mỗi lần mở app: tự khôi phục khi cài lại, thu hồi khi đã hoàn
   tiền. Mọi giao dịch được xác nhận (`completePurchase`), nếu không Google sẽ

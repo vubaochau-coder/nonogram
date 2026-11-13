@@ -529,7 +529,7 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get premiumBenefitDaily =>
-      '2 подсказки и 1 волшебная палочка каждый день';
+      '2 подсказки и 1 волшебная палочка в каждый день отметки';
 
   @override
   String premiumBuy(String price) {
@@ -544,7 +544,7 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get premiumActiveDaily =>
-      'Каждый день запас пополняется до 2 подсказок и 1 волшебной палочки.';
+      'Отмечайтесь каждый день, чтобы получать 2 подсказки и 1 волшебную палочку на этот день.';
 
   @override
   String get premiumPurchased => 'Спасибо! Реклама между уровнями отключена.';
@@ -557,7 +557,104 @@ class AppLocalizationsRu extends AppLocalizations {
   String get premiumFailed => 'Покупка не удалась. Попробуйте ещё раз.';
 
   @override
-  String premiumDailyReward(int hints, int wands) {
-    return 'Ежедневный подарок: теперь у вас подсказок — $hints, волшебных палочек — $wands.';
+  String get checkInTitle => 'Ежедневная отметка';
+
+  @override
+  String get checkInAction => 'Отметиться';
+
+  @override
+  String get checkInDoneToday => 'Сегодня вы уже отметились';
+
+  @override
+  String checkInNextGift(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'До следующего подарка $count отметки',
+      many: 'До следующего подарка $count отметок',
+      few: 'До следующего подарка $count отметки',
+      one: 'До следующего подарка $count отметка',
+    );
+    return '$_temp0';
   }
+
+  @override
+  String get checkInCheckedIn => 'Вы отметились!';
+
+  @override
+  String checkInReceived(String rewards) {
+    return 'Вы получили: $rewards.';
+  }
+
+  @override
+  String rewardHints(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count подсказки',
+      many: '$count подсказок',
+      few: '$count подсказки',
+      one: '$count подсказка',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String rewardWands(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count волшебной палочки',
+      many: '$count волшебных палочек',
+      few: '$count волшебные палочки',
+      one: '$count волшебная палочка',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String rewardTodayOnly(String reward) {
+    return '$reward (только сегодня)';
+  }
+
+  @override
+  String get checkInMonthGifts => 'Подарки за месяц';
+
+  @override
+  String get checkInTotalHints => 'Подсказки';
+
+  @override
+  String get checkInTotalWands => 'Волшебные палочки';
+
+  @override
+  String get checkInTotalDailyHints => 'Подсказки (только сегодня)';
+
+  @override
+  String get checkInTotalDailyWands => 'Волшебные палочки (только сегодня)';
+
+  @override
+  String get checkInPremiumToday => 'Сегодня из пакета без рекламы';
+
+  @override
+  String get checkInPremiumNotYet =>
+      'Отметьтесь, чтобы получить 2 подсказки и 1 волшебную палочку на сегодня.';
+
+  @override
+  String get checkInPremiumUsedUp => 'На сегодня всё использовано. До завтра!';
+
+  @override
+  String checkInExpiresIn(String time) {
+    return 'Истекает через $time';
+  }
+
+  @override
+  String dashboardDailyReminder(String rewards, String time) {
+    return 'У вас ещё есть $rewards на сегодня. Они сгорят через $time — сыграйте сейчас, чтобы не потерять их!';
+  }
+
+  @override
+  String get dashboardDailyReminderTitle => 'Сегодняшние бонусы ждут вас';
+
+  @override
+  String get dashboardDailyReminderPlay => 'Играть';
 }
