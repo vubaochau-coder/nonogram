@@ -17,6 +17,7 @@ import 'sections/nonogram_completion_result_section.dart';
 import 'sections/nonogram_landscape_info_panel.dart';
 import 'package:nested/nested.dart';
 import 'package:provider/provider.dart';
+import 'celebration/solve_celebration.dart';
 import 'coach/nonogram_play_coach.dart';
 
 class NonogramPlayPage extends StatefulWidget {
@@ -60,7 +61,9 @@ class _NonogramPlayPageState extends State<NonogramPlayPage> {
           },
         ),
       ],
-      child: const _SystemUiModeSync(child: _NonogramPlayView()),
+      child: const _SystemUiModeSync(
+        child: SolveCelebrationScope(child: _NonogramPlayView()),
+      ),
     );
   }
 }
@@ -116,7 +119,23 @@ class _NonogramPlayView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<NonogramPlayBloc, NonogramPlayState>(
+    final celebration = context.watch<SolveCelebration>();
+    return BlocConsumer<NonogramPlayBloc, NonogramPlayState>(
+      listenWhen:
+          (p, c) =>
+              c is NonogramPlayCompletedState ||
+              (celebration.isActive && !c.isSolved),
+      listener: (context, state) {
+        if (!state.isSolved) {
+          celebration.reset();
+          return;
+        }
+        // Chỉ khi vừa giải xong (không phải mở lại màn đã giải). Máy bật
+        // giảm chuyển động thì sang thẳng màn kết quả.
+        final puzzle = state.puzzle;
+        if (puzzle == null || MediaQuery.disableAnimationsOf(context)) return;
+        celebration.start(puzzle.solution);
+      },
       buildWhen: (p, c) {
         return p.isSolved != c.isSolved ||
             p.isLoading != c.isLoading ||
@@ -161,7 +180,8 @@ class _NonogramPlayView extends StatelessWidget {
           );
         }
 
-        if (state.isSolved && state.puzzle != null) {
+        // Đang chạy sóng giải xong thì giữ bàn chơi thêm một nhịp.
+        if (state.isSolved && state.puzzle != null && !celebration.holdsBoard) {
           return _NonogramCompletionView(state: state);
         }
 

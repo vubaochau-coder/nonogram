@@ -6,6 +6,8 @@ import 'package:nonogram/core/duration_format.dart';
 import 'package:nonogram/models/nonogram_puzzle.dart';
 import 'package:nonogram/widgets/nonogram_pixel_art.dart';
 
+import '../celebration/solve_celebration.dart';
+
 /// Màn hình khi giải xong: hình hoàn chỉnh, thời gian, nút chơi tiếp.
 class NonogramCompletionResultSection extends StatelessWidget {
   final NonogramPuzzle puzzle;
@@ -131,8 +133,13 @@ class _Picture extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final aspect = puzzle.cols / puzzle.rows;
+    // Vừa giải xong: tranh bay từ bàn chơi vào ô này, nên ô chỉ hiện tranh
+    // khi bản bay đã tới, và không tự phóng to nữa.
+    final celebration = SolveCelebration.maybeOf(context);
+    final flewIn = celebration?.isActive ?? false;
+    final hidden = celebration?.hidesPicture ?? false;
     return TweenAnimationBuilder<double>(
-      tween: Tween(begin: 0.9, end: 1),
+      tween: Tween(begin: flewIn ? 1 : 0.9, end: 1),
       duration: const Duration(milliseconds: 600),
       curve: Curves.easeOutCubic,
       builder:
@@ -150,8 +157,12 @@ class _Picture extends StatelessWidget {
             child: ConstrainedBox(
               constraints: const BoxConstraints(maxWidth: 320, maxHeight: 320),
               child: AspectRatio(
+                key: celebration?.pictureKey,
                 aspectRatio: aspect,
-                child: NonogramPixelArt.picture(context, puzzle.solution),
+                child: Opacity(
+                  opacity: hidden ? 0 : 1,
+                  child: NonogramPixelArt.picture(context, puzzle.solution),
+                ),
               ),
             ),
           ),

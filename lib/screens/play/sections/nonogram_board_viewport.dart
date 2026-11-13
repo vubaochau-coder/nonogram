@@ -16,6 +16,7 @@ import '../../painters/nonogram_grid_painter.dart';
 import '../../painters/nonogram_left_clues_painter.dart';
 import '../../painters/nonogram_top_clues_painter.dart';
 import '../bloc/nonogram_play_bloc.dart';
+import '../celebration/solve_celebration.dart';
 import '../bloc/nonogram_play_event.dart';
 import '../bloc/nonogram_play_state.dart';
 import '../engine/clue_overflow.dart';
@@ -602,6 +603,8 @@ class _BoardPaint extends StatelessWidget {
         ),
     ];
     final chipTextStyle = clueStyle.copyWith(color: const Color(0xFF2B1A00));
+    final celebration = SolveCelebration.maybeOf(context);
+    final waving = celebration != null && celebration.holdsBoard;
     return Stack(
       clipBehavior: Clip.hardEdge,
       children: [
@@ -623,6 +626,7 @@ class _BoardPaint extends StatelessWidget {
                   width: gridW,
                   height: gridH,
                   child: RepaintBoundary(
+                    key: celebration?.gridKey,
                     child: CustomPaint(
                       painter: NonogramCellsPainter(
                         rows: puzzle.rows,
@@ -654,6 +658,28 @@ class _BoardPaint extends StatelessWidget {
                     ),
                   ),
                 ),
+                // Vừa giải xong: sóng sáng lan từ góc trái dưới lên góc
+                // phải trên, xoá dấu X để lộ hình.
+                if (waving)
+                  Positioned(
+                    left: offset.dx - clipLeft,
+                    top: offset.dy - clipTop,
+                    width: gridW,
+                    height: gridH,
+                    child: IgnorePointer(
+                      child: CustomPaint(
+                        key: const ValueKey('solve-wave'),
+                        painter: SolveWavePainter(
+                          progress: celebration.wave,
+                          solution: puzzle.solution,
+                          cellSize: cell,
+                          filledColor: colors.onSurface,
+                          highlightColor: game.reward,
+                          backgroundColor: colors.surfaceContainerLow,
+                        ),
+                      ),
+                    ),
+                  ),
                 // Ô vừa được gợi ý tô giúp: nháy sáng (nằm trong vùng cắt
                 // nên không đè lên dải số).
                 for (final c in hintCells)
