@@ -646,6 +646,55 @@ void main() {
       expect(bloc.state.remainingHints, 2);
     });
 
+    test('the open level follows inventory changes made elsewhere', () async {
+      await repository.savePowerUps(const PowerUpInventory(hints: 0, wands: 0));
+      bloc.add(const LevelLoadRequested());
+      await bloc.stream.firstWhere((s) => s.puzzle != null && !s.isLoading);
+
+      // Quà điểm danh nạp vào kho.
+      await repository.savePowerUps(const PowerUpInventory(hints: 2, wands: 1));
+      await bloc.stream.firstWhere((s) => s.remainingHints == 2);
+      expect(bloc.state.remainingWands, 1);
+    });
+
+    test('today-only hints are used first and shown apart', () async {
+      final today = repository.today;
+      await repository.savePowerUps(
+        const PowerUpInventory(
+          hints: 1,
+          wands: 0,
+        ).withDaily(hints: 2, wands: 1, day: today),
+      );
+      bloc.add(const LevelLoadRequested());
+      await bloc.stream.firstWhere((s) => s.puzzle != null && !s.isLoading);
+      expect(bloc.state.remainingHints, 3);
+      expect(bloc.state.dailyHints, 2);
+      expect(bloc.state.remainingWands, 1);
+      expect(bloc.state.dailyWands, 1);
+
+      bloc.add(const HintRequested(offsetX: 0, offsetY: 0));
+      await bloc.stream.firstWhere((s) => s.remainingHints == 2);
+      expect(bloc.state.dailyHints, 1);
+      await Future<void>.delayed(const Duration(milliseconds: 10));
+      final saved = await repository.getPowerUps();
+      expect(saved.hints, 1);
+      expect(saved.dailyHints, 1);
+    });
+
+    test('yesterday\'s today-only uses are gone', () async {
+      await repository.savePowerUps(
+        const PowerUpInventory(
+          hints: 1,
+          wands: 0,
+        ).withDaily(hints: 2, wands: 1, day: 1),
+      );
+      bloc.add(const LevelLoadRequested());
+      await bloc.stream.firstWhere((s) => s.puzzle != null && !s.isLoading);
+      expect(bloc.state.remainingHints, 1);
+      expect(bloc.state.dailyHints, 0);
+      expect(bloc.state.remainingWands, 0);
+    });
+
     test('a new player starts with the starter inventory', () async {
       expect(await repository.getPowerUps(), PowerUpInventory.starter);
       bloc.add(const LevelLoadRequested());

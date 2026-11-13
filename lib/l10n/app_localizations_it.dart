@@ -524,4 +524,136 @@ class AppLocalizationsIt extends AppLocalizations {
 
   @override
   String get settingsLanguageSystem => 'Lingua del dispositivo';
+
+  @override
+  String get premiumTitle => 'Gioca senza pubblicità';
+
+  @override
+  String get premiumBenefitNoAds => 'Niente più pubblicità tra i livelli';
+
+  @override
+  String get premiumBenefitDaily =>
+      '2 suggerimenti e 1 bacchetta magica ogni giorno in cui segni la presenza';
+
+  @override
+  String premiumBuy(String price) {
+    return 'Acquista · $price';
+  }
+
+  @override
+  String get premiumOneTime => 'Pagamento unico tramite Google Play';
+
+  @override
+  String get premiumActiveTitle => 'Pacchetto senza pubblicità attivo';
+
+  @override
+  String get premiumActiveDaily =>
+      'Segna la presenza ogni giorno per ricevere 2 suggerimenti e 1 bacchetta magica per quel giorno.';
+
+  @override
+  String get premiumPurchased =>
+      'Grazie! La pubblicità tra i livelli è disattivata.';
+
+  @override
+  String get premiumPending =>
+      'Il pagamento è in sospeso. Il pacchetto si attiverà appena verrà completato.';
+
+  @override
+  String get premiumFailed => 'L\'acquisto non è andato a buon fine. Riprova.';
+
+  @override
+  String get checkInTitle => 'Presenza giornaliera';
+
+  @override
+  String get checkInAction => 'Segna presenza';
+
+  @override
+  String get checkInDoneToday => 'Presenza segnata oggi';
+
+  @override
+  String checkInNextGift(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Prossimo regalo tra $count presenze',
+      one: 'Prossimo regalo alla prossima presenza',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get checkInCheckedIn => 'Presenza segnata!';
+
+  @override
+  String checkInReceived(String rewards) {
+    return 'Hai ricevuto $rewards.';
+  }
+
+  @override
+  String rewardHints(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count suggerimenti',
+      one: '1 suggerimento',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String rewardWands(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count bacchette magiche',
+      one: '1 bacchetta magica',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String rewardTodayOnly(String reward) {
+    return '$reward (solo oggi)';
+  }
+
+  @override
+  String get checkInMonthGifts => 'Regali del mese';
+
+  @override
+  String get checkInTotalHints => 'Suggerimenti';
+
+  @override
+  String get checkInTotalWands => 'Bacchette magiche';
+
+  @override
+  String get checkInTotalDailyHints => 'Suggerimenti (solo oggi)';
+
+  @override
+  String get checkInTotalDailyWands => 'Bacchette magiche (solo oggi)';
+
+  @override
+  String get checkInPremiumToday => 'Oggi dal tuo pacchetto senza pubblicità';
+
+  @override
+  String get checkInPremiumNotYet =>
+      'Segna la presenza per ricevere 2 suggerimenti e 1 bacchetta magica per oggi.';
+
+  @override
+  String get checkInPremiumUsedUp => 'Tutto usato per oggi. A domani!';
+
+  @override
+  String checkInExpiresIn(String time) {
+    return 'Scade tra $time';
+  }
+
+  @override
+  String dashboardDailyReminder(String rewards, String time) {
+    return 'Hai ancora $rewards per oggi. Scadono tra $time: gioca ora per non sprecarli!';
+  }
+
+  @override
+  String get dashboardDailyReminderTitle => 'I tuoi aiuti di oggi ti aspettano';
+
+  @override
+  String get dashboardDailyReminderPlay => 'Gioca ora';
 }

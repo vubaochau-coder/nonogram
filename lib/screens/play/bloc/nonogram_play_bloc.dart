@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:math' show Random;
 import 'dart:ui' show Offset, Size;
 import 'package:flutter/painting.dart' show Axis;
@@ -38,6 +39,35 @@ class NonogramPlayBloc extends AppBloc<NonogramPlayEvent, NonogramPlayState> {
   final Random _random;
 
   _DragSession? _dragSession;
+  StreamSubscription<PowerUpInventory>? _powerUpsSub;
+
+  /// Kho hiện tại (đã bỏ lượt trong ngày hết hạn).
+  PowerUpInventory _inventory = const PowerUpInventory(hints: 0, wands: 0);
+
+  /// Kho tính tới lúc này: qua nửa đêm thì lượt trong ngày cũ hết hạn.
+  PowerUpInventory get _current =>
+      _inventory = _inventory.activeOn(_repository.today);
+
+  NonogramPlayState _withInventory(
+    NonogramPlayState s,
+    PowerUpInventory inventory,
+  ) => s.copyWith(
+    remainingHints: inventory.totalHints,
+    remainingWands: inventory.totalWands,
+    dailyHints: inventory.dailyHints,
+    dailyWands: inventory.dailyWands,
+  );
+
+  Future<void> _savePowerUps(PowerUpInventory inventory) {
+    _inventory = inventory;
+    return _repository.savePowerUps(inventory);
+  }
+
+  @override
+  Future<void> close() async {
+    await _powerUpsSub?.cancel();
+    return super.close();
+  }
 
   NonogramPlayBloc({
     required NonogramRepository repository,
@@ -75,6 +105,10 @@ class NonogramPlayBloc extends AppBloc<NonogramPlayEvent, NonogramPlayState> {
     on<WandToggled>(_onWandToggled, transformer: sequential());
     on<WandLineSelected>(_onWandLineSelected, transformer: sequential());
     on<RewardGranted>(_onRewardGranted, transformer: sequential());
+    on<PowerUpsChanged>(_onPowerUpsChanged, transformer: sequential());
+    _powerUpsSub = repository.powerUpChanges.listen(
+      (inventory) => add(PowerUpsChanged(inventory)),
+    );
 
     // --- Internal/Orchestration Events ---
     on<CurrentProgressSaveRequested>(
@@ -158,7 +192,7 @@ class NonogramPlayBloc extends AppBloc<NonogramPlayEvent, NonogramPlayState> {
     // (kể cả ván dở), cập nhật lại khi khung nhìn đổi (xoay màn hình...).
     final cellSize = _autoCellSize(puzzle);
     // Kho dùng chung cho mọi màn, không theo ván.
-    final powerUps = await _repository.getPowerUps();
+    final powerUps = _inventory = await _repository.getPowerUps();
 
     final offsetX = snapshot?.viewportOffsetX ?? 0.0;
     final offsetY = snapshot?.viewportOffsetY ?? 0.0;
@@ -181,8 +215,10 @@ class NonogramPlayBloc extends AppBloc<NonogramPlayEvent, NonogramPlayState> {
       cellSize: cellSize,
       isFullscreen: state.isFullscreen,
       isSolved: _engine.isSolved(puzzle: puzzle, gridData: initialGrid),
-      remainingHints: powerUps.hints,
-      remainingWands: powerUps.wands,
+      remainingHints: powerUps.totalHints,
+      remainingWands: powerUps.totalWands,
+      dailyHints: powerUps.dailyHints,
+      dailyWands: powerUps.dailyWands,
       isWandActive: false,
       // Ô ghim sẵn của màn luôn khoá, cùng với các ô mở bằng gợi ý / gậy phép.
       lockedCells: {
@@ -464,7 +500,10 @@ class NonogramPlayBloc extends AppBloc<NonogramPlayEvent, NonogramPlayState> {
 
   _onWandToggled(WandToggled event, Emitter emit) {
     if (state.isLoading || state.isSolved || state.puzzle == null) return;
-    if (!state.isWandActive && state.remainingWands <= 0) return;
+    if (!state.isWandActive && _current.totalWands <= 0) {
+      emit(_withInventory(state, _inventory));
+      return;
+    }
     _dragSession = null;
     emit(state.copyWith(isWandActive: !state.isWandActive));
   }
@@ -507,11 +546,14 @@ class NonogramPlayBloc extends AppBloc<NonogramPlayEvent, NonogramPlayState> {
       gridData: state.gridData,
     );
 
-    final nextState = _buildGridDerivedState(
-      sourceState: state,
-      gridData: newGrid.toUnmodifiable2D(),
+    final inventory = _current.consume(PowerUp.wand);
+    final nextState = _withInventory(
+      _buildGridDerivedState(
+        sourceState: state,
+        gridData: newGrid.toUnmodifiable2D(),
+      ),
+      inventory,
     ).copyWith(
-      remainingWands: state.remainingWands - 1,
       isWandActive: false,
       lockedCells: {
         ...state.lockedCells,
@@ -538,7 +580,7 @@ class NonogramPlayBloc extends AppBloc<NonogramPlayEvent, NonogramPlayState> {
       ),
     );
     add(const SolveCheckRequested());
-    await _savePowerUps(nextState);
+    await _savePowerUps(inventory);
   }
 
   /// Còn ô cần tô để gợi ý mở không (để không bắt xem quảng cáo vô ích).
@@ -556,46 +598,58 @@ class NonogramPlayBloc extends AppBloc<NonogramPlayEvent, NonogramPlayState> {
     return false;
   }
 
+  _onPowerUpsChanged(PowerUpsChanged event, Emitter emit) {
+    _inventory = event.inventory;
+    if (state.puzzle == null || state.isLoading) return;
+    final next = _withInventory(state, _current);
+    if (next != state) emit(next);
+  }
+
   /// Lượt dùng thêm (sau quảng cáo) chỉ có khi kho đã hết: không tích luỹ.
   _onRewardGranted(RewardGranted event, Emitter emit) async {
     if (state.isLoading || state.isSolved || state.puzzle == null) return;
     switch (event.powerUp) {
       case PowerUp.hint:
-        if (state.remainingHints > 0) return;
+        if (_current.totalHints > 0) return;
         await _applyHint(
           emit,
           offsetX: event.offsetX,
           offsetY: event.offsetY,
-          consume: false,
+          inventoryAfter: null,
         );
       case PowerUp.wand:
-        if (state.remainingWands > 0 || state.isWandActive) return;
+        if (_current.totalWands > 0 || state.isWandActive) return;
         // Lượt này nằm trong kho cho tới khi chọn hàng / cột; huỷ chọn thì
         // vẫn giữ (đã xem quảng cáo rồi).
         _dragSession = null;
-        final nextState = state.copyWith(remainingWands: 1, isWandActive: true);
-        emit(nextState);
-        await _savePowerUps(nextState);
+        final inventory = _current.addPermanent(PowerUp.wand, 1);
+        emit(_withInventory(state, inventory).copyWith(isWandActive: true));
+        await _savePowerUps(inventory);
     }
   }
 
   _onHintRequested(HintRequested event, Emitter emit) async {
-    if (state.remainingHints <= 0) return;
+    final inventory = _current;
+    if (inventory.totalHints <= 0) {
+      // Lượt trong ngày vừa hết hạn: cập nhật badge (thành nút quảng cáo).
+      emit(_withInventory(state, inventory));
+      return;
+    }
     await _applyHint(
       emit,
       offsetX: event.offsetX,
       offsetY: event.offsetY,
-      consume: true,
+      inventoryAfter: inventory.consume(PowerUp.hint),
     );
   }
 
-  /// Mở 5 ô cần tô. [consume]: trừ một lượt trong kho (false khi người chơi
-  /// vừa xem quảng cáo để dùng lượt này).
+  /// Mở 5 ô cần tô. [inventoryAfter]: kho sau khi trừ lượt này; null khi
+  /// người chơi vừa xem quảng cáo để dùng lượt này (không trừ kho).
   Future<void> _applyHint(
     Emitter emit, {
     required double offsetX,
     required double offsetY,
-    required bool consume,
+    required PowerUpInventory? inventoryAfter,
   }) async {
     if (state.isLoading || state.isSolved || state.puzzle == null) return;
 
@@ -612,11 +666,13 @@ class NonogramPlayBloc extends AppBloc<NonogramPlayEvent, NonogramPlayState> {
 
     final newGrid = _engine.fillCells(gridData: state.gridData, cells: cells);
 
-    final nextState = _buildGridDerivedState(
+    var nextState = _buildGridDerivedState(
       sourceState: state,
       gridData: newGrid.toUnmodifiable2D(),
-      remainingHints: consume ? state.remainingHints - 1 : null,
     ).copyWith(lockedCells: {...state.lockedCells, ...cells});
+    if (inventoryAfter != null) {
+      nextState = _withInventory(nextState, inventoryAfter);
+    }
 
     // Pulse animation state
     emit(NonogramPlayHintCellsAppliedState.fromState(nextState, cells: cells));
@@ -631,16 +687,8 @@ class NonogramPlayBloc extends AppBloc<NonogramPlayEvent, NonogramPlayState> {
       ),
     );
     add(const SolveCheckRequested());
-    if (consume) await _savePowerUps(nextState);
+    if (inventoryAfter != null) await _savePowerUps(inventoryAfter);
   }
-
-  Future<void> _savePowerUps(NonogramPlayState from) =>
-      _repository.savePowerUps(
-        PowerUpInventory(
-          hints: from.remainingHints,
-          wands: from.remainingWands,
-        ),
-      );
 
   // --- Internal Handlers ---
 

@@ -521,4 +521,137 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get settingsLanguageSystem => 'Gerätesprache';
+
+  @override
+  String get premiumTitle => 'Ohne Werbung spielen';
+
+  @override
+  String get premiumBenefitNoAds => 'Keine Werbung mehr zwischen den Levels';
+
+  @override
+  String get premiumBenefitDaily =>
+      '2 Tipps und 1 Zauberstab an jedem Check-in-Tag';
+
+  @override
+  String premiumBuy(String price) {
+    return 'Kaufen · $price';
+  }
+
+  @override
+  String get premiumOneTime => 'Einmalige Zahlung über Google Play';
+
+  @override
+  String get premiumActiveTitle => 'Werbefrei-Paket aktiv';
+
+  @override
+  String get premiumActiveDaily =>
+      'Checke jeden Tag ein, um 2 Tipps und 1 Zauberstab für diesen Tag zu bekommen.';
+
+  @override
+  String get premiumPurchased =>
+      'Danke! Die Werbung zwischen den Levels ist jetzt aus.';
+
+  @override
+  String get premiumPending =>
+      'Deine Zahlung steht noch aus. Das Paket wird aktiviert, sobald sie abgeschlossen ist.';
+
+  @override
+  String get premiumFailed =>
+      'Der Kauf hat nicht geklappt. Bitte versuche es erneut.';
+
+  @override
+  String get checkInTitle => 'Tägliches Einchecken';
+
+  @override
+  String get checkInAction => 'Einchecken';
+
+  @override
+  String get checkInDoneToday => 'Heute eingecheckt';
+
+  @override
+  String checkInNextGift(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Nächstes Geschenk in $count Check-ins',
+      one: 'Nächstes Geschenk beim nächsten Einchecken',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get checkInCheckedIn => 'Eingecheckt!';
+
+  @override
+  String checkInReceived(String rewards) {
+    return 'Du hast $rewards erhalten.';
+  }
+
+  @override
+  String rewardHints(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count Tipps',
+      one: '1 Tipp',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String rewardWands(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count Zauberstäbe',
+      one: '1 Zauberstab',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String rewardTodayOnly(String reward) {
+    return '$reward (nur heute)';
+  }
+
+  @override
+  String get checkInMonthGifts => 'Geschenke diesen Monat';
+
+  @override
+  String get checkInTotalHints => 'Tipps';
+
+  @override
+  String get checkInTotalWands => 'Zauberstäbe';
+
+  @override
+  String get checkInTotalDailyHints => 'Tipps (nur heute)';
+
+  @override
+  String get checkInTotalDailyWands => 'Zauberstäbe (nur heute)';
+
+  @override
+  String get checkInPremiumToday => 'Heute aus deinem Werbefrei-Paket';
+
+  @override
+  String get checkInPremiumNotYet =>
+      'Checke ein, um heute 2 Tipps und 1 Zauberstab zu bekommen.';
+
+  @override
+  String get checkInPremiumUsedUp => 'Für heute alles verbraucht. Bis morgen!';
+
+  @override
+  String checkInExpiresIn(String time) {
+    return 'Läuft ab in $time';
+  }
+
+  @override
+  String dashboardDailyReminder(String rewards, String time) {
+    return 'Du hast heute noch $rewards. Sie laufen in $time ab – spiel jetzt, damit nichts verfällt!';
+  }
+
+  @override
+  String get dashboardDailyReminderTitle => 'Deine heutigen Hilfen warten';
+
+  @override
+  String get dashboardDailyReminderPlay => 'Jetzt spielen';
 }

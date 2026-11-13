@@ -506,4 +506,113 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get settingsLanguageSystem => '端末の言語';
+
+  @override
+  String get premiumTitle => '広告なしでプレイ';
+
+  @override
+  String get premiumBenefitNoAds => 'レベル間の広告がなくなります';
+
+  @override
+  String get premiumBenefitDaily => 'チェックインした日はヒント2回と魔法の杖1回';
+
+  @override
+  String premiumBuy(String price) {
+    return '購入 · $price';
+  }
+
+  @override
+  String get premiumOneTime => 'Google Play での1回払い';
+
+  @override
+  String get premiumActiveTitle => '広告なしパック有効';
+
+  @override
+  String get premiumActiveDaily => '毎日チェックインすると、その日使えるヒント2回と魔法の杖1回がもらえます。';
+
+  @override
+  String get premiumPurchased => 'ありがとうございます！レベル間の広告がオフになりました。';
+
+  @override
+  String get premiumPending => '支払いが保留中です。完了するとパックが有効になります。';
+
+  @override
+  String get premiumFailed => '購入できませんでした。もう一度お試しください。';
+
+  @override
+  String get checkInTitle => '毎日チェックイン';
+
+  @override
+  String get checkInAction => 'チェックイン';
+
+  @override
+  String get checkInDoneToday => '今日はチェックイン済み';
+
+  @override
+  String checkInNextGift(int count) {
+    return 'あと$count回のチェックインで次のプレゼント';
+  }
+
+  @override
+  String get checkInCheckedIn => 'チェックインしました！';
+
+  @override
+  String checkInReceived(String rewards) {
+    return '$rewardsを受け取りました。';
+  }
+
+  @override
+  String rewardHints(int count) {
+    return 'ヒント$count回';
+  }
+
+  @override
+  String rewardWands(int count) {
+    return '魔法の杖$count回';
+  }
+
+  @override
+  String rewardTodayOnly(String reward) {
+    return '$reward（今日のみ）';
+  }
+
+  @override
+  String get checkInMonthGifts => '今月のプレゼント';
+
+  @override
+  String get checkInTotalHints => 'ヒント';
+
+  @override
+  String get checkInTotalWands => '魔法の杖';
+
+  @override
+  String get checkInTotalDailyHints => 'ヒント（今日のみ）';
+
+  @override
+  String get checkInTotalDailyWands => '魔法の杖（今日のみ）';
+
+  @override
+  String get checkInPremiumToday => '広告なしパックの今日の分';
+
+  @override
+  String get checkInPremiumNotYet => 'チェックインすると今日使えるヒント2回と魔法の杖1回がもらえます。';
+
+  @override
+  String get checkInPremiumUsedUp => '今日の分は使い切りました。また明日！';
+
+  @override
+  String checkInExpiresIn(String time) {
+    return 'あと$timeで期限切れ';
+  }
+
+  @override
+  String dashboardDailyReminder(String rewards, String time) {
+    return '今日はまだ$rewards残っています。あと$timeで期限切れになるので、今すぐプレイして無駄にしないで！';
+  }
+
+  @override
+  String get dashboardDailyReminderTitle => '今日の分が待っています';
+
+  @override
+  String get dashboardDailyReminderPlay => '今すぐプレイ';
 }

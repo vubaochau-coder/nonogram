@@ -520,4 +520,136 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get settingsLanguageSystem => 'Device language';
+
+  @override
+  String get premiumTitle => 'Play without ads';
+
+  @override
+  String get premiumBenefitNoAds => 'No more ads between levels';
+
+  @override
+  String get premiumBenefitDaily =>
+      '2 hints and 1 magic wand each day you check in';
+
+  @override
+  String premiumBuy(String price) {
+    return 'Buy · $price';
+  }
+
+  @override
+  String get premiumOneTime => 'One-time payment via Google Play';
+
+  @override
+  String get premiumActiveTitle => 'Ad-free pack active';
+
+  @override
+  String get premiumActiveDaily =>
+      'Check in every day to get 2 hints and 1 magic wand for that day.';
+
+  @override
+  String get premiumPurchased => 'Thank you! Ads between levels are now off.';
+
+  @override
+  String get premiumPending =>
+      'Your payment is pending. The pack turns on as soon as it goes through.';
+
+  @override
+  String get premiumFailed =>
+      'The purchase didn\'t go through. Please try again.';
+
+  @override
+  String get checkInTitle => 'Daily check-in';
+
+  @override
+  String get checkInAction => 'Check in';
+
+  @override
+  String get checkInDoneToday => 'Checked in today';
+
+  @override
+  String checkInNextGift(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Next gift in $count check-ins',
+      one: 'Next gift on your next check-in',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get checkInCheckedIn => 'Checked in!';
+
+  @override
+  String checkInReceived(String rewards) {
+    return 'You got $rewards.';
+  }
+
+  @override
+  String rewardHints(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count hints',
+      one: '1 hint',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String rewardWands(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count magic wands',
+      one: '1 magic wand',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String rewardTodayOnly(String reward) {
+    return '$reward (today only)';
+  }
+
+  @override
+  String get checkInMonthGifts => 'Gifts this month';
+
+  @override
+  String get checkInTotalHints => 'Hints';
+
+  @override
+  String get checkInTotalWands => 'Magic wands';
+
+  @override
+  String get checkInTotalDailyHints => 'Hints (today only)';
+
+  @override
+  String get checkInTotalDailyWands => 'Magic wands (today only)';
+
+  @override
+  String get checkInPremiumToday => 'Today from your ad-free pack';
+
+  @override
+  String get checkInPremiumNotYet =>
+      'Check in to get 2 hints and 1 magic wand for today.';
+
+  @override
+  String get checkInPremiumUsedUp => 'All used for today. See you tomorrow!';
+
+  @override
+  String checkInExpiresIn(String time) {
+    return 'Expires in $time';
+  }
+
+  @override
+  String dashboardDailyReminder(String rewards, String time) {
+    return 'You still have $rewards for today. They expire in $time, so play now and don\'t let them go to waste!';
+  }
+
+  @override
+  String get dashboardDailyReminderTitle => 'Today\'s uses are waiting';
+
+  @override
+  String get dashboardDailyReminderPlay => 'Play now';
 }

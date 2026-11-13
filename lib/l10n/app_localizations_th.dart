@@ -519,4 +519,117 @@ class AppLocalizationsTh extends AppLocalizations {
 
   @override
   String get settingsLanguageSystem => 'ภาษาของอุปกรณ์';
+
+  @override
+  String get premiumTitle => 'เล่นแบบไม่มีโฆษณา';
+
+  @override
+  String get premiumBenefitNoAds => 'ไม่มีโฆษณาระหว่างด่านอีกต่อไป';
+
+  @override
+  String get premiumBenefitDaily =>
+      'คำใบ้ 2 ครั้งและไม้กายสิทธิ์ 1 ครั้งทุกวันที่เช็กอิน';
+
+  @override
+  String premiumBuy(String price) {
+    return 'ซื้อ · $price';
+  }
+
+  @override
+  String get premiumOneTime => 'ชำระครั้งเดียวผ่าน Google Play';
+
+  @override
+  String get premiumActiveTitle => 'แพ็กไม่มีโฆษณาเปิดใช้งานแล้ว';
+
+  @override
+  String get premiumActiveDaily =>
+      'เช็กอินทุกวันเพื่อรับคำใบ้ 2 ครั้งและไม้กายสิทธิ์ 1 ครั้งสำหรับวันนั้น';
+
+  @override
+  String get premiumPurchased => 'ขอบคุณ! ปิดโฆษณาระหว่างด่านแล้ว';
+
+  @override
+  String get premiumPending =>
+      'การชำระเงินกำลังรอดำเนินการ แพ็กจะเปิดใช้งานเมื่อชำระเสร็จ';
+
+  @override
+  String get premiumFailed => 'ซื้อไม่สำเร็จ โปรดลองอีกครั้ง';
+
+  @override
+  String get checkInTitle => 'เช็กอินรายวัน';
+
+  @override
+  String get checkInAction => 'เช็กอิน';
+
+  @override
+  String get checkInDoneToday => 'วันนี้เช็กอินแล้ว';
+
+  @override
+  String checkInNextGift(int count) {
+    return 'อีก $count ครั้งจะได้ของขวัญถัดไป';
+  }
+
+  @override
+  String get checkInCheckedIn => 'เช็กอินแล้ว!';
+
+  @override
+  String checkInReceived(String rewards) {
+    return 'คุณได้รับ $rewards';
+  }
+
+  @override
+  String rewardHints(int count) {
+    return 'คำใบ้ $count ครั้ง';
+  }
+
+  @override
+  String rewardWands(int count) {
+    return 'ไม้กายสิทธิ์ $count ครั้ง';
+  }
+
+  @override
+  String rewardTodayOnly(String reward) {
+    return '$reward (เฉพาะวันนี้)';
+  }
+
+  @override
+  String get checkInMonthGifts => 'ของขวัญเดือนนี้';
+
+  @override
+  String get checkInTotalHints => 'คำใบ้';
+
+  @override
+  String get checkInTotalWands => 'ไม้กายสิทธิ์';
+
+  @override
+  String get checkInTotalDailyHints => 'คำใบ้ (เฉพาะวันนี้)';
+
+  @override
+  String get checkInTotalDailyWands => 'ไม้กายสิทธิ์ (เฉพาะวันนี้)';
+
+  @override
+  String get checkInPremiumToday => 'วันนี้จากแพ็กไม่มีโฆษณา';
+
+  @override
+  String get checkInPremiumNotYet =>
+      'เช็กอินเพื่อรับคำใบ้ 2 ครั้งและไม้กายสิทธิ์ 1 ครั้งสำหรับวันนี้';
+
+  @override
+  String get checkInPremiumUsedUp => 'วันนี้ใช้หมดแล้ว พบกันพรุ่งนี้!';
+
+  @override
+  String checkInExpiresIn(String time) {
+    return 'หมดอายุใน $time';
+  }
+
+  @override
+  String dashboardDailyReminder(String rewards, String time) {
+    return 'วันนี้คุณยังเหลือ $rewards จะหมดอายุใน $time เล่นเลยเพื่อไม่ให้เสียเปล่า!';
+  }
+
+  @override
+  String get dashboardDailyReminderTitle => 'ตัวช่วยของวันนี้รออยู่';
+
+  @override
+  String get dashboardDailyReminderPlay => 'เล่นเลย';
 }

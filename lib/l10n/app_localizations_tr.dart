@@ -520,4 +520,119 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get settingsLanguageSystem => 'Cihaz dili';
+
+  @override
+  String get premiumTitle => 'Reklamsız oyna';
+
+  @override
+  String get premiumBenefitNoAds => 'Seviyeler arasında artık reklam yok';
+
+  @override
+  String get premiumBenefitDaily =>
+      'Giriş yaptığın her gün 2 ipucu ve 1 sihirli değnek';
+
+  @override
+  String premiumBuy(String price) {
+    return 'Satın al · $price';
+  }
+
+  @override
+  String get premiumOneTime => 'Google Play üzerinden tek seferlik ödeme';
+
+  @override
+  String get premiumActiveTitle => 'Reklamsız paket etkin';
+
+  @override
+  String get premiumActiveDaily =>
+      'O gün için 2 ipucu ve 1 sihirli değnek almak üzere her gün giriş yap.';
+
+  @override
+  String get premiumPurchased =>
+      'Teşekkürler! Seviyeler arasındaki reklamlar kapatıldı.';
+
+  @override
+  String get premiumPending =>
+      'Ödemen beklemede. Tamamlanınca paket etkinleşecek.';
+
+  @override
+  String get premiumFailed => 'Satın alma gerçekleşmedi. Lütfen tekrar dene.';
+
+  @override
+  String get checkInTitle => 'Günlük giriş';
+
+  @override
+  String get checkInAction => 'Giriş yap';
+
+  @override
+  String get checkInDoneToday => 'Bugün giriş yapıldı';
+
+  @override
+  String checkInNextGift(int count) {
+    return 'Sonraki hediyeye $count giriş kaldı';
+  }
+
+  @override
+  String get checkInCheckedIn => 'Giriş yapıldı!';
+
+  @override
+  String checkInReceived(String rewards) {
+    return '$rewards kazandın.';
+  }
+
+  @override
+  String rewardHints(int count) {
+    return '$count ipucu';
+  }
+
+  @override
+  String rewardWands(int count) {
+    return '$count sihirli değnek';
+  }
+
+  @override
+  String rewardTodayOnly(String reward) {
+    return '$reward (yalnızca bugün)';
+  }
+
+  @override
+  String get checkInMonthGifts => 'Bu ayın hediyeleri';
+
+  @override
+  String get checkInTotalHints => 'İpuçları';
+
+  @override
+  String get checkInTotalWands => 'Sihirli değnekler';
+
+  @override
+  String get checkInTotalDailyHints => 'İpuçları (yalnızca bugün)';
+
+  @override
+  String get checkInTotalDailyWands => 'Sihirli değnekler (yalnızca bugün)';
+
+  @override
+  String get checkInPremiumToday => 'Bugün reklamsız paketinden';
+
+  @override
+  String get checkInPremiumNotYet =>
+      'Bugün için 2 ipucu ve 1 sihirli değnek almak için giriş yap.';
+
+  @override
+  String get checkInPremiumUsedUp =>
+      'Bugünkülerin hepsi kullanıldı. Yarın görüşürüz!';
+
+  @override
+  String checkInExpiresIn(String time) {
+    return '$time sonra sona eriyor';
+  }
+
+  @override
+  String dashboardDailyReminder(String rewards, String time) {
+    return 'Bugün için hâlâ $rewards var. $time sonra sona erecek, boşa gitmemesi için hemen oyna!';
+  }
+
+  @override
+  String get dashboardDailyReminderTitle => 'Bugünkü yardımların seni bekliyor';
+
+  @override
+  String get dashboardDailyReminderPlay => 'Şimdi oyna';
 }

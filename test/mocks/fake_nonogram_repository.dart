@@ -10,6 +10,7 @@ class FakeNonogramRepository extends NonogramRepository {
     int levelCount = 10,
     List<List<int>>? solution,
     Set<({int row, int col})> pinnedCells = const {},
+    int Function()? today,
   }) : super(
          solution == null
              ? FakeNonogramPuzzleSource(
@@ -22,5 +23,6 @@ class FakeNonogramRepository extends NonogramRepository {
                pinnedCells: pinnedCells,
              ),
          FakeNonogramLocalService(),
+         today: today,
        );
 }

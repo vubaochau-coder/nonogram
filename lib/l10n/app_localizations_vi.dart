@@ -519,4 +519,117 @@ class AppLocalizationsVi extends AppLocalizations {
 
   @override
   String get settingsLanguageSystem => 'Theo ngôn ngữ của máy';
+
+  @override
+  String get premiumTitle => 'Chơi không quảng cáo';
+
+  @override
+  String get premiumBenefitNoAds => 'Không còn quảng cáo khi qua màn';
+
+  @override
+  String get premiumBenefitDaily =>
+      'Mỗi lần điểm danh có thêm 2 gợi ý và 1 gậy phép';
+
+  @override
+  String premiumBuy(String price) {
+    return 'Mua · $price';
+  }
+
+  @override
+  String get premiumOneTime => 'Thanh toán một lần qua Google Play';
+
+  @override
+  String get premiumActiveTitle => 'Gói không quảng cáo đã kích hoạt';
+
+  @override
+  String get premiumActiveDaily =>
+      'Điểm danh mỗi ngày để nhận 2 gợi ý và 1 gậy phép dùng trong ngày.';
+
+  @override
+  String get premiumPurchased => 'Cảm ơn bạn! Đã tắt quảng cáo khi qua màn.';
+
+  @override
+  String get premiumPending =>
+      'Giao dịch đang chờ thanh toán. Gói sẽ tự kích hoạt khi thanh toán xong.';
+
+  @override
+  String get premiumFailed => 'Chưa mua được. Bạn thử lại nhé.';
+
+  @override
+  String get checkInTitle => 'Điểm danh hằng ngày';
+
+  @override
+  String get checkInAction => 'Điểm danh';
+
+  @override
+  String get checkInDoneToday => 'Hôm nay đã điểm danh';
+
+  @override
+  String checkInNextGift(int count) {
+    return 'Còn $count lần điểm danh nữa đến quà tiếp theo';
+  }
+
+  @override
+  String get checkInCheckedIn => 'Đã điểm danh!';
+
+  @override
+  String checkInReceived(String rewards) {
+    return 'Bạn nhận được $rewards.';
+  }
+
+  @override
+  String rewardHints(int count) {
+    return '$count gợi ý';
+  }
+
+  @override
+  String rewardWands(int count) {
+    return '$count gậy phép';
+  }
+
+  @override
+  String rewardTodayOnly(String reward) {
+    return '$reward (dùng trong ngày)';
+  }
+
+  @override
+  String get checkInMonthGifts => 'Quà trong tháng';
+
+  @override
+  String get checkInTotalHints => 'Gợi ý';
+
+  @override
+  String get checkInTotalWands => 'Gậy phép';
+
+  @override
+  String get checkInTotalDailyHints => 'Gợi ý (trong ngày)';
+
+  @override
+  String get checkInTotalDailyWands => 'Gậy phép (trong ngày)';
+
+  @override
+  String get checkInPremiumToday => 'Hôm nay từ gói không quảng cáo';
+
+  @override
+  String get checkInPremiumNotYet =>
+      'Điểm danh để nhận 2 gợi ý và 1 gậy phép dùng trong hôm nay.';
+
+  @override
+  String get checkInPremiumUsedUp => 'Hôm nay đã dùng hết. Hẹn bạn ngày mai!';
+
+  @override
+  String checkInExpiresIn(String time) {
+    return 'Hết hạn sau $time';
+  }
+
+  @override
+  String dashboardDailyReminder(String rewards, String time) {
+    return 'Bạn còn $rewards hôm nay, hết hạn sau $time. Chơi ngay để không lãng phí nhé!';
+  }
+
+  @override
+  String get dashboardDailyReminderTitle => 'Lượt hôm nay đang chờ bạn';
+
+  @override
+  String get dashboardDailyReminderPlay => 'Chơi ngay';
 }

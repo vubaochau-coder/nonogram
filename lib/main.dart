@@ -8,6 +8,7 @@ import 'package:toastification/toastification.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 
 import 'ads/ad_config.dart';
+import 'ads/ad_entitlements.dart';
 import 'ads/ad_manager.dart';
 import 'ads/ad_service.dart';
 import 'ads/network/admob/admob_network.dart';
@@ -23,6 +24,11 @@ import 'data/hive_nonogram_local_service.dart';
 import 'data/nonogram_puzzle_source.dart';
 import 'data/nonogram_repository.dart';
 import 'l10n/app_localizations.dart';
+import 'premium/play_billing_gateway.dart';
+import 'premium/premium_controller.dart';
+import 'checkin/check_in_service.dart';
+import 'checkin/game_clock.dart';
+import 'checkin/trusted_clock.dart';
 import 'rating/app_rating.dart';
 import 'screens/dashboard/nonogram_dashboard_page.dart';
 import 'screens/play_mode/play_mode_selection_page.dart';
@@ -33,9 +39,24 @@ Future<void> main() async {
   registerAppLicenses();
 
   final flavor = AppFlavor.current;
+  final android = !kIsWeb && defaultTargetPlatform == TargetPlatform.android;
+  // Gói "Chơi không quảng cáo" bán qua Google Play: chỉ có trên Android.
+  final premium =
+      android
+          ? await PremiumController.load(gateway: PlayBillingGateway())
+          : null;
+  // Giờ của game theo giờ mạng (điểm danh, hạn của lượt trong ngày).
+  final clock = await GameClock.load(trusted: NetworkTrustedClock());
+  final checkIn = await CheckInService.load(
+    clock: clock,
+    isPremium: () => premium?.isPremium ?? false,
+  );
   final launcher = AppLauncher(
     flavor: flavor,
-    adService: createAdService(flavor),
+    adService: createAdService(flavor, premium),
+    premium: premium,
+    clock: clock,
+    checkIn: checkIn,
     // Lời mời đánh giá mở CH Play: chỉ có trên Android.
     rating:
         !kIsWeb && defaultTargetPlatform == TargetPlatform.android
@@ -51,10 +72,15 @@ Future<void> main() async {
 
 /// Quảng cáo AdMob chỉ có trên Android (chưa cấu hình cho iOS). Bản `store`
 /// dùng ID thật, bản `dev` dùng ID thử nghiệm (xem [AdConfig.forFlavor]).
-AdService createAdService(AppFlavor flavor) {
+/// Mua gói không quảng cáo ([premium]) thì tắt quảng cáo xen kẽ.
+AdService createAdService(AppFlavor flavor, PremiumController? premium) {
   final android = !kIsWeb && defaultTargetPlatform == TargetPlatform.android;
   if (!android) return NoAdService();
-  return AdManager(network: AdMobNetwork(), config: AdConfig.forFlavor(flavor));
+  return AdManager(
+    network: AdMobNetwork(),
+    config: AdConfig.forFlavor(flavor),
+    entitlements: premium ?? const NoAdEntitlements(),
+  );
 }
 
 /// Khởi động app: flavor `dev` hiện màn chọn chế độ chơi trước, flavor
@@ -63,6 +89,9 @@ class AppLauncher {
   AppLauncher({
     required this.flavor,
     required this.adService,
+    this.premium,
+    required this.clock,
+    required this.checkIn,
     this.rating,
     required this.themeMode,
     required this.locale,
@@ -72,6 +101,9 @@ class AppLauncher {
 
   final AppFlavor flavor;
   final AdService adService;
+  final PremiumController? premium;
+  final GameClock clock;
+  final CheckInService checkIn;
   final AppRatingController? rating;
   final AppThemeModeController themeMode;
   final AppLocaleController locale;
@@ -79,6 +111,13 @@ class AppLauncher {
   final PlayModePreferences playModes;
 
   Future<void> launch() async {
+    // Không chặn lúc mở app: hỏi Google Play và đồng bộ giờ ở nền.
+    final premium = this.premium;
+    if (premium != null) {
+      premium.addListener(checkIn.premiumChanged);
+      premium.initialize();
+    }
+    checkIn.initialize();
     if (flavor.hasPlayModeSelection) {
       showModeSelection();
     } else {
@@ -116,6 +155,7 @@ class AppLauncher {
     final repository = NonogramRepository(
       AssetNonogramPuzzleSource(basePath: mode.levelsPath),
       localService,
+      today: () => clock.today,
     );
 
     runApp(
@@ -124,6 +164,9 @@ class AppLauncher {
         themeMode: themeMode,
         locale: locale,
         adService: adService,
+        premium: premium,
+        checkIn: checkIn,
+        clock: clock,
         rating: rating,
         onboarding: onboarding,
         showTutorialOnStart: showTutorial,
@@ -133,6 +176,8 @@ class AppLauncher {
                 : null,
       ),
     );
+
+    checkIn.attach(repository);
 
     // Sau khi app đã hiện: hộp thoại xin đồng ý (nếu cần) nằm trên giao
     // diện game, và việc tải quảng cáo không làm chậm lúc mở app.
@@ -239,6 +284,9 @@ class NonogramApp extends StatelessWidget {
     required this.themeMode,
     required this.locale,
     this.adService,
+    this.premium,
+    this.checkIn,
+    this.clock,
     this.rating,
     this.onboarding,
     this.showTutorialOnStart = false,
@@ -254,6 +302,13 @@ class NonogramApp extends StatelessWidget {
 
   /// Null trên iOS, web và trong test: không hỏi đánh giá.
   final AppRatingController? rating;
+
+  /// Null trên iOS, web và trong test: không bán gói không quảng cáo.
+  final PremiumController? premium;
+
+  /// Null trong test: không có điểm danh.
+  final CheckInService? checkIn;
+  final GameClock? clock;
 
   /// Null trong test: không tự hiện hướng dẫn thao tác khi vào màn chơi.
   final OnboardingPreferences? onboarding;
@@ -273,6 +328,9 @@ class NonogramApp extends StatelessWidget {
         ChangeNotifierProvider.value(value: locale),
         Provider<AdService>.value(value: adService ?? NoAdService()),
         if (rating != null) Provider.value(value: rating!),
+        if (premium != null) ChangeNotifierProvider.value(value: premium!),
+        if (checkIn != null) ChangeNotifierProvider.value(value: checkIn!),
+        if (clock != null) ChangeNotifierProvider.value(value: clock!),
         if (onboarding != null) Provider.value(value: onboarding!),
         if (playModeSwitcher != null) Provider.value(value: playModeSwitcher!),
       ],

@@ -986,6 +986,192 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Device language'**
   String get settingsLanguageSystem;
+
+  /// No description provided for @premiumTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Play without ads'**
+  String get premiumTitle;
+
+  /// No description provided for @premiumBenefitNoAds.
+  ///
+  /// In en, this message translates to:
+  /// **'No more ads between levels'**
+  String get premiumBenefitNoAds;
+
+  /// No description provided for @premiumBenefitDaily.
+  ///
+  /// In en, this message translates to:
+  /// **'2 hints and 1 magic wand each day you check in'**
+  String get premiumBenefitDaily;
+
+  /// No description provided for @premiumBuy.
+  ///
+  /// In en, this message translates to:
+  /// **'Buy · {price}'**
+  String premiumBuy(String price);
+
+  /// No description provided for @premiumOneTime.
+  ///
+  /// In en, this message translates to:
+  /// **'One-time payment via Google Play'**
+  String get premiumOneTime;
+
+  /// No description provided for @premiumActiveTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Ad-free pack active'**
+  String get premiumActiveTitle;
+
+  /// No description provided for @premiumActiveDaily.
+  ///
+  /// In en, this message translates to:
+  /// **'Check in every day to get 2 hints and 1 magic wand for that day.'**
+  String get premiumActiveDaily;
+
+  /// No description provided for @premiumPurchased.
+  ///
+  /// In en, this message translates to:
+  /// **'Thank you! Ads between levels are now off.'**
+  String get premiumPurchased;
+
+  /// No description provided for @premiumPending.
+  ///
+  /// In en, this message translates to:
+  /// **'Your payment is pending. The pack turns on as soon as it goes through.'**
+  String get premiumPending;
+
+  /// No description provided for @premiumFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'The purchase didn\'t go through. Please try again.'**
+  String get premiumFailed;
+
+  /// No description provided for @checkInTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Daily check-in'**
+  String get checkInTitle;
+
+  /// No description provided for @checkInAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Check in'**
+  String get checkInAction;
+
+  /// No description provided for @checkInDoneToday.
+  ///
+  /// In en, this message translates to:
+  /// **'Checked in today'**
+  String get checkInDoneToday;
+
+  /// No description provided for @checkInNextGift.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =1{Next gift on your next check-in} other{Next gift in {count} check-ins}}'**
+  String checkInNextGift(int count);
+
+  /// No description provided for @checkInCheckedIn.
+  ///
+  /// In en, this message translates to:
+  /// **'Checked in!'**
+  String get checkInCheckedIn;
+
+  /// No description provided for @checkInReceived.
+  ///
+  /// In en, this message translates to:
+  /// **'You got {rewards}.'**
+  String checkInReceived(String rewards);
+
+  /// No description provided for @rewardHints.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =1{1 hint} other{{count} hints}}'**
+  String rewardHints(int count);
+
+  /// No description provided for @rewardWands.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =1{1 magic wand} other{{count} magic wands}}'**
+  String rewardWands(int count);
+
+  /// No description provided for @rewardTodayOnly.
+  ///
+  /// In en, this message translates to:
+  /// **'{reward} (today only)'**
+  String rewardTodayOnly(String reward);
+
+  /// No description provided for @checkInMonthGifts.
+  ///
+  /// In en, this message translates to:
+  /// **'Gifts this month'**
+  String get checkInMonthGifts;
+
+  /// No description provided for @checkInTotalHints.
+  ///
+  /// In en, this message translates to:
+  /// **'Hints'**
+  String get checkInTotalHints;
+
+  /// No description provided for @checkInTotalWands.
+  ///
+  /// In en, this message translates to:
+  /// **'Magic wands'**
+  String get checkInTotalWands;
+
+  /// No description provided for @checkInTotalDailyHints.
+  ///
+  /// In en, this message translates to:
+  /// **'Hints (today only)'**
+  String get checkInTotalDailyHints;
+
+  /// No description provided for @checkInTotalDailyWands.
+  ///
+  /// In en, this message translates to:
+  /// **'Magic wands (today only)'**
+  String get checkInTotalDailyWands;
+
+  /// No description provided for @checkInPremiumToday.
+  ///
+  /// In en, this message translates to:
+  /// **'Today from your ad-free pack'**
+  String get checkInPremiumToday;
+
+  /// No description provided for @checkInPremiumNotYet.
+  ///
+  /// In en, this message translates to:
+  /// **'Check in to get 2 hints and 1 magic wand for today.'**
+  String get checkInPremiumNotYet;
+
+  /// No description provided for @checkInPremiumUsedUp.
+  ///
+  /// In en, this message translates to:
+  /// **'All used for today. See you tomorrow!'**
+  String get checkInPremiumUsedUp;
+
+  /// No description provided for @checkInExpiresIn.
+  ///
+  /// In en, this message translates to:
+  /// **'Expires in {time}'**
+  String checkInExpiresIn(String time);
+
+  /// No description provided for @dashboardDailyReminder.
+  ///
+  /// In en, this message translates to:
+  /// **'You still have {rewards} for today. They expire in {time}, so play now and don\'t let them go to waste!'**
+  String dashboardDailyReminder(String rewards, String time);
+
+  /// No description provided for @dashboardDailyReminderTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Today\'s uses are waiting'**
+  String get dashboardDailyReminderTitle;
+
+  /// No description provided for @dashboardDailyReminderPlay.
+  ///
+  /// In en, this message translates to:
+  /// **'Play now'**
+  String get dashboardDailyReminderPlay;
 }
 
 class _AppLocalizationsDelegate

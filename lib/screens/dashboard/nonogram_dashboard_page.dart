@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:lucide_icons/lucide_icons.dart';
+import 'package:nonogram/checkin/check_in_dashboard.dart';
 import 'package:nonogram/core/app_locale.dart';
 import 'package:nonogram/core/app_route_intent.dart';
 import 'package:nonogram/core/app_theme_mode.dart';
 import 'package:nonogram/core/context_ext.dart';
+import 'package:nonogram/premium/premium_card.dart';
 import 'package:nonogram/widgets/app_language_selector.dart';
 
 import 'bloc/nonogram_dashboard_bloc.dart';
@@ -61,6 +63,14 @@ class _NonogramDashboardViewState extends State<_NonogramDashboardView> {
 
   @override
   Widget build(BuildContext context) {
+    return CheckInAutoOpener(
+      // Lần đầu mở app: bài hướng dẫn trước, điểm danh để lần sau.
+      enabled: !widget.showTutorialOnStart,
+      child: _buildScaffold(context),
+    );
+  }
+
+  Widget _buildScaffold(BuildContext context) {
     return Scaffold(
       body: SafeArea(
         bottom: false,
@@ -86,6 +96,7 @@ class _NonogramDashboardViewState extends State<_NonogramDashboardView> {
                 ],
               ),
               actions: [
+                const CheckInButton(),
                 IconButton(
                   onPressed:
                       () => context.read<AppThemeModeController>().toggle(),
@@ -117,6 +128,9 @@ class _NonogramDashboardViewState extends State<_NonogramDashboardView> {
               sliver: SliverList.list(
                 children: const [
                   NonogramDashboardHeroSection(),
+                  SizedBox(height: 20),
+                  DailyUsesReminder(),
+                  PremiumCard(),
                   SizedBox(height: 20),
                   NonogramDashboardProgressSection(),
                   SizedBox(height: 24),
