@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:lucide_icons/lucide_icons.dart';
 import 'package:nonogram/models/power_up_inventory.dart';
+import 'package:nonogram/checkin/reward_view.dart';
 import 'package:nonogram/core/app_theme.dart';
 import 'package:nonogram/core/context_ext.dart';
 
@@ -31,6 +32,10 @@ class WandAction extends StatelessWidget {
         // Hết lượt: nút vẫn bấm được, bấm là xem quảng cáo để dùng một lượt.
         final adOffer = !state.isWandActive && state.remainingWands <= 0;
         final enabled = !state.isSolved;
+        // Còn lượt trong ngày (và không đang bật chế độ chọn): icon vàng kèm
+        // đồng hồ cho lượt có hạn.
+        final timeLimited =
+            enabled && !state.isWandActive && state.dailyWands > 0;
         return Tooltip(
           message: context.l10n.nonogramPlayWandLabel,
           child: Stack(
@@ -39,6 +44,13 @@ class WandAction extends StatelessWidget {
               OverlayButton(
                 key: const ValueKey('nonogram-wand'),
                 icon: LucideIcons.wand2,
+                iconWidget:
+                    timeLimited
+                        ? const PowerUpGlyph(
+                          powerUp: PowerUp.wand,
+                          timeLimited: true,
+                        )
+                        : null,
                 color: state.isWandActive ? colors.primary : null,
                 enabled: enabled,
                 onPressed: () {

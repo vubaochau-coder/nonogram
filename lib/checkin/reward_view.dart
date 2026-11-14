@@ -17,6 +17,69 @@ IconData powerUpIcon(PowerUp p) => switch (p) {
   PowerUp.wand => LucideIcons.wand2,
 };
 
+/// Icon của một gợi ý / gậy phép. Khi [timeLimited] (lượt trong ngày của gói
+/// không quảng cáo) thì cả icon chuyển màu vàng ([GameColors.reward]) và có
+/// thêm đồng hồ nhỏ nằm trong góc dưới phải — để phân biệt lượt có hạn với
+/// lượt vĩnh viễn bằng cả hình dạng, không chỉ bằng màu.
+class PowerUpGlyph extends StatelessWidget {
+  const PowerUpGlyph({
+    super.key,
+    required this.powerUp,
+    this.timeLimited = false,
+    this.size = 18,
+    this.color,
+    this.background,
+  });
+
+  final PowerUp powerUp;
+  final bool timeLimited;
+  final double size;
+
+  /// Màu icon khi không phải lượt có hạn. Mặc định [ColorScheme.onSurface].
+  final Color? color;
+
+  /// Màu nền sau đồng hồ để tách khỏi nét icon. Mặc định nền nút trong màn
+  /// chơi ([ColorScheme.surfaceContainerLow]).
+  final Color? background;
+
+  @override
+  Widget build(BuildContext context) {
+    final base =
+        timeLimited
+            ? context.gameColors.reward
+            : (color ?? context.color.onSurface);
+    final icon = Icon(powerUpIcon(powerUp), size: size, color: base);
+    if (!timeLimited) return icon;
+
+    final clockSize = size * 0.6;
+    return SizedBox.square(
+      dimension: size,
+      child: Stack(
+        clipBehavior: Clip.none,
+        children: [
+          Positioned.fill(child: icon),
+          Positioned(
+            right: -size * 0.08,
+            bottom: -size * 0.08,
+            child: Container(
+              decoration: BoxDecoration(
+                color: background ?? context.color.surfaceContainerLow,
+                shape: BoxShape.circle,
+              ),
+              padding: EdgeInsets.all(size * 0.05),
+              child: Icon(
+                LucideIcons.clock,
+                size: clockSize,
+                color: context.gameColors.reward,
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
 /// Lượt có hạn (trong ngày) màu vàng, lượt vĩnh viễn màu primary: cùng màu
 /// với badge trên nút gợi ý / gậy phép trong màn chơi.
 Color rewardColor(BuildContext context, {required bool daily}) =>
