@@ -26,7 +26,10 @@ flutter run --flavor dev      # Android: luôn phải chọn flavor
   độ cũ (`nonogram_offline_v1`), nên tiến độ của các bản thử trước đây vẫn còn.
 - `assets/levels_dev/` (574 màn lấy từ nonogram.org, không được dùng thương
   mại) chỉ được đóng gói khi build `--flavor dev`.
-- Build bản store: `flutter build appbundle --release --flavor store`.
+- Build bản store: `flutter build appbundle --release --flavor store --obfuscate --split-debug-info=build/symbols`.
+  Bản release Android bật R8 (làm rối + rút gọn, keep rules ở
+  `android/app/proguard-rules.pro`) và `--obfuscate` làm rối mã Dart. Lưu lại
+  thư mục `build/symbols` (và `mapping.txt` của R8) để giải mã stack trace.
 - iOS và web chưa cấu hình flavor: build không có `--flavor` chạy như bản
   `store` (không có chế độ nhà phát triển).
 - Nhánh `beta` giữ nguyên trạng thái `main` trước khi đổi bộ màn (vẫn dùng bộ
