@@ -37,7 +37,7 @@ class CheckInService extends ChangeNotifier with WidgetsBindingObserver {
   final GameClock clock;
   final bool Function() _isPremium;
   final Map<int, List<CheckInReward>> _history;
-  final int _startDay;
+  int _startDay;
   int? _maxSeenDay;
   NonogramRepository? _repository;
   bool _busy = false;
@@ -224,6 +224,36 @@ class CheckInService extends ChangeNotifier with WidgetsBindingObserver {
     history: _history,
     premium: isPremium,
   );
+
+  // --- Công cụ tester (chỉ bản `dev`) ---
+
+  /// Xoá toàn bộ lịch sử điểm danh, coi như hôm nay mới bắt đầu dùng app.
+  /// Không thu hồi quà đã phát vào kho.
+  Future<void> debugReset() async {
+    _history.clear();
+    _startDay = today;
+    _maxSeenDay = today;
+    await _saveHistory();
+    await _box?.put(_startKey, _startDay);
+    await _box?.put(_maxSeenKey, _maxSeenDay);
+    notifyListeners();
+  }
+
+  /// Sau khi lùi giờ của game (công cụ tester): bỏ những lần điểm danh "trong
+  /// tương lai" và hạ bánh cóc về hôm nay, để điểm danh lại được. Người chơi
+  /// thật lùi giờ thì vẫn bị bánh cóc chặn.
+  Future<void> debugRewindToToday() async {
+    final t = today;
+    _history.removeWhere((day, _) => day > t);
+    if (_startDay > t) {
+      _startDay = t;
+      await _box?.put(_startKey, _startDay);
+    }
+    _maxSeenDay = t;
+    await _saveHistory();
+    await _box?.put(_maxSeenKey, t);
+    notifyListeners();
+  }
 
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {

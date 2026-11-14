@@ -106,6 +106,7 @@ class NonogramPlayBloc extends AppBloc<NonogramPlayEvent, NonogramPlayState> {
     on<WandLineSelected>(_onWandLineSelected, transformer: sequential());
     on<RewardGranted>(_onRewardGranted, transformer: sequential());
     on<PowerUpsChanged>(_onPowerUpsChanged, transformer: sequential());
+    on<DebugSolveRequested>(_onDebugSolveRequested, transformer: sequential());
     _powerUpsSub = repository.powerUpChanges.listen(
       (inventory) => add(PowerUpsChanged(inventory)),
     );
@@ -688,6 +689,26 @@ class NonogramPlayBloc extends AppBloc<NonogramPlayEvent, NonogramPlayState> {
     );
     add(const SolveCheckRequested());
     if (inventoryAfter != null) await _savePowerUps(inventoryAfter);
+  }
+
+  _onDebugSolveRequested(DebugSolveRequested event, Emitter emit) {
+    final puzzle = state.puzzle;
+    if (state.isLoading || state.isSolved || puzzle == null) return;
+    _dragSession = null;
+    final grid = [
+      for (final row in puzzle.solution)
+        [
+          for (final v in row)
+            v == 1 ? NonogramCellState.filled : NonogramCellState.empty,
+        ],
+    ];
+    emit(
+      _buildGridDerivedState(
+        sourceState: state.copyWith(isWandActive: false),
+        gridData: grid.toUnmodifiable2D(),
+      ),
+    );
+    add(const SolveCheckRequested());
   }
 
   // --- Internal Handlers ---

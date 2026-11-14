@@ -99,6 +99,14 @@ class AppRatingController {
     await _box?.put(_lastSolvedKey, solvedLevels);
   }
 
+  /// Công cụ tester: quên mọi lần đã hỏi, như người chơi mới.
+  Future<void> debugReset() async {
+    _state = const RatingState();
+    await _box?.delete(_answeredKey);
+    await _box?.delete(_promptsKey);
+    await _box?.delete(_lastSolvedKey);
+  }
+
   /// Người chơi chọn [stars] sao: không hỏi nữa; 5 sao thì mở cửa hàng.
   Future<void> submit(int stars) async {
     _state = RatingState(

@@ -11,6 +11,8 @@ import 'package:nonogram/core/play_mode.dart';
 import 'package:nonogram/premium/premium_card.dart';
 import 'package:nonogram/premium/premium_controller.dart';
 import 'package:nonogram/screens/licenses/app_licenses_page.dart';
+import 'package:nonogram/tester/tester_settings.dart';
+import 'package:nonogram/tester/tester_tools_page.dart';
 import 'package:nonogram/widgets/app_language_selector.dart';
 import 'package:provider/provider.dart';
 
@@ -46,6 +48,7 @@ class MePage extends StatelessWidget {
     final locale = _maybe<AppLocaleController>(context);
     final sounds = _maybe<AppSoundController>(context);
     final switcher = _maybe<PlayModeSwitcher>(context);
+    final tester = _maybe<TesterSettings>(context);
 
     return Scaffold(
       body: SafeArea(
@@ -124,6 +127,25 @@ class MePage extends StatelessWidget {
                 ),
               ],
             ),
+            // Chỉ bản `dev`: chuỗi không dịch (dành cho người test nội bộ).
+            if (tester != null)
+              _Group(
+                title: 'Tester',
+                children: [
+                  _Tile(
+                    key: const ValueKey('me-tester-tools'),
+                    icon: LucideIcons.flaskConical,
+                    color: const Color(0xFFF97316),
+                    label: 'Công cụ tester',
+                    onTap:
+                        () => Navigator.of(context).push(
+                          MaterialPageRoute<void>(
+                            builder: (_) => const TesterToolsPage(),
+                          ),
+                        ),
+                  ),
+                ],
+              ),
             ValueListenableBuilder<bool>(
               valueListenable: context.ads.privacyOptionsRequired,
               builder: (context, privacyRequired, _) {

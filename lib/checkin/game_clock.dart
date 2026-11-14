@@ -10,9 +10,20 @@ import 'trusted_clock.dart';
 /// ([sync], khi mở app / mở lại app) đo lại độ lệch. Mất mạng thì dùng độ
 /// lệch đã lưu; còn ai tắt mạng rồi chỉnh giờ thì bánh cóc của điểm danh
 /// chặn (xem `CheckInPolicy`).
+///
+/// [debugShift] (chỉ bản `dev`, công cụ tester): tua giờ của game thêm một
+/// khoảng để test điểm danh / lượt trong ngày mà không phải chờ.
 class GameClock extends ChangeNotifier {
-  GameClock._(this._box, this._trusted, this._device, Duration offset)
-    : _offset = offset;
+  GameClock._(
+    this._box,
+    this._trusted,
+    this._device,
+    Duration offset, {
+    ValueListenable<Duration>? debugShift,
+  }) : _offset = offset,
+       _debugShift = debugShift {
+    _debugShift?.addListener(notifyListeners);
+  }
 
   static const _boxName = 'nonogram_preferences_v1';
   static const _offsetKey = 'clock_offset_ms';
@@ -21,14 +32,24 @@ class GameClock extends ChangeNotifier {
   final TrustedClock _trusted;
   final DateTime Function() _device;
   Duration _offset;
+  final ValueListenable<Duration>? _debugShift;
 
-  static Future<GameClock> load({required TrustedClock trusted}) async {
+  static Future<GameClock> load({
+    required TrustedClock trusted,
+    ValueListenable<Duration>? debugShift,
+  }) async {
     Box<dynamic>? box;
     try {
       box = await Hive.openBox<dynamic>(_boxName);
     } catch (_) {}
     final ms = box?.get(_offsetKey) as int? ?? 0;
-    return GameClock._(box, trusted, DateTime.now, Duration(milliseconds: ms));
+    return GameClock._(
+      box,
+      trusted,
+      DateTime.now,
+      Duration(milliseconds: ms),
+      debugShift: debugShift,
+    );
   }
 
   /// Dùng trong test: không lưu.
@@ -37,12 +58,17 @@ class GameClock extends ChangeNotifier {
     required TrustedClock trusted,
     DateTime Function()? device,
     Duration offset = Duration.zero,
+    ValueListenable<Duration>? debugShift,
   }) : _box = null,
        _trusted = trusted,
        _device = device ?? DateTime.now,
-       _offset = offset;
+       _offset = offset,
+       _debugShift = debugShift {
+    _debugShift?.addListener(notifyListeners);
+  }
 
-  DateTime now() => _device().add(_offset);
+  DateTime now() =>
+      _device().add(_offset).add(_debugShift?.value ?? Duration.zero);
 
   /// Số ngày kể từ 1970-01-01 theo lịch địa phương.
   int get today => dayNumberOf(now());
@@ -66,5 +92,11 @@ class GameClock extends ChangeNotifier {
       if (today != dayBefore) notifyListeners();
     }
     return true;
+  }
+
+  @override
+  void dispose() {
+    _debugShift?.removeListener(notifyListeners);
+    super.dispose();
   }
 }
