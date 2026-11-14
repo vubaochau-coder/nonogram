@@ -42,8 +42,8 @@ class _NonogramPlaySoundsState extends State<NonogramPlaySounds> {
   }
 }
 
-/// Tiếng cho một lần bàn chơi đổi từ [prev] sang [next]; null = im.
-@visibleForTesting
+/// Tiếng cho một lần bàn chơi đổi từ [prev] sang [next]; null = im. Dùng
+/// chung cho màn chơi và bài hướng dẫn.
 GameSound? soundFor(PlayTally prev, PlayTally next) {
   final filledUp = next.filled > prev.filled;
   // Khớp thêm hàng / cột (trừ nước cuối giải xong: hiệu ứng giải xong lo).
