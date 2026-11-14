@@ -53,3 +53,18 @@ rng = np.random.default_rng(5)
 for k in range(8):
     s = tone(rng.uniform(2200, 3400), 0.18, 25, (1,)); o = int(SR*(0.35+k*0.06)); x[o:o+len(s)] += s*0.12
 save('fanfare', x, 0.75)
+
+# Điểm danh: bong bóng (nút) vỡ.
+x = t(0.12); fr = np.linspace(900, 250, len(x)); n = np.random.default_rng(2).normal(size=len(x))
+save('pop', (np.sin(2*np.pi*np.cumsum(fr)/SR)*0.8 + np.convolve(n, np.ones(8)/8, 'same')*0.5)*np.exp(-40*x), 0.6)
+
+# Điểm danh: đóng dấu ô hôm nay ("cộp" + chuỗi chuông).
+x = t(0.18); thump = np.sin(2*np.pi*np.linspace(160, 70, len(x))*x)*np.exp(-25*x)
+x = np.zeros(int(SR*1.0)); x[:len(thump)] += thump*0.9
+for i, f in enumerate([1046.5, 1318.5, 1567.98]):
+    s = tone(f, 0.8, 5); o = int(SR*(0.04 + 0.07*i)); x[o:o+len(s)] += s*0.35
+save('stamp', x, 0.6)
+
+# Mở quà: một tiếng gõ khi hộp rung.
+x = t(0.08)
+save('knock', np.sin(2*np.pi*np.linspace(220, 120, len(x))*x)*np.exp(-45*x), 0.5)

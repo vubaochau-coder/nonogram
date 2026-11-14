@@ -619,6 +619,52 @@ class AppLocalizationsEn extends AppLocalizations {
   String get checkInMonthGifts => 'Gifts this month';
 
   @override
+  String get navHome => 'Home';
+
+  @override
+  String get navMe => 'Me';
+
+  @override
+  String get meHelp => 'Help';
+
+  @override
+  String get meMore => 'More';
+
+  @override
+  String get checkInNotYetToday => 'Not checked in today';
+
+  @override
+  String get checkInTodayButton => 'Check in today';
+
+  @override
+  String checkInGiftsLeftShort(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count more for a gift',
+      one: '1 more for a gift',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get checkInGiftToday => 'Gift today!';
+
+  @override
+  String checkInGiftMilestone(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Gift for $count check-ins',
+      one: 'Gift for 1 check-in',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get checkInGiftCollect => 'Collect';
+
+  @override
   String get checkInTotalHints => 'Hints';
 
   @override

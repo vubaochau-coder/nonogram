@@ -24,8 +24,17 @@ enum GameSound {
   /// Tranh bay sang màn kết quả.
   whoosh('whoosh'),
 
-  /// Tranh đáp xuống thẻ kết quả.
-  fanfare('fanfare');
+  /// Tranh đáp xuống thẻ kết quả; hộp quà điểm danh bật nắp.
+  fanfare('fanfare'),
+
+  /// Nút điểm danh vỡ như bong bóng.
+  pop('pop'),
+
+  /// Ô hôm nay trên lịch được đóng dấu.
+  stamp('stamp'),
+
+  /// Hộp quà điểm danh rung (mỗi nhịp một tiếng).
+  knock('knock', voices: 2);
 
   const GameSound(this.file, {this.voices = 1});
 

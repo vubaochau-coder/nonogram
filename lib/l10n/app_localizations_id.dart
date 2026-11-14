@@ -604,6 +604,40 @@ class AppLocalizationsId extends AppLocalizations {
   String get checkInMonthGifts => 'Hadiah bulan ini';
 
   @override
+  String get navHome => 'Beranda';
+
+  @override
+  String get navMe => 'Saya';
+
+  @override
+  String get meHelp => 'Bantuan';
+
+  @override
+  String get meMore => 'Lainnya';
+
+  @override
+  String get checkInNotYetToday => 'Belum absen hari ini';
+
+  @override
+  String get checkInTodayButton => 'Absen hari ini';
+
+  @override
+  String checkInGiftsLeftShort(int count) {
+    return '$count kali lagi dapat hadiah';
+  }
+
+  @override
+  String get checkInGiftToday => 'Hari ini ada hadiah!';
+
+  @override
+  String checkInGiftMilestone(int count) {
+    return 'Hadiah $count kali absen';
+  }
+
+  @override
+  String get checkInGiftCollect => 'Ambil';
+
+  @override
   String get checkInTotalHints => 'Petunjuk';
 
   @override

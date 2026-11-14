@@ -622,6 +622,52 @@ class AppLocalizationsPt extends AppLocalizations {
   String get checkInMonthGifts => 'Presentes do mês';
 
   @override
+  String get navHome => 'Início';
+
+  @override
+  String get navMe => 'Eu';
+
+  @override
+  String get meHelp => 'Ajuda';
+
+  @override
+  String get meMore => 'Mais';
+
+  @override
+  String get checkInNotYetToday => 'Presença ainda não marcada hoje';
+
+  @override
+  String get checkInTodayButton => 'Marcar presença hoje';
+
+  @override
+  String checkInGiftsLeftShort(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Faltam $count para um presente',
+      one: 'Falta 1 para um presente',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get checkInGiftToday => 'Hoje tem presente!';
+
+  @override
+  String checkInGiftMilestone(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Presente de $count presenças',
+      one: 'Presente de 1 presença',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get checkInGiftCollect => 'Pegar';
+
+  @override
   String get checkInTotalHints => 'Dicas';
 
   @override

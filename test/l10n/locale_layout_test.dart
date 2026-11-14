@@ -6,6 +6,10 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:lucide_icons/lucide_icons.dart';
+import 'package:nonogram/checkin/check_in_service.dart';
+import 'package:nonogram/checkin/game_clock.dart';
+import 'package:nonogram/core/app_sounds.dart';
+import 'package:nonogram/screens/home/app_home_page.dart';
 import 'package:nonogram/core/app_locale.dart';
 import 'package:nonogram/core/app_theme.dart';
 import 'package:nonogram/core/app_theme_mode.dart';
@@ -23,6 +27,7 @@ import 'package:nonogram/screens/play/sections/nonogram_completion_result_sectio
 import 'package:nonogram/screens/tutorial/nonogram_tutorial_page.dart';
 import 'package:provider/provider.dart';
 
+import '../mocks/fake_purchase_gateway.dart';
 import '../mocks/fake_nonogram_local_service.dart';
 import '../mocks/fake_nonogram_puzzle_source.dart';
 
@@ -44,6 +49,7 @@ void main() {
     Widget home, {
     Size size = const Size(360, 640),
     bool withHistory = false,
+    bool withCheckIn = false,
   }) async {
     tester.view.physicalSize = size;
     tester.view.devicePixelRatio = 1;
@@ -66,15 +72,28 @@ void main() {
         );
       }
     }
+    final repository = NonogramRepository(
+      FakeNonogramPuzzleSource(solution: levels),
+      local,
+    );
+    final clock = GameClock.inMemory(
+      trusted: FakeTrustedClock(null),
+      device: () => DateTime(2026, 11, 13, 9),
+    );
+    final checkIn =
+        withCheckIn
+            ? (CheckInService.inMemory(clock: clock)..attach(repository))
+            : null;
+    if (checkIn != null) addTearDown(checkIn.dispose);
     await tester.pumpWidget(
       MultiRepositoryProvider(
         providers: [
-          RepositoryProvider<NonogramRepository>.value(
-            value: NonogramRepository(
-              FakeNonogramPuzzleSource(solution: levels),
-              local,
-            ),
-          ),
+          RepositoryProvider<NonogramRepository>.value(value: repository),
+          if (checkIn != null) ...[
+            ChangeNotifierProvider.value(value: clock),
+            ChangeNotifierProvider.value(value: checkIn),
+            ChangeNotifierProvider.value(value: AppSoundController.inMemory()),
+          ],
           ChangeNotifierProvider.value(
             value: AppThemeModeController.inMemory(),
           ),
@@ -104,6 +123,17 @@ void main() {
     group(language.tag, () {
       testWidgets('dashboard', (tester) async {
         await pump(tester, locale, const NonogramDashboardPage());
+        expect(tester.takeException(), isNull);
+      });
+
+      testWidgets('home tabs: check-in and me', (tester) async {
+        await pump(tester, locale, const AppHomePage(), withCheckIn: true);
+        expect(tester.takeException(), isNull);
+        await tester.tap(find.byKey(const ValueKey('home-tab-checkIn')));
+        await tester.pump();
+        expect(tester.takeException(), isNull);
+        await tester.tap(find.byKey(const ValueKey('home-tab-me')));
+        await tester.pump();
         expect(tester.takeException(), isNull);
       });
 

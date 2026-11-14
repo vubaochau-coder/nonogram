@@ -337,6 +337,30 @@
     }
   },
   "checkInMonthGifts": "Gifts this month",
+  "navHome": "Home",
+  "navMe": "Me",
+  "meHelp": "Help",
+  "meMore": "More",
+  "checkInNotYetToday": "Not checked in today",
+  "checkInTodayButton": "Check in today",
+  "checkInGiftsLeftShort": "{count, plural, =1{1 more for a gift} other{{count} more for a gift}}",
+  "@checkInGiftsLeftShort": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "checkInGiftToday": "Gift today!",
+  "checkInGiftMilestone": "{count, plural, =1{Gift for 1 check-in} other{Gift for {count} check-ins}}",
+  "@checkInGiftMilestone": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "checkInGiftCollect": "Collect",
   "checkInTotalHints": "Hints",
   "checkInTotalWands": "Magic wands",
   "checkInTotalDailyHints": "Hints (today only)",

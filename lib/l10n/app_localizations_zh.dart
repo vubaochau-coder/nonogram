@@ -572,6 +572,40 @@ class AppLocalizationsZh extends AppLocalizations {
   String get checkInMonthGifts => '本月礼物';
 
   @override
+  String get navHome => '首页';
+
+  @override
+  String get navMe => '我的';
+
+  @override
+  String get meHelp => '帮助';
+
+  @override
+  String get meMore => '更多';
+
+  @override
+  String get checkInNotYetToday => '今天还没签到';
+
+  @override
+  String get checkInTodayButton => '今日签到';
+
+  @override
+  String checkInGiftsLeftShort(int count) {
+    return '再签 $count 次得礼物';
+  }
+
+  @override
+  String get checkInGiftToday => '今天有礼物！';
+
+  @override
+  String checkInGiftMilestone(int count) {
+    return '累计签到 $count 次礼物';
+  }
+
+  @override
+  String get checkInGiftCollect => '领取';
+
+  @override
   String get checkInTotalHints => '提示';
 
   @override
@@ -1175,6 +1209,40 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
 
   @override
   String get checkInMonthGifts => '本月禮物';
+
+  @override
+  String get navHome => '首頁';
+
+  @override
+  String get navMe => '我的';
+
+  @override
+  String get meHelp => '說明';
+
+  @override
+  String get meMore => '更多';
+
+  @override
+  String get checkInNotYetToday => '今天還沒簽到';
+
+  @override
+  String get checkInTodayButton => '今日簽到';
+
+  @override
+  String checkInGiftsLeftShort(int count) {
+    return '再簽 $count 次得禮物';
+  }
+
+  @override
+  String get checkInGiftToday => '今天有禮物！';
+
+  @override
+  String checkInGiftMilestone(int count) {
+    return '累計簽到 $count 次禮物';
+  }
+
+  @override
+  String get checkInGiftCollect => '領取';
 
   @override
   String get checkInTotalHints => '提示';

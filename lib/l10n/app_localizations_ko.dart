@@ -584,6 +584,40 @@ class AppLocalizationsKo extends AppLocalizations {
   String get checkInMonthGifts => '이번 달 선물';
 
   @override
+  String get navHome => '홈';
+
+  @override
+  String get navMe => '내 정보';
+
+  @override
+  String get meHelp => '도움말';
+
+  @override
+  String get meMore => '기타';
+
+  @override
+  String get checkInNotYetToday => '오늘 아직 출석하지 않았어요';
+
+  @override
+  String get checkInTodayButton => '오늘 출석 체크';
+
+  @override
+  String checkInGiftsLeftShort(int count) {
+    return '선물까지 $count번 남음';
+  }
+
+  @override
+  String get checkInGiftToday => '오늘은 선물이 있어요!';
+
+  @override
+  String checkInGiftMilestone(int count) {
+    return '출석 $count번 달성 선물';
+  }
+
+  @override
+  String get checkInGiftCollect => '받기';
+
+  @override
   String get checkInTotalHints => '힌트';
 
   @override

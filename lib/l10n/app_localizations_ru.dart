@@ -624,6 +624,56 @@ class AppLocalizationsRu extends AppLocalizations {
   String get checkInMonthGifts => 'Подарки за месяц';
 
   @override
+  String get navHome => 'Главная';
+
+  @override
+  String get navMe => 'Я';
+
+  @override
+  String get meHelp => 'Помощь';
+
+  @override
+  String get meMore => 'Ещё';
+
+  @override
+  String get checkInNotYetToday => 'Сегодня вы ещё не отметились';
+
+  @override
+  String get checkInTodayButton => 'Отметиться сегодня';
+
+  @override
+  String checkInGiftsLeftShort(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Ещё $count отметки до подарка',
+      many: 'Ещё $count отметок до подарка',
+      few: 'Ещё $count отметки до подарка',
+      one: 'Ещё $count отметка до подарка',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get checkInGiftToday => 'Сегодня подарок!';
+
+  @override
+  String checkInGiftMilestone(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Подарок за $count отметки',
+      many: 'Подарок за $count отметок',
+      few: 'Подарок за $count отметки',
+      one: 'Подарок за $count отметку',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get checkInGiftCollect => 'Забрать';
+
+  @override
   String get checkInTotalHints => 'Подсказки';
 
   @override
