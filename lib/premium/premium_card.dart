@@ -5,6 +5,7 @@ import 'package:nonogram/core/context_ext.dart';
 import 'package:nonogram/core/toast_utils.dart';
 import 'package:provider/provider.dart';
 
+import 'premium_benefits_page.dart';
 import 'premium_controller.dart';
 import 'purchase_gateway.dart';
 
@@ -96,9 +97,42 @@ class _OfferCard extends StatelessWidget {
                 ),
               ),
             ),
+            const _ViewBenefitsButton(divider: true),
           ],
         ),
       ),
+    );
+  }
+}
+
+/// Nút chữ "Xem chi tiết quyền lợi": mở [PremiumBenefitsPage].
+class _ViewBenefitsButton extends StatelessWidget {
+  const _ViewBenefitsButton({this.divider = false});
+
+  /// Có vạch ngăn phía trên (dùng trong thẻ mời mua).
+  final bool divider;
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = context.l10n;
+    return Column(
+      children: [
+        if (divider)
+          Divider(height: 24, color: context.gameColors.cardBorder),
+        Center(
+          child: TextButton.icon(
+            key: const ValueKey('premium-view-benefits'),
+            onPressed:
+                () => Navigator.of(context).push(
+                  MaterialPageRoute<void>(
+                    builder: (_) => const PremiumBenefitsPage(),
+                  ),
+                ),
+            icon: const Icon(LucideIcons.sparkles, size: 16),
+            label: Text(l10n.premiumViewBenefits),
+          ),
+        ),
+      ],
     );
   }
 }
@@ -131,25 +165,30 @@ class _ActiveCard extends StatelessWidget {
       key: const ValueKey('premium-active'),
       child: Padding(
         padding: const EdgeInsets.all(16),
-        child: Row(
+        child: Column(
           children: [
-            Icon(LucideIcons.crown, color: context.gameColors.reward),
-            const SizedBox(width: 12),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(l10n.premiumActiveTitle, style: context.titleSmall),
-                  const SizedBox(height: 2),
-                  Text(
-                    l10n.premiumActiveDaily,
-                    style: context.bodySmall.copyWith(
-                      color: context.color.onSurfaceVariant,
-                    ),
+            Row(
+              children: [
+                Icon(LucideIcons.crown, color: context.gameColors.reward),
+                const SizedBox(width: 12),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(l10n.premiumActiveTitle, style: context.titleSmall),
+                      const SizedBox(height: 2),
+                      Text(
+                        l10n.premiumActiveDaily,
+                        style: context.bodySmall.copyWith(
+                          color: context.color.onSurfaceVariant,
+                        ),
+                      ),
+                    ],
                   ),
-                ],
-              ),
+                ),
+              ],
             ),
+            const _ViewBenefitsButton(divider: true),
           ],
         ),
       ),

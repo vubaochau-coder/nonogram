@@ -652,4 +652,88 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get dashboardDailyReminderPlay => '今すぐプレイ';
+
+  @override
+  String get premiumViewBenefits => '特典を見る';
+
+  @override
+  String get premiumBenefitsTitle => 'パックの特典';
+
+  @override
+  String get premiumBenefitsTagline => '一度の購入で、レベル間の広告を削除し、毎日サポートの報酬を獲得できます。アカウントに永久に適用されます。';
+
+  @override
+  String get premiumBenefitsOneTime => '買い切り';
+
+  @override
+  String get premiumWhatYouGet => '受け取れるもの';
+
+  @override
+  String get premiumPerkNoAdsTitle => 'レベル間の広告なし';
+
+  @override
+  String get premiumPerkNoAdsBody => 'パズルの合間の全画面広告がなくなります。途切れることなく次のレベルへ進めます。';
+
+  @override
+  String get premiumPerkDailyTitle => '毎日のチェックイン報酬';
+
+  @override
+  String get premiumPerkDailyBody => 'チェックインするたびに、その日に使えるヒント2回と魔法の杖1回が、通常のマイルストーン報酬に加えてもらえます。';
+
+  @override
+  String get premiumItemsTitle => 'サポートアイテムの働き';
+
+  @override
+  String get powerUpHintName => 'ヒント';
+
+  @override
+  String get powerUpHintTagline => '自分で選んだ1マスの正解を表示';
+
+  @override
+  String get powerUpHintDesc => '電球をタップして、迷っている場所を選びます。アプリが正しい1マス（塗りつぶし、または空きの印）を埋めて、行き詰まりを解消します。';
+
+  @override
+  String get powerUpWandName => '魔法の杖';
+
+  @override
+  String get powerUpWandTagline => '1行または1列をまるごと解く';
+
+  @override
+  String get powerUpWandDesc => '杖をタップして選択モードにし、行または列のヒント数字をタップします。アプリがその行または列をまるごと表示します。1マスのヒントより強力です。';
+
+  @override
+  String get powerUpStatesTitle => 'アイコンで使用タイプがわかる';
+
+  @override
+  String get powerUpStatesLead => '角の数字は残りの合計回数です。期限付きの回数ではアイコンが金色になり、小さな時計が付きます。';
+
+  @override
+  String get powerUpTimeLimited => '期限付き';
+
+  @override
+  String get powerUpTimeLimitedDesc => '時計付きの金色アイコン。パックの毎日のチェックイン報酬です。その日の終わりに期限切れになります。';
+
+  @override
+  String get powerUpPermanent => '無期限';
+
+  @override
+  String get powerUpPermanentDesc => '青いバッジ付きの通常アイコン。マイルストーンや初期の回数です。期限切れになりません。';
+
+  @override
+  String get powerUpSpendOrderTitle => 'どの回数から使われる？';
+
+  @override
+  String get powerUpSpendOrderHeading => '期限付きの回数から先に使われます';
+
+  @override
+  String get powerUpSpendOrderBody => '毎日の回数はその日の終わりに期限切れになるため、ヒントや杖はまず毎日の回数を使い、毎日の回数がなくなってから無期限の回数を使います。無駄になりません。';
+
+  @override
+  String get powerUpSpendDaily => '毎日の回数';
+
+  @override
+  String get powerUpSpendPermanent => '無期限の回数';
+
+  @override
+  String get premiumBenefitsFootnote => '毎日の回数は翌日に繰り越されません。マイルストーンのチェックイン報酬は無期限の回数で、通常どおり貯まります。';
 }

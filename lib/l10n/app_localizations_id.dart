@@ -675,4 +675,88 @@ class AppLocalizationsId extends AppLocalizations {
 
   @override
   String get dashboardDailyReminderPlay => 'Main sekarang';
+
+  @override
+  String get premiumViewBenefits => 'Lihat manfaat';
+
+  @override
+  String get premiumBenefitsTitle => 'Manfaat paket';
+
+  @override
+  String get premiumBenefitsTagline => 'Beli sekali untuk menghilangkan iklan di antara level dan dapatkan hadiah bantuan setiap hari, selamanya di akunmu.';
+
+  @override
+  String get premiumBenefitsOneTime => 'sekali bayar';
+
+  @override
+  String get premiumWhatYouGet => 'Yang kamu dapatkan';
+
+  @override
+  String get premiumPerkNoAdsTitle => 'Tanpa iklan di antara level';
+
+  @override
+  String get premiumPerkNoAdsBody => 'Tidak ada lagi iklan layar penuh di antara puzzle. Lanjut dari satu level ke level berikutnya tanpa jeda.';
+
+  @override
+  String get premiumPerkDailyTitle => 'Hadiah absen harian';
+
+  @override
+  String get premiumPerkDailyBody => 'Setiap absen memberimu 2 petunjuk tambahan dan 1 tongkat ajaib untuk hari itu, di luar hadiah tonggak biasa.';
+
+  @override
+  String get premiumItemsTitle => 'Fungsi alat bantu';
+
+  @override
+  String get powerUpHintName => 'Petunjuk';
+
+  @override
+  String get powerUpHintTagline => 'Membuka satu sel benar yang kamu pilih';
+
+  @override
+  String get powerUpHintDesc => 'Ketuk bola lampu, lalu pilih bagian yang kamu ragukan. Aplikasi mengisi satu sel yang benar (terisi atau ditandai kosong) agar kamu bisa lanjut.';
+
+  @override
+  String get powerUpWandName => 'Tongkat ajaib';
+
+  @override
+  String get powerUpWandTagline => 'Menyelesaikan satu baris atau kolom penuh';
+
+  @override
+  String get powerUpWandDesc => 'Ketuk tongkat untuk mengaktifkan mode pilih, lalu ketuk angka petunjuk pada sebuah baris atau kolom. Aplikasi membuka seluruh baris atau kolom itu. Lebih kuat daripada petunjuk satu sel.';
+
+  @override
+  String get powerUpStatesTitle => 'Ikon menunjukkan jenis penggunaan';
+
+  @override
+  String get powerUpStatesLead => 'Angka di sudut adalah total sisa penggunaanmu. Penggunaan berbatas waktu membuat ikon menjadi emas dengan jam kecil:';
+
+  @override
+  String get powerUpTimeLimited => 'Berbatas waktu';
+
+  @override
+  String get powerUpTimeLimitedDesc => 'Ikon emas dengan jam. Dari hadiah absen harian paket. Kedaluwarsa di akhir hari.';
+
+  @override
+  String get powerUpPermanent => 'Permanen';
+
+  @override
+  String get powerUpPermanentDesc => 'Ikon biasa dengan lencana biru. Penggunaan tonggak dan awal. Tidak pernah kedaluwarsa.';
+
+  @override
+  String get powerUpSpendOrderTitle => 'Penggunaan mana yang dipakai dulu?';
+
+  @override
+  String get powerUpSpendOrderHeading => 'Penggunaan berbatas waktu dipakai lebih dulu';
+
+  @override
+  String get powerUpSpendOrderBody => 'Penggunaan harian kedaluwarsa di akhir hari, jadi petunjuk atau tongkat memakai penggunaan harianmu dulu dan baru memakai yang permanen setelah yang harian habis. Tidak ada yang terbuang.';
+
+  @override
+  String get powerUpSpendDaily => 'Penggunaan harian';
+
+  @override
+  String get powerUpSpendPermanent => 'Penggunaan permanen';
+
+  @override
+  String get premiumBenefitsFootnote => 'Penggunaan harian tidak dibawa ke hari berikutnya. Hadiah tonggak adalah penggunaan permanen dan terkumpul seperti biasa.';
 }

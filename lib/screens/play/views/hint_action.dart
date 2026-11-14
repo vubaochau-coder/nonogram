@@ -1,4 +1,5 @@
 import 'package:nonogram/models/power_up_inventory.dart';
+import 'package:nonogram/checkin/reward_view.dart';
 import 'package:nonogram/core/context_ext.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -30,8 +31,15 @@ class HintAction extends StatelessWidget {
         final l10n = context.l10n;
         // Hết lượt: nút vẫn bấm được, bấm là xem quảng cáo để dùng một lượt.
         final adOffer = state.remainingHints <= 0;
+        // Còn lượt trong ngày: icon chuyển vàng kèm đồng hồ (lượt có hạn,
+        // app trừ trước).
+        final timeLimited = !state.isSolved && state.dailyHints > 0;
         final button = OverlayButton(
           icon: LucideIcons.lightbulb,
+          iconWidget:
+              timeLimited
+                  ? const PowerUpGlyph(powerUp: PowerUp.hint, timeLimited: true)
+                  : null,
           label:
               compact ? null : l10n.nonogramPlayHintLabel(state.remainingHints),
           enabled: !state.isSolved,

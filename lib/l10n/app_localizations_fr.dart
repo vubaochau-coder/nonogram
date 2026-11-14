@@ -708,4 +708,88 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get dashboardDailyReminderPlay => 'Jouer';
+
+  @override
+  String get premiumViewBenefits => 'Voir les avantages';
+
+  @override
+  String get premiumBenefitsTitle => 'Avantages du pack';
+
+  @override
+  String get premiumBenefitsTagline => 'Achète une fois pour supprimer les publicités entre les niveaux et recevoir des récompenses d\'aide chaque jour, à vie sur ton compte.';
+
+  @override
+  String get premiumBenefitsOneTime => 'paiement unique';
+
+  @override
+  String get premiumWhatYouGet => 'Ce que tu obtiens';
+
+  @override
+  String get premiumPerkNoAdsTitle => 'Pas de publicités entre les niveaux';
+
+  @override
+  String get premiumPerkNoAdsBody => 'Fini les publicités plein écran entre les puzzles. Passe d\'un niveau à l\'autre sans interruption.';
+
+  @override
+  String get premiumPerkDailyTitle => 'Récompenses de présence quotidiennes';
+
+  @override
+  String get premiumPerkDailyBody => 'Chaque présence te donne 2 indices supplémentaires et 1 baguette magique pour la journée, en plus des récompenses de palier habituelles.';
+
+  @override
+  String get premiumItemsTitle => 'À quoi servent les aides';
+
+  @override
+  String get powerUpHintName => 'Indice';
+
+  @override
+  String get powerUpHintTagline => 'Révèle une case correcte que tu choisis';
+
+  @override
+  String get powerUpHintDesc => 'Touche l\'ampoule, puis choisis l\'endroit qui te pose problème. L\'appli remplit une case correcte (remplie ou marquée vide) pour te débloquer.';
+
+  @override
+  String get powerUpWandName => 'Baguette magique';
+
+  @override
+  String get powerUpWandTagline => 'Résout une ligne ou une colonne entière';
+
+  @override
+  String get powerUpWandDesc => 'Touche la baguette pour activer le mode sélection, puis touche les chiffres d\'indice d\'une ligne ou d\'une colonne. L\'appli révèle toute cette ligne ou colonne. Plus puissant qu\'un indice d\'une seule case.';
+
+  @override
+  String get powerUpStatesTitle => 'L\'icône indique le type d\'utilisation';
+
+  @override
+  String get powerUpStatesLead => 'Le nombre dans le coin est le total de tes utilisations restantes. Une utilisation à durée limitée rend l\'icône dorée avec une petite horloge :';
+
+  @override
+  String get powerUpTimeLimited => 'Durée limitée';
+
+  @override
+  String get powerUpTimeLimitedDesc => 'Icône dorée avec horloge. Issue de la récompense de présence quotidienne du pack. Expire à la fin de la journée.';
+
+  @override
+  String get powerUpPermanent => 'Permanent';
+
+  @override
+  String get powerUpPermanentDesc => 'Icône normale avec badge bleu. Utilisations de palier et de départ. N\'expirent jamais.';
+
+  @override
+  String get powerUpSpendOrderTitle => 'Quelles utilisations sont dépensées en premier ?';
+
+  @override
+  String get powerUpSpendOrderHeading => 'Les utilisations à durée limitée sont dépensées en premier';
+
+  @override
+  String get powerUpSpendOrderBody => 'Les utilisations quotidiennes expirent à la fin de la journée, donc un indice ou une baguette dépense d\'abord tes utilisations quotidiennes et n\'utilise les permanentes qu\'une fois les quotidiennes épuisées. Rien n\'est gaspillé.';
+
+  @override
+  String get powerUpSpendDaily => 'Utilisations quotidiennes';
+
+  @override
+  String get powerUpSpendPermanent => 'Utilisations permanentes';
+
+  @override
+  String get premiumBenefitsFootnote => 'Les utilisations quotidiennes ne sont pas reportées au lendemain. Les récompenses de palier sont des utilisations permanentes et s\'accumulent normalement.';
 }

@@ -641,6 +641,90 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get dashboardDailyReminderPlay => '立即游玩';
+
+  @override
+  String get premiumViewBenefits => '查看权益';
+
+  @override
+  String get premiumBenefitsTitle => '套餐权益';
+
+  @override
+  String get premiumBenefitsTagline => '一次购买即可去除关卡之间的广告，并每天获得帮助奖励，永久绑定你的账号。';
+
+  @override
+  String get premiumBenefitsOneTime => '一次性';
+
+  @override
+  String get premiumWhatYouGet => '你能获得什么';
+
+  @override
+  String get premiumPerkNoAdsTitle => '关卡之间无广告';
+
+  @override
+  String get premiumPerkNoAdsBody => '谜题之间不再有全屏广告，一关接一关畅玩无中断。';
+
+  @override
+  String get premiumPerkDailyTitle => '每日签到奖励';
+
+  @override
+  String get premiumPerkDailyBody => '除常规里程碑奖励外，每次签到都会额外获得当天可用的 2 次提示和 1 次魔法棒。';
+
+  @override
+  String get premiumItemsTitle => '道具有什么用';
+
+  @override
+  String get powerUpHintName => '提示';
+
+  @override
+  String get powerUpHintTagline => '揭示你所选的一个正确格子';
+
+  @override
+  String get powerUpHintDesc => '点击灯泡，再选择你拿不准的位置。应用会填入一个正确的格子（填涂或标记为空），帮你走出困境。';
+
+  @override
+  String get powerUpWandName => '魔法棒';
+
+  @override
+  String get powerUpWandTagline => '解开一整行或一整列';
+
+  @override
+  String get powerUpWandDesc => '点击魔法棒开启选择模式，再点击某一行或某一列的提示数字。应用会揭示该整行或整列，比单格提示更强。';
+
+  @override
+  String get powerUpStatesTitle => '图标显示使用类型';
+
+  @override
+  String get powerUpStatesLead => '角标数字是剩余的总次数。有时限的次数会让图标变成金色并带一个小时钟：';
+
+  @override
+  String get powerUpTimeLimited => '有时限';
+
+  @override
+  String get powerUpTimeLimitedDesc => '带时钟的金色图标。来自套餐的每日签到奖励，当天结束时过期。';
+
+  @override
+  String get powerUpPermanent => '永久';
+
+  @override
+  String get powerUpPermanentDesc => '带蓝色徽章的普通图标。里程碑和初始次数，永不过期。';
+
+  @override
+  String get powerUpSpendOrderTitle => '先用哪种次数？';
+
+  @override
+  String get powerUpSpendOrderHeading => '优先消耗有时限的次数';
+
+  @override
+  String get powerUpSpendOrderBody => '每日次数会在当天结束时过期，所以提示或魔法棒会先消耗你的每日次数，只有在每日次数用完后才会动用永久次数，不会浪费。';
+
+  @override
+  String get powerUpSpendDaily => '每日次数';
+
+  @override
+  String get powerUpSpendPermanent => '永久次数';
+
+  @override
+  String get premiumBenefitsFootnote => '每日次数不会累积到第二天。里程碑签到奖励属于永久次数，照常累积。';
 }
 
 /// The translations for Chinese, using the Han script (`zh_Hant`).
@@ -1280,4 +1364,88 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
 
   @override
   String get dashboardDailyReminderPlay => '立即遊玩';
+
+  @override
+  String get premiumViewBenefits => '查看權益';
+
+  @override
+  String get premiumBenefitsTitle => '套餐權益';
+
+  @override
+  String get premiumBenefitsTagline => '一次購買即可去除關卡之間的廣告，並每天獲得幫助獎勵，永久綁定你的帳號。';
+
+  @override
+  String get premiumBenefitsOneTime => '一次性';
+
+  @override
+  String get premiumWhatYouGet => '你能獲得什麼';
+
+  @override
+  String get premiumPerkNoAdsTitle => '關卡之間無廣告';
+
+  @override
+  String get premiumPerkNoAdsBody => '謎題之間不再有全螢幕廣告，一關接一關暢玩無中斷。';
+
+  @override
+  String get premiumPerkDailyTitle => '每日簽到獎勵';
+
+  @override
+  String get premiumPerkDailyBody => '除常規里程碑獎勵外，每次簽到都會額外獲得當天可用的 2 次提示和 1 次魔法棒。';
+
+  @override
+  String get premiumItemsTitle => '道具有什麼用';
+
+  @override
+  String get powerUpHintName => '提示';
+
+  @override
+  String get powerUpHintTagline => '揭示你所選的一個正確格子';
+
+  @override
+  String get powerUpHintDesc => '點擊燈泡，再選擇你拿不準的位置。應用會填入一個正確的格子（填塗或標記為空），幫你走出困境。';
+
+  @override
+  String get powerUpWandName => '魔法棒';
+
+  @override
+  String get powerUpWandTagline => '解開一整行或一整列';
+
+  @override
+  String get powerUpWandDesc => '點擊魔法棒開啟選擇模式，再點擊某一行或某一列的提示數字。應用會揭示該整行或整列，比單格提示更強。';
+
+  @override
+  String get powerUpStatesTitle => '圖示顯示使用類型';
+
+  @override
+  String get powerUpStatesLead => '角標數字是剩餘的總次數。有時限的次數會讓圖示變成金色並帶一個小時鐘：';
+
+  @override
+  String get powerUpTimeLimited => '有時限';
+
+  @override
+  String get powerUpTimeLimitedDesc => '帶時鐘的金色圖示。來自套餐的每日簽到獎勵，當天結束時過期。';
+
+  @override
+  String get powerUpPermanent => '永久';
+
+  @override
+  String get powerUpPermanentDesc => '帶藍色徽章的普通圖示。里程碑和初始次數，永不過期。';
+
+  @override
+  String get powerUpSpendOrderTitle => '先用哪種次數？';
+
+  @override
+  String get powerUpSpendOrderHeading => '優先消耗有時限的次數';
+
+  @override
+  String get powerUpSpendOrderBody => '每日次數會在當天結束時過期，所以提示或魔法棒會先消耗你的每日次數，只有在每日次數用完後才會動用永久次數，不會浪費。';
+
+  @override
+  String get powerUpSpendDaily => '每日次數';
+
+  @override
+  String get powerUpSpendPermanent => '永久次數';
+
+  @override
+  String get premiumBenefitsFootnote => '每日次數不會累積到第二天。里程碑簽到獎勵屬於永久次數，照常累積。';
 }

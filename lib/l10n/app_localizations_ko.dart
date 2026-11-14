@@ -653,4 +653,88 @@ class AppLocalizationsKo extends AppLocalizations {
 
   @override
   String get dashboardDailyReminderPlay => '지금 플레이';
+
+  @override
+  String get premiumViewBenefits => '혜택 보기';
+
+  @override
+  String get premiumBenefitsTitle => '패키지 혜택';
+
+  @override
+  String get premiumBenefitsTagline => '한 번 구매하면 레벨 사이 광고가 사라지고 매일 도움 보상을 받으며, 계정에 영구히 적용됩니다.';
+
+  @override
+  String get premiumBenefitsOneTime => '1회 결제';
+
+  @override
+  String get premiumWhatYouGet => '받는 혜택';
+
+  @override
+  String get premiumPerkNoAdsTitle => '레벨 사이 광고 없음';
+
+  @override
+  String get premiumPerkNoAdsBody => '퍼즐 사이의 전체 화면 광고가 사라집니다. 쉬지 않고 다음 레벨로 넘어가세요.';
+
+  @override
+  String get premiumPerkDailyTitle => '매일 출석 보상';
+
+  @override
+  String get premiumPerkDailyBody => '출석할 때마다 그날 쓸 수 있는 힌트 2개와 마법 지팡이 1개를 평소 마일스톤 보상에 더해 받습니다.';
+
+  @override
+  String get premiumItemsTitle => '도움 아이템의 역할';
+
+  @override
+  String get powerUpHintName => '힌트';
+
+  @override
+  String get powerUpHintTagline => '직접 고른 한 칸의 정답을 공개';
+
+  @override
+  String get powerUpHintDesc => '전구를 누른 다음 헷갈리는 위치를 고르세요. 앱이 정답인 한 칸(채움 또는 빈칸 표시)을 채워 막힌 곳을 풀어 줍니다.';
+
+  @override
+  String get powerUpWandName => '마법 지팡이';
+
+  @override
+  String get powerUpWandTagline => '한 행 또는 한 열 전체를 풀기';
+
+  @override
+  String get powerUpWandDesc => '지팡이를 눌러 선택 모드를 켠 뒤 행이나 열의 힌트 숫자를 누르세요. 앱이 그 행이나 열 전체를 공개합니다. 한 칸 힌트보다 강력합니다.';
+
+  @override
+  String get powerUpStatesTitle => '아이콘으로 사용 종류를 알 수 있어요';
+
+  @override
+  String get powerUpStatesLead => '모서리의 숫자는 남은 총 사용 횟수입니다. 기한이 있는 사용은 아이콘이 금색으로 바뀌고 작은 시계가 붙습니다.';
+
+  @override
+  String get powerUpTimeLimited => '기한 있음';
+
+  @override
+  String get powerUpTimeLimitedDesc => '시계가 있는 금색 아이콘. 패키지의 매일 출석 보상입니다. 그날이 끝나면 만료됩니다.';
+
+  @override
+  String get powerUpPermanent => '무기한';
+
+  @override
+  String get powerUpPermanentDesc => '파란 배지가 있는 일반 아이콘. 마일스톤과 시작 사용입니다. 만료되지 않습니다.';
+
+  @override
+  String get powerUpSpendOrderTitle => '어떤 사용이 먼저 쓰이나요?';
+
+  @override
+  String get powerUpSpendOrderHeading => '기한 있는 사용이 먼저 쓰입니다';
+
+  @override
+  String get powerUpSpendOrderBody => '매일 사용은 그날이 끝나면 만료되므로, 힌트나 지팡이는 매일 사용을 먼저 쓰고 매일 사용이 다 떨어진 뒤에야 무기한 사용을 씁니다. 낭비되지 않습니다.';
+
+  @override
+  String get powerUpSpendDaily => '매일 사용';
+
+  @override
+  String get powerUpSpendPermanent => '무기한 사용';
+
+  @override
+  String get premiumBenefitsFootnote => '매일 사용은 다음 날로 넘어가지 않습니다. 마일스톤 출석 보상은 무기한 사용이며 평소대로 쌓입니다.';
 }

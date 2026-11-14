@@ -703,4 +703,88 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get dashboardDailyReminderPlay => 'Jetzt spielen';
+
+  @override
+  String get premiumViewBenefits => 'Vorteile ansehen';
+
+  @override
+  String get premiumBenefitsTitle => 'Paketvorteile';
+
+  @override
+  String get premiumBenefitsTagline => 'Einmal kaufen, Werbung zwischen den Levels entfernen und jeden Tag Hilfsbelohnungen erhalten, dauerhaft auf deinem Konto.';
+
+  @override
+  String get premiumBenefitsOneTime => 'einmalig';
+
+  @override
+  String get premiumWhatYouGet => 'Das bekommst du';
+
+  @override
+  String get premiumPerkNoAdsTitle => 'Keine Werbung zwischen den Levels';
+
+  @override
+  String get premiumPerkNoAdsBody => 'Keine Vollbildwerbung mehr zwischen den Rätseln. Spiel ohne Unterbrechung von einem Level zum nächsten.';
+
+  @override
+  String get premiumPerkDailyTitle => 'Tägliche Check-in-Belohnungen';
+
+  @override
+  String get premiumPerkDailyBody => 'Jeder Check-in bringt dir an diesem Tag 2 zusätzliche Tipps und 1 Zauberstab, zusätzlich zu den üblichen Meilenstein-Belohnungen.';
+
+  @override
+  String get premiumItemsTitle => 'Was die Hilfen bewirken';
+
+  @override
+  String get powerUpHintName => 'Tipp';
+
+  @override
+  String get powerUpHintTagline => 'Deckt ein richtiges Feld deiner Wahl auf';
+
+  @override
+  String get powerUpHintDesc => 'Tippe auf die Glühbirne und wähle die Stelle, bei der du unsicher bist. Die App füllt ein richtiges Feld aus (gefüllt oder als leer markiert), damit du weiterkommst.';
+
+  @override
+  String get powerUpWandName => 'Zauberstab';
+
+  @override
+  String get powerUpWandTagline => 'Löst eine ganze Zeile oder Spalte';
+
+  @override
+  String get powerUpWandDesc => 'Tippe auf den Zauberstab, um den Auswahlmodus zu aktivieren, und tippe dann auf die Zahlen einer Zeile oder Spalte. Die App deckt diese ganze Zeile oder Spalte auf. Stärker als ein Tipp für ein einzelnes Feld.';
+
+  @override
+  String get powerUpStatesTitle => 'Das Symbol zeigt die Art der Nutzung';
+
+  @override
+  String get powerUpStatesLead => 'Die Zahl in der Ecke ist die Gesamtzahl deiner verbleibenden Nutzungen. Eine zeitlich begrenzte Nutzung färbt das Symbol golden mit einer kleinen Uhr:';
+
+  @override
+  String get powerUpTimeLimited => 'Zeitlich begrenzt';
+
+  @override
+  String get powerUpTimeLimitedDesc => 'Goldenes Symbol mit Uhr. Aus der täglichen Check-in-Belohnung des Pakets. Läuft am Ende des Tages ab.';
+
+  @override
+  String get powerUpPermanent => 'Dauerhaft';
+
+  @override
+  String get powerUpPermanentDesc => 'Normales Symbol mit blauem Abzeichen. Meilenstein- und Startnutzungen. Laufen nie ab.';
+
+  @override
+  String get powerUpSpendOrderTitle => 'Welche Nutzungen werden zuerst verbraucht?';
+
+  @override
+  String get powerUpSpendOrderHeading => 'Zeitlich begrenzte Nutzungen werden zuerst verbraucht';
+
+  @override
+  String get powerUpSpendOrderBody => 'Tägliche Nutzungen laufen am Ende des Tages ab. Darum verbraucht ein Tipp oder Zauberstab zuerst deine täglichen Nutzungen und erst dann deine dauerhaften, wenn die täglichen aufgebraucht sind. So geht nichts verloren.';
+
+  @override
+  String get powerUpSpendDaily => 'Tägliche Nutzungen';
+
+  @override
+  String get powerUpSpendPermanent => 'Dauerhafte Nutzungen';
+
+  @override
+  String get premiumBenefitsFootnote => 'Tägliche Nutzungen werden nicht auf den nächsten Tag übertragen. Meilenstein-Belohnungen sind dauerhafte Nutzungen und sammeln sich wie gewohnt an.';
 }
