@@ -70,4 +70,22 @@ void main() {
     await pump(tester, c);
     expect(find.text('Gói không quảng cáo đã kích hoạt'), findsOneWidget);
   });
+
+  testWidgets('offer card links to the benefits page', (tester) async {
+    final c = premium(FakePurchaseGateway());
+    await c.initialize();
+    await pump(tester, c);
+
+    final link = find.byKey(const ValueKey('premium-view-benefits'));
+    expect(link, findsOneWidget);
+    await tester.tap(link);
+    await tester.pumpAndSettle();
+    expect(find.text('Quyền lợi gói'), findsOneWidget);
+  });
+
+  testWidgets('active card also links to the benefits page', (tester) async {
+    final c = premium(FakePurchaseGateway(), owned: true);
+    await pump(tester, c);
+    expect(find.byKey(const ValueKey('premium-view-benefits')), findsOneWidget);
+  });
 }

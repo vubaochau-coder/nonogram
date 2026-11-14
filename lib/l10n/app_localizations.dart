@@ -1238,6 +1238,174 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Play now'**
   String get dashboardDailyReminderPlay;
+
+  /// No description provided for @premiumViewBenefits.
+  ///
+  /// In en, this message translates to:
+  /// **'See what's included'**
+  String get premiumViewBenefits;
+
+  /// No description provided for @premiumBenefitsTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Pack benefits'**
+  String get premiumBenefitsTitle;
+
+  /// No description provided for @premiumBenefitsTagline.
+  ///
+  /// In en, this message translates to:
+  /// **'Buy once to remove ads between levels and get daily helper rewards, forever on your account.'**
+  String get premiumBenefitsTagline;
+
+  /// No description provided for @premiumBenefitsOneTime.
+  ///
+  /// In en, this message translates to:
+  /// **'one-time'**
+  String get premiumBenefitsOneTime;
+
+  /// No description provided for @premiumWhatYouGet.
+  ///
+  /// In en, this message translates to:
+  /// **'What you get'**
+  String get premiumWhatYouGet;
+
+  /// No description provided for @premiumPerkNoAdsTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'No ads between levels'**
+  String get premiumPerkNoAdsTitle;
+
+  /// No description provided for @premiumPerkNoAdsBody.
+  ///
+  /// In en, this message translates to:
+  /// **'No more full-screen ads between puzzles. Move from one level to the next without a break.'**
+  String get premiumPerkNoAdsBody;
+
+  /// No description provided for @premiumPerkDailyTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Daily check-in rewards'**
+  String get premiumPerkDailyTitle;
+
+  /// No description provided for @premiumPerkDailyBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Each check-in gives you 2 extra hints and 1 magic wand for that day, on top of the usual milestone rewards.'**
+  String get premiumPerkDailyBody;
+
+  /// No description provided for @premiumItemsTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'What the power-ups do'**
+  String get premiumItemsTitle;
+
+  /// No description provided for @powerUpHintName.
+  ///
+  /// In en, this message translates to:
+  /// **'Hint'**
+  String get powerUpHintName;
+
+  /// No description provided for @powerUpHintTagline.
+  ///
+  /// In en, this message translates to:
+  /// **'Reveals one correct cell you pick'**
+  String get powerUpHintTagline;
+
+  /// No description provided for @powerUpHintDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Tap the lightbulb, then pick the spot you are unsure about. The app fills in one correct cell, filled or marked empty, to get you unstuck.'**
+  String get powerUpHintDesc;
+
+  /// No description provided for @powerUpWandName.
+  ///
+  /// In en, this message translates to:
+  /// **'Magic wand'**
+  String get powerUpWandName;
+
+  /// No description provided for @powerUpWandTagline.
+  ///
+  /// In en, this message translates to:
+  /// **'Solves a whole row or column'**
+  String get powerUpWandTagline;
+
+  /// No description provided for @powerUpWandDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Tap the wand to turn on select mode, then tap the clue numbers of a row or column. The app reveals that whole row or column. Stronger than a single-cell hint.'**
+  String get powerUpWandDesc;
+
+  /// No description provided for @powerUpStatesTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'The icon shows the use type'**
+  String get powerUpStatesTitle;
+
+  /// No description provided for @powerUpStatesLead.
+  ///
+  /// In en, this message translates to:
+  /// **'The number in the corner is your total uses left. A time-limited use turns the icon gold with a small clock:'**
+  String get powerUpStatesLead;
+
+  /// No description provided for @powerUpTimeLimited.
+  ///
+  /// In en, this message translates to:
+  /// **'Time-limited'**
+  String get powerUpTimeLimited;
+
+  /// No description provided for @powerUpTimeLimitedDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Gold icon with a clock. From the pack's daily check-in reward. Expires at the end of the day.'**
+  String get powerUpTimeLimitedDesc;
+
+  /// No description provided for @powerUpPermanent.
+  ///
+  /// In en, this message translates to:
+  /// **'Permanent'**
+  String get powerUpPermanent;
+
+  /// No description provided for @powerUpPermanentDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Normal icon with a blue badge. Milestone and starter uses. Never expire.'**
+  String get powerUpPermanentDesc;
+
+  /// No description provided for @powerUpSpendOrderTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Which uses are spent first?'**
+  String get powerUpSpendOrderTitle;
+
+  /// No description provided for @powerUpSpendOrderHeading.
+  ///
+  /// In en, this message translates to:
+  /// **'Time-limited uses are spent first'**
+  String get powerUpSpendOrderHeading;
+
+  /// No description provided for @powerUpSpendOrderBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Daily uses expire at the end of the day, so a hint or wand spends your daily uses first and only uses your permanent ones once the daily uses run out. Nothing goes to waste.'**
+  String get powerUpSpendOrderBody;
+
+  /// No description provided for @powerUpSpendDaily.
+  ///
+  /// In en, this message translates to:
+  /// **'Daily uses'**
+  String get powerUpSpendDaily;
+
+  /// No description provided for @powerUpSpendPermanent.
+  ///
+  /// In en, this message translates to:
+  /// **'Permanent uses'**
+  String get powerUpSpendPermanent;
+
+  /// No description provided for @premiumBenefitsFootnote.
+  ///
+  /// In en, this message translates to:
+  /// **'Daily uses do not roll over to the next day. Milestone check-in rewards are permanent uses and build up as normal.'**
+  String get premiumBenefitsFootnote;
 }
 
 class _AppLocalizationsDelegate

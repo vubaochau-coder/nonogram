@@ -278,7 +278,9 @@ class _CelebrationLayer extends StatelessWidget {
     final hide = collecting ? _seg(ct, 0, 0.2) : 0.0;
     final textA = _seg(t, open + 0.3, open + 0.6) * (1 - hide);
     final buttonA = _seg(t, open + 0.6, open + 0.9) * (1 - hide);
-    final gold = context.gameColors.reward;
+    // Màu theo loại quà: quà mốc (vĩnh viễn) dùng màu primary, quà trong ngày
+    // dùng vàng — khớp badge trên nút gợi ý / gậy phép và trang quyền lợi.
+    final rewardTint = rewardColor(context, daily: gift.daily);
 
     return [
       if (fly < 1)
@@ -294,9 +296,13 @@ class _CelebrationLayer extends StatelessWidget {
                 decoration: BoxDecoration(
                   color: Colors.white,
                   shape: BoxShape.circle,
-                  border: Border.all(color: gold, width: 4),
+                  border: Border.all(color: rewardTint, width: 4),
                 ),
-                child: Icon(powerUpIcon(gift.powerUp), color: gold, size: 44),
+                child: Icon(
+                  powerUpIcon(gift.powerUp),
+                  color: rewardTint,
+                  size: 44,
+                ),
               ),
             ),
           ),

@@ -77,6 +77,14 @@ android {
                 } else {
                     signingConfigs.getByName("debug")
                 }
+            // Làm rối + rút gọn mã bytecode (R8) và loại tài nguyên không dùng.
+            // Keep rules cho plugin nằm ở proguard-rules.pro để tránh crash.
+            isMinifyEnabled = true
+            isShrinkResources = true
+            proguardFiles(
+                getDefaultProguardFile("proguard-android-optimize.txt"),
+                "proguard-rules.pro",
+            )
         }
     }
 }

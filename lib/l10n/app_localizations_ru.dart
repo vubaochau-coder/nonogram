@@ -710,4 +710,99 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get dashboardDailyReminderPlay => 'Играть';
+
+  @override
+  String get premiumViewBenefits => 'Смотреть преимущества';
+
+  @override
+  String get premiumBenefitsTitle => 'Преимущества набора';
+
+  @override
+  String get premiumBenefitsTagline =>
+      'Купите один раз, чтобы убрать рекламу между уровнями и каждый день получать награды-помощники — навсегда на вашем аккаунте.';
+
+  @override
+  String get premiumBenefitsOneTime => 'разовая покупка';
+
+  @override
+  String get premiumWhatYouGet => 'Что вы получаете';
+
+  @override
+  String get premiumPerkNoAdsTitle => 'Без рекламы между уровнями';
+
+  @override
+  String get premiumPerkNoAdsBody =>
+      'Больше никакой полноэкранной рекламы между головоломками. Переходите с уровня на уровень без пауз.';
+
+  @override
+  String get premiumPerkDailyTitle => 'Ежедневные награды за отметку';
+
+  @override
+  String get premiumPerkDailyBody =>
+      'Каждая отметка даёт вам 2 дополнительные подсказки и 1 волшебную палочку на этот день — помимо обычных наград за рубежи.';
+
+  @override
+  String get premiumItemsTitle => 'Что делают помощники';
+
+  @override
+  String get powerUpHintName => 'Подсказка';
+
+  @override
+  String get powerUpHintTagline => 'Открывает одну верную клетку на ваш выбор';
+
+  @override
+  String get powerUpHintDesc =>
+      'Нажмите на лампочку и выберите место, в котором сомневаетесь. Приложение заполнит одну верную клетку (закрашенную или отмеченную пустой), чтобы помочь вам продолжить.';
+
+  @override
+  String get powerUpWandName => 'Волшебная палочка';
+
+  @override
+  String get powerUpWandTagline => 'Решает целую строку или столбец';
+
+  @override
+  String get powerUpWandDesc =>
+      'Нажмите на палочку, чтобы включить режим выбора, затем нажмите на числа-подсказки строки или столбца. Приложение откроет всю эту строку или столбец. Сильнее подсказки для одной клетки.';
+
+  @override
+  String get powerUpStatesTitle => 'Значок показывает тип использования';
+
+  @override
+  String get powerUpStatesLead =>
+      'Число в углу — это общее количество оставшихся использований. Использование с ограниченным сроком делает значок золотым с маленькими часами:';
+
+  @override
+  String get powerUpTimeLimited => 'Ограниченный срок';
+
+  @override
+  String get powerUpTimeLimitedDesc =>
+      'Золотой значок с часами. Из ежедневной награды набора за отметку. Истекает в конце дня.';
+
+  @override
+  String get powerUpPermanent => 'Бессрочные';
+
+  @override
+  String get powerUpPermanentDesc =>
+      'Обычный значок с синим бейджем. Использования за рубежи и стартовые. Никогда не истекают.';
+
+  @override
+  String get powerUpSpendOrderTitle => 'Какие использования тратятся первыми?';
+
+  @override
+  String get powerUpSpendOrderHeading =>
+      'Сначала тратятся использования с ограниченным сроком';
+
+  @override
+  String get powerUpSpendOrderBody =>
+      'Ежедневные использования истекают в конце дня, поэтому подсказка или палочка сначала тратит ежедневные использования и берётся за бессрочные только после того, как ежедневные закончатся. Ничего не пропадает.';
+
+  @override
+  String get powerUpSpendDaily => 'Ежедневные использования';
+
+  @override
+  String get powerUpSpendPermanent => 'Бессрочные использования';
+
+  @override
+  String get premiumBenefitsFootnote =>
+      'Ежедневные использования не переносятся на следующий день. Награды за рубежи — это бессрочные использования, и они накапливаются как обычно.';
 }
