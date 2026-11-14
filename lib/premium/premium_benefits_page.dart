@@ -429,10 +429,7 @@ class _StateColumn extends StatelessWidget {
                 ),
               ),
               const SizedBox(width: 7),
-              Text(
-                label,
-                style: context.titleSmall.copyWith(color: accent),
-              ),
+              Text(label, style: context.titleSmall.copyWith(color: accent)),
             ],
           ),
           const SizedBox(height: 6),

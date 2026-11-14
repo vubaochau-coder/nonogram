@@ -709,7 +709,8 @@ class AppLocalizationsEn extends AppLocalizations {
   String get premiumBenefitsTitle => 'Pack benefits';
 
   @override
-  String get premiumBenefitsTagline => 'Buy once to remove ads between levels and get daily helper rewards, forever on your account.';
+  String get premiumBenefitsTagline =>
+      'Buy once to remove ads between levels and get daily helper rewards, forever on your account.';
 
   @override
   String get premiumBenefitsOneTime => 'one-time';
@@ -721,13 +722,15 @@ class AppLocalizationsEn extends AppLocalizations {
   String get premiumPerkNoAdsTitle => 'No ads between levels';
 
   @override
-  String get premiumPerkNoAdsBody => 'No more full-screen ads between puzzles. Move from one level to the next without a break.';
+  String get premiumPerkNoAdsBody =>
+      'No more full-screen ads between puzzles. Move from one level to the next without a break.';
 
   @override
   String get premiumPerkDailyTitle => 'Daily check-in rewards';
 
   @override
-  String get premiumPerkDailyBody => 'Each check-in gives you 2 extra hints and 1 magic wand for that day, on top of the usual milestone rewards.';
+  String get premiumPerkDailyBody =>
+      'Each check-in gives you 2 extra hints and 1 magic wand for that day, on top of the usual milestone rewards.';
 
   @override
   String get premiumItemsTitle => 'What the power-ups do';
@@ -739,7 +742,8 @@ class AppLocalizationsEn extends AppLocalizations {
   String get powerUpHintTagline => 'Reveals one correct cell you pick';
 
   @override
-  String get powerUpHintDesc => 'Tap the lightbulb, then pick the spot you are unsure about. The app fills in one correct cell, filled or marked empty, to get you unstuck.';
+  String get powerUpHintDesc =>
+      'Tap the lightbulb, then pick the spot you are unsure about. The app fills in one correct cell, filled or marked empty, to get you unstuck.';
 
   @override
   String get powerUpWandName => 'Magic wand';
@@ -748,25 +752,29 @@ class AppLocalizationsEn extends AppLocalizations {
   String get powerUpWandTagline => 'Solves a whole row or column';
 
   @override
-  String get powerUpWandDesc => 'Tap the wand to turn on select mode, then tap the clue numbers of a row or column. The app reveals that whole row or column. Stronger than a single-cell hint.';
+  String get powerUpWandDesc =>
+      'Tap the wand to turn on select mode, then tap the clue numbers of a row or column. The app reveals that whole row or column. Stronger than a single-cell hint.';
 
   @override
   String get powerUpStatesTitle => 'The icon shows the use type';
 
   @override
-  String get powerUpStatesLead => 'The number in the corner is your total uses left. A time-limited use turns the icon gold with a small clock:';
+  String get powerUpStatesLead =>
+      'The number in the corner is your total uses left. A time-limited use turns the icon gold with a small clock:';
 
   @override
   String get powerUpTimeLimited => 'Time-limited';
 
   @override
-  String get powerUpTimeLimitedDesc => 'Gold icon with a clock. From the pack\'s daily check-in reward. Expires at the end of the day.';
+  String get powerUpTimeLimitedDesc =>
+      'Gold icon with a clock. From the pack\'s daily check-in reward. Expires at the end of the day.';
 
   @override
   String get powerUpPermanent => 'Permanent';
 
   @override
-  String get powerUpPermanentDesc => 'Normal icon with a blue badge. Milestone and starter uses. Never expire.';
+  String get powerUpPermanentDesc =>
+      'Normal icon with a blue badge. Milestone and starter uses. Never expire.';
 
   @override
   String get powerUpSpendOrderTitle => 'Which uses are spent first?';
@@ -775,7 +783,8 @@ class AppLocalizationsEn extends AppLocalizations {
   String get powerUpSpendOrderHeading => 'Time-limited uses are spent first';
 
   @override
-  String get powerUpSpendOrderBody => 'Daily uses expire at the end of the day, so a hint or wand spends your daily uses first and only uses your permanent ones once the daily uses run out. Nothing goes to waste.';
+  String get powerUpSpendOrderBody =>
+      'Daily uses expire at the end of the day, so a hint or wand spends your daily uses first and only uses your permanent ones once the daily uses run out. Nothing goes to waste.';
 
   @override
   String get powerUpSpendDaily => 'Daily uses';
@@ -784,5 +793,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String get powerUpSpendPermanent => 'Permanent uses';
 
   @override
-  String get premiumBenefitsFootnote => 'Daily uses do not roll over to the next day. Milestone check-in rewards are permanent uses and build up as normal.';
+  String get premiumBenefitsFootnote =>
+      'Daily uses do not roll over to the next day. Milestone check-in rewards are permanent uses and build up as normal.';
 }

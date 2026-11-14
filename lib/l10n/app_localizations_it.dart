@@ -713,7 +713,8 @@ class AppLocalizationsIt extends AppLocalizations {
   String get premiumBenefitsTitle => 'Vantaggi del pacchetto';
 
   @override
-  String get premiumBenefitsTagline => 'Acquista una volta per rimuovere la pubblicità tra i livelli e ricevere ricompense di aiuto ogni giorno, per sempre sul tuo account.';
+  String get premiumBenefitsTagline =>
+      'Acquista una volta per rimuovere la pubblicità tra i livelli e ricevere ricompense di aiuto ogni giorno, per sempre sul tuo account.';
 
   @override
   String get premiumBenefitsOneTime => 'pagamento unico';
@@ -725,13 +726,15 @@ class AppLocalizationsIt extends AppLocalizations {
   String get premiumPerkNoAdsTitle => 'Niente pubblicità tra i livelli';
 
   @override
-  String get premiumPerkNoAdsBody => 'Niente più pubblicità a schermo intero tra un puzzle e l\'altro. Passa da un livello al successivo senza interruzioni.';
+  String get premiumPerkNoAdsBody =>
+      'Niente più pubblicità a schermo intero tra un puzzle e l\'altro. Passa da un livello al successivo senza interruzioni.';
 
   @override
   String get premiumPerkDailyTitle => 'Ricompense giornaliere di presenza';
 
   @override
-  String get premiumPerkDailyBody => 'Ogni presenza ti dà 2 suggerimenti extra e 1 bacchetta magica per quel giorno, oltre alle solite ricompense dei traguardi.';
+  String get premiumPerkDailyBody =>
+      'Ogni presenza ti dà 2 suggerimenti extra e 1 bacchetta magica per quel giorno, oltre alle solite ricompense dei traguardi.';
 
   @override
   String get premiumItemsTitle => 'Cosa fanno gli aiuti';
@@ -743,7 +746,8 @@ class AppLocalizationsIt extends AppLocalizations {
   String get powerUpHintTagline => 'Rivela una casella corretta che scegli tu';
 
   @override
-  String get powerUpHintDesc => 'Tocca la lampadina, poi scegli il punto su cui sei incerto. L\'app riempie una casella corretta (piena o segnata come vuota) per sbloccarti.';
+  String get powerUpHintDesc =>
+      'Tocca la lampadina, poi scegli il punto su cui sei incerto. L\'app riempie una casella corretta (piena o segnata come vuota) per sbloccarti.';
 
   @override
   String get powerUpWandName => 'Bacchetta magica';
@@ -752,34 +756,40 @@ class AppLocalizationsIt extends AppLocalizations {
   String get powerUpWandTagline => 'Risolve un\'intera riga o colonna';
 
   @override
-  String get powerUpWandDesc => 'Tocca la bacchetta per attivare la modalità selezione, poi tocca i numeri indizio di una riga o colonna. L\'app rivela l\'intera riga o colonna. Più potente di un suggerimento su una singola casella.';
+  String get powerUpWandDesc =>
+      'Tocca la bacchetta per attivare la modalità selezione, poi tocca i numeri indizio di una riga o colonna. L\'app rivela l\'intera riga o colonna. Più potente di un suggerimento su una singola casella.';
 
   @override
   String get powerUpStatesTitle => 'L\'icona indica il tipo di utilizzo';
 
   @override
-  String get powerUpStatesLead => 'Il numero nell\'angolo è il totale degli utilizzi rimasti. Un utilizzo a tempo limitato rende l\'icona dorata con un piccolo orologio:';
+  String get powerUpStatesLead =>
+      'Il numero nell\'angolo è il totale degli utilizzi rimasti. Un utilizzo a tempo limitato rende l\'icona dorata con un piccolo orologio:';
 
   @override
   String get powerUpTimeLimited => 'A tempo limitato';
 
   @override
-  String get powerUpTimeLimitedDesc => 'Icona dorata con orologio. Dalla ricompensa giornaliera di presenza del pacchetto. Scade alla fine della giornata.';
+  String get powerUpTimeLimitedDesc =>
+      'Icona dorata con orologio. Dalla ricompensa giornaliera di presenza del pacchetto. Scade alla fine della giornata.';
 
   @override
   String get powerUpPermanent => 'Permanente';
 
   @override
-  String get powerUpPermanentDesc => 'Icona normale con badge blu. Utilizzi dei traguardi e iniziali. Non scadono mai.';
+  String get powerUpPermanentDesc =>
+      'Icona normale con badge blu. Utilizzi dei traguardi e iniziali. Non scadono mai.';
 
   @override
   String get powerUpSpendOrderTitle => 'Quali utilizzi si consumano per primi?';
 
   @override
-  String get powerUpSpendOrderHeading => 'Gli utilizzi a tempo limitato si consumano per primi';
+  String get powerUpSpendOrderHeading =>
+      'Gli utilizzi a tempo limitato si consumano per primi';
 
   @override
-  String get powerUpSpendOrderBody => 'Gli utilizzi giornalieri scadono alla fine della giornata, quindi un suggerimento o una bacchetta consuma prima gli utilizzi giornalieri e usa quelli permanenti solo quando i giornalieri finiscono. Niente va sprecato.';
+  String get powerUpSpendOrderBody =>
+      'Gli utilizzi giornalieri scadono alla fine della giornata, quindi un suggerimento o una bacchetta consuma prima gli utilizzi giornalieri e usa quelli permanenti solo quando i giornalieri finiscono. Niente va sprecato.';
 
   @override
   String get powerUpSpendDaily => 'Utilizzi giornalieri';
@@ -788,5 +798,6 @@ class AppLocalizationsIt extends AppLocalizations {
   String get powerUpSpendPermanent => 'Utilizzi permanenti';
 
   @override
-  String get premiumBenefitsFootnote => 'Gli utilizzi giornalieri non passano al giorno successivo. Le ricompense dei traguardi sono utilizzi permanenti e si accumulano normalmente.';
+  String get premiumBenefitsFootnote =>
+      'Gli utilizzi giornalieri non passano al giorno successivo. Le ricompense dei traguardi sono utilizzi permanenti e si accumulano normalmente.';
 }

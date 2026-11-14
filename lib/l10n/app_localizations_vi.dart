@@ -677,7 +677,8 @@ class AppLocalizationsVi extends AppLocalizations {
   String get premiumBenefitsTitle => 'Quyền lợi gói';
 
   @override
-  String get premiumBenefitsTagline => 'Mua một lần để gỡ quảng cáo khi qua màn và nhận quà hỗ trợ mỗi ngày, trọn đời trên tài khoản của bạn.';
+  String get premiumBenefitsTagline =>
+      'Mua một lần để gỡ quảng cáo khi qua màn và nhận quà hỗ trợ mỗi ngày, trọn đời trên tài khoản của bạn.';
 
   @override
   String get premiumBenefitsOneTime => 'một lần';
@@ -689,13 +690,15 @@ class AppLocalizationsVi extends AppLocalizations {
   String get premiumPerkNoAdsTitle => 'Gỡ quảng cáo khi qua màn';
 
   @override
-  String get premiumPerkNoAdsBody => 'Không còn quảng cáo toàn màn hình giữa các màn chơi. Chơi liền mạch từ màn này sang màn khác.';
+  String get premiumPerkNoAdsBody =>
+      'Không còn quảng cáo toàn màn hình giữa các màn chơi. Chơi liền mạch từ màn này sang màn khác.';
 
   @override
   String get premiumPerkDailyTitle => 'Quà điểm danh mỗi ngày';
 
   @override
-  String get premiumPerkDailyBody => 'Mỗi lần điểm danh nhận thêm 2 gợi ý và 1 gậy phép dùng trong ngày, ngoài quà mốc thường lệ.';
+  String get premiumPerkDailyBody =>
+      'Mỗi lần điểm danh nhận thêm 2 gợi ý và 1 gậy phép dùng trong ngày, ngoài quà mốc thường lệ.';
 
   @override
   String get premiumItemsTitle => 'Vật phẩm hỗ trợ là gì';
@@ -707,7 +710,8 @@ class AppLocalizationsVi extends AppLocalizations {
   String get powerUpHintTagline => 'Hé lộ một ô đúng mà bạn tự chọn';
 
   @override
-  String get powerUpHintDesc => 'Bấm nút bóng đèn rồi chọn vị trí đang phân vân. App điền sẵn một ô chính xác (tô đen hoặc đánh dấu trống) để bạn gỡ bí.';
+  String get powerUpHintDesc =>
+      'Bấm nút bóng đèn rồi chọn vị trí đang phân vân. App điền sẵn một ô chính xác (tô đen hoặc đánh dấu trống) để bạn gỡ bí.';
 
   @override
   String get powerUpWandName => 'Gậy phép';
@@ -716,25 +720,29 @@ class AppLocalizationsVi extends AppLocalizations {
   String get powerUpWandTagline => 'Giải trọn một hàng hoặc một cột';
 
   @override
-  String get powerUpWandDesc => 'Bấm đũa phép để bật chế độ chọn, rồi chạm vào dãy số của một hàng hay cột. App hé lộ đáp án đúng của cả hàng hoặc cột đó. Mạnh hơn gợi ý một ô.';
+  String get powerUpWandDesc =>
+      'Bấm đũa phép để bật chế độ chọn, rồi chạm vào dãy số của một hàng hay cột. App hé lộ đáp án đúng của cả hàng hoặc cột đó. Mạnh hơn gợi ý một ô.';
 
   @override
   String get powerUpStatesTitle => 'Nhìn icon để biết loại lượt';
 
   @override
-  String get powerUpStatesLead => 'Số ở góc nút là tổng lượt còn lại. Lượt có thời hạn sẽ làm icon chuyển màu vàng kèm đồng hồ nhỏ:';
+  String get powerUpStatesLead =>
+      'Số ở góc nút là tổng lượt còn lại. Lượt có thời hạn sẽ làm icon chuyển màu vàng kèm đồng hồ nhỏ:';
 
   @override
   String get powerUpTimeLimited => 'Có thời hạn';
 
   @override
-  String get powerUpTimeLimitedDesc => 'Icon vàng có đồng hồ. Là quà điểm danh mỗi ngày của gói. Hết hạn vào cuối ngày.';
+  String get powerUpTimeLimitedDesc =>
+      'Icon vàng có đồng hồ. Là quà điểm danh mỗi ngày của gói. Hết hạn vào cuối ngày.';
 
   @override
   String get powerUpPermanent => 'Vô thời hạn';
 
   @override
-  String get powerUpPermanentDesc => 'Icon thường với huy hiệu xanh. Là quà mốc và lượt tặng. Dùng mãi mãi.';
+  String get powerUpPermanentDesc =>
+      'Icon thường với huy hiệu xanh. Là quà mốc và lượt tặng. Dùng mãi mãi.';
 
   @override
   String get powerUpSpendOrderTitle => 'App dùng lượt nào trước?';
@@ -743,7 +751,8 @@ class AppLocalizationsVi extends AppLocalizations {
   String get powerUpSpendOrderHeading => 'Ưu tiên tiêu lượt có thời hạn trước';
 
   @override
-  String get powerUpSpendOrderBody => 'Lượt trong ngày hết hạn vào cuối ngày, nên gợi ý hay gậy phép sẽ trừ lượt trong ngày trước, chỉ dùng tới lượt vĩnh viễn khi lượt trong ngày đã hết. Không có gì bị lãng phí.';
+  String get powerUpSpendOrderBody =>
+      'Lượt trong ngày hết hạn vào cuối ngày, nên gợi ý hay gậy phép sẽ trừ lượt trong ngày trước, chỉ dùng tới lượt vĩnh viễn khi lượt trong ngày đã hết. Không có gì bị lãng phí.';
 
   @override
   String get powerUpSpendDaily => 'Lượt trong ngày';
@@ -752,5 +761,6 @@ class AppLocalizationsVi extends AppLocalizations {
   String get powerUpSpendPermanent => 'Lượt vĩnh viễn';
 
   @override
-  String get premiumBenefitsFootnote => 'Lượt trong ngày không cộng dồn sang hôm sau. Quà mốc điểm danh là lượt vĩnh viễn và cộng dồn bình thường.';
+  String get premiumBenefitsFootnote =>
+      'Lượt trong ngày không cộng dồn sang hôm sau. Quà mốc điểm danh là lượt vĩnh viễn và cộng dồn bình thường.';
 }

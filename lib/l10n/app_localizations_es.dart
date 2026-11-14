@@ -714,7 +714,8 @@ class AppLocalizationsEs extends AppLocalizations {
   String get premiumBenefitsTitle => 'Beneficios del paquete';
 
   @override
-  String get premiumBenefitsTagline => 'Compra una vez para quitar los anuncios entre niveles y recibir recompensas de ayuda cada día, para siempre en tu cuenta.';
+  String get premiumBenefitsTagline =>
+      'Compra una vez para quitar los anuncios entre niveles y recibir recompensas de ayuda cada día, para siempre en tu cuenta.';
 
   @override
   String get premiumBenefitsOneTime => 'pago único';
@@ -726,13 +727,15 @@ class AppLocalizationsEs extends AppLocalizations {
   String get premiumPerkNoAdsTitle => 'Sin anuncios entre niveles';
 
   @override
-  String get premiumPerkNoAdsBody => 'Se acabaron los anuncios a pantalla completa entre los puzzles. Pasa de un nivel a otro sin interrupciones.';
+  String get premiumPerkNoAdsBody =>
+      'Se acabaron los anuncios a pantalla completa entre los puzzles. Pasa de un nivel a otro sin interrupciones.';
 
   @override
   String get premiumPerkDailyTitle => 'Recompensas diarias por registrarte';
 
   @override
-  String get premiumPerkDailyBody => 'Cada registro te da 2 pistas adicionales y 1 varita mágica para ese día, además de las recompensas de hito habituales.';
+  String get premiumPerkDailyBody =>
+      'Cada registro te da 2 pistas adicionales y 1 varita mágica para ese día, además de las recompensas de hito habituales.';
 
   @override
   String get premiumItemsTitle => 'Qué hacen las ayudas';
@@ -744,7 +747,8 @@ class AppLocalizationsEs extends AppLocalizations {
   String get powerUpHintTagline => 'Revela una casilla correcta que tú eliges';
 
   @override
-  String get powerUpHintDesc => 'Toca la bombilla y elige el punto que te genera dudas. La app rellena una casilla correcta (marcada o vacía) para que puedas seguir.';
+  String get powerUpHintDesc =>
+      'Toca la bombilla y elige el punto que te genera dudas. La app rellena una casilla correcta (marcada o vacía) para que puedas seguir.';
 
   @override
   String get powerUpWandName => 'Varita mágica';
@@ -753,34 +757,40 @@ class AppLocalizationsEs extends AppLocalizations {
   String get powerUpWandTagline => 'Resuelve una fila o columna entera';
 
   @override
-  String get powerUpWandDesc => 'Toca la varita para activar el modo de selección y luego toca los números de pista de una fila o columna. La app revela esa fila o columna completa. Más potente que una pista de una sola casilla.';
+  String get powerUpWandDesc =>
+      'Toca la varita para activar el modo de selección y luego toca los números de pista de una fila o columna. La app revela esa fila o columna completa. Más potente que una pista de una sola casilla.';
 
   @override
   String get powerUpStatesTitle => 'El icono indica el tipo de uso';
 
   @override
-  String get powerUpStatesLead => 'El número en la esquina es el total de usos que te quedan. Un uso con tiempo limitado pone el icono dorado con un pequeño reloj:';
+  String get powerUpStatesLead =>
+      'El número en la esquina es el total de usos que te quedan. Un uso con tiempo limitado pone el icono dorado con un pequeño reloj:';
 
   @override
   String get powerUpTimeLimited => 'Con tiempo limitado';
 
   @override
-  String get powerUpTimeLimitedDesc => 'Icono dorado con reloj. De la recompensa diaria por registrarte del paquete. Caduca al final del día.';
+  String get powerUpTimeLimitedDesc =>
+      'Icono dorado con reloj. De la recompensa diaria por registrarte del paquete. Caduca al final del día.';
 
   @override
   String get powerUpPermanent => 'Permanente';
 
   @override
-  String get powerUpPermanentDesc => 'Icono normal con insignia azul. Usos de hito y de inicio. No caducan nunca.';
+  String get powerUpPermanentDesc =>
+      'Icono normal con insignia azul. Usos de hito y de inicio. No caducan nunca.';
 
   @override
   String get powerUpSpendOrderTitle => '¿Qué usos se gastan primero?';
 
   @override
-  String get powerUpSpendOrderHeading => 'Los usos con tiempo limitado se gastan primero';
+  String get powerUpSpendOrderHeading =>
+      'Los usos con tiempo limitado se gastan primero';
 
   @override
-  String get powerUpSpendOrderBody => 'Los usos diarios caducan al final del día, así que una pista o varita gasta primero tus usos diarios y solo usa los permanentes cuando los diarios se agotan. Nada se desperdicia.';
+  String get powerUpSpendOrderBody =>
+      'Los usos diarios caducan al final del día, así que una pista o varita gasta primero tus usos diarios y solo usa los permanentes cuando los diarios se agotan. Nada se desperdicia.';
 
   @override
   String get powerUpSpendDaily => 'Usos diarios';
@@ -789,5 +799,6 @@ class AppLocalizationsEs extends AppLocalizations {
   String get powerUpSpendPermanent => 'Usos permanentes';
 
   @override
-  String get premiumBenefitsFootnote => 'Los usos diarios no pasan al día siguiente. Las recompensas de hito son usos permanentes y se acumulan con normalidad.';
+  String get premiumBenefitsFootnote =>
+      'Los usos diarios no pasan al día siguiente. Las recompensas de hito son usos permanentes y se acumulan con normalidad.';
 }

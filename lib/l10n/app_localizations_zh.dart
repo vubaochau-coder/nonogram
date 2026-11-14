@@ -688,7 +688,8 @@ class AppLocalizationsZh extends AppLocalizations {
   String get powerUpWandTagline => '解开一整行或一整列';
 
   @override
-  String get powerUpWandDesc => '点击魔法棒开启选择模式，再点击某一行或某一列的提示数字。应用会揭示该整行或整列，比单格提示更强。';
+  String get powerUpWandDesc =>
+      '点击魔法棒开启选择模式，再点击某一行或某一列的提示数字。应用会揭示该整行或整列，比单格提示更强。';
 
   @override
   String get powerUpStatesTitle => '图标显示使用类型';
@@ -715,7 +716,8 @@ class AppLocalizationsZh extends AppLocalizations {
   String get powerUpSpendOrderHeading => '优先消耗有时限的次数';
 
   @override
-  String get powerUpSpendOrderBody => '每日次数会在当天结束时过期，所以提示或魔法棒会先消耗你的每日次数，只有在每日次数用完后才会动用永久次数，不会浪费。';
+  String get powerUpSpendOrderBody =>
+      '每日次数会在当天结束时过期，所以提示或魔法棒会先消耗你的每日次数，只有在每日次数用完后才会动用永久次数，不会浪费。';
 
   @override
   String get powerUpSpendDaily => '每日次数';
@@ -1411,7 +1413,8 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
   String get powerUpWandTagline => '解開一整行或一整列';
 
   @override
-  String get powerUpWandDesc => '點擊魔法棒開啟選擇模式，再點擊某一行或某一列的提示數字。應用會揭示該整行或整列，比單格提示更強。';
+  String get powerUpWandDesc =>
+      '點擊魔法棒開啟選擇模式，再點擊某一行或某一列的提示數字。應用會揭示該整行或整列，比單格提示更強。';
 
   @override
   String get powerUpStatesTitle => '圖示顯示使用類型';
@@ -1438,7 +1441,8 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
   String get powerUpSpendOrderHeading => '優先消耗有時限的次數';
 
   @override
-  String get powerUpSpendOrderBody => '每日次數會在當天結束時過期，所以提示或魔法棒會先消耗你的每日次數，只有在每日次數用完後才會動用永久次數，不會浪費。';
+  String get powerUpSpendOrderBody =>
+      '每日次數會在當天結束時過期，所以提示或魔法棒會先消耗你的每日次數，只有在每日次數用完後才會動用永久次數，不會浪費。';
 
   @override
   String get powerUpSpendDaily => '每日次數';

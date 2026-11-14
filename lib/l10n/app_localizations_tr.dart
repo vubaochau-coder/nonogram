@@ -680,7 +680,8 @@ class AppLocalizationsTr extends AppLocalizations {
   String get premiumBenefitsTitle => 'Paket avantajları';
 
   @override
-  String get premiumBenefitsTagline => 'Bir kez satın al; seviyeler arası reklamları kaldır ve her gün yardım ödülleri kazan, hesabında kalıcı olarak.';
+  String get premiumBenefitsTagline =>
+      'Bir kez satın al; seviyeler arası reklamları kaldır ve her gün yardım ödülleri kazan, hesabında kalıcı olarak.';
 
   @override
   String get premiumBenefitsOneTime => 'tek seferlik';
@@ -692,13 +693,15 @@ class AppLocalizationsTr extends AppLocalizations {
   String get premiumPerkNoAdsTitle => 'Seviyeler arasında reklam yok';
 
   @override
-  String get premiumPerkNoAdsBody => 'Bulmacalar arasında artık tam ekran reklam yok. Bir seviyeden diğerine aralıksız geç.';
+  String get premiumPerkNoAdsBody =>
+      'Bulmacalar arasında artık tam ekran reklam yok. Bir seviyeden diğerine aralıksız geç.';
 
   @override
   String get premiumPerkDailyTitle => 'Günlük giriş ödülleri';
 
   @override
-  String get premiumPerkDailyBody => 'Her giriş, her zamanki kilometre taşı ödüllerine ek olarak o gün için sana 2 ipucu ve 1 sihirli değnek daha verir.';
+  String get premiumPerkDailyBody =>
+      'Her giriş, her zamanki kilometre taşı ödüllerine ek olarak o gün için sana 2 ipucu ve 1 sihirli değnek daha verir.';
 
   @override
   String get premiumItemsTitle => 'Yardımcılar ne işe yarar';
@@ -710,7 +713,8 @@ class AppLocalizationsTr extends AppLocalizations {
   String get powerUpHintTagline => 'Seçtiğin bir doğru hücreyi gösterir';
 
   @override
-  String get powerUpHintDesc => 'Ampule dokun, sonra emin olmadığın yeri seç. Uygulama doğru bir hücreyi (dolu ya da boş işaretli) doldurarak takıldığın yeri açar.';
+  String get powerUpHintDesc =>
+      'Ampule dokun, sonra emin olmadığın yeri seç. Uygulama doğru bir hücreyi (dolu ya da boş işaretli) doldurarak takıldığın yeri açar.';
 
   @override
   String get powerUpWandName => 'Sihirli değnek';
@@ -719,25 +723,29 @@ class AppLocalizationsTr extends AppLocalizations {
   String get powerUpWandTagline => 'Bir satırın ya da sütunun tamamını çözer';
 
   @override
-  String get powerUpWandDesc => 'Seçim modunu açmak için değneğe dokun, sonra bir satırın ya da sütunun ipucu sayılarına dokun. Uygulama o satırın ya da sütunun tamamını gösterir. Tek hücrelik ipucundan daha güçlü.';
+  String get powerUpWandDesc =>
+      'Seçim modunu açmak için değneğe dokun, sonra bir satırın ya da sütunun ipucu sayılarına dokun. Uygulama o satırın ya da sütunun tamamını gösterir. Tek hücrelik ipucundan daha güçlü.';
 
   @override
   String get powerUpStatesTitle => 'Simge kullanım türünü gösterir';
 
   @override
-  String get powerUpStatesLead => 'Köşedeki sayı kalan toplam kullanım hakkındır. Süreli bir hak, simgeyi küçük bir saatle birlikte altın rengine çevirir:';
+  String get powerUpStatesLead =>
+      'Köşedeki sayı kalan toplam kullanım hakkındır. Süreli bir hak, simgeyi küçük bir saatle birlikte altın rengine çevirir:';
 
   @override
   String get powerUpTimeLimited => 'Süreli';
 
   @override
-  String get powerUpTimeLimitedDesc => 'Saatli altın simge. Paketin günlük giriş ödülünden gelir. Günün sonunda sona erer.';
+  String get powerUpTimeLimitedDesc =>
+      'Saatli altın simge. Paketin günlük giriş ödülünden gelir. Günün sonunda sona erer.';
 
   @override
   String get powerUpPermanent => 'Kalıcı';
 
   @override
-  String get powerUpPermanentDesc => 'Mavi rozetli normal simge. Kilometre taşı ve başlangıç hakları. Asla sona ermez.';
+  String get powerUpPermanentDesc =>
+      'Mavi rozetli normal simge. Kilometre taşı ve başlangıç hakları. Asla sona ermez.';
 
   @override
   String get powerUpSpendOrderTitle => 'Hangi haklar önce harcanır?';
@@ -746,7 +754,8 @@ class AppLocalizationsTr extends AppLocalizations {
   String get powerUpSpendOrderHeading => 'Önce süreli haklar harcanır';
 
   @override
-  String get powerUpSpendOrderBody => 'Günlük haklar günün sonunda sona erer; bu yüzden bir ipucu ya da değnek önce günlük haklarını harcar ve ancak günlükler bitince kalıcı haklarını kullanır. Hiçbir şey boşa gitmez.';
+  String get powerUpSpendOrderBody =>
+      'Günlük haklar günün sonunda sona erer; bu yüzden bir ipucu ya da değnek önce günlük haklarını harcar ve ancak günlükler bitince kalıcı haklarını kullanır. Hiçbir şey boşa gitmez.';
 
   @override
   String get powerUpSpendDaily => 'Günlük haklar';
@@ -755,5 +764,6 @@ class AppLocalizationsTr extends AppLocalizations {
   String get powerUpSpendPermanent => 'Kalıcı haklar';
 
   @override
-  String get premiumBenefitsFootnote => 'Günlük haklar ertesi güne devredilmez. Kilometre taşı ödülleri kalıcı haklardır ve her zamanki gibi birikir.';
+  String get premiumBenefitsFootnote =>
+      'Günlük haklar ertesi güne devredilmez. Kilometre taşı ödülleri kalıcı haklardır ve her zamanki gibi birikir.';
 }

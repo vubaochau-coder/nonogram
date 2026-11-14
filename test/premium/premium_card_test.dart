@@ -86,9 +86,6 @@ void main() {
   testWidgets('active card also links to the benefits page', (tester) async {
     final c = premium(FakePurchaseGateway(), owned: true);
     await pump(tester, c);
-    expect(
-      find.byKey(const ValueKey('premium-view-benefits')),
-      findsOneWidget,
-    );
+    expect(find.byKey(const ValueKey('premium-view-benefits')), findsOneWidget);
   });
 }

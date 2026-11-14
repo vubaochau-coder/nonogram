@@ -117,8 +117,7 @@ class _ViewBenefitsButton extends StatelessWidget {
     final l10n = context.l10n;
     return Column(
       children: [
-        if (divider)
-          Divider(height: 24, color: context.gameColors.cardBorder),
+        if (divider) Divider(height: 24, color: context.gameColors.cardBorder),
         Center(
           child: TextButton.icon(
             key: const ValueKey('premium-view-benefits'),

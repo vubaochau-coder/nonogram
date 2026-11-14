@@ -677,7 +677,8 @@ class AppLocalizationsTh extends AppLocalizations {
   String get premiumBenefitsTitle => 'สิทธิประโยชน์ของแพ็ก';
 
   @override
-  String get premiumBenefitsTagline => 'ซื้อครั้งเดียวเพื่อลบโฆษณาระหว่างด่านและรับรางวัลตัวช่วยทุกวัน ตลอดไปบนบัญชีของคุณ';
+  String get premiumBenefitsTagline =>
+      'ซื้อครั้งเดียวเพื่อลบโฆษณาระหว่างด่านและรับรางวัลตัวช่วยทุกวัน ตลอดไปบนบัญชีของคุณ';
 
   @override
   String get premiumBenefitsOneTime => 'จ่ายครั้งเดียว';
@@ -689,13 +690,15 @@ class AppLocalizationsTh extends AppLocalizations {
   String get premiumPerkNoAdsTitle => 'ไม่มีโฆษณาระหว่างด่าน';
 
   @override
-  String get premiumPerkNoAdsBody => 'ไม่มีโฆษณาเต็มจอระหว่างปริศนาอีกต่อไป เล่นต่อจากด่านหนึ่งไปอีกด่านได้โดยไม่สะดุด';
+  String get premiumPerkNoAdsBody =>
+      'ไม่มีโฆษณาเต็มจอระหว่างปริศนาอีกต่อไป เล่นต่อจากด่านหนึ่งไปอีกด่านได้โดยไม่สะดุด';
 
   @override
   String get premiumPerkDailyTitle => 'รางวัลเช็กอินรายวัน';
 
   @override
-  String get premiumPerkDailyBody => 'การเช็กอินแต่ละครั้งให้คำใบ้เพิ่ม 2 ครั้งและไม้กายสิทธิ์ 1 ครั้งสำหรับวันนั้น นอกเหนือจากรางวัลหมุดหมายตามปกติ';
+  String get premiumPerkDailyBody =>
+      'การเช็กอินแต่ละครั้งให้คำใบ้เพิ่ม 2 ครั้งและไม้กายสิทธิ์ 1 ครั้งสำหรับวันนั้น นอกเหนือจากรางวัลหมุดหมายตามปกติ';
 
   @override
   String get premiumItemsTitle => 'ตัวช่วยทำอะไรได้บ้าง';
@@ -707,7 +710,8 @@ class AppLocalizationsTh extends AppLocalizations {
   String get powerUpHintTagline => 'เผยช่องที่ถูกต้องหนึ่งช่องที่คุณเลือก';
 
   @override
-  String get powerUpHintDesc => 'แตะหลอดไฟ แล้วเลือกตำแหน่งที่ยังไม่แน่ใจ แอปจะเติมช่องที่ถูกต้องหนึ่งช่อง (ระบายหรือทำเครื่องหมายว่าว่าง) เพื่อช่วยให้คุณไปต่อได้';
+  String get powerUpHintDesc =>
+      'แตะหลอดไฟ แล้วเลือกตำแหน่งที่ยังไม่แน่ใจ แอปจะเติมช่องที่ถูกต้องหนึ่งช่อง (ระบายหรือทำเครื่องหมายว่าว่าง) เพื่อช่วยให้คุณไปต่อได้';
 
   @override
   String get powerUpWandName => 'ไม้กายสิทธิ์';
@@ -716,25 +720,29 @@ class AppLocalizationsTh extends AppLocalizations {
   String get powerUpWandTagline => 'แก้ทั้งแถวหรือทั้งคอลัมน์';
 
   @override
-  String get powerUpWandDesc => 'แตะไม้กายสิทธิ์เพื่อเปิดโหมดเลือก แล้วแตะตัวเลขใบ้ของแถวหรือคอลัมน์ แอปจะเผยทั้งแถวหรือคอลัมน์นั้น ทรงพลังกว่าคำใบ้แบบช่องเดียว';
+  String get powerUpWandDesc =>
+      'แตะไม้กายสิทธิ์เพื่อเปิดโหมดเลือก แล้วแตะตัวเลขใบ้ของแถวหรือคอลัมน์ แอปจะเผยทั้งแถวหรือคอลัมน์นั้น ทรงพลังกว่าคำใบ้แบบช่องเดียว';
 
   @override
   String get powerUpStatesTitle => 'ไอคอนบอกประเภทของสิทธิ์';
 
   @override
-  String get powerUpStatesLead => 'ตัวเลขที่มุมคือจำนวนครั้งที่เหลือทั้งหมด สิทธิ์แบบมีกำหนดเวลาจะทำให้ไอคอนเป็นสีทองพร้อมนาฬิกาเล็ก ๆ';
+  String get powerUpStatesLead =>
+      'ตัวเลขที่มุมคือจำนวนครั้งที่เหลือทั้งหมด สิทธิ์แบบมีกำหนดเวลาจะทำให้ไอคอนเป็นสีทองพร้อมนาฬิกาเล็ก ๆ';
 
   @override
   String get powerUpTimeLimited => 'มีกำหนดเวลา';
 
   @override
-  String get powerUpTimeLimitedDesc => 'ไอคอนสีทองมีนาฬิกา มาจากรางวัลเช็กอินรายวันของแพ็ก หมดอายุเมื่อสิ้นวัน';
+  String get powerUpTimeLimitedDesc =>
+      'ไอคอนสีทองมีนาฬิกา มาจากรางวัลเช็กอินรายวันของแพ็ก หมดอายุเมื่อสิ้นวัน';
 
   @override
   String get powerUpPermanent => 'ไม่มีกำหนด';
 
   @override
-  String get powerUpPermanentDesc => 'ไอคอนปกติมีป้ายสีน้ำเงิน เป็นสิทธิ์จากหมุดหมายและของเริ่มต้น ไม่มีวันหมดอายุ';
+  String get powerUpPermanentDesc =>
+      'ไอคอนปกติมีป้ายสีน้ำเงิน เป็นสิทธิ์จากหมุดหมายและของเริ่มต้น ไม่มีวันหมดอายุ';
 
   @override
   String get powerUpSpendOrderTitle => 'สิทธิ์ไหนถูกใช้ก่อน?';
@@ -743,7 +751,8 @@ class AppLocalizationsTh extends AppLocalizations {
   String get powerUpSpendOrderHeading => 'สิทธิ์แบบมีกำหนดเวลาจะถูกใช้ก่อน';
 
   @override
-  String get powerUpSpendOrderBody => 'สิทธิ์รายวันหมดอายุเมื่อสิ้นวัน ดังนั้นคำใบ้หรือไม้กายสิทธิ์จะใช้สิทธิ์รายวันก่อน และจะใช้สิทธิ์ถาวรก็ต่อเมื่อสิทธิ์รายวันหมดแล้ว จึงไม่มีอะไรสูญเปล่า';
+  String get powerUpSpendOrderBody =>
+      'สิทธิ์รายวันหมดอายุเมื่อสิ้นวัน ดังนั้นคำใบ้หรือไม้กายสิทธิ์จะใช้สิทธิ์รายวันก่อน และจะใช้สิทธิ์ถาวรก็ต่อเมื่อสิทธิ์รายวันหมดแล้ว จึงไม่มีอะไรสูญเปล่า';
 
   @override
   String get powerUpSpendDaily => 'สิทธิ์รายวัน';
@@ -752,5 +761,6 @@ class AppLocalizationsTh extends AppLocalizations {
   String get powerUpSpendPermanent => 'สิทธิ์ถาวร';
 
   @override
-  String get premiumBenefitsFootnote => 'สิทธิ์รายวันไม่ยกยอดไปวันถัดไป รางวัลหมุดหมายเป็นสิทธิ์ถาวรและสะสมได้ตามปกติ';
+  String get premiumBenefitsFootnote =>
+      'สิทธิ์รายวันไม่ยกยอดไปวันถัดไป รางวัลหมุดหมายเป็นสิทธิ์ถาวรและสะสมได้ตามปกติ';
 }
