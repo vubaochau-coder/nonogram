@@ -19,4 +19,7 @@ enum AppFlavor {
   static AppFlavor fromName(String? name) => name == 'dev' ? dev : store;
 
   bool get hasPlayModeSelection => this == dev;
+
+  /// Công cụ tester (tua giờ, cửa hàng giả, giải ngay...) trong tab "Tôi".
+  bool get hasTesterTools => this == dev;
 }

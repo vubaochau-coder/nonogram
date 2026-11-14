@@ -149,6 +149,11 @@ class PowerUpsChanged extends NonogramPlayEvent {
   const PowerUpsChanged(this.inventory);
 }
 
+/// Công cụ tester (bản `dev`): tô đúng đáp án và hoàn thành màn ngay.
+class DebugSolveRequested extends NonogramPlayEvent {
+  const DebugSolveRequested();
+}
+
 // --- Internal/Refactor Events (Phase 4.2+) ---
 
 class CurrentProgressSaveRequested extends NonogramPlayEvent {

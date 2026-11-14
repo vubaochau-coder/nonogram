@@ -74,7 +74,14 @@ class PremiumController extends ChangeNotifier implements AdEntitlements {
     _purchasedSub = gateway.purchased.listen((id) {
       if (id == productId) _setOwned(true);
     });
+    await refresh();
+  }
+
+  /// Hỏi lại cửa hàng giá và các gói đã mua (vd. sau khi công cụ tester đổi
+  /// cửa hàng thật ⇄ giả, hoặc giả lập hoàn tiền).
+  Future<void> refresh() async {
     _available = await gateway.isAvailable();
+    _price = null;
     if (_available) {
       _price = await gateway.priceOf(productId);
       final owned = await gateway.ownedProducts();

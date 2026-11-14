@@ -11,6 +11,7 @@ import 'ads/ad_config.dart';
 import 'ads/ad_entitlements.dart';
 import 'ads/ad_manager.dart';
 import 'ads/ad_service.dart';
+import 'ads/interstitial_policy.dart';
 import 'ads/network/admob/admob_network.dart';
 import 'core/app_flavor.dart';
 import 'core/app_licenses.dart';
@@ -27,6 +28,8 @@ import 'data/nonogram_repository.dart';
 import 'l10n/app_localizations.dart';
 import 'premium/play_billing_gateway.dart';
 import 'premium/premium_controller.dart';
+import 'tester/tester_purchase_gateway.dart';
+import 'tester/tester_settings.dart';
 import 'checkin/check_in_service.dart';
 import 'checkin/game_clock.dart';
 import 'checkin/trusted_clock.dart';
@@ -41,21 +44,37 @@ Future<void> main() async {
 
   final flavor = AppFlavor.current;
   final android = !kIsWeb && defaultTargetPlatform == TargetPlatform.android;
-  // Gói "Chơi không quảng cáo" bán qua Google Play: chỉ có trên Android.
-  final premium =
-      android
-          ? await PremiumController.load(gateway: PlayBillingGateway())
-          : null;
+  // Công cụ tester (tua giờ, cửa hàng giả, giải ngay...): chỉ bản `dev`.
+  final tester = flavor.hasTesterTools ? await TesterSettings.load() : null;
+  // Gói "Chơi không quảng cáo" bán qua Google Play: chỉ có trên Android (bản
+  // `dev` thì có thêm cửa hàng giả của tester trên mọi nền tảng).
+  final PremiumController? premium;
+  if (tester != null) {
+    premium = await PremiumController.load(
+      gateway: TesterPurchaseGateway(
+        settings: tester,
+        real: android ? PlayBillingGateway() : null,
+      ),
+    );
+  } else if (android) {
+    premium = await PremiumController.load(gateway: PlayBillingGateway());
+  } else {
+    premium = null;
+  }
   // Giờ của game theo giờ mạng (điểm danh, hạn của lượt trong ngày).
-  final clock = await GameClock.load(trusted: NetworkTrustedClock());
+  final clock = await GameClock.load(
+    trusted: NetworkTrustedClock(),
+    debugShift: tester?.dayShift,
+  );
   final checkIn = await CheckInService.load(
     clock: clock,
     isPremium: () => premium?.isPremium ?? false,
   );
   final launcher = AppLauncher(
     flavor: flavor,
-    adService: createAdService(flavor, premium),
+    adService: createAdService(flavor, premium, tester: tester),
     premium: premium,
+    tester: tester,
     clock: clock,
     checkIn: checkIn,
     // Lời mời đánh giá mở CH Play: chỉ có trên Android.
@@ -75,13 +94,23 @@ Future<void> main() async {
 /// Quảng cáo AdMob chỉ có trên Android (chưa cấu hình cho iOS). Bản `store`
 /// dùng ID thật, bản `dev` dùng ID thử nghiệm (xem [AdConfig.forFlavor]).
 /// Mua gói không quảng cáo ([premium]) thì tắt quảng cáo xen kẽ.
-AdService createAdService(AppFlavor flavor, PremiumController? premium) {
+/// Công cụ tester ([tester]) bỏ được giãn cách quảng cáo xen kẽ.
+AdService createAdService(
+  AppFlavor flavor,
+  PremiumController? premium, {
+  TesterSettings? tester,
+}) {
   final android = !kIsWeb && defaultTargetPlatform == TargetPlatform.android;
   if (!android) return NoAdService();
+  final config = AdConfig.forFlavor(flavor);
   return AdManager(
     network: AdMobNetwork(),
-    config: AdConfig.forFlavor(flavor),
+    config: config,
     entitlements: premium ?? const NoAdEntitlements(),
+    policy: InterstitialPolicy(
+      config: config.interstitial,
+      ignoreInterval: tester == null ? null : () => tester.adsNoInterval,
+    ),
   );
 }
 
@@ -92,6 +121,7 @@ class AppLauncher {
     required this.flavor,
     required this.adService,
     this.premium,
+    this.tester,
     required this.clock,
     required this.checkIn,
     this.rating,
@@ -105,6 +135,7 @@ class AppLauncher {
   final AppFlavor flavor;
   final AdService adService;
   final PremiumController? premium;
+  final TesterSettings? tester;
   final GameClock clock;
   final CheckInService checkIn;
   final AppRatingController? rating;
@@ -170,6 +201,7 @@ class AppLauncher {
         locale: locale,
         adService: adService,
         premium: premium,
+        tester: tester,
         checkIn: checkIn,
         clock: clock,
         rating: rating,
@@ -291,6 +323,7 @@ class NonogramApp extends StatelessWidget {
     this.sounds,
     this.adService,
     this.premium,
+    this.tester,
     this.checkIn,
     this.clock,
     this.rating,
@@ -314,6 +347,9 @@ class NonogramApp extends StatelessWidget {
 
   /// Null trên iOS, web và trong test: không bán gói không quảng cáo.
   final PremiumController? premium;
+
+  /// Chỉ có ở flavor `dev`: công cụ tester.
+  final TesterSettings? tester;
 
   /// Null trong test: không có điểm danh.
   final CheckInService? checkIn;
@@ -339,6 +375,7 @@ class NonogramApp extends StatelessWidget {
         Provider<AdService>.value(value: adService ?? NoAdService()),
         if (rating != null) Provider.value(value: rating!),
         if (premium != null) ChangeNotifierProvider.value(value: premium!),
+        if (tester != null) ChangeNotifierProvider.value(value: tester!),
         if (checkIn != null) ChangeNotifierProvider.value(value: checkIn!),
         if (clock != null) ChangeNotifierProvider.value(value: clock!),
         if (onboarding != null) Provider.value(value: onboarding!),
