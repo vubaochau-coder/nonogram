@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:nonogram/core/app_sounds.dart';
 import 'package:nonogram/core/app_theme.dart';
 import 'package:nonogram/l10n/app_localizations.dart';
 import 'package:nonogram/models/nonogram_cell_state.dart';
 import 'package:nonogram/models/nonogram_interaction_mode.dart';
 import 'package:nonogram/screens/tutorial/nonogram_tutorial_controller.dart';
 import 'package:nonogram/screens/tutorial/nonogram_tutorial_page.dart';
+import 'package:provider/provider.dart';
 
 /// Làm đúng mọi bước của kịch bản.
 void solveAll(NonogramTutorialController controller) {
@@ -391,6 +394,61 @@ void main() {
       expect(await result, isTrue);
     });
 
+    testWidgets('plays game sounds and buzzes on every long press', (
+      tester,
+    ) async {
+      tester.view.physicalSize = const Size(1080, 2340);
+      tester.view.devicePixelRatio = 3;
+      addTearDown(tester.view.reset);
+      final haptics = <String>[];
+      tester.binding.defaultBinaryMessenger.setMockMethodCallHandler(
+        SystemChannels.platform,
+        (call) async {
+          if (call.method == 'HapticFeedback.vibrate') {
+            haptics.add('${call.arguments}');
+          }
+          return null;
+        },
+      );
+      addTearDown(
+        () => tester.binding.defaultBinaryMessenger.setMockMethodCallHandler(
+          SystemChannels.platform,
+          null,
+        ),
+      );
+      final engine = _RecordingEngine();
+      final navigatorKey = GlobalKey<NavigatorState>();
+      await tester.pumpWidget(
+        ChangeNotifierProvider.value(
+          value: AppSoundController.inMemory(engine: engine),
+          child: buildPage(navigatorKey),
+        ),
+      );
+      navigatorKey.currentState!.push<bool>(
+        MaterialPageRoute(builder: (_) => const NonogramTutorialPage()),
+      );
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 500));
+      await tester.tap(find.byKey(const ValueKey('nonogram-tutorial-start')));
+      await tester.pump(const Duration(milliseconds: 300));
+
+      // Bước này chưa dạy nhấn giữ: không đổi ô nhưng vẫn rung như màn chơi.
+      final grid = find.byKey(const ValueKey('nonogram-tutorial-grid'));
+      await tester.longPressAt(
+        tester.getRect(grid).topLeft + const Offset(5, 5),
+      );
+      await tester.pump(const Duration(milliseconds: 300));
+      expect(haptics, isNotEmpty);
+
+      await tapMode(tester);
+      for (var c = 0; c < 5; c++) {
+        await tapCell(tester, 0, c);
+      }
+      expect(engine.played.first, GameSound.fill);
+      // Tô đủ hàng đầu: tiếng khớp hàng.
+      expect(engine.played.last, GameSound.line);
+    });
+
     testWidgets('skip closes the tutorial without the techniques', (
       tester,
     ) async {
@@ -410,4 +468,14 @@ void main() {
       expect(await result, isFalse);
     });
   });
+}
+
+class _RecordingEngine implements GameSoundEngine {
+  final played = <GameSound>[];
+
+  @override
+  void play(GameSound sound) => played.add(sound);
+
+  @override
+  void dispose() {}
 }

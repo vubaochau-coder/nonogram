@@ -6,14 +6,17 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:lucide_icons/lucide_icons.dart';
 import 'package:nonogram/core/app_haptics.dart';
+import 'package:nonogram/core/app_sounds.dart';
 import 'package:nonogram/core/app_theme.dart';
 import 'package:nonogram/core/context_ext.dart';
 import 'package:nonogram/core/onboarding_preferences.dart';
 import 'package:nonogram/l10n/app_localizations.dart';
+import 'package:nonogram/models/nonogram_cell_state.dart';
 import 'package:nonogram/models/nonogram_interaction_mode.dart';
 import 'package:nonogram/screens/painters/nonogram_cells_painter.dart';
 import 'package:nonogram/screens/painters/nonogram_grid_painter.dart';
 
+import '../play/nonogram_play_sounds.dart';
 import 'nonogram_tutorial_controller.dart';
 
 /// Luồng "Cách chơi": một câu đố 5×5 hiện dần từng hàng, mỗi bước có lời dẫn,
@@ -38,6 +41,7 @@ class _NonogramTutorialPageState extends State<NonogramTutorialPage> {
   void initState() {
     super.initState();
     _controller.addListener(_onProgress);
+    _lastTally = _tally();
   }
 
   @override
@@ -47,7 +51,58 @@ class _NonogramTutorialPageState extends State<NonogramTutorialPage> {
     super.dispose();
   }
 
+  /// Bàn hướng dẫn lần trước, để biết vừa tô / đánh X / khớp hàng nào.
+  PlayTally? _lastTally;
+  bool _wasFinished = false;
+
+  PlayTally _tally() {
+    final c = _controller;
+    var filled = 0;
+    var marked = 0;
+    for (final row in c.grid) {
+      for (final cell in row) {
+        if (cell == NonogramCellState.filled) filled++;
+        if (cell == NonogramCellState.marked) marked++;
+      }
+    }
+    var lines = 0;
+    for (var r = 0; r < c.rows; r++) {
+      if (c.isRowComplete(r)) lines++;
+    }
+    for (var col = 0; col < c.cols; col++) {
+      if (c.isColComplete(col)) lines++;
+    }
+    return (
+      // Mỗi lần nạp bài mới là một danh sách solution mới.
+      game: identityHashCode(c.solution),
+      filled: filled,
+      marked: marked,
+      lines: lines,
+      totalLines: c.rows + c.cols,
+    );
+  }
+
+  /// Tiếng giống màn chơi: tô ô, đánh X, khớp xong hàng / cột; giải xong bài
+  /// thì hợp âm mừng.
+  void _playSounds() {
+    final tally = _tally();
+    final prev = _lastTally;
+    _lastTally = tally;
+    final sounds = AppSoundController.maybeOf(context);
+    if (sounds == null) return;
+    final finished = _controller.isFinished;
+    if (finished && !_wasFinished) {
+      _wasFinished = true;
+      sounds.play(GameSound.fanfare);
+      return;
+    }
+    if (prev == null || prev.game != tally.game) return;
+    final sound = soundFor(prev, tally);
+    if (sound != null) sounds.play(sound);
+  }
+
   void _onProgress() {
+    _playSounds();
     if (!_controller.isFinished) return;
     try {
       context.read<OnboardingPreferences>().markPlayCoachSeen();
@@ -553,9 +608,10 @@ class _TutorialGridState extends State<_TutorialGrid> {
   void _onLongPress(Offset position) {
     final cell = _cellAt(position);
     if (cell == null) return;
-    if (widget.controller.longPressCell(cell.row, cell.col)) {
-      AppHaptics.longPress();
-    }
+    // Như màn chơi: rung ngay lúc nhấn giữ được nhận (kể cả khi bước này
+    // không nhận nhấn giữ), để người chơi biết đã có thể nhấc tay.
+    AppHaptics.longPress();
+    widget.controller.longPressCell(cell.row, cell.col);
   }
 
   void _onDrag(Offset position) {
