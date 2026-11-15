@@ -828,10 +828,10 @@ class _MonthTotals extends StatelessWidget {
                 padding: const EdgeInsets.symmetric(vertical: 4),
                 child: Row(
                   children: [
-                    Icon(
-                      powerUpIcon(entry.key.powerUp),
-                      size: 18,
-                      color: rewardColor(context, daily: entry.key.daily),
+                    PowerUpGlyph(
+                      powerUp: entry.key.powerUp,
+                      timeLimited: entry.key.daily,
+                      color: rewardColor(context, daily: false),
                     ),
                     const SizedBox(width: 10),
                     Expanded(

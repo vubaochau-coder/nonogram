@@ -428,6 +428,13 @@ class _PowerUpSectionState extends State<_PowerUpSection> {
             () => _save((i) => i.addPermanent(PowerUp.wand, 10)),
           ),
           _Btn(
+            'Lượt trong ngày: 2 gợi ý · 1 gậy phép',
+            () => _save(
+              (i) =>
+                  i.withDaily(hints: 2, wands: 1, day: widget.repository.today),
+            ),
+          ),
+          _Btn(
             'Về 0 (test quảng cáo có thưởng)',
             () => _save((_) => const PowerUpInventory(hints: 0, wands: 0)),
             danger: true,

@@ -27,6 +27,18 @@ void main() {
     expect(find.byIcon(LucideIcons.clock), findsNothing);
   });
 
+  testWidgets('RewardAmount marks daily rewards with a clock', (tester) async {
+    await tester.pumpWidget(
+      wrap(const RewardAmount(powerUp: PowerUp.hint, amount: 2, daily: true)),
+    );
+    expect(find.byIcon(LucideIcons.clock), findsOneWidget);
+
+    await tester.pumpWidget(
+      wrap(const RewardAmount(powerUp: PowerUp.hint, amount: 2, daily: false)),
+    );
+    expect(find.byIcon(LucideIcons.clock), findsNothing);
+  });
+
   testWidgets('PowerUpGlyph uses the wand icon for wands', (tester) async {
     await tester.pumpWidget(
       wrap(const PowerUpGlyph(powerUp: PowerUp.wand, timeLimited: true)),
