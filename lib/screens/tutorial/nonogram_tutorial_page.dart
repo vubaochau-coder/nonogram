@@ -1018,10 +1018,16 @@ class _TapHintState extends State<_TapHint>
         animation: _animation,
         builder: (context, child) {
           final v = _animation.value;
-          // 0–50%: nhấn xuống, 50–100%: nhấc lên. Nhấn chạm đúng lúc 50%.
-          final press = Curves.easeInOut.transform(
-            v < 0.5 ? v / 0.5 : (1 - v) / 0.5,
-          );
+          // 0–30%: nhấn xuống; 30–80%: giữ nguyên (sóng lan từ đầu ngón tay
+          // đứng yên, nên tâm sóng luôn trùng đầu ngón tay); 80–100%: nhấc.
+          final double press;
+          if (v < _TapRipplePainter.pressAt) {
+            press = Curves.easeInOut.transform(v / _TapRipplePainter.pressAt);
+          } else if (v < 0.8) {
+            press = 1;
+          } else {
+            press = Curves.easeInOut.transform((1 - v) / 0.2);
+          }
           return Stack(
             clipBehavior: Clip.none,
             children: [
@@ -1062,7 +1068,8 @@ class _TapHintState extends State<_TapHint>
 }
 
 /// Hai vòng sóng (chỉ viền) lan ra từ [center] ngay lúc ngón tay nhấn xuống
-/// (giữa chu kỳ), vòng thứ hai trễ hơn một chút.
+/// ([pressAt]), vòng thứ hai trễ hơn một chút; cả hai tắt trước khi bàn tay
+/// nhấc lên.
 class _TapRipplePainter extends CustomPainter {
   _TapRipplePainter({
     required this.progress,
@@ -1078,15 +1085,19 @@ class _TapRipplePainter extends CustomPainter {
   final double strokeWidth;
   final Color color;
 
-  static const _delays = [0.0, 0.3 / 1.4];
+  /// Lúc đầu ngón tay chạm (tỉ lệ chu kỳ).
+  static const pressAt = 0.3;
+
+  /// Độ trễ của từng vòng và thời gian sống của mỗi vòng (tỉ lệ chu kỳ).
+  static const _delays = [0.0, 0.12];
+  static const _life = 0.38;
 
   @override
   void paint(Canvas canvas, Size size) {
     for (final delay in _delays) {
-      // Mỗi vòng sống 70% chu kỳ kể từ lúc nhấn.
-      final local = (progress - 0.5 - delay) % 1.0;
-      if (local >= 0.7) continue;
-      final t = local / 0.7;
+      final local = progress - pressAt - delay;
+      if (local < 0 || local >= _life) continue;
+      final t = local / _life;
       final radius = maxRadius * (0.15 + 0.85 * Curves.easeOut.transform(t));
       canvas.drawCircle(
         center,
