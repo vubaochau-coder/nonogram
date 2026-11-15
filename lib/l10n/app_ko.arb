@@ -184,8 +184,6 @@
   "checkInPremiumUsedUp": "오늘 몫을 모두 사용했어요. 내일 또 만나요!",
   "checkInExpiresIn": "{time} 후 만료",
   "dashboardDailyReminder": "오늘 쓸 수 있는 {rewards}이(가) 남아 있어요. {time} 후 만료되니 지금 플레이해서 놓치지 마세요!",
-  "dashboardDailyReminderTitle": "오늘의 아이템이 기다려요",
-  "dashboardDailyReminderPlay": "지금 플레이",
   "premiumViewBenefits": "혜택 보기",
   "premiumBenefitsTitle": "패키지 혜택",
   "premiumBenefitsTagline": "한 번 구매하면 레벨 사이 광고가 사라지고 매일 도움 보상을 받으며, 계정에 영구히 적용됩니다.",

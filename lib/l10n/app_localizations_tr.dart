@@ -668,12 +668,6 @@ class AppLocalizationsTr extends AppLocalizations {
   }
 
   @override
-  String get dashboardDailyReminderTitle => 'Bugünkü yardımların seni bekliyor';
-
-  @override
-  String get dashboardDailyReminderPlay => 'Şimdi oyna';
-
-  @override
   String get premiumViewBenefits => 'Avantajları gör';
 
   @override

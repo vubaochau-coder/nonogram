@@ -649,12 +649,6 @@ class AppLocalizationsKo extends AppLocalizations {
   }
 
   @override
-  String get dashboardDailyReminderTitle => '오늘의 아이템이 기다려요';
-
-  @override
-  String get dashboardDailyReminderPlay => '지금 플레이';
-
-  @override
   String get premiumViewBenefits => '혜택 보기';
 
   @override

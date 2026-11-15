@@ -229,8 +229,6 @@
   "checkInPremiumUsedUp": "Hôm nay đã dùng hết. Hẹn bạn ngày mai!",
   "checkInExpiresIn": "Hết hạn sau {time}",
   "dashboardDailyReminder": "Bạn còn {rewards} hôm nay, hết hạn sau {time}. Chơi ngay để không lãng phí nhé!",
-  "dashboardDailyReminderTitle": "Lượt hôm nay đang chờ bạn",
-  "dashboardDailyReminderPlay": "Chơi ngay",
   "premiumViewBenefits": "Xem chi tiết quyền lợi",
   "premiumBenefitsTitle": "Quyền lợi gói",
   "premiumBenefitsTagline": "Mua một lần để gỡ quảng cáo khi qua màn và nhận quà hỗ trợ mỗi ngày, trọn đời trên tài khoản của bạn.",

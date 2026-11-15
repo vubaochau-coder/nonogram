@@ -184,8 +184,6 @@
   "checkInPremiumUsedUp": "今日の分は使い切りました。また明日！",
   "checkInExpiresIn": "あと{time}で期限切れ",
   "dashboardDailyReminder": "今日はまだ{rewards}残っています。あと{time}で期限切れになるので、今すぐプレイして無駄にしないで！",
-  "dashboardDailyReminderTitle": "今日の分が待っています",
-  "dashboardDailyReminderPlay": "今すぐプレイ",
   "premiumViewBenefits": "特典を見る",
   "premiumBenefitsTitle": "パックの特典",
   "premiumBenefitsTagline": "一度の購入で、レベル間の広告を削除し、毎日サポートの報酬を獲得できます。アカウントに永久に適用されます。",

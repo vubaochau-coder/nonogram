@@ -184,8 +184,6 @@
   "checkInPremiumUsedUp": "Semua sudah dipakai hari ini. Sampai besok!",
   "checkInExpiresIn": "Berakhir dalam {time}",
   "dashboardDailyReminder": "Kamu masih punya {rewards} untuk hari ini. Berakhir dalam {time}, main sekarang supaya tidak terbuang!",
-  "dashboardDailyReminderTitle": "Bantuan hari ini menunggumu",
-  "dashboardDailyReminderPlay": "Main sekarang",
   "premiumViewBenefits": "Lihat manfaat",
   "premiumBenefitsTitle": "Manfaat paket",
   "premiumBenefitsTagline": "Beli sekali untuk menghilangkan iklan di antara level dan dapatkan hadiah bantuan setiap hari, selamanya di akunmu.",

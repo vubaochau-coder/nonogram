@@ -665,12 +665,6 @@ class AppLocalizationsVi extends AppLocalizations {
   }
 
   @override
-  String get dashboardDailyReminderTitle => 'Lượt hôm nay đang chờ bạn';
-
-  @override
-  String get dashboardDailyReminderPlay => 'Chơi ngay';
-
-  @override
   String get premiumViewBenefits => 'Xem chi tiết quyền lợi';
 
   @override

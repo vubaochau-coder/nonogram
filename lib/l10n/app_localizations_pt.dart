@@ -700,13 +700,6 @@ class AppLocalizationsPt extends AppLocalizations {
   }
 
   @override
-  String get dashboardDailyReminderTitle =>
-      'Suas ajudas de hoje estão esperando';
-
-  @override
-  String get dashboardDailyReminderPlay => 'Jogar agora';
-
-  @override
   String get premiumViewBenefits => 'Ver benefícios';
 
   @override

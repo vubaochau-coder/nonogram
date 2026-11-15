@@ -184,8 +184,6 @@
   "checkInPremiumUsedUp": "Tout est utilisé pour aujourd'hui. À demain !",
   "checkInExpiresIn": "Expire dans {time}",
   "dashboardDailyReminder": "Il te reste {rewards} pour aujourd'hui. Ils expirent dans {time} : joue maintenant pour ne rien perdre !",
-  "dashboardDailyReminderTitle": "Tes aides du jour t'attendent",
-  "dashboardDailyReminderPlay": "Jouer",
   "premiumViewBenefits": "Voir les avantages",
   "premiumBenefitsTitle": "Avantages du pack",
   "premiumBenefitsTagline": "Achète une fois pour supprimer les publicités entre les niveaux et recevoir des récompenses d'aide chaque jour, à vie sur ton compte.",

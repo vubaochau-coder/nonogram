@@ -665,12 +665,6 @@ class AppLocalizationsTh extends AppLocalizations {
   }
 
   @override
-  String get dashboardDailyReminderTitle => 'ตัวช่วยของวันนี้รออยู่';
-
-  @override
-  String get dashboardDailyReminderPlay => 'เล่นเลย';
-
-  @override
   String get premiumViewBenefits => 'ดูสิทธิประโยชน์';
 
   @override

@@ -184,8 +184,6 @@
   "checkInPremiumUsedUp": "Bugünkülerin hepsi kullanıldı. Yarın görüşürüz!",
   "checkInExpiresIn": "{time} sonra sona eriyor",
   "dashboardDailyReminder": "Bugün için hâlâ {rewards} var. {time} sonra sona erecek, boşa gitmemesi için hemen oyna!",
-  "dashboardDailyReminderTitle": "Bugünkü yardımların seni bekliyor",
-  "dashboardDailyReminderPlay": "Şimdi oyna",
   "premiumViewBenefits": "Avantajları gör",
   "premiumBenefitsTitle": "Paket avantajları",
   "premiumBenefitsTagline": "Bir kez satın al; seviyeler arası reklamları kaldır ve her gün yardım ödülleri kazan, hesabında kalıcı olarak.",
