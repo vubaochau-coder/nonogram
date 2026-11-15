@@ -31,7 +31,6 @@ class WandAction extends StatelessWidget {
               p.isWandActive != c.isWandActive ||
               p.isSolved != c.isSolved,
       builder: (context, state) {
-        final colors = context.color;
         // Hết lượt: nút vẫn bấm được, bấm là xem quảng cáo để dùng một lượt.
         final adOffer = !state.isWandActive && state.remainingWands <= 0;
         final enabled = !state.isSolved;
@@ -56,7 +55,7 @@ class WandAction extends StatelessWidget {
                             timeLimited: true,
                           )
                           : null,
-                  color: state.isWandActive ? colors.primary : null,
+                  color: state.isWandActive ? context.gameColors.reward : null,
                   enabled: enabled,
                   onPressed: () {
                     if (adOffer) {
@@ -159,7 +158,7 @@ class _PulseRingState extends State<_PulseRing>
   @override
   Widget build(BuildContext context) {
     if (!widget.active) return widget.child;
-    final primary = context.color.primary;
+    final gold = context.gameColors.reward;
     return AnimatedBuilder(
       animation: _pulse,
       child: widget.child,
@@ -171,7 +170,7 @@ class _PulseRingState extends State<_PulseRing>
             borderRadius: BorderRadius.circular(14),
             boxShadow: [
               BoxShadow(
-                color: primary.withValues(alpha: 0.45 * (1 - t)),
+                color: gold.withValues(alpha: 0.5 * (1 - t)),
                 spreadRadius: 7 * t,
               ),
             ],
@@ -298,30 +297,35 @@ class _WandSelectBannerState extends State<WandSelectBanner>
 
   Widget _banner(BuildContext context) {
     final colors = context.color;
+    final gold = context.gameColors.reward;
     return Material(
-      color: colors.primaryContainer,
+      color: Color.alphaBlend(
+        gold.withValues(alpha: 0.18),
+        colors.surfaceContainerLow,
+      ),
       elevation: 3,
-      borderRadius: BorderRadius.circular(14),
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(14),
+        side: BorderSide(color: gold.withValues(alpha: 0.5)),
+      ),
       child: Padding(
         padding: const EdgeInsets.fromLTRB(14, 6, 6, 6),
         child: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Icon(LucideIcons.wand2, size: 18, color: colors.onPrimaryContainer),
+            Icon(LucideIcons.wand2, size: 18, color: gold),
             const SizedBox(width: 10),
             Flexible(
               child: Text(
                 context.l10n.nonogramPlayWandSelectPrompt,
-                style: context.labelLarge.copyWith(
-                  color: colors.onPrimaryContainer,
-                ),
+                style: context.labelLarge.copyWith(color: colors.onSurface),
               ),
             ),
             const SizedBox(width: 4),
             TextButton(
               key: const ValueKey('nonogram-wand-cancel'),
               style: TextButton.styleFrom(
-                foregroundColor: colors.onPrimaryContainer,
+                foregroundColor: colors.onSurface,
                 // Giữ font của theme, chỉ đậm hơn.
                 textStyle: context.labelLarge.copyWith(
                   fontWeight: FontWeight.w800,

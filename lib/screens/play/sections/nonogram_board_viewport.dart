@@ -849,8 +849,8 @@ class _BoardPaint extends StatelessWidget {
           child: ColoredBox(color: colors.surface),
         ),
 
-        // 6. Đang chọn hàng / cột cho gậy phép: lưới mờ đi, từng dãy số
-        // sáng lần lượt theo nhịp sóng để người chơi biết chạm vào đâu.
+        // 6. Đang chọn hàng / cột cho gậy phép: lưới mờ đi, các dãy số cùng
+        // nhấp nháy vàng để người chơi biết chạm vào đâu.
         if (state.isWandActive)
           Positioned.fill(
             child: IgnorePointer(
@@ -901,8 +901,8 @@ class _BoardPaint extends StatelessWidget {
 }
 
 /// Lớp phủ khi đang chọn hàng / cột cho gậy phép: lưới mờ đi để mắt dồn vào
-/// hai dải số, mọi dãy số có viền nhạt (đều chạm được), và một "sóng" sáng
-/// chạy lần lượt qua từng cột rồi từng hàng, cùng nhịp với nút gậy phép.
+/// hai dải số, và mọi dãy số cùng nhấp nháy vàng theo nhịp của nút gậy
+/// phép.
 class _WandSelectOverlay extends StatefulWidget {
   const _WandSelectOverlay({
     required this.rows,
@@ -970,7 +970,7 @@ class _WandSelectOverlayState extends State<_WandSelectOverlay>
         area: widget.area,
         leftStrip: widget.leftStrip,
         topStrip: widget.topStrip,
-        accent: context.color.primary,
+        accent: context.gameColors.reward,
         scrim: context.color.surface,
       ),
     );
@@ -1004,14 +1004,11 @@ class _WandSelectPainter extends CustomPainter {
   final Color accent;
   final Color scrim;
 
-  /// Độ sáng của sóng tại dãy thứ [k] (cột trước, rồi hàng): sáng lên rồi
-  /// tắt trong nửa đầu "lượt" của dãy đó, các dãy lệch pha nhau.
-  double _intensity(int k) {
+  /// Độ sáng hiện tại, chung cho mọi dãy số: sáng lên rồi tắt dần trong một
+  /// chu kỳ, cùng nhịp với nút gậy phép.
+  double get _intensity {
     if (!animate) return 0.5;
-    final n = rows + cols;
-    final step = min(0.06, 0.7 / n);
-    final local = (wave.value - k * step) % 1.0;
-    return local < 0.5 ? sin(pi * local / 0.5) : 0.0;
+    return 0.5 - 0.5 * cos(2 * pi * wave.value);
   }
 
   void _line(Canvas canvas, Rect rect, double t) {
@@ -1048,7 +1045,7 @@ class _WandSelectPainter extends CustomPainter {
           cell,
           topStrip.height,
         );
-        if (rect.overlaps(topStrip)) _line(canvas, rect, _intensity(c));
+        if (rect.overlaps(topStrip)) _line(canvas, rect, _intensity);
       }
       canvas.restore();
     }
@@ -1062,7 +1059,7 @@ class _WandSelectPainter extends CustomPainter {
           leftStrip.width,
           cell,
         );
-        if (rect.overlaps(leftStrip)) _line(canvas, rect, _intensity(cols + r));
+        if (rect.overlaps(leftStrip)) _line(canvas, rect, _intensity);
       }
       canvas.restore();
     }
