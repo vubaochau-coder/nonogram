@@ -179,11 +179,8 @@
   "checkInTotalWands": "Sihirli değnekler",
   "checkInTotalDailyHints": "İpuçları (yalnızca bugün)",
   "checkInTotalDailyWands": "Sihirli değnekler (yalnızca bugün)",
-  "checkInPremiumToday": "Bugün reklamsız paketinden",
   "checkInPremiumNotYet": "Bugün için 2 ipucu ve 1 sihirli değnek almak için giriş yap.",
-  "checkInPremiumUsedUp": "Bugünkülerin hepsi kullanıldı. Yarın görüşürüz!",
-  "checkInExpiresIn": "{time} sonra sona eriyor",
-  "dashboardDailyReminder": "Bugün için hâlâ {rewards} var. {time} sonra sona erecek, boşa gitmemesi için hemen oyna!",
+  "dashboardDailyReminder": "{time} içinde sona erecek {rewards} hakkın var. Boşa gitmemesi için hemen kullan.",
   "premiumViewBenefits": "Avantajları gör",
   "premiumBenefitsTitle": "Paket avantajları",
   "premiumBenefitsTagline": "Bir kez satın al; seviyeler arası reklamları kaldır ve her gün yardım ödülleri kazan, hesabında kalıcı olarak.",
@@ -211,5 +208,8 @@
   "powerUpSpendOrderBody": "Günlük haklar günün sonunda sona erer; bu yüzden bir ipucu ya da değnek önce günlük haklarını harcar ve ancak günlükler bitince kalıcı haklarını kullanır. Hiçbir şey boşa gitmez.",
   "powerUpSpendDaily": "Günlük haklar",
   "powerUpSpendPermanent": "Kalıcı haklar",
-  "premiumBenefitsFootnote": "Günlük haklar ertesi güne devredilmez. Kilometre taşı ödülleri kalıcı haklardır ve her zamanki gibi birikir."
+  "premiumBenefitsFootnote": "Günlük haklar ertesi güne devredilmez. Kilometre taşı ödülleri kalıcı haklardır ve her zamanki gibi birikir.",
+  "dashboardDailyReminderBoth": "{hints} ve {wands}",
+  "checkInLegendMilestone": "Her {count} girişte hediye",
+  "checkInLegendPremium": "Reklamsız paket ödülü"
 }

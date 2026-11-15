@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:lucide_icons/lucide_icons.dart';
 import 'package:nonogram/checkin/check_in_page.dart';
 import 'package:nonogram/checkin/check_in_service.dart';
 import 'package:nonogram/checkin/game_clock.dart';
@@ -87,7 +88,18 @@ void main() {
       find.byKey(const ValueKey('dashboard-daily-reminder')),
       findsOneWidget,
     );
-    expect(find.textContaining('2 gợi ý · 1 gậy phép'), findsOneWidget);
+    // Mỗi loại quà kèm icon lượt có hạn ngay trong câu.
+    expect(find.textContaining('Bạn còn 2 gợi ý'), findsOneWidget);
+    expect(find.textContaining('và 1 gậy phép'), findsOneWidget);
+    expect(find.textContaining('Dùng ngay để không lãng phí.'), findsOneWidget);
+    // Icon đồng hồ đầu banner + đồng hồ trong icon gợi ý và gậy phép.
+    expect(
+      find.descendant(
+        of: find.byKey(const ValueKey('dashboard-daily-reminder')),
+        matching: find.byIcon(LucideIcons.clock),
+      ),
+      findsNWidgets(3),
+    );
 
     // Dùng hết: thẻ nhắc biến mất.
     await repository.savePowerUps(const PowerUpInventory(hints: 0, wands: 0));

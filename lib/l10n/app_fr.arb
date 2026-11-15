@@ -179,11 +179,8 @@
   "checkInTotalWands": "Baguettes magiques",
   "checkInTotalDailyHints": "Indices (aujourd'hui seulement)",
   "checkInTotalDailyWands": "Baguettes magiques (aujourd'hui seulement)",
-  "checkInPremiumToday": "Aujourd'hui grâce à ton pack sans publicité",
   "checkInPremiumNotYet": "Valide ta présence pour recevoir 2 indices et 1 baguette magique pour aujourd'hui.",
-  "checkInPremiumUsedUp": "Tout est utilisé pour aujourd'hui. À demain !",
-  "checkInExpiresIn": "Expire dans {time}",
-  "dashboardDailyReminder": "Il te reste {rewards} pour aujourd'hui. Ils expirent dans {time} : joue maintenant pour ne rien perdre !",
+  "dashboardDailyReminder": "Il te reste {rewards} qui expirent dans {time}. Utilise-les maintenant pour ne rien perdre.",
   "premiumViewBenefits": "Voir les avantages",
   "premiumBenefitsTitle": "Avantages du pack",
   "premiumBenefitsTagline": "Achète une fois pour supprimer les publicités entre les niveaux et recevoir des récompenses d'aide chaque jour, à vie sur ton compte.",
@@ -211,5 +208,8 @@
   "powerUpSpendOrderBody": "Les utilisations quotidiennes expirent à la fin de la journée, donc un indice ou une baguette dépense d'abord tes utilisations quotidiennes et n'utilise les permanentes qu'une fois les quotidiennes épuisées. Rien n'est gaspillé.",
   "powerUpSpendDaily": "Utilisations quotidiennes",
   "powerUpSpendPermanent": "Utilisations permanentes",
-  "premiumBenefitsFootnote": "Les utilisations quotidiennes ne sont pas reportées au lendemain. Les récompenses de palier sont des utilisations permanentes et s'accumulent normalement."
+  "premiumBenefitsFootnote": "Les utilisations quotidiennes ne sont pas reportées au lendemain. Les récompenses de palier sont des utilisations permanentes et s'accumulent normalement.",
+  "dashboardDailyReminderBoth": "{hints} et {wands}",
+  "checkInLegendMilestone": "Cadeau toutes les {count} présences",
+  "checkInLegendPremium": "Récompense du pack sans publicité"
 }

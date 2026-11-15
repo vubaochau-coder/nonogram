@@ -645,23 +645,12 @@ class AppLocalizationsVi extends AppLocalizations {
   String get checkInTotalDailyWands => 'Gậy phép (trong ngày)';
 
   @override
-  String get checkInPremiumToday => 'Hôm nay từ gói không quảng cáo';
-
-  @override
   String get checkInPremiumNotYet =>
       'Điểm danh để nhận 2 gợi ý và 1 gậy phép dùng trong hôm nay.';
 
   @override
-  String get checkInPremiumUsedUp => 'Hôm nay đã dùng hết. Hẹn bạn ngày mai!';
-
-  @override
-  String checkInExpiresIn(String time) {
-    return 'Hết hạn sau $time';
-  }
-
-  @override
   String dashboardDailyReminder(String rewards, String time) {
-    return 'Bạn còn $rewards hôm nay, hết hạn sau $time. Chơi ngay để không lãng phí nhé!';
+    return 'Bạn còn $rewards sẽ hết hạn sau $time. Dùng ngay để không lãng phí.';
   }
 
   @override
@@ -757,4 +746,17 @@ class AppLocalizationsVi extends AppLocalizations {
   @override
   String get premiumBenefitsFootnote =>
       'Lượt trong ngày không cộng dồn sang hôm sau. Quà mốc điểm danh là lượt vĩnh viễn và cộng dồn bình thường.';
+
+  @override
+  String dashboardDailyReminderBoth(String hints, String wands) {
+    return '$hints và $wands';
+  }
+
+  @override
+  String checkInLegendMilestone(int count) {
+    return 'Mốc quà mỗi $count lần điểm danh';
+  }
+
+  @override
+  String get checkInLegendPremium => 'Quà gói không quảng cáo';
 }

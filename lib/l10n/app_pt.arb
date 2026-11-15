@@ -179,11 +179,8 @@
   "checkInTotalWands": "Varinhas mágicas",
   "checkInTotalDailyHints": "Dicas (só hoje)",
   "checkInTotalDailyWands": "Varinhas mágicas (só hoje)",
-  "checkInPremiumToday": "Hoje do seu pacote sem anúncios",
   "checkInPremiumNotYet": "Marque presença para receber 2 dicas e 1 varinha mágica para hoje.",
-  "checkInPremiumUsedUp": "Tudo usado por hoje. Até amanhã!",
-  "checkInExpiresIn": "Expira em {time}",
-  "dashboardDailyReminder": "Você ainda tem {rewards} para hoje. Expiram em {time}, jogue agora para não desperdiçar!",
+  "dashboardDailyReminder": "Você ainda tem {rewards} que expiram em {time}. Use agora para não desperdiçar.",
   "premiumViewBenefits": "Ver benefícios",
   "premiumBenefitsTitle": "Benefícios do pacote",
   "premiumBenefitsTagline": "Compre uma vez para remover os anúncios entre os níveis e receber recompensas de ajuda todos os dias, para sempre na sua conta.",
@@ -211,5 +208,8 @@
   "powerUpSpendOrderBody": "Os usos diários expiram no fim do dia, então uma dica ou varinha gasta primeiro os seus usos diários e só usa os permanentes quando os diários acabam. Nada é desperdiçado.",
   "powerUpSpendDaily": "Usos diários",
   "powerUpSpendPermanent": "Usos permanentes",
-  "premiumBenefitsFootnote": "Os usos diários não passam para o dia seguinte. As recompensas de marco são usos permanentes e se acumulam normalmente."
+  "premiumBenefitsFootnote": "Os usos diários não passam para o dia seguinte. As recompensas de marco são usos permanentes e se acumulam normalmente.",
+  "dashboardDailyReminderBoth": "{hints} e {wands}",
+  "checkInLegendMilestone": "Presente a cada {count} presenças",
+  "checkInLegendPremium": "Recompensa do pacote sem anúncios"
 }

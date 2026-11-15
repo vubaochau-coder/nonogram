@@ -679,23 +679,12 @@ class AppLocalizationsDe extends AppLocalizations {
   String get checkInTotalDailyWands => 'Zauberstäbe (nur heute)';
 
   @override
-  String get checkInPremiumToday => 'Heute aus deinem Werbefrei-Paket';
-
-  @override
   String get checkInPremiumNotYet =>
       'Checke ein, um heute 2 Tipps und 1 Zauberstab zu bekommen.';
 
   @override
-  String get checkInPremiumUsedUp => 'Für heute alles verbraucht. Bis morgen!';
-
-  @override
-  String checkInExpiresIn(String time) {
-    return 'Läuft ab in $time';
-  }
-
-  @override
   String dashboardDailyReminder(String rewards, String time) {
-    return 'Du hast heute noch $rewards. Sie laufen in $time ab – spiel jetzt, damit nichts verfällt!';
+    return 'Du hast noch $rewards, die in $time ablaufen. Nutze sie jetzt, damit nichts verfällt.';
   }
 
   @override
@@ -793,4 +782,17 @@ class AppLocalizationsDe extends AppLocalizations {
   @override
   String get premiumBenefitsFootnote =>
       'Tägliche Nutzungen werden nicht auf den nächsten Tag übertragen. Meilenstein-Belohnungen sind dauerhafte Nutzungen und sammeln sich wie gewohnt an.';
+
+  @override
+  String dashboardDailyReminderBoth(String hints, String wands) {
+    return '$hints und $wands';
+  }
+
+  @override
+  String checkInLegendMilestone(int count) {
+    return 'Geschenk alle $count Check-ins';
+  }
+
+  @override
+  String get checkInLegendPremium => 'Belohnung des werbefreien Pakets';
 }

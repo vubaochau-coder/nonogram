@@ -650,24 +650,12 @@ class AppLocalizationsId extends AppLocalizations {
   String get checkInTotalDailyWands => 'Tongkat ajaib (hanya hari ini)';
 
   @override
-  String get checkInPremiumToday => 'Hari ini dari paket bebas iklan';
-
-  @override
   String get checkInPremiumNotYet =>
       'Absen untuk mendapat 2 petunjuk dan 1 tongkat ajaib hari ini.';
 
   @override
-  String get checkInPremiumUsedUp =>
-      'Semua sudah dipakai hari ini. Sampai besok!';
-
-  @override
-  String checkInExpiresIn(String time) {
-    return 'Berakhir dalam $time';
-  }
-
-  @override
   String dashboardDailyReminder(String rewards, String time) {
-    return 'Kamu masih punya $rewards untuk hari ini. Berakhir dalam $time, main sekarang supaya tidak terbuang!';
+    return 'Kamu masih punya $rewards yang akan berakhir dalam $time. Gunakan sekarang agar tidak terbuang.';
   }
 
   @override
@@ -764,4 +752,17 @@ class AppLocalizationsId extends AppLocalizations {
   @override
   String get premiumBenefitsFootnote =>
       'Penggunaan harian tidak dibawa ke hari berikutnya. Hadiah tonggak adalah penggunaan permanen dan terkumpul seperti biasa.';
+
+  @override
+  String dashboardDailyReminderBoth(String hints, String wands) {
+    return '$hints dan $wands';
+  }
+
+  @override
+  String checkInLegendMilestone(int count) {
+    return 'Hadiah setiap $count kali absen';
+  }
+
+  @override
+  String get checkInLegendPremium => 'Hadiah paket tanpa iklan';
 }

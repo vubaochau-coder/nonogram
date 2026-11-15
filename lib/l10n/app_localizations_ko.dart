@@ -630,22 +630,11 @@ class AppLocalizationsKo extends AppLocalizations {
   String get checkInTotalDailyWands => '마법 지팡이 (오늘만)';
 
   @override
-  String get checkInPremiumToday => '광고 제거 팩의 오늘 선물';
-
-  @override
   String get checkInPremiumNotYet => '출석하면 오늘 쓸 수 있는 힌트 2개와 마법 지팡이 1개를 받아요.';
 
   @override
-  String get checkInPremiumUsedUp => '오늘 몫을 모두 사용했어요. 내일 또 만나요!';
-
-  @override
-  String checkInExpiresIn(String time) {
-    return '$time 후 만료';
-  }
-
-  @override
   String dashboardDailyReminder(String rewards, String time) {
-    return '오늘 쓸 수 있는 $rewards이(가) 남아 있어요. $time 후 만료되니 지금 플레이해서 놓치지 마세요!';
+    return '$time 후 만료되는 $rewards가 남아 있어요. 낭비하지 않도록 지금 사용하세요.';
   }
 
   @override
@@ -741,4 +730,17 @@ class AppLocalizationsKo extends AppLocalizations {
   @override
   String get premiumBenefitsFootnote =>
       '매일 사용은 다음 날로 넘어가지 않습니다. 마일스톤 출석 보상은 무기한 사용이며 평소대로 쌓입니다.';
+
+  @override
+  String dashboardDailyReminderBoth(String hints, String wands) {
+    return '$hints와 $wands';
+  }
+
+  @override
+  String checkInLegendMilestone(int count) {
+    return '출석 $count회마다 선물';
+  }
+
+  @override
+  String get checkInLegendPremium => '광고 제거 패키지 보상';
 }

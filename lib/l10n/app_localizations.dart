@@ -1197,34 +1197,16 @@ abstract class AppLocalizations {
   /// **'Magic wands (today only)'**
   String get checkInTotalDailyWands;
 
-  /// No description provided for @checkInPremiumToday.
-  ///
-  /// In en, this message translates to:
-  /// **'Today from your ad-free pack'**
-  String get checkInPremiumToday;
-
   /// No description provided for @checkInPremiumNotYet.
   ///
   /// In en, this message translates to:
   /// **'Check in to get 2 hints and 1 magic wand for today.'**
   String get checkInPremiumNotYet;
 
-  /// No description provided for @checkInPremiumUsedUp.
-  ///
-  /// In en, this message translates to:
-  /// **'All used for today. See you tomorrow!'**
-  String get checkInPremiumUsedUp;
-
-  /// No description provided for @checkInExpiresIn.
-  ///
-  /// In en, this message translates to:
-  /// **'Expires in {time}'**
-  String checkInExpiresIn(String time);
-
   /// No description provided for @dashboardDailyReminder.
   ///
   /// In en, this message translates to:
-  /// **'You still have {rewards} for today. They expire in {time}, so play now and don\'t let them go to waste!'**
+  /// **'You have {rewards} that will expire in {time}. Use them now so they don\'t go to waste.'**
   String dashboardDailyReminder(String rewards, String time);
 
   /// No description provided for @premiumViewBenefits.
@@ -1394,6 +1376,24 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Daily uses do not roll over to the next day. Milestone check-in rewards are permanent uses and build up as normal.'**
   String get premiumBenefitsFootnote;
+
+  /// No description provided for @dashboardDailyReminderBoth.
+  ///
+  /// In en, this message translates to:
+  /// **'{hints} and {wands}'**
+  String dashboardDailyReminderBoth(String hints, String wands);
+
+  /// No description provided for @checkInLegendMilestone.
+  ///
+  /// In en, this message translates to:
+  /// **'Gift every {count} check-ins'**
+  String checkInLegendMilestone(int count);
+
+  /// No description provided for @checkInLegendPremium.
+  ///
+  /// In en, this message translates to:
+  /// **'Ad-free pack reward'**
+  String get checkInLegendPremium;
 }
 
 class _AppLocalizationsDelegate

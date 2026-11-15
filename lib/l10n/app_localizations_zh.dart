@@ -618,22 +618,11 @@ class AppLocalizationsZh extends AppLocalizations {
   String get checkInTotalDailyWands => '魔法棒（仅限今天）';
 
   @override
-  String get checkInPremiumToday => '今天来自无广告礼包';
-
-  @override
   String get checkInPremiumNotYet => '签到即可获得今天可用的 2 次提示和 1 次魔法棒。';
 
   @override
-  String get checkInPremiumUsedUp => '今天的已用完，明天见！';
-
-  @override
-  String checkInExpiresIn(String time) {
-    return '$time后过期';
-  }
-
-  @override
   String dashboardDailyReminder(String rewards, String time) {
-    return '你今天还有 $rewards，将在 $time后过期，快来玩别浪费了！';
+    return '你还有$rewards将在$time后过期，立即使用以免浪费。';
   }
 
   @override
@@ -721,6 +710,19 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get premiumBenefitsFootnote => '每日次数不会累积到第二天。里程碑签到奖励属于永久次数，照常累积。';
+
+  @override
+  String dashboardDailyReminderBoth(String hints, String wands) {
+    return '$hints和$wands';
+  }
+
+  @override
+  String checkInLegendMilestone(int count) {
+    return '每签到 $count 次有礼物';
+  }
+
+  @override
+  String get checkInLegendPremium => '无广告套餐奖励';
 }
 
 /// The translations for Chinese, using the Han script (`zh_Hant`).
@@ -1337,22 +1339,11 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
   String get checkInTotalDailyWands => '魔法棒（僅限今天）';
 
   @override
-  String get checkInPremiumToday => '今天來自無廣告禮包';
-
-  @override
   String get checkInPremiumNotYet => '簽到即可獲得今天可用的 2 次提示和 1 次魔法棒。';
 
   @override
-  String get checkInPremiumUsedUp => '今天的已用完，明天見！';
-
-  @override
-  String checkInExpiresIn(String time) {
-    return '$time後過期';
-  }
-
-  @override
   String dashboardDailyReminder(String rewards, String time) {
-    return '你今天還有 $rewards，將在 $time後過期，快來玩別浪費了！';
+    return '你還有$rewards將在$time後過期，立即使用以免浪費。';
   }
 
   @override
@@ -1440,4 +1431,17 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
 
   @override
   String get premiumBenefitsFootnote => '每日次數不會累積到第二天。里程碑簽到獎勵屬於永久次數，照常累積。';
+
+  @override
+  String dashboardDailyReminderBoth(String hints, String wands) {
+    return '$hints和$wands';
+  }
+
+  @override
+  String checkInLegendMilestone(int count) {
+    return '每簽到 $count 次有禮物';
+  }
+
+  @override
+  String get checkInLegendPremium => '無廣告套餐獎勵';
 }

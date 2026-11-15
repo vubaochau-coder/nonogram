@@ -677,23 +677,12 @@ class AppLocalizationsEn extends AppLocalizations {
   String get checkInTotalDailyWands => 'Magic wands (today only)';
 
   @override
-  String get checkInPremiumToday => 'Today from your ad-free pack';
-
-  @override
   String get checkInPremiumNotYet =>
       'Check in to get 2 hints and 1 magic wand for today.';
 
   @override
-  String get checkInPremiumUsedUp => 'All used for today. See you tomorrow!';
-
-  @override
-  String checkInExpiresIn(String time) {
-    return 'Expires in $time';
-  }
-
-  @override
   String dashboardDailyReminder(String rewards, String time) {
-    return 'You still have $rewards for today. They expire in $time, so play now and don\'t let them go to waste!';
+    return 'You have $rewards that will expire in $time. Use them now so they don\'t go to waste.';
   }
 
   @override
@@ -789,4 +778,17 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get premiumBenefitsFootnote =>
       'Daily uses do not roll over to the next day. Milestone check-in rewards are permanent uses and build up as normal.';
+
+  @override
+  String dashboardDailyReminderBoth(String hints, String wands) {
+    return '$hints and $wands';
+  }
+
+  @override
+  String checkInLegendMilestone(int count) {
+    return 'Gift every $count check-ins';
+  }
+
+  @override
+  String get checkInLegendPremium => 'Ad-free pack reward';
 }

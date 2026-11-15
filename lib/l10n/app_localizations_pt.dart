@@ -680,23 +680,12 @@ class AppLocalizationsPt extends AppLocalizations {
   String get checkInTotalDailyWands => 'Varinhas mágicas (só hoje)';
 
   @override
-  String get checkInPremiumToday => 'Hoje do seu pacote sem anúncios';
-
-  @override
   String get checkInPremiumNotYet =>
       'Marque presença para receber 2 dicas e 1 varinha mágica para hoje.';
 
   @override
-  String get checkInPremiumUsedUp => 'Tudo usado por hoje. Até amanhã!';
-
-  @override
-  String checkInExpiresIn(String time) {
-    return 'Expira em $time';
-  }
-
-  @override
   String dashboardDailyReminder(String rewards, String time) {
-    return 'Você ainda tem $rewards para hoje. Expiram em $time, jogue agora para não desperdiçar!';
+    return 'Você ainda tem $rewards que expiram em $time. Use agora para não desperdiçar.';
   }
 
   @override
@@ -793,4 +782,17 @@ class AppLocalizationsPt extends AppLocalizations {
   @override
   String get premiumBenefitsFootnote =>
       'Os usos diários não passam para o dia seguinte. As recompensas de marco são usos permanentes e se acumulam normalmente.';
+
+  @override
+  String dashboardDailyReminderBoth(String hints, String wands) {
+    return '$hints e $wands';
+  }
+
+  @override
+  String checkInLegendMilestone(int count) {
+    return 'Presente a cada $count presenças';
+  }
+
+  @override
+  String get checkInLegendPremium => 'Recompensa do pacote sem anúncios';
 }

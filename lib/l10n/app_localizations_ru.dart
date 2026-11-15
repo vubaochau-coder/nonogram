@@ -686,23 +686,12 @@ class AppLocalizationsRu extends AppLocalizations {
   String get checkInTotalDailyWands => 'Волшебные палочки (только сегодня)';
 
   @override
-  String get checkInPremiumToday => 'Сегодня из пакета без рекламы';
-
-  @override
   String get checkInPremiumNotYet =>
       'Отметьтесь, чтобы получить 2 подсказки и 1 волшебную палочку на сегодня.';
 
   @override
-  String get checkInPremiumUsedUp => 'На сегодня всё использовано. До завтра!';
-
-  @override
-  String checkInExpiresIn(String time) {
-    return 'Истекает через $time';
-  }
-
-  @override
   String dashboardDailyReminder(String rewards, String time) {
-    return 'У вас ещё есть $rewards на сегодня. Они сгорят через $time — сыграйте сейчас, чтобы не потерять их!';
+    return 'У вас осталось $rewards, срок действия истекает через $time. Используйте сейчас, чтобы ничего не пропало.';
   }
 
   @override
@@ -799,4 +788,17 @@ class AppLocalizationsRu extends AppLocalizations {
   @override
   String get premiumBenefitsFootnote =>
       'Ежедневные использования не переносятся на следующий день. Награды за рубежи — это бессрочные использования, и они накапливаются как обычно.';
+
+  @override
+  String dashboardDailyReminderBoth(String hints, String wands) {
+    return '$hints и $wands';
+  }
+
+  @override
+  String checkInLegendMilestone(int count) {
+    return 'Подарок каждые $count отметок';
+  }
+
+  @override
+  String get checkInLegendPremium => 'Награда набора без рекламы';
 }
