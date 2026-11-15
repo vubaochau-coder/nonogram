@@ -18,6 +18,10 @@ class OverlayButton extends StatelessWidget {
   final Color? color;
   final bool enabled;
 
+  /// Hiện mờ như đang bị khoá nhưng vẫn nhận chạm (vd. khi gậy phép đang chờ
+  /// chọn hàng / cột: chạm vào để nhắc người chơi thay vì làm thao tác).
+  final bool muted;
+
   const OverlayButton({
     super.key,
     required this.icon,
@@ -27,13 +31,14 @@ class OverlayButton extends StatelessWidget {
     required this.onPressed,
     this.color,
     this.enabled = true,
+    this.muted = false,
   });
 
   @override
   Widget build(BuildContext context) {
     final active = color;
     final foreground =
-        !enabled
+        !enabled || muted
             ? context.color.onSurfaceVariant.withValues(alpha: 0.45)
             : (active ?? context.color.onSurface);
     final background =

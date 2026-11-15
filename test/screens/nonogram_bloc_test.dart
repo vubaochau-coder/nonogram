@@ -780,6 +780,28 @@ void main() {
       );
     });
 
+    test('hints and mode changes are blocked while choosing a line', () async {
+      await start();
+      final hints = bloc.state.remainingHints;
+      final mode = bloc.state.interactionMode;
+      bloc.add(const WandToggled());
+      await bloc.stream.firstWhere((s) => s.isWandActive);
+
+      bloc.add(const HintRequested(offsetX: 0, offsetY: 0));
+      bloc.add(const InteractionModeChanged(offsetX: 0, offsetY: 0));
+      await Future<void>.delayed(const Duration(milliseconds: 20));
+
+      expect(bloc.state.isWandActive, isTrue);
+      expect(bloc.state.remainingHints, hints);
+      expect(bloc.state.interactionMode, mode);
+      expect(
+        bloc.state.gridData
+            .expand((r) => r)
+            .every((c) => c == NonogramCellState.empty),
+        isTrue,
+      );
+    });
+
     test('selection without entering wand mode is ignored', () async {
       await start();
       bloc.add(

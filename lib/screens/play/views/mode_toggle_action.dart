@@ -9,6 +9,7 @@ import '../bloc/nonogram_play_bloc.dart';
 import '../bloc/nonogram_play_event.dart';
 import '../bloc/nonogram_play_state.dart';
 import '../nonogram_transformation_controller_provider.dart';
+import 'wand_action.dart';
 
 /// Nút gạt hai lựa chọn: chạm vào ô sẽ tô (ô vuông đặc) hay đánh X. Cả hai
 /// lựa chọn luôn hiện, lựa chọn đang bật được tô màu. Chạm vào bên nào cũng
@@ -24,12 +25,22 @@ class ModeToggleAction extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<NonogramPlayBloc, NonogramPlayState>(
-      buildWhen: (p, c) => p.interactionMode != c.interactionMode,
+      buildWhen:
+          (p, c) =>
+              p.interactionMode != c.interactionMode ||
+              p.isWandActive != c.isWandActive,
       builder: (context, state) {
         final l10n = context.l10n;
         final colors = context.color;
 
+        // Gậy phép đang chờ chọn hàng / cột: nút mờ đi, chạm vào chỉ nhắc.
+        final blocked = state.isWandActive;
+
         void toggle() {
+          if (blocked) {
+            WandNudge.of(context);
+            return;
+          }
           final t =
               NonogramTransformationControllerProvider.of(
                 context,
@@ -94,17 +105,21 @@ class ModeToggleAction extends StatelessWidget {
 
         return Material(
           color: Colors.transparent,
-          child: Container(
-            padding: const EdgeInsets.all(1),
-            decoration: BoxDecoration(
-              color: colors.surfaceContainerLow,
-              borderRadius: BorderRadius.circular(13),
-              border: Border.all(color: context.gameColors.cardBorder),
-            ),
-            child: Flex(
-              direction: vertical ? Axis.vertical : Axis.horizontal,
-              mainAxisSize: MainAxisSize.min,
-              children: children,
+          child: AnimatedOpacity(
+            opacity: blocked ? 0.4 : 1,
+            duration: const Duration(milliseconds: 160),
+            child: Container(
+              padding: const EdgeInsets.all(1),
+              decoration: BoxDecoration(
+                color: colors.surfaceContainerLow,
+                borderRadius: BorderRadius.circular(13),
+                border: Border.all(color: context.gameColors.cardBorder),
+              ),
+              child: Flex(
+                direction: vertical ? Axis.vertical : Axis.horizontal,
+                mainAxisSize: MainAxisSize.min,
+                children: children,
+              ),
             ),
           ),
         );

@@ -1230,7 +1230,7 @@ abstract class AppLocalizations {
   /// No description provided for @premiumViewBenefits.
   ///
   /// In en, this message translates to:
-  /// **'See what's included'**
+  /// **'See what\'s included'**
   String get premiumViewBenefits;
 
   /// No description provided for @premiumBenefitsTitle.
@@ -1344,7 +1344,7 @@ abstract class AppLocalizations {
   /// No description provided for @powerUpTimeLimitedDesc.
   ///
   /// In en, this message translates to:
-  /// **'Gold icon with a clock. From the pack's daily check-in reward. Expires at the end of the day.'**
+  /// **'Gold icon with a clock. From the pack\'s daily check-in reward. Expires at the end of the day.'**
   String get powerUpTimeLimitedDesc;
 
   /// No description provided for @powerUpPermanent.
