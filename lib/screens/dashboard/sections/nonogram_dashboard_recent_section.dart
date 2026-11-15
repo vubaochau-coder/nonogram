@@ -37,6 +37,14 @@ class NonogramDashboardRecentSection extends StatelessWidget {
                 ),
                 if (recent.isNotEmpty)
                   TextButton(
+                    // Bỏ vùng chạm 48dp thừa để hàng tiêu đề không cao hơn
+                    // chữ (đẩy tiêu đề xa thẻ phía trên).
+                    style: TextButton.styleFrom(
+                      visualDensity: VisualDensity.compact,
+                      tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                      padding: const EdgeInsets.symmetric(horizontal: 8),
+                      minimumSize: const Size(0, 32),
+                    ),
                     onPressed:
                         () => openFromDashboard(
                           context,
