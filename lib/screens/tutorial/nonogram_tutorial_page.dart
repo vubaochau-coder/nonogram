@@ -561,10 +561,10 @@ class _ClueTile extends StatelessWidget {
         children: [
           tile,
           if (pointed)
-            Positioned(
-              left: width / 2 - handSize * 0.42,
-              top: height / 2 - handSize * 0.08,
-              child: IgnorePointer(child: _TapHint(size: handSize)),
+            _handAt(
+              center: Offset(width / 2, height / 2),
+              size: handSize,
+              child: _TapHint(size: handSize),
             ),
         ],
       ),
@@ -740,27 +740,32 @@ class _TutorialGridState extends State<_TutorialGrid> {
                 child: IgnorePointer(
                   child: _SwipeHint(
                     from: Offset(
-                      (pending.first.col + 0.5) * cellSize - handSize * 0.42,
-                      (pending.first.row + 0.5) * cellSize - handSize * 0.08,
+                      (pending.first.col + 0.5) * cellSize -
+                          handSize * _fingertip.dx,
+                      (pending.first.row + 0.5) * cellSize -
+                          handSize * _fingertip.dy,
                     ),
                     to: Offset(
-                      (pending.last.col + 0.5) * cellSize - handSize * 0.42,
-                      (pending.last.row + 0.5) * cellSize - handSize * 0.08,
+                      (pending.last.col + 0.5) * cellSize -
+                          handSize * _fingertip.dx,
+                      (pending.last.row + 0.5) * cellSize -
+                          handSize * _fingertip.dy,
                     ),
                     size: handSize,
                   ),
                 ),
               )
             else if (pointAt != null)
-              Positioned(
-                left: (pointAt.col + 0.5) * cellSize - handSize * 0.42,
-                top: (pointAt.row + 0.5) * cellSize - handSize * 0.08,
-                child: IgnorePointer(
-                  child:
-                      step.task == TutorialTask.longPressMark
-                          ? _HoldHint(size: handSize)
-                          : _TapHint(size: handSize),
+              _handAt(
+                center: Offset(
+                  (pointAt.col + 0.5) * cellSize,
+                  (pointAt.row + 0.5) * cellSize,
                 ),
+                size: handSize,
+                child:
+                    step.task == TutorialTask.longPressMark
+                        ? _HoldHint(size: handSize)
+                        : _TapHint(size: handSize),
               ),
           ],
         ),
@@ -902,10 +907,10 @@ class _TutorialModeToggle extends StatelessWidget {
             ),
           ),
           if (pointAt == mode)
-            const Positioned(
-              left: _segment * 0.5 - 20,
-              top: _segment * 0.45,
-              child: IgnorePointer(child: _TapHint(size: 48)),
+            _handAt(
+              center: const Offset(_segment / 2, _segment / 2),
+              size: 48,
+              child: const _TapHint(size: 48),
             ),
         ],
       );
@@ -947,7 +952,26 @@ class _TutorialModeToggle extends StatelessWidget {
   }
 }
 
-/// Bàn tay nhấp nhô, đầu ngón tay ở khoảng (42%, 8%) của ô vuông [size].
+/// Tâm đầu ngón tay trong icon [Icons.touch_app] (lưới 24), theo tỉ lệ cạnh
+/// icon. Cũng là tâm các cung tròn vẽ sẵn quanh ngón tay của icon.
+const _fingertip = Offset(11.5 / 24, 7.5 / 24);
+
+/// Đặt bàn tay cỡ [size] sao cho đầu ngón tay (lúc nhấn xuống) nằm đúng
+/// [center].
+Positioned _handAt({
+  required Offset center,
+  required double size,
+  required Widget child,
+}) => Positioned(
+  left: center.dx - _fingertip.dx * size,
+  top: center.dy - _fingertip.dy * size,
+  width: size,
+  height: size,
+  child: IgnorePointer(child: child),
+);
+
+/// Bàn tay nhấp nhô: nhấc lên rồi nhấn xuống đúng đầu ngón tay; mỗi lần
+/// nhấn, hai vòng sóng lan ra từ đầu ngón tay rồi mờ dần.
 class _TapHint extends StatefulWidget {
   const _TapHint({required this.size});
 
@@ -961,8 +985,21 @@ class _TapHintState extends State<_TapHint>
     with SingleTickerProviderStateMixin {
   late final AnimationController _animation = AnimationController(
     vsync: this,
-    duration: const Duration(milliseconds: 700),
-  )..repeat(reverse: true);
+    duration: const Duration(milliseconds: 1400),
+  );
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    if (MediaQuery.disableAnimationsOf(context)) {
+      // Giảm chuyển động: bàn tay đứng yên ở tư thế nhấn, không có sóng.
+      _animation
+        ..stop()
+        ..value = 0.5;
+    } else if (!_animation.isAnimating) {
+      _animation.repeat();
+    }
+  }
 
   @override
   void dispose() {
@@ -973,27 +1010,102 @@ class _TapHintState extends State<_TapHint>
   @override
   Widget build(BuildContext context) {
     final colors = context.color;
-
-    return AnimatedBuilder(
-      animation: _animation,
-      builder: (context, child) {
-        final t = Curves.easeInOut.transform(_animation.value);
-        return Transform.translate(
-          offset: Offset(0, widget.size * 0.14 * t),
-          child: child,
-        );
-      },
-      child: Icon(
-        Icons.touch_app,
-        size: widget.size,
-        color: colors.onSurface,
-        shadows: [
-          Shadow(color: colors.surface, blurRadius: 6),
-          Shadow(color: colors.surface, blurRadius: 2),
-        ],
+    final size = widget.size;
+    final still = MediaQuery.disableAnimationsOf(context);
+    return SizedBox.square(
+      dimension: size,
+      child: AnimatedBuilder(
+        animation: _animation,
+        builder: (context, child) {
+          final v = _animation.value;
+          // 0–50%: nhấn xuống, 50–100%: nhấc lên. Nhấn chạm đúng lúc 50%.
+          final press = Curves.easeInOut.transform(
+            v < 0.5 ? v / 0.5 : (1 - v) / 0.5,
+          );
+          return Stack(
+            clipBehavior: Clip.none,
+            children: [
+              if (!still)
+                Positioned.fill(
+                  child: CustomPaint(
+                    painter: _TapRipplePainter(
+                      progress: v,
+                      center: Offset(
+                        _fingertip.dx * size,
+                        _fingertip.dy * size,
+                      ),
+                      maxRadius: size * 0.6,
+                      strokeWidth: math.max(2, size * 0.045),
+                      color: colors.primary,
+                    ),
+                  ),
+                ),
+              Transform.translate(
+                offset: Offset(0, -size * 0.14 * (1 - press)),
+                child: child,
+              ),
+            ],
+          );
+        },
+        child: Icon(
+          Icons.touch_app,
+          size: size,
+          color: colors.onSurface,
+          shadows: [
+            Shadow(color: colors.surface, blurRadius: 6),
+            Shadow(color: colors.surface, blurRadius: 2),
+          ],
+        ),
       ),
     );
   }
+}
+
+/// Hai vòng sóng (chỉ viền) lan ra từ [center] ngay lúc ngón tay nhấn xuống
+/// (giữa chu kỳ), vòng thứ hai trễ hơn một chút.
+class _TapRipplePainter extends CustomPainter {
+  _TapRipplePainter({
+    required this.progress,
+    required this.center,
+    required this.maxRadius,
+    required this.strokeWidth,
+    required this.color,
+  });
+
+  final double progress;
+  final Offset center;
+  final double maxRadius;
+  final double strokeWidth;
+  final Color color;
+
+  static const _delays = [0.0, 0.3 / 1.4];
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    for (final delay in _delays) {
+      // Mỗi vòng sống 70% chu kỳ kể từ lúc nhấn.
+      final local = (progress - 0.5 - delay) % 1.0;
+      if (local >= 0.7) continue;
+      final t = local / 0.7;
+      final radius = maxRadius * (0.15 + 0.85 * Curves.easeOut.transform(t));
+      canvas.drawCircle(
+        center,
+        radius,
+        Paint()
+          ..style = PaintingStyle.stroke
+          ..strokeWidth = strokeWidth
+          ..color = color.withValues(alpha: 0.85 * (1 - t)),
+      );
+    }
+  }
+
+  @override
+  bool shouldRepaint(_TapRipplePainter old) =>
+      old.progress != progress ||
+      old.center != center ||
+      old.maxRadius != maxRadius ||
+      old.strokeWidth != strokeWidth ||
+      old.color != color;
 }
 
 /// Bàn tay lướt từ [from] tới [to] (vị trí góc trên-trái của icon), lặp lại.
@@ -1104,8 +1216,8 @@ class _HoldHintState extends State<_HoldHint>
             children: [
               if (v >= 0.2 && v <= 0.85)
                 Positioned(
-                  left: size * 0.42 - ring / 2,
-                  top: size * 0.08 - ring / 2,
+                  left: size * _fingertip.dx - ring / 2,
+                  top: size * _fingertip.dy - ring / 2,
                   width: ring,
                   height: ring,
                   child: CircularProgressIndicator(
@@ -1116,7 +1228,7 @@ class _HoldHintState extends State<_HoldHint>
                   ),
                 ),
               Transform.translate(
-                offset: Offset(0, size * 0.12 * press),
+                offset: Offset(0, -size * 0.12 * (1 - press)),
                 child: child,
               ),
             ],
@@ -1225,10 +1337,10 @@ class _TutorialToolButton extends StatelessWidget {
           ),
         ),
         if (pointed)
-          const Positioned(
-            left: _size * 0.5 - 20,
-            top: _size * 0.45,
-            child: IgnorePointer(child: _TapHint(size: 48)),
+          _handAt(
+            center: const Offset(_size / 2, _size / 2),
+            size: 48,
+            child: const _TapHint(size: 48),
           ),
       ],
     );
