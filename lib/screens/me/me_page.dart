@@ -102,6 +102,10 @@ class MePage extends StatelessWidget {
                           key: const ValueKey('me-sound'),
                           value: enabled,
                           onChanged: sounds.setEnabled,
+                          // Bỏ vùng chạm 48dp thừa để dòng không cao hơn các
+                          // dòng khác (cả dòng vốn đã chạm được để bật / tắt).
+                          materialTapTargetSize:
+                              MaterialTapTargetSize.shrinkWrap,
                         ),
                       );
                     },

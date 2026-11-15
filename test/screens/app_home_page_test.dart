@@ -121,4 +121,20 @@ void main() {
     await tester.pump();
     expect(sounds.enabled, isFalse);
   });
+
+  testWidgets('me tab: the sound row is as tall as the other rows', (
+    tester,
+  ) async {
+    await pump(tester);
+    await tester.tap(find.byKey(const ValueKey('home-tab-me')));
+    await tester.pump();
+    final themeRow = tester.getSize(find.byKey(const ValueKey('me-theme')));
+    final soundRow = tester.getSize(
+      find.ancestor(
+        of: find.byKey(const ValueKey('me-sound')),
+        matching: find.byType(InkWell),
+      ),
+    );
+    expect(soundRow.height, themeRow.height);
+  });
 }
