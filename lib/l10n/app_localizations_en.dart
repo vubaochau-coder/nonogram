@@ -697,12 +697,6 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
-  String get dashboardDailyReminderTitle => 'Today\'s uses are waiting';
-
-  @override
-  String get dashboardDailyReminderPlay => 'Play now';
-
-  @override
   String get premiumViewBenefits => 'See what\'s included';
 
   @override

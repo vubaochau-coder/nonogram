@@ -184,8 +184,6 @@
   "checkInPremiumUsedUp": "今天的已用完，明天见！",
   "checkInExpiresIn": "{time}后过期",
   "dashboardDailyReminder": "你今天还有 {rewards}，将在 {time}后过期，快来玩别浪费了！",
-  "dashboardDailyReminderTitle": "今天的道具在等你",
-  "dashboardDailyReminderPlay": "立即游玩",
   "premiumViewBenefits": "查看权益",
   "premiumBenefitsTitle": "套餐权益",
   "premiumBenefitsTagline": "一次购买即可去除关卡之间的广告，并每天获得帮助奖励，永久绑定你的账号。",

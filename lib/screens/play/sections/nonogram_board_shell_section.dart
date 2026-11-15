@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:provider/provider.dart' show ChangeNotifierProvider;
 import 'package:nonogram/core/onboarding_preferences.dart';
 
 import '../bloc/nonogram_play_bloc.dart';
@@ -225,90 +226,95 @@ class _NonogramBoardShellSectionState extends State<NonogramBoardShellSection> {
 
   @override
   Widget build(BuildContext context) {
-    return MultiBlocListener(
-      listeners: [
-        BlocListener<NonogramPlayBloc, NonogramPlayState>(
-          // Lưu vị trí lưới cùng ván mỗi khi bàn thay đổi.
-          listenWhen: (p, c) => p.gridData != c.gridData,
-          listener: (context, state) {
-            final controller = NonogramTransformationControllerProvider.of(
-              context,
+    return ChangeNotifierProvider<WandNudge>(
+      // Nhắc khi bấm thao tác bị chặn lúc gậy phép đang chờ chọn hàng / cột.
+      create: (_) => WandNudge(),
+      child: MultiBlocListener(
+        listeners: [
+          BlocListener<NonogramPlayBloc, NonogramPlayState>(
+            // Lưu vị trí lưới cùng ván mỗi khi bàn thay đổi.
+            listenWhen: (p, c) => p.gridData != c.gridData,
+            listener: (context, state) {
+              final controller = NonogramTransformationControllerProvider.of(
+                context,
+              );
+              final t = controller.value.getTranslation();
+              context.read<NonogramPlayBloc>().add(ViewportChanged(t.x, t.y));
+            },
+          ),
+          BlocListener<NonogramPlayBloc, NonogramPlayState>(
+            // Sang màn mới: xét lại mẹo kéo bàn chơi cho màn lớn.
+            listenWhen: (p, c) => p.puzzle?.id != c.puzzle?.id,
+            listener: (context, state) => _scheduleAutoCoach(),
+          ),
+        ],
+        child: LayoutBuilder(
+          builder: (context, constraints) {
+            _boardSize = constraints.biggest;
+            final landscape = NonogramBoardLayout.isLandscapeViewport(
+              constraints.biggest,
             );
-            final t = controller.value.getTranslation();
-            context.read<NonogramPlayBloc>().add(ViewportChanged(t.x, t.y));
-          },
-        ),
-        BlocListener<NonogramPlayBloc, NonogramPlayState>(
-          // Sang màn mới: xét lại mẹo kéo bàn chơi cho màn lớn.
-          listenWhen: (p, c) => p.puzzle?.id != c.puzzle?.id,
-          listener: (context, state) => _scheduleAutoCoach(),
-        ),
-      ],
-      child: LayoutBuilder(
-        builder: (context, constraints) {
-          _boardSize = constraints.biggest;
-          final landscape = NonogramBoardLayout.isLandscapeViewport(
-            constraints.biggest,
-          );
-          // Màn dọc hẹp: nút gợi ý chỉ còn icon + huy hiệu để hàng nút vừa.
-          final compactHint = constraints.maxWidth < 400;
-          return Stack(
-            children: [
-              const Positioned.fill(child: NonogramBoardViewport()),
-              if (landscape)
-                Positioned(
-                  top: 0,
-                  right: 0,
-                  width: NonogramBoardLayout.railReserve,
-                  child: _buildRail(),
-                )
-              else
-                Positioned(
-                  top: 0,
-                  right: 16,
-                  child: BlocSelector<
-                    NonogramPlayBloc,
-                    NonogramPlayState,
-                    bool
-                  >(
-                    selector: (state) => state.isFullscreen,
-                    builder: (context, isFullscreen) {
-                      final actions = _buildOverlayActions(
-                        compactHint: compactHint,
-                      );
-                      return SafeArea(
-                        left: false,
-                        right: false,
-                        bottom: false,
-                        minimum: EdgeInsets.only(top: isFullscreen ? 16 : 0),
-                        child:
-                            isFullscreen
-                                ? NonogramFullscreenActionDock(child: actions)
-                                : actions,
-                      );
-                    },
+            // Màn dọc hẹp: nút gợi ý chỉ còn icon + huy hiệu để hàng nút vừa.
+            final compactHint = constraints.maxWidth < 400;
+            return Stack(
+              children: [
+                const Positioned.fill(child: NonogramBoardViewport()),
+                if (landscape)
+                  Positioned(
+                    top: 0,
+                    right: 0,
+                    width: NonogramBoardLayout.railReserve,
+                    child: _buildRail(),
+                  )
+                else
+                  Positioned(
+                    top: 0,
+                    right: 16,
+                    child: BlocSelector<
+                      NonogramPlayBloc,
+                      NonogramPlayState,
+                      bool
+                    >(
+                      selector: (state) => state.isFullscreen,
+                      builder: (context, isFullscreen) {
+                        final actions = _buildOverlayActions(
+                          compactHint: compactHint,
+                        );
+                        return SafeArea(
+                          left: false,
+                          right: false,
+                          bottom: false,
+                          minimum: EdgeInsets.only(top: isFullscreen ? 16 : 0),
+                          child:
+                              isFullscreen
+                                  ? NonogramFullscreenActionDock(child: actions)
+                                  : actions,
+                        );
+                      },
+                    ),
                   ),
-                ),
-              // Đang chọn hàng / cột cho gậy phép: dải hướng dẫn ở mép dưới.
-              Positioned(
-                left: 16,
-                right: landscape ? NonogramBoardLayout.railReserve + 8 : 16,
-                bottom: 16,
-                child: BlocSelector<NonogramPlayBloc, NonogramPlayState, bool>(
-                  selector: (state) => state.isWandActive,
-                  builder:
-                      (context, active) => AnimatedSwitcher(
-                        duration: const Duration(milliseconds: 180),
-                        child:
-                            active
-                                ? const Center(child: WandSelectBanner())
-                                : const SizedBox.shrink(),
+                // Đang chọn hàng / cột cho gậy phép: dải hướng dẫn ở mép dưới.
+                Positioned(
+                  left: 16,
+                  right: landscape ? NonogramBoardLayout.railReserve + 8 : 16,
+                  bottom: 16,
+                  child:
+                      BlocSelector<NonogramPlayBloc, NonogramPlayState, bool>(
+                        selector: (state) => state.isWandActive,
+                        builder:
+                            (context, active) => AnimatedSwitcher(
+                              duration: const Duration(milliseconds: 180),
+                              child:
+                                  active
+                                      ? const Center(child: WandSelectBanner())
+                                      : const SizedBox.shrink(),
+                            ),
                       ),
                 ),
-              ),
-            ],
-          );
-        },
+              ],
+            );
+          },
+        ),
       ),
     );
   }

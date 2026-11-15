@@ -139,7 +139,12 @@ class RewardAmount extends StatelessWidget {
           ),
         ),
         SizedBox(width: size * 0.15),
-        Icon(powerUpIcon(powerUp), size: size, color: color),
+        PowerUpGlyph(
+          powerUp: powerUp,
+          timeLimited: daily,
+          size: size,
+          color: color,
+        ),
       ],
     );
   }

@@ -26,6 +26,7 @@ class HintAction extends StatelessWidget {
           (p, c) =>
               p.remainingHints != c.remainingHints ||
               p.dailyHints != c.dailyHints ||
+              p.isWandActive != c.isWandActive ||
               p.isSolved != c.isSolved,
       builder: (context, state) {
         final l10n = context.l10n;
@@ -33,7 +34,10 @@ class HintAction extends StatelessWidget {
         final adOffer = state.remainingHints <= 0;
         // Còn lượt trong ngày: icon chuyển vàng kèm đồng hồ (lượt có hạn,
         // app trừ trước).
-        final timeLimited = !state.isSolved && state.dailyHints > 0;
+        // Gậy phép đang chờ chọn hàng / cột: nút mờ đi, chạm vào chỉ nhắc
+        // người chơi chọn hàng / cột hoặc huỷ.
+        final blocked = state.isWandActive;
+        final timeLimited = !state.isSolved && !blocked && state.dailyHints > 0;
         final button = OverlayButton(
           icon: LucideIcons.lightbulb,
           iconWidget:
@@ -43,7 +47,12 @@ class HintAction extends StatelessWidget {
           label:
               compact ? null : l10n.nonogramPlayHintLabel(state.remainingHints),
           enabled: !state.isSolved,
+          muted: blocked,
           onPressed: () {
+            if (blocked) {
+              WandNudge.of(context);
+              return;
+            }
             if (adOffer) {
               usePowerUpWithAd(context, PowerUp.hint);
               return;

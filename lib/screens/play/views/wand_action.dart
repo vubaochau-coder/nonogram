@@ -1,4 +1,7 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:lucide_icons/lucide_icons.dart';
 import 'package:nonogram/models/power_up_inventory.dart';
@@ -28,7 +31,6 @@ class WandAction extends StatelessWidget {
               p.isWandActive != c.isWandActive ||
               p.isSolved != c.isSolved,
       builder: (context, state) {
-        final colors = context.color;
         // Hết lượt: nút vẫn bấm được, bấm là xem quảng cáo để dùng một lượt.
         final adOffer = !state.isWandActive && state.remainingWands <= 0;
         final enabled = !state.isSolved;
@@ -41,25 +43,28 @@ class WandAction extends StatelessWidget {
           child: Stack(
             clipBehavior: Clip.none,
             children: [
-              OverlayButton(
-                key: const ValueKey('nonogram-wand'),
-                icon: LucideIcons.wand2,
-                iconWidget:
-                    timeLimited
-                        ? const PowerUpGlyph(
-                          powerUp: PowerUp.wand,
-                          timeLimited: true,
-                        )
-                        : null,
-                color: state.isWandActive ? colors.primary : null,
-                enabled: enabled,
-                onPressed: () {
-                  if (adOffer) {
-                    usePowerUpWithAd(context, PowerUp.wand);
-                    return;
-                  }
-                  context.read<NonogramPlayBloc>().add(const WandToggled());
-                },
+              _PulseRing(
+                active: state.isWandActive,
+                child: OverlayButton(
+                  key: const ValueKey('nonogram-wand'),
+                  icon: LucideIcons.wand2,
+                  iconWidget:
+                      timeLimited
+                          ? const PowerUpGlyph(
+                            powerUp: PowerUp.wand,
+                            timeLimited: true,
+                          )
+                          : null,
+                  color: state.isWandActive ? context.gameColors.reward : null,
+                  enabled: enabled,
+                  onPressed: () {
+                    if (adOffer) {
+                      usePowerUpWithAd(context, PowerUp.wand);
+                      return;
+                    }
+                    context.read<NonogramPlayBloc>().add(const WandToggled());
+                  },
+                ),
               ),
               Positioned(
                 right: -4,
@@ -75,6 +80,102 @@ class WandAction extends StatelessWidget {
               ),
             ],
           ),
+        );
+      },
+    );
+  }
+}
+
+/// Chu kỳ nhấp nháy chung của nút gậy phép và dãy số khi đang chọn hàng /
+/// cột.
+const wandPulsePeriod = Duration(milliseconds: 1600);
+
+/// Tín hiệu "nhắc" khi người chơi bấm một thao tác bị chặn trong lúc gậy
+/// phép đang chờ chọn hàng / cột: dải hướng dẫn nảy lên để kéo sự chú ý.
+class WandNudge extends ChangeNotifier {
+  void nudge() {
+    HapticFeedback.lightImpact();
+    notifyListeners();
+  }
+
+  /// Gửi nhắc nếu màn chơi có cung cấp [WandNudge] (test lẻ thì không).
+  static void of(BuildContext context) {
+    try {
+      context.read<WandNudge>().nudge();
+    } on ProviderNotFoundException {
+      HapticFeedback.lightImpact();
+    }
+  }
+}
+
+/// Vòng sáng lan ra định kỳ quanh nút gậy phép khi đang chọn hàng / cột.
+class _PulseRing extends StatefulWidget {
+  const _PulseRing({required this.active, required this.child});
+
+  final bool active;
+  final Widget child;
+
+  @override
+  State<_PulseRing> createState() => _PulseRingState();
+}
+
+class _PulseRingState extends State<_PulseRing>
+    with SingleTickerProviderStateMixin {
+  late final AnimationController _pulse = AnimationController(
+    vsync: this,
+    duration: wandPulsePeriod,
+  );
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    _sync();
+  }
+
+  @override
+  void didUpdateWidget(_PulseRing oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    _sync();
+  }
+
+  void _sync() {
+    final animate = widget.active && !MediaQuery.disableAnimationsOf(context);
+    if (animate && !_pulse.isAnimating) {
+      _pulse.repeat();
+    } else if (!animate && _pulse.isAnimating) {
+      _pulse
+        ..stop()
+        ..value = 0;
+    }
+  }
+
+  @override
+  void dispose() {
+    _pulse.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    if (!widget.active) return widget.child;
+    final gold = context.gameColors.reward;
+    return AnimatedBuilder(
+      animation: _pulse,
+      child: widget.child,
+      builder: (context, child) {
+        // Lan ra rồi tắt dần trong nửa đầu chu kỳ, nghỉ ở nửa sau.
+        final t = (_pulse.value * 2).clamp(0.0, 1.0);
+        return DecoratedBox(
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(14),
+            boxShadow: [
+              BoxShadow(
+                color: gold.withValues(alpha: 0.5 * (1 - t)),
+                spreadRadius: 7 * t,
+              ),
+            ],
+          ),
+          child: child,
         );
       },
     );
@@ -139,36 +240,92 @@ class CountBadge extends StatelessWidget {
 }
 
 /// Dải hướng dẫn khi đang chọn hàng / cột cho gậy phép, kèm nút huỷ.
-class WandSelectBanner extends StatelessWidget {
+class WandSelectBanner extends StatefulWidget {
   const WandSelectBanner({super.key});
 
   @override
+  State<WandSelectBanner> createState() => _WandSelectBannerState();
+}
+
+class _WandSelectBannerState extends State<WandSelectBanner>
+    with SingleTickerProviderStateMixin {
+  late final AnimationController _bounce = AnimationController(
+    vsync: this,
+    duration: const Duration(milliseconds: 360),
+  );
+  WandNudge? _nudge;
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    WandNudge? nudge;
+    try {
+      nudge = context.read<WandNudge>();
+    } on ProviderNotFoundException {
+      nudge = null;
+    }
+    if (nudge != _nudge) {
+      _nudge?.removeListener(_onNudge);
+      _nudge = nudge?..addListener(_onNudge);
+    }
+  }
+
+  void _onNudge() {
+    if (MediaQuery.disableAnimationsOf(context)) return;
+    _bounce.forward(from: 0);
+  }
+
+  @override
+  void dispose() {
+    _nudge?.removeListener(_onNudge);
+    _bounce.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
+    return AnimatedBuilder(
+      animation: _bounce,
+      builder:
+          (context, child) => Transform.scale(
+            scale: 1 + 0.07 * sin(pi * _bounce.value),
+            child: child,
+          ),
+      child: _banner(context),
+    );
+  }
+
+  Widget _banner(BuildContext context) {
     final colors = context.color;
+    final gold = context.gameColors.reward;
     return Material(
-      color: colors.primaryContainer,
+      color: Color.alphaBlend(
+        gold.withValues(alpha: 0.18),
+        colors.surfaceContainerLow,
+      ),
       elevation: 3,
-      borderRadius: BorderRadius.circular(14),
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(14),
+        side: BorderSide(color: gold.withValues(alpha: 0.5)),
+      ),
       child: Padding(
         padding: const EdgeInsets.fromLTRB(14, 6, 6, 6),
         child: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Icon(LucideIcons.wand2, size: 18, color: colors.onPrimaryContainer),
+            Icon(LucideIcons.wand2, size: 18, color: gold),
             const SizedBox(width: 10),
             Flexible(
               child: Text(
                 context.l10n.nonogramPlayWandSelectPrompt,
-                style: context.labelLarge.copyWith(
-                  color: colors.onPrimaryContainer,
-                ),
+                style: context.labelLarge.copyWith(color: colors.onSurface),
               ),
             ),
             const SizedBox(width: 4),
             TextButton(
               key: const ValueKey('nonogram-wand-cancel'),
               style: TextButton.styleFrom(
-                foregroundColor: colors.onPrimaryContainer,
+                foregroundColor: colors.onSurface,
                 // Giữ font của theme, chỉ đậm hơn.
                 textStyle: context.labelLarge.copyWith(
                   fontWeight: FontWeight.w800,

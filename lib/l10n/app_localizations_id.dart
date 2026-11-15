@@ -671,12 +671,6 @@ class AppLocalizationsId extends AppLocalizations {
   }
 
   @override
-  String get dashboardDailyReminderTitle => 'Bantuan hari ini menunggumu';
-
-  @override
-  String get dashboardDailyReminderPlay => 'Main sekarang';
-
-  @override
   String get premiumViewBenefits => 'Lihat manfaat';
 
   @override

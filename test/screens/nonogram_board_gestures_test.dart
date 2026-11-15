@@ -430,6 +430,30 @@ void main() {
     expect(_bloc(tester).state.remainingWands, 1);
   });
 
+  testWidgets('other actions are blocked while choosing a wand line', (
+    tester,
+  ) async {
+    await _pumpPlay(tester, phone);
+    final bloc = _bloc(tester);
+    final hints = bloc.state.remainingHints;
+    final mode = bloc.state.interactionMode;
+    await tester.tap(find.byKey(const ValueKey('nonogram-wand')));
+    await tester.pump(const Duration(milliseconds: 300));
+
+    await tester.tap(find.byIcon(LucideIcons.lightbulb));
+    await tester.pump(const Duration(milliseconds: 300));
+    await tester.tap(find.byKey(const ValueKey('nonogram-mode-mark')));
+    await tester.pump(const Duration(milliseconds: 300));
+
+    expect(bloc.state.isWandActive, isTrue);
+    expect(bloc.state.remainingHints, hints);
+    expect(bloc.state.interactionMode, mode);
+
+    await tester.tap(find.byKey(const ValueKey('nonogram-wand-cancel')));
+    await tester.pump(const Duration(milliseconds: 300));
+    expect(bloc.state.isWandActive, isFalse);
+  });
+
   /// Dùng hết lượt gậy phép (hiện đáp án hàng thứ 3).
   Future<void> useUpWand(WidgetTester tester) async {
     final bloc = _bloc(tester);

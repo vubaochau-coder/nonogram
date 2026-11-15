@@ -637,12 +637,6 @@ class AppLocalizationsZh extends AppLocalizations {
   }
 
   @override
-  String get dashboardDailyReminderTitle => '今天的道具在等你';
-
-  @override
-  String get dashboardDailyReminderPlay => '立即游玩';
-
-  @override
   String get premiumViewBenefits => '查看权益';
 
   @override
@@ -1360,12 +1354,6 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
   String dashboardDailyReminder(String rewards, String time) {
     return '你今天還有 $rewards，將在 $time後過期，快來玩別浪費了！';
   }
-
-  @override
-  String get dashboardDailyReminderTitle => '今天的道具在等你';
-
-  @override
-  String get dashboardDailyReminderPlay => '立即遊玩';
 
   @override
   String get premiumViewBenefits => '查看權益';

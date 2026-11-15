@@ -184,8 +184,6 @@
   "checkInPremiumUsedUp": "На сегодня всё использовано. До завтра!",
   "checkInExpiresIn": "Истекает через {time}",
   "dashboardDailyReminder": "У вас ещё есть {rewards} на сегодня. Они сгорят через {time} — сыграйте сейчас, чтобы не потерять их!",
-  "dashboardDailyReminderTitle": "Сегодняшние бонусы ждут вас",
-  "dashboardDailyReminderPlay": "Играть",
   "premiumViewBenefits": "Смотреть преимущества",
   "premiumBenefitsTitle": "Преимущества набора",
   "premiumBenefitsTagline": "Купите один раз, чтобы убрать рекламу между уровнями и каждый день получать награды-помощники — навсегда на вашем аккаунте.",

@@ -704,12 +704,6 @@ class AppLocalizationsFr extends AppLocalizations {
   }
 
   @override
-  String get dashboardDailyReminderTitle => 'Tes aides du jour t\'attendent';
-
-  @override
-  String get dashboardDailyReminderPlay => 'Jouer';
-
-  @override
   String get premiumViewBenefits => 'Voir les avantages';
 
   @override

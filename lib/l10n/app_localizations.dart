@@ -1227,22 +1227,10 @@ abstract class AppLocalizations {
   /// **'You still have {rewards} for today. They expire in {time}, so play now and don\'t let them go to waste!'**
   String dashboardDailyReminder(String rewards, String time);
 
-  /// No description provided for @dashboardDailyReminderTitle.
-  ///
-  /// In en, this message translates to:
-  /// **'Today\'s uses are waiting'**
-  String get dashboardDailyReminderTitle;
-
-  /// No description provided for @dashboardDailyReminderPlay.
-  ///
-  /// In en, this message translates to:
-  /// **'Play now'**
-  String get dashboardDailyReminderPlay;
-
   /// No description provided for @premiumViewBenefits.
   ///
   /// In en, this message translates to:
-  /// **'See what's included'**
+  /// **'See what\'s included'**
   String get premiumViewBenefits;
 
   /// No description provided for @premiumBenefitsTitle.
@@ -1356,7 +1344,7 @@ abstract class AppLocalizations {
   /// No description provided for @powerUpTimeLimitedDesc.
   ///
   /// In en, this message translates to:
-  /// **'Gold icon with a clock. From the pack's daily check-in reward. Expires at the end of the day.'**
+  /// **'Gold icon with a clock. From the pack\'s daily check-in reward. Expires at the end of the day.'**
   String get powerUpTimeLimitedDesc;
 
   /// No description provided for @powerUpPermanent.

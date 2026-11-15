@@ -390,7 +390,8 @@ class NonogramPlayBloc extends AppBloc<NonogramPlayEvent, NonogramPlayState> {
   }
 
   _onInteractionModeChanged(InteractionModeChanged event, Emitter emit) {
-    if (state.isSolved) return;
+    // Gậy phép đang chờ chọn hàng / cột: các thao tác khác bị chặn.
+    if (state.isSolved || state.isWandActive) return;
     _dragSession = null;
     final nextMode =
         state.interactionMode == NonogramInteractionMode.mark
@@ -630,6 +631,8 @@ class NonogramPlayBloc extends AppBloc<NonogramPlayEvent, NonogramPlayState> {
   }
 
   _onHintRequested(HintRequested event, Emitter emit) async {
+    // Gậy phép đang chờ chọn hàng / cột: không tiêu lượt gợi ý.
+    if (state.isWandActive) return;
     final inventory = _current;
     if (inventory.totalHints <= 0) {
       // Lượt trong ngày vừa hết hạn: cập nhật badge (thành nút quảng cáo).

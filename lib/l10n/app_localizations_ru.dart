@@ -706,12 +706,6 @@ class AppLocalizationsRu extends AppLocalizations {
   }
 
   @override
-  String get dashboardDailyReminderTitle => 'Сегодняшние бонусы ждут вас';
-
-  @override
-  String get dashboardDailyReminderPlay => 'Играть';
-
-  @override
   String get premiumViewBenefits => 'Смотреть преимущества';
 
   @override

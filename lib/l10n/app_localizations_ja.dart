@@ -648,12 +648,6 @@ class AppLocalizationsJa extends AppLocalizations {
   }
 
   @override
-  String get dashboardDailyReminderTitle => '今日の分が待っています';
-
-  @override
-  String get dashboardDailyReminderPlay => '今すぐプレイ';
-
-  @override
   String get premiumViewBenefits => '特典を見る';
 
   @override
