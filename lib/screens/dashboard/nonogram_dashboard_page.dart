@@ -91,10 +91,10 @@ class _NonogramDashboardViewState extends State<_NonogramDashboardView> {
                 children: const [
                   NonogramDashboardHeroSection(),
                   SizedBox(height: 20),
+                  // Tự có lề dưới 20 khi hiện; ẩn thì không chiếm chỗ.
                   DailyUsesReminder(),
-                  SizedBox(height: 20),
                   NonogramDashboardProgressSection(),
-                  SizedBox(height: 24),
+                  SizedBox(height: 20),
                   NonogramDashboardRecentSection(),
                 ],
               ),
