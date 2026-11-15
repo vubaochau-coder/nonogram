@@ -225,11 +225,11 @@ class _CheckInTabState extends State<CheckInTab> with TickerProviderStateMixin {
             controller: _scroll,
             padding: const EdgeInsets.fromLTRB(16, 12, 16, 110),
             children: [
-              _StatusCard(checkedIn: checkedIn, count: count),
-              if (service.isPremium) ...[
-                const SizedBox(height: 12),
-                _PremiumToday(checkedIn: checkedIn),
-              ],
+              _StatusCard(
+                checkedIn: checkedIn,
+                count: count,
+                premium: service.isPremium,
+              ),
               const SizedBox(height: 16),
               Card(
                 child: Padding(
@@ -247,7 +247,15 @@ class _CheckInTabState extends State<CheckInTab> with TickerProviderStateMixin {
                         month: month,
                         todayKey: _todayKey,
                         holdToday: hold,
-                        giftPending: _heldGift != null,
+                      ),
+                      _CalendarLegend(
+                        // Vương miện: đang có gói, hoặc tháng này từng nhận
+                        // quà của gói.
+                        premium:
+                            service.isPremium ||
+                            month.days.any(
+                              (d) => d.checked && d.rewards.any((r) => r.daily),
+                            ),
                       ),
                     ],
                   ),
@@ -289,68 +297,160 @@ class _CheckInTabState extends State<CheckInTab> with TickerProviderStateMixin {
   }
 }
 
-/// Thẻ trên cùng: hôm nay đã / chưa điểm danh, còn mấy lần tới quà.
+/// Thẻ trên cùng: hôm nay đã / chưa điểm danh, còn mấy lần tới quà. Chưa
+/// điểm danh: nền gradient để kéo chú ý (người có gói thấy thêm dòng nhắc
+/// nhận quà gói). Đã điểm danh: nền xanh lá nhạt.
 class _StatusCard extends StatelessWidget {
-  const _StatusCard({required this.checkedIn, required this.count});
+  const _StatusCard({
+    required this.checkedIn,
+    required this.count,
+    required this.premium,
+  });
 
   final bool checkedIn;
   final int count;
+  final bool premium;
 
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
-    final color =
-        checkedIn ? context.gameColors.success : context.color.primary;
-    return Card(
-      key: const ValueKey('check-in-status'),
-      child: Padding(
-        padding: const EdgeInsets.all(16),
-        child: Row(
-          children: [
-            AnimatedSwitcher(
-              duration: const Duration(milliseconds: 300),
-              transitionBuilder:
-                  (child, animation) =>
-                      ScaleTransition(scale: animation, child: child),
-              child: Container(
-                key: ValueKey(checkedIn),
-                width: 44,
-                height: 44,
-                decoration: BoxDecoration(
-                  color: color.withValues(alpha: 0.12),
-                  shape: BoxShape.circle,
-                ),
-                child: Icon(
-                  checkedIn ? LucideIcons.checkCircle2 : LucideIcons.gift,
-                  color: color,
-                  size: 22,
-                ),
-              ),
+    final colors = context.color;
+    final game = context.gameColors;
+    final success = game.success;
+    final next = l10n.checkInNextGift(
+      CheckInPolicy.checkInsToNextMilestone(count),
+    );
+
+    final Widget icon;
+    final Widget text;
+    final BoxDecoration decoration;
+    if (checkedIn) {
+      decoration = BoxDecoration(
+        color: Color.alphaBlend(
+          success.withValues(alpha: 0.12),
+          colors.surfaceContainerLow,
+        ),
+        borderRadius: BorderRadius.circular(20),
+        border: Border.all(color: success.withValues(alpha: 0.35)),
+      );
+      icon = _StatusIcon(
+        background: success.withValues(alpha: 0.22),
+        child: Icon(LucideIcons.checkCircle2, color: success, size: 22),
+      );
+      text = Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            l10n.checkInDoneToday,
+            style: context.titleSmall.copyWith(color: success),
+          ),
+          const SizedBox(height: 4),
+          Text(
+            next,
+            style: context.bodySmall.copyWith(color: colors.onSurfaceVariant),
+          ),
+        ],
+      );
+    } else {
+      decoration = BoxDecoration(
+        gradient: LinearGradient(
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+          colors: [game.heroStart, game.heroEnd],
+        ),
+        borderRadius: BorderRadius.circular(20),
+        boxShadow: [
+          BoxShadow(
+            color: game.heroStart.withValues(alpha: 0.28),
+            blurRadius: 20,
+            offset: const Offset(0, 8),
+          ),
+        ],
+      );
+      icon = _StatusIcon(
+        background: Colors.white.withValues(alpha: 0.2),
+        child: const Icon(LucideIcons.gift, color: Colors.white, size: 22),
+      );
+      text = Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            l10n.checkInNotYetToday,
+            style: context.titleSmall.copyWith(color: Colors.white),
+          ),
+          const SizedBox(height: 4),
+          Text(
+            next,
+            style: context.bodySmall.copyWith(
+              color: Colors.white.withValues(alpha: 0.88),
             ),
-            const SizedBox(width: 14),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    checkedIn ? l10n.checkInDoneToday : l10n.checkInNotYetToday,
-                    style: context.titleSmall,
+          ),
+          if (premium) ...[
+            const SizedBox(height: 8),
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const Padding(
+                  padding: EdgeInsets.only(top: 1),
+                  child: Icon(
+                    LucideIcons.crown,
+                    size: 15,
+                    color: Color(0xFFFFD66B),
                   ),
-                  const SizedBox(height: 4),
-                  Text(
-                    l10n.checkInNextGift(
-                      CheckInPolicy.checkInsToNextMilestone(count),
-                    ),
+                ),
+                const SizedBox(width: 6),
+                Expanded(
+                  child: Text(
+                    l10n.checkInPremiumNotYet,
                     style: context.bodySmall.copyWith(
-                      color: context.color.onSurfaceVariant,
+                      color: Colors.white,
+                      fontWeight: FontWeight.w700,
                     ),
                   ),
-                ],
-              ),
+                ),
+              ],
             ),
           ],
-        ),
+        ],
+      );
+    }
+
+    return AnimatedContainer(
+      key: const ValueKey('check-in-status'),
+      duration: const Duration(milliseconds: 300),
+      padding: const EdgeInsets.all(16),
+      decoration: decoration,
+      child: Row(
+        children: [
+          AnimatedSwitcher(
+            duration: const Duration(milliseconds: 300),
+            transitionBuilder:
+                (child, animation) =>
+                    ScaleTransition(scale: animation, child: child),
+            child: KeyedSubtree(key: ValueKey(checkedIn), child: icon),
+          ),
+          const SizedBox(width: 14),
+          Expanded(child: text),
+        ],
       ),
+    );
+  }
+}
+
+class _StatusIcon extends StatelessWidget {
+  const _StatusIcon({required this.background, required this.child});
+
+  final Color background;
+  final Widget child;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: 44,
+      height: 44,
+      decoration: BoxDecoration(color: background, shape: BoxShape.circle),
+      alignment: Alignment.center,
+      child: child,
     );
   }
 }
@@ -463,84 +563,6 @@ class _CheckInButtonState extends State<_CheckInButton> {
   }
 }
 
-class _PremiumToday extends StatelessWidget {
-  const _PremiumToday({required this.checkedIn});
-
-  final bool checkedIn;
-
-  @override
-  Widget build(BuildContext context) {
-    final l10n = context.l10n;
-    final yellow = rewardColor(context, daily: true);
-    return Card(
-      key: const ValueKey('check-in-premium-today'),
-      child: Padding(
-        padding: const EdgeInsets.all(16),
-        child: PowerUpsBuilder(
-          builder: (context, inv, now) {
-            final String detail;
-            Widget? amounts;
-            if (!checkedIn) {
-              detail = l10n.checkInPremiumNotYet;
-            } else if (inv == null || !inv.hasDaily) {
-              detail = l10n.checkInPremiumUsedUp;
-            } else {
-              detail = l10n.checkInExpiresIn(
-                context.timeLeft(now, endOfTodayOf(context, now)),
-              );
-              amounts = Row(
-                children: [
-                  if (inv.dailyHints > 0)
-                    RewardAmount(
-                      powerUp: PowerUp.hint,
-                      amount: inv.dailyHints,
-                      daily: true,
-                      size: 18,
-                    ),
-                  if (inv.dailyHints > 0 && inv.dailyWands > 0)
-                    const SizedBox(width: 16),
-                  if (inv.dailyWands > 0)
-                    RewardAmount(
-                      powerUp: PowerUp.wand,
-                      amount: inv.dailyWands,
-                      daily: true,
-                      size: 18,
-                    ),
-                ],
-              );
-            }
-            return Row(
-              children: [
-                Icon(LucideIcons.crown, color: yellow),
-                const SizedBox(width: 12),
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(l10n.checkInPremiumToday, style: context.titleSmall),
-                      if (amounts != null) ...[
-                        const SizedBox(height: 6),
-                        amounts,
-                      ],
-                      const SizedBox(height: 4),
-                      Text(
-                        detail,
-                        style: context.bodySmall.copyWith(
-                          color: context.color.onSurfaceVariant,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ],
-            );
-          },
-        ),
-      ),
-    );
-  }
-}
-
 class _MonthNavigator extends StatelessWidget {
   const _MonthNavigator({
     required this.month,
@@ -594,7 +616,6 @@ class _CalendarGrid extends StatelessWidget {
     required this.month,
     required this.todayKey,
     required this.holdToday,
-    required this.giftPending,
   });
 
   final CheckInMonth month;
@@ -602,9 +623,6 @@ class _CalendarGrid extends StatelessWidget {
 
   /// Ô hôm nay vẽ như chưa điểm danh (hiệu ứng chưa tới).
   final bool holdToday;
-
-  /// Quà hôm nay chưa nhận: huy hiệu vẫn là hộp quà.
-  final bool giftPending;
 
   @override
   Widget build(BuildContext context) {
@@ -658,7 +676,6 @@ class _CalendarGrid extends StatelessWidget {
                             key: day.isToday ? todayKey : null,
                             day: day,
                             checked: day.checked && !(day.isToday && holdToday),
-                            giftPending: day.isToday && giftPending,
                           ),
                         },
                       ),
@@ -672,116 +689,284 @@ class _CalendarGrid extends StatelessWidget {
   }
 }
 
-/// Một ngày trên lịch. Đã điểm danh: nền gradient, số nhỏ và dấu tích trắng.
-/// Ngày có quà mốc: huy hiệu hộp quà ở góc (đã nhận: dấu tích vàng).
+/// Màu của ngày mốc quà (mỗi [CheckInPolicy.milestoneEvery] lần điểm danh).
+/// Chế độ tối dùng nền đậm và gradient tươi hơn để ngày mốc vẫn nổi.
+class _MilestoneColors {
+  _MilestoneColors.of(BuildContext context)
+    : this._(context, Theme.of(context).brightness == Brightness.dark);
+
+  _MilestoneColors._(BuildContext context, bool dark)
+    : background = Color.alphaBlend(
+        context.color.primary.withValues(alpha: dark ? 0.40 : 0.13),
+        context.color.surfaceContainerLow,
+      ),
+      ink = dark ? const Color(0xFFDCE3FF) : context.color.primary,
+      gradient =
+          dark
+              ? const [Color(0xFF4C6EF5), Color(0xFF7950F2)]
+              : [context.gameColors.heroStart, context.gameColors.heroEnd];
+
+  /// Nền của ngày mốc chưa tới.
+  final Color background;
+
+  /// Chữ của ngày mốc chưa tới.
+  final Color ink;
+
+  /// Nền của ngày mốc đã điểm danh.
+  final List<Color> gradient;
+}
+
+/// Một ngày trên lịch.
+/// - Đã điểm danh: nền nhạt, số nhỏ và dấu tích mảnh; ngày mốc quà thì nền
+///   gradient, dấu tích đậm.
+/// - Ngày mốc chưa tới: số to, nền màu, không viền (viền dành cho hôm nay).
+/// - Hôm nay: luôn có vòng viền bao ngoài ô.
+/// - Ngày có quà gói không quảng cáo: vương miện ở góc (đã nhận: đặc; sắp
+///   tới: viền).
 class _DayCell extends StatelessWidget {
-  const _DayCell({
-    super.key,
-    required this.day,
-    required this.checked,
-    required this.giftPending,
-  });
+  const _DayCell({super.key, required this.day, required this.checked});
 
   final CheckInDay day;
   final bool checked;
-  final bool giftPending;
 
   @override
   Widget build(BuildContext context) {
     final colors = context.color;
-    final game = context.gameColors;
-    final Border? border;
-    if (day.beforeStart || checked) {
-      border = null;
-    } else if (day.isToday) {
-      border = Border.all(color: colors.primary, width: 2);
+    final milestone = day.hasMilestone;
+    final ms = _MilestoneColors.of(context);
+    final dark = Theme.of(context).brightness == Brightness.dark;
+    final premiumDay = day.rewards.any((r) => r.daily);
+
+    final Widget content;
+    BoxDecoration decoration;
+    if (checked) {
+      final ink = milestone ? Colors.white : colors.primary;
+      decoration = BoxDecoration(
+        color:
+            milestone
+                ? null
+                : Color.alphaBlend(
+                  colors.primary.withValues(alpha: dark ? 0.20 : 0.14),
+                  colors.surfaceContainerLow,
+                ),
+        gradient:
+            milestone
+                ? LinearGradient(
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
+                  colors: ms.gradient,
+                )
+                : null,
+        boxShadow:
+            milestone
+                ? [
+                  BoxShadow(
+                    color: ms.gradient.first.withValues(alpha: 0.4),
+                    blurRadius: 10,
+                    offset: const Offset(0, 4),
+                  ),
+                ]
+                : null,
+        borderRadius: BorderRadius.circular(10),
+      );
+      content = Column(
+        key: ValueKey('check-in-checked-${day.dayOfMonth}'),
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Text(
+            '${day.dayOfMonth}',
+            style: context.labelSmall.copyWith(
+              color:
+                  milestone
+                      ? Colors.white
+                      : Color.lerp(colors.primary, colors.onSurface, 0.25),
+              fontSize: milestone ? 13.5 : null,
+              fontWeight: milestone ? FontWeight.w800 : FontWeight.w700,
+              height: 1,
+            ),
+          ),
+          const SizedBox(height: 2),
+          milestone
+              ? Icon(Icons.check_rounded, color: ink, size: 20)
+              : Icon(LucideIcons.check, color: ink, size: 16),
+        ],
+      );
     } else {
-      border = Border.all(color: colors.outlineVariant);
+      final upcomingMilestone = milestone && !day.beforeStart;
+      final Border? border;
+      if (day.beforeStart || upcomingMilestone || day.isToday) {
+        border = null;
+      } else {
+        border = Border.all(color: colors.outlineVariant);
+      }
+      decoration = BoxDecoration(
+        color: upcomingMilestone ? ms.background : null,
+        border: border,
+        borderRadius: BorderRadius.circular(10),
+      );
+      final TextStyle style;
+      if (upcomingMilestone) {
+        style = context.labelLarge.copyWith(
+          fontSize: 17,
+          fontWeight: FontWeight.w800,
+          color: ms.ink,
+        );
+      } else {
+        style = context.labelLarge.copyWith(
+          fontSize: day.isToday ? 13.5 : 12.5,
+          fontWeight: day.isToday ? FontWeight.w800 : FontWeight.w600,
+          color:
+              day.beforeStart
+                  ? colors.onSurfaceVariant.withValues(alpha: 0.4)
+                  : colors.onSurface,
+        );
+      }
+      content = Center(child: Text('${day.dayOfMonth}', style: style));
     }
-    final gotGift = day.hasMilestone && checked && !giftPending;
 
     return Stack(
       clipBehavior: Clip.none,
       children: [
         Positioned.fill(
-          child: Container(
-            key: ValueKey('check-in-day-${day.dayOfMonth}'),
-            decoration: BoxDecoration(
-              gradient:
-                  checked
-                      ? LinearGradient(
-                        begin: Alignment.topLeft,
-                        end: Alignment.bottomRight,
-                        colors: [game.heroStart, game.heroEnd],
-                      )
-                      : null,
-              border: border,
-              borderRadius: BorderRadius.circular(10),
+          child: KeyedSubtree(
+            key:
+                milestone
+                    ? ValueKey('check-in-milestone-${day.dayOfMonth}')
+                    : null,
+            child: Container(
+              key: ValueKey('check-in-day-${day.dayOfMonth}'),
+              decoration: decoration,
+              child: content,
             ),
-            child:
-                checked
-                    ? Column(
-                      key: ValueKey('check-in-checked-${day.dayOfMonth}'),
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text(
-                          '${day.dayOfMonth}',
-                          style: context.labelSmall.copyWith(
-                            color: Colors.white.withValues(alpha: 0.85),
-                            fontWeight: FontWeight.w700,
-                            height: 1,
-                          ),
-                        ),
-                        const SizedBox(height: 2),
-                        const Icon(
-                          Icons.check_rounded,
-                          color: Colors.white,
-                          size: 20,
-                        ),
-                      ],
-                    )
-                    : Center(
-                      child: Text(
-                        '${day.dayOfMonth}',
-                        style: context.labelLarge.copyWith(
-                          fontWeight:
-                              day.isToday ? FontWeight.w800 : FontWeight.w600,
-                          color:
-                              day.beforeStart
-                                  ? colors.onSurfaceVariant.withValues(
-                                    alpha: 0.4,
-                                  )
-                                  : colors.onSurface,
-                        ),
-                      ),
-                    ),
           ),
         ),
-        if (day.hasMilestone)
+        // Hôm nay: vòng viền bao ngoài ô (cách 1px), thấy rõ cả trên nền
+        // gradient của ngày mốc.
+        if (day.isToday)
+          Positioned(
+            left: -3,
+            top: -3,
+            right: -3,
+            bottom: -3,
+            child: IgnorePointer(
+              child: DecoratedBox(
+                key: const ValueKey('check-in-today-ring'),
+                decoration: BoxDecoration(
+                  border: Border.all(color: colors.primary, width: 2),
+                  borderRadius: BorderRadius.circular(13),
+                ),
+              ),
+            ),
+          ),
+        if (premiumDay)
           Positioned(
             right: -5,
             top: -5,
-            child: Container(
-              key: ValueKey('check-in-gift-${day.dayOfMonth}'),
-              width: 18,
-              height: 18,
-              decoration: BoxDecoration(
-                color: gotGift ? game.reward : colors.primary,
-                shape: BoxShape.circle,
-                border: Border.all(
-                  color: colors.surfaceContainerLow,
-                  width: 1.5,
-                ),
-              ),
-              alignment: Alignment.center,
-              child: Icon(
-                gotGift ? Icons.check_rounded : LucideIcons.gift,
-                size: 10,
-                color: Colors.white,
-              ),
+            child: _CrownBadge(
+              key: ValueKey('check-in-crown-${day.dayOfMonth}'),
+              upcoming: !checked,
             ),
           ),
       ],
+    );
+  }
+}
+
+/// Vương miện ở góc ô: ngày nhận quà của gói không quảng cáo. Đã nhận: nền
+/// vàng đặc; sắp tới: viền vàng.
+class _CrownBadge extends StatelessWidget {
+  const _CrownBadge({super.key, this.upcoming = false});
+
+  final bool upcoming;
+
+  @override
+  Widget build(BuildContext context) {
+    final gold = context.gameColors.reward;
+    final card = context.color.surfaceContainerLow;
+    return Container(
+      width: 18,
+      height: 18,
+      decoration: BoxDecoration(
+        color: upcoming ? card : gold,
+        shape: BoxShape.circle,
+        border: Border.all(
+          color: upcoming ? gold.withValues(alpha: 0.65) : card,
+          width: 1.5,
+        ),
+      ),
+      alignment: Alignment.center,
+      child: Icon(
+        LucideIcons.crown,
+        size: 10,
+        color: upcoming ? gold : const Color(0xFF2B1A00),
+      ),
+    );
+  }
+}
+
+/// Chú thích dưới lịch: ô mốc quà, và vương miện của gói (nếu có).
+class _CalendarLegend extends StatelessWidget {
+  const _CalendarLegend({required this.premium});
+
+  final bool premium;
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = context.l10n;
+    final ms = _MilestoneColors.of(context);
+    final style = context.bodySmall.copyWith(
+      color: context.color.onSurfaceVariant,
+    );
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(6, 6, 6, 0),
+      child: Align(
+        alignment: Alignment.centerLeft,
+        child: Wrap(
+          spacing: 16,
+          runSpacing: 6,
+          children: [
+            Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Container(
+                  constraints: const BoxConstraints(minWidth: 22),
+                  height: 22,
+                  alignment: Alignment.center,
+                  decoration: BoxDecoration(
+                    color: ms.background,
+                    borderRadius: BorderRadius.circular(6),
+                  ),
+                  child: Text(
+                    '${CheckInPolicy.milestoneEvery}',
+                    style: context.labelSmall.copyWith(
+                      color: ms.ink,
+                      fontWeight: FontWeight.w800,
+                    ),
+                  ),
+                ),
+                const SizedBox(width: 6),
+                Flexible(
+                  child: Text(
+                    l10n.checkInLegendMilestone(CheckInPolicy.milestoneEvery),
+                    style: style,
+                  ),
+                ),
+              ],
+            ),
+            if (premium)
+              Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  const _CrownBadge(),
+                  const SizedBox(width: 6),
+                  Flexible(
+                    child: Text(l10n.checkInLegendPremium, style: style),
+                  ),
+                ],
+              ),
+          ],
+        ),
+      ),
     );
   }
 }

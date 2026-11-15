@@ -142,28 +142,42 @@ void main() {
     expect(find.byKey(const ValueKey('check-in-button')), findsNothing);
   });
 
-  testWidgets('gift badges sit on the projected milestone days', (
+  testWidgets('milestone days are highlighted, no crowns without the pack', (
     tester,
   ) async {
     await pump(tester);
     // Chưa điểm danh lần nào, hôm nay 13/11: lần thứ 5 là 17/11, thứ 10 là
     // 22/11.
-    expect(find.byKey(const ValueKey('check-in-gift-17')), findsOneWidget);
-    expect(find.byKey(const ValueKey('check-in-gift-22')), findsOneWidget);
-    expect(find.byKey(const ValueKey('check-in-gift-16')), findsNothing);
-    expect(find.byKey(const ValueKey('check-in-premium-today')), findsNothing);
+    expect(find.byKey(const ValueKey('check-in-milestone-17')), findsOneWidget);
+    expect(find.byKey(const ValueKey('check-in-milestone-22')), findsOneWidget);
+    expect(find.byKey(const ValueKey('check-in-milestone-16')), findsNothing);
+    expect(find.byKey(const ValueKey('check-in-crown-13')), findsNothing);
+    expect(find.text('Quà gói không quảng cáo'), findsNothing);
+    // Hôm nay luôn có vòng viền, kể cả khi chưa điểm danh.
+    expect(find.byKey(const ValueKey('check-in-today-ring')), findsOneWidget);
   });
 
-  testWidgets('premium sees today\'s card and today-only totals', (
+  testWidgets('premium: crowns on pack days and today-only totals', (
     tester,
   ) async {
     await pump(tester, premium: true);
+    // Không còn thẻ riêng của gói: lời nhắc nằm trong thẻ trạng thái.
     expect(
-      find.byKey(const ValueKey('check-in-premium-today')),
+      find.text('Điểm danh để nhận 2 gợi ý và 1 gậy phép dùng trong hôm nay.'),
       findsOneWidget,
     );
+    expect(find.byKey(const ValueKey('check-in-crown-13')), findsOneWidget);
+    expect(find.byKey(const ValueKey('check-in-crown-30')), findsOneWidget);
+    expect(find.text('Quà gói không quảng cáo'), findsOneWidget);
+
     await tester.tap(find.byKey(const ValueKey('check-in-button')));
     await settle(tester);
+    // Đã điểm danh: lời nhắc của gói biến mất, ô hôm nay vẫn có vòng viền.
+    expect(
+      find.text('Điểm danh để nhận 2 gợi ý và 1 gậy phép dùng trong hôm nay.'),
+      findsNothing,
+    );
+    expect(find.byKey(const ValueKey('check-in-today-ring')), findsOneWidget);
     expect(find.byKey(const ValueKey('check-in-total-hint-daily')), findsOne);
     final total = tester.widget<Text>(
       find.byKey(const ValueKey('check-in-total-hint-daily')),

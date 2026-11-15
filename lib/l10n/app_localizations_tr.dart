@@ -647,24 +647,12 @@ class AppLocalizationsTr extends AppLocalizations {
   String get checkInTotalDailyWands => 'Sihirli değnekler (yalnızca bugün)';
 
   @override
-  String get checkInPremiumToday => 'Bugün reklamsız paketinden';
-
-  @override
   String get checkInPremiumNotYet =>
       'Bugün için 2 ipucu ve 1 sihirli değnek almak için giriş yap.';
 
   @override
-  String get checkInPremiumUsedUp =>
-      'Bugünkülerin hepsi kullanıldı. Yarın görüşürüz!';
-
-  @override
-  String checkInExpiresIn(String time) {
-    return '$time sonra sona eriyor';
-  }
-
-  @override
   String dashboardDailyReminder(String rewards, String time) {
-    return 'Bugün için hâlâ $rewards var. $time sonra sona erecek, boşa gitmemesi için hemen oyna!';
+    return '$time içinde sona erecek $rewards hakkın var. Boşa gitmemesi için hemen kullan.';
   }
 
   @override
@@ -760,4 +748,17 @@ class AppLocalizationsTr extends AppLocalizations {
   @override
   String get premiumBenefitsFootnote =>
       'Günlük haklar ertesi güne devredilmez. Kilometre taşı ödülleri kalıcı haklardır ve her zamanki gibi birikir.';
+
+  @override
+  String dashboardDailyReminderBoth(String hints, String wands) {
+    return '$hints ve $wands';
+  }
+
+  @override
+  String checkInLegendMilestone(int count) {
+    return 'Her $count girişte hediye';
+  }
+
+  @override
+  String get checkInLegendPremium => 'Reklamsız paket ödülü';
 }

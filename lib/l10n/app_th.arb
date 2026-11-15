@@ -179,11 +179,8 @@
   "checkInTotalWands": "ไม้กายสิทธิ์",
   "checkInTotalDailyHints": "คำใบ้ (เฉพาะวันนี้)",
   "checkInTotalDailyWands": "ไม้กายสิทธิ์ (เฉพาะวันนี้)",
-  "checkInPremiumToday": "วันนี้จากแพ็กไม่มีโฆษณา",
   "checkInPremiumNotYet": "เช็กอินเพื่อรับคำใบ้ 2 ครั้งและไม้กายสิทธิ์ 1 ครั้งสำหรับวันนี้",
-  "checkInPremiumUsedUp": "วันนี้ใช้หมดแล้ว พบกันพรุ่งนี้!",
-  "checkInExpiresIn": "หมดอายุใน {time}",
-  "dashboardDailyReminder": "วันนี้คุณยังเหลือ {rewards} จะหมดอายุใน {time} เล่นเลยเพื่อไม่ให้เสียเปล่า!",
+  "dashboardDailyReminder": "คุณยังมี{rewards}ที่จะหมดอายุใน {time} ใช้เลยเพื่อไม่ให้เสียเปล่า",
   "premiumViewBenefits": "ดูสิทธิประโยชน์",
   "premiumBenefitsTitle": "สิทธิประโยชน์ของแพ็ก",
   "premiumBenefitsTagline": "ซื้อครั้งเดียวเพื่อลบโฆษณาระหว่างด่านและรับรางวัลตัวช่วยทุกวัน ตลอดไปบนบัญชีของคุณ",
@@ -211,5 +208,8 @@
   "powerUpSpendOrderBody": "สิทธิ์รายวันหมดอายุเมื่อสิ้นวัน ดังนั้นคำใบ้หรือไม้กายสิทธิ์จะใช้สิทธิ์รายวันก่อน และจะใช้สิทธิ์ถาวรก็ต่อเมื่อสิทธิ์รายวันหมดแล้ว จึงไม่มีอะไรสูญเปล่า",
   "powerUpSpendDaily": "สิทธิ์รายวัน",
   "powerUpSpendPermanent": "สิทธิ์ถาวร",
-  "premiumBenefitsFootnote": "สิทธิ์รายวันไม่ยกยอดไปวันถัดไป รางวัลหมุดหมายเป็นสิทธิ์ถาวรและสะสมได้ตามปกติ"
+  "premiumBenefitsFootnote": "สิทธิ์รายวันไม่ยกยอดไปวันถัดไป รางวัลหมุดหมายเป็นสิทธิ์ถาวรและสะสมได้ตามปกติ",
+  "dashboardDailyReminderBoth": "{hints}และ{wands}",
+  "checkInLegendMilestone": "ของขวัญทุก {count} ครั้งที่เช็กอิน",
+  "checkInLegendPremium": "รางวัลแพ็กไม่มีโฆษณา"
 }

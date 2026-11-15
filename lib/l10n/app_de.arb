@@ -179,11 +179,8 @@
   "checkInTotalWands": "Zauberstäbe",
   "checkInTotalDailyHints": "Tipps (nur heute)",
   "checkInTotalDailyWands": "Zauberstäbe (nur heute)",
-  "checkInPremiumToday": "Heute aus deinem Werbefrei-Paket",
   "checkInPremiumNotYet": "Checke ein, um heute 2 Tipps und 1 Zauberstab zu bekommen.",
-  "checkInPremiumUsedUp": "Für heute alles verbraucht. Bis morgen!",
-  "checkInExpiresIn": "Läuft ab in {time}",
-  "dashboardDailyReminder": "Du hast heute noch {rewards}. Sie laufen in {time} ab – spiel jetzt, damit nichts verfällt!",
+  "dashboardDailyReminder": "Du hast noch {rewards}, die in {time} ablaufen. Nutze sie jetzt, damit nichts verfällt.",
   "premiumViewBenefits": "Vorteile ansehen",
   "premiumBenefitsTitle": "Paketvorteile",
   "premiumBenefitsTagline": "Einmal kaufen, Werbung zwischen den Levels entfernen und jeden Tag Hilfsbelohnungen erhalten, dauerhaft auf deinem Konto.",
@@ -211,5 +208,8 @@
   "powerUpSpendOrderBody": "Tägliche Nutzungen laufen am Ende des Tages ab. Darum verbraucht ein Tipp oder Zauberstab zuerst deine täglichen Nutzungen und erst dann deine dauerhaften, wenn die täglichen aufgebraucht sind. So geht nichts verloren.",
   "powerUpSpendDaily": "Tägliche Nutzungen",
   "powerUpSpendPermanent": "Dauerhafte Nutzungen",
-  "premiumBenefitsFootnote": "Tägliche Nutzungen werden nicht auf den nächsten Tag übertragen. Meilenstein-Belohnungen sind dauerhafte Nutzungen und sammeln sich wie gewohnt an."
+  "premiumBenefitsFootnote": "Tägliche Nutzungen werden nicht auf den nächsten Tag übertragen. Meilenstein-Belohnungen sind dauerhafte Nutzungen und sammeln sich wie gewohnt an.",
+  "dashboardDailyReminderBoth": "{hints} und {wands}",
+  "checkInLegendMilestone": "Geschenk alle {count} Check-ins",
+  "checkInLegendPremium": "Belohnung des werbefreien Pakets"
 }

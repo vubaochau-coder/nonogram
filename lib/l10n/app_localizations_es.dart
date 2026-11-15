@@ -682,23 +682,12 @@ class AppLocalizationsEs extends AppLocalizations {
   String get checkInTotalDailyWands => 'Varitas mágicas (solo hoy)';
 
   @override
-  String get checkInPremiumToday => 'Hoy de tu paquete sin anuncios';
-
-  @override
   String get checkInPremiumNotYet =>
       'Regístrate para recibir 2 pistas y 1 varita mágica para hoy.';
 
   @override
-  String get checkInPremiumUsedUp => 'Ya usaste todo por hoy. ¡Hasta mañana!';
-
-  @override
-  String checkInExpiresIn(String time) {
-    return 'Caduca en $time';
-  }
-
-  @override
   String dashboardDailyReminder(String rewards, String time) {
-    return 'Aún tienes $rewards para hoy. Caducan en $time, ¡juega ahora para no desperdiciarlas!';
+    return 'Te quedan $rewards que caducan en $time. Úsalos ahora para no desperdiciarlos.';
   }
 
   @override
@@ -795,4 +784,17 @@ class AppLocalizationsEs extends AppLocalizations {
   @override
   String get premiumBenefitsFootnote =>
       'Los usos diarios no pasan al día siguiente. Las recompensas de hito son usos permanentes y se acumulan con normalidad.';
+
+  @override
+  String dashboardDailyReminderBoth(String hints, String wands) {
+    return '$hints y $wands';
+  }
+
+  @override
+  String checkInLegendMilestone(int count) {
+    return 'Regalo cada $count registros';
+  }
+
+  @override
+  String get checkInLegendPremium => 'Recompensa del paquete sin anuncios';
 }

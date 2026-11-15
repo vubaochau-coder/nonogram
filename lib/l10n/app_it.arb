@@ -179,11 +179,8 @@
   "checkInTotalWands": "Bacchette magiche",
   "checkInTotalDailyHints": "Suggerimenti (solo oggi)",
   "checkInTotalDailyWands": "Bacchette magiche (solo oggi)",
-  "checkInPremiumToday": "Oggi dal tuo pacchetto senza pubblicità",
   "checkInPremiumNotYet": "Segna la presenza per ricevere 2 suggerimenti e 1 bacchetta magica per oggi.",
-  "checkInPremiumUsedUp": "Tutto usato per oggi. A domani!",
-  "checkInExpiresIn": "Scade tra {time}",
-  "dashboardDailyReminder": "Hai ancora {rewards} per oggi. Scadono tra {time}: gioca ora per non sprecarli!",
+  "dashboardDailyReminder": "Ti restano {rewards} che scadono tra {time}. Usali ora per non sprecarli.",
   "premiumViewBenefits": "Vedi i vantaggi",
   "premiumBenefitsTitle": "Vantaggi del pacchetto",
   "premiumBenefitsTagline": "Acquista una volta per rimuovere la pubblicità tra i livelli e ricevere ricompense di aiuto ogni giorno, per sempre sul tuo account.",
@@ -211,5 +208,8 @@
   "powerUpSpendOrderBody": "Gli utilizzi giornalieri scadono alla fine della giornata, quindi un suggerimento o una bacchetta consuma prima gli utilizzi giornalieri e usa quelli permanenti solo quando i giornalieri finiscono. Niente va sprecato.",
   "powerUpSpendDaily": "Utilizzi giornalieri",
   "powerUpSpendPermanent": "Utilizzi permanenti",
-  "premiumBenefitsFootnote": "Gli utilizzi giornalieri non passano al giorno successivo. Le ricompense dei traguardi sono utilizzi permanenti e si accumulano normalmente."
+  "premiumBenefitsFootnote": "Gli utilizzi giornalieri non passano al giorno successivo. Le ricompense dei traguardi sono utilizzi permanenti e si accumulano normalmente.",
+  "dashboardDailyReminderBoth": "{hints} e {wands}",
+  "checkInLegendMilestone": "Regalo ogni {count} presenze",
+  "checkInLegendPremium": "Ricompensa del pacchetto senza pubblicità"
 }

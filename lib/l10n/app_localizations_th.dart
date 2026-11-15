@@ -645,23 +645,12 @@ class AppLocalizationsTh extends AppLocalizations {
   String get checkInTotalDailyWands => 'ไม้กายสิทธิ์ (เฉพาะวันนี้)';
 
   @override
-  String get checkInPremiumToday => 'วันนี้จากแพ็กไม่มีโฆษณา';
-
-  @override
   String get checkInPremiumNotYet =>
       'เช็กอินเพื่อรับคำใบ้ 2 ครั้งและไม้กายสิทธิ์ 1 ครั้งสำหรับวันนี้';
 
   @override
-  String get checkInPremiumUsedUp => 'วันนี้ใช้หมดแล้ว พบกันพรุ่งนี้!';
-
-  @override
-  String checkInExpiresIn(String time) {
-    return 'หมดอายุใน $time';
-  }
-
-  @override
   String dashboardDailyReminder(String rewards, String time) {
-    return 'วันนี้คุณยังเหลือ $rewards จะหมดอายุใน $time เล่นเลยเพื่อไม่ให้เสียเปล่า!';
+    return 'คุณยังมี$rewardsที่จะหมดอายุใน $time ใช้เลยเพื่อไม่ให้เสียเปล่า';
   }
 
   @override
@@ -757,4 +746,17 @@ class AppLocalizationsTh extends AppLocalizations {
   @override
   String get premiumBenefitsFootnote =>
       'สิทธิ์รายวันไม่ยกยอดไปวันถัดไป รางวัลหมุดหมายเป็นสิทธิ์ถาวรและสะสมได้ตามปกติ';
+
+  @override
+  String dashboardDailyReminderBoth(String hints, String wands) {
+    return '$hintsและ$wands';
+  }
+
+  @override
+  String checkInLegendMilestone(int count) {
+    return 'ของขวัญทุก $count ครั้งที่เช็กอิน';
+  }
+
+  @override
+  String get checkInLegendPremium => 'รางวัลแพ็กไม่มีโฆษณา';
 }

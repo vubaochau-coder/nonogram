@@ -629,22 +629,11 @@ class AppLocalizationsJa extends AppLocalizations {
   String get checkInTotalDailyWands => '魔法の杖（今日のみ）';
 
   @override
-  String get checkInPremiumToday => '広告なしパックの今日の分';
-
-  @override
   String get checkInPremiumNotYet => 'チェックインすると今日使えるヒント2回と魔法の杖1回がもらえます。';
 
   @override
-  String get checkInPremiumUsedUp => '今日の分は使い切りました。また明日！';
-
-  @override
-  String checkInExpiresIn(String time) {
-    return 'あと$timeで期限切れ';
-  }
-
-  @override
   String dashboardDailyReminder(String rewards, String time) {
-    return '今日はまだ$rewards残っています。あと$timeで期限切れになるので、今すぐプレイして無駄にしないで！';
+    return 'あと$timeで期限切れになる$rewardsが残っています。無駄にしないよう今すぐ使いましょう。';
   }
 
   @override
@@ -739,4 +728,17 @@ class AppLocalizationsJa extends AppLocalizations {
   @override
   String get premiumBenefitsFootnote =>
       '毎日の回数は翌日に繰り越されません。マイルストーンのチェックイン報酬は無期限の回数で、通常どおり貯まります。';
+
+  @override
+  String dashboardDailyReminderBoth(String hints, String wands) {
+    return '$hintsと$wands';
+  }
+
+  @override
+  String checkInLegendMilestone(int count) {
+    return '$count回チェックインごとのプレゼント';
+  }
+
+  @override
+  String get checkInLegendPremium => '広告なしパックの特典';
 }

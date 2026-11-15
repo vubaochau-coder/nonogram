@@ -179,11 +179,8 @@
   "checkInTotalWands": "Varitas mágicas",
   "checkInTotalDailyHints": "Pistas (solo hoy)",
   "checkInTotalDailyWands": "Varitas mágicas (solo hoy)",
-  "checkInPremiumToday": "Hoy de tu paquete sin anuncios",
   "checkInPremiumNotYet": "Regístrate para recibir 2 pistas y 1 varita mágica para hoy.",
-  "checkInPremiumUsedUp": "Ya usaste todo por hoy. ¡Hasta mañana!",
-  "checkInExpiresIn": "Caduca en {time}",
-  "dashboardDailyReminder": "Aún tienes {rewards} para hoy. Caducan en {time}, ¡juega ahora para no desperdiciarlas!",
+  "dashboardDailyReminder": "Te quedan {rewards} que caducan en {time}. Úsalos ahora para no desperdiciarlos.",
   "premiumViewBenefits": "Ver beneficios",
   "premiumBenefitsTitle": "Beneficios del paquete",
   "premiumBenefitsTagline": "Compra una vez para quitar los anuncios entre niveles y recibir recompensas de ayuda cada día, para siempre en tu cuenta.",
@@ -211,5 +208,8 @@
   "powerUpSpendOrderBody": "Los usos diarios caducan al final del día, así que una pista o varita gasta primero tus usos diarios y solo usa los permanentes cuando los diarios se agotan. Nada se desperdicia.",
   "powerUpSpendDaily": "Usos diarios",
   "powerUpSpendPermanent": "Usos permanentes",
-  "premiumBenefitsFootnote": "Los usos diarios no pasan al día siguiente. Las recompensas de hito son usos permanentes y se acumulan con normalidad."
+  "premiumBenefitsFootnote": "Los usos diarios no pasan al día siguiente. Las recompensas de hito son usos permanentes y se acumulan con normalidad.",
+  "dashboardDailyReminderBoth": "{hints} y {wands}",
+  "checkInLegendMilestone": "Regalo cada {count} registros",
+  "checkInLegendPremium": "Recompensa del paquete sin anuncios"
 }

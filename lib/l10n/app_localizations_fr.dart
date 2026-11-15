@@ -682,25 +682,12 @@ class AppLocalizationsFr extends AppLocalizations {
       'Baguettes magiques (aujourd\'hui seulement)';
 
   @override
-  String get checkInPremiumToday =>
-      'Aujourd\'hui grâce à ton pack sans publicité';
-
-  @override
   String get checkInPremiumNotYet =>
       'Valide ta présence pour recevoir 2 indices et 1 baguette magique pour aujourd\'hui.';
 
   @override
-  String get checkInPremiumUsedUp =>
-      'Tout est utilisé pour aujourd\'hui. À demain !';
-
-  @override
-  String checkInExpiresIn(String time) {
-    return 'Expire dans $time';
-  }
-
-  @override
   String dashboardDailyReminder(String rewards, String time) {
-    return 'Il te reste $rewards pour aujourd\'hui. Ils expirent dans $time : joue maintenant pour ne rien perdre !';
+    return 'Il te reste $rewards qui expirent dans $time. Utilise-les maintenant pour ne rien perdre.';
   }
 
   @override
@@ -798,4 +785,17 @@ class AppLocalizationsFr extends AppLocalizations {
   @override
   String get premiumBenefitsFootnote =>
       'Les utilisations quotidiennes ne sont pas reportées au lendemain. Les récompenses de palier sont des utilisations permanentes et s\'accumulent normalement.';
+
+  @override
+  String dashboardDailyReminderBoth(String hints, String wands) {
+    return '$hints et $wands';
+  }
+
+  @override
+  String checkInLegendMilestone(int count) {
+    return 'Cadeau toutes les $count présences';
+  }
+
+  @override
+  String get checkInLegendPremium => 'Récompense du pack sans publicité';
 }
