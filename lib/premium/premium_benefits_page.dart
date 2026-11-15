@@ -270,10 +270,9 @@ class _ItemCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final tint =
-        powerUp == PowerUp.hint
-            ? context.gameColors.reward
-            : context.color.primary;
+    // Màu trung tính (primary) cho cả hai vật phẩm: màu vàng dành riêng cho
+    // lượt có thời hạn.
+    final tint = context.color.primary;
     return Card(
       child: Padding(
         padding: const EdgeInsets.all(14),

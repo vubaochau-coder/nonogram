@@ -117,10 +117,16 @@ class _ViewBenefitsButton extends StatelessWidget {
     final l10n = context.l10n;
     return Column(
       children: [
-        if (divider) Divider(height: 24, color: context.gameColors.cardBorder),
+        if (divider) Divider(height: 20, color: context.gameColors.cardBorder),
         Center(
           child: TextButton.icon(
             key: const ValueKey('premium-view-benefits'),
+            style: TextButton.styleFrom(
+              visualDensity: VisualDensity.compact,
+              tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+              padding: const EdgeInsets.symmetric(horizontal: 8),
+              minimumSize: const Size(0, 32),
+            ),
             onPressed:
                 () => Navigator.of(context).push(
                   MaterialPageRoute<void>(
