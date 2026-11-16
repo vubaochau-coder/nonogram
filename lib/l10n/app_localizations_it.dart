@@ -9,7 +9,7 @@ class AppLocalizationsIt extends AppLocalizations {
   AppLocalizationsIt([String locale = 'it']) : super(locale);
 
   @override
-  String get appTitle => 'Nonopix';
+  String get appTitle => 'Pixel Nonogram';
 
   @override
   String get commonCancel => 'Annulla';
@@ -249,7 +249,7 @@ class AppLocalizationsIt extends AppLocalizations {
   String get nonogramTutorialSkip => 'Salta';
 
   @override
-  String get nonogramTutorialWelcomeTitle => 'Benvenuto in Nonopix!';
+  String get nonogramTutorialWelcomeTitle => 'Benvenuto in Pixel Nonogram!';
 
   @override
   String get nonogramTutorialWelcome =>
@@ -502,7 +502,7 @@ class AppLocalizationsIt extends AppLocalizations {
   String get settingsAdPrivacy => 'Privacy degli annunci';
 
   @override
-  String get ratingTitle => 'Ti piace Nonopix?';
+  String get ratingTitle => 'Ti piace Pixel Nonogram?';
 
   @override
   String get ratingMessage => 'Tocca una stella per valutare il gioco.';

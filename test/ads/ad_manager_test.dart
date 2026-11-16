@@ -147,7 +147,7 @@ void main() {
     expect(interstitial.shown, hasLength(2));
   });
 
-  test('store uses the Nonopix ad units, dev only test ads', () {
+  test('store uses the Pixel Nonogram ad units, dev only test ads', () {
     final store = AdConfig.forFlavor(AppFlavor.store).unitIds;
     final dev = AdConfig.forFlavor(AppFlavor.dev).unitIds;
     for (final format in AdFormat.values) {

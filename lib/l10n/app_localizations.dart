@@ -126,7 +126,7 @@ abstract class AppLocalizations {
   /// App name
   ///
   /// In en, this message translates to:
-  /// **'Nonopix'**
+  /// **'Pixel Nonogram'**
   String get appTitle;
 
   /// No description provided for @commonCancel.
@@ -528,7 +528,7 @@ abstract class AppLocalizations {
   /// No description provided for @nonogramTutorialWelcomeTitle.
   ///
   /// In en, this message translates to:
-  /// **'Welcome to Nonopix!'**
+  /// **'Welcome to Pixel Nonogram!'**
   String get nonogramTutorialWelcomeTitle;
 
   /// No description provided for @nonogramTutorialWelcome.
@@ -948,7 +948,7 @@ abstract class AppLocalizations {
   /// No description provided for @ratingTitle.
   ///
   /// In en, this message translates to:
-  /// **'Enjoying Nonopix?'**
+  /// **'Enjoying Pixel Nonogram?'**
   String get ratingTitle;
 
   /// No description provided for @ratingMessage.

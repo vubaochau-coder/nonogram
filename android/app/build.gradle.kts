@@ -47,7 +47,7 @@ android {
     flavorDimensions += "track"
     productFlavors {
         // AdMob App ID: bản dev dùng App ID thử nghiệm của Google, bản store
-        // dùng App ID thật của Nonopix (ID đơn vị quảng cáo: lib/ads/ad_config.dart).
+        // dùng App ID thật của Pixel Nonogram (ID đơn vị quảng cáo: lib/ads/ad_config.dart).
         create("dev") {
             dimension = "track"
             manifestPlaceholders["admobAppId"] = "ca-app-pub-3940256099942544~3347511713"

@@ -1,4 +1,4 @@
-"""Vẽ logo Nonopix: launcher icon (Android, iOS), splash và icon web.
+"""Vẽ logo Pixel Nonogram: launcher icon (Android, iOS), splash và icon web.
 
 Chạy: python3 tools/generate_icons.py   (cần Pillow)
 

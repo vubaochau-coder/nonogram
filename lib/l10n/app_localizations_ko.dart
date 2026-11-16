@@ -9,7 +9,7 @@ class AppLocalizationsKo extends AppLocalizations {
   AppLocalizationsKo([String locale = 'ko']) : super(locale);
 
   @override
-  String get appTitle => 'Nonopix';
+  String get appTitle => 'Pixel Nonogram';
 
   @override
   String get commonCancel => '취소';
@@ -242,7 +242,7 @@ class AppLocalizationsKo extends AppLocalizations {
   String get nonogramTutorialSkip => '건너뛰기';
 
   @override
-  String get nonogramTutorialWelcomeTitle => 'Nonopix에 오신 것을 환영합니다!';
+  String get nonogramTutorialWelcomeTitle => 'Pixel Nonogram에 오신 것을 환영합니다!';
 
   @override
   String get nonogramTutorialWelcome => '작은 5×5 퍼즐로 기본 규칙을 배워 봅시다.';
@@ -486,7 +486,7 @@ class AppLocalizationsKo extends AppLocalizations {
   String get settingsAdPrivacy => '광고 개인정보 보호';
 
   @override
-  String get ratingTitle => 'Nonopix가 마음에 드시나요?';
+  String get ratingTitle => 'Pixel Nonogram이 마음에 드시나요?';
 
   @override
   String get ratingMessage => '별을 탭해 게임을 평가해 주세요.';

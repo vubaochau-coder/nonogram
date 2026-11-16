@@ -31,7 +31,7 @@
 	     được liên kết và cần khoá này để app không crash khi mở. -->
 	<string>ca-app-pub-3940256099942544~1458002511</string>
 	<key>CFBundleDisplayName</key>
-	<string>Nonopix</string>
+	<string>Pixel Nonogram</string>
 	<key>CFBundleExecutable</key>
 	<string>$(EXECUTABLE_NAME)</string>
 	<key>CFBundleIdentifier</key>
@@ -39,7 +39,7 @@
 	<key>CFBundleInfoDictionaryVersion</key>
 	<string>6.0</string>
 	<key>CFBundleName</key>
-	<string>Nonopix</string>
+	<string>Pixel Nonogram</string>
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleShortVersionString</key>
