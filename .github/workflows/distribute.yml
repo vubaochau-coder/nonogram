@@ -1,7 +1,11 @@
 name: Distribute
 
-# Chạy sau khi CI trên main xanh (không đẩy bản build chưa qua test),
-# hoặc chạy tay từ tab Actions.
+# Bản thử nội bộ, build từ nhánh `develop`: chạy sau khi CI trên develop xanh
+# (không đẩy bản build chưa qua test), hoặc chạy tay từ tab Actions (luôn build
+# develop, chọn nhánh nào cũng vậy).
+#
+# File này phải có trên nhánh mặc định (`main`): GitHub chỉ đọc trigger
+# `workflow_run` / `workflow_dispatch` từ đó. Sửa file thì sửa ở cả hai nhánh.
 #
 # Cần cấu hình trong Settings → Secrets and variables → Actions:
 #   Secrets:
@@ -21,7 +25,7 @@ on:
   workflow_run:
     workflows: [CI]
     types: [completed]
-    branches: [main]
+    branches: [develop]
   workflow_dispatch:
     inputs:
       release_notes:
@@ -52,7 +56,8 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
-          ref: ${{ github.event.workflow_run.head_sha || github.sha }}
+          # Chạy tay: lấy đầu nhánh develop (main không có flavor dev).
+          ref: ${{ github.event.workflow_run.head_sha || 'develop' }}
 
       - name: Read Flutter version from .fvmrc
         id: fvm
@@ -113,9 +118,9 @@ jobs:
         env:
           INPUT_NOTES: ${{ github.event.inputs.release_notes }}
           COMMIT_MESSAGE: ${{ github.event.workflow_run.head_commit.message }}
-          SHA: ${{ github.event.workflow_run.head_sha || github.sha }}
           VERSION: ${{ steps.build.outputs.name }} (${{ steps.build.outputs.number }})
         run: |
+          SHA=$(git rev-parse HEAD)
           {
             if [ -n "$INPUT_NOTES" ]; then
               echo "$INPUT_NOTES"

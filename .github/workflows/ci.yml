@@ -1,12 +1,17 @@
 name: CI
 
+# Chỉ chạy cho nhánh `develop` (push và pull request vào develop). Nhánh `main`
+# là nhánh build bản store: không tự chạy gì, kiểm tra nằm trong workflow
+# "Store build" (chạy tay).
+#
 # Bỏ qua các thay đổi chỉ ở tài liệu để tiết kiệm phút GitHub Actions
 # (Distribute chạy sau CI nên cũng không build lại cho các thay đổi này).
 on:
   push:
-    branches: [main]
+    branches: [develop]
     paths-ignore: ['**.md', 'docs/**', 'LICENSE']
   pull_request:
+    branches: [develop]
     paths-ignore: ['**.md', 'docs/**', 'LICENSE']
 
 concurrency:

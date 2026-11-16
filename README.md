@@ -19,7 +19,7 @@ flutter run --flavor dev      # Android: luôn phải chọn flavor
 
 | Flavor | Dùng cho | Màn chọn chế độ chơi | Bộ màn |
 |---|---|---|---|
-| `dev` | Bản thử nội bộ, mặc định trên GitHub Actions (workflow Distribute) | Có | Chế độ người dùng (`assets/levels/`) + chế độ nhà phát triển (`assets/levels_dev/`) |
+| `dev` | Bản thử nội bộ, build từ nhánh `develop` (workflow Distribute) | Có | Chế độ người dùng (`assets/levels/`) + chế độ nhà phát triển (`assets/levels_dev/`) |
 | `store` | Bản phát hành lên store (workflow "Store build", chạy tay) | Không | Chỉ `assets/levels/` |
 
 - Mỗi chế độ chơi lưu tiến độ riêng. Chế độ nhà phát triển dùng lại box tiến
@@ -299,17 +299,23 @@ quảng cáo xen kẽ.
 - 5 sao: mở trang app trên CH Play (`market://`, không có thì mở trang web).
   Ít hơn: cảm ơn và ở lại trong game. Đã chọn sao thì không hỏi nữa.
 
-## Phát hành (Firebase App Distribution)
+## Nhánh và phát hành
 
-Chỉ phát hành qua GitHub Actions. App Android `com.chauvb.nonogram`
-(**Nonopix**) nằm chung project Firebase với app chess (`chess-app-chauvb`).
+| Nhánh | Dùng cho | GitHub Actions |
+|---|---|---|
+| `develop` | Phát triển và thử nội bộ: có flavor `dev`, công cụ tester, chế độ nhà phát triển | `CI` tự chạy cho mỗi push / pull request vào develop; CI xanh thì `Distribute` đẩy bản thử lên Firebase App Distribution |
+| `main` | Mã nguồn của bản store, không có code kiểm thử | Không tự chạy gì. Khi cần phát hành thì chạy tay `Store build` |
 
-- Workflow `CI` chạy format/analyze/test cho mỗi push và pull request.
-- Workflow `Distribute` build APK release và đẩy lên Firebase App
-  Distribution sau khi CI trên `main` xanh, hoặc chạy tay từ tab Actions
-  (có ô nhập ghi chú phát hành).
-- Số build = số thứ tự lần chạy của workflow `Distribute`, tự tăng mỗi lần
-  phát hành.
+App Android `com.chauvb.nonogram` (**Nonopix**) nằm chung project Firebase
+với app chess (`chess-app-chauvb`).
+
+- `Distribute` build APK release flavor `dev` từ nhánh `develop`; chạy tay từ
+  tab Actions cũng được (có ô nhập ghi chú phát hành). Số build = số thứ tự
+  lần chạy của workflow, tự tăng mỗi lần phát hành.
+- `Store build` chạy format / analyze / test rồi build `.aab` đã ký; số build
+  nhập tay khi chạy.
+- File workflow giống nhau ở cả hai nhánh: GitHub đọc trigger của
+  `Distribute` từ nhánh mặc định (`main`), nên sửa workflow thì sửa cả hai.
 
 Secrets/variables cần cấu hình được mô tả ở đầu
 `.github/workflows/distribute.yml`.

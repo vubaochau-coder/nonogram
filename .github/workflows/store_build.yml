@@ -1,8 +1,10 @@
 name: Store build
 
 # Bản phát hành lên Google Play: flavor `store` (không có màn chọn chế độ chơi,
-# chỉ có bộ màn có bản quyền). Chỉ chạy tay từ tab Actions; kết quả là file
-# .aab đã ký ở mục Artifacts của lần chạy, tải về rồi tự đưa lên Play Console.
+# chỉ có bộ màn có bản quyền). Chỉ chạy tay từ tab Actions, trên nhánh `main`;
+# kết quả là file .aab đã ký ở mục Artifacts của lần chạy, tải về rồi tự đưa
+# lên Play Console. Nhánh main không có CI tự động nên workflow này chạy
+# format / analyze / test trước khi build.
 #
 # Dùng chung các secret ký app với workflow Distribute:
 #   ANDROID_KEYSTORE_BASE64, ANDROID_KEYSTORE_PASSWORD, ANDROID_KEY_ALIAS,
@@ -61,6 +63,9 @@ jobs:
           EOF
 
       - run: flutter pub get --enforce-lockfile
+      - run: dart format --output=none --set-exit-if-changed lib test
+      - run: flutter analyze
+      - run: flutter test
 
       - name: Check build number
         env:
