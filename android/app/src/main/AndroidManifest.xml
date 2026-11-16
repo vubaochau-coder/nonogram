@@ -1,4 +1,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- Quảng cáo, mua gói và giờ mạng của điểm danh. Khai báo ở đây để bản
+         release không phụ thuộc vào manifest của plugin quảng cáo. -->
+    <uses-permission android:name="android.permission.INTERNET"/>
     <application
         android:label="Nonopix"
         android:name="${applicationName}"
