@@ -17,15 +17,15 @@ class AdConfig {
 
   final InterstitialPolicyConfig interstitial;
 
-  /// Bản release dùng ID thật của Nonopix; bản debug / profile (`flutter run`
+  /// Bản release dùng ID thật của Pixel Nonogram; bản debug / profile (`flutter run`
   /// khi phát triển) dùng ID thử nghiệm của Google, để không bấm nhầm vào
   /// quảng cáo thật (AdMob có thể khoá tài khoản vì lượt bấm không hợp lệ).
   factory AdConfig.forBuild({bool release = kReleaseMode}) => AdConfig(
     unitIds:
         release
             ? const {
-              AdFormat.rewarded: NonopixAdMobIds.rewarded,
-              AdFormat.interstitial: NonopixAdMobIds.interstitial,
+              AdFormat.rewarded: AppAdMobIds.rewarded,
+              AdFormat.interstitial: AppAdMobIds.interstitial,
             }
             : const {
               AdFormat.rewarded: AdMobTestIds.rewarded,
@@ -34,10 +34,10 @@ class AdConfig {
   );
 }
 
-/// ID đơn vị quảng cáo thật của Nonopix trên AdMob (không phải bí mật: chúng
+/// ID đơn vị quảng cáo thật của Pixel Nonogram trên AdMob (không phải bí mật: chúng
 /// nằm sẵn trong APK). App ID tương ứng nằm trong android/app/build.gradle.kts.
-class NonopixAdMobIds {
-  NonopixAdMobIds._();
+class AppAdMobIds {
+  AppAdMobIds._();
 
   /// Đơn vị "power_up_refill" (Quảng cáo có tặng thưởng).
   static const rewarded = 'ca-app-pub-8391885617554349/6022270752';

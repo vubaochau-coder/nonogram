@@ -9,7 +9,7 @@ class AppLocalizationsZh extends AppLocalizations {
   AppLocalizationsZh([String locale = 'zh']) : super(locale);
 
   @override
-  String get appTitle => 'Nonopix';
+  String get appTitle => 'Pixel Nonogram';
 
   @override
   String get commonCancel => '取消';
@@ -242,7 +242,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get nonogramTutorialSkip => '跳过';
 
   @override
-  String get nonogramTutorialWelcomeTitle => '欢迎来到 Nonopix！';
+  String get nonogramTutorialWelcomeTitle => '欢迎来到 Pixel Nonogram！';
 
   @override
   String get nonogramTutorialWelcome => '让我们通过一个 5×5 的小谜题来学习基本规则。';
@@ -441,7 +441,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get settingsAdPrivacy => '广告隐私';
 
   @override
-  String get ratingTitle => '喜欢 Nonopix 吗？';
+  String get ratingTitle => '喜欢 Pixel Nonogram 吗？';
 
   @override
   String get ratingMessage => '点按星星为游戏评分。';
@@ -697,7 +697,7 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
   AppLocalizationsZhHant() : super('zh_Hant');
 
   @override
-  String get appTitle => 'Nonopix';
+  String get appTitle => 'Pixel Nonogram';
 
   @override
   String get commonCancel => '取消';
@@ -930,7 +930,7 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
   String get nonogramTutorialSkip => '略過';
 
   @override
-  String get nonogramTutorialWelcomeTitle => '歡迎來到 Nonopix！';
+  String get nonogramTutorialWelcomeTitle => '歡迎來到 Pixel Nonogram！';
 
   @override
   String get nonogramTutorialWelcome => '讓我們透過一個 5×5 的小謎題來學習基本規則。';
@@ -1129,7 +1129,7 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
   String get settingsAdPrivacy => '廣告隱私';
 
   @override
-  String get ratingTitle => '喜歡 Nonopix 嗎？';
+  String get ratingTitle => '喜歡 Pixel Nonogram 嗎？';
 
   @override
   String get ratingMessage => '點按星星為遊戲評分。';

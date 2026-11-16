@@ -3,7 +3,7 @@
          release không phụ thuộc vào manifest của plugin quảng cáo. -->
     <uses-permission android:name="android.permission.INTERNET"/>
     <application
-        android:label="Nonopix"
+        android:label="Pixel Nonogram"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity

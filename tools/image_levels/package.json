@@ -1,5 +1,5 @@
 {
-  "name": "nonopix-image-levels",
+  "name": "pixel-nonogram-image-levels",
   "private": true,
   "type": "module",
   "description": "Sinh màn nonogram từ các bộ icon có giấy phép mở",

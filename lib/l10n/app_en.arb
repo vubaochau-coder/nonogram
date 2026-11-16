@@ -1,6 +1,6 @@
 {
   "@@locale": "en",
-  "appTitle": "Nonopix",
+  "appTitle": "Pixel Nonogram",
   "@appTitle": {
     "description": "App name"
   },
@@ -156,7 +156,7 @@
   "nonogramSettingsRestartConfirm": "Restart",
   "nonogramTutorialTitle": "How to play",
   "nonogramTutorialSkip": "Skip",
-  "nonogramTutorialWelcomeTitle": "Welcome to Nonopix!",
+  "nonogramTutorialWelcomeTitle": "Welcome to Pixel Nonogram!",
   "nonogramTutorialWelcome": "Let's learn the basic rules with a small 5×5 puzzle.",
   "nonogramTutorialStart": "Start",
   "nonogramTutorialSwitchToFill": "Puzzles are solved by filling in squares. Tap the button below to switch to fill mode.",
@@ -240,7 +240,7 @@
   },
   "adRewardNotReady": "The ad isn't ready yet. Check your internet connection and try again.",
   "settingsAdPrivacy": "Ad privacy",
-  "ratingTitle": "Enjoying Nonopix?",
+  "ratingTitle": "Enjoying Pixel Nonogram?",
   "ratingMessage": "Tap a star to rate the game.",
   "ratingLater": "Later",
   "ratingSubmit": "Submit",

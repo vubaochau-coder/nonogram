@@ -1,9 +1,9 @@
-# Nonopix
+# Pixel Nonogram
 
-<img src="assets/branding/logo.png" width="96" alt="Logo Nonopix">
+<img src="assets/branding/logo.png" width="96" alt="Logo Pixel Nonogram">
 
 
-**Nonopix** là game nonogram (tô ô theo gợi ý số để lộ ra hình) viết bằng
+**Pixel Nonogram** là game nonogram (tô ô theo gợi ý số để lộ ra hình) viết bằng
 Flutter, tách ra từ project Nexora. **Chơi được khi không có mạng**: màn chơi đóng gói sẵn trong app,
 tiến độ lưu trên máy, không cần tài khoản. Mạng chỉ dùng để tải quảng cáo
 (bản store trên Android, xem [Quảng cáo](#quảng-cáo-admob)).
@@ -216,7 +216,7 @@ Game ──AdPlacement──▶ AdService (ad_service.dart)
   nối Firebase Analytics / AppsFlyer bằng một sink mới.
 - **Cấu hình** (`AdConfig`, `InterstitialPolicyConfig`) tách khỏi code, sẵn
   sàng đọc từ Remote Config.
-- **ID quảng cáo:** bản release dùng ID thật của Nonopix, bản debug / profile
+- **ID quảng cáo:** bản release dùng ID thật của Pixel Nonogram, bản debug / profile
   dùng ID thử nghiệm của Google (luôn hiện quảng cáo mẫu, không ra tiền):
   `AdConfig.forBuild` trong `lib/ads/ad_config.dart`. App ID ở
   `android/app/build.gradle.kts`.
@@ -296,7 +296,7 @@ quảng cáo xen kẽ.
 | `develop` | Phát triển và thử nội bộ: có flavor `dev` / `store`, công cụ tester, chế độ nhà phát triển | `CI` tự chạy cho mỗi push / pull request vào develop; CI xanh thì `Distribute` đẩy bản thử lên Firebase App Distribution |
 | `main` | Mã nguồn của bản store: không có flavor và code kiểm thử | Không tự chạy gì. Khi cần phát hành thì chạy tay `Store build` |
 
-App Android `com.chauvb.nonogram` (**Nonopix**) nằm chung project Firebase
+App Android `com.chauvb.nonogram` (**Pixel Nonogram**) nằm chung project Firebase
 với app chess (`chess-app-chauvb`).
 
 - `Distribute` build APK release flavor `dev` từ nhánh `develop`; chạy tay từ

@@ -1,11 +1,11 @@
 {
-    "name": "Nonopix – Nonogram offline",
-    "short_name": "Nonopix",
+    "name": "Pixel Nonogram",
+    "short_name": "Pixel Nonogram",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#F5F6FA",
     "theme_color": "#3B5BDB",
-    "description": "Nonopix: offline nonogram picture logic puzzles.",
+    "description": "Pixel Nonogram: offline picture logic puzzles.",
     "orientation": "portrait-primary",
     "prefer_related_applications": false,
     "icons": [

@@ -90,7 +90,7 @@ jobs:
 
       - uses: actions/upload-artifact@v4
         with:
-          name: nonopix-store-${{ github.event.inputs.build_number }}
+          name: pixel-nonogram-store-${{ github.event.inputs.build_number }}
           path: build/app/outputs/bundle/release/app-release.aab
           if-no-files-found: error
 
@@ -98,7 +98,7 @@ jobs:
       # Giữ lại theo từng build number; không bao giờ đưa vào app.
       - uses: actions/upload-artifact@v4
         with:
-          name: nonopix-store-symbols-${{ github.event.inputs.build_number }}
+          name: pixel-nonogram-store-symbols-${{ github.event.inputs.build_number }}
           path: build/symbols
           if-no-files-found: error
 

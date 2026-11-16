@@ -146,7 +146,7 @@ void main() {
     expect(interstitial.shown, hasLength(2));
   });
 
-  test('release uses the Nonopix ad units, debug only test ads', () {
+  test('release uses the Pixel Nonogram ad units, debug only test ads', () {
     final release = AdConfig.forBuild(release: true).unitIds;
     final debug = AdConfig.forBuild(release: false).unitIds;
     for (final format in AdFormat.values) {

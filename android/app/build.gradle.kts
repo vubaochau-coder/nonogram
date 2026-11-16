@@ -38,7 +38,7 @@ android {
         targetSdk = flutter.targetSdkVersion
         versionCode = flutter.versionCode
         versionName = flutter.versionName
-        // AdMob App ID thật của Nonopix (ID đơn vị quảng cáo: lib/ads/ad_config.dart).
+        // AdMob App ID thật của Pixel Nonogram (ID đơn vị quảng cáo: lib/ads/ad_config.dart).
         manifestPlaceholders["admobAppId"] = "ca-app-pub-8391885617554349~5283904151"
     }
 
