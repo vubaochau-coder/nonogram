@@ -89,7 +89,7 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get nonogramGuideRuleDesc =>
-      'Jede Zahl steht für einen zusammenhängenden Block ausgefüllter Felder in dieser Zeile oder Spalte. Bei mehreren Zahlen sind es getrennte Blöcke, und zwischen zwei Blöcken muss mindestens ein leeres Feld liegen. Zum Beispiel bedeutet `3 1`: ein Block aus 3 ausgefüllten Feldern, dann mindestens 1 leeres Feld, dann ein Block aus 1 ausgefülltem Feld.';
+      'Jede Zahl steht für einen zusammenhängenden Block ausgefüllter Felder in dieser Zeile oder Spalte. Bei mehreren Zahlen sind es getrennte Blöcke, und zwischen zwei Blöcken muss mindestens ein leeres Feld liegen. Zum Beispiel bedeutet 3 1: ein Block aus 3 ausgefüllten Feldern, dann mindestens 1 leeres Feld, dann ein Block aus 1 ausgefülltem Feld.';
 
   @override
   String get nonogramGuideRuleTitle => 'Grundregel: Was die Zahlen bedeuten';

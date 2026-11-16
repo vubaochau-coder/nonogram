@@ -90,7 +90,7 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get nonogramGuideRuleDesc =>
-      'Chaque nombre représente un bloc continu de cases remplies dans cette ligne ou colonne. S\'il y a plusieurs nombres, ils représentent des blocs distincts, et chaque bloc doit être séparé du suivant par au moins une case vide. Par exemple, `3 1` signifie un bloc de 3 cases remplies, puis au moins 1 case vide, puis un bloc de 1 case remplie.';
+      'Chaque nombre représente un bloc continu de cases remplies dans cette ligne ou colonne. S\'il y a plusieurs nombres, ils représentent des blocs distincts, et chaque bloc doit être séparé du suivant par au moins une case vide. Par exemple, 3 1 signifie un bloc de 3 cases remplies, puis au moins 1 case vide, puis un bloc de 1 case remplie.';
 
   @override
   String get nonogramGuideRuleTitle =>

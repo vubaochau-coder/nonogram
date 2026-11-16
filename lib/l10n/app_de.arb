@@ -22,7 +22,7 @@
   "nonogramGuideMethodSuperpositionSimpleTitle": "Überlagerung (ein Hinweis)",
   "nonogramGuideMethodWallPushingDesc": "Liegt ein bekanntes ausgefülltes Feld näher am Rand, als der erste Hinweis lang ist, muss sich die zugehörige Figur von diesem Rand weg erstrecken.",
   "nonogramGuideMethodWallPushingTitle": "2. Vom Rand wegschieben",
-  "nonogramGuideRuleDesc": "Jede Zahl steht für einen zusammenhängenden Block ausgefüllter Felder in dieser Zeile oder Spalte. Bei mehreren Zahlen sind es getrennte Blöcke, und zwischen zwei Blöcken muss mindestens ein leeres Feld liegen. Zum Beispiel bedeutet `3 1`: ein Block aus 3 ausgefüllten Feldern, dann mindestens 1 leeres Feld, dann ein Block aus 1 ausgefülltem Feld.",
+  "nonogramGuideRuleDesc": "Jede Zahl steht für einen zusammenhängenden Block ausgefüllter Felder in dieser Zeile oder Spalte. Bei mehreren Zahlen sind es getrennte Blöcke, und zwischen zwei Blöcken muss mindestens ein leeres Feld liegen. Zum Beispiel bedeutet 3 1: ein Block aus 3 ausgefüllten Feldern, dann mindestens 1 leeres Feld, dann ein Block aus 1 ausgefülltem Feld.",
   "nonogramGuideRuleTitle": "Grundregel: Was die Zahlen bedeuten",
   "nonogramGuideTitle": "Lösungstechniken",
   "nonogramHistoryCompletedOn": "Gelöst am {date}",

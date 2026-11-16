@@ -86,7 +86,7 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get nonogramGuideRuleDesc =>
-      '每个数字代表该行或该列中一段连续的已涂方格（色块）。如果有多个数字，它们代表不同的色块，且相邻色块之间至少要隔一个空格。例如 `3 1` 表示先是 3 个连续的涂色方格，然后至少 1 个空格，再是 1 个涂色方格。';
+      '每个数字代表该行或该列中一段连续的已涂方格（色块）。如果有多个数字，它们代表不同的色块，且相邻色块之间至少要隔一个空格。例如 3 1 表示先是 3 个连续的涂色方格，然后至少 1 个空格，再是 1 个涂色方格。';
 
   @override
   String get nonogramGuideRuleTitle => '基本规则：数字的含义';
@@ -774,7 +774,7 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
 
   @override
   String get nonogramGuideRuleDesc =>
-      '每個數字代表該橫列或直行中一段連續的已塗方格（色塊）。如果有多個數字，它們代表不同的色塊，且相鄰色塊之間至少要隔一個空格。例如 `3 1` 表示先是 3 個連續的塗色方格，然後至少 1 個空格，再是 1 個塗色方格。';
+      '每個數字代表該橫列或直行中一段連續的已塗方格（色塊）。如果有多個數字，它們代表不同的色塊，且相鄰色塊之間至少要隔一個空格。例如 3 1 表示先是 3 個連續的塗色方格，然後至少 1 個空格，再是 1 個塗色方格。';
 
   @override
   String get nonogramGuideRuleTitle => '基本規則：數字的含義';

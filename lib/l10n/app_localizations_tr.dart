@@ -89,7 +89,7 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get nonogramGuideRuleDesc =>
-      'Her sayı, o satır ya da sütundaki kesintisiz bir dolu kare bloğunu gösterir. Birden fazla sayı varsa bunlar ayrı bloklardır ve her blok bir sonrakinden en az bir boş kareyle ayrılmalıdır. Örneğin `3 1`, 3 dolu karelik bir blok, ardından en az 1 boş kare, ardından 1 dolu karelik bir blok demektir.';
+      'Her sayı, o satır ya da sütundaki kesintisiz bir dolu kare bloğunu gösterir. Birden fazla sayı varsa bunlar ayrı bloklardır ve her blok bir sonrakinden en az bir boş kareyle ayrılmalıdır. Örneğin 3 1, 3 dolu karelik bir blok, ardından en az 1 boş kare, ardından 1 dolu karelik bir blok demektir.';
 
   @override
   String get nonogramGuideRuleTitle => 'Temel kural: sayılar ne anlama gelir';

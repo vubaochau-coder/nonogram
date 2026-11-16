@@ -86,7 +86,7 @@ class AppLocalizationsKo extends AppLocalizations {
 
   @override
   String get nonogramGuideRuleDesc =>
-      '각 숫자는 그 행이나 열에서 연속으로 칠해진 칸 묶음(블록) 하나를 나타냅니다. 숫자가 여러 개라면 각각 별개의 블록이며, 블록 사이에는 최소 한 칸의 빈칸이 있어야 합니다. 예를 들어 `3 1`은 3칸짜리 블록, 최소 1칸의 빈칸, 1칸짜리 블록이 차례로 온다는 뜻입니다.';
+      '각 숫자는 그 행이나 열에서 연속으로 칠해진 칸 묶음(블록) 하나를 나타냅니다. 숫자가 여러 개라면 각각 별개의 블록이며, 블록 사이에는 최소 한 칸의 빈칸이 있어야 합니다. 예를 들어 3 1은 3칸짜리 블록, 최소 1칸의 빈칸, 1칸짜리 블록이 차례로 온다는 뜻입니다.';
 
   @override
   String get nonogramGuideRuleTitle => '기본 규칙: 숫자의 의미';

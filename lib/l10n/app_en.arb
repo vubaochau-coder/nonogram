@@ -32,7 +32,7 @@
   "nonogramGuideMethodSuperpositionSimpleTitle": "Superposition (Single Clue)",
   "nonogramGuideMethodWallPushingDesc": "If a known painted cell is closer to a border than the size of the first clue, the figure it belongs to must extend away from that border.",
   "nonogramGuideMethodWallPushingTitle": "2. Pushing off from the walls",
-  "nonogramGuideRuleDesc": "Each number represents one continuous block of filled cells in that row or column. If there are multiple numbers, they represent separate blocks, and each block must be separated from the next by at least one empty cell. For example, `3 1` means a block of 3 filled cells, then at least 1 empty cell, then a block of 1 filled cell.",
+  "nonogramGuideRuleDesc": "Each number represents one continuous block of filled cells in that row or column. If there are multiple numbers, they represent separate blocks, and each block must be separated from the next by at least one empty cell. For example, 3 1 means a block of 3 filled cells, then at least 1 empty cell, then a block of 1 filled cell.",
   "nonogramGuideRuleTitle": "Core rule: what the numbers mean",
   "nonogramGuideTitle": "How to Solve",
   "nonogramHistoryCompletedOn": "Completed on {date}",

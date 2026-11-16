@@ -22,7 +22,7 @@
   "nonogramGuideMethodSuperpositionSimpleTitle": "Sobreposição (uma dica)",
   "nonogramGuideMethodWallPushingDesc": "Se um quadrado preenchido conhecido está mais perto de uma borda do que o tamanho da primeira dica, a figura a que ele pertence deve se estender para longe dessa borda.",
   "nonogramGuideMethodWallPushingTitle": "2. Afastar das paredes",
-  "nonogramGuideRuleDesc": "Cada número representa um bloco contínuo de quadrados preenchidos naquela linha ou coluna. Se houver vários números, eles representam blocos separados, e cada bloco deve estar separado do próximo por pelo menos um quadrado vazio. Por exemplo, `3 1` significa um bloco de 3 quadrados preenchidos, depois pelo menos 1 quadrado vazio e então um bloco de 1 quadrado preenchido.",
+  "nonogramGuideRuleDesc": "Cada número representa um bloco contínuo de quadrados preenchidos naquela linha ou coluna. Se houver vários números, eles representam blocos separados, e cada bloco deve estar separado do próximo por pelo menos um quadrado vazio. Por exemplo, 3 1 significa um bloco de 3 quadrados preenchidos, depois pelo menos 1 quadrado vazio e então um bloco de 1 quadrado preenchido.",
   "nonogramGuideRuleTitle": "Regra principal: o que os números significam",
   "nonogramGuideTitle": "Como resolver",
   "nonogramHistoryCompletedOn": "Concluído em {date}",

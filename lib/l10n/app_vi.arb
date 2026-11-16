@@ -29,7 +29,7 @@
   "nonogramGuideMethodSuperpositionSimpleTitle": "Chồng lấp (Trường hợp đơn số)",
   "nonogramGuideMethodWallPushingDesc": "Nếu một ô đã được tô nằm gần biên hơn kích thước của con số chỉ dẫn đầu tiên, khối đó chắc chắn phải kéo dài ra xa phía biên đó.",
   "nonogramGuideMethodWallPushingTitle": "2. Đẩy từ biên",
-  "nonogramGuideRuleDesc": "Mỗi con số biểu thị một nhóm ô được tô liền nhau trong hàng hoặc cột đó. Nếu có nhiều số, chúng biểu thị các nhóm riêng biệt, và giữa hai nhóm luôn phải có ít nhất 1 ô trống. Ví dụ, `3 1` nghĩa là một nhóm 3 ô tô liền nhau, sau đó là ít nhất 1 ô trống, rồi đến một nhóm 1 ô.",
+  "nonogramGuideRuleDesc": "Mỗi con số biểu thị một nhóm ô được tô liền nhau trong hàng hoặc cột đó. Nếu có nhiều số, chúng biểu thị các nhóm riêng biệt, và giữa hai nhóm luôn phải có ít nhất 1 ô trống. Ví dụ, 3 1 nghĩa là một nhóm 3 ô tô liền nhau, sau đó là ít nhất 1 ô trống, rồi đến một nhóm 1 ô.",
   "nonogramGuideRuleTitle": "Quy luật cốt lõi: ý nghĩa của các con số",
   "nonogramGuideTitle": "Cách Giải Nonogram",
   "nonogramHistoryCompletedOn": "Hoàn thành lúc {date}",
