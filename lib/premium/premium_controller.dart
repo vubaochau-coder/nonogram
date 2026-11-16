@@ -77,8 +77,7 @@ class PremiumController extends ChangeNotifier implements AdEntitlements {
     await refresh();
   }
 
-  /// Hỏi lại cửa hàng giá và các gói đã mua (vd. sau khi công cụ tester đổi
-  /// cửa hàng thật ⇄ giả, hoặc giả lập hoàn tiền).
+  /// Hỏi lại cửa hàng giá và các gói đã mua.
   Future<void> refresh() async {
     _available = await gateway.isAvailable();
     _price = null;

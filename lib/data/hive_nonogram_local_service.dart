@@ -5,8 +5,8 @@ import 'package:nonogram/models/nonogram_completed_progress.dart';
 import 'package:nonogram/models/power_up_inventory.dart';
 
 class HiveNonogramLocalService implements NonogramLocalService {
-  /// [boxName]: mỗi chế độ chơi lưu tiến độ ở một box riêng (xem `PlayMode`).
-  HiveNonogramLocalService({this.boxName = 'nonogram_offline_v1'});
+  /// Tên box không được đổi: tiến độ của người chơi nằm trong đó.
+  HiveNonogramLocalService({this.boxName = 'nonogram_offline_user_v1'});
 
   static const _currentProgressKey = 'current_progress';
   static const _completedProgressKey = 'completed_progress';

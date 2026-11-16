@@ -434,9 +434,6 @@ class AppLocalizationsEs extends AppLocalizations {
   String get settingsLicenses => 'Licencias';
 
   @override
-  String get settingsSwitchPlayMode => 'Cambiar modo de juego';
-
-  @override
   String get licensesTitle => 'Licencias';
 
   @override
@@ -454,34 +451,6 @@ class AppLocalizationsEs extends AppLocalizations {
       'Licencias de software de código abierto';
 
   @override
-  String get licensesDeveloperLevelsNote =>
-      'Los puzles del modo desarrollador proceden de nonogram.org y son solo para pruebas internas. No se incluyen en la versión de la tienda.';
-
-  @override
-  String get playModeTitle => 'Elige un modo de juego';
-
-  @override
-  String get playModeSubtitle =>
-      'El progreso se guarda por separado para cada modo.';
-
-  @override
-  String get playModeUserTitle => 'Modo jugador';
-
-  @override
-  String get playModeUserBody =>
-      'Los puzles con licencia que incluye la versión de la tienda.';
-
-  @override
-  String get playModeDeveloperTitle => 'Modo desarrollador';
-
-  @override
-  String get playModeDeveloperBody =>
-      'Los puzles originales de nonogram.org, para pruebas internas. Conserva tu progreso anterior.';
-
-  @override
-  String get playModeLastUsed => 'Último usado';
-
-  @override
   String licensesBy(String author) {
     return 'Por $author';
   }
@@ -489,11 +458,6 @@ class AppLocalizationsEs extends AppLocalizations {
   @override
   String licensesLevelCount(int count) {
     return '$count puzles';
-  }
-
-  @override
-  String playModeProgress(int solved, int total) {
-    return '$solved/$total resueltos';
   }
 
   @override

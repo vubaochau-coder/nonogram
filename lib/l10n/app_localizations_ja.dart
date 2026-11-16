@@ -419,9 +419,6 @@ class AppLocalizationsJa extends AppLocalizations {
   String get settingsLicenses => 'ライセンス';
 
   @override
-  String get settingsSwitchPlayMode => 'プレイモードを切り替え';
-
-  @override
   String get licensesTitle => 'ライセンス';
 
   @override
@@ -438,32 +435,6 @@ class AppLocalizationsJa extends AppLocalizations {
   String get licensesSoftwareButton => 'オープンソースソフトウェアのライセンス';
 
   @override
-  String get licensesDeveloperLevelsNote =>
-      '開発者モードのパズルは nonogram.org のもので、社内テスト専用です。ストア版には含まれません。';
-
-  @override
-  String get playModeTitle => 'プレイモードを選択';
-
-  @override
-  String get playModeSubtitle => '進捗はモードごとに別々に保存されます。';
-
-  @override
-  String get playModeUserTitle => 'プレイヤーモード';
-
-  @override
-  String get playModeUserBody => 'ストア版に収録されているライセンス済みのパズル。';
-
-  @override
-  String get playModeDeveloperTitle => '開発者モード';
-
-  @override
-  String get playModeDeveloperBody =>
-      '社内テスト用の nonogram.org のオリジナルパズル。これまでの進捗を引き継ぎます。';
-
-  @override
-  String get playModeLastUsed => '前回使用';
-
-  @override
   String licensesBy(String author) {
     return '作者：$author';
   }
@@ -471,11 +442,6 @@ class AppLocalizationsJa extends AppLocalizations {
   @override
   String licensesLevelCount(int count) {
     return '$count問';
-  }
-
-  @override
-  String playModeProgress(int solved, int total) {
-    return '$solved/$total問クリア';
   }
 
   @override

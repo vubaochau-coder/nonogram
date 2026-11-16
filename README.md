@@ -12,28 +12,19 @@ tiến độ lưu trên máy, không cần tài khoản. Mạng chỉ dùng đ�
 
 ```bash
 flutter pub get
-flutter run --flavor dev      # Android: luôn phải chọn flavor
+flutter run
 ```
 
-### Flavor
+Nhánh `main` là mã nguồn của bản store: không có flavor, công cụ tester hay
+chế độ nhà phát triển (các thứ đó nằm ở nhánh `develop`, xem
+[Nhánh và phát hành](#nhánh-và-phát-hành)).
 
-| Flavor | Dùng cho | Màn chọn chế độ chơi | Bộ màn |
-|---|---|---|---|
-| `dev` | Bản thử nội bộ, build từ nhánh `develop` (workflow Distribute) | Có | Chế độ người dùng (`assets/levels/`) + chế độ nhà phát triển (`assets/levels_dev/`) |
-| `store` | Bản phát hành lên store (workflow "Store build", chạy tay) | Không | Chỉ `assets/levels/` |
-
-- Mỗi chế độ chơi lưu tiến độ riêng. Chế độ nhà phát triển dùng lại box tiến
-  độ cũ (`nonogram_offline_v1`), nên tiến độ của các bản thử trước đây vẫn còn.
-- `assets/levels_dev/` (574 màn lấy từ nonogram.org, không được dùng thương
-  mại) chỉ được đóng gói khi build `--flavor dev`.
-- Build bản store: `flutter build appbundle --release --flavor store --obfuscate --split-debug-info=build/symbols`.
+- Build bản store: `flutter build appbundle --release --obfuscate --split-debug-info=build/symbols`.
   Bản release Android bật R8 (làm rối + rút gọn, keep rules ở
   `android/app/proguard-rules.pro`) và `--obfuscate` làm rối mã Dart. Lưu lại
   thư mục `build/symbols` (và `mapping.txt` của R8) để giải mã stack trace.
-- iOS và web chưa cấu hình flavor: build không có `--flavor` chạy như bản
-  `store` (không có chế độ nhà phát triển).
-- Nhánh `beta` giữ nguyên trạng thái `main` trước khi đổi bộ màn (vẫn dùng bộ
-  màn crawl).
+- Tiến độ người chơi lưu trong box Hive `nonogram_offline_user_v1`: không đổi
+  tên box này.
 
 Hỗ trợ Android, iOS và Web.
 
@@ -46,7 +37,7 @@ Thanh điều hướng dưới có 3 tab (`lib/screens/home/app_home_page.dart`)
 - **Điểm danh** (`CheckInTab`): xem [Điểm danh hằng ngày](#điểm-danh-hằng-ngày).
 - **Tôi** (`MePage`): gói không quảng cáo; cài đặt (giao diện: bấm là đổi
   Sáng ⇄ Tối, ngôn ngữ, âm thanh); trợ giúp (cách chơi, kỹ thuật giải); quyền
-  riêng tư quảng cáo (khi bắt buộc), giấy phép, đổi chế độ chơi (bản `dev`).
+  riêng tư quảng cáo (khi bắt buộc), giấy phép.
 
 ## Ngôn ngữ
 
@@ -158,7 +149,6 @@ lib/
   l10n/                      Chuỗi dịch (app_<mã>.arb, 15 ngôn ngữ) + code sinh từ đó
 assets/
   levels/                    1.061 màn chơi có bản quyền (sinh bằng tools/build_levels.dart)
-  levels_dev/                574 màn crawl, chỉ có ở flavor dev (chế độ nhà phát triển)
   licenses/                  Văn bản giấy phép hình màn chơi (hiện ở Cài đặt → Giấy phép)
   fonts/                     Font Nunito (giấy phép OFL, xem Nunito-OFL.txt)
 tools/
@@ -187,8 +177,8 @@ flutter test
 
 ## Quảng cáo (AdMob)
 
-Có quảng cáo trên **Android** (cả `store` và `dev`; bản `dev` luôn dùng ID
-thử nghiệm). iOS, web và test không có (`createAdService` trong
+Có quảng cáo trên **Android** (bản debug / profile luôn dùng ID thử
+nghiệm). iOS, web và test không có (`createAdService` trong
 `lib/main.dart`).
 
 | Loại | Khi nào |
@@ -226,13 +216,13 @@ Game ──AdPlacement──▶ AdService (ad_service.dart)
   nối Firebase Analytics / AppsFlyer bằng một sink mới.
 - **Cấu hình** (`AdConfig`, `InterstitialPolicyConfig`) tách khỏi code, sẵn
   sàng đọc từ Remote Config.
-- **ID quảng cáo:** bản `store` dùng ID thật của Nonopix, bản `dev` dùng ID
-  thử nghiệm của Google (luôn hiện quảng cáo mẫu, không ra tiền). ID đơn vị
-  quảng cáo ở `lib/ads/ad_config.dart`, App ID ở `android/app/build.gradle.kts`
-  (theo flavor).
-- Thử quảng cáo trên máy: `flutter run --flavor dev`. Chạy `--flavor store`
-  là **quảng cáo thật**: đừng bấm vào, AdMob sẽ khoá tài khoản vì lượt bấm
-  không hợp lệ; muốn thử bản store thì thêm máy vào **Cài đặt → Thiết bị thử
+- **ID quảng cáo:** bản release dùng ID thật của Nonopix, bản debug / profile
+  dùng ID thử nghiệm của Google (luôn hiện quảng cáo mẫu, không ra tiền):
+  `AdConfig.forBuild` trong `lib/ads/ad_config.dart`. App ID ở
+  `android/app/build.gradle.kts`.
+- Thử quảng cáo trên máy: `flutter run` (quảng cáo mẫu). Chạy `--release` là
+  **quảng cáo thật**: đừng bấm vào, AdMob sẽ khoá tài khoản vì lượt bấm
+  không hợp lệ; muốn thử bản release thì thêm máy vào **Cài đặt → Thiết bị thử
   nghiệm** trong AdMob trước.
 
 - **Privacy policy:** `docs/privacy/index.html`, đăng bằng GitHub Pages tại
@@ -303,8 +293,8 @@ quảng cáo xen kẽ.
 
 | Nhánh | Dùng cho | GitHub Actions |
 |---|---|---|
-| `develop` | Phát triển và thử nội bộ: có flavor `dev`, công cụ tester, chế độ nhà phát triển | `CI` tự chạy cho mỗi push / pull request vào develop; CI xanh thì `Distribute` đẩy bản thử lên Firebase App Distribution |
-| `main` | Mã nguồn của bản store, không có code kiểm thử | Không tự chạy gì. Khi cần phát hành thì chạy tay `Store build` |
+| `develop` | Phát triển và thử nội bộ: có flavor `dev` / `store`, công cụ tester, chế độ nhà phát triển | `CI` tự chạy cho mỗi push / pull request vào develop; CI xanh thì `Distribute` đẩy bản thử lên Firebase App Distribution |
+| `main` | Mã nguồn của bản store: không có flavor và code kiểm thử | Không tự chạy gì. Khi cần phát hành thì chạy tay `Store build` |
 
 App Android `com.chauvb.nonogram` (**Nonopix**) nằm chung project Firebase
 với app chess (`chess-app-chauvb`).

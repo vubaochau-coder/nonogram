@@ -28,7 +28,7 @@
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
-        <!-- AdMob App ID: theo flavor (xem app/build.gradle.kts).
+        <!-- AdMob App ID (xem app/build.gradle.kts).
              Thiếu dòng này thì SDK quảng cáo làm app crash ngay khi mở. -->
         <meta-data
             android:name="com.google.android.gms.ads.APPLICATION_ID"

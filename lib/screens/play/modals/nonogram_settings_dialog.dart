@@ -5,7 +5,6 @@ import 'package:nonogram/ads/ad_scope.dart';
 import 'package:nonogram/core/app_locale.dart';
 import 'package:nonogram/core/app_sounds.dart';
 import 'package:nonogram/core/context_ext.dart';
-import 'package:nonogram/core/play_mode.dart';
 import 'package:nonogram/screens/licenses/app_licenses_page.dart';
 import 'package:nonogram/widgets/app_language_selector.dart';
 import 'package:nonogram/widgets/app_theme_mode_selector.dart';
@@ -40,8 +39,7 @@ Future<void> showNonogramSettingsDialog(BuildContext context) async {
 enum _SettingsResult { showControlsGuide }
 
 /// Cài đặt khi đang chơi: giao diện sáng/tối, ngôn ngữ, xem lại hướng dẫn thao tác,
-/// chơi lại màn từ đầu, giấy phép, quyền riêng tư quảng cáo (khi bắt buộc)
-/// và (flavor `dev`) đổi chế độ chơi.
+/// chơi lại màn từ đầu, giấy phép và quyền riêng tư quảng cáo (khi bắt buộc).
 class NonogramSettingsDialog extends StatelessWidget {
   const NonogramSettingsDialog({super.key});
 
@@ -94,19 +92,10 @@ class NonogramSettingsDialog extends StatelessWidget {
     }
   }
 
-  PlayModeSwitcher? _playModeSwitcher(BuildContext context) {
-    try {
-      return context.read<PlayModeSwitcher>();
-    } on ProviderNotFoundException {
-      return null;
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
     final colors = context.color;
-    final switcher = _playModeSwitcher(context);
 
     return AppDialog(
       title: Text(l10n.nonogramSettingsTitle),
@@ -205,24 +194,6 @@ class NonogramSettingsDialog extends StatelessWidget {
               );
             },
           ),
-          if (switcher != null) ...[
-            const SizedBox(height: 10),
-            SizedBox(
-              width: double.infinity,
-              child: OutlinedButton.icon(
-                key: const ValueKey('nonogram-switch-play-mode'),
-                onPressed: () {
-                  Navigator.pop(context);
-                  switcher.switchMode();
-                },
-                icon: const Icon(LucideIcons.repeat, size: 18),
-                label: Text(l10n.settingsSwitchPlayMode),
-                style: OutlinedButton.styleFrom(
-                  padding: const EdgeInsets.symmetric(vertical: 12),
-                ),
-              ),
-            ),
-          ],
         ],
       ),
       actions: [

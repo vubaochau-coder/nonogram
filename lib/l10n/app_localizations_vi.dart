@@ -429,9 +429,6 @@ class AppLocalizationsVi extends AppLocalizations {
   String get settingsLicenses => 'Giấy phép';
 
   @override
-  String get settingsSwitchPlayMode => 'Đổi chế độ chơi';
-
-  @override
   String get licensesTitle => 'Giấy phép';
 
   @override
@@ -448,33 +445,6 @@ class AppLocalizationsVi extends AppLocalizations {
   String get licensesSoftwareButton => 'Giấy phép phần mềm mã nguồn mở';
 
   @override
-  String get licensesDeveloperLevelsNote =>
-      'Các màn ở chế độ nhà phát triển lấy từ nonogram.org, chỉ dùng để thử nội bộ và không có trong bản phát hành trên store.';
-
-  @override
-  String get playModeTitle => 'Chọn chế độ chơi';
-
-  @override
-  String get playModeSubtitle => 'Tiến độ của mỗi chế độ được lưu riêng.';
-
-  @override
-  String get playModeUserTitle => 'Chế độ người dùng';
-
-  @override
-  String get playModeUserBody =>
-      'Bộ màn có bản quyền, giống bản phát hành trên store.';
-
-  @override
-  String get playModeDeveloperTitle => 'Chế độ nhà phát triển';
-
-  @override
-  String get playModeDeveloperBody =>
-      'Bộ màn gốc từ nonogram.org, chỉ dùng để thử nội bộ. Giữ tiến độ chơi trước đây.';
-
-  @override
-  String get playModeLastUsed => 'Lần trước';
-
-  @override
   String licensesBy(String author) {
     return 'Tác giả: $author';
   }
@@ -482,11 +452,6 @@ class AppLocalizationsVi extends AppLocalizations {
   @override
   String licensesLevelCount(int count) {
     return '$count màn';
-  }
-
-  @override
-  String playModeProgress(int solved, int total) {
-    return 'Đã giải $solved/$total màn';
   }
 
   @override

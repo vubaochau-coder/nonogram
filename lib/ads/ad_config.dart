@@ -1,4 +1,4 @@
-import 'package:nonogram/core/app_flavor.dart';
+import 'package:flutter/foundation.dart';
 
 import 'ad_placement.dart';
 import 'interstitial_policy.dart';
@@ -17,20 +17,20 @@ class AdConfig {
 
   final InterstitialPolicyConfig interstitial;
 
-  /// Bản `store` dùng ID thật của Nonopix; bản `dev` dùng ID thử nghiệm của
-  /// Google, để người thử nội bộ không bấm nhầm vào quảng cáo thật (AdMob có
-  /// thể khoá tài khoản vì lượt bấm không hợp lệ).
-  factory AdConfig.forFlavor(AppFlavor flavor) => AdConfig(
-    unitIds: switch (flavor) {
-      AppFlavor.store => const {
-        AdFormat.rewarded: NonopixAdMobIds.rewarded,
-        AdFormat.interstitial: NonopixAdMobIds.interstitial,
-      },
-      AppFlavor.dev => const {
-        AdFormat.rewarded: AdMobTestIds.rewarded,
-        AdFormat.interstitial: AdMobTestIds.interstitial,
-      },
-    },
+  /// Bản release dùng ID thật của Nonopix; bản debug / profile (`flutter run`
+  /// khi phát triển) dùng ID thử nghiệm của Google, để không bấm nhầm vào
+  /// quảng cáo thật (AdMob có thể khoá tài khoản vì lượt bấm không hợp lệ).
+  factory AdConfig.forBuild({bool release = kReleaseMode}) => AdConfig(
+    unitIds:
+        release
+            ? const {
+              AdFormat.rewarded: NonopixAdMobIds.rewarded,
+              AdFormat.interstitial: NonopixAdMobIds.interstitial,
+            }
+            : const {
+              AdFormat.rewarded: AdMobTestIds.rewarded,
+              AdFormat.interstitial: AdMobTestIds.interstitial,
+            },
   );
 }
 

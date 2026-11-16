@@ -1,19 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:lucide_icons/lucide_icons.dart';
-import 'package:nonogram/core/app_flavor.dart';
 import 'package:nonogram/core/app_licenses.dart';
 import 'package:nonogram/core/app_spacing.dart';
 import 'package:nonogram/core/context_ext.dart';
-import 'package:nonogram/core/play_mode.dart';
 import 'package:nonogram/data/nonogram_puzzle_source.dart';
 
 /// Ghi công hình ảnh màn chơi và font, kèm lối vào trang giấy phép phần mềm
 /// của Flutter (có cả các giấy phép đăng ký trong `registerAppLicenses`).
 class AppLicensesPage extends StatefulWidget {
-  const AppLicensesPage({super.key, this.flavor, this.levelSource});
-
-  /// Mặc định là flavor của bản build hiện tại.
-  final AppFlavor? flavor;
+  const AppLicensesPage({super.key, this.levelSource});
 
   /// Nguồn bộ màn có bản quyền, để đếm số màn của mỗi bộ hình.
   final AssetNonogramPuzzleSource? levelSource;
@@ -26,9 +21,7 @@ class _AppLicensesPageState extends State<AppLicensesPage> {
   late final Future<Map<String, int>> _counts = _countLevels();
 
   Future<Map<String, int>> _countLevels() async {
-    final source =
-        widget.levelSource ??
-        AssetNonogramPuzzleSource(basePath: PlayMode.user.levelsPath);
+    final source = widget.levelSource ?? AssetNonogramPuzzleSource();
     final counts = <String, int>{};
     try {
       for (final pack in (await source.index()).packs) {
@@ -45,7 +38,6 @@ class _AppLicensesPageState extends State<AppLicensesPage> {
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
-    final flavor = widget.flavor ?? AppFlavor.current;
 
     return Scaffold(
       appBar: AppBar(title: Text(l10n.licensesTitle)),
@@ -82,10 +74,6 @@ class _AppLicensesPageState extends State<AppLicensesPage> {
                 );
               },
             ),
-            if (flavor == AppFlavor.dev) ...[
-              const SizedBox(height: 4),
-              _Note(l10n.licensesDeveloperLevelsNote),
-            ],
             const SizedBox(height: 20),
             _SectionTitle(l10n.licensesFontHeading),
             _CreditCard(
@@ -179,30 +167,6 @@ class _CreditCard extends StatelessWidget {
           ),
         ],
       ),
-    );
-  }
-}
-
-class _Note extends StatelessWidget {
-  const _Note(this.text);
-
-  final String text;
-
-  @override
-  Widget build(BuildContext context) {
-    final colors = context.color;
-    return Row(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Icon(LucideIcons.info, size: 16, color: colors.onSurfaceVariant),
-        const SizedBox(width: 8),
-        Expanded(
-          child: Text(
-            text,
-            style: context.bodySmall.copyWith(color: colors.onSurfaceVariant),
-          ),
-        ),
-      ],
     );
   }
 }

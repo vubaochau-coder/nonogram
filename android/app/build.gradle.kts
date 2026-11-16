@@ -38,24 +38,8 @@ android {
         targetSdk = flutter.targetSdkVersion
         versionCode = flutter.versionCode
         versionName = flutter.versionName
-    }
-
-    // Flavor: `dev` (bản thử nội bộ, mặc định trên GitHub Actions: có màn chọn chế
-    // độ chơi và bộ màn của chế độ nhà phát triển) và `store` (bản phát hành).
-    // Cùng applicationId: không đổi được vì đã đăng ký trên Firebase / Google Play.
-    // Build luôn kèm --flavor, vd. `flutter run --flavor dev`.
-    flavorDimensions += "track"
-    productFlavors {
-        // AdMob App ID: bản dev dùng App ID thử nghiệm của Google, bản store
-        // dùng App ID thật của Nonopix (ID đơn vị quảng cáo: lib/ads/ad_config.dart).
-        create("dev") {
-            dimension = "track"
-            manifestPlaceholders["admobAppId"] = "ca-app-pub-3940256099942544~3347511713"
-        }
-        create("store") {
-            dimension = "track"
-            manifestPlaceholders["admobAppId"] = "ca-app-pub-8391885617554349~5283904151"
-        }
+        // AdMob App ID thật của Nonopix (ID đơn vị quảng cáo: lib/ads/ad_config.dart).
+        manifestPlaceholders["admobAppId"] = "ca-app-pub-8391885617554349~5283904151"
     }
 
     signingConfigs {

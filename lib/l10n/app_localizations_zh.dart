@@ -409,9 +409,6 @@ class AppLocalizationsZh extends AppLocalizations {
   String get settingsLicenses => '许可';
 
   @override
-  String get settingsSwitchPlayMode => '切换游戏模式';
-
-  @override
   String get licensesTitle => '许可';
 
   @override
@@ -428,31 +425,6 @@ class AppLocalizationsZh extends AppLocalizations {
   String get licensesSoftwareButton => '开源软件许可';
 
   @override
-  String get licensesDeveloperLevelsNote =>
-      '开发者模式的谜题来自 nonogram.org，仅供内部测试使用，不包含在商店版本中。';
-
-  @override
-  String get playModeTitle => '选择游戏模式';
-
-  @override
-  String get playModeSubtitle => '每种模式的进度分别保存。';
-
-  @override
-  String get playModeUserTitle => '玩家模式';
-
-  @override
-  String get playModeUserBody => '商店版本中附带的已授权谜题。';
-
-  @override
-  String get playModeDeveloperTitle => '开发者模式';
-
-  @override
-  String get playModeDeveloperBody => '来自 nonogram.org 的原版谜题，供内部测试使用。保留你之前的进度。';
-
-  @override
-  String get playModeLastUsed => '上次使用';
-
-  @override
   String licensesBy(String author) {
     return '作者：$author';
   }
@@ -460,11 +432,6 @@ class AppLocalizationsZh extends AppLocalizations {
   @override
   String licensesLevelCount(int count) {
     return '$count 个谜题';
-  }
-
-  @override
-  String playModeProgress(int solved, int total) {
-    return '已完成 $solved/$total';
   }
 
   @override
@@ -1130,9 +1097,6 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
   String get settingsLicenses => '授權';
 
   @override
-  String get settingsSwitchPlayMode => '切換遊戲模式';
-
-  @override
   String get licensesTitle => '授權';
 
   @override
@@ -1149,31 +1113,6 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
   String get licensesSoftwareButton => '開放原始碼軟體授權';
 
   @override
-  String get licensesDeveloperLevelsNote =>
-      '開發者模式的謎題來自 nonogram.org，僅供內部測試使用，不包含在商店版本中。';
-
-  @override
-  String get playModeTitle => '選擇遊戲模式';
-
-  @override
-  String get playModeSubtitle => '每種模式的進度分別儲存。';
-
-  @override
-  String get playModeUserTitle => '玩家模式';
-
-  @override
-  String get playModeUserBody => '商店版本中附帶的已授權謎題。';
-
-  @override
-  String get playModeDeveloperTitle => '開發者模式';
-
-  @override
-  String get playModeDeveloperBody => '來自 nonogram.org 的原版謎題，供內部測試使用。保留你之前的進度。';
-
-  @override
-  String get playModeLastUsed => '上次使用';
-
-  @override
   String licensesBy(String author) {
     return '作者：$author';
   }
@@ -1181,11 +1120,6 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
   @override
   String licensesLevelCount(int count) {
     return '$count 個謎題';
-  }
-
-  @override
-  String playModeProgress(int solved, int total) {
-    return '已完成 $solved/$total';
   }
 
   @override

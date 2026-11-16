@@ -432,9 +432,6 @@ class AppLocalizationsPt extends AppLocalizations {
   String get settingsLicenses => 'Licenças';
 
   @override
-  String get settingsSwitchPlayMode => 'Mudar modo de jogo';
-
-  @override
   String get licensesTitle => 'Licenças';
 
   @override
@@ -451,34 +448,6 @@ class AppLocalizationsPt extends AppLocalizations {
   String get licensesSoftwareButton => 'Licenças de software de código aberto';
 
   @override
-  String get licensesDeveloperLevelsNote =>
-      'Os quebra-cabeças do modo desenvolvedor vêm do nonogram.org e são apenas para testes internos. Eles não estão incluídos na versão da loja.';
-
-  @override
-  String get playModeTitle => 'Escolha um modo de jogo';
-
-  @override
-  String get playModeSubtitle =>
-      'O progresso é salvo separadamente para cada modo.';
-
-  @override
-  String get playModeUserTitle => 'Modo jogador';
-
-  @override
-  String get playModeUserBody =>
-      'Os quebra-cabeças licenciados que vêm na versão da loja.';
-
-  @override
-  String get playModeDeveloperTitle => 'Modo desenvolvedor';
-
-  @override
-  String get playModeDeveloperBody =>
-      'Os quebra-cabeças originais do nonogram.org, para testes internos. Mantém seu progresso anterior.';
-
-  @override
-  String get playModeLastUsed => 'Último usado';
-
-  @override
   String licensesBy(String author) {
     return 'Por $author';
   }
@@ -486,11 +455,6 @@ class AppLocalizationsPt extends AppLocalizations {
   @override
   String licensesLevelCount(int count) {
     return '$count quebra-cabeças';
-  }
-
-  @override
-  String playModeProgress(int solved, int total) {
-    return '$solved/$total resolvidos';
   }
 
   @override
