@@ -90,7 +90,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get nonogramGuideRuleDesc =>
-      'Each number represents one continuous block of filled cells in that row or column. If there are multiple numbers, they represent separate blocks, and each block must be separated from the next by at least one empty cell. For example, `3 1` means a block of 3 filled cells, then at least 1 empty cell, then a block of 1 filled cell.';
+      'Each number represents one continuous block of filled cells in that row or column. If there are multiple numbers, they represent separate blocks, and each block must be separated from the next by at least one empty cell. For example, 3 1 means a block of 3 filled cells, then at least 1 empty cell, then a block of 1 filled cell.';
 
   @override
   String get nonogramGuideRuleTitle => 'Core rule: what the numbers mean';

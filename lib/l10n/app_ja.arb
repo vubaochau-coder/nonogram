@@ -22,7 +22,7 @@
   "nonogramGuideMethodSuperpositionSimpleTitle": "重ね合わせ（ヒントが1つ）",
   "nonogramGuideMethodWallPushingDesc": "塗られていると分かっているマスが、最初のヒント数字の長さよりも端に近い場合、そのブロックは端から離れる方向へ伸びているはずです。",
   "nonogramGuideMethodWallPushingTitle": "2. 壁から押し出す",
-  "nonogramGuideRuleDesc": "それぞれの数字は、その行または列で連続して塗られるマスのかたまり（ブロック）を表します。数字が複数ある場合はそれぞれ別のブロックで、ブロックとブロックの間には少なくとも1マスの空きが必要です。たとえば `3 1` は、3マス塗ったブロック、少なくとも1マスの空き、1マス塗ったブロックの順に並ぶことを意味します。",
+  "nonogramGuideRuleDesc": "それぞれの数字は、その行または列で連続して塗られるマスのかたまり（ブロック）を表します。数字が複数ある場合はそれぞれ別のブロックで、ブロックとブロックの間には少なくとも1マスの空きが必要です。たとえば 3 1 は、3マス塗ったブロック、少なくとも1マスの空き、1マス塗ったブロックの順に並ぶことを意味します。",
   "nonogramGuideRuleTitle": "基本ルール：数字の意味",
   "nonogramGuideTitle": "解き方",
   "nonogramHistoryCompletedOn": "{date}にクリア",

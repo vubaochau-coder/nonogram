@@ -89,7 +89,7 @@ class AppLocalizationsIt extends AppLocalizations {
 
   @override
   String get nonogramGuideRuleDesc =>
-      'Ogni numero rappresenta un blocco continuo di caselle piene in quella riga o colonna. Se ci sono più numeri, rappresentano blocchi separati, e ogni blocco deve essere separato dal successivo da almeno una casella vuota. Per esempio, `3 1` significa un blocco di 3 caselle piene, poi almeno 1 casella vuota, poi un blocco di 1 casella piena.';
+      'Ogni numero rappresenta un blocco continuo di caselle piene in quella riga o colonna. Se ci sono più numeri, rappresentano blocchi separati, e ogni blocco deve essere separato dal successivo da almeno una casella vuota. Per esempio, 3 1 significa un blocco di 3 caselle piene, poi almeno 1 casella vuota, poi un blocco di 1 casella piena.';
 
   @override
   String get nonogramGuideRuleTitle => 'Regola base: cosa significano i numeri';

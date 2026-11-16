@@ -89,7 +89,7 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get nonogramGuideRuleDesc =>
-      'Cada número representa um bloco contínuo de quadrados preenchidos naquela linha ou coluna. Se houver vários números, eles representam blocos separados, e cada bloco deve estar separado do próximo por pelo menos um quadrado vazio. Por exemplo, `3 1` significa um bloco de 3 quadrados preenchidos, depois pelo menos 1 quadrado vazio e então um bloco de 1 quadrado preenchido.';
+      'Cada número representa um bloco contínuo de quadrados preenchidos naquela linha ou coluna. Se houver vários números, eles representam blocos separados, e cada bloco deve estar separado do próximo por pelo menos um quadrado vazio. Por exemplo, 3 1 significa um bloco de 3 quadrados preenchidos, depois pelo menos 1 quadrado vazio e então um bloco de 1 quadrado preenchido.';
 
   @override
   String get nonogramGuideRuleTitle =>

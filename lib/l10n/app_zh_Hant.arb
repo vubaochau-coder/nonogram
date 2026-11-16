@@ -22,7 +22,7 @@
   "nonogramGuideMethodSuperpositionSimpleTitle": "疊加法（單個數字）",
   "nonogramGuideMethodWallPushingDesc": "如果一個確定已塗的方格離邊緣的距離比第一個數字還短，那麼它所屬的色塊必須朝遠離該邊緣的方向延伸。",
   "nonogramGuideMethodWallPushingTitle": "2. 從邊緣推開",
-  "nonogramGuideRuleDesc": "每個數字代表該橫列或直行中一段連續的已塗方格（色塊）。如果有多個數字，它們代表不同的色塊，且相鄰色塊之間至少要隔一個空格。例如 `3 1` 表示先是 3 個連續的塗色方格，然後至少 1 個空格，再是 1 個塗色方格。",
+  "nonogramGuideRuleDesc": "每個數字代表該橫列或直行中一段連續的已塗方格（色塊）。如果有多個數字，它們代表不同的色塊，且相鄰色塊之間至少要隔一個空格。例如 3 1 表示先是 3 個連續的塗色方格，然後至少 1 個空格，再是 1 個塗色方格。",
   "nonogramGuideRuleTitle": "基本規則：數字的含義",
   "nonogramGuideTitle": "解題技巧",
   "nonogramHistoryCompletedOn": "完成於 {date}",

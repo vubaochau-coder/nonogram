@@ -88,7 +88,7 @@ class AppLocalizationsVi extends AppLocalizations {
 
   @override
   String get nonogramGuideRuleDesc =>
-      'Mỗi con số biểu thị một nhóm ô được tô liền nhau trong hàng hoặc cột đó. Nếu có nhiều số, chúng biểu thị các nhóm riêng biệt, và giữa hai nhóm luôn phải có ít nhất 1 ô trống. Ví dụ, `3 1` nghĩa là một nhóm 3 ô tô liền nhau, sau đó là ít nhất 1 ô trống, rồi đến một nhóm 1 ô.';
+      'Mỗi con số biểu thị một nhóm ô được tô liền nhau trong hàng hoặc cột đó. Nếu có nhiều số, chúng biểu thị các nhóm riêng biệt, và giữa hai nhóm luôn phải có ít nhất 1 ô trống. Ví dụ, 3 1 nghĩa là một nhóm 3 ô tô liền nhau, sau đó là ít nhất 1 ô trống, rồi đến một nhóm 1 ô.';
 
   @override
   String get nonogramGuideRuleTitle =>

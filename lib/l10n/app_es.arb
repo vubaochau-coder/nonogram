@@ -22,7 +22,7 @@
   "nonogramGuideMethodSuperpositionSimpleTitle": "Superposición (una pista)",
   "nonogramGuideMethodWallPushingDesc": "Si una casilla rellena conocida está más cerca de un borde que el tamaño de la primera pista, la figura a la que pertenece debe extenderse alejándose de ese borde.",
   "nonogramGuideMethodWallPushingTitle": "2. Empujar desde las paredes",
-  "nonogramGuideRuleDesc": "Cada número representa un bloque continuo de casillas rellenas en esa fila o columna. Si hay varios números, representan bloques separados, y cada bloque debe estar separado del siguiente por al menos una casilla vacía. Por ejemplo, `3 1` significa un bloque de 3 casillas rellenas, luego al menos 1 casilla vacía y después un bloque de 1 casilla rellena.",
+  "nonogramGuideRuleDesc": "Cada número representa un bloque continuo de casillas rellenas en esa fila o columna. Si hay varios números, representan bloques separados, y cada bloque debe estar separado del siguiente por al menos una casilla vacía. Por ejemplo, 3 1 significa un bloque de 3 casillas rellenas, luego al menos 1 casilla vacía y después un bloque de 1 casilla rellena.",
   "nonogramGuideRuleTitle": "Regla básica: qué significan los números",
   "nonogramGuideTitle": "Cómo resolver",
   "nonogramHistoryCompletedOn": "Completado el {date}",

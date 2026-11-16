@@ -88,7 +88,7 @@ class AppLocalizationsId extends AppLocalizations {
 
   @override
   String get nonogramGuideRuleDesc =>
-      'Setiap angka mewakili satu blok kotak terisi yang bersambung di baris atau kolom itu. Jika ada beberapa angka, masing-masing mewakili blok terpisah, dan setiap blok harus dipisahkan dari blok berikutnya oleh minimal satu kotak kosong. Contohnya, `3 1` berarti blok 3 kotak terisi, lalu minimal 1 kotak kosong, lalu blok 1 kotak terisi.';
+      'Setiap angka mewakili satu blok kotak terisi yang bersambung di baris atau kolom itu. Jika ada beberapa angka, masing-masing mewakili blok terpisah, dan setiap blok harus dipisahkan dari blok berikutnya oleh minimal satu kotak kosong. Contohnya, 3 1 berarti blok 3 kotak terisi, lalu minimal 1 kotak kosong, lalu blok 1 kotak terisi.';
 
   @override
   String get nonogramGuideRuleTitle => 'Aturan inti: arti angka-angka';

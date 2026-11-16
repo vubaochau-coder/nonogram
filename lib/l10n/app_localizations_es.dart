@@ -90,7 +90,7 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get nonogramGuideRuleDesc =>
-      'Cada número representa un bloque continuo de casillas rellenas en esa fila o columna. Si hay varios números, representan bloques separados, y cada bloque debe estar separado del siguiente por al menos una casilla vacía. Por ejemplo, `3 1` significa un bloque de 3 casillas rellenas, luego al menos 1 casilla vacía y después un bloque de 1 casilla rellena.';
+      'Cada número representa un bloque continuo de casillas rellenas en esa fila o columna. Si hay varios números, representan bloques separados, y cada bloque debe estar separado del siguiente por al menos una casilla vacía. Por ejemplo, 3 1 significa un bloque de 3 casillas rellenas, luego al menos 1 casilla vacía y después un bloque de 1 casilla rellena.';
 
   @override
   String get nonogramGuideRuleTitle =>

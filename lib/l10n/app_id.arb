@@ -22,7 +22,7 @@
   "nonogramGuideMethodSuperpositionSimpleTitle": "Penumpukan (satu petunjuk)",
   "nonogramGuideMethodWallPushingDesc": "Jika kotak terisi yang sudah diketahui lebih dekat ke tepi daripada panjang petunjuk pertama, figur tempat kotak itu berada harus memanjang menjauhi tepi tersebut.",
   "nonogramGuideMethodWallPushingTitle": "2. Mendorong dari dinding",
-  "nonogramGuideRuleDesc": "Setiap angka mewakili satu blok kotak terisi yang bersambung di baris atau kolom itu. Jika ada beberapa angka, masing-masing mewakili blok terpisah, dan setiap blok harus dipisahkan dari blok berikutnya oleh minimal satu kotak kosong. Contohnya, `3 1` berarti blok 3 kotak terisi, lalu minimal 1 kotak kosong, lalu blok 1 kotak terisi.",
+  "nonogramGuideRuleDesc": "Setiap angka mewakili satu blok kotak terisi yang bersambung di baris atau kolom itu. Jika ada beberapa angka, masing-masing mewakili blok terpisah, dan setiap blok harus dipisahkan dari blok berikutnya oleh minimal satu kotak kosong. Contohnya, 3 1 berarti blok 3 kotak terisi, lalu minimal 1 kotak kosong, lalu blok 1 kotak terisi.",
   "nonogramGuideRuleTitle": "Aturan inti: arti angka-angka",
   "nonogramGuideTitle": "Cara Menyelesaikan",
   "nonogramHistoryCompletedOn": "Selesai pada {date}",
