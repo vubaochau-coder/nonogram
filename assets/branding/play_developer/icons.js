@@ -1,14 +1,14 @@
 const { chromium } = require('playwright');
 const fs = require('fs');
-// pixel ">_" on 9x7 grid
+// pixel ">_c": ">" = squinting eye / prompt, "c" = eye / initial, "_" = mouth / cursor
 const G = [
- "X........",
- "XX.......",
- ".XX......",
- "..XX.....",
- ".XX......",
- "XX.......",
- "X...XXXXX",
+ "XX.......XXX",
+ ".XX.....XX..",
+ "..XX....XX..",
+ ".XX.....XX..",
+ "XX.......XXX",
+ "............",
+ "....XXXX....",
 ];
 function grid({x0,y0,cell,gap,r,on,off,offOp,glow}) {
   let s='';
@@ -19,7 +19,7 @@ function grid({x0,y0,cell,gap,r,on,off,offOp,glow}) {
   }));
   return s;
 }
-const cell=30,gap=6, W=9*(cell+gap)-gap, H=7*(cell+gap)-gap;
+const cell=28,gap=6, W=G[0].length*(cell+gap)-gap, H=G.length*(cell+gap)-gap;
 const glowDef=(std)=>`<filter id="glow" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="${std}" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>`;
 const dots=(y)=>['#FF5F57','#FEBC2E','#28C840'].map((c,i)=>`<circle cx="${72+i*34}" cy="${y}" r="11" fill="${c}"/>`).join('');
 
