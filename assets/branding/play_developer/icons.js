@@ -19,7 +19,7 @@ function grid({x0,y0,cell,gap,r,on,off,offOp,glow}) {
   }));
   return s;
 }
-const cell=28,gap=6, W=G[0].length*(cell+gap)-gap, H=G.length*(cell+gap)-gap;
+const cell=21,gap=5, W=G[0].length*(cell+gap)-gap, H=G.length*(cell+gap)-gap;
 const glowDef=(std)=>`<filter id="glow" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="${std}" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>`;
 const dots=(y)=>['#FF5F57','#FEBC2E','#28C840'].map((c,i)=>`<circle cx="${72+i*34}" cy="${y}" r="11" fill="${c}"/>`).join('');
 
