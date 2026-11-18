@@ -1,3 +1,5 @@
+// Google Play developer icon (512x512): pixel ">_c" face on a CRT-style background.
+// Run: node icons.js   (needs Playwright + Chromium and the JetBrains Mono font)
 const { chromium } = require('playwright');
 const fs = require('fs');
 // pixel ">_c": ">" = squinting eye / prompt, "c" = eye / initial, "_" = mouth / cursor
@@ -49,8 +51,9 @@ const variants = {
 (async()=>{
   const b=await chromium.launch(); const p=await b.newPage({viewport:{width:512,height:512}});
   for(const [k,v] of Object.entries(variants)){
+    if(k!=='C') continue; // the chosen design
     await p.setContent(`<html><body style="margin:0"><svg xmlns="http://www.w3.org/2000/svg" width="512" height="512">${v}</svg></body></html>`);
-    await p.screenshot({path:`icon_${k}.png`});
+    await p.screenshot({path:'play-developer-icon-512.png'}); // 512x512, 24-bit RGB PNG
   }
   await b.close();
 })();

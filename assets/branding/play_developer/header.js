@@ -1,4 +1,5 @@
-// Google Play developer header, 4096x2304. Minimal CRT style matching icon C.
+// Google Play developer header (4096x2304): ">_c" mark + name, minimal CRT style.
+// Run: node header.js   (needs Playwright + Chromium and the JetBrains Mono font)
 const { chromium } = require('playwright');
 const W=4096,H=2304;
 const G=["XX.......XXX",".XX.....XX..","..XX....XX..",".XX.....XX..","XX.......XXX","............","....XXXX...."];
@@ -25,7 +26,10 @@ body{margin:0;width:${W}px;height:${H}px;overflow:hidden;position:relative;font-
 <div class="scan"></div><div class="vig"></div></body></html>`;
 (async()=>{const b=await chromium.launch();const p=await b.newPage({viewport:{width:W,height:H}});
 await p.setContent(html);await p.evaluate(()=>document.fonts.ready);
-await p.screenshot({path:'dev_header_4096x2304.jpg',type:'jpeg',quality:90});
-await p.setViewportSize({width:1366,height:768});
-await p.setContent(`<body style="margin:0"><img style="width:1366px" src="data:image/jpeg;base64,${require('fs').readFileSync('dev_header_4096x2304.jpg').toString('base64')}"></body>`);
-await p.screenshot({path:process.env.PREV||'/dev/null'});await b.close();})();
+// A straight PNG of the scanlines is ~4.5 MB, over Play's 1 MB limit. Rendering through
+// JPEG first smooths the noise so the final 24-bit PNG lands around 930 KB (quality 70; 80 goes over 1 MB).
+const jpg=await p.screenshot({type:'jpeg',quality:70});
+await p.setContent(`<body style="margin:0"><img style="display:block" src="data:image/jpeg;base64,${jpg.toString('base64')}"></body>`);
+await p.waitForFunction(()=>document.images[0].complete);
+await p.screenshot({path:'play-developer-header-4096x2304.png'}); // 24-bit RGB PNG
+await b.close();})();
