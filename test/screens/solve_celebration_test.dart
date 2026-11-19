@@ -125,7 +125,9 @@ void main() {
     expect(find.byKey(const ValueKey('solve-wave')), findsOneWidget);
     expect(find.byType(NonogramCompletionResultSection), findsNothing);
 
-    await tester.pump(SolveCelebration.waveDuration);
+    await tester.pump(
+      SolveCelebration.fitDuration + SolveCelebration.waveDuration,
+    );
     expect(find.byType(NonogramCompletionResultSection), findsNothing);
 
     // Hết sóng: sang màn kết quả, tranh đang bay.
@@ -193,7 +195,9 @@ void main() {
     bloc.add(const CellLongPressed(row: 0, col: 0));
     await tester.pump(const Duration(milliseconds: 100));
     await _solve(tester);
-    await tester.pump(SolveCelebration.waveDuration);
+    await tester.pump(
+      SolveCelebration.fitDuration + SolveCelebration.waveDuration,
+    );
     await tester.pump(const Duration(milliseconds: 300));
     await tester.pump();
     await tester.pump(SolveCelebration.flightDuration);
