@@ -197,6 +197,15 @@ class NonogramBoardLayout {
     viewport.height,
   );
 
+  /// Vùng cả tranh nằm gọn khi vừa giải xong (dải số đã mờ đi): cả khung
+  /// nhìn, trừ phần chừa cho nút công cụ và một lề quanh.
+  Rect get celebrationArea => Rect.fromLTRB(
+    endMargin,
+    max(topReserve, endMargin),
+    viewport.width - rightReserve - endMargin,
+    viewport.height - endMargin,
+  );
+
   /// Ô dưới điểm [p] (toạ độ khung nhìn), hoặc null nếu điểm nằm ngoài lưới
   /// hoặc trên dải gợi ý (dải che lên lưới khi dính mép).
   ({int row, int col})? cellAt(Offset p, Offset t) {
