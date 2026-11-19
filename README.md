@@ -314,3 +314,26 @@ Secrets/variables cần cấu hình được mô tả ở đầu
 
 `tools/generate_icons.py` vẽ lại toàn bộ launcher icon, splash, icon web và
 `assets/branding/logo.png` (logo 1024px để dùng cho Firebase/store).
+
+## Giấy phép
+
+Mã nguồn được chia sẻ để mọi người học hỏi, theo
+[PolyForm Noncommercial 1.0.0](LICENSE):
+
+- **Được:** clone, chạy, đọc, sửa code để học hoặc làm dự án cá nhân, và chia
+  sẻ lại cho mục đích phi thương mại (kèm file `LICENSE` và dòng
+  `Required Notice`).
+- **Không được:** dùng cho bất kỳ mục đích thương mại nào, gồm cả phát hành
+  app (kể cả bản đổi tên / đổi giao diện) có quảng cáo, thu phí hay mua trong
+  app.
+
+Giấy phép này **không** áp dụng cho:
+
+- Hình màn chơi và dữ liệu nonogram của bên thứ ba trong `assets/levels/` và
+  `tools/image_levels/`: theo giấy phép gốc của từng nguồn (CC0, CC BY, CC
+  BY-SA, MIT), xem [docs/credits.md](docs/credits.md).
+- Font, icon và thư viện bên thứ ba: theo giấy phép riêng của chúng.
+- Tên "Pixel Nonogram", logo và hình ảnh trên cửa hàng: không được dùng cho
+  app khác.
+
+Muốn dùng cho mục đích thương mại, hãy liên hệ chủ repo qua GitHub.
