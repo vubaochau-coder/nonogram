@@ -608,6 +608,41 @@ class _BoardPaint extends StatelessWidget {
     final waving = celebration != null && celebration.holdsBoard;
     // Tranh đang bay sang màn kết quả: lưới trên bàn (đang mờ dần) để trống.
     final flying = celebration != null && celebration.isFlying;
+    final revealing = waving || flying;
+    final Widget cellsPaint = CustomPaint(
+      painter: NonogramCellsPainter(
+        rows: puzzle.rows,
+        cols: puzzle.cols,
+        gridData: state.gridData,
+        satisfiedRows: state.satisfiedRows,
+        satisfiedCols: state.satisfiedCols,
+        cellSize: cell,
+        backgroundColor: colors.surfaceContainerLow,
+        filledColor: colors.onSurface,
+        markedMarkerColor: colors.primary,
+        markerColor: colors.onSurfaceVariant.withValues(alpha: 0.7),
+        lockedCells: state.lockedCells,
+        lockedStarColor: game.lockedStar,
+        lockedMarkStarColor: game.lockedMarkStar,
+        pinnedCells: puzzle.pinnedCells,
+        pinColor: colors.surfaceContainerLow,
+      ),
+      foregroundPainter: NonogramGridPainter(
+        rows: puzzle.rows,
+        cols: puzzle.cols,
+        cellSize: cell,
+        themeColor: colors.primary,
+        lineColor: colors.outlineVariant,
+        majorLineColor: colors.outline,
+      ),
+    );
+
+    // Lúc giải xong hai dải số mờ đi để lộ trọn tranh.
+    Widget strip(Widget child) =>
+        revealing
+            ? FadeTransition(opacity: celebration.cluesOpacity, child: child)
+            : child;
+
     return Stack(
       clipBehavior: Clip.hardEdge,
       children: [
@@ -623,66 +658,17 @@ class _BoardPaint extends StatelessWidget {
             child: Stack(
               clipBehavior: Clip.none,
               children: [
-                Positioned(
-                  left: offset.dx - clipLeft,
-                  top: offset.dy - clipTop,
-                  width: gridW,
-                  height: gridH,
-                  child: RepaintBoundary(
-                    key: celebration?.gridKey,
-                    child: Opacity(
-                      opacity: flying ? 0 : 1,
-                      child: CustomPaint(
-                        painter: NonogramCellsPainter(
-                          rows: puzzle.rows,
-                          cols: puzzle.cols,
-                          gridData: state.gridData,
-                          satisfiedRows: state.satisfiedRows,
-                          satisfiedCols: state.satisfiedCols,
-                          cellSize: cell,
-                          backgroundColor: colors.surfaceContainerLow,
-                          filledColor: colors.onSurface,
-                          markedMarkerColor: colors.primary,
-                          markerColor: colors.onSurfaceVariant.withValues(
-                            alpha: 0.7,
-                          ),
-                          lockedCells: state.lockedCells,
-                          lockedStarColor: game.lockedStar,
-                          lockedMarkStarColor: game.lockedMarkStar,
-                          pinnedCells: puzzle.pinnedCells,
-                          pinColor: colors.surfaceContainerLow,
-                        ),
-                        foregroundPainter: NonogramGridPainter(
-                          rows: puzzle.rows,
-                          cols: puzzle.cols,
-                          cellSize: cell,
-                          themeColor: colors.primary,
-                          lineColor: colors.outlineVariant,
-                          majorLineColor: colors.outline,
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-                // Vừa giải xong: sóng lan từ góc trái dưới lên góc phải
-                // trên, từng ô tô nổi lên rồi hạ xuống, dấu X mờ dần.
-                if (waving)
+                // Đang có hiệu ứng giải xong: lưới chuyển sang lớp sân khấu
+                // (8) để lùi lại cho thấy trọn tranh.
+                if (!revealing)
                   Positioned(
                     left: offset.dx - clipLeft,
                     top: offset.dy - clipTop,
                     width: gridW,
                     height: gridH,
-                    child: IgnorePointer(
-                      child: CustomPaint(
-                        key: const ValueKey('solve-wave'),
-                        painter: SolveWavePainter(
-                          progress: celebration.wave,
-                          solution: puzzle.solution,
-                          cellSize: cell,
-                          filledColor: colors.onSurface,
-                          backgroundColor: colors.surfaceContainerLow,
-                        ),
-                      ),
+                    child: RepaintBoundary(
+                      key: celebration?.gridKey,
+                      child: cellsPaint,
                     ),
                   ),
                 // Ô vừa được gợi ý tô giúp: nháy sáng (nằm trong vùng cắt
@@ -710,50 +696,52 @@ class _BoardPaint extends StatelessWidget {
             top: offset.dy,
             width: leftW,
             height: gridH,
-            child: Stack(
-              clipBehavior: Clip.hardEdge,
-              children: [
-                Positioned(
-                  left: leftW - leftContent + leftClueScroll,
-                  top: 0,
-                  width: leftContent,
-                  height: gridH,
-                  child: CustomPaint(
-                    painter: NonogramLeftCluesPainter(
-                      clues: puzzle.leftClues,
-                      satisfiedRows: state.satisfiedRows,
-                      cellSize: cell,
-                      clueDepth: layout.leftClueDepth,
-                      lineColor: colors.surface,
-                      majorLineColor: colors.outline,
-                      backgroundColor: game.clueBackground,
-                      bandColor: game.clueBand,
-                      textStyle: clueStyle,
-                      satisfiedTextStyle: solvedStyle,
-                    ),
-                  ),
-                ),
-                Positioned.fill(
-                  child: IgnorePointer(
+            child: strip(
+              Stack(
+                clipBehavior: Clip.hardEdge,
+                children: [
+                  Positioned(
+                    left: leftW - leftContent + leftClueScroll,
+                    top: 0,
+                    width: leftContent,
+                    height: gridH,
                     child: CustomPaint(
-                      key: const ValueKey('left-clue-overflow'),
-                      painter: NonogramClueOverflowPainter(
-                        overflows: overflows(
-                          puzzle.leftClues,
-                          leftW,
-                          leftClueScroll,
-                          layout.leftClueDepth,
-                        ),
-                        axis: Axis.horizontal,
+                      painter: NonogramLeftCluesPainter(
+                        clues: puzzle.leftClues,
+                        satisfiedRows: state.satisfiedRows,
                         cellSize: cell,
                         clueDepth: layout.leftClueDepth,
-                        chipColor: game.reward,
-                        textStyle: chipTextStyle,
+                        lineColor: colors.surface,
+                        majorLineColor: colors.outline,
+                        backgroundColor: game.clueBackground,
+                        bandColor: game.clueBand,
+                        textStyle: clueStyle,
+                        satisfiedTextStyle: solvedStyle,
                       ),
                     ),
                   ),
-                ),
-              ],
+                  Positioned.fill(
+                    child: IgnorePointer(
+                      child: CustomPaint(
+                        key: const ValueKey('left-clue-overflow'),
+                        painter: NonogramClueOverflowPainter(
+                          overflows: overflows(
+                            puzzle.leftClues,
+                            leftW,
+                            leftClueScroll,
+                            layout.leftClueDepth,
+                          ),
+                          axis: Axis.horizontal,
+                          cellSize: cell,
+                          clueDepth: layout.leftClueDepth,
+                          chipColor: game.reward,
+                          textStyle: chipTextStyle,
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
             ),
           ),
 
@@ -765,50 +753,52 @@ class _BoardPaint extends StatelessWidget {
             top: stickyTop,
             width: gridW,
             height: topH,
-            child: Stack(
-              clipBehavior: Clip.hardEdge,
-              children: [
-                Positioned(
-                  left: 0,
-                  top: topH - topContent + topClueScroll,
-                  width: gridW,
-                  height: topContent,
-                  child: CustomPaint(
-                    painter: NonogramTopCluesPainter(
-                      clues: puzzle.topClues,
-                      satisfiedColumns: state.satisfiedCols,
-                      cellSize: cell,
-                      clueDepth: layout.topClueDepth,
-                      lineColor: colors.surface,
-                      majorLineColor: colors.outline,
-                      backgroundColor: game.clueBackground,
-                      bandColor: game.clueBand,
-                      textStyle: clueStyle,
-                      satisfiedTextStyle: solvedStyle,
-                    ),
-                  ),
-                ),
-                Positioned.fill(
-                  child: IgnorePointer(
+            child: strip(
+              Stack(
+                clipBehavior: Clip.hardEdge,
+                children: [
+                  Positioned(
+                    left: 0,
+                    top: topH - topContent + topClueScroll,
+                    width: gridW,
+                    height: topContent,
                     child: CustomPaint(
-                      key: const ValueKey('top-clue-overflow'),
-                      painter: NonogramClueOverflowPainter(
-                        overflows: overflows(
-                          puzzle.topClues,
-                          topH,
-                          topClueScroll,
-                          layout.topClueDepth,
-                        ),
-                        axis: Axis.vertical,
+                      painter: NonogramTopCluesPainter(
+                        clues: puzzle.topClues,
+                        satisfiedColumns: state.satisfiedCols,
                         cellSize: cell,
                         clueDepth: layout.topClueDepth,
-                        chipColor: game.reward,
-                        textStyle: chipTextStyle,
+                        lineColor: colors.surface,
+                        majorLineColor: colors.outline,
+                        backgroundColor: game.clueBackground,
+                        bandColor: game.clueBand,
+                        textStyle: clueStyle,
+                        satisfiedTextStyle: solvedStyle,
                       ),
                     ),
                   ),
-                ),
-              ],
+                  Positioned.fill(
+                    child: IgnorePointer(
+                      child: CustomPaint(
+                        key: const ValueKey('top-clue-overflow'),
+                        painter: NonogramClueOverflowPainter(
+                          overflows: overflows(
+                            puzzle.topClues,
+                            topH,
+                            topClueScroll,
+                            layout.topClueDepth,
+                          ),
+                          axis: Axis.vertical,
+                          cellSize: cell,
+                          clueDepth: layout.topClueDepth,
+                          chipColor: game.reward,
+                          textStyle: chipTextStyle,
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
             ),
           ),
 
@@ -895,7 +885,122 @@ class _BoardPaint extends StatelessWidget {
                     ),
             pulse: hintPulse,
           ),
+
+        // 8. Vừa giải xong: lưới lùi lại cho trọn tranh nằm giữa khung (vùng
+        // cắt nới dần ra cả khung nhìn trong lúc dải số mờ đi), rồi sóng
+        // lan trên tranh. Lúc tranh bay sang màn kết quả thì để trống.
+        if (revealing)
+          Positioned.fill(
+            child: IgnorePointer(
+              child: Opacity(
+                opacity: flying ? 0 : 1,
+                child: _SolveStage(
+                  fit: celebration.fit,
+                  clipFrom: Rect.fromLTRB(
+                    clipLeft,
+                    clipTop,
+                    layout.viewport.width,
+                    layout.viewport.height,
+                  ),
+                  clipTo: Rect.fromLTRB(
+                    0,
+                    layout.topReserve,
+                    layout.viewport.width - rightReserve,
+                    layout.viewport.height,
+                  ),
+                  gridFrom: Rect.fromLTWH(offset.dx, offset.dy, gridW, gridH),
+                  gridTo: SolveCelebration.fitRect(
+                    grid: Size(gridW, gridH),
+                    area: layout.celebrationArea,
+                  ),
+                  child: SizedBox(
+                    width: gridW,
+                    height: gridH,
+                    child: Stack(
+                      children: [
+                        Positioned.fill(
+                          child: RepaintBoundary(
+                            key: celebration.gridKey,
+                            child: cellsPaint,
+                          ),
+                        ),
+                        // Sóng lan từ góc trái dưới lên góc phải trên, từng ô
+                        // tô nổi lên rồi hạ xuống, dấu X mờ dần.
+                        if (waving)
+                          Positioned.fill(
+                            child: CustomPaint(
+                              key: const ValueKey('solve-wave'),
+                              painter: SolveWavePainter(
+                                progress: celebration.wave,
+                                solution: puzzle.solution,
+                                cellSize: cell,
+                                filledColor: colors.onSurface,
+                                backgroundColor: colors.surfaceContainerLow,
+                              ),
+                            ),
+                          ),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          ),
       ],
+    );
+  }
+}
+
+/// Lớp sân khấu lúc giải xong: lưới đi từ [gridFrom] (chỗ đang chơi) tới
+/// [gridTo] (trọn tranh giữa khung), vùng cắt nới từ [clipFrom] (phần lưới
+/// đang lộ ra) tới [clipTo], theo [fit].
+class _SolveStage extends StatelessWidget {
+  const _SolveStage({
+    required this.fit,
+    required this.clipFrom,
+    required this.clipTo,
+    required this.gridFrom,
+    required this.gridTo,
+    required this.child,
+  });
+
+  final Animation<double> fit;
+  final Rect clipFrom;
+  final Rect clipTo;
+  final Rect gridFrom;
+  final Rect gridTo;
+
+  /// Lưới ở cỡ thật; được thu phóng cho khớp khung đang đi.
+  final Widget child;
+
+  @override
+  Widget build(BuildContext context) {
+    return AnimatedBuilder(
+      animation: fit,
+      child: child,
+      builder: (context, child) {
+        final t = fit.value;
+        final clip = Rect.lerp(clipFrom, clipTo, t)!;
+        final grid = Rect.lerp(gridFrom, gridTo, t)!;
+        return Stack(
+          children: [
+            Positioned.fromRect(
+              rect: clip,
+              child: ClipRect(
+                child: Stack(
+                  clipBehavior: Clip.none,
+                  children: [
+                    Positioned.fromRect(
+                      rect: grid.shift(-clip.topLeft),
+                      child: FittedBox(fit: BoxFit.fill, child: child),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ],
+        );
+      },
     );
   }
 }

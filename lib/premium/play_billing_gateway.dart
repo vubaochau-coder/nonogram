@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import 'package:flutter/foundation.dart';
+import 'package:flutter/widgets.dart';
 import 'package:in_app_purchase/in_app_purchase.dart';
 import 'package:in_app_purchase_android/in_app_purchase_android.dart';
 
@@ -10,9 +10,16 @@ import 'purchase_gateway.dart';
 ///
 /// Mọi giao dịch thành công đều được xác nhận (`completePurchase`); Google
 /// tự hoàn tiền những giao dịch không được xác nhận trong 3 ngày.
+///
+/// Có lúc Play không báo kết quả nào (người dùng rời app giữa chừng rồi mở
+/// lại, sheet thanh toán bị đóng ngang...). Vì vậy khi app quay lại sau màn
+/// thanh toán mà sau [resumeGrace] vẫn chưa có kết quả, hỏi lại Play các gói
+/// đã sở hữu để kết thúc lượt mua, thay vì để nút mua chờ mãi.
 class PlayBillingGateway implements PurchaseGateway {
-  PlayBillingGateway({InAppPurchase? iap})
-    : _iap = iap ?? InAppPurchase.instance {
+  PlayBillingGateway({
+    InAppPurchase? iap,
+    this.resumeGrace = const Duration(seconds: 2),
+  }) : _iap = iap ?? InAppPurchase.instance {
     _subscription = _iap.purchaseStream.listen(
       _onPurchases,
       onError: (Object e) => debugPrint('Purchase stream: $e'),
@@ -24,6 +31,13 @@ class PlayBillingGateway implements PurchaseGateway {
   final _purchased = StreamController<String>.broadcast();
   final Map<String, ProductDetails> _products = {};
   final Map<String, Completer<PurchaseOutcome>> _pendingBuys = {};
+
+  /// Thời gian chờ Play tự báo kết quả sau khi app quay lại.
+  final Duration resumeGrace;
+
+  /// Nghe app quay lại, chỉ trong lúc có lượt mua đang chờ.
+  AppLifecycleListener? _lifecycle;
+  Timer? _resumeCheck;
 
   @override
   Stream<String> get purchased => _purchased.stream;
@@ -84,6 +98,7 @@ class PlayBillingGateway implements PurchaseGateway {
     final existing = _pendingBuys[productId];
     if (existing != null) return existing.future;
     final completer = _pendingBuys[productId] = Completer<PurchaseOutcome>();
+    _lifecycle ??= AppLifecycleListener(onResume: _onResume);
     try {
       final started = await _iap.buyNonConsumable(
         purchaseParam: PurchaseParam(productDetails: product),
@@ -108,6 +123,35 @@ class PlayBillingGateway implements PurchaseGateway {
     if (completer != null && !completer.isCompleted) {
       completer.complete(outcome);
     }
+    if (_pendingBuys.isEmpty) _stopWatchingResume();
+  }
+
+  void _onResume() {
+    _resumeCheck?.cancel();
+    _resumeCheck = Timer(resumeGrace, _settleStalledBuys);
+  }
+
+  /// App đã quay lại sau màn thanh toán mà Play vẫn im lặng: đã sở hữu thì
+  /// coi như mua xong, chưa thì coi như người dùng đã bỏ.
+  Future<void> _settleStalledBuys() async {
+    if (_pendingBuys.isEmpty) return;
+    final ids = _pendingBuys.keys.toList();
+    final owned = await ownedProducts();
+    for (final id in ids) {
+      if (owned?.contains(id) == true) {
+        _purchased.add(id);
+        _finish(id, PurchaseOutcome.purchased);
+      } else {
+        _finish(id, PurchaseOutcome.cancelled);
+      }
+    }
+  }
+
+  void _stopWatchingResume() {
+    _resumeCheck?.cancel();
+    _resumeCheck = null;
+    _lifecycle?.dispose();
+    _lifecycle = null;
   }
 
   Future<void> _onPurchases(List<PurchaseDetails> purchases) async {
@@ -137,6 +181,7 @@ class PlayBillingGateway implements PurchaseGateway {
 
   @override
   void dispose() {
+    _stopWatchingResume();
     _subscription.cancel();
     _purchased.close();
   }

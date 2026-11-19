@@ -12,8 +12,9 @@ enum SolveCelebrationPhase {
   /// Không có hiệu ứng (đang chơi, hoặc mở một màn đã giải sẵn).
   idle,
 
-  /// Sóng lan trên bàn chơi từ góc trái dưới lên góc phải trên: từng ô tô
-  /// nổi lên rồi hạ xuống.
+  /// Hai dải số mờ đi, lưới thu nhỏ / dời vào giữa để cả tranh nằm trọn
+  /// trong khung nhìn; rồi sóng lan từ góc trái dưới lên góc phải trên: từng
+  /// ô tô nổi lên rồi hạ xuống.
   wave,
 
   /// Đã sang màn kết quả: khung chạy quanh tranh, tranh vừa thu nhỏ vừa bay
@@ -24,7 +25,8 @@ enum SolveCelebrationPhase {
   done,
 }
 
-/// Điều phối hiệu ứng giải xong: sóng nổi ô trên lưới, rồi khung chạy quanh
+/// Điều phối hiệu ứng giải xong: lưới lùi lại cho thấy trọn tranh (dải số
+/// mờ đi), sóng nổi ô trên lưới, rồi khung chạy quanh
 /// tranh trong lúc tranh thu nhỏ và bay vào thẻ tranh của màn kết quả (kiểu
 /// hero animation trong cùng một trang).
 ///
@@ -34,9 +36,12 @@ class SolveCelebration extends ChangeNotifier {
   SolveCelebration({required TickerProvider vsync})
     : _wave = AnimationController(
         vsync: vsync,
-        duration: waveDuration + _waveHold,
+        duration: fitDuration + waveDuration + _waveHold,
       ),
       _flight = AnimationController(vsync: vsync, duration: flightDuration);
+
+  /// Thời gian lưới lùi lại cho vừa khung nhìn (trước khi sóng chạy).
+  static const fitDuration = Duration(milliseconds: 450);
 
   /// Thời gian sóng đi hết lưới.
   static const waveDuration = Duration(milliseconds: 1300);
@@ -74,13 +79,30 @@ class SolveCelebration extends ChangeNotifier {
   List<List<int>> _solution = const [];
   List<List<int>> get solution => _solution;
 
+  static double _waveFraction(Duration d) =>
+      d.inMilliseconds /
+      (fitDuration + waveDuration + _waveHold).inMilliseconds;
+
+  /// Mốc (0..1 trên bộ điều khiển sóng) sóng bắt đầu.
+  static final double _waveStart = _waveFraction(fitDuration);
+
+  /// Lưới lùi lại cho vừa khung nhìn: 0 = chỗ đang chơi, 1 = trọn tranh ở
+  /// giữa khung; giữ ở 1 tới hết hiệu ứng.
+  late final Animation<double> fit = _wave.drive(
+    CurveTween(curve: Interval(0, _waveStart, curve: Curves.easeInOutCubic)),
+  );
+
+  /// Độ hiện của hai dải số: mờ hẳn khi lưới đã lùi xong.
+  late final Animation<double> cluesOpacity = _wave.drive(
+    Tween<double>(begin: 1, end: 0).chain(
+      CurveTween(curve: Interval(0, _waveStart * 0.7, curve: Curves.easeOut)),
+    ),
+  );
+
   /// Tiến độ sóng, 0..1 trên cả [waveDuration] (phần nghỉ phía sau giữ ở 1).
   late final Animation<double> wave = _wave.drive(
     CurveTween(
-      curve: Interval(
-        0,
-        waveDuration.inMilliseconds / (waveDuration + _waveHold).inMilliseconds,
-      ),
+      curve: Interval(_waveStart, _waveFraction(fitDuration + waveDuration)),
     ),
   );
 
@@ -149,11 +171,21 @@ class SolveCelebration extends ChangeNotifier {
     _flight.value = 0;
     _setPhase(SolveCelebrationPhase.wave);
     HapticFeedback.mediumImpact();
-    onSound?.call(GameSound.wave);
+    // Tiếng sóng vang lúc sóng thật sự bắt đầu (sau nhịp lưới lùi lại).
+    var waveSounded = false;
+    void onTick() {
+      if (waveSounded || _wave.value < _waveStart) return;
+      waveSounded = true;
+      onSound?.call(GameSound.wave);
+    }
+
+    _wave.addListener(onTick);
     try {
       await _wave.forward(from: 0).orCancel;
     } on TickerCanceled {
       return;
+    } finally {
+      _wave.removeListener(onTick);
     }
     if (_disposed || _phase != SolveCelebrationPhase.wave) return;
 
@@ -210,10 +242,30 @@ class SolveCelebration extends ChangeNotifier {
     _setPhase(SolveCelebrationPhase.idle);
   }
 
+  /// Khung của [key] trên màn hình, tính cả phép thu phóng phía trên (lưới
+  /// được thu nhỏ lúc lùi lại).
   static Rect? _globalRect(GlobalKey key) {
     final box = key.currentContext?.findRenderObject();
     if (box is! RenderBox || !box.hasSize || !box.attached) return null;
-    return box.localToGlobal(Offset.zero) & box.size;
+    return MatrixUtils.transformRect(
+      box.getTransformTo(null),
+      Offset.zero & box.size,
+    );
+  }
+
+  /// Chỗ cả tranh nằm khi lưới lùi lại: vừa trọn [area] (giữ tỉ lệ, căn
+  /// giữa), không phóng to quá cỡ đang chơi.
+  static Rect fitRect({required Size grid, required Rect area}) {
+    if (grid.isEmpty || area.isEmpty) return area.center & Size.zero;
+    final scale = min(
+      1.0,
+      min(area.width / grid.width, area.height / grid.height),
+    );
+    return Rect.fromCenter(
+      center: area.center,
+      width: grid.width * scale,
+      height: grid.height * scale,
+    );
   }
 
   static SolveCelebration? maybeOf(BuildContext context, {bool listen = true}) {
