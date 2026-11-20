@@ -225,10 +225,15 @@ Game ──AdPlacement──▶ AdService (ad_service.dart)
   không hợp lệ; muốn thử bản release thì thêm máy vào **Cài đặt → Thiết bị thử
   nghiệm** trong AdMob trước.
 
-- **Privacy policy:** `docs/privacy/index.html`, đăng bằng GitHub Pages tại
-  https://vubaochau-coder.github.io/nonogram/privacy/ (Settings → Pages →
-  Deploy from a branch → `main` / `/docs`). Dùng URL này cho Play Console và
-  thông báo GDPR trên AdMob. Thêm SDK / dữ liệu mới thì cập nhật trang này.
+- **Privacy policy:** nằm ở repo
+  [`vubaochau-coder.github.io`](https://github.com/vubaochau-coder/vubaochau-coder.github.io),
+  file `nonogram/privacy/index.html`, đăng tại
+  https://vubaochau-coder.github.io/nonogram/privacy/. Dùng URL này cho Play
+  Console và thông báo GDPR trên AdMob. Thêm SDK / dữ liệu mới thì cập nhật
+  trang ở repo đó. Repo này **không bật GitHub Pages** (nếu bật, nó chiếm
+  đường dẫn `/nonogram/` và che mất trang chính sách).
+- **app-ads.txt:** cũng ở repo `vubaochau-coder.github.io`, tại
+  https://vubaochau-coder.github.io/app-ads.txt.
 
 ## Điểm danh hằng ngày
 
