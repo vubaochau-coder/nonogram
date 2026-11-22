@@ -188,6 +188,24 @@ void main() {
     expect((await repository.getPowerUps()).hints, 1);
   });
 
+  testWidgets('ad-free pack: collect x2 still shows and still plays an ad', (
+    tester,
+  ) async {
+    final ads = FakeAdService();
+    await pump(tester, premium: true, previousCheckIns: 6, ads: ads);
+    await tester.tap(find.byKey(const ValueKey('check-in-button')));
+    await run(tester, 4700);
+    final double = find.byKey(const ValueKey('check-in-gift-double'));
+    expect(double, findsOneWidget);
+    await tester.tap(double);
+    await run(tester, 2000);
+    expect(ads.rewardedShown, [AdPlacement.checkInDoubleGift]);
+    expect(
+      (await repository.getPowerUps()).hints,
+      2 * CheckInPolicy.streakReward(7).amount,
+    );
+  });
+
   testWidgets('no ads: no collect x2 button', (tester) async {
     await pump(tester, previousCheckIns: 6);
     await tester.tap(find.byKey(const ValueKey('check-in-button')));
