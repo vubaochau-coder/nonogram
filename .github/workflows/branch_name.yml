@@ -1,0 +1,27 @@
+name: Branch name
+
+# Tên nhánh không được chứa tên AI (xem CLAUDE.md). Chạy cho mọi pull request,
+# nhẹ, không cần checkout code.
+on:
+  pull_request:
+    types: [opened, reopened, synchronize, edited]
+
+permissions: {}
+
+jobs:
+  check:
+    name: No AI names in branch names
+    runs-on: ubuntu-latest
+    timeout-minutes: 2
+    steps:
+      - name: Check the head branch name
+        env:
+          BRANCH: ${{ github.head_ref }}
+        run: |
+          pattern='claude|anthropic|copilot|chatgpt|gpt|openai|gemini|bard|cursor|codex|devin'
+          found=$(printf '%s' "$BRANCH" | grep -oiE "$pattern" | head -1 || true)
+          if [ -n "$found" ]; then
+            echo "::error::Tên nhánh '$BRANCH' chứa '$found'. Tên nhánh không được chứa tên AI; đổi tên theo nội dung thay đổi, ví dụ feat/..., fix/..."
+            exit 1
+          fi
+          echo "Tên nhánh '$BRANCH' hợp lệ."
