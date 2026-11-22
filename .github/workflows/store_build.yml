@@ -6,6 +6,11 @@ name: Store build
 # lên Play Console. Nhánh main không có CI tự động nên workflow này chạy
 # format / analyze / test trước khi build.
 #
+# Build xong (đã qua test, đã upload artifact) thì gắn tag
+# `v<versionName>+<buildNumber>` (ví dụ `v1.0.0+12`) vào đúng commit vừa build,
+# làm mốc để so sánh các phiên bản: `git diff v1.0.0+11 v1.0.0+12`. Số build đã
+# có tag thì dừng ngay từ đầu.
+#
 # Dùng chung các secret ký app với workflow Distribute:
 #   ANDROID_KEYSTORE_BASE64, ANDROID_KEYSTORE_PASSWORD, ANDROID_KEY_ALIAS,
 #   ANDROID_KEY_PASSWORD
@@ -17,7 +22,8 @@ on:
         required: true
 
 permissions:
-  contents: read
+  # Để đẩy tag phiên bản.
+  contents: write
 
 jobs:
   build:
@@ -26,6 +32,31 @@ jobs:
     timeout-minutes: 30
     steps:
       - uses: actions/checkout@v4
+        with:
+          # Lấy cả tag để kiểm tra trùng.
+          fetch-depth: 0
+          fetch-tags: true
+
+      - name: Work out the release tag
+        id: tag
+        env:
+          BUILD_NUMBER: ${{ github.event.inputs.build_number }}
+        run: |
+          case "$BUILD_NUMBER" in
+            ''|*[!0-9]*) echo "::error::Số build phải là số nguyên dương"; exit 1 ;;
+          esac
+          version=$(sed -n 's/^version: *\([^+]*\).*/\1/p' pubspec.yaml)
+          if [ -z "$version" ]; then
+            echo "::error::Không đọc được version trong pubspec.yaml"
+            exit 1
+          fi
+          tag="v${version}+${BUILD_NUMBER}"
+          if git rev-parse -q --verify "refs/tags/$tag" >/dev/null; then
+            echo "::error::Tag $tag đã có: số build $BUILD_NUMBER đã được build trước đó"
+            exit 1
+          fi
+          echo "name=$tag" >> "$GITHUB_OUTPUT"
+          echo "Tag sẽ gắn: $tag"
 
       - name: Read Flutter version from .fvmrc
         id: fvm
@@ -67,14 +98,6 @@ jobs:
       - run: flutter analyze
       - run: flutter test
 
-      - name: Check build number
-        env:
-          BUILD_NUMBER: ${{ github.event.inputs.build_number }}
-        run: |
-          case "$BUILD_NUMBER" in
-            ''|*[!0-9]*) echo "::error::Số build phải là số nguyên dương"; exit 1 ;;
-          esac
-
       - run: flutter build appbundle --release --build-number=${{ github.event.inputs.build_number }} --obfuscate --split-debug-info=build/symbols
 
       # Bộ màn của chế độ nhà phát triển (lấy từ nonogram.org, chỉ có ở nhánh
@@ -101,6 +124,20 @@ jobs:
           name: pixel-nonogram-store-symbols-${{ github.event.inputs.build_number }}
           path: build/symbols
           if-no-files-found: error
+
+      # Mốc phiên bản: chỉ gắn khi mọi bước trên đều thành công.
+      - name: Tag the built commit
+        env:
+          TAG: ${{ steps.tag.outputs.name }}
+          BUILD_NUMBER: ${{ github.event.inputs.build_number }}
+          RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git tag -a "$TAG" "$GITHUB_SHA" \
+            -m "Store build $BUILD_NUMBER" -m "$RUN_URL"
+          git push origin "refs/tags/$TAG"
+          echo "### Đã gắn tag \`$TAG\` vào \`${GITHUB_SHA:0:7}\`" >> "$GITHUB_STEP_SUMMARY"
 
       - name: Remove credentials
         if: always()
