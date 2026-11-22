@@ -694,6 +694,7 @@ class _TutorialGridState extends State<_TutorialGrid> {
     // Bàn tay chỉ hiện khi bước vừa bắt đầu, để không che bàn khi đang tô.
     final pointAt =
         !step.freePlay &&
+                step.ghostLine == null &&
                 pending.isNotEmpty &&
                 pending.length == step.targets.length
             ? pending.first
@@ -756,15 +757,15 @@ class _TutorialGridState extends State<_TutorialGrid> {
                 ),
               ),
             ),
-            if (step.ghost case final ghost?)
+            if (step.ghostLine case final line? when controller.showGhost)
               Positioned.fill(
                 child: IgnorePointer(
-                  child: CustomPaint(
-                    painter: _GhostPainter(
-                      ghost: ghost,
-                      cellSize: cellSize,
-                      color: colors.primary,
-                    ),
+                  child: _GhostBlink(
+                    key: ValueKey(controller.stepIndex),
+                    line: line,
+                    placements: controller.ghostPlacements,
+                    cellSize: cellSize,
+                    color: colors.primary,
                   ),
                 ),
               ),
@@ -833,60 +834,138 @@ class _TutorialGridState extends State<_TutorialGrid> {
   }
 }
 
-/// Hai vạch mảnh trong cùng một dòng: nhóm khối đặt ở vị trí xa nhất một
-/// bên (vạch trên / trái) và bên kia (vạch dưới / phải). Chỗ hai vạch cùng
-/// phủ là phần chắc chắn được tô; ngoài cả hai vạch là ô không với tới.
-class _GhostPainter extends CustomPainter {
-  _GhostPainter({
-    required this.ghost,
+/// Nháy nền xanh lần lượt từng cách đặt khối hợp lệ trên [line]: sáng lên,
+/// tắt đi rồi chuyển sang cách tiếp theo, lặp mãi. Ô sáng ở mọi cách là ô
+/// chắc chắn được tô; ô không sáng ở cách nào là ô chắc chắn trống.
+/// Khi giảm chuyển động: vẽ đứng yên mọi cách chồng lên nhau.
+class _GhostBlink extends StatefulWidget {
+  const _GhostBlink({
+    super.key,
+    required this.line,
+    required this.placements,
     required this.cellSize,
     required this.color,
   });
 
-  final TutorialGhost ghost;
+  final TutorialLine line;
+  final List<Set<int>> placements;
+  final double cellSize;
+  final Color color;
+
+  /// Thời gian cho mỗi cách đặt: sáng lên, giữ, tắt, nghỉ.
+  static const _perPlacement = Duration(milliseconds: 1100);
+
+  @override
+  State<_GhostBlink> createState() => _GhostBlinkState();
+}
+
+class _GhostBlinkState extends State<_GhostBlink>
+    with SingleTickerProviderStateMixin {
+  late final AnimationController _animation = AnimationController(
+    vsync: this,
+    duration: _GhostBlink._perPlacement * widget.placements.length,
+  );
+  bool _still = false;
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    _still = MediaQuery.disableAnimationsOf(context);
+    if (_still) {
+      _animation.stop();
+    } else if (!_animation.isAnimating) {
+      _animation.repeat();
+    }
+  }
+
+  @override
+  void dispose() {
+    _animation.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final placements = widget.placements;
+    return AnimatedBuilder(
+      animation: _animation,
+      builder: (context, _) {
+        final List<(Set<int>, double)> shown;
+        if (_still) {
+          shown = [for (final p in placements) (p, 1 / placements.length)];
+        } else {
+          final t = _animation.value * placements.length;
+          final index = t.floor().clamp(0, placements.length - 1);
+          final f = t - index;
+          // 0–20%: sáng lên, 20–65%: giữ, 65–85%: tắt, 85–100%: nghỉ.
+          final opacity =
+              f < 0.2
+                  ? f / 0.2
+                  : f < 0.65
+                  ? 1.0
+                  : f < 0.85
+                  ? (0.85 - f) / 0.2
+                  : 0.0;
+          shown = [(placements[index], opacity)];
+        }
+        return CustomPaint(
+          painter: _GhostPainter(
+            line: widget.line,
+            shown: shown,
+            cellSize: widget.cellSize,
+            color: widget.color,
+          ),
+        );
+      },
+    );
+  }
+}
+
+class _GhostPainter extends CustomPainter {
+  _GhostPainter({
+    required this.line,
+    required this.shown,
+    required this.cellSize,
+    required this.color,
+  });
+
+  final TutorialLine line;
+
+  /// Các cách đặt đang hiện, kèm độ đậm (0–1).
+  final List<(Set<int>, double)> shown;
   final double cellSize;
   final Color color;
 
   @override
   void paint(Canvas canvas, Size size) {
-    final fill = Paint()..color = color.withValues(alpha: 0.55);
-    final stroke =
-        Paint()
-          ..color = color
-          ..style = PaintingStyle.stroke
-          ..strokeWidth = 1.5;
-    final line = ghost.line;
-    final inset = cellSize * 0.1;
-    final lane = cellSize * 0.3;
-    final gap = cellSize * 0.1;
-    for (final (laneIndex, start) in [(0, ghost.from), (1, ghost.to)]) {
-      // Vị trí vạch theo bề ngang của ô (trên / dưới, hoặc trái / phải).
-      final across =
-          line.index * cellSize +
-          (cellSize - 2 * lane - gap) / 2 +
-          laneIndex * (lane + gap);
-      var pos = start;
-      for (final block in ghost.blocks) {
-        final from = pos * cellSize + inset;
-        final length = block * cellSize - 2 * inset;
-        final rect =
-            line.isRow
-                ? Rect.fromLTWH(from, across, length, lane)
-                : Rect.fromLTWH(across, from, lane, length);
-        final rrect = RRect.fromRectAndRadius(rect, Radius.circular(lane / 2));
-        canvas.drawRRect(rrect, fill);
-        canvas.drawRRect(rrect, stroke);
-        pos += block + 1;
+    for (final (cells, opacity) in shown) {
+      if (opacity <= 0) continue;
+      final paint = Paint()..color = color.withValues(alpha: 0.45 * opacity);
+      for (final i in cells) {
+        final rect = (line.isRow
+                ? Rect.fromLTWH(
+                  i * cellSize,
+                  line.index * cellSize,
+                  cellSize,
+                  cellSize,
+                )
+                : Rect.fromLTWH(
+                  line.index * cellSize,
+                  i * cellSize,
+                  cellSize,
+                  cellSize,
+                ))
+            .deflate(cellSize * 0.08);
+        canvas.drawRRect(
+          RRect.fromRectAndRadius(rect, Radius.circular(cellSize * 0.12)),
+          paint,
+        );
       }
     }
   }
 
   @override
-  bool shouldRepaint(covariant _GhostPainter oldDelegate) {
-    return oldDelegate.ghost != ghost ||
-        oldDelegate.cellSize != cellSize ||
-        oldDelegate.color != color;
-  }
+  bool shouldRepaint(covariant _GhostPainter oldDelegate) => true;
 }
 
 /// Viền sáng quanh từng đoạn ô liền nhau cần làm trong mỗi hàng.

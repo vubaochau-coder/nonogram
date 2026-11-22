@@ -462,11 +462,11 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get nonogramTutorialOverlapSingle =>
-      'Busca primero los números grandes. Las dos barras azules muestran el 6 pegado a la izquierda y a la derecha. Donde se solapan siempre se rellena, esté donde esté el bloque. Rellena esas 4 casillas.';
+      'Busca primero los números grandes. El 6 cabe de 3 formas en estas 8 casillas, y cada una parpadea por turnos. Las casillas iluminadas en todas son seguras: rellena las 4 del marco amarillo.';
 
   @override
   String get nonogramTutorialOverlapMulti =>
-      'Igual con varios números: 3 3 necesita al menos 7 casillas (3 + hueco + 3), así que el grupo solo se mueve 1 casilla. Barras de arriba: a la izquierda; de abajo: a la derecha. Rellena lo que cubren ambas.';
+      'Igual con varios números: 3 3 necesita al menos 7 casillas (3 + hueco + 3), así que solo cabe de 3 formas. Rellena las casillas iluminadas en las 3.';
 
   @override
   String get nonogramTutorialFullRow =>
@@ -482,7 +482,7 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get nonogramTutorialOutOfReach =>
-      'Ahora las columnas. La columna 2 es un bloque de 3 que debe cubrir sus 2 casillas rellenas. Las dos barras azules son sus posiciones extremas: las casillas fuera de ambas no se alcanzan. Márcalas con X, y lo mismo en la columna 7.';
+      'Ahora las columnas. La columna 2 es un bloque de 3 que debe cubrir sus 2 casillas rellenas, así que solo cabe de 2 formas. Las casillas que nunca se iluminan no se alcanzan: márcalas con X, y lo mismo en la columna 7.';
 
   @override
   String get nonogramTutorialBackToFill =>

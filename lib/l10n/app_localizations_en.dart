@@ -458,11 +458,11 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get nonogramTutorialOverlapSingle =>
-      'Look for big numbers first. The two blue bars show the 6 pushed fully left and fully right. Where they overlap is filled wherever the block goes. Fill those 4 squares.';
+      'Look for big numbers first. The 6 fits these 8 squares in 3 ways, and each one blinks in turn. Squares lit in every way are filled for sure: fill the 4 in the yellow frame.';
 
   @override
   String get nonogramTutorialOverlapMulti =>
-      'Same with several numbers: 3 3 needs at least 7 squares (3 + gap + 3), so the group moves only 1 square. Top bars: pushed left, bottom bars: pushed right. Fill the squares both cover.';
+      'Same with several numbers: 3 3 needs at least 7 squares (3 + gap + 3), so it fits in only 3 ways. Fill the squares lit in all 3.';
 
   @override
   String get nonogramTutorialFullRow =>
@@ -478,7 +478,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get nonogramTutorialOutOfReach =>
-      'Now the columns. Column 2 is one block of 3 that must cover its 2 filled squares. The two blue bars are its furthest positions: squares outside both can\'t be reached. Mark them with X, and the same in column 7.';
+      'Now the columns. Column 2 is one block of 3 that must cover its 2 filled squares, so it fits in only 2 ways. Squares never lit can\'t be reached: mark them with X, and the same in column 7.';
 
   @override
   String get nonogramTutorialBackToFill =>

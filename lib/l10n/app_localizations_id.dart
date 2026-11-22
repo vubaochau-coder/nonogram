@@ -457,11 +457,11 @@ class AppLocalizationsId extends AppLocalizations {
 
   @override
   String get nonogramTutorialOverlapSingle =>
-      'Cari angka besar lebih dulu. Dua batang biru menunjukkan blok 6 mentok ke kiri dan mentok ke kanan. Bagian yang tumpang tindih selalu terisi di mana pun bloknya. Isi 4 kotak itu.';
+      'Cari angka besar lebih dulu. Blok 6 punya 3 cara masuk ke 8 kotak ini, dan tiap cara berkedip bergantian. Kotak yang menyala di semua cara pasti terisi: isi 4 kotak di bingkai kuning.';
 
   @override
   String get nonogramTutorialOverlapMulti =>
-      'Sama dengan beberapa angka: 3 3 butuh minimal 7 kotak (3 + celah + 3), jadi kelompoknya hanya bergeser 1 kotak. Batang atas: mentok kiri, batang bawah: mentok kanan. Isi kotak yang tertutup keduanya.';
+      'Sama dengan beberapa angka: 3 3 butuh minimal 7 kotak (3 + celah + 3), jadi hanya ada 3 cara. Isi kotak yang menyala di ketiganya.';
 
   @override
   String get nonogramTutorialFullRow =>
@@ -477,7 +477,7 @@ class AppLocalizationsId extends AppLocalizations {
 
   @override
   String get nonogramTutorialOutOfReach =>
-      'Sekarang kolomnya. Kolom 2 adalah satu blok 3 yang harus menutupi 2 kotak terisinya. Dua batang biru adalah posisi terjauhnya: kotak di luar keduanya tidak terjangkau. Tandai dengan X, begitu juga di kolom 7.';
+      'Sekarang kolomnya. Kolom 2 adalah satu blok 3 yang harus menutupi 2 kotak terisinya, jadi hanya ada 2 cara. Kotak yang tak pernah menyala tidak terjangkau: tandai dengan X, begitu juga di kolom 7.';
 
   @override
   String get nonogramTutorialBackToFill =>

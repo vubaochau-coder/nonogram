@@ -458,11 +458,11 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get nonogramTutorialOverlapSingle =>
-      'Önce büyük sayılara bak. İki mavi çubuk, 6\'yı tamamen sola ve tamamen sağa yaslanmış gösterir. Çakıştıkları yer, blok nerede olursa olsun doludur. O 4 kareyi doldur.';
+      'Önce büyük sayılara bak. 6 bu 8 kareye 3 şekilde sığar ve her biri sırayla yanıp söner. Her şekilde yanan kareler kesin doludur: sarı çerçevedeki 4 kareyi doldur.';
 
   @override
   String get nonogramTutorialOverlapMulti =>
-      'Birden çok sayıda da aynı: 3 3 en az 7 kare ister (3 + boşluk + 3), yani grup yalnızca 1 kare kayar. Üstteki çubuklar: sola yaslı, alttakiler: sağa yaslı. İkisinin de kapladığı kareleri doldur.';
+      'Birden çok sayıda da aynı: 3 3 en az 7 kare ister (3 + boşluk + 3), yani yalnızca 3 şekilde sığar. Üçünde de yanan kareleri doldur.';
 
   @override
   String get nonogramTutorialFullRow =>
@@ -478,7 +478,7 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get nonogramTutorialOutOfReach =>
-      'Şimdi sütunlar. 2. sütun, 2 dolu karesini kaplaması gereken tek bir 3\'lük blok. İki mavi çubuk en uç konumları: ikisinin de dışında kalan karelere ulaşılamaz. Onları X ile işaretle, 7. sütunda da aynısını yap.';
+      'Şimdi sütunlar. 2. sütun, 2 dolu karesini kaplaması gereken tek bir 3\'lük blok; yalnızca 2 şekilde sığar. Hiç yanmayan karelere ulaşılamaz: onları X ile işaretle, 7. sütunda da aynısını yap.';
 
   @override
   String get nonogramTutorialBackToFill =>

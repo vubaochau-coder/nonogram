@@ -14,33 +14,38 @@ import 'package:provider/provider.dart';
 /// Làm đúng mọi bước của kịch bản.
 void solveAll(NonogramTutorialController controller) {
   while (!controller.isFinished) {
-    final step = controller.step;
-    switch (step.task) {
-      case TutorialTask.intro:
-        controller.start();
-      case TutorialTask.switchMode:
-        controller.selectMode(step.mode!);
-      case TutorialTask.fill:
-      case TutorialTask.mark:
-        for (final cell in controller.pendingTargets) {
-          controller.tapCell(cell.row, cell.col);
-        }
-      case TutorialTask.rulesDone:
-      case TutorialTask.toolsDone:
-        controller.continueChapter();
-      case TutorialTask.longPressMark:
-        for (final cell in controller.pendingTargets) {
-          controller.longPressCell(cell.row, cell.col);
-        }
-      case TutorialTask.useHint:
-        controller.useHint();
-      case TutorialTask.activateWand:
-        controller.activateWand();
-      case TutorialTask.pickWandLine:
-        controller.pickClueLine(step.wandLine!);
-      case TutorialTask.done:
-        break;
-    }
+    _doStep(controller);
+  }
+}
+
+/// Làm đúng bước hiện tại.
+void _doStep(NonogramTutorialController controller) {
+  final step = controller.step;
+  switch (step.task) {
+    case TutorialTask.intro:
+      controller.start();
+    case TutorialTask.switchMode:
+      controller.selectMode(step.mode!);
+    case TutorialTask.fill:
+    case TutorialTask.mark:
+      for (final cell in controller.pendingTargets) {
+        controller.tapCell(cell.row, cell.col);
+      }
+    case TutorialTask.rulesDone:
+    case TutorialTask.toolsDone:
+      controller.continueChapter();
+    case TutorialTask.longPressMark:
+      for (final cell in controller.pendingTargets) {
+        controller.longPressCell(cell.row, cell.col);
+      }
+    case TutorialTask.useHint:
+      controller.useHint();
+    case TutorialTask.activateWand:
+      controller.activateWand();
+    case TutorialTask.pickWandLine:
+      controller.pickClueLine(step.wandLine!);
+    case TutorialTask.done:
+      break;
   }
 }
 
@@ -321,41 +326,53 @@ void main() {
       }
     });
 
-    test('the two ghost bars overlap exactly on the cells to fill', () {
-      for (final step in steps) {
-        final ghost = step.ghost;
-        if (ghost == null) continue;
-        Set<int> covered(int start) {
-          final cells = <int>{};
-          var pos = start;
-          for (final block in ghost.blocks) {
-            cells.addAll([for (var i = 0; i < block; i++) pos + i]);
-            pos += block + 1;
-          }
-          return cells;
-        }
-
-        final overlap = covered(ghost.from).intersection(covered(ghost.to));
-        final line = ghost.line;
-        if (step.task == TutorialTask.fill) {
-          expect({
-            for (final i in overlap)
+    test('blinking placements agree exactly with the cells to do', () {
+      final controller = NonogramTutorialController();
+      final counts = <TutorialMessage, int>{};
+      while (!controller.isFinished) {
+        final step = controller.step;
+        final line = step.ghostLine;
+        if (line != null) {
+          final placements = controller.ghostPlacements;
+          counts[step.message] = placements.length;
+          expect(controller.showGhost, isTrue);
+          TutorialCell cellAt(int i) =>
               line.isRow
                   ? (row: line.index, col: i)
-                  : (row: i, col: line.index),
-          }, step.targets);
-        } else {
-          // Ngoài tầm với: các ô mục tiêu trên dòng này nằm ngoài cả hai vị
-          // trí xa nhất.
-          final reach = covered(ghost.from).union(covered(ghost.to));
-          for (final cell in step.targets) {
-            final onLine =
-                line.isRow ? cell.row == line.index : cell.col == line.index;
-            if (!onLine) continue;
-            expect(reach.contains(line.isRow ? cell.col : cell.row), isFalse);
+                  : (row: i, col: line.index);
+          final onLine = {
+            for (final cell in step.targets)
+              if (line.isRow ? cell.row == line.index : cell.col == line.index)
+                cell,
+          };
+          if (step.task == TutorialTask.fill) {
+            // Ô sáng ở mọi cách đặt = đúng các ô cần tô.
+            final always = placements.reduce((a, b) => a.intersection(b));
+            expect({for (final i in always) cellAt(i)}, onLine);
+          } else {
+            // Ô không sáng ở cách nào = đúng các ô cần đánh X (còn trống).
+            final reach = placements.reduce((a, b) => a.union(b));
+            final length = line.isRow ? controller.cols : controller.rows;
+            expect({
+              for (var i = 0; i < length; i++)
+                if (!reach.contains(i) &&
+                    controller.cellAt(cellAt(i).row, cellAt(i).col) ==
+                        NonogramCellState.empty)
+                  cellAt(i),
+            }, onLine);
           }
+          // Làm ô đầu tiên thì hoạt ảnh dừng.
+          final first = controller.pendingTargets.first;
+          controller.tapCell(first.row, first.col);
+          expect(controller.showGhost, isFalse);
         }
+        _doStep(controller);
       }
+      expect(counts, {
+        TutorialMessage.overlapSingle: 3,
+        TutorialMessage.overlapMulti: 3,
+        TutorialMessage.outOfReach: 2,
+      });
     });
 
     test('free play hides the highlight', () {

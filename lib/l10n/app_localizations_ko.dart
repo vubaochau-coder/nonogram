@@ -448,11 +448,11 @@ class AppLocalizationsKo extends AppLocalizations {
 
   @override
   String get nonogramTutorialOverlapSingle =>
-      '먼저 큰 숫자를 찾으세요. 파란 막대 두 개는 6을 왼쪽 끝과 오른쪽 끝에 붙인 모습입니다. 겹치는 부분은 블록이 어디 있든 항상 칠해집니다. 그 4칸을 칠하세요.';
+      '먼저 큰 숫자를 찾으세요. 6은 이 8칸에 놓는 방법이 3가지이고, 하나씩 차례로 깜박입니다. 모든 방법에서 빛나는 칸은 확실히 칠해집니다. 노란 테두리 안의 4칸을 칠하세요.';
 
   @override
   String get nonogramTutorialOverlapMulti =>
-      '숫자가 여러 개여도 같습니다. 3 3은 최소 7칸(3 + 빈칸 + 3)이 필요해서 묶음이 1칸만 움직입니다. 위쪽 막대는 왼쪽 끝, 아래쪽 막대는 오른쪽 끝입니다. 둘 다 덮는 칸을 칠하세요.';
+      '숫자가 여러 개여도 같습니다. 3 3은 최소 7칸(3 + 빈칸 + 3)이 필요해서 놓는 방법이 3가지뿐입니다. 3가지 모두에서 빛나는 칸을 칠하세요.';
 
   @override
   String get nonogramTutorialFullRow => '8칸에 8: 줄 전체를 칠합니다. 줄을 따라 쓸어 보세요.';
@@ -467,7 +467,7 @@ class AppLocalizationsKo extends AppLocalizations {
 
   @override
   String get nonogramTutorialOutOfReach =>
-      '이제 열을 봅니다. 2열은 칠해진 2칸을 반드시 덮는 3짜리 블록 하나입니다. 파란 막대 두 개는 가장 먼 두 위치이고, 두 막대 밖의 칸에는 닿을 수 없습니다. X를 표시하고, 7열도 똑같이 하세요.';
+      '이제 열을 봅니다. 2열은 칠해진 2칸을 반드시 덮는 3짜리 블록 하나라서 놓는 방법이 2가지뿐입니다. 한 번도 빛나지 않는 칸에는 닿을 수 없습니다. X를 표시하고, 7열도 똑같이 하세요.';
 
   @override
   String get nonogramTutorialBackToFill =>

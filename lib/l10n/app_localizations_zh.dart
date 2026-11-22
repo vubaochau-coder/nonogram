@@ -435,11 +435,11 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get nonogramTutorialOverlapSingle =>
-      '先找大数字。两条蓝色横条分别是 6 推到最左和推到最右的位置。它们重叠的部分无论色块在哪里都一定要涂。涂上这 4 格。';
+      '先找大数字。6 在这 8 格里有 3 种放法，会轮流闪烁。每种放法都亮起的格子一定要涂：涂上黄框里的 4 格。';
 
   @override
   String get nonogramTutorialOverlapMulti =>
-      '多个数字也一样：3 3 至少需要 7 格（3 + 空格 + 3），所以整组只能移动 1 格。上面的横条是推到最左，下面的是推到最右。涂上两者都覆盖的格子。';
+      '多个数字也一样：3 3 至少需要 7 格（3 + 空格 + 3），所以只有 3 种放法。涂上 3 种放法都亮起的格子。';
 
   @override
   String get nonogramTutorialFullRow => '8 格里是 8：整行都要涂。滑动涂满整行。';
@@ -452,7 +452,7 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get nonogramTutorialOutOfReach =>
-      '现在看列。第 2 列是一个长度 3 的色块，必须盖住已涂的 2 格。两条蓝色竖条是它最远的两个位置：在两者之外的格子都够不到。标上 X，第 7 列也一样。';
+      '现在看列。第 2 列是一个长度 3 的色块，必须盖住已涂的 2 格，所以只有 2 种放法。从不亮起的格子够不到：标上 X，第 7 列也一样。';
 
   @override
   String get nonogramTutorialBackToFill => '看第 3 列：它需要 7 格。切换回涂色模式。';
@@ -1189,11 +1189,11 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
 
   @override
   String get nonogramTutorialOverlapSingle =>
-      '先找大數字。兩條藍色長條分別是 6 推到最左和推到最右的位置。它們重疊的部分無論色塊在哪裡都一定要塗。塗上這 4 格。';
+      '先找大數字。6 在這 8 格裡有 3 種放法，會輪流閃爍。每種放法都亮起的格子一定要塗：塗上黃框裡的 4 格。';
 
   @override
   String get nonogramTutorialOverlapMulti =>
-      '多個數字也一樣：3 3 至少需要 7 格（3 + 空格 + 3），所以整組只能移動 1 格。上面的長條是推到最左，下面的是推到最右。塗上兩者都覆蓋的格子。';
+      '多個數字也一樣：3 3 至少需要 7 格（3 + 空格 + 3），所以只有 3 種放法。塗上 3 種放法都亮起的格子。';
 
   @override
   String get nonogramTutorialFullRow => '8 格裡是 8：整列都要塗。滑動塗滿整列。';
@@ -1207,7 +1207,7 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
 
   @override
   String get nonogramTutorialOutOfReach =>
-      '現在看直行。第 2 行是一個長度 3 的色塊，必須蓋住已塗的 2 格。兩條藍色長條是它最遠的兩個位置：在兩者之外的格子都搆不到。標上 X，第 7 行也一樣。';
+      '現在看直行。第 2 行是一個長度 3 的色塊，必須蓋住已塗的 2 格，所以只有 2 種放法。從不亮起的格子搆不到：標上 X，第 7 行也一樣。';
 
   @override
   String get nonogramTutorialBackToFill => '看第 3 行：它需要 7 格。切換回塗色模式。';

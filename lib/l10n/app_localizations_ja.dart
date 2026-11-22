@@ -448,11 +448,11 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get nonogramTutorialOverlapSingle =>
-      'まず大きな数字を探しましょう。2本の青いバーは、6を左端に寄せた場合と右端に寄せた場合です。重なる部分は、ブロックがどこにあっても必ず塗られます。その4マスを塗りましょう。';
+      'まず大きな数字を探しましょう。6はこの8マスに3通りの置き方があり、順番に点滅します。どの置き方でも光るマスは必ず塗られます。黄色い枠の4マスを塗りましょう。';
 
   @override
   String get nonogramTutorialOverlapMulti =>
-      '数字が複数でも同じです。3 3 には最低7マス（3＋空白＋3）が必要なので、全体で1マスしか動けません。上のバーは左寄せ、下のバーは右寄せ。両方が重なるマスを塗りましょう。';
+      '数字が複数でも同じです。3 3 には最低7マス（3＋空白＋3）が必要なので、置き方は3通りだけ。3通りすべてで光るマスを塗りましょう。';
 
   @override
   String get nonogramTutorialFullRow => '8マスに8：この行はすべて塗られます。なぞって塗りましょう。';
@@ -467,7 +467,7 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get nonogramTutorialOutOfReach =>
-      '次は列です。2列目は3のブロック1つで、塗られた2マスを必ず含みます。2本の青いバーは一番遠い2つの位置です。どちらのバーの外にあるマスにも届きません。×を付けましょう。7列目も同じです。';
+      '次は列です。2列目は塗られた2マスを必ず含む3のブロック1つなので、置き方は2通りだけ。一度も光らないマスには届きません。×を付けましょう。7列目も同じです。';
 
   @override
   String get nonogramTutorialBackToFill => '3列目を見てください。7マス必要です。塗りモードに戻しましょう。';
