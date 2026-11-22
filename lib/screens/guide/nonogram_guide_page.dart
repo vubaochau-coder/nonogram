@@ -35,6 +35,11 @@ class NonogramGuidePage extends StatelessWidget {
         diagrams: GuideDiagrams.superpositionMulti,
       ),
       NonogramGuideItem(
+        title: l10n.nonogramGuideMethodLineDoneTitle,
+        description: l10n.nonogramGuideMethodLineDoneDesc,
+        diagrams: GuideDiagrams.lineDone,
+      ),
+      NonogramGuideItem(
         title: _normalizedTitle(l10n.nonogramGuideMethodWallPushingTitle),
         description: l10n.nonogramGuideMethodWallPushingDesc,
         diagrams: GuideDiagrams.wallPushing,
@@ -93,6 +98,16 @@ class NonogramGuidePage extends StatelessWidget {
                 _basicRuleIllustration(context),
                 const SizedBox(height: 16),
                 _basicRuleWideGapIllustration(context),
+              ],
+            ),
+            _RoutineSection(
+              title: context.l10n.nonogramGuideRoutineTitle,
+              tips: [
+                context.l10n.nonogramGuideRoutineTip1,
+                context.l10n.nonogramGuideRoutineTip2,
+                context.l10n.nonogramGuideRoutineTip3,
+                context.l10n.nonogramGuideRoutineTip4,
+                context.l10n.nonogramGuideRoutineTip5,
               ],
             ),
             ...List.generate(guideItems.length, (index) {
@@ -171,6 +186,61 @@ class _GuideSection extends StatelessWidget {
           ),
           const SizedBox(height: 16),
           ...examples,
+        ],
+      ),
+    );
+  }
+}
+
+/// Các bước nên làm khi bắt đầu một câu đố, trước khi vào từng kỹ thuật.
+class _RoutineSection extends StatelessWidget {
+  const _RoutineSection({required this.title, required this.tips});
+
+  final String title;
+  final List<String> tips;
+
+  @override
+  Widget build(BuildContext context) {
+    final colors = context.color;
+
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 40),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            title,
+            style: context.titleSmall.copyWith(color: colors.primary),
+          ),
+          const SizedBox(height: 12),
+          for (final tip in tips)
+            Padding(
+              padding: const EdgeInsets.only(bottom: 10),
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.only(top: 7, right: 12),
+                    child: Container(
+                      width: 8,
+                      height: 8,
+                      decoration: BoxDecoration(
+                        color: colors.primary,
+                        borderRadius: BorderRadius.circular(2),
+                      ),
+                    ),
+                  ),
+                  Expanded(
+                    child: Text(
+                      tip,
+                      style: context.bodyMedium.copyWith(
+                        color: colors.onSurfaceVariant,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
         ],
       ),
     );

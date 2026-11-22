@@ -37,14 +37,14 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get nonogramGuideMethodDivisionDesc =>
-      'If joining two existing blocks would create a figure larger than any available clue, the gap between them must be an X.';
+      'If joining two filled pieces would make a block bigger than the largest number, the square between them must be empty. Mark it with X to keep them apart.';
 
   @override
   String get nonogramGuideMethodDivisionTitle => '5. Division';
 
   @override
   String get nonogramGuideMethodDoublePositioningDesc =>
-      'If a painted cell can only belong to a few specific block variants, any cells that are never filled in any of those variants must be marked with X.';
+      'Sometimes a filled square can belong to only one or two of the numbers. Try each possibility: squares that stay empty in every one of them get an X.';
 
   @override
   String get nonogramGuideMethodDoublePositioningTitle =>
@@ -52,21 +52,21 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get nonogramGuideMethodInaccessibilityDesc =>
-      'Mark cells that cannot possibly belong to any remaining figure with a cross (X).';
+      'Squares that no block can reach are empty. Try each block at its furthest positions around the filled squares; anything outside that range gets an X.';
 
   @override
   String get nonogramGuideMethodInaccessibilityTitle => '3. Inaccessibility';
 
   @override
   String get nonogramGuideMethodNotFitDesc =>
-      'If an empty space between crosses is smaller than any available clue for that line, it must be marked with X.';
+      'A gap between X\'s (or between an X and the edge) that is shorter than every number that could go there can\'t hold a block: mark it with X.';
 
   @override
   String get nonogramGuideMethodNotFitTitle => '4. Doesn\'t fit in';
 
   @override
   String get nonogramGuideMethodSuperpositionMultiDesc =>
-      'When there are several numbers, superpose the extreme left and right positions of the entire group, accounting for the mandatory minimum one-square gap between same-color blocks. Squares where a group overlaps with its own range in both variants are painted.';
+      'With several numbers, push the whole group left (keeping one empty square between blocks), then right. Where the same block covers a square in both positions, that square is filled. Quick check: add up the numbers and the gaps; what\'s left over is how far each block can move.';
 
   @override
   String get nonogramGuideMethodSuperpositionMultiTitle =>
@@ -74,7 +74,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get nonogramGuideMethodSuperpositionSimpleDesc =>
-      'If a number makes more than half of the length, some squares in the middle will definitely be painted. Superpose the extreme left and extreme right positions; where they overlap, the squares are painted.';
+      'If a number is more than half its line, part of it is always filled. Imagine the block pushed all the way left, then all the way right: the squares it covers both times are filled for sure. Example: 7 in 10 squares always fills the middle 4.';
 
   @override
   String get nonogramGuideMethodSuperpositionSimpleTitle =>
@@ -82,7 +82,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get nonogramGuideMethodWallPushingDesc =>
-      'If a known painted cell is closer to a border than the size of the first clue, the figure it belongs to must extend away from that border.';
+      'A filled square near the edge limits where its block can be. The block can\'t go past the edge, so it must extend away from it. Example: 5 with the 4th square filled: even pushed against the left edge, the block still covers the 5th square.';
 
   @override
   String get nonogramGuideMethodWallPushingTitle =>
@@ -310,7 +310,37 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get nonogramGuideTutorialCardDesc =>
-      'Learn the rules and controls step by step on a small 5×5 puzzle.';
+      'Learn the rules, the controls and the main solving techniques step by step, by playing.';
+
+  @override
+  String get nonogramGuideRoutineTitle => 'Where to start';
+
+  @override
+  String get nonogramGuideRoutineTip1 =>
+      'Start with the big numbers. If a number is more than half its line, part of it is already certain (see technique 1 below).';
+
+  @override
+  String get nonogramGuideRoutineTip2 =>
+      'Solve the easy lines first: 0 means the whole line is empty, and if the numbers plus one gap between each add up to the line\'s length, it fits only one way.';
+
+  @override
+  String get nonogramGuideRoutineTip3 =>
+      'Mark squares you know are empty with X. An X is as useful as a filled square.';
+
+  @override
+  String get nonogramGuideRoutineTip4 =>
+      'Go back and forth between rows and columns. Every square you solve is a new clue for the line that crosses it.';
+
+  @override
+  String get nonogramGuideRoutineTip5 =>
+      'Never guess. When you\'re stuck, look for the line with the fewest unknown squares, or use a hint.';
+
+  @override
+  String get nonogramGuideMethodLineDoneTitle => 'Finished lines';
+
+  @override
+  String get nonogramGuideMethodLineDoneDesc =>
+      'When all the blocks of a line are in place, every other square in it is empty: mark them with X. A line with the number 0 is empty from the start.';
 
   @override
   String get nonogramPlayInfoHide => 'Hide level info';
@@ -418,6 +448,49 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get nonogramTutorialFinishTools =>
       'Fill the remaining squares to finish. Drag down a column to fill faster.';
+
+  @override
+  String get nonogramTutorialToolsDoneTitle => 'Controls mastered!';
+
+  @override
+  String get nonogramTutorialToolsDone =>
+      'Real puzzles are bigger, and most lines can\'t be solved at a glance. Next, learn the solving techniques on an 8×8 puzzle.';
+
+  @override
+  String get nonogramTutorialOverlapSingle =>
+      'Look for big numbers first. The 6 fits these 8 squares in 3 ways, and each one blinks in turn. Squares lit in every way are filled for sure: fill the 4 in the yellow frame.';
+
+  @override
+  String get nonogramTutorialOverlapMulti =>
+      'Same with several numbers: 3 3 needs at least 7 squares (3 + gap + 3), so it fits in only 3 ways. Fill the squares lit in all 3.';
+
+  @override
+  String get nonogramTutorialFullRow =>
+      '8 in 8 squares: the whole row is filled. Drag across it.';
+
+  @override
+  String get nonogramTutorialZeroRow =>
+      '0 means the row has no filled squares at all. Switch to X mode.';
+
+  @override
+  String get nonogramTutorialMarkZeroRow =>
+      'Mark the whole bottom row with X. X\'s matter: they show the columns where blocks can\'t go.';
+
+  @override
+  String get nonogramTutorialOutOfReach =>
+      'Now the columns. Column 2 is one block of 3 that must cover its 2 filled squares, so it fits in only 2 ways. Squares never lit can\'t be reached: mark them with X, and the same in column 7.';
+
+  @override
+  String get nonogramTutorialBackToFill =>
+      'Look at column 3: it needs 7. Switch back to fill mode.';
+
+  @override
+  String get nonogramTutorialExactSpace =>
+      'The X at the bottom leaves exactly 7 squares for the 7, so fill them all. Column 6 works the same way.';
+
+  @override
+  String get nonogramTutorialFinishTechniques =>
+      'That\'s the routine: solve what you can in the rows, then in the columns, and repeat. Finish the mushroom on your own!';
 
   @override
   String get nonogramPlayHintNothingToFill =>

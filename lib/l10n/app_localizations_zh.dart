@@ -37,49 +37,49 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get nonogramGuideMethodDivisionDesc =>
-      '如果把两个已有的色块连起来会形成比任何可用数字都长的图形，那么它们之间的空隙必须是 X。';
+      '如果把两段已涂格连起来会得到比最大数字还长的色块，它们之间的格子一定为空。标上 X 把它们隔开。';
 
   @override
   String get nonogramGuideMethodDivisionTitle => '5. 分隔';
 
   @override
   String get nonogramGuideMethodDoublePositioningDesc =>
-      '如果一个已涂的方格只能属于某个色块的少数几种摆法，那么在所有这些摆法中都不会被涂的方格都必须标记为 X。';
+      '有时一个已涂格只可能属于其中一两个数字。逐一尝试每种可能：在所有可能中都为空的格子标上 X。';
 
   @override
   String get nonogramGuideMethodDoublePositioningTitle => '6. 双重定位';
 
   @override
   String get nonogramGuideMethodInaccessibilityDesc =>
-      '将不可能属于任何剩余色块的方格标上叉号（X）。';
+      '任何色块都够不到的格子一定为空。把每个色块放在已涂格周围最远的位置试试，范围之外的格子都标 X。';
 
   @override
   String get nonogramGuideMethodInaccessibilityTitle => '3. 不可达';
 
   @override
   String get nonogramGuideMethodNotFitDesc =>
-      '如果两个叉号之间的空格比该行任何可用数字都短，就必须标记为 X。';
+      'X 之间（或 X 与边缘之间）的空隙如果比任何可能放进去的数字都短，就放不下色块：把它标上 X。';
 
   @override
   String get nonogramGuideMethodNotFitTitle => '4. 放不下';
 
   @override
   String get nonogramGuideMethodSuperpositionMultiDesc =>
-      '有多个数字时，考虑同色色块之间至少要空一格的规定，把整组数字分别靠最左和靠最右摆放后叠在一起。同一个色块在两种摆法中都重叠的方格要涂上。';
+      '有多个数字时，把整组推到最左（色块之间留 1 个空格），再推到最右。同一个色块在两种位置都覆盖的格子一定要涂。速算法：把数字和间隔加起来，剩下的格数就是每个色块能移动的距离。';
 
   @override
   String get nonogramGuideMethodSuperpositionMultiTitle => '叠加法（多个数字）';
 
   @override
   String get nonogramGuideMethodSuperpositionSimpleDesc =>
-      '如果一个数字超过该行长度的一半，中间的某些方格一定会被涂。把靠最左和靠最右的摆法叠在一起，重叠的方格就要涂上。';
+      '如果一个数字超过该行长度的一半，它总有一部分会被涂上。想象把色块推到最左，再推到最右：两次都覆盖的格子一定要涂。例如：10 格中的 7 总会涂满中间 4 格。';
 
   @override
   String get nonogramGuideMethodSuperpositionSimpleTitle => '叠加法（单个数字）';
 
   @override
   String get nonogramGuideMethodWallPushingDesc =>
-      '如果一个确定已涂的方格离边缘的距离比第一个数字还短，那么它所属的色块必须向远离该边缘的方向延伸。';
+      '靠近边缘的已涂格会限制它所在色块的位置。色块不能超出边缘，只能往另一侧延伸。例如：5 且第 4 格已涂：即使推到最左，色块仍会覆盖第 5 格。';
 
   @override
   String get nonogramGuideMethodWallPushingTitle => '2. 从边缘推开';
@@ -296,7 +296,34 @@ class AppLocalizationsZh extends AppLocalizations {
   String get nonogramGuideTutorialCardTitle => '边玩边学';
 
   @override
-  String get nonogramGuideTutorialCardDesc => '在一个 5×5 的小谜题上一步步学习规则和操作。';
+  String get nonogramGuideTutorialCardDesc => '边玩边学，一步步掌握规则、操作和主要解题技巧。';
+
+  @override
+  String get nonogramGuideRoutineTitle => '从哪里开始';
+
+  @override
+  String get nonogramGuideRoutineTip1 =>
+      '从大数字开始。如果一个数字超过所在行列长度的一半，它的一部分已经可以确定（见下方技巧 1）。';
+
+  @override
+  String get nonogramGuideRoutineTip2 =>
+      '先解简单的行：0 表示整行为空；如果数字之和加上每两个数字之间 1 个空格正好等于行长，就只有一种排法。';
+
+  @override
+  String get nonogramGuideRoutineTip3 => '确定为空的格子要标上 X。X 和涂色的格子一样有用。';
+
+  @override
+  String get nonogramGuideRoutineTip4 => '在行与列之间来回切换。每解出一格，都是与它交叉的那一行或列的新线索。';
+
+  @override
+  String get nonogramGuideRoutineTip5 => '不要猜。卡住时，找未知格最少的那一行或列，或使用提示。';
+
+  @override
+  String get nonogramGuideMethodLineDoneTitle => '已完成的行列';
+
+  @override
+  String get nonogramGuideMethodLineDoneDesc =>
+      '当一行的所有色块都已就位，其余格子都是空的：把它们标上 X。数字为 0 的行一开始就是全空的。';
 
   @override
   String get nonogramPlayInfoHide => '隐藏关卡信息';
@@ -398,6 +425,45 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get nonogramTutorialFinishTools => '涂完剩下的方格就完成了。沿着一列向下拖动可以涂得更快。';
+
+  @override
+  String get nonogramTutorialToolsDoneTitle => '操作已掌握！';
+
+  @override
+  String get nonogramTutorialToolsDone =>
+      '正式谜题更大，大多数行列无法一眼看出答案。接下来，在一个 8×8 谜题上学习解题技巧。';
+
+  @override
+  String get nonogramTutorialOverlapSingle =>
+      '先找大数字。6 在这 8 格里有 3 种放法，会轮流闪烁。每种放法都亮起的格子一定要涂：涂上黄框里的 4 格。';
+
+  @override
+  String get nonogramTutorialOverlapMulti =>
+      '多个数字也一样：3 3 至少需要 7 格（3 + 空格 + 3），所以只有 3 种放法。涂上 3 种放法都亮起的格子。';
+
+  @override
+  String get nonogramTutorialFullRow => '8 格里是 8：整行都要涂。滑动涂满整行。';
+
+  @override
+  String get nonogramTutorialZeroRow => '0 表示这一行没有任何要涂的格子。切换到 X 模式。';
+
+  @override
+  String get nonogramTutorialMarkZeroRow => '把最下面一整行都标上 X。X 很有用：它告诉各列哪里不可能有色块。';
+
+  @override
+  String get nonogramTutorialOutOfReach =>
+      '现在看列。第 2 列是一个长度 3 的色块，必须盖住已涂的 2 格，所以只有 2 种放法。从不亮起的格子够不到：标上 X，第 7 列也一样。';
+
+  @override
+  String get nonogramTutorialBackToFill => '看第 3 列：它需要 7 格。切换回涂色模式。';
+
+  @override
+  String get nonogramTutorialExactSpace =>
+      '底部的 X 让 7 正好剩下 7 格，所以全部涂上。第 6 列也一样。';
+
+  @override
+  String get nonogramTutorialFinishTechniques =>
+      '这就是解题套路：先在行里解出能确定的格子，再看列，如此反复。自己完成这个蘑菇吧！';
 
   @override
   String get nonogramPlayHintNothingToFill => '所有该涂的方格都已经涂好了。检查一下是否有多涂的方格。';
@@ -725,49 +791,49 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
 
   @override
   String get nonogramGuideMethodDivisionDesc =>
-      '如果把兩個已有的色塊連起來會形成比任何可用數字都長的圖形，那麼它們之間的空隙必須是 X。';
+      '如果把兩段已塗格連起來會得到比最大數字還長的色塊，它們之間的格子一定為空。標上 X 把它們隔開。';
 
   @override
   String get nonogramGuideMethodDivisionTitle => '5. 分隔';
 
   @override
   String get nonogramGuideMethodDoublePositioningDesc =>
-      '如果一個已塗的方格只能屬於某個色塊的少數幾種擺法，那麼在所有這些擺法中都不會被塗的方格都必須標記為 X。';
+      '有時一個已塗格只可能屬於其中一兩個數字。逐一嘗試每種可能：在所有可能中都為空的格子標上 X。';
 
   @override
   String get nonogramGuideMethodDoublePositioningTitle => '6. 雙重定位';
 
   @override
   String get nonogramGuideMethodInaccessibilityDesc =>
-      '將不可能屬於任何剩餘色塊的方格標上叉號（X）。';
+      '任何色塊都搆不到的格子一定為空。把每個色塊放在已塗格周圍最遠的位置試試，範圍之外的格子都標 X。';
 
   @override
   String get nonogramGuideMethodInaccessibilityTitle => '3. 不可達';
 
   @override
   String get nonogramGuideMethodNotFitDesc =>
-      '如果兩個叉號之間的空格比這條線上任何可用數字都短，就必須標記為 X。';
+      'X 之間（或 X 與邊緣之間）的空隙如果比任何可能放進去的數字都短，就放不下色塊：把它標上 X。';
 
   @override
   String get nonogramGuideMethodNotFitTitle => '4. 放不下';
 
   @override
   String get nonogramGuideMethodSuperpositionMultiDesc =>
-      '有多個數字時，考慮同色色塊之間至少要空一格的規定，把整組數字分別靠最左和靠最右擺放後疊在一起。同一個色塊在兩種擺法中都重疊的方格要塗上。';
+      '有多個數字時，把整組推到最左（色塊之間留 1 個空格），再推到最右。同一個色塊在兩種位置都覆蓋的格子一定要塗。速算法：把數字和間隔加起來，剩下的格數就是每個色塊能移動的距離。';
 
   @override
   String get nonogramGuideMethodSuperpositionMultiTitle => '疊加法（多個數字）';
 
   @override
   String get nonogramGuideMethodSuperpositionSimpleDesc =>
-      '如果一個數字超過這條線長度的一半，中間的某些方格一定會被塗。把靠最左和靠最右的擺法疊在一起，重疊的方格就要塗上。';
+      '如果一個數字超過該行長度的一半，它總有一部分會被塗上。想像把色塊推到最左，再推到最右：兩次都覆蓋的格子一定要塗。例如：10 格中的 7 總會塗滿中間 4 格。';
 
   @override
   String get nonogramGuideMethodSuperpositionSimpleTitle => '疊加法（單個數字）';
 
   @override
   String get nonogramGuideMethodWallPushingDesc =>
-      '如果一個確定已塗的方格離邊緣的距離比第一個數字還短，那麼它所屬的色塊必須朝遠離該邊緣的方向延伸。';
+      '靠近邊緣的已塗格會限制它所在色塊的位置。色塊不能超出邊緣，只能往另一側延伸。例如：5 且第 4 格已塗：即使推到最左，色塊仍會覆蓋第 5 格。';
 
   @override
   String get nonogramGuideMethodWallPushingTitle => '2. 從邊緣推開';
@@ -984,7 +1050,34 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
   String get nonogramGuideTutorialCardTitle => '邊玩邊學';
 
   @override
-  String get nonogramGuideTutorialCardDesc => '在一個 5×5 的小謎題上一步步學習規則和操作。';
+  String get nonogramGuideTutorialCardDesc => '邊玩邊學，一步步掌握規則、操作和主要解題技巧。';
+
+  @override
+  String get nonogramGuideRoutineTitle => '從哪裡開始';
+
+  @override
+  String get nonogramGuideRoutineTip1 =>
+      '從大數字開始。如果一個數字超過所在行列長度的一半，它的一部分已經可以確定（見下方技巧 1）。';
+
+  @override
+  String get nonogramGuideRoutineTip2 =>
+      '先解簡單的行列：0 表示整行為空；如果數字之和加上每兩個數字之間 1 個空格正好等於長度，就只有一種排法。';
+
+  @override
+  String get nonogramGuideRoutineTip3 => '確定為空的格子要標上 X。X 和塗色的格子一樣有用。';
+
+  @override
+  String get nonogramGuideRoutineTip4 => '在橫列與直行之間來回切換。每解出一格，都是與它交叉的那一行或列的新線索。';
+
+  @override
+  String get nonogramGuideRoutineTip5 => '不要猜。卡住時，找未知格最少的那一行或列，或使用提示。';
+
+  @override
+  String get nonogramGuideMethodLineDoneTitle => '已完成的行列';
+
+  @override
+  String get nonogramGuideMethodLineDoneDesc =>
+      '當一行的所有色塊都已就位，其餘格子都是空的：把它們標上 X。數字為 0 的行一開始就是全空的。';
 
   @override
   String get nonogramPlayInfoHide => '隱藏關卡資訊';
@@ -1086,6 +1179,46 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
 
   @override
   String get nonogramTutorialFinishTools => '塗完剩下的方格就完成了。沿著一直行向下拖曳可以塗得更快。';
+
+  @override
+  String get nonogramTutorialToolsDoneTitle => '操作已掌握！';
+
+  @override
+  String get nonogramTutorialToolsDone =>
+      '正式謎題更大，大多數橫列和直行無法一眼看出答案。接下來，在一個 8×8 謎題上學習解題技巧。';
+
+  @override
+  String get nonogramTutorialOverlapSingle =>
+      '先找大數字。6 在這 8 格裡有 3 種放法，會輪流閃爍。每種放法都亮起的格子一定要塗：塗上黃框裡的 4 格。';
+
+  @override
+  String get nonogramTutorialOverlapMulti =>
+      '多個數字也一樣：3 3 至少需要 7 格（3 + 空格 + 3），所以只有 3 種放法。塗上 3 種放法都亮起的格子。';
+
+  @override
+  String get nonogramTutorialFullRow => '8 格裡是 8：整列都要塗。滑動塗滿整列。';
+
+  @override
+  String get nonogramTutorialZeroRow => '0 表示這一橫列沒有任何要塗的格子。切換到 X 模式。';
+
+  @override
+  String get nonogramTutorialMarkZeroRow =>
+      '把最下面一整列都標上 X。X 很有用：它告訴各直行哪裡不可能有色塊。';
+
+  @override
+  String get nonogramTutorialOutOfReach =>
+      '現在看直行。第 2 行是一個長度 3 的色塊，必須蓋住已塗的 2 格，所以只有 2 種放法。從不亮起的格子搆不到：標上 X，第 7 行也一樣。';
+
+  @override
+  String get nonogramTutorialBackToFill => '看第 3 行：它需要 7 格。切換回塗色模式。';
+
+  @override
+  String get nonogramTutorialExactSpace =>
+      '底部的 X 讓 7 正好剩下 7 格，所以全部塗上。第 6 行也一樣。';
+
+  @override
+  String get nonogramTutorialFinishTechniques =>
+      '這就是解題套路：先在橫列裡解出能確定的格子，再看直行，如此反覆。自己完成這個蘑菇吧！';
 
   @override
   String get nonogramPlayHintNothingToFill => '所有該塗的方格都已經塗好了。檢查一下是否有多塗的方格。';

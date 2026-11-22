@@ -26,6 +26,10 @@ import 'nonogram_tutorial_controller.dart';
 /// liền, nhấn giữ để đánh X, nút gợi ý, gậy phép. Làm xong phần này thì
 /// không tự hiện hướng dẫn thao tác trong màn chơi nữa.
 ///
+/// Phần 3 dạy các kỹ thuật giải trên câu đố 8×8: chồng lấp (một số, nhiều
+/// số), hàng số 0, ô ngoài tầm với, khoảng trống vừa khít, rồi để người chơi
+/// tự giải nốt.
+///
 /// Đóng trang trả về `true` nếu người chơi bấm "Xem các kỹ thuật giải".
 class NonogramTutorialPage extends StatefulWidget {
   const NonogramTutorialPage({super.key});
@@ -103,7 +107,10 @@ class _NonogramTutorialPageState extends State<NonogramTutorialPage> {
 
   void _onProgress() {
     _playSounds();
-    if (!_controller.isFinished) return;
+    if (_controller.step.task != TutorialTask.toolsDone &&
+        !_controller.isFinished) {
+      return;
+    }
     try {
       context.read<OnboardingPreferences>().markPlayCoachSeen();
     } on ProviderNotFoundException {
@@ -149,7 +156,8 @@ class _NonogramTutorialPageState extends State<NonogramTutorialPage> {
                       child: _MessageCard(
                         text:
                             task == TutorialTask.intro ||
-                                    task == TutorialTask.rulesDone
+                                    task == TutorialTask.rulesDone ||
+                                    task == TutorialTask.toolsDone
                                 ? ''
                                 : tutorialMessageText(l10n, step.message),
                         mistakes: _controller.mistakes,
@@ -222,11 +230,33 @@ class _NonogramTutorialPageState extends State<NonogramTutorialPage> {
                       actions: [
                         FilledButton(
                           key: const ValueKey('nonogram-tutorial-continue'),
-                          onPressed: _controller.continueToTools,
+                          onPressed: _controller.continueChapter,
                           child: Text(l10n.nonogramTutorialContinue),
                         ),
                         TextButton(
                           key: const ValueKey('nonogram-tutorial-later'),
+                          onPressed: _close,
+                          child: Text(l10n.nonogramTutorialLater),
+                        ),
+                      ],
+                    ),
+                  ),
+                if (task == TutorialTask.toolsDone)
+                  _Overlay(
+                    alignment: Alignment.bottomCenter,
+                    child: _OverlayCard(
+                      title: l10n.nonogramTutorialToolsDoneTitle,
+                      body: l10n.nonogramTutorialToolsDone,
+                      actions: [
+                        FilledButton(
+                          key: const ValueKey(
+                            'nonogram-tutorial-continue-techniques',
+                          ),
+                          onPressed: _controller.continueChapter,
+                          child: Text(l10n.nonogramTutorialContinue),
+                        ),
+                        TextButton(
+                          key: const ValueKey('nonogram-tutorial-later-tools'),
                           onPressed: _close,
                           child: Text(l10n.nonogramTutorialLater),
                         ),
@@ -281,6 +311,16 @@ String tutorialMessageText(AppLocalizations l10n, TutorialMessage message) {
     TutorialMessage.activateWand => l10n.nonogramTutorialActivateWand,
     TutorialMessage.pickWandLine => l10n.nonogramTutorialPickWandLine,
     TutorialMessage.finishTools => l10n.nonogramTutorialFinishTools,
+    TutorialMessage.toolsDone => l10n.nonogramTutorialToolsDone,
+    TutorialMessage.overlapSingle => l10n.nonogramTutorialOverlapSingle,
+    TutorialMessage.overlapMulti => l10n.nonogramTutorialOverlapMulti,
+    TutorialMessage.fullRow => l10n.nonogramTutorialFullRow,
+    TutorialMessage.zeroRow => l10n.nonogramTutorialZeroRow,
+    TutorialMessage.markZeroRow => l10n.nonogramTutorialMarkZeroRow,
+    TutorialMessage.outOfReach => l10n.nonogramTutorialOutOfReach,
+    TutorialMessage.backToFill => l10n.nonogramTutorialBackToFill,
+    TutorialMessage.exactSpace => l10n.nonogramTutorialExactSpace,
+    TutorialMessage.finishTechniques => l10n.nonogramTutorialFinishTechniques,
     TutorialMessage.done => l10n.nonogramTutorialDone,
   };
 }
@@ -388,9 +428,14 @@ class _TutorialBoard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final step = controller.step;
-    final activeRows = {
-      for (final cell in controller.highlightedCells) cell.row,
-    };
+    // Bước theo cột (các ô cần làm trải trên nhiều hàng hơn số cột): sáng
+    // dãy số của cột; còn lại sáng dãy số của hàng.
+    final highlighted = controller.highlightedCells;
+    final highlightRows = {for (final cell in highlighted) cell.row};
+    final highlightCols = {for (final cell in highlighted) cell.col};
+    final byColumn = highlightRows.length > highlightCols.length;
+    final activeRows = byColumn ? const <int>{} : highlightRows;
+    final activeCols = byColumn ? highlightCols : const <int>{};
     final wandLine = step.wandLine;
     final picking = step.task == TutorialTask.pickWandLine;
     bool isWandTarget(bool isRow, int index) =>
@@ -419,7 +464,7 @@ class _TutorialBoard extends StatelessWidget {
                     clues: controller.colClues[c],
                     vertical: true,
                     complete: controller.isColComplete(c),
-                    active: isWandTarget(false, c),
+                    active: activeCols.contains(c) || isWandTarget(false, c),
                     pointed: isWandTarget(false, c),
                     onTap: pick(false, c),
                   ),
@@ -648,7 +693,10 @@ class _TutorialGridState extends State<_TutorialGrid> {
     final pending = controller.pendingTargets;
     // Bàn tay chỉ hiện khi bước vừa bắt đầu, để không che bàn khi đang tô.
     final pointAt =
-        pending.isNotEmpty && pending.length == step.targets.length
+        !step.freePlay &&
+                step.ghostLine == null &&
+                pending.isNotEmpty &&
+                pending.length == step.targets.length
             ? pending.first
             : null;
     final handSize = cellSize * 0.9;
@@ -709,6 +757,18 @@ class _TutorialGridState extends State<_TutorialGrid> {
                 ),
               ),
             ),
+            if (step.ghostLine case final line? when controller.showGhost)
+              Positioned.fill(
+                child: IgnorePointer(
+                  child: _GhostBlink(
+                    key: ValueKey(controller.stepIndex),
+                    line: line,
+                    placements: controller.ghostPlacements,
+                    cellSize: cellSize,
+                    color: colors.primary,
+                  ),
+                ),
+              ),
             Positioned.fill(
               child: IgnorePointer(
                 child: CustomPaint(
@@ -772,6 +832,140 @@ class _TutorialGridState extends State<_TutorialGrid> {
       ),
     );
   }
+}
+
+/// Nháy nền xanh lần lượt từng cách đặt khối hợp lệ trên [line]: sáng lên,
+/// tắt đi rồi chuyển sang cách tiếp theo, lặp mãi. Ô sáng ở mọi cách là ô
+/// chắc chắn được tô; ô không sáng ở cách nào là ô chắc chắn trống.
+/// Khi giảm chuyển động: vẽ đứng yên mọi cách chồng lên nhau.
+class _GhostBlink extends StatefulWidget {
+  const _GhostBlink({
+    super.key,
+    required this.line,
+    required this.placements,
+    required this.cellSize,
+    required this.color,
+  });
+
+  final TutorialLine line;
+  final List<Set<int>> placements;
+  final double cellSize;
+  final Color color;
+
+  /// Thời gian cho mỗi cách đặt: sáng lên, giữ, tắt, nghỉ.
+  static const _perPlacement = Duration(milliseconds: 1800);
+
+  @override
+  State<_GhostBlink> createState() => _GhostBlinkState();
+}
+
+class _GhostBlinkState extends State<_GhostBlink>
+    with SingleTickerProviderStateMixin {
+  late final AnimationController _animation = AnimationController(
+    vsync: this,
+    duration: _GhostBlink._perPlacement * widget.placements.length,
+  );
+  bool _still = false;
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    _still = MediaQuery.disableAnimationsOf(context);
+    if (_still) {
+      _animation.stop();
+    } else if (!_animation.isAnimating) {
+      _animation.repeat();
+    }
+  }
+
+  @override
+  void dispose() {
+    _animation.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final placements = widget.placements;
+    return AnimatedBuilder(
+      animation: _animation,
+      builder: (context, _) {
+        final List<(Set<int>, double)> shown;
+        if (_still) {
+          shown = [for (final p in placements) (p, 1 / placements.length)];
+        } else {
+          final t = _animation.value * placements.length;
+          final index = t.floor().clamp(0, placements.length - 1);
+          final f = t - index;
+          // 0–20%: sáng lên, 20–65%: giữ, 65–85%: tắt, 85–100%: nghỉ.
+          final opacity =
+              f < 0.2
+                  ? f / 0.2
+                  : f < 0.65
+                  ? 1.0
+                  : f < 0.85
+                  ? (0.85 - f) / 0.2
+                  : 0.0;
+          shown = [(placements[index], opacity)];
+        }
+        return CustomPaint(
+          painter: _GhostPainter(
+            line: widget.line,
+            shown: shown,
+            cellSize: widget.cellSize,
+            color: widget.color,
+          ),
+        );
+      },
+    );
+  }
+}
+
+class _GhostPainter extends CustomPainter {
+  _GhostPainter({
+    required this.line,
+    required this.shown,
+    required this.cellSize,
+    required this.color,
+  });
+
+  final TutorialLine line;
+
+  /// Các cách đặt đang hiện, kèm độ đậm (0–1).
+  final List<(Set<int>, double)> shown;
+  final double cellSize;
+  final Color color;
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    for (final (cells, opacity) in shown) {
+      if (opacity <= 0) continue;
+      final paint = Paint()..color = color.withValues(alpha: 0.45 * opacity);
+      for (final i in cells) {
+        final rect = (line.isRow
+                ? Rect.fromLTWH(
+                  i * cellSize,
+                  line.index * cellSize,
+                  cellSize,
+                  cellSize,
+                )
+                : Rect.fromLTWH(
+                  line.index * cellSize,
+                  i * cellSize,
+                  cellSize,
+                  cellSize,
+                ))
+            .deflate(cellSize * 0.08);
+        canvas.drawRRect(
+          RRect.fromRectAndRadius(rect, Radius.circular(cellSize * 0.12)),
+          paint,
+        );
+      }
+    }
+  }
+
+  @override
+  bool shouldRepaint(covariant _GhostPainter oldDelegate) => true;
 }
 
 /// Viền sáng quanh từng đoạn ô liền nhau cần làm trong mỗi hàng.

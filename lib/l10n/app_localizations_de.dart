@@ -37,14 +37,14 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get nonogramGuideMethodDivisionDesc =>
-      'Würde das Verbinden zweier vorhandener Blöcke eine Figur ergeben, die größer ist als jeder verfügbare Hinweis, muss die Lücke dazwischen ein X sein.';
+      'Würde das Verbinden zweier gefüllter Stücke einen Block ergeben, der größer als die größte Zahl ist, muss das Kästchen dazwischen leer sein. Markiere es mit X.';
 
   @override
   String get nonogramGuideMethodDivisionTitle => '5. Trennung';
 
   @override
   String get nonogramGuideMethodDoublePositioningDesc =>
-      'Kann ein ausgefülltes Feld nur zu wenigen bestimmten Varianten eines Blocks gehören, müssen alle Felder, die in keiner dieser Varianten ausgefüllt sind, mit X markiert werden.';
+      'Manchmal kann ein gefülltes Kästchen nur zu einer oder zwei Zahlen gehören. Probiere jede Möglichkeit: Kästchen, die in allen leer bleiben, bekommen ein X.';
 
   @override
   String get nonogramGuideMethodDoublePositioningTitle =>
@@ -52,21 +52,21 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get nonogramGuideMethodInaccessibilityDesc =>
-      'Markiere Felder, die zu keiner der verbleibenden Figuren gehören können, mit einem Kreuz (X).';
+      'Kästchen, die kein Block erreichen kann, sind leer. Probiere jeden Block in seinen äußersten Lagen um die gefüllten Kästchen; alles außerhalb bekommt ein X.';
 
   @override
   String get nonogramGuideMethodInaccessibilityTitle => '3. Unerreichbarkeit';
 
   @override
   String get nonogramGuideMethodNotFitDesc =>
-      'Ist ein leerer Bereich zwischen Kreuzen kleiner als jeder verfügbare Hinweis dieser Zeile, muss er mit X markiert werden.';
+      'Eine Lücke zwischen X (oder zwischen X und Rand), die kürzer ist als jede Zahl, die dorthin passen könnte, fasst keinen Block: Markiere sie mit X.';
 
   @override
   String get nonogramGuideMethodNotFitTitle => '4. Passt nicht hinein';
 
   @override
   String get nonogramGuideMethodSuperpositionMultiDesc =>
-      'Bei mehreren Zahlen legst du die äußerste linke und die äußerste rechte Lage der ganzen Gruppe übereinander und berücksichtigst dabei die vorgeschriebene Lücke von mindestens einem Feld zwischen gleichfarbigen Blöcken. Felder, an denen sich ein Block in beiden Varianten mit sich selbst überschneidet, werden ausgefüllt.';
+      'Bei mehreren Zahlen schiebst du die ganze Gruppe nach links (mit je einer Lücke zwischen den Blöcken), dann nach rechts. Deckt derselbe Block ein Kästchen in beiden Lagen ab, ist es gefüllt. Schnelltest: Zahlen und Lücken addieren; der Rest zeigt, wie weit sich jeder Block bewegen kann.';
 
   @override
   String get nonogramGuideMethodSuperpositionMultiTitle =>
@@ -74,7 +74,7 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get nonogramGuideMethodSuperpositionSimpleDesc =>
-      'Ist eine Zahl größer als die halbe Länge, sind einige Felder in der Mitte sicher ausgefüllt. Lege die äußerste linke und die äußerste rechte Lage übereinander; wo sie sich überschneiden, werden die Felder ausgefüllt.';
+      'Ist eine Zahl größer als die halbe Linie, ist ein Teil davon immer gefüllt. Schieb den Block gedanklich ganz nach links, dann ganz nach rechts: Was er beide Male abdeckt, ist sicher gefüllt. Beispiel: 7 in 10 Kästchen füllt immer die mittleren 4.';
 
   @override
   String get nonogramGuideMethodSuperpositionSimpleTitle =>
@@ -82,7 +82,7 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get nonogramGuideMethodWallPushingDesc =>
-      'Liegt ein bekanntes ausgefülltes Feld näher am Rand, als der erste Hinweis lang ist, muss sich die zugehörige Figur von diesem Rand weg erstrecken.';
+      'Ein gefülltes Kästchen nahe am Rand schränkt seinen Block ein. Der Block kann nicht über den Rand hinaus, also muss er sich vom Rand weg erstrecken. Beispiel: 5 mit gefülltem 4. Kästchen: Selbst ganz links deckt der Block noch das 5. Kästchen ab.';
 
   @override
   String get nonogramGuideMethodWallPushingTitle => '2. Vom Rand wegschieben';
@@ -310,7 +310,37 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get nonogramGuideTutorialCardDesc =>
-      'Lerne Regeln und Steuerung Schritt für Schritt an einem kleinen 5×5-Rätsel.';
+      'Lerne Regeln, Steuerung und die wichtigsten Lösungstechniken Schritt für Schritt beim Spielen.';
+
+  @override
+  String get nonogramGuideRoutineTitle => 'Wo fängt man an?';
+
+  @override
+  String get nonogramGuideRoutineTip1 =>
+      'Beginne mit den großen Zahlen. Ist eine Zahl größer als die halbe Linie, steht ein Teil davon schon fest (siehe Technik 1 unten).';
+
+  @override
+  String get nonogramGuideRoutineTip2 =>
+      'Löse zuerst die einfachen Zeilen: 0 heißt, die ganze Zeile bleibt leer, und ergeben die Zahlen plus je eine Lücke genau die Zeilenlänge, gibt es nur eine Lösung.';
+
+  @override
+  String get nonogramGuideRoutineTip3 =>
+      'Markiere Kästchen, die sicher leer sind, mit X. Ein X ist genauso nützlich wie ein gefülltes Kästchen.';
+
+  @override
+  String get nonogramGuideRoutineTip4 =>
+      'Wechsle immer wieder zwischen Zeilen und Spalten. Jedes gelöste Kästchen ist ein neuer Hinweis für die Linie, die es kreuzt.';
+
+  @override
+  String get nonogramGuideRoutineTip5 =>
+      'Nie raten. Wenn du feststeckst, such die Linie mit den wenigsten offenen Kästchen oder nimm einen Tipp.';
+
+  @override
+  String get nonogramGuideMethodLineDoneTitle => 'Fertige Linien';
+
+  @override
+  String get nonogramGuideMethodLineDoneDesc =>
+      'Sind alle Blöcke einer Linie platziert, sind alle übrigen Kästchen leer: Markiere sie mit X. Eine Linie mit der Zahl 0 ist von Anfang an leer.';
 
   @override
   String get nonogramPlayInfoHide => 'Levelinfo ausblenden';
@@ -418,6 +448,49 @@ class AppLocalizationsDe extends AppLocalizations {
   @override
   String get nonogramTutorialFinishTools =>
       'Fülle die übrigen Felder aus, um das Rätsel zu lösen. Ziehe eine Spalte hinunter, um schneller auszufüllen.';
+
+  @override
+  String get nonogramTutorialToolsDoneTitle => 'Steuerung gemeistert!';
+
+  @override
+  String get nonogramTutorialToolsDone =>
+      'Echte Rätsel sind größer, und die meisten Zeilen lassen sich nicht auf einen Blick lösen. Als Nächstes lernst du die Lösungstechniken an einem 8×8-Rätsel.';
+
+  @override
+  String get nonogramTutorialOverlapSingle =>
+      'Such zuerst nach großen Zahlen. Die 6 passt auf 3 Arten in diese 8 Kästchen, jede blinkt nacheinander auf. Was bei jeder Art leuchtet, ist sicher gefüllt: Füll die 4 im gelben Rahmen.';
+
+  @override
+  String get nonogramTutorialOverlapMulti =>
+      'Mit mehreren Zahlen genauso: 3 3 braucht mindestens 7 Kästchen (3 + Lücke + 3), passt also nur auf 3 Arten. Füll die Kästchen, die bei allen 3 leuchten.';
+
+  @override
+  String get nonogramTutorialFullRow =>
+      '8 in 8 Kästchen: Die ganze Zeile wird gefüllt. Wisch einmal darüber.';
+
+  @override
+  String get nonogramTutorialZeroRow =>
+      '0 bedeutet: In dieser Zeile ist kein einziges Kästchen gefüllt. Wechsle in den X-Modus.';
+
+  @override
+  String get nonogramTutorialMarkZeroRow =>
+      'Markiere die ganze unterste Zeile mit X. X sind wichtig: Sie zeigen den Spalten, wo keine Blöcke hinkönnen.';
+
+  @override
+  String get nonogramTutorialOutOfReach =>
+      'Jetzt die Spalten. Spalte 2 ist ein Block aus 3, der ihre 2 gefüllten Kästchen abdecken muss, also passt er nur auf 2 Arten. Kästchen, die nie leuchten, sind unerreichbar: Markiere sie mit X, ebenso in Spalte 7.';
+
+  @override
+  String get nonogramTutorialBackToFill =>
+      'Sieh dir Spalte 3 an: Sie braucht 7. Wechsle zurück in den Ausfüllmodus.';
+
+  @override
+  String get nonogramTutorialExactSpace =>
+      'Das X ganz unten lässt genau 7 Kästchen für die 7 übrig, also füll sie alle. Spalte 6 funktioniert genauso.';
+
+  @override
+  String get nonogramTutorialFinishTechniques =>
+      'So geht\'s immer: Löse in den Zeilen, was geht, dann in den Spalten, und wiederhole das. Mach den Pilz jetzt allein fertig!';
 
   @override
   String get nonogramPlayHintNothingToFill =>

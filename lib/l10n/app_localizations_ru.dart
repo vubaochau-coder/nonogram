@@ -37,14 +37,14 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get nonogramGuideMethodDivisionDesc =>
-      'Если соединение двух уже закрашенных блоков дало бы фигуру длиннее любого из доступных чисел, промежуток между ними должен быть крестиком.';
+      'Если соединение двух закрашенных кусков даст блок больше самого большого числа, клетка между ними пустая. Отметьте её крестиком, чтобы разделить их.';
 
   @override
   String get nonogramGuideMethodDivisionTitle => '5. Разделение';
 
   @override
   String get nonogramGuideMethodDoublePositioningDesc =>
-      'Если закрашенная клетка может принадлежать лишь нескольким определённым вариантам блока, все клетки, которые не закрашены ни в одном из этих вариантов, нужно отметить крестиком.';
+      'Иногда закрашенная клетка может принадлежать только одному или двум числам. Переберите варианты: клетки, пустые во всех вариантах, отмечайте крестиком.';
 
   @override
   String get nonogramGuideMethodDoublePositioningTitle =>
@@ -52,21 +52,21 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get nonogramGuideMethodInaccessibilityDesc =>
-      'Отметьте крестиком (X) клетки, которые не могут принадлежать ни одной из оставшихся фигур.';
+      'Клетки, до которых не может дотянуться ни один блок, пустые. Поставьте каждый блок в крайние положения вокруг закрашенных клеток; всё, что за пределами, отмечайте крестиком.';
 
   @override
   String get nonogramGuideMethodInaccessibilityTitle => '3. Недоступность';
 
   @override
   String get nonogramGuideMethodNotFitDesc =>
-      'Если пустой участок между крестиками короче любого из доступных чисел этой линии, его нужно отметить крестиками.';
+      'Промежуток между крестиками (или между крестиком и краем), который короче любого числа, способного туда попасть, не вместит блок: отметьте его крестиками.';
 
   @override
   String get nonogramGuideMethodNotFitTitle => '4. Не помещается';
 
   @override
   String get nonogramGuideMethodSuperpositionMultiDesc =>
-      'Если чисел несколько, наложите крайнее левое и крайнее правое положения всей группы, учитывая обязательный промежуток минимум в одну клетку между блоками одного цвета. Клетки, где блок пересекается сам с собой в обоих вариантах, закрашиваются.';
+      'Если чисел несколько, сдвиньте всю группу влево (с одной пустой клеткой между блоками), затем вправо. Если один и тот же блок закрывает клетку в обоих положениях, она закрашена. Быстрый способ: сложите числа и промежутки — остаток показывает, насколько может сдвинуться каждый блок.';
 
   @override
   String get nonogramGuideMethodSuperpositionMultiTitle =>
@@ -74,7 +74,7 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get nonogramGuideMethodSuperpositionSimpleDesc =>
-      'Если число больше половины длины линии, некоторые клетки в середине точно закрашены. Наложите крайнее левое и крайнее правое положения; там, где они пересекаются, клетки закрашиваются.';
+      'Если число больше половины линии, часть его клеток закрашена всегда. Представьте блок, сдвинутый до упора влево, а потом вправо: клетки, закрытые в обоих случаях, точно закрашены. Пример: 7 в 10 клетках всегда закрашивает 4 средние.';
 
   @override
   String get nonogramGuideMethodSuperpositionSimpleTitle =>
@@ -82,7 +82,7 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get nonogramGuideMethodWallPushingDesc =>
-      'Если известная закрашенная клетка ближе к краю, чем длина первого числа, фигура, к которой она относится, должна продолжаться в сторону от этого края.';
+      'Закрашенная клетка у края ограничивает положение своего блока. Блок не может выйти за край, поэтому тянется от него. Пример: 5, и 4-я клетка закрашена: даже прижатый к левому краю, блок всё равно закрывает 5-ю клетку.';
 
   @override
   String get nonogramGuideMethodWallPushingTitle => '2. Отталкивание от края';
@@ -310,7 +310,37 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get nonogramGuideTutorialCardDesc =>
-      'Шаг за шагом освойте правила и управление на маленькой головоломке 5×5.';
+      'Правила, управление и основные приёмы решения — шаг за шагом, прямо в игре.';
+
+  @override
+  String get nonogramGuideRoutineTitle => 'С чего начать';
+
+  @override
+  String get nonogramGuideRoutineTip1 =>
+      'Начинайте с больших чисел. Если число больше половины линии, часть его клеток уже известна (см. приём 1 ниже).';
+
+  @override
+  String get nonogramGuideRoutineTip2 =>
+      'Сначала решайте простые линии: 0 значит, что вся линия пустая, а если сумма чисел плюс по одному промежутку между ними равна длине линии, расстановка только одна.';
+
+  @override
+  String get nonogramGuideRoutineTip3 =>
+      'Отмечайте крестиком клетки, которые точно пустые. Крестик так же полезен, как закрашенная клетка.';
+
+  @override
+  String get nonogramGuideRoutineTip4 =>
+      'Чередуйте строки и столбцы. Каждая решённая клетка — новая подсказка для пересекающей её линии.';
+
+  @override
+  String get nonogramGuideRoutineTip5 =>
+      'Никогда не угадывайте. Если застряли, найдите линию с наименьшим числом неизвестных клеток или возьмите подсказку.';
+
+  @override
+  String get nonogramGuideMethodLineDoneTitle => 'Готовые линии';
+
+  @override
+  String get nonogramGuideMethodLineDoneDesc =>
+      'Когда все блоки линии на месте, остальные её клетки пустые: отметьте их крестиком. Линия с числом 0 пуста с самого начала.';
 
   @override
   String get nonogramPlayInfoHide => 'Скрыть сведения об уровне';
@@ -419,6 +449,49 @@ class AppLocalizationsRu extends AppLocalizations {
   @override
   String get nonogramTutorialFinishTools =>
       'Закрасьте оставшиеся клетки, чтобы закончить. Проведите вниз по столбцу, чтобы закрашивать быстрее.';
+
+  @override
+  String get nonogramTutorialToolsDoneTitle => 'Управление освоено!';
+
+  @override
+  String get nonogramTutorialToolsDone =>
+      'Настоящие головоломки больше, и большинство линий не решить с первого взгляда. Дальше изучим приёмы решения на поле 8×8.';
+
+  @override
+  String get nonogramTutorialOverlapSingle =>
+      'Сначала ищите большие числа. Блок 6 помещается в эти 8 клеток 3 способами, и каждый по очереди мигает. Клетки, горящие при любом способе, точно закрашены: закрасьте 4 в жёлтой рамке.';
+
+  @override
+  String get nonogramTutorialOverlapMulti =>
+      'С несколькими числами так же: для 3 3 нужно минимум 7 клеток (3 + промежуток + 3), поэтому способов всего 3. Закрасьте клетки, горящие во всех трёх.';
+
+  @override
+  String get nonogramTutorialFullRow =>
+      '8 в 8 клетках: вся строка закрашена. Проведите по ней пальцем.';
+
+  @override
+  String get nonogramTutorialZeroRow =>
+      '0 значит, что в строке нет ни одной закрашенной клетки. Переключитесь в режим X.';
+
+  @override
+  String get nonogramTutorialMarkZeroRow =>
+      'Отметьте всю нижнюю строку крестиками. Крестики важны: они показывают столбцам, где блоков быть не может.';
+
+  @override
+  String get nonogramTutorialOutOfReach =>
+      'Теперь столбцы. Столбец 2 — один блок из 3, который должен накрыть 2 закрашенные клетки, поэтому способов всего 2. Клетки, которые ни разу не загораются, недосягаемы: отметьте их крестиком, и так же в столбце 7.';
+
+  @override
+  String get nonogramTutorialBackToFill =>
+      'Посмотрите на столбец 3: ему нужно 7. Вернитесь в режим закрашивания.';
+
+  @override
+  String get nonogramTutorialExactSpace =>
+      'Крестик внизу оставляет ровно 7 клеток для числа 7, так что закрасьте их все. Со столбцом 6 то же самое.';
+
+  @override
+  String get nonogramTutorialFinishTechniques =>
+      'Вот и весь порядок: решите что можно в строках, потом в столбцах, и повторяйте. Дорисуйте гриб сами!';
 
   @override
   String get nonogramPlayHintNothingToFill =>

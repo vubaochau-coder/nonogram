@@ -37,14 +37,14 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get nonogramGuideMethodDivisionDesc =>
-      'Si relier deux blocs existants créait une figure plus grande que tous les indices disponibles, l\'espace entre eux doit être un X.';
+      'Si relier deux morceaux noircis formait un bloc plus grand que le plus grand nombre, la case entre eux doit être vide. Marquez-la d\'un X pour les séparer.';
 
   @override
   String get nonogramGuideMethodDivisionTitle => '5. Séparation';
 
   @override
   String get nonogramGuideMethodDoublePositioningDesc =>
-      'Si une case remplie ne peut appartenir qu\'à quelques variantes précises d\'un bloc, toutes les cases qui ne sont remplies dans aucune de ces variantes doivent être marquées d\'un X.';
+      'Parfois, une case noircie ne peut appartenir qu\'à un ou deux des nombres. Essayez chaque possibilité : les cases vides dans toutes reçoivent un X.';
 
   @override
   String get nonogramGuideMethodDoublePositioningTitle =>
@@ -52,21 +52,21 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get nonogramGuideMethodInaccessibilityDesc =>
-      'Marquez d\'une croix (X) les cases qui ne peuvent appartenir à aucune des figures restantes.';
+      'Les cases qu\'aucun bloc ne peut atteindre sont vides. Essayez chaque bloc dans ses positions extrêmes autour des cases noircies ; tout ce qui est hors de portée reçoit un X.';
 
   @override
   String get nonogramGuideMethodInaccessibilityTitle => '3. Inaccessibilité';
 
   @override
   String get nonogramGuideMethodNotFitDesc =>
-      'Si un espace vide entre des croix est plus petit que tous les indices disponibles pour cette ligne, il doit être marqué d\'un X.';
+      'Un espace entre des X (ou entre un X et le bord) plus court que tous les nombres qui pourraient s\'y placer ne peut contenir aucun bloc : marquez-le d\'un X.';
 
   @override
   String get nonogramGuideMethodNotFitTitle => '4. Pas assez de place';
 
   @override
   String get nonogramGuideMethodSuperpositionMultiDesc =>
-      'Lorsqu\'il y a plusieurs nombres, superposez les positions extrêmes à gauche et à droite de tout le groupe, en tenant compte de l\'espace minimal obligatoire d\'une case entre deux blocs de même couleur. Les cases où un bloc se recouvre lui-même dans les deux variantes sont remplies.';
+      'Avec plusieurs nombres, poussez tout le groupe à gauche (une case vide entre les blocs), puis à droite. Si le même bloc couvre une case dans les deux positions, elle est noircie. Astuce : additionnez les nombres et les espaces ; le reste indique de combien chaque bloc peut bouger.';
 
   @override
   String get nonogramGuideMethodSuperpositionMultiTitle =>
@@ -74,7 +74,7 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get nonogramGuideMethodSuperpositionSimpleDesc =>
-      'Si un nombre dépasse la moitié de la longueur, certaines cases du milieu seront forcément remplies. Superposez les positions extrêmes à gauche et à droite ; là où elles se recouvrent, les cases sont remplies.';
+      'Si un nombre dépasse la moitié de sa ligne, une partie est toujours noircie. Imaginez le bloc poussé tout à gauche, puis tout à droite : les cases couvertes les deux fois sont sûres. Exemple : 7 sur 10 cases noircit toujours les 4 du milieu.';
 
   @override
   String get nonogramGuideMethodSuperpositionSimpleTitle =>
@@ -82,7 +82,7 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get nonogramGuideMethodWallPushingDesc =>
-      'Si une case remplie connue est plus proche d\'un bord que la taille du premier indice, la figure à laquelle elle appartient doit s\'étendre en s\'éloignant de ce bord.';
+      'Une case noircie près du bord limite la position de son bloc. Le bloc ne peut pas dépasser le bord, il doit donc s\'étendre de l\'autre côté. Exemple : 5 avec la 4e case noircie : même collé au bord gauche, le bloc couvre encore la 5e case.';
 
   @override
   String get nonogramGuideMethodWallPushingTitle =>
@@ -313,7 +313,37 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get nonogramGuideTutorialCardDesc =>
-      'Apprenez les règles et les commandes pas à pas sur une petite grille de 5×5.';
+      'Apprenez les règles, les commandes et les principales techniques pas à pas, en jouant.';
+
+  @override
+  String get nonogramGuideRoutineTitle => 'Par où commencer';
+
+  @override
+  String get nonogramGuideRoutineTip1 =>
+      'Commencez par les grands nombres. Si un nombre dépasse la moitié de sa ligne, une partie est déjà certaine (voir la technique 1 plus bas).';
+
+  @override
+  String get nonogramGuideRoutineTip2 =>
+      'Résolvez d\'abord les lignes faciles : 0 signifie que toute la ligne est vide, et si les nombres plus un espace entre chacun font la longueur de la ligne, ils ne rentrent que d\'une façon.';
+
+  @override
+  String get nonogramGuideRoutineTip3 =>
+      'Marquez d\'un X les cases que vous savez vides. Un X est aussi utile qu\'une case noircie.';
+
+  @override
+  String get nonogramGuideRoutineTip4 =>
+      'Alternez entre lignes et colonnes. Chaque case résolue est un nouvel indice pour la ligne qui la croise.';
+
+  @override
+  String get nonogramGuideRoutineTip5 =>
+      'Ne devinez jamais. Si vous bloquez, cherchez la ligne avec le moins de cases inconnues, ou utilisez un indice.';
+
+  @override
+  String get nonogramGuideMethodLineDoneTitle => 'Lignes terminées';
+
+  @override
+  String get nonogramGuideMethodLineDoneDesc =>
+      'Quand tous les blocs d\'une ligne sont placés, toutes ses autres cases sont vides : marquez-les d\'un X. Une ligne avec le nombre 0 est vide dès le départ.';
 
   @override
   String get nonogramPlayInfoHide => 'Masquer les infos du niveau';
@@ -421,6 +451,49 @@ class AppLocalizationsFr extends AppLocalizations {
   @override
   String get nonogramTutorialFinishTools =>
       'Remplissez les cases restantes pour terminer. Faites glisser vers le bas le long d\'une colonne pour aller plus vite.';
+
+  @override
+  String get nonogramTutorialToolsDoneTitle => 'Commandes maîtrisées !';
+
+  @override
+  String get nonogramTutorialToolsDone =>
+      'Les vraies grilles sont plus grandes, et la plupart des lignes ne se résolvent pas d\'un coup d\'œil. Découvrez maintenant les techniques de résolution sur une grille 8×8.';
+
+  @override
+  String get nonogramTutorialOverlapSingle =>
+      'Cherchez d\'abord les grands nombres. Le 6 tient de 3 façons dans ces 8 cases, et chacune clignote tour à tour. Les cases allumées à chaque fois sont sûres : noircissez les 4 du cadre jaune.';
+
+  @override
+  String get nonogramTutorialOverlapMulti =>
+      'Pareil avec plusieurs nombres : 3 3 demande au moins 7 cases (3 + espace + 3), il ne tient donc que de 3 façons. Noircissez les cases allumées dans les 3.';
+
+  @override
+  String get nonogramTutorialFullRow =>
+      '8 sur 8 cases : toute la ligne est noircie. Glissez le doigt dessus.';
+
+  @override
+  String get nonogramTutorialZeroRow =>
+      '0 signifie qu\'aucune case de la ligne n\'est noircie. Passez en mode X.';
+
+  @override
+  String get nonogramTutorialMarkZeroRow =>
+      'Marquez toute la dernière ligne d\'un X. Les X comptent : ils montrent aux colonnes où les blocs ne peuvent pas aller.';
+
+  @override
+  String get nonogramTutorialOutOfReach =>
+      'Passons aux colonnes. La colonne 2 est un bloc de 3 qui doit couvrir ses 2 cases noires : il ne tient que de 2 façons. Les cases jamais allumées sont hors de portée : marquez-les d\'un X, et pareil dans la colonne 7.';
+
+  @override
+  String get nonogramTutorialBackToFill =>
+      'Regardez la colonne 3 : elle demande 7. Revenez en mode remplissage.';
+
+  @override
+  String get nonogramTutorialExactSpace =>
+      'Le X du bas laisse exactement 7 cases pour le 7 : noircissez-les toutes. La colonne 6 fonctionne pareil.';
+
+  @override
+  String get nonogramTutorialFinishTechniques =>
+      'Voilà la méthode : résolvez ce que vous pouvez dans les lignes, puis dans les colonnes, et recommencez. Terminez le champignon tout seul !';
 
   @override
   String get nonogramPlayHintNothingToFill =>

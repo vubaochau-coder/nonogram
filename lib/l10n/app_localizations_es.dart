@@ -37,14 +37,14 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get nonogramGuideMethodDivisionDesc =>
-      'Si unir dos bloques existentes formaría una figura más grande que cualquier pista disponible, el hueco entre ellos debe ser una X.';
+      'Si unir dos tramos rellenos formaría un bloque mayor que el número más grande, la casilla entre ellos debe estar vacía. Márcala con X para separarlos.';
 
   @override
   String get nonogramGuideMethodDivisionTitle => '5. División';
 
   @override
   String get nonogramGuideMethodDoublePositioningDesc =>
-      'Si una casilla rellena solo puede pertenecer a unas pocas variantes concretas de un bloque, cualquier casilla que no se rellene en ninguna de esas variantes debe marcarse con X.';
+      'A veces una casilla rellena solo puede pertenecer a uno o dos de los números. Prueba cada posibilidad: las casillas que quedan vacías en todas llevan X.';
 
   @override
   String get nonogramGuideMethodDoublePositioningTitle =>
@@ -52,21 +52,21 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get nonogramGuideMethodInaccessibilityDesc =>
-      'Marca con una cruz (X) las casillas que no pueden pertenecer a ninguna de las figuras restantes.';
+      'Las casillas a las que ningún bloque puede llegar están vacías. Prueba cada bloque en sus posiciones más alejadas alrededor de las casillas rellenas; lo que quede fuera lleva X.';
 
   @override
   String get nonogramGuideMethodInaccessibilityTitle => '3. Inaccesibilidad';
 
   @override
   String get nonogramGuideMethodNotFitDesc =>
-      'Si un espacio vacío entre cruces es más pequeño que cualquier pista disponible para esa línea, debe marcarse con X.';
+      'Un hueco entre X (o entre una X y el borde) más corto que cualquier número que pudiera ir ahí no admite ningún bloque: márcalo con X.';
 
   @override
   String get nonogramGuideMethodNotFitTitle => '4. No cabe';
 
   @override
   String get nonogramGuideMethodSuperpositionMultiDesc =>
-      'Cuando hay varios números, superpón las posiciones extremas izquierda y derecha de todo el grupo, teniendo en cuenta el hueco mínimo obligatorio de una casilla entre bloques del mismo color. Las casillas en las que un bloque coincide consigo mismo en ambas variantes se rellenan.';
+      'Con varios números, empuja todo el grupo a la izquierda (dejando una casilla vacía entre bloques) y luego a la derecha. Si el mismo bloque cubre una casilla en ambas posiciones, esa casilla se rellena. Truco: suma los números y los huecos; lo que sobra es cuánto puede moverse cada bloque.';
 
   @override
   String get nonogramGuideMethodSuperpositionMultiTitle =>
@@ -74,7 +74,7 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get nonogramGuideMethodSuperpositionSimpleDesc =>
-      'Si un número ocupa más de la mitad de la línea, algunas casillas del centro estarán rellenas con seguridad. Superpón las posiciones extremas izquierda y derecha; donde coinciden, las casillas se rellenan.';
+      'Si un número ocupa más de la mitad de su línea, una parte siempre se rellena. Imagina el bloque empujado del todo a la izquierda y luego del todo a la derecha: las casillas que cubre las dos veces son seguras. Ejemplo: 7 en 10 casillas siempre rellena las 4 del centro.';
 
   @override
   String get nonogramGuideMethodSuperpositionSimpleTitle =>
@@ -82,7 +82,7 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get nonogramGuideMethodWallPushingDesc =>
-      'Si una casilla rellena conocida está más cerca de un borde que el tamaño de la primera pista, la figura a la que pertenece debe extenderse alejándose de ese borde.';
+      'Una casilla rellena cerca del borde limita dónde puede estar su bloque. El bloque no puede salirse del borde, así que debe extenderse hacia el otro lado. Ejemplo: 5 con la 4.ª casilla rellena: aunque se pegue al borde izquierdo, el bloque sigue cubriendo la 5.ª.';
 
   @override
   String get nonogramGuideMethodWallPushingTitle =>
@@ -314,7 +314,37 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get nonogramGuideTutorialCardDesc =>
-      'Aprende las reglas y los controles paso a paso con un pequeño puzle de 5×5.';
+      'Aprende las reglas, los controles y las técnicas principales paso a paso, jugando.';
+
+  @override
+  String get nonogramGuideRoutineTitle => 'Por dónde empezar';
+
+  @override
+  String get nonogramGuideRoutineTip1 =>
+      'Empieza por los números grandes. Si un número ocupa más de la mitad de su línea, una parte ya es segura (ver la técnica 1 abajo).';
+
+  @override
+  String get nonogramGuideRoutineTip2 =>
+      'Resuelve primero las líneas fáciles: 0 significa que toda la línea está vacía, y si los números más un hueco entre cada uno suman la longitud de la línea, solo caben de una forma.';
+
+  @override
+  String get nonogramGuideRoutineTip3 =>
+      'Marca con X las casillas que sabes que están vacías. Una X es tan útil como una casilla rellena.';
+
+  @override
+  String get nonogramGuideRoutineTip4 =>
+      'Alterna entre filas y columnas. Cada casilla que resuelves es una pista nueva para la línea que la cruza.';
+
+  @override
+  String get nonogramGuideRoutineTip5 =>
+      'No adivines nunca. Si te atascas, busca la línea con menos casillas desconocidas o usa una pista.';
+
+  @override
+  String get nonogramGuideMethodLineDoneTitle => 'Líneas terminadas';
+
+  @override
+  String get nonogramGuideMethodLineDoneDesc =>
+      'Cuando todos los bloques de una línea están colocados, el resto de sus casillas está vacío: márcalas con X. Una línea con el número 0 está vacía desde el principio.';
 
   @override
   String get nonogramPlayInfoHide => 'Ocultar información del nivel';
@@ -422,6 +452,49 @@ class AppLocalizationsEs extends AppLocalizations {
   @override
   String get nonogramTutorialFinishTools =>
       'Rellena las casillas restantes para terminar. Arrastra hacia abajo por una columna para rellenar más rápido.';
+
+  @override
+  String get nonogramTutorialToolsDoneTitle => '¡Ya dominas los controles!';
+
+  @override
+  String get nonogramTutorialToolsDone =>
+      'Los puzles reales son más grandes y la mayoría de las líneas no se resuelven a simple vista. Ahora aprende las técnicas de resolución en un puzle de 8×8.';
+
+  @override
+  String get nonogramTutorialOverlapSingle =>
+      'Busca primero los números grandes. El 6 cabe de 3 formas en estas 8 casillas, y cada una parpadea por turnos. Las casillas iluminadas en todas son seguras: rellena las 4 del marco amarillo.';
+
+  @override
+  String get nonogramTutorialOverlapMulti =>
+      'Igual con varios números: 3 3 necesita al menos 7 casillas (3 + hueco + 3), así que solo cabe de 3 formas. Rellena las casillas iluminadas en las 3.';
+
+  @override
+  String get nonogramTutorialFullRow =>
+      '8 en 8 casillas: toda la fila se rellena. Arrastra a lo largo de ella.';
+
+  @override
+  String get nonogramTutorialZeroRow =>
+      '0 significa que la fila no tiene ninguna casilla rellena. Cambia al modo X.';
+
+  @override
+  String get nonogramTutorialMarkZeroRow =>
+      'Marca toda la fila de abajo con X. Las X importan: muestran a las columnas dónde no pueden ir los bloques.';
+
+  @override
+  String get nonogramTutorialOutOfReach =>
+      'Ahora las columnas. La columna 2 es un bloque de 3 que debe cubrir sus 2 casillas rellenas, así que solo cabe de 2 formas. Las casillas que nunca se iluminan no se alcanzan: márcalas con X, y lo mismo en la columna 7.';
+
+  @override
+  String get nonogramTutorialBackToFill =>
+      'Mira la columna 3: necesita 7. Vuelve al modo de rellenar.';
+
+  @override
+  String get nonogramTutorialExactSpace =>
+      'La X de abajo deja exactamente 7 casillas para el 7, así que rellénalas todas. La columna 6 funciona igual.';
+
+  @override
+  String get nonogramTutorialFinishTechniques =>
+      'Ese es el método: resuelve lo que puedas en las filas, luego en las columnas, y repite. ¡Termina la seta tú solo!';
 
   @override
   String get nonogramPlayHintNothingToFill =>
