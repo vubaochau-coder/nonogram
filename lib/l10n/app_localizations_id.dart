@@ -630,17 +630,6 @@ class AppLocalizationsId extends AppLocalizations {
   String get checkInDoneToday => 'Sudah absen hari ini';
 
   @override
-  String checkInNextGift(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: 'Hadiah berikutnya dalam $count kali absen',
-      one: 'Hadiah berikutnya di absen berikutnya',
-    );
-    return '$_temp0';
-  }
-
-  @override
   String get checkInCheckedIn => 'Berhasil absen!';
 
   @override
@@ -664,9 +653,6 @@ class AppLocalizationsId extends AppLocalizations {
   }
 
   @override
-  String get checkInMonthGifts => 'Hadiah bulan ini';
-
-  @override
   String get navHome => 'Beranda';
 
   @override
@@ -679,42 +665,75 @@ class AppLocalizationsId extends AppLocalizations {
   String get meMore => 'Lainnya';
 
   @override
-  String get checkInNotYetToday => 'Belum absen hari ini';
-
-  @override
   String get checkInTodayButton => 'Absen hari ini';
-
-  @override
-  String checkInGiftsLeftShort(int count) {
-    return '$count kali lagi dapat hadiah';
-  }
 
   @override
   String get checkInGiftToday => 'Hari ini ada hadiah!';
 
   @override
-  String checkInGiftMilestone(int count) {
-    return 'Hadiah $count kali absen';
-  }
-
-  @override
   String get checkInGiftCollect => 'Ambil';
 
   @override
-  String get checkInTotalHints => 'Petunjuk';
+  String get checkInGiftDouble => 'Ambil x2';
 
   @override
-  String get checkInTotalWands => 'Tongkat ajaib';
+  String checkInStreakTitle(int count) {
+    return 'Beruntun $count hari';
+  }
 
   @override
-  String get checkInTotalDailyHints => 'Petunjuk (hanya hari ini)';
+  String checkInStreakDays(int count) {
+    return '$count hari';
+  }
 
   @override
-  String get checkInTotalDailyWands => 'Tongkat ajaib (hanya hari ini)';
+  String checkInStreakMakeUp(int missed, String days) {
+    return 'Ganti $missed hari yang terlewat agar beruntunmu jadi $days';
+  }
 
   @override
-  String get checkInPremiumNotYet =>
-      'Absen untuk mendapat 2 petunjuk dan 1 tongkat ajaib hari ini.';
+  String get checkInStreakKeepGoing =>
+      'Absen setiap hari agar beruntunmu terjaga';
+
+  @override
+  String get checkInStreakAllDone =>
+      'Kamu sudah dapat semua hadiah beruntun bulan ini!';
+
+  @override
+  String checkInStreakDaysLeft(int count) {
+    return '$count hari lagi untuk hadiah';
+  }
+
+  @override
+  String get checkInLegendChecked => 'Sudah absen';
+
+  @override
+  String get checkInLegendMissed => 'Terlewat';
+
+  @override
+  String get checkInLegendFuture => 'Mendatang';
+
+  @override
+  String checkInGiftStreak(int count) {
+    return 'Hadiah beruntun $count hari';
+  }
+
+  @override
+  String checkInMakeUpTitle(String date) {
+    return 'Ganti tanggal $date?';
+  }
+
+  @override
+  String get checkInMakeUpBody =>
+      'Tonton iklan singkat untuk mengganti hari ini. Beruntunmu akan tersambung lagi.';
+
+  @override
+  String get checkInMakeUpWatch => 'Tonton iklan';
+
+  @override
+  String checkInMadeUp(String date) {
+    return 'Tanggal $date sudah diganti';
+  }
 
   @override
   String dashboardDailyReminder(String rewards, String time) {
@@ -820,12 +839,4 @@ class AppLocalizationsId extends AppLocalizations {
   String dashboardDailyReminderBoth(String hints, String wands) {
     return '$hints dan $wands';
   }
-
-  @override
-  String checkInLegendMilestone(int count) {
-    return 'Hadiah setiap $count kali absen';
-  }
-
-  @override
-  String get checkInLegendPremium => 'Hadiah paket tanpa iklan';
 }

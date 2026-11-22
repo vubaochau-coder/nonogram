@@ -629,11 +629,6 @@ class AppLocalizationsTh extends AppLocalizations {
   String get checkInDoneToday => 'วันนี้เช็กอินแล้ว';
 
   @override
-  String checkInNextGift(int count) {
-    return 'อีก $count ครั้งจะได้ของขวัญถัดไป';
-  }
-
-  @override
   String get checkInCheckedIn => 'เช็กอินแล้ว!';
 
   @override
@@ -657,9 +652,6 @@ class AppLocalizationsTh extends AppLocalizations {
   }
 
   @override
-  String get checkInMonthGifts => 'ของขวัญเดือนนี้';
-
-  @override
   String get navHome => 'หน้าหลัก';
 
   @override
@@ -672,42 +664,74 @@ class AppLocalizationsTh extends AppLocalizations {
   String get meMore => 'อื่น ๆ';
 
   @override
-  String get checkInNotYetToday => 'วันนี้ยังไม่ได้เช็กอิน';
-
-  @override
   String get checkInTodayButton => 'เช็กอินวันนี้';
-
-  @override
-  String checkInGiftsLeftShort(int count) {
-    return 'อีก $count ครั้งได้ของขวัญ';
-  }
 
   @override
   String get checkInGiftToday => 'วันนี้มีของขวัญ!';
 
   @override
-  String checkInGiftMilestone(int count) {
-    return 'ของขวัญเช็กอินครบ $count ครั้ง';
-  }
-
-  @override
   String get checkInGiftCollect => 'รับ';
 
   @override
-  String get checkInTotalHints => 'คำใบ้';
+  String get checkInGiftDouble => 'รับ x2';
 
   @override
-  String get checkInTotalWands => 'ไม้กายสิทธิ์';
+  String checkInStreakTitle(int count) {
+    return 'ต่อเนื่อง $count วัน';
+  }
 
   @override
-  String get checkInTotalDailyHints => 'คำใบ้ (เฉพาะวันนี้)';
+  String checkInStreakDays(int count) {
+    return '$count วัน';
+  }
 
   @override
-  String get checkInTotalDailyWands => 'ไม้กายสิทธิ์ (เฉพาะวันนี้)';
+  String checkInStreakMakeUp(int missed, String days) {
+    return 'ชดเชย $missed วันที่พลาดไป เพื่อให้ต่อเนื่องเป็น $days';
+  }
 
   @override
-  String get checkInPremiumNotYet =>
-      'เช็กอินเพื่อรับคำใบ้ 2 ครั้งและไม้กายสิทธิ์ 1 ครั้งสำหรับวันนี้';
+  String get checkInStreakKeepGoing => 'เช็กอินทุกวันเพื่อรักษาความต่อเนื่อง';
+
+  @override
+  String get checkInStreakAllDone =>
+      'คุณได้รับของขวัญต่อเนื่องครบทุกชิ้นของเดือนนี้แล้ว!';
+
+  @override
+  String checkInStreakDaysLeft(int count) {
+    return 'อีก $count วันจะได้ของขวัญ';
+  }
+
+  @override
+  String get checkInLegendChecked => 'เช็กอินแล้ว';
+
+  @override
+  String get checkInLegendMissed => 'พลาด';
+
+  @override
+  String get checkInLegendFuture => 'ยังไม่ถึง';
+
+  @override
+  String checkInGiftStreak(int count) {
+    return 'ของขวัญต่อเนื่อง $count วัน';
+  }
+
+  @override
+  String checkInMakeUpTitle(String date) {
+    return 'ชดเชยวันที่ $date ไหม?';
+  }
+
+  @override
+  String get checkInMakeUpBody =>
+      'ดูโฆษณาสั้น ๆ เพื่อชดเชยวันนี้ ความต่อเนื่องของคุณจะกลับมาเชื่อมกัน';
+
+  @override
+  String get checkInMakeUpWatch => 'ดูโฆษณา';
+
+  @override
+  String checkInMadeUp(String date) {
+    return 'ชดเชยวันที่ $date แล้ว';
+  }
 
   @override
   String dashboardDailyReminder(String rewards, String time) {
@@ -812,12 +836,4 @@ class AppLocalizationsTh extends AppLocalizations {
   String dashboardDailyReminderBoth(String hints, String wands) {
     return '$hintsและ$wands';
   }
-
-  @override
-  String checkInLegendMilestone(int count) {
-    return 'ของขวัญทุก $count ครั้งที่เช็กอิน';
-  }
-
-  @override
-  String get checkInLegendPremium => 'รางวัลแพ็กไม่มีโฆษณา';
 }

@@ -614,11 +614,6 @@ class AppLocalizationsKo extends AppLocalizations {
   String get checkInDoneToday => '오늘 출석 완료';
 
   @override
-  String checkInNextGift(int count) {
-    return '다음 선물까지 출석 $count번 남음';
-  }
-
-  @override
   String get checkInCheckedIn => '출석 완료!';
 
   @override
@@ -642,9 +637,6 @@ class AppLocalizationsKo extends AppLocalizations {
   }
 
   @override
-  String get checkInMonthGifts => '이번 달 선물';
-
-  @override
   String get navHome => '홈';
 
   @override
@@ -657,41 +649,72 @@ class AppLocalizationsKo extends AppLocalizations {
   String get meMore => '기타';
 
   @override
-  String get checkInNotYetToday => '오늘 아직 출석하지 않았어요';
-
-  @override
   String get checkInTodayButton => '오늘 출석 체크';
-
-  @override
-  String checkInGiftsLeftShort(int count) {
-    return '선물까지 $count번 남음';
-  }
 
   @override
   String get checkInGiftToday => '오늘은 선물이 있어요!';
 
   @override
-  String checkInGiftMilestone(int count) {
-    return '출석 $count번 달성 선물';
-  }
-
-  @override
   String get checkInGiftCollect => '받기';
 
   @override
-  String get checkInTotalHints => '힌트';
+  String get checkInGiftDouble => '2배로 받기';
 
   @override
-  String get checkInTotalWands => '마법 지팡이';
+  String checkInStreakTitle(int count) {
+    return '$count일 연속';
+  }
 
   @override
-  String get checkInTotalDailyHints => '힌트 (오늘만)';
+  String checkInStreakDays(int count) {
+    return '$count일';
+  }
 
   @override
-  String get checkInTotalDailyWands => '마법 지팡이 (오늘만)';
+  String checkInStreakMakeUp(int missed, String days) {
+    return '놓친 $missed일을 채우면 연속 기록이 $days이 됩니다';
+  }
 
   @override
-  String get checkInPremiumNotYet => '출석하면 오늘 쓸 수 있는 힌트 2개와 마법 지팡이 1개를 받아요.';
+  String get checkInStreakKeepGoing => '매일 출석해서 연속 기록을 이어가세요';
+
+  @override
+  String get checkInStreakAllDone => '이번 달 연속 보상을 모두 받았어요!';
+
+  @override
+  String checkInStreakDaysLeft(int count) {
+    return '선물까지 $count일 남음';
+  }
+
+  @override
+  String get checkInLegendChecked => '출석함';
+
+  @override
+  String get checkInLegendMissed => '놓침';
+
+  @override
+  String get checkInLegendFuture => '예정';
+
+  @override
+  String checkInGiftStreak(int count) {
+    return '$count일 연속 선물';
+  }
+
+  @override
+  String checkInMakeUpTitle(String date) {
+    return '$date을 채울까요?';
+  }
+
+  @override
+  String get checkInMakeUpBody => '짧은 광고를 보면 이 날을 채울 수 있어요. 연속 기록이 다시 이어집니다.';
+
+  @override
+  String get checkInMakeUpWatch => '광고 보기';
+
+  @override
+  String checkInMadeUp(String date) {
+    return '$date을 채웠어요';
+  }
 
   @override
   String dashboardDailyReminder(String rewards, String time) {
@@ -796,12 +819,4 @@ class AppLocalizationsKo extends AppLocalizations {
   String dashboardDailyReminderBoth(String hints, String wands) {
     return '$hints와 $wands';
   }
-
-  @override
-  String checkInLegendMilestone(int count) {
-    return '출석 $count회마다 선물';
-  }
-
-  @override
-  String get checkInLegendPremium => '광고 제거 패키지 보상';
 }

@@ -1167,12 +1167,6 @@ abstract class AppLocalizations {
   /// **'Checked in today'**
   String get checkInDoneToday;
 
-  /// No description provided for @checkInNextGift.
-  ///
-  /// In en, this message translates to:
-  /// **'{count, plural, =1{Next gift on your next check-in} other{Next gift in {count} check-ins}}'**
-  String checkInNextGift(int count);
-
   /// No description provided for @checkInCheckedIn.
   ///
   /// In en, this message translates to:
@@ -1203,12 +1197,6 @@ abstract class AppLocalizations {
   /// **'{reward} (today only)'**
   String rewardTodayOnly(String reward);
 
-  /// No description provided for @checkInMonthGifts.
-  ///
-  /// In en, this message translates to:
-  /// **'Gifts this month'**
-  String get checkInMonthGifts;
-
   /// No description provided for @navHome.
   ///
   /// In en, this message translates to:
@@ -1233,23 +1221,11 @@ abstract class AppLocalizations {
   /// **'More'**
   String get meMore;
 
-  /// No description provided for @checkInNotYetToday.
-  ///
-  /// In en, this message translates to:
-  /// **'Not checked in today'**
-  String get checkInNotYetToday;
-
   /// No description provided for @checkInTodayButton.
   ///
   /// In en, this message translates to:
   /// **'Check in today'**
   String get checkInTodayButton;
-
-  /// No description provided for @checkInGiftsLeftShort.
-  ///
-  /// In en, this message translates to:
-  /// **'{count, plural, =1{1 more for a gift} other{{count} more for a gift}}'**
-  String checkInGiftsLeftShort(int count);
 
   /// No description provided for @checkInGiftToday.
   ///
@@ -1257,47 +1233,101 @@ abstract class AppLocalizations {
   /// **'Gift today!'**
   String get checkInGiftToday;
 
-  /// No description provided for @checkInGiftMilestone.
-  ///
-  /// In en, this message translates to:
-  /// **'{count, plural, =1{Gift for 1 check-in} other{Gift for {count} check-ins}}'**
-  String checkInGiftMilestone(int count);
-
   /// No description provided for @checkInGiftCollect.
   ///
   /// In en, this message translates to:
   /// **'Collect'**
   String get checkInGiftCollect;
 
-  /// No description provided for @checkInTotalHints.
+  /// No description provided for @checkInGiftDouble.
   ///
   /// In en, this message translates to:
-  /// **'Hints'**
-  String get checkInTotalHints;
+  /// **'Collect x2'**
+  String get checkInGiftDouble;
 
-  /// No description provided for @checkInTotalWands.
+  /// No description provided for @checkInStreakTitle.
   ///
   /// In en, this message translates to:
-  /// **'Magic wands'**
-  String get checkInTotalWands;
+  /// **'{count}-day streak'**
+  String checkInStreakTitle(int count);
 
-  /// No description provided for @checkInTotalDailyHints.
+  /// No description provided for @checkInStreakDays.
   ///
   /// In en, this message translates to:
-  /// **'Hints (today only)'**
-  String get checkInTotalDailyHints;
+  /// **'{count, plural, =1{1 day} other{{count} days}}'**
+  String checkInStreakDays(int count);
 
-  /// No description provided for @checkInTotalDailyWands.
+  /// No description provided for @checkInStreakMakeUp.
   ///
   /// In en, this message translates to:
-  /// **'Magic wands (today only)'**
-  String get checkInTotalDailyWands;
+  /// **'Make up {missed, plural, =1{1 missed day} other{{missed} missed days}} to grow your streak to {days}'**
+  String checkInStreakMakeUp(int missed, String days);
 
-  /// No description provided for @checkInPremiumNotYet.
+  /// No description provided for @checkInStreakKeepGoing.
   ///
   /// In en, this message translates to:
-  /// **'Check in to get 2 hints and 1 magic wand for today.'**
-  String get checkInPremiumNotYet;
+  /// **'Check in every day to keep your streak'**
+  String get checkInStreakKeepGoing;
+
+  /// No description provided for @checkInStreakAllDone.
+  ///
+  /// In en, this message translates to:
+  /// **'You got every streak gift this month!'**
+  String get checkInStreakAllDone;
+
+  /// No description provided for @checkInStreakDaysLeft.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =1{1 more day for a gift} other{{count} more days for a gift}}'**
+  String checkInStreakDaysLeft(int count);
+
+  /// No description provided for @checkInLegendChecked.
+  ///
+  /// In en, this message translates to:
+  /// **'Checked in'**
+  String get checkInLegendChecked;
+
+  /// No description provided for @checkInLegendMissed.
+  ///
+  /// In en, this message translates to:
+  /// **'Missed'**
+  String get checkInLegendMissed;
+
+  /// No description provided for @checkInLegendFuture.
+  ///
+  /// In en, this message translates to:
+  /// **'Coming up'**
+  String get checkInLegendFuture;
+
+  /// No description provided for @checkInGiftStreak.
+  ///
+  /// In en, this message translates to:
+  /// **'{count}-day streak gift'**
+  String checkInGiftStreak(int count);
+
+  /// No description provided for @checkInMakeUpTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Make up {date}?'**
+  String checkInMakeUpTitle(String date);
+
+  /// No description provided for @checkInMakeUpBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Watch a short ad to make up this day. Your streak will be joined back up.'**
+  String get checkInMakeUpBody;
+
+  /// No description provided for @checkInMakeUpWatch.
+  ///
+  /// In en, this message translates to:
+  /// **'Watch ad'**
+  String get checkInMakeUpWatch;
+
+  /// No description provided for @checkInMadeUp.
+  ///
+  /// In en, this message translates to:
+  /// **'Made up {date}'**
+  String checkInMadeUp(String date);
 
   /// No description provided for @dashboardDailyReminder.
   ///
@@ -1478,18 +1508,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'{hints} and {wands}'**
   String dashboardDailyReminderBoth(String hints, String wands);
-
-  /// No description provided for @checkInLegendMilestone.
-  ///
-  /// In en, this message translates to:
-  /// **'Gift every {count} check-ins'**
-  String checkInLegendMilestone(int count);
-
-  /// No description provided for @checkInLegendPremium.
-  ///
-  /// In en, this message translates to:
-  /// **'Ad-free pack reward'**
-  String get checkInLegendPremium;
 }
 
 class _AppLocalizationsDelegate

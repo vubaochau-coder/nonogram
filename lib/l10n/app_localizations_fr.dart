@@ -634,17 +634,6 @@ class AppLocalizationsFr extends AppLocalizations {
   String get checkInDoneToday => 'Présence validée aujourd\'hui';
 
   @override
-  String checkInNextGift(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: 'Prochain cadeau dans $count présences',
-      one: 'Prochain cadeau à ta prochaine présence',
-    );
-    return '$_temp0';
-  }
-
-  @override
   String get checkInCheckedIn => 'Présence validée !';
 
   @override
@@ -680,9 +669,6 @@ class AppLocalizationsFr extends AppLocalizations {
   }
 
   @override
-  String get checkInMonthGifts => 'Cadeaux du mois';
-
-  @override
   String get navHome => 'Accueil';
 
   @override
@@ -695,55 +681,93 @@ class AppLocalizationsFr extends AppLocalizations {
   String get meMore => 'Plus';
 
   @override
-  String get checkInNotYetToday => 'Présence pas encore validée aujourd\'hui';
-
-  @override
   String get checkInTodayButton => 'Valider ma présence';
-
-  @override
-  String checkInGiftsLeftShort(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: 'Encore $count pour un cadeau',
-      one: 'Encore 1 pour un cadeau',
-    );
-    return '$_temp0';
-  }
 
   @override
   String get checkInGiftToday => 'Cadeau aujourd\'hui !';
 
   @override
-  String checkInGiftMilestone(int count) {
+  String get checkInGiftCollect => 'Récupérer';
+
+  @override
+  String get checkInGiftDouble => 'Récupérer x2';
+
+  @override
+  String checkInStreakTitle(int count) {
+    return 'Série de $count jours';
+  }
+
+  @override
+  String checkInStreakDays(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: 'Cadeau pour $count présences',
-      one: 'Cadeau pour 1 présence',
+      other: '$count jours',
+      one: '1 jour',
     );
     return '$_temp0';
   }
 
   @override
-  String get checkInGiftCollect => 'Récupérer';
+  String checkInStreakMakeUp(int missed, String days) {
+    String _temp0 = intl.Intl.pluralLogic(
+      missed,
+      locale: localeName,
+      other: '$missed jours manqués',
+      one: '1 jour manqué',
+    );
+    return 'Rattrapez $_temp0 pour porter votre série à $days';
+  }
 
   @override
-  String get checkInTotalHints => 'Indices';
+  String get checkInStreakKeepGoing =>
+      'Pointez chaque jour pour garder votre série';
 
   @override
-  String get checkInTotalWands => 'Baguettes magiques';
+  String get checkInStreakAllDone =>
+      'Vous avez tous les cadeaux de série ce mois-ci !';
 
   @override
-  String get checkInTotalDailyHints => 'Indices (aujourd\'hui seulement)';
+  String checkInStreakDaysLeft(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Encore $count jours pour un cadeau',
+      one: 'Encore 1 jour pour un cadeau',
+    );
+    return '$_temp0';
+  }
 
   @override
-  String get checkInTotalDailyWands =>
-      'Baguettes magiques (aujourd\'hui seulement)';
+  String get checkInLegendChecked => 'Pointé';
 
   @override
-  String get checkInPremiumNotYet =>
-      'Valide ta présence pour recevoir 2 indices et 1 baguette magique pour aujourd\'hui.';
+  String get checkInLegendMissed => 'Manqué';
+
+  @override
+  String get checkInLegendFuture => 'À venir';
+
+  @override
+  String checkInGiftStreak(int count) {
+    return 'Cadeau de série de $count jours';
+  }
+
+  @override
+  String checkInMakeUpTitle(String date) {
+    return 'Rattraper le $date ?';
+  }
+
+  @override
+  String get checkInMakeUpBody =>
+      'Regardez une courte pub pour rattraper ce jour. Votre série sera reconstituée.';
+
+  @override
+  String get checkInMakeUpWatch => 'Voir la pub';
+
+  @override
+  String checkInMadeUp(String date) {
+    return '$date rattrapé';
+  }
 
   @override
   String dashboardDailyReminder(String rewards, String time) {
@@ -850,12 +874,4 @@ class AppLocalizationsFr extends AppLocalizations {
   String dashboardDailyReminderBoth(String hints, String wands) {
     return '$hints et $wands';
   }
-
-  @override
-  String checkInLegendMilestone(int count) {
-    return 'Cadeau toutes les $count présences';
-  }
-
-  @override
-  String get checkInLegendPremium => 'Récompense du pack sans publicité';
 }

@@ -597,11 +597,6 @@ class AppLocalizationsZh extends AppLocalizations {
   String get checkInDoneToday => '今天已签到';
 
   @override
-  String checkInNextGift(int count) {
-    return '再签到 $count 次即可获得下一份礼物';
-  }
-
-  @override
   String get checkInCheckedIn => '签到成功！';
 
   @override
@@ -625,9 +620,6 @@ class AppLocalizationsZh extends AppLocalizations {
   }
 
   @override
-  String get checkInMonthGifts => '本月礼物';
-
-  @override
   String get navHome => '首页';
 
   @override
@@ -640,41 +632,72 @@ class AppLocalizationsZh extends AppLocalizations {
   String get meMore => '更多';
 
   @override
-  String get checkInNotYetToday => '今天还没签到';
-
-  @override
   String get checkInTodayButton => '今日签到';
-
-  @override
-  String checkInGiftsLeftShort(int count) {
-    return '再签 $count 次得礼物';
-  }
 
   @override
   String get checkInGiftToday => '今天有礼物！';
 
   @override
-  String checkInGiftMilestone(int count) {
-    return '累计签到 $count 次礼物';
-  }
-
-  @override
   String get checkInGiftCollect => '领取';
 
   @override
-  String get checkInTotalHints => '提示';
+  String get checkInGiftDouble => '领取 x2';
 
   @override
-  String get checkInTotalWands => '魔法棒';
+  String checkInStreakTitle(int count) {
+    return '连续 $count 天';
+  }
 
   @override
-  String get checkInTotalDailyHints => '提示（仅限今天）';
+  String checkInStreakDays(int count) {
+    return '$count 天';
+  }
 
   @override
-  String get checkInTotalDailyWands => '魔法棒（仅限今天）';
+  String checkInStreakMakeUp(int missed, String days) {
+    return '补签 $missed 天，连续天数将达到 $days';
+  }
 
   @override
-  String get checkInPremiumNotYet => '签到即可获得今天可用的 2 次提示和 1 次魔法棒。';
+  String get checkInStreakKeepGoing => '每天签到，保持连续';
+
+  @override
+  String get checkInStreakAllDone => '本月连续签到奖励已全部领取！';
+
+  @override
+  String checkInStreakDaysLeft(int count) {
+    return '再签 $count 天得礼物';
+  }
+
+  @override
+  String get checkInLegendChecked => '已签到';
+
+  @override
+  String get checkInLegendMissed => '漏签';
+
+  @override
+  String get checkInLegendFuture => '未到';
+
+  @override
+  String checkInGiftStreak(int count) {
+    return '连续 $count 天礼物';
+  }
+
+  @override
+  String checkInMakeUpTitle(String date) {
+    return '补签 $date？';
+  }
+
+  @override
+  String get checkInMakeUpBody => '观看一段短广告即可补签这一天，连续天数会重新接上。';
+
+  @override
+  String get checkInMakeUpWatch => '观看广告';
+
+  @override
+  String checkInMadeUp(String date) {
+    return '已补签 $date';
+  }
 
   @override
   String dashboardDailyReminder(String rewards, String time) {
@@ -771,14 +794,6 @@ class AppLocalizationsZh extends AppLocalizations {
   String dashboardDailyReminderBoth(String hints, String wands) {
     return '$hints和$wands';
   }
-
-  @override
-  String checkInLegendMilestone(int count) {
-    return '每签到 $count 次有礼物';
-  }
-
-  @override
-  String get checkInLegendPremium => '无广告套餐奖励';
 }
 
 /// The translations for Chinese, using the Han script (`zh_Hant`).
@@ -1375,11 +1390,6 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
   String get checkInDoneToday => '今天已簽到';
 
   @override
-  String checkInNextGift(int count) {
-    return '再簽到 $count 次即可獲得下一份禮物';
-  }
-
-  @override
   String get checkInCheckedIn => '簽到成功！';
 
   @override
@@ -1403,9 +1413,6 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
   }
 
   @override
-  String get checkInMonthGifts => '本月禮物';
-
-  @override
   String get navHome => '首頁';
 
   @override
@@ -1418,41 +1425,72 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
   String get meMore => '更多';
 
   @override
-  String get checkInNotYetToday => '今天還沒簽到';
-
-  @override
   String get checkInTodayButton => '今日簽到';
-
-  @override
-  String checkInGiftsLeftShort(int count) {
-    return '再簽 $count 次得禮物';
-  }
 
   @override
   String get checkInGiftToday => '今天有禮物！';
 
   @override
-  String checkInGiftMilestone(int count) {
-    return '累計簽到 $count 次禮物';
-  }
-
-  @override
   String get checkInGiftCollect => '領取';
 
   @override
-  String get checkInTotalHints => '提示';
+  String get checkInGiftDouble => '領取 x2';
 
   @override
-  String get checkInTotalWands => '魔法棒';
+  String checkInStreakTitle(int count) {
+    return '連續 $count 天';
+  }
 
   @override
-  String get checkInTotalDailyHints => '提示（僅限今天）';
+  String checkInStreakDays(int count) {
+    return '$count 天';
+  }
 
   @override
-  String get checkInTotalDailyWands => '魔法棒（僅限今天）';
+  String checkInStreakMakeUp(int missed, String days) {
+    return '補簽 $missed 天，連續天數將達到 $days';
+  }
 
   @override
-  String get checkInPremiumNotYet => '簽到即可獲得今天可用的 2 次提示和 1 次魔法棒。';
+  String get checkInStreakKeepGoing => '每天簽到，保持連續';
+
+  @override
+  String get checkInStreakAllDone => '本月連續簽到獎勵已全部領取！';
+
+  @override
+  String checkInStreakDaysLeft(int count) {
+    return '再簽 $count 天得禮物';
+  }
+
+  @override
+  String get checkInLegendChecked => '已簽到';
+
+  @override
+  String get checkInLegendMissed => '漏簽';
+
+  @override
+  String get checkInLegendFuture => '未到';
+
+  @override
+  String checkInGiftStreak(int count) {
+    return '連續 $count 天禮物';
+  }
+
+  @override
+  String checkInMakeUpTitle(String date) {
+    return '補簽 $date？';
+  }
+
+  @override
+  String get checkInMakeUpBody => '觀看一段短廣告即可補簽這一天，連續天數會重新接上。';
+
+  @override
+  String get checkInMakeUpWatch => '觀看廣告';
+
+  @override
+  String checkInMadeUp(String date) {
+    return '已補簽 $date';
+  }
 
   @override
   String dashboardDailyReminder(String rewards, String time) {
@@ -1549,12 +1587,4 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
   String dashboardDailyReminderBoth(String hints, String wands) {
     return '$hints和$wands';
   }
-
-  @override
-  String checkInLegendMilestone(int count) {
-    return '每簽到 $count 次有禮物';
-  }
-
-  @override
-  String get checkInLegendPremium => '無廣告套餐獎勵';
 }

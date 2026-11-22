@@ -613,11 +613,6 @@ class AppLocalizationsJa extends AppLocalizations {
   String get checkInDoneToday => '今日はチェックイン済み';
 
   @override
-  String checkInNextGift(int count) {
-    return 'あと$count回のチェックインで次のプレゼント';
-  }
-
-  @override
   String get checkInCheckedIn => 'チェックインしました！';
 
   @override
@@ -641,9 +636,6 @@ class AppLocalizationsJa extends AppLocalizations {
   }
 
   @override
-  String get checkInMonthGifts => '今月のプレゼント';
-
-  @override
   String get navHome => 'ホーム';
 
   @override
@@ -656,41 +648,72 @@ class AppLocalizationsJa extends AppLocalizations {
   String get meMore => 'その他';
 
   @override
-  String get checkInNotYetToday => '今日はまだチェックインしていません';
-
-  @override
   String get checkInTodayButton => '今日のチェックイン';
-
-  @override
-  String checkInGiftsLeftShort(int count) {
-    return 'あと$count回でプレゼント';
-  }
 
   @override
   String get checkInGiftToday => '今日はプレゼントあり！';
 
   @override
-  String checkInGiftMilestone(int count) {
-    return 'チェックイン$count回達成のプレゼント';
-  }
-
-  @override
   String get checkInGiftCollect => '受け取る';
 
   @override
-  String get checkInTotalHints => 'ヒント';
+  String get checkInGiftDouble => '2倍で受け取る';
 
   @override
-  String get checkInTotalWands => '魔法の杖';
+  String checkInStreakTitle(int count) {
+    return '$count日連続';
+  }
 
   @override
-  String get checkInTotalDailyHints => 'ヒント（今日のみ）';
+  String checkInStreakDays(int count) {
+    return '$count日';
+  }
 
   @override
-  String get checkInTotalDailyWands => '魔法の杖（今日のみ）';
+  String checkInStreakMakeUp(int missed, String days) {
+    return '逃した$missed日を取り戻すと、連続記録が$daysになります';
+  }
 
   @override
-  String get checkInPremiumNotYet => 'チェックインすると今日使えるヒント2回と魔法の杖1回がもらえます。';
+  String get checkInStreakKeepGoing => '毎日チェックインして連続記録をキープしよう';
+
+  @override
+  String get checkInStreakAllDone => '今月の連続ボーナスをすべて獲得しました！';
+
+  @override
+  String checkInStreakDaysLeft(int count) {
+    return 'あと$count日でプレゼント';
+  }
+
+  @override
+  String get checkInLegendChecked => 'チェックイン済み';
+
+  @override
+  String get checkInLegendMissed => '未チェック';
+
+  @override
+  String get checkInLegendFuture => 'これから';
+
+  @override
+  String checkInGiftStreak(int count) {
+    return '$count日連続ボーナス';
+  }
+
+  @override
+  String checkInMakeUpTitle(String date) {
+    return '$dateを取り戻しますか？';
+  }
+
+  @override
+  String get checkInMakeUpBody => '短い広告を見ると、この日を取り戻せます。連続記録がつながります。';
+
+  @override
+  String get checkInMakeUpWatch => '広告を見る';
+
+  @override
+  String checkInMadeUp(String date) {
+    return '$dateを取り戻しました';
+  }
 
   @override
   String dashboardDailyReminder(String rewards, String time) {
@@ -794,12 +817,4 @@ class AppLocalizationsJa extends AppLocalizations {
   String dashboardDailyReminderBoth(String hints, String wands) {
     return '$hintsと$wands';
   }
-
-  @override
-  String checkInLegendMilestone(int count) {
-    return '$count回チェックインごとのプレゼント';
-  }
-
-  @override
-  String get checkInLegendPremium => '広告なしパックの特典';
 }

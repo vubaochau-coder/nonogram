@@ -308,14 +308,6 @@
   "checkInTitle": "Daily check-in",
   "checkInAction": "Check in",
   "checkInDoneToday": "Checked in today",
-  "checkInNextGift": "{count, plural, =1{Next gift on your next check-in} other{Next gift in {count} check-ins}}",
-  "@checkInNextGift": {
-    "placeholders": {
-      "count": {
-        "type": "int"
-      }
-    }
-  },
   "checkInCheckedIn": "Checked in!",
   "checkInReceived": "You got {rewards}.",
   "@checkInReceived": {
@@ -349,36 +341,80 @@
       }
     }
   },
-  "checkInMonthGifts": "Gifts this month",
   "navHome": "Home",
   "navMe": "Me",
   "meHelp": "Help",
   "meMore": "More",
-  "checkInNotYetToday": "Not checked in today",
   "checkInTodayButton": "Check in today",
-  "checkInGiftsLeftShort": "{count, plural, =1{1 more for a gift} other{{count} more for a gift}}",
-  "@checkInGiftsLeftShort": {
-    "placeholders": {
-      "count": {
-        "type": "int"
-      }
-    }
-  },
   "checkInGiftToday": "Gift today!",
-  "checkInGiftMilestone": "{count, plural, =1{Gift for 1 check-in} other{Gift for {count} check-ins}}",
-  "@checkInGiftMilestone": {
+  "checkInGiftCollect": "Collect",
+  "checkInGiftDouble": "Collect x2",
+  "checkInStreakTitle": "{count}-day streak",
+  "@checkInStreakTitle": {
     "placeholders": {
       "count": {
         "type": "int"
       }
     }
   },
-  "checkInGiftCollect": "Collect",
-  "checkInTotalHints": "Hints",
-  "checkInTotalWands": "Magic wands",
-  "checkInTotalDailyHints": "Hints (today only)",
-  "checkInTotalDailyWands": "Magic wands (today only)",
-  "checkInPremiumNotYet": "Check in to get 2 hints and 1 magic wand for today.",
+  "checkInStreakDays": "{count, plural, =1{1 day} other{{count} days}}",
+  "@checkInStreakDays": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "checkInStreakMakeUp": "Make up {missed, plural, =1{1 missed day} other{{missed} missed days}} to grow your streak to {days}",
+  "@checkInStreakMakeUp": {
+    "placeholders": {
+      "missed": {
+        "type": "int"
+      },
+      "days": {
+        "type": "String"
+      }
+    }
+  },
+  "checkInStreakKeepGoing": "Check in every day to keep your streak",
+  "checkInStreakAllDone": "You got every streak gift this month!",
+  "checkInStreakDaysLeft": "{count, plural, =1{1 more day for a gift} other{{count} more days for a gift}}",
+  "@checkInStreakDaysLeft": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "checkInLegendChecked": "Checked in",
+  "checkInLegendMissed": "Missed",
+  "checkInLegendFuture": "Coming up",
+  "checkInGiftStreak": "{count}-day streak gift",
+  "@checkInGiftStreak": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "checkInMakeUpTitle": "Make up {date}?",
+  "@checkInMakeUpTitle": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "checkInMakeUpBody": "Watch a short ad to make up this day. Your streak will be joined back up.",
+  "checkInMakeUpWatch": "Watch ad",
+  "checkInMadeUp": "Made up {date}",
+  "@checkInMadeUp": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
   "dashboardDailyReminder": "You have {rewards} that will expire in {time}. Use them now so they don't go to waste.",
   "@dashboardDailyReminder": {
     "placeholders": {
@@ -419,8 +455,6 @@
   "powerUpSpendPermanent": "Permanent uses",
   "premiumBenefitsFootnote": "Daily uses do not roll over to the next day. Milestone check-in rewards are permanent uses and build up as normal.",
   "dashboardDailyReminderBoth": "{hints} and {wands}",
-  "checkInLegendMilestone": "Gift every {count} check-ins",
-  "checkInLegendPremium": "Ad-free pack reward",
   "@dashboardDailyReminderBoth": {
     "placeholders": {
       "hints": {
@@ -428,13 +462,6 @@
       },
       "wands": {
         "type": "String"
-      }
-    }
-  },
-  "@checkInLegendMilestone": {
-    "placeholders": {
-      "count": {
-        "type": "int"
       }
     }
   }
