@@ -675,6 +675,9 @@ class AppLocalizationsTr extends AppLocalizations {
   String get checkInGiftCollect => 'Al';
 
   @override
+  String get checkInGiftDouble => 'x2 Al';
+
+  @override
   String checkInStreakTitle(int count) {
     return '$count günlük seri';
   }

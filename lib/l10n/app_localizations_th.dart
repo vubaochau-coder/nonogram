@@ -673,6 +673,9 @@ class AppLocalizationsTh extends AppLocalizations {
   String get checkInGiftCollect => 'รับ';
 
   @override
+  String get checkInGiftDouble => 'รับ x2';
+
+  @override
   String checkInStreakTitle(int count) {
     return 'ต่อเนื่อง $count วัน';
   }

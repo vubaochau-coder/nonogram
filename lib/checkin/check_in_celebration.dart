@@ -65,6 +65,7 @@ class CheckInCelebration {
     this.giftTarget,
     this.onLand,
     this.onCollected,
+    this.onDouble,
     this.sounds,
   }) : assert(gift == null || badge != null),
        _overlay = overlay {
@@ -97,6 +98,10 @@ class CheckInCelebration {
 
   final VoidCallback? onLand;
   final VoidCallback? onCollected;
+
+  /// Nút "Nhận x2": xem quảng cáo, trả về true nếu đã phát thêm quà. Null:
+  /// không có nút (bản không có quảng cáo).
+  final Future<bool> Function()? onDouble;
   final AppSoundController? sounds;
 
   final OverlayState _overlay;
@@ -107,6 +112,14 @@ class CheckInCelebration {
 
   /// Lúc bấm "Nhận" (null: chưa bấm).
   double? _collectAt;
+
+  /// Đang xem quảng cáo "Nhận x2".
+  bool _doubling = false;
+
+  /// Đã nhận gấp đôi; lúc đó (thời điểm [_doubledAt]) số quà nảy lên rồi tự
+  /// bay về mốc.
+  bool doubled = false;
+  double? _doubledAt;
   final _fired = <String>{};
 
   double get time => _time.value;
@@ -125,11 +138,30 @@ class CheckInCelebration {
 
   /// Nhận quà (nút "Nhận" hoặc nút quay lại).
   void collect() {
-    if (gift == null || _collectAt != null) return;
+    if (gift == null || _collectAt != null || _doubling) return;
     if (time < CheckInTimeline.collectReady) return;
     _collectAt = time;
     HapticFeedback.selectionClick();
     sounds?.play(GameSound.whoosh);
+  }
+
+  /// Nút "Nhận x2".
+  Future<void> doubleUp() async {
+    final onDouble = this.onDouble;
+    if (onDouble == null || gift == null || doubled) return;
+    if (_collectAt != null || _doubling) return;
+    if (time < CheckInTimeline.collectReady) return;
+    _doubling = true;
+    HapticFeedback.selectionClick();
+    try {
+      if (!await onDouble() || _done.isCompleted) return;
+      doubled = true;
+      _doubledAt = time;
+      HapticFeedback.heavyImpact();
+      sounds?.play(GameSound.fanfare);
+    } finally {
+      _doubling = false;
+    }
   }
 
   void _once(String id, double at, VoidCallback action) {
@@ -170,6 +202,11 @@ class CheckInCelebration {
       HapticFeedback.heavyImpact();
       sounds?.play(GameSound.fanfare);
     });
+    // Đã nhận gấp đôi: cho xem số mới một chút rồi tự bay về mốc.
+    final doubledAt = _doubledAt;
+    if (doubledAt != null && _collectAt == null && time >= doubledAt + 0.9) {
+      collect();
+    }
     final collectAt = _collectAt;
     if (collectAt != null &&
         time >= collectAt + CheckInTimeline.collectDuration) {
@@ -284,6 +321,7 @@ class _CelebrationLayer extends StatelessWidget {
   ) {
     final gift = c.gift!;
     final l10n = context.l10n;
+    final colors = _FxColors.of(context);
     const open = CheckInTimeline.open;
     final rise = _seg(t, open + 0.05, open + 0.45);
     if (rise <= 0) return const [];
@@ -301,7 +339,14 @@ class _CelebrationLayer extends StatelessWidget {
         collecting ? 1 - 0.75 * fly : Curves.easeOutBack.transform(rise);
     final hide = collecting ? _seg(ct, 0, 0.2) : 0.0;
     final textA = _seg(t, open + 0.3, open + 0.6) * (1 - hide);
-    final buttonA = _seg(t, open + 0.6, open + 0.9) * (1 - hide);
+    final buttonA =
+        _seg(t, open + 0.6, open + 0.9) * (1 - hide) * (c.doubled ? 0 : 1);
+    final doubledAt = c._doubledAt;
+    final shown =
+        c.doubled ? CheckInReward(gift.powerUp, gift.amount * 2) : gift;
+    // Vừa nhân đôi: số quà nảy lên.
+    final pop = doubledAt == null ? 0.0 : _seg(t, doubledAt, doubledAt + 0.4);
+    final popScale = pop > 0 && pop < 1 ? 1 + 0.35 * sin(pi * pop) : 1.0;
     // Màu theo loại quà: quà mốc (vĩnh viễn) dùng màu primary, quà trong ngày
     // dùng vàng — khớp badge trên nút gợi ý / gậy phép và trang quyền lợi.
     final rewardTint = rewardColor(context, daily: gift.daily);
@@ -341,12 +386,16 @@ class _CelebrationLayer extends StatelessWidget {
               opacity: textA,
               child: Column(
                 children: [
-                  Text(
-                    '+${context.rewardLabel(gift)}',
-                    textAlign: TextAlign.center,
-                    style: context.headlineMedium.copyWith(
-                      color: Colors.white,
-                      fontWeight: FontWeight.w900,
+                  Transform.scale(
+                    scale: popScale,
+                    child: Text(
+                      '+${context.rewardLabel(shown)}',
+                      key: const ValueKey('check-in-gift-amount'),
+                      textAlign: TextAlign.center,
+                      style: context.headlineMedium.copyWith(
+                        color: c.doubled ? colors.gold : Colors.white,
+                        fontWeight: FontWeight.w900,
+                      ),
                     ),
                   ),
                   const SizedBox(height: 4),
@@ -366,27 +415,75 @@ class _CelebrationLayer extends StatelessWidget {
         Positioned(
           left: 0,
           right: 0,
-          top: boxCenter.dy + 170,
+          top: boxCenter.dy + 160,
           child: Center(
             child: Opacity(
               opacity: buttonA,
-              child: SizedBox(
-                width: 200,
-                height: 54,
-                child: FilledButton(
-                  key: const ValueKey('check-in-gift-collect'),
-                  onPressed: collecting ? null : c.collect,
-                  style: FilledButton.styleFrom(
-                    backgroundColor: Colors.white,
-                    foregroundColor: context.color.primary,
-                    disabledBackgroundColor: Colors.white,
-                    disabledForegroundColor: context.color.primary,
-                    textStyle: context.titleMedium.copyWith(
-                      fontWeight: FontWeight.w900,
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  if (c.onDouble != null) ...[
+                    SizedBox(
+                      width: 230,
+                      height: 56,
+                      child: FilledButton.icon(
+                        key: const ValueKey('check-in-gift-double'),
+                        onPressed:
+                            collecting || c._doubling ? null : c.doubleUp,
+                        icon: const Icon(Icons.play_circle_fill_rounded),
+                        label: Text(l10n.checkInGiftDouble),
+                        style: FilledButton.styleFrom(
+                          backgroundColor: colors.gold,
+                          foregroundColor: const Color(0xFF2B1A00),
+                          disabledBackgroundColor: colors.gold.withValues(
+                            alpha: 0.6,
+                          ),
+                          disabledForegroundColor: const Color(0xFF2B1A00),
+                          textStyle: context.titleMedium.copyWith(
+                            fontWeight: FontWeight.w900,
+                          ),
+                        ),
+                      ),
                     ),
+                    const SizedBox(height: 10),
+                  ],
+                  SizedBox(
+                    width: 230,
+                    height: c.onDouble != null ? 46 : 54,
+                    child:
+                        c.onDouble != null
+                            ? TextButton(
+                              key: const ValueKey('check-in-gift-collect'),
+                              onPressed:
+                                  collecting || c._doubling ? null : c.collect,
+                              style: TextButton.styleFrom(
+                                backgroundColor: Colors.white.withValues(
+                                  alpha: 0.16,
+                                ),
+                                foregroundColor: Colors.white,
+                                disabledForegroundColor: Colors.white70,
+                                textStyle: context.titleMedium.copyWith(
+                                  fontWeight: FontWeight.w800,
+                                ),
+                              ),
+                              child: Text(l10n.checkInGiftCollect),
+                            )
+                            : FilledButton(
+                              key: const ValueKey('check-in-gift-collect'),
+                              onPressed: collecting ? null : c.collect,
+                              style: FilledButton.styleFrom(
+                                backgroundColor: Colors.white,
+                                foregroundColor: context.color.primary,
+                                disabledBackgroundColor: Colors.white,
+                                disabledForegroundColor: context.color.primary,
+                                textStyle: context.titleMedium.copyWith(
+                                  fontWeight: FontWeight.w900,
+                                ),
+                              ),
+                              child: Text(l10n.checkInGiftCollect),
+                            ),
                   ),
-                  child: Text(l10n.checkInGiftCollect),
-                ),
+                ],
               ),
             ),
           ),

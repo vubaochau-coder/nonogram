@@ -186,6 +186,7 @@
   "checkInTodayButton": "今日簽到",
   "checkInGiftToday": "今天有禮物！",
   "checkInGiftCollect": "領取",
+  "checkInGiftDouble": "領取 x2",
   "checkInStreakTitle": "連續 {count} 天",
   "checkInStreakDays": "{count} 天",
   "checkInStreakMakeUp": "補簽 {missed} 天，連續天數將達到 {days}",

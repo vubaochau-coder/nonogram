@@ -231,6 +231,7 @@
   "checkInTodayButton": "Điểm danh hôm nay",
   "checkInGiftToday": "Hôm nay có quà!",
   "checkInGiftCollect": "Nhận",
+  "checkInGiftDouble": "Nhận x2",
   "checkInStreakTitle": "Chuỗi {count} ngày",
   "checkInStreakDays": "{count} ngày",
   "checkInStreakMakeUp": "Bù {missed} ngày bỏ lỡ để nối chuỗi thành {days}",

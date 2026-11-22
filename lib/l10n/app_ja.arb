@@ -186,6 +186,7 @@
   "checkInTodayButton": "今日のチェックイン",
   "checkInGiftToday": "今日はプレゼントあり！",
   "checkInGiftCollect": "受け取る",
+  "checkInGiftDouble": "2倍で受け取る",
   "checkInStreakTitle": "{count}日連続",
   "checkInStreakDays": "{count}日",
   "checkInStreakMakeUp": "逃した{missed}日を取り戻すと、連続記録が{days}になります",

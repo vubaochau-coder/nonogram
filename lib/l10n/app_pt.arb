@@ -186,6 +186,7 @@
   "checkInTodayButton": "Marcar presença hoje",
   "checkInGiftToday": "Hoje tem presente!",
   "checkInGiftCollect": "Pegar",
+  "checkInGiftDouble": "Coletar x2",
   "checkInStreakTitle": "Sequência de {count} dias",
   "checkInStreakDays": "{count, plural, =1{1 dia} other{{count} dias}}",
   "checkInStreakMakeUp": "Recupere {missed, plural, =1{1 dia perdido} other{{missed} dias perdidos}} para levar sua sequência a {days}",

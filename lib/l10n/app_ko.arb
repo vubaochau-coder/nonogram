@@ -186,6 +186,7 @@
   "checkInTodayButton": "오늘 출석 체크",
   "checkInGiftToday": "오늘은 선물이 있어요!",
   "checkInGiftCollect": "받기",
+  "checkInGiftDouble": "2배로 받기",
   "checkInStreakTitle": "{count}일 연속",
   "checkInStreakDays": "{count}일",
   "checkInStreakMakeUp": "놓친 {missed}일을 채우면 연속 기록이 {days}이 됩니다",

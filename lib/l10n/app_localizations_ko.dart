@@ -658,6 +658,9 @@ class AppLocalizationsKo extends AppLocalizations {
   String get checkInGiftCollect => '받기';
 
   @override
+  String get checkInGiftDouble => '2배로 받기';
+
+  @override
   String checkInStreakTitle(int count) {
     return '$count일 연속';
   }

@@ -657,6 +657,9 @@ class AppLocalizationsJa extends AppLocalizations {
   String get checkInGiftCollect => '受け取る';
 
   @override
+  String get checkInGiftDouble => '2倍で受け取る';
+
+  @override
   String checkInStreakTitle(int count) {
     return '$count日連続';
   }

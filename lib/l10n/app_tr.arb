@@ -186,6 +186,7 @@
   "checkInTodayButton": "Bugün giriş yap",
   "checkInGiftToday": "Bugün hediye var!",
   "checkInGiftCollect": "Al",
+  "checkInGiftDouble": "x2 Al",
   "checkInStreakTitle": "{count} günlük seri",
   "checkInStreakDays": "{count} gün",
   "checkInStreakMakeUp": "Serini {days} yapmak için kaçırdığın {missed} günü telafi et",

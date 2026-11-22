@@ -689,6 +689,9 @@ class AppLocalizationsPt extends AppLocalizations {
   String get checkInGiftCollect => 'Pegar';
 
   @override
+  String get checkInGiftDouble => 'Coletar x2';
+
+  @override
   String checkInStreakTitle(int count) {
     return 'Sequência de $count dias';
   }

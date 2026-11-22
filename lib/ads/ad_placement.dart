@@ -15,6 +15,9 @@ enum AdPlacement {
   /// Bù một ngày điểm danh bỏ lỡ.
   checkInMakeUp('checkin_makeup', AdFormat.rewarded),
 
+  /// Mở quà mốc chuỗi: xem quảng cáo để nhận gấp đôi.
+  checkInDoubleGift('checkin_double_gift', AdFormat.rewarded),
+
   /// Rời màn hình hoàn thành (sang màn sau / về trang chính).
   levelComplete('level_complete', AdFormat.interstitial);
 

@@ -641,6 +641,9 @@ class AppLocalizationsZh extends AppLocalizations {
   String get checkInGiftCollect => '领取';
 
   @override
+  String get checkInGiftDouble => '领取 x2';
+
+  @override
   String checkInStreakTitle(int count) {
     return '连续 $count 天';
   }
@@ -1429,6 +1432,9 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
 
   @override
   String get checkInGiftCollect => '領取';
+
+  @override
+  String get checkInGiftDouble => '領取 x2';
 
   @override
   String checkInStreakTitle(int count) {

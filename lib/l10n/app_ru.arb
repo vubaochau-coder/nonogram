@@ -186,6 +186,7 @@
   "checkInTodayButton": "Отметиться сегодня",
   "checkInGiftToday": "Сегодня подарок!",
   "checkInGiftCollect": "Забрать",
+  "checkInGiftDouble": "Забрать x2",
   "checkInStreakTitle": "Серия: {count} дн.",
   "checkInStreakDays": "{count, plural, one{{count} день} few{{count} дня} other{{count} дней}}",
   "checkInStreakMakeUp": "Восполните {missed, plural, one{{missed} пропущенный день} few{{missed} пропущенных дня} other{{missed} пропущенных дней}}, чтобы серия выросла до {days}",

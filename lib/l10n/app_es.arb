@@ -186,6 +186,7 @@
   "checkInTodayButton": "Registrarme hoy",
   "checkInGiftToday": "¡Hoy hay regalo!",
   "checkInGiftCollect": "Recoger",
+  "checkInGiftDouble": "Recoger x2",
   "checkInStreakTitle": "Racha de {count} días",
   "checkInStreakDays": "{count, plural, =1{1 día} other{{count} días}}",
   "checkInStreakMakeUp": "Recupera {missed, plural, =1{1 día perdido} other{{missed} días perdidos}} para llevar tu racha a {days}",

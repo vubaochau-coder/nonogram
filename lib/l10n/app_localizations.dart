@@ -1239,6 +1239,12 @@ abstract class AppLocalizations {
   /// **'Collect'**
   String get checkInGiftCollect;
 
+  /// No description provided for @checkInGiftDouble.
+  ///
+  /// In en, this message translates to:
+  /// **'Collect x2'**
+  String get checkInGiftDouble;
+
   /// No description provided for @checkInStreakTitle.
   ///
   /// In en, this message translates to:

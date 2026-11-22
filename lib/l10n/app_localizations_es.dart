@@ -691,6 +691,9 @@ class AppLocalizationsEs extends AppLocalizations {
   String get checkInGiftCollect => 'Recoger';
 
   @override
+  String get checkInGiftDouble => 'Recoger x2';
+
+  @override
   String checkInStreakTitle(int count) {
     return 'Racha de $count días';
   }

@@ -348,6 +348,7 @@
   "checkInTodayButton": "Check in today",
   "checkInGiftToday": "Gift today!",
   "checkInGiftCollect": "Collect",
+  "checkInGiftDouble": "Collect x2",
   "checkInStreakTitle": "{count}-day streak",
   "@checkInStreakTitle": {
     "placeholders": {

@@ -148,6 +148,56 @@ void main() {
     );
   });
 
+  testWidgets('collect x2 after watching an ad doubles the gift', (
+    tester,
+  ) async {
+    final ads = FakeAdService();
+    final service = await pump(tester, previousCheckIns: 6, ads: ads);
+    await tester.tap(find.byKey(const ValueKey('check-in-button')));
+    await run(tester, 4700);
+    final double = find.byKey(const ValueKey('check-in-gift-double'));
+    expect(double, findsOneWidget);
+    expect(find.text('+1 gợi ý'), findsOneWidget);
+
+    await tester.tap(double);
+    await tester.pump();
+    expect(ads.rewardedShown, [AdPlacement.checkInDoubleGift]);
+    await run(tester, 300);
+    expect(find.text('+2 gợi ý'), findsOneWidget);
+    // Tự bay về mốc, không cần bấm "Nhận".
+    await run(tester, 1600);
+    expect(collect, findsNothing);
+    expect(node(7, 'claimed'), findsOneWidget);
+    expect((await repository.getPowerUps()).hints, 2);
+    expect(await service.doubleGift(day: clock.today, milestone: 7), isFalse);
+  });
+
+  testWidgets('collect x2: skipping the ad keeps the normal gift', (
+    tester,
+  ) async {
+    final ads = FakeAdService(earnReward: false);
+    await pump(tester, previousCheckIns: 6, ads: ads);
+    await tester.tap(find.byKey(const ValueKey('check-in-button')));
+    await run(tester, 4700);
+    await tester.tap(find.byKey(const ValueKey('check-in-gift-double')));
+    await run(tester, 300);
+    expect(find.text('+1 gợi ý'), findsOneWidget);
+    await tester.tap(collect);
+    await run(tester, 1000);
+    expect(node(7, 'claimed'), findsOneWidget);
+    expect((await repository.getPowerUps()).hints, 1);
+  });
+
+  testWidgets('no ads: no collect x2 button', (tester) async {
+    await pump(tester, previousCheckIns: 6);
+    await tester.tap(find.byKey(const ValueKey('check-in-button')));
+    await run(tester, 4700);
+    expect(collect, findsOneWidget);
+    expect(find.byKey(const ValueKey('check-in-gift-double')), findsNothing);
+    await tester.tap(collect);
+    await run(tester, 1000);
+  });
+
   testWidgets('calendar: checked, missed, today and locked days', (
     tester,
   ) async {

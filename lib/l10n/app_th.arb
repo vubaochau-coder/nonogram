@@ -186,6 +186,7 @@
   "checkInTodayButton": "เช็กอินวันนี้",
   "checkInGiftToday": "วันนี้มีของขวัญ!",
   "checkInGiftCollect": "รับ",
+  "checkInGiftDouble": "รับ x2",
   "checkInStreakTitle": "ต่อเนื่อง {count} วัน",
   "checkInStreakDays": "{count} วัน",
   "checkInStreakMakeUp": "ชดเชย {missed} วันที่พลาดไป เพื่อให้ต่อเนื่องเป็น {days}",

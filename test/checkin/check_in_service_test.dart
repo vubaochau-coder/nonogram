@@ -61,9 +61,13 @@ void main() {
     expect(s.count, 15);
     expect(
       await repository.getPowerUps(),
-      PowerUpInventory(hints: 0, wands: 0)
-          .addPermanent(PowerUp.hint, CheckInPolicy.streakReward(7).amount)
-          .addPermanent(PowerUp.wand, CheckInPolicy.streakReward(14).amount),
+      [7, 14].fold(
+        const PowerUpInventory(hints: 0, wands: 0),
+        (inv, m) => inv.addPermanent(
+          CheckInPolicy.streakReward(m).powerUp,
+          CheckInPolicy.streakReward(m).amount,
+        ),
+      ),
     );
     expect(s.claimedMilestones(2026, 11), {7, 14});
   });
@@ -108,6 +112,35 @@ void main() {
     expect(await s.makeUp(missed), isNull);
     // Bù không làm mất lượt điểm danh hôm nay.
     expect(s.canCheckIn, isTrue);
+  });
+
+  test('rewards: 1 hint at 7, 14 and 21 days, 1 wand at 28', () {
+    for (final m in [7, 14, 21]) {
+      expect(
+        CheckInPolicy.streakReward(m),
+        const CheckInReward(PowerUp.hint, 1),
+      );
+    }
+    expect(
+      CheckInPolicy.streakReward(28),
+      const CheckInReward(PowerUp.wand, 1),
+    );
+  });
+
+  test('a milestone gift can be doubled once, only after claiming', () async {
+    final s = service();
+    expect(await s.doubleGift(day: clock.today, milestone: 7), isFalse);
+    for (var i = 0; i < 7; i++) {
+      await s.checkIn();
+      if (i < 6) nextDay();
+    }
+    expect((await repository.getPowerUps()).hints, 1);
+    expect(await s.doubleGift(day: clock.today, milestone: 7), isTrue);
+    expect((await repository.getPowerUps()).hints, 2);
+    expect(await s.doubleGift(day: clock.today, milestone: 7), isFalse);
+    expect((await repository.getPowerUps()).hints, 2);
+    // Mốc chưa đạt thì không nhân đôi được.
+    expect(await s.doubleGift(day: clock.today, milestone: 14), isFalse);
   });
 
   test('cannot make up today, future days or days before install', () async {

@@ -186,6 +186,7 @@
   "checkInTodayButton": "Absen hari ini",
   "checkInGiftToday": "Hari ini ada hadiah!",
   "checkInGiftCollect": "Ambil",
+  "checkInGiftDouble": "Ambil x2",
   "checkInStreakTitle": "Beruntun {count} hari",
   "checkInStreakDays": "{count} hari",
   "checkInStreakMakeUp": "Ganti {missed} hari yang terlewat agar beruntunmu jadi {days}",

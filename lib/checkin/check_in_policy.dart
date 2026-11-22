@@ -64,14 +64,11 @@ class CheckInPolicy {
   static const premiumDailyHints = 2;
   static const premiumDailyWands = 1;
 
-  /// Quà của mốc chuỗi [milestone].
-  ///
-  /// Tạm thời: phần quà từng mốc sẽ được thiết kế lại sau.
+  /// Quà của mốc chuỗi [milestone]: 7, 14, 21 ngày được 1 gợi ý, 28 ngày
+  /// được 1 gậy phép. Lúc mở quà, xem quảng cáo thì nhận gấp đôi.
   static CheckInReward streakReward(int milestone) => switch (milestone) {
-    7 => const CheckInReward(PowerUp.hint, 1),
-    14 => const CheckInReward(PowerUp.wand, 1),
-    21 => const CheckInReward(PowerUp.hint, 2),
-    _ => const CheckInReward(PowerUp.wand, 2),
+    28 => const CheckInReward(PowerUp.wand, 1),
+    _ => const CheckInReward(PowerUp.hint, 1),
   };
 
   /// Quà trong ngày của gói không quảng cáo.

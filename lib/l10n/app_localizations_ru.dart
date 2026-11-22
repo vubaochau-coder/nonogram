@@ -690,6 +690,9 @@ class AppLocalizationsRu extends AppLocalizations {
   String get checkInGiftCollect => 'Забрать';
 
   @override
+  String get checkInGiftDouble => 'Забрать x2';
+
+  @override
   String checkInStreakTitle(int count) {
     return 'Серия: $count дн.';
   }

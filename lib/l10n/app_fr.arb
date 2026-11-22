@@ -186,6 +186,7 @@
   "checkInTodayButton": "Valider ma présence",
   "checkInGiftToday": "Cadeau aujourd'hui !",
   "checkInGiftCollect": "Récupérer",
+  "checkInGiftDouble": "Récupérer x2",
   "checkInStreakTitle": "Série de {count} jours",
   "checkInStreakDays": "{count, plural, =1{1 jour} other{{count} jours}}",
   "checkInStreakMakeUp": "Rattrapez {missed, plural, =1{1 jour manqué} other{{missed} jours manqués}} pour porter votre série à {days}",

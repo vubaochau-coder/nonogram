@@ -674,6 +674,9 @@ class AppLocalizationsVi extends AppLocalizations {
   String get checkInGiftCollect => 'Nhận';
 
   @override
+  String get checkInGiftDouble => 'Nhận x2';
+
+  @override
   String checkInStreakTitle(int count) {
     return 'Chuỗi $count ngày';
   }

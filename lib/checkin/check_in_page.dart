@@ -35,7 +35,8 @@ Color _missedColor(BuildContext context) =>
 /// - Ngày bỏ lỡ: chạm để bù (xem quảng cáo có thưởng sau khi xác nhận).
 /// - Điểm danh / bù xong: [CheckInCelebration] đóng dấu ô ngày, thanh chuỗi
 ///   chạy tới chuỗi dài nhất mới, rồi mở lần lượt quà các mốc vừa đạt (hộp
-///   quà nhảy ra từ mốc, phần quà bay về mốc).
+///   quà nhảy ra từ mốc, phần quà bay về mốc). Lúc mở quà có nút "Nhận x2":
+///   xem quảng cáo để nhận gấp đôi.
 ///
 /// Trong lúc hiệu ứng chạy, ô ngày, thanh chuỗi và các mốc vẫn hiện như cũ
 /// tới đúng bước của hiệu ứng.
@@ -215,6 +216,8 @@ class _CheckInTabState extends State<CheckInTab> with TickerProviderStateMixin {
   }) async {
     final sounds = AppSoundController.maybeOf(context);
     final overlay = Overlay.of(context, rootOverlay: true);
+    final ads = context.ads;
+    final l10n = context.l10n;
 
     // 1. Đóng dấu ô ngày.
     setState(() => _hideButton = button != null);
@@ -270,6 +273,25 @@ class _CheckInTabState extends State<CheckInTab> with TickerProviderStateMixin {
             badge: node,
             giftTarget: node.center,
             sounds: sounds,
+            // Không có quảng cáo (web, iOS): không có nút "Nhận x2".
+            onDouble:
+                ads.isEnabled
+                    ? () async {
+                      if (!ads.isReady(AdPlacement.checkInDoubleGift)) {
+                        ToastUtils.warning(title: l10n.adRewardNotReady);
+                        return false;
+                      }
+                      if (!await ads.showRewarded(
+                        AdPlacement.checkInDoubleGift,
+                      )) {
+                        return false;
+                      }
+                      return service.doubleGift(
+                        day: outcome.day,
+                        milestone: gift.milestone,
+                      );
+                    }
+                    : null,
             onCollected: () {
               if (!mounted) return;
               setState(() {

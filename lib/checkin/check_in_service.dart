@@ -52,11 +52,13 @@ class CheckInService extends ChangeNotifier with WidgetsBindingObserver {
     required Map<int, List<CheckInReward>> history,
     required int startDay,
     required Map<int, Set<int>> claims,
+    required Map<int, Set<int>> doubled,
     int? maxSeenDay,
   }) : _isPremium = isPremium,
        _history = history,
        _startDay = startDay,
        _claims = claims,
+       _doubled = doubled,
        _maxSeenDay = maxSeenDay;
 
   static const _boxName = 'nonogram_preferences_v1';
@@ -64,6 +66,7 @@ class CheckInService extends ChangeNotifier with WidgetsBindingObserver {
   static const _startKey = 'checkin_start_day';
   static const _maxSeenKey = 'checkin_max_seen_day';
   static const _claimsKey = 'checkin_streak_claims';
+  static const _doubledKey = 'checkin_streak_doubled';
 
   final Box<dynamic>? _box;
   final GameClock clock;
@@ -73,6 +76,9 @@ class CheckInService extends ChangeNotifier with WidgetsBindingObserver {
 
   /// Các mốc chuỗi đã nhận, theo tháng ([monthKeyOf]).
   final Map<int, Set<int>> _claims;
+
+  /// Các mốc đã nhận gấp đôi (xem quảng cáo), theo tháng.
+  final Map<int, Set<int>> _doubled;
   int? _maxSeenDay;
   NonogramRepository? _repository;
   bool _busy = false;
@@ -97,17 +103,23 @@ class CheckInService extends ChangeNotifier with WidgetsBindingObserver {
         } catch (_) {}
       }
     }
-    final claims = <int, Set<int>>{};
-    final rawClaims = box?.get(_claimsKey);
-    if (rawClaims is Map) {
-      for (final entry in rawClaims.entries) {
-        try {
-          claims[int.parse('${entry.key}')] = {
-            for (final m in entry.value as List) m as int,
-          };
-        } catch (_) {}
+    Map<int, Set<int>> readMonths(String key) {
+      final out = <int, Set<int>>{};
+      final raw = box?.get(key);
+      if (raw is Map) {
+        for (final entry in raw.entries) {
+          try {
+            out[int.parse('${entry.key}')] = {
+              for (final m in entry.value as List) m as int,
+            };
+          } catch (_) {}
+        }
       }
+      return out;
     }
+
+    final claims = readMonths(_claimsKey);
+    final doubled = readMonths(_doubledKey);
     var start = box?.get(_startKey) as int?;
     if (start == null) {
       start = clock.today;
@@ -120,6 +132,7 @@ class CheckInService extends ChangeNotifier with WidgetsBindingObserver {
       history: history,
       startDay: start,
       claims: claims,
+      doubled: doubled,
       maxSeenDay: box?.get(_maxSeenKey) as int?,
     );
   }
@@ -132,12 +145,14 @@ class CheckInService extends ChangeNotifier with WidgetsBindingObserver {
     Map<int, List<CheckInReward>>? history,
     int? startDay,
     Map<int, Set<int>>? claims,
+    Map<int, Set<int>>? doubled,
     int? maxSeenDay,
   }) : _box = null,
        _isPremium = isPremium ?? (() => false),
        _history = history ?? {},
        _startDay = startDay ?? clock.today,
        _claims = claims ?? {},
+       _doubled = doubled ?? {},
        _maxSeenDay = maxSeenDay;
 
   int get today => clock.today;
@@ -267,6 +282,24 @@ class CheckInService extends ChangeNotifier with WidgetsBindingObserver {
     } finally {
       _busy = false;
     }
+  }
+
+  /// Nhận thêm một phần quà mốc [milestone] của tháng chứa ngày [day] (sau
+  /// khi xem xong quảng cáo "Nhận x2"). Mỗi mốc chỉ nhân đôi một lần, và chỉ
+  /// khi đã nhận mốc đó. Trả về true nếu đã phát thêm.
+  Future<bool> doubleGift({required int day, required int milestone}) async {
+    final repository = _repository;
+    if (repository == null) return false;
+    final key = monthKeyOf(dateOfDayNumber(day));
+    if (!(_claims[key]?.contains(milestone) ?? false)) return false;
+    if (_doubled[key]?.contains(milestone) ?? false) return false;
+    _doubled[key] = {...?_doubled[key], milestone};
+    await _box?.put(_doubledKey, {
+      for (final e in _doubled.entries) '${e.key}': e.value.toList(),
+    });
+    await _grant(repository, [CheckInPolicy.streakReward(milestone)], today);
+    notifyListeners();
+    return true;
   }
 
   /// Vừa mua (hoặc khôi phục) gói: nếu hôm nay đã điểm danh mà chưa có quà

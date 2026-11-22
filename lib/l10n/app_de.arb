@@ -186,6 +186,7 @@
   "checkInTodayButton": "Heute einchecken",
   "checkInGiftToday": "Heute gibt's ein Geschenk!",
   "checkInGiftCollect": "Abholen",
+  "checkInGiftDouble": "x2 einsammeln",
   "checkInStreakTitle": "{count}-Tage-Serie",
   "checkInStreakDays": "{count, plural, =1{1 Tag} other{{count} Tage}}",
   "checkInStreakMakeUp": "Hol {missed, plural, =1{1 verpassten Tag} other{{missed} verpasste Tage}} nach, um deine Serie auf {days} zu bringen",

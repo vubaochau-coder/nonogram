@@ -687,6 +687,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get checkInGiftCollect => 'Collect';
 
   @override
+  String get checkInGiftDouble => 'Collect x2';
+
+  @override
   String checkInStreakTitle(int count) {
     return '$count-day streak';
   }

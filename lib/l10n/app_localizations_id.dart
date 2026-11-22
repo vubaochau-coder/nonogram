@@ -674,6 +674,9 @@ class AppLocalizationsId extends AppLocalizations {
   String get checkInGiftCollect => 'Ambil';
 
   @override
+  String get checkInGiftDouble => 'Ambil x2';
+
+  @override
   String checkInStreakTitle(int count) {
     return 'Beruntun $count hari';
   }
