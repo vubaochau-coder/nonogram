@@ -339,6 +339,29 @@ class AppLocalizationsFr extends AppLocalizations {
       'Ne devinez jamais. Si vous bloquez, cherchez la ligne avec le moins de cases inconnues, ou utilisez un indice.';
 
   @override
+  String nonogramGuideExample(int number) {
+    return 'Exemple $number';
+  }
+
+  @override
+  String get nonogramGuideExampleSingle => 'Exemple';
+
+  @override
+  String get nonogramGuideLegendTitle => 'Comment lire les schémas';
+
+  @override
+  String get nonogramGuideLegendFilled => 'Case noircie';
+
+  @override
+  String get nonogramGuideLegendTrial => 'Position de bloc à l\'essai';
+
+  @override
+  String get nonogramGuideLegendCross => 'Case vide (X)';
+
+  @override
+  String get nonogramGuideLegendResult => 'Ce qu\'on en déduit';
+
+  @override
   String get nonogramGuideMethodLineDoneTitle => 'Lignes terminées';
 
   @override

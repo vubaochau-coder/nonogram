@@ -335,6 +335,29 @@ class AppLocalizationsId extends AppLocalizations {
       'Jangan menebak. Saat buntu, cari garis dengan kotak belum diketahui paling sedikit, atau gunakan petunjuk.';
 
   @override
+  String nonogramGuideExample(int number) {
+    return 'Contoh $number';
+  }
+
+  @override
+  String get nonogramGuideExampleSingle => 'Contoh';
+
+  @override
+  String get nonogramGuideLegendTitle => 'Cara membaca gambar';
+
+  @override
+  String get nonogramGuideLegendFilled => 'Kotak terisi';
+
+  @override
+  String get nonogramGuideLegendTrial => 'Mencoba posisi blok';
+
+  @override
+  String get nonogramGuideLegendCross => 'Kotak kosong (X)';
+
+  @override
+  String get nonogramGuideLegendResult => 'Yang bisa disimpulkan';
+
+  @override
   String get nonogramGuideMethodLineDoneTitle => 'Garis yang sudah lengkap';
 
   @override

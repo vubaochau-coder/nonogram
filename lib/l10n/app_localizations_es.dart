@@ -340,6 +340,29 @@ class AppLocalizationsEs extends AppLocalizations {
       'No adivines nunca. Si te atascas, busca la línea con menos casillas desconocidas o usa una pista.';
 
   @override
+  String nonogramGuideExample(int number) {
+    return 'Ejemplo $number';
+  }
+
+  @override
+  String get nonogramGuideExampleSingle => 'Ejemplo';
+
+  @override
+  String get nonogramGuideLegendTitle => 'Cómo leer los dibujos';
+
+  @override
+  String get nonogramGuideLegendFilled => 'Casilla rellena';
+
+  @override
+  String get nonogramGuideLegendTrial => 'Probando la posición de un bloque';
+
+  @override
+  String get nonogramGuideLegendCross => 'Casilla vacía (X)';
+
+  @override
+  String get nonogramGuideLegendResult => 'Lo que se deduce';
+
+  @override
   String get nonogramGuideMethodLineDoneTitle => 'Líneas terminadas';
 
   @override

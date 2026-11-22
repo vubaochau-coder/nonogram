@@ -329,6 +329,29 @@ class AppLocalizationsKo extends AppLocalizations {
       '절대 찍지 마세요. 막히면 모르는 칸이 가장 적은 줄을 찾거나 힌트를 사용하세요.';
 
   @override
+  String nonogramGuideExample(int number) {
+    return '예시 $number';
+  }
+
+  @override
+  String get nonogramGuideExampleSingle => '예시';
+
+  @override
+  String get nonogramGuideLegendTitle => '그림 보는 법';
+
+  @override
+  String get nonogramGuideLegendFilled => '칠해진 칸';
+
+  @override
+  String get nonogramGuideLegendTrial => '블록을 시험 삼아 놓은 자리';
+
+  @override
+  String get nonogramGuideLegendCross => '빈칸 (X)';
+
+  @override
+  String get nonogramGuideLegendResult => '알아낼 수 있는 결과';
+
+  @override
   String get nonogramGuideMethodLineDoneTitle => '완성된 줄';
 
   @override

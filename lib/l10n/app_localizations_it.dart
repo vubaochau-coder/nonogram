@@ -339,6 +339,29 @@ class AppLocalizationsIt extends AppLocalizations {
       'Non tirare mai a indovinare. Se sei bloccato, cerca la linea con meno caselle sconosciute o usa un suggerimento.';
 
   @override
+  String nonogramGuideExample(int number) {
+    return 'Esempio $number';
+  }
+
+  @override
+  String get nonogramGuideExampleSingle => 'Esempio';
+
+  @override
+  String get nonogramGuideLegendTitle => 'Come leggere le figure';
+
+  @override
+  String get nonogramGuideLegendFilled => 'Casella piena';
+
+  @override
+  String get nonogramGuideLegendTrial => 'Prova di posizione del blocco';
+
+  @override
+  String get nonogramGuideLegendCross => 'Casella vuota (X)';
+
+  @override
+  String get nonogramGuideLegendResult => 'Cosa se ne deduce';
+
+  @override
   String get nonogramGuideMethodLineDoneTitle => 'Linee completate';
 
   @override

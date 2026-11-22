@@ -336,6 +336,29 @@ class AppLocalizationsRu extends AppLocalizations {
       'Никогда не угадывайте. Если застряли, найдите линию с наименьшим числом неизвестных клеток или возьмите подсказку.';
 
   @override
+  String nonogramGuideExample(int number) {
+    return 'Пример $number';
+  }
+
+  @override
+  String get nonogramGuideExampleSingle => 'Пример';
+
+  @override
+  String get nonogramGuideLegendTitle => 'Как читать схемы';
+
+  @override
+  String get nonogramGuideLegendFilled => 'Закрашенная клетка';
+
+  @override
+  String get nonogramGuideLegendTrial => 'Пробное положение блока';
+
+  @override
+  String get nonogramGuideLegendCross => 'Пустая клетка (X)';
+
+  @override
+  String get nonogramGuideLegendResult => 'Что из этого следует';
+
+  @override
   String get nonogramGuideMethodLineDoneTitle => 'Готовые линии';
 
   @override

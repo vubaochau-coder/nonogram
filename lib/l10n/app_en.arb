@@ -180,6 +180,20 @@
   "nonogramGuideRoutineTip3": "Mark squares you know are empty with X. An X is as useful as a filled square.",
   "nonogramGuideRoutineTip4": "Go back and forth between rows and columns. Every square you solve is a new clue for the line that crosses it.",
   "nonogramGuideRoutineTip5": "Never guess. When you're stuck, look for the line with the fewest unknown squares, or use a hint.",
+  "nonogramGuideExample": "Example {number}",
+  "@nonogramGuideExample": {
+    "placeholders": {
+      "number": {
+        "type": "int"
+      }
+    }
+  },
+  "nonogramGuideExampleSingle": "Example",
+  "nonogramGuideLegendTitle": "How to read the pictures",
+  "nonogramGuideLegendFilled": "Filled square",
+  "nonogramGuideLegendTrial": "Trying a block position",
+  "nonogramGuideLegendCross": "Empty square (X)",
+  "nonogramGuideLegendResult": "What you can deduce",
   "nonogramGuideMethodLineDoneTitle": "Finished lines",
   "nonogramGuideMethodLineDoneDesc": "When all the blocks of a line are in place, every other square in it is empty: mark them with X. A line with the number 0 is empty from the start.",
   "nonogramPlayInfoHide": "Hide level info",
