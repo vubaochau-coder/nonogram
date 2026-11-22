@@ -37,14 +37,14 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get nonogramGuideMethodDivisionDesc =>
-      'Se juntar dois blocos existentes formaria uma figura maior que qualquer dica disponível, o espaço entre eles deve ser um X.';
+      'Se juntar dois trechos preenchidos formaria um bloco maior que o maior número, o quadrado entre eles precisa estar vazio. Marque-o com X para separá-los.';
 
   @override
   String get nonogramGuideMethodDivisionTitle => '5. Divisão';
 
   @override
   String get nonogramGuideMethodDoublePositioningDesc =>
-      'Se um quadrado preenchido só pode pertencer a algumas variantes específicas de um bloco, todo quadrado que não é preenchido em nenhuma dessas variantes deve ser marcado com X.';
+      'Às vezes um quadrado preenchido só pode pertencer a um ou dois dos números. Teste cada possibilidade: os quadrados que ficam vazios em todas recebem um X.';
 
   @override
   String get nonogramGuideMethodDoublePositioningTitle =>
@@ -52,21 +52,21 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get nonogramGuideMethodInaccessibilityDesc =>
-      'Marque com um X os quadrados que não podem pertencer a nenhuma das figuras restantes.';
+      'Quadrados que nenhum bloco alcança estão vazios. Teste cada bloco nas posições mais distantes ao redor dos quadrados preenchidos; o que ficar fora desse alcance recebe um X.';
 
   @override
   String get nonogramGuideMethodInaccessibilityTitle => '3. Inacessibilidade';
 
   @override
   String get nonogramGuideMethodNotFitDesc =>
-      'Se um espaço vazio entre X é menor que qualquer dica disponível para aquela linha, ele deve ser marcado com X.';
+      'Um espaço entre X (ou entre um X e a borda) menor do que qualquer número que poderia ficar ali não comporta nenhum bloco: marque-o com X.';
 
   @override
   String get nonogramGuideMethodNotFitTitle => '4. Não cabe';
 
   @override
   String get nonogramGuideMethodSuperpositionMultiDesc =>
-      'Quando há vários números, sobreponha as posições extremas à esquerda e à direita do grupo inteiro, considerando o espaço mínimo obrigatório de um quadrado entre blocos da mesma cor. Os quadrados em que um bloco coincide consigo mesmo nas duas variantes são preenchidos.';
+      'Com vários números, empurre o grupo todo para a esquerda (com um quadrado vazio entre os blocos) e depois para a direita. Se o mesmo bloco cobre um quadrado nas duas posições, ele é preenchido. Dica: some os números e os espaços; o que sobra é quanto cada bloco pode se mover.';
 
   @override
   String get nonogramGuideMethodSuperpositionMultiTitle =>
@@ -74,7 +74,7 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get nonogramGuideMethodSuperpositionSimpleDesc =>
-      'Se um número ocupa mais da metade da linha, alguns quadrados do meio com certeza serão preenchidos. Sobreponha as posições extremas à esquerda e à direita; onde elas coincidem, os quadrados são preenchidos.';
+      'Se um número ocupa mais da metade da linha, parte dele é sempre preenchida. Imagine o bloco empurrado todo para a esquerda e depois todo para a direita: os quadrados cobertos nas duas vezes são certos. Exemplo: 7 em 10 quadrados sempre preenche os 4 do meio.';
 
   @override
   String get nonogramGuideMethodSuperpositionSimpleTitle =>
@@ -82,7 +82,7 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get nonogramGuideMethodWallPushingDesc =>
-      'Se um quadrado preenchido conhecido está mais perto de uma borda do que o tamanho da primeira dica, a figura a que ele pertence deve se estender para longe dessa borda.';
+      'Um quadrado preenchido perto da borda limita onde seu bloco pode ficar. O bloco não pode passar da borda, então precisa se estender para o outro lado. Exemplo: 5 com o 4º quadrado preenchido: mesmo encostado na borda esquerda, o bloco ainda cobre o 5º.';
 
   @override
   String get nonogramGuideMethodWallPushingTitle => '2. Afastar das paredes';
@@ -312,7 +312,37 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get nonogramGuideTutorialCardDesc =>
-      'Aprenda as regras e os controles passo a passo em um pequeno quebra-cabeça 5×5.';
+      'Aprenda as regras, os controles e as principais técnicas passo a passo, jogando.';
+
+  @override
+  String get nonogramGuideRoutineTitle => 'Por onde começar';
+
+  @override
+  String get nonogramGuideRoutineTip1 =>
+      'Comece pelos números grandes. Se um número ocupa mais da metade da linha, parte dele já é certa (veja a técnica 1 abaixo).';
+
+  @override
+  String get nonogramGuideRoutineTip2 =>
+      'Resolva primeiro as linhas fáceis: 0 significa que a linha toda está vazia, e se os números mais um espaço entre cada um somam o comprimento da linha, só há um jeito de encaixá-los.';
+
+  @override
+  String get nonogramGuideRoutineTip3 =>
+      'Marque com X os quadrados que você sabe que estão vazios. Um X é tão útil quanto um quadrado preenchido.';
+
+  @override
+  String get nonogramGuideRoutineTip4 =>
+      'Alterne entre linhas e colunas. Cada quadrado resolvido é uma nova pista para a linha que o cruza.';
+
+  @override
+  String get nonogramGuideRoutineTip5 =>
+      'Nunca chute. Se travar, procure a linha com menos quadrados desconhecidos, ou use uma dica.';
+
+  @override
+  String get nonogramGuideMethodLineDoneTitle => 'Linhas concluídas';
+
+  @override
+  String get nonogramGuideMethodLineDoneDesc =>
+      'Quando todos os blocos de uma linha estão no lugar, todos os outros quadrados dela estão vazios: marque-os com X. Uma linha com o número 0 já começa vazia.';
 
   @override
   String get nonogramPlayInfoHide => 'Ocultar informações do nível';
@@ -420,6 +450,49 @@ class AppLocalizationsPt extends AppLocalizations {
   @override
   String get nonogramTutorialFinishTools =>
       'Preencha os quadrados restantes para terminar. Arraste para baixo em uma coluna para preencher mais rápido.';
+
+  @override
+  String get nonogramTutorialToolsDoneTitle => 'Controles dominados!';
+
+  @override
+  String get nonogramTutorialToolsDone =>
+      'Os quebra-cabeças de verdade são maiores, e a maioria das linhas não se resolve num piscar de olhos. Agora aprenda as técnicas de resolução num quebra-cabeça 8×8.';
+
+  @override
+  String get nonogramTutorialOverlapSingle =>
+      'Em quebra-cabeças maiores, procure primeiro os números grandes. O 6 pode deslizar por estes 8 quadrados, mas sempre cobre os 4 do meio. Preencha-os.';
+
+  @override
+  String get nonogramTutorialOverlapMulti =>
+      'A mesma ideia vale para vários números: 3 3 precisa de pelo menos 7 quadrados (3 + espaço + 3), então o grupo só pode se mover 1 quadrado. Preencha os quadrados cobertos nas duas posições.';
+
+  @override
+  String get nonogramTutorialFullRow =>
+      '8 em 8 quadrados: a linha inteira é preenchida. Arraste por ela.';
+
+  @override
+  String get nonogramTutorialZeroRow =>
+      '0 significa que a linha não tem nenhum quadrado preenchido. Mude para o modo X.';
+
+  @override
+  String get nonogramTutorialMarkZeroRow =>
+      'Marque toda a última linha com X. Os X importam: mostram às colunas onde os blocos não podem ficar.';
+
+  @override
+  String get nonogramTutorialOutOfReach =>
+      'Agora as colunas. A coluna 2 é um bloco de 3 que precisa cobrir seus 2 quadrados preenchidos, então alcança no máximo 1 quadrado além. Marque com X os quadrados fora de alcance, e o mesmo na coluna 7.';
+
+  @override
+  String get nonogramTutorialBackToFill =>
+      'Veja a coluna 3: ela precisa de 7. Volte ao modo de preencher.';
+
+  @override
+  String get nonogramTutorialExactSpace =>
+      'O X embaixo deixa exatamente 7 quadrados para o 7, então preencha todos. A coluna 6 funciona do mesmo jeito.';
+
+  @override
+  String get nonogramTutorialFinishTechniques =>
+      'Esse é o método: resolva o que puder nas linhas, depois nas colunas, e repita. Termine o cogumelo sozinho!';
 
   @override
   String get nonogramPlayHintNothingToFill =>

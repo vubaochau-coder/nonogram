@@ -37,35 +37,35 @@ class AppLocalizationsId extends AppLocalizations {
 
   @override
   String get nonogramGuideMethodDivisionDesc =>
-      'Jika menggabungkan dua blok yang sudah ada akan membentuk figur yang lebih besar dari petunjuk mana pun, celah di antaranya harus berupa X.';
+      'Jika menyambung dua potongan terisi akan membentuk blok yang lebih besar dari angka terbesar, kotak di antaranya pasti kosong. Tandai dengan X untuk memisahkannya.';
 
   @override
   String get nonogramGuideMethodDivisionTitle => '5. Pemisahan';
 
   @override
   String get nonogramGuideMethodDoublePositioningDesc =>
-      'Jika kotak yang terisi hanya bisa menjadi bagian dari beberapa varian blok tertentu, setiap kotak yang tidak pernah terisi di varian mana pun harus ditandai X.';
+      'Kadang sebuah kotak terisi hanya bisa milik satu atau dua angka. Coba tiap kemungkinan: kotak yang tetap kosong di semua kemungkinan diberi X.';
 
   @override
   String get nonogramGuideMethodDoublePositioningTitle => '6. Posisi ganda';
 
   @override
   String get nonogramGuideMethodInaccessibilityDesc =>
-      'Tandai dengan silang (X) kotak yang tidak mungkin menjadi bagian dari figur mana pun yang tersisa.';
+      'Kotak yang tidak bisa dijangkau blok mana pun pasti kosong. Coba tiap blok di posisi terjauhnya di sekitar kotak terisi; semua yang di luar jangkauan diberi X.';
 
   @override
   String get nonogramGuideMethodInaccessibilityTitle => '3. Tak terjangkau';
 
   @override
   String get nonogramGuideMethodNotFitDesc =>
-      'Jika ruang kosong di antara tanda silang lebih kecil dari petunjuk mana pun di baris itu, ruang itu harus ditandai X.';
+      'Celah di antara tanda X (atau antara X dan tepi) yang lebih pendek dari semua angka yang mungkin masuk ke sana tidak bisa memuat blok: tandai dengan X.';
 
   @override
   String get nonogramGuideMethodNotFitTitle => '4. Tidak muat';
 
   @override
   String get nonogramGuideMethodSuperpositionMultiDesc =>
-      'Jika ada beberapa angka, tumpuk posisi paling kiri dan paling kanan dari seluruh kelompok, dengan memperhitungkan celah wajib minimal satu kotak di antara blok berwarna sama. Kotak tempat sebuah blok bertumpuk dengan dirinya sendiri di kedua varian harus diisi.';
+      'Dengan beberapa angka, dorong seluruh kelompok ke kiri (sisakan satu kotak kosong di antara blok), lalu ke kanan. Jika blok yang sama menutupi sebuah kotak di kedua posisi, kotak itu terisi. Cara cepat: jumlahkan angka dan celahnya; sisanya adalah seberapa jauh setiap blok bisa bergeser.';
 
   @override
   String get nonogramGuideMethodSuperpositionMultiTitle =>
@@ -73,7 +73,7 @@ class AppLocalizationsId extends AppLocalizations {
 
   @override
   String get nonogramGuideMethodSuperpositionSimpleDesc =>
-      'Jika sebuah angka lebih dari setengah panjang baris, beberapa kotak di tengah pasti terisi. Tumpuk posisi paling kiri dan paling kanan; di bagian yang bertumpuk, kotaknya diisi.';
+      'Jika sebuah angka lebih dari setengah garisnya, sebagian selalu terisi. Bayangkan bloknya didorong mentok ke kiri, lalu mentok ke kanan: kotak yang tertutup di kedua posisi pasti terisi. Contoh: 7 dalam 10 kotak selalu mengisi 4 kotak tengah.';
 
   @override
   String get nonogramGuideMethodSuperpositionSimpleTitle =>
@@ -81,7 +81,7 @@ class AppLocalizationsId extends AppLocalizations {
 
   @override
   String get nonogramGuideMethodWallPushingDesc =>
-      'Jika kotak terisi yang sudah diketahui lebih dekat ke tepi daripada panjang petunjuk pertama, figur tempat kotak itu berada harus memanjang menjauhi tepi tersebut.';
+      'Kotak terisi di dekat tepi membatasi posisi bloknya. Blok tidak bisa melewati tepi, jadi harus memanjang menjauhinya. Contoh: 5 dengan kotak ke-4 terisi: meski didorong ke tepi kiri, blok tetap menutupi kotak ke-5.';
 
   @override
   String get nonogramGuideMethodWallPushingTitle => '2. Mendorong dari dinding';
@@ -309,7 +309,37 @@ class AppLocalizationsId extends AppLocalizations {
 
   @override
   String get nonogramGuideTutorialCardDesc =>
-      'Pelajari aturan dan kontrol langkah demi langkah di teka-teki kecil 5×5.';
+      'Pelajari aturan, kontrol, dan teknik penyelesaian utama langkah demi langkah sambil bermain.';
+
+  @override
+  String get nonogramGuideRoutineTitle => 'Mulai dari mana';
+
+  @override
+  String get nonogramGuideRoutineTip1 =>
+      'Mulai dari angka besar. Jika sebuah angka lebih dari setengah garisnya, sebagian sudah pasti terisi (lihat teknik 1 di bawah).';
+
+  @override
+  String get nonogramGuideRoutineTip2 =>
+      'Selesaikan baris yang mudah dulu: 0 berarti seluruh baris kosong, dan jika jumlah angka ditambah satu celah di antaranya sama dengan panjang baris, hanya ada satu susunan.';
+
+  @override
+  String get nonogramGuideRoutineTip3 =>
+      'Tandai kotak yang pasti kosong dengan X. Tanda X sama bergunanya dengan kotak terisi.';
+
+  @override
+  String get nonogramGuideRoutineTip4 =>
+      'Bolak-balik antara baris dan kolom. Setiap kotak yang terpecahkan adalah petunjuk baru bagi garis yang memotongnya.';
+
+  @override
+  String get nonogramGuideRoutineTip5 =>
+      'Jangan menebak. Saat buntu, cari garis dengan kotak belum diketahui paling sedikit, atau gunakan petunjuk.';
+
+  @override
+  String get nonogramGuideMethodLineDoneTitle => 'Garis yang sudah lengkap';
+
+  @override
+  String get nonogramGuideMethodLineDoneDesc =>
+      'Jika semua blok dalam satu garis sudah di tempatnya, semua kotak lainnya kosong: tandai dengan X. Garis dengan angka 0 kosong sejak awal.';
 
   @override
   String get nonogramPlayInfoHide => 'Sembunyikan info level';
@@ -417,6 +447,49 @@ class AppLocalizationsId extends AppLocalizations {
   @override
   String get nonogramTutorialFinishTools =>
       'Isi kotak yang tersisa untuk menyelesaikan. Geser ke bawah di sepanjang kolom agar lebih cepat.';
+
+  @override
+  String get nonogramTutorialToolsDoneTitle => 'Kontrol sudah dikuasai!';
+
+  @override
+  String get nonogramTutorialToolsDone =>
+      'Teka-teki sungguhan lebih besar, dan sebagian besar baris tidak bisa langsung diselesaikan sekilas. Berikutnya, pelajari teknik penyelesaian pada teka-teki 8×8.';
+
+  @override
+  String get nonogramTutorialOverlapSingle =>
+      'Di teka-teki besar, cari angka besar lebih dulu. Blok 6 bisa bergeser di 8 kotak ini, tetapi 4 kotak tengah selalu tertutup. Isi kotak-kotak itu.';
+
+  @override
+  String get nonogramTutorialOverlapMulti =>
+      'Sama halnya dengan beberapa angka: 3 3 butuh minimal 7 kotak (3 + celah + 3), jadi kelompoknya hanya bisa bergeser 1 kotak. Isi kotak yang tertutup di kedua posisi.';
+
+  @override
+  String get nonogramTutorialFullRow =>
+      '8 dalam 8 kotak: seluruh baris terisi. Seret di sepanjang baris.';
+
+  @override
+  String get nonogramTutorialZeroRow =>
+      '0 berarti baris itu sama sekali tidak punya kotak terisi. Beralih ke mode X.';
+
+  @override
+  String get nonogramTutorialMarkZeroRow =>
+      'Tandai seluruh baris paling bawah dengan X. Tanda X itu penting: ia menunjukkan pada kolom di mana blok tidak bisa berada.';
+
+  @override
+  String get nonogramTutorialOutOfReach =>
+      'Sekarang kolomnya. Kolom 2 adalah satu blok 3 yang harus menutupi 2 kotak terisinya, jadi paling jauh hanya menjangkau 1 kotak lagi. Tandai kotak di luar jangkauan dengan X, begitu juga di kolom 7.';
+
+  @override
+  String get nonogramTutorialBackToFill =>
+      'Lihat kolom 3: kolom itu butuh 7. Beralih kembali ke mode isi.';
+
+  @override
+  String get nonogramTutorialExactSpace =>
+      'Tanda X di bawah menyisakan tepat 7 kotak untuk angka 7, jadi isi semuanya. Kolom 6 juga sama.';
+
+  @override
+  String get nonogramTutorialFinishTechniques =>
+      'Begitulah caranya: selesaikan yang bisa di baris, lalu di kolom, dan ulangi. Selesaikan jamurnya sendiri!';
 
   @override
   String get nonogramPlayHintNothingToFill =>

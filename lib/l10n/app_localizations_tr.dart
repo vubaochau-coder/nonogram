@@ -37,14 +37,14 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get nonogramGuideMethodDivisionDesc =>
-      'İki mevcut bloğu birleştirmek, elindeki tüm ipuçlarından daha büyük bir şekil oluşturacaksa aradaki boşluk X olmalıdır.';
+      'İki dolu parçayı birleştirmek en büyük sayıdan uzun bir blok oluşturacaksa, aradaki kare boş olmalıdır. Onları ayırmak için X koy.';
 
   @override
   String get nonogramGuideMethodDivisionTitle => '5. Ayırma';
 
   @override
   String get nonogramGuideMethodDoublePositioningDesc =>
-      'Dolu bir kare bir bloğun yalnızca birkaç belirli yerleşimine ait olabiliyorsa, bu yerleşimlerin hiçbirinde dolmayan tüm kareler X ile işaretlenmelidir.';
+      'Bazen dolu bir kare sayılardan yalnızca birine ya da ikisine ait olabilir. Her olasılığı dene: hepsinde boş kalan karelere X koy.';
 
   @override
   String get nonogramGuideMethodDoublePositioningTitle =>
@@ -52,21 +52,21 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get nonogramGuideMethodInaccessibilityDesc =>
-      'Kalan hiçbir şekle ait olamayacak kareleri çarpı (X) ile işaretle.';
+      'Hiçbir bloğun ulaşamadığı kareler boştur. Her bloğu dolu karelerin çevresindeki en uç konumlarında dene; bu aralığın dışında kalan her kareye X koy.';
 
   @override
   String get nonogramGuideMethodInaccessibilityTitle => '3. Erişilemezlik';
 
   @override
   String get nonogramGuideMethodNotFitDesc =>
-      'Çarpılar arasındaki boş alan o satırdaki tüm ipuçlarından küçükse X ile işaretlenmelidir.';
+      'X\'ler arasındaki (veya X ile kenar arasındaki) boşluk, oraya girebilecek her sayıdan kısaysa hiçbir blok sığmaz: X ile işaretle.';
 
   @override
   String get nonogramGuideMethodNotFitTitle => '4. Sığmıyor';
 
   @override
   String get nonogramGuideMethodSuperpositionMultiDesc =>
-      'Birden fazla sayı varsa, aynı renkteki bloklar arasındaki zorunlu en az bir karelik boşluğu hesaba katarak tüm grubun en sol ve en sağ konumlarını üst üste koy. Bir bloğun her iki konumda da kendisiyle çakıştığı kareler doldurulur.';
+      'Birden çok sayı varsa tüm grubu sola (bloklar arasında birer boş kare bırakarak), sonra sağa it. Aynı blok bir kareyi iki konumda da kaplıyorsa o kare doludur. Hızlı yol: sayıları ve boşlukları topla; artan kısım her bloğun ne kadar kayabileceğidir.';
 
   @override
   String get nonogramGuideMethodSuperpositionMultiTitle =>
@@ -74,7 +74,7 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get nonogramGuideMethodSuperpositionSimpleDesc =>
-      'Bir sayı satırın yarısından uzunsa ortadaki bazı kareler kesinlikle doludur. En sol ve en sağ konumları üst üste koy; çakıştıkları kareler doldurulur.';
+      'Bir sayı çizgisinin yarısından büyükse bir kısmı her zaman doludur. Bloğu önce tamamen sola, sonra tamamen sağa ittiğini düşün: iki seferde de kapladığı kareler kesin doludur. Örnek: 10 karede 7, ortadaki 4 kareyi her zaman doldurur.';
 
   @override
   String get nonogramGuideMethodSuperpositionSimpleTitle =>
@@ -82,7 +82,7 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get nonogramGuideMethodWallPushingDesc =>
-      'Bilinen dolu bir kare kenara ilk ipucunun uzunluğundan daha yakınsa, ait olduğu şekil o kenardan uzağa doğru uzanmalıdır.';
+      'Kenara yakın dolu bir kare, bloğunun nerede olabileceğini sınırlar. Blok kenarı aşamaz, bu yüzden kenardan uzağa doğru uzanmalıdır. Örnek: 4. karesi dolu bir 5: sol kenara dayansa bile blok 5. kareyi kaplar.';
 
   @override
   String get nonogramGuideMethodWallPushingTitle => '2. Kenardan itme';
@@ -310,7 +310,37 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get nonogramGuideTutorialCardDesc =>
-      'Kuralları ve kontrolleri küçük bir 5×5 bulmacada adım adım öğren.';
+      'Kuralları, kontrolleri ve temel çözüm tekniklerini oynayarak adım adım öğren.';
+
+  @override
+  String get nonogramGuideRoutineTitle => 'Nereden başlamalı';
+
+  @override
+  String get nonogramGuideRoutineTip1 =>
+      'Büyük sayılarla başla. Bir sayı çizgisinin yarısından büyükse bir kısmı zaten kesindir (aşağıdaki 1. tekniğe bak).';
+
+  @override
+  String get nonogramGuideRoutineTip2 =>
+      'Önce kolay satırları çöz: 0 satırın tamamen boş olduğu anlamına gelir; sayıların toplamı ve aralarındaki birer boşluk satırın uzunluğuna eşitse tek bir yerleşim vardır.';
+
+  @override
+  String get nonogramGuideRoutineTip3 =>
+      'Boş olduğunu bildiğin kareleri X ile işaretle. Bir X, dolu bir kare kadar işe yarar.';
+
+  @override
+  String get nonogramGuideRoutineTip4 =>
+      'Satırlarla sütunlar arasında gidip gel. Çözdüğün her kare, onu kesen çizgi için yeni bir ipucudur.';
+
+  @override
+  String get nonogramGuideRoutineTip5 =>
+      'Asla tahmin etme. Takılırsan en az bilinmeyen karesi olan çizgiyi ara ya da ipucu kullan.';
+
+  @override
+  String get nonogramGuideMethodLineDoneTitle => 'Tamamlanan çizgiler';
+
+  @override
+  String get nonogramGuideMethodLineDoneDesc =>
+      'Bir çizginin tüm blokları yerleştiğinde diğer bütün kareleri boştur: onları X ile işaretle. 0 sayılı bir çizgi baştan boştur.';
 
   @override
   String get nonogramPlayInfoHide => 'Bölüm bilgisini gizle';
@@ -418,6 +448,49 @@ class AppLocalizationsTr extends AppLocalizations {
   @override
   String get nonogramTutorialFinishTools =>
       'Bitirmek için kalan kareleri doldur. Daha hızlı doldurmak için bir sütun boyunca aşağı sürükle.';
+
+  @override
+  String get nonogramTutorialToolsDoneTitle => 'Kontroller tamam!';
+
+  @override
+  String get nonogramTutorialToolsDone =>
+      'Gerçek bulmacalar daha büyüktür ve çoğu satır bir bakışta çözülmez. Şimdi çözüm tekniklerini 8×8 bir bulmacada öğren.';
+
+  @override
+  String get nonogramTutorialOverlapSingle =>
+      'Büyük bulmacalarda önce büyük sayılara bak. 6 bu 8 karede kayabilir, ama ortadaki 4 kareyi her durumda kaplar. Onları doldur.';
+
+  @override
+  String get nonogramTutorialOverlapMulti =>
+      'Birden çok sayıda da aynı fikir: 3 3 en az 7 kare ister (3 + boşluk + 3), yani grup yalnızca 1 kare kayabilir. Her iki konumda da kapladığı kareleri doldur.';
+
+  @override
+  String get nonogramTutorialFullRow =>
+      '8 karede 8: satırın tamamı dolu. Parmağını boydan boya sürükle.';
+
+  @override
+  String get nonogramTutorialZeroRow =>
+      '0, satırda hiç dolu kare olmadığı anlamına gelir. X moduna geç.';
+
+  @override
+  String get nonogramTutorialMarkZeroRow =>
+      'En alt satırın tamamını X ile işaretle. X\'ler önemlidir: sütunlara blokların nereye gelemeyeceğini gösterir.';
+
+  @override
+  String get nonogramTutorialOutOfReach =>
+      'Şimdi sütunlar. 2. sütun, 2 dolu karesini kaplaması gereken tek bir 3\'lük blok; bu yüzden en fazla 1 kare öteye uzanabilir. Ulaşamayacağı kareleri X ile işaretle, 7. sütunda da aynısını yap.';
+
+  @override
+  String get nonogramTutorialBackToFill =>
+      '3. sütuna bak: 7 kare istiyor. Doldurma moduna geri dön.';
+
+  @override
+  String get nonogramTutorialExactSpace =>
+      'Alttaki X, 7 için tam 7 kare bırakıyor; hepsini doldur. 6. sütun da aynı şekilde.';
+
+  @override
+  String get nonogramTutorialFinishTechniques =>
+      'Yöntem bu: satırlarda çözebildiğini çöz, sonra sütunlarda, ve tekrarla. Mantarı kendin tamamla!';
 
   @override
   String get nonogramPlayHintNothingToFill =>

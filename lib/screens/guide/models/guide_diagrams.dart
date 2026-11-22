@@ -62,6 +62,28 @@ abstract final class GuideDiagrams {
     ),
   ];
 
+  /// Hàng đã đủ khối: các ô còn lại đánh X. Hàng số 0 trống hoàn toàn.
+  static final lineDone = [
+    GuideDiagram(
+      groups: [
+        [_r('2 1', '.##...#...')],
+        [_r('~2 ~1', 'X##XXX#XXX')],
+      ],
+      links: [
+        [GuideDiagramLink(0, 9)],
+      ],
+    ),
+    GuideDiagram(
+      groups: [
+        [_r('0', '..........')],
+        [_r('0', 'XXXXXXXXXX')],
+      ],
+      links: [
+        [GuideDiagramLink(0, 9)],
+      ],
+    ),
+  ];
+
   /// Đẩy từ biên.
   static final wallPushing = [
     GuideDiagram(

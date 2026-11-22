@@ -26,6 +26,10 @@ import 'nonogram_tutorial_controller.dart';
 /// liền, nhấn giữ để đánh X, nút gợi ý, gậy phép. Làm xong phần này thì
 /// không tự hiện hướng dẫn thao tác trong màn chơi nữa.
 ///
+/// Phần 3 dạy các kỹ thuật giải trên câu đố 8×8: chồng lấp (một số, nhiều
+/// số), hàng số 0, ô ngoài tầm với, khoảng trống vừa khít, rồi để người chơi
+/// tự giải nốt.
+///
 /// Đóng trang trả về `true` nếu người chơi bấm "Xem các kỹ thuật giải".
 class NonogramTutorialPage extends StatefulWidget {
   const NonogramTutorialPage({super.key});
@@ -103,7 +107,10 @@ class _NonogramTutorialPageState extends State<NonogramTutorialPage> {
 
   void _onProgress() {
     _playSounds();
-    if (!_controller.isFinished) return;
+    if (_controller.step.task != TutorialTask.toolsDone &&
+        !_controller.isFinished) {
+      return;
+    }
     try {
       context.read<OnboardingPreferences>().markPlayCoachSeen();
     } on ProviderNotFoundException {
@@ -149,7 +156,8 @@ class _NonogramTutorialPageState extends State<NonogramTutorialPage> {
                       child: _MessageCard(
                         text:
                             task == TutorialTask.intro ||
-                                    task == TutorialTask.rulesDone
+                                    task == TutorialTask.rulesDone ||
+                                    task == TutorialTask.toolsDone
                                 ? ''
                                 : tutorialMessageText(l10n, step.message),
                         mistakes: _controller.mistakes,
@@ -222,11 +230,33 @@ class _NonogramTutorialPageState extends State<NonogramTutorialPage> {
                       actions: [
                         FilledButton(
                           key: const ValueKey('nonogram-tutorial-continue'),
-                          onPressed: _controller.continueToTools,
+                          onPressed: _controller.continueChapter,
                           child: Text(l10n.nonogramTutorialContinue),
                         ),
                         TextButton(
                           key: const ValueKey('nonogram-tutorial-later'),
+                          onPressed: _close,
+                          child: Text(l10n.nonogramTutorialLater),
+                        ),
+                      ],
+                    ),
+                  ),
+                if (task == TutorialTask.toolsDone)
+                  _Overlay(
+                    alignment: Alignment.bottomCenter,
+                    child: _OverlayCard(
+                      title: l10n.nonogramTutorialToolsDoneTitle,
+                      body: l10n.nonogramTutorialToolsDone,
+                      actions: [
+                        FilledButton(
+                          key: const ValueKey(
+                            'nonogram-tutorial-continue-techniques',
+                          ),
+                          onPressed: _controller.continueChapter,
+                          child: Text(l10n.nonogramTutorialContinue),
+                        ),
+                        TextButton(
+                          key: const ValueKey('nonogram-tutorial-later-tools'),
                           onPressed: _close,
                           child: Text(l10n.nonogramTutorialLater),
                         ),
@@ -281,6 +311,16 @@ String tutorialMessageText(AppLocalizations l10n, TutorialMessage message) {
     TutorialMessage.activateWand => l10n.nonogramTutorialActivateWand,
     TutorialMessage.pickWandLine => l10n.nonogramTutorialPickWandLine,
     TutorialMessage.finishTools => l10n.nonogramTutorialFinishTools,
+    TutorialMessage.toolsDone => l10n.nonogramTutorialToolsDone,
+    TutorialMessage.overlapSingle => l10n.nonogramTutorialOverlapSingle,
+    TutorialMessage.overlapMulti => l10n.nonogramTutorialOverlapMulti,
+    TutorialMessage.fullRow => l10n.nonogramTutorialFullRow,
+    TutorialMessage.zeroRow => l10n.nonogramTutorialZeroRow,
+    TutorialMessage.markZeroRow => l10n.nonogramTutorialMarkZeroRow,
+    TutorialMessage.outOfReach => l10n.nonogramTutorialOutOfReach,
+    TutorialMessage.backToFill => l10n.nonogramTutorialBackToFill,
+    TutorialMessage.exactSpace => l10n.nonogramTutorialExactSpace,
+    TutorialMessage.finishTechniques => l10n.nonogramTutorialFinishTechniques,
     TutorialMessage.done => l10n.nonogramTutorialDone,
   };
 }
@@ -388,9 +428,14 @@ class _TutorialBoard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final step = controller.step;
-    final activeRows = {
-      for (final cell in controller.highlightedCells) cell.row,
-    };
+    // Bước theo cột (các ô cần làm trải trên nhiều hàng hơn số cột): sáng
+    // dãy số của cột; còn lại sáng dãy số của hàng.
+    final highlighted = controller.highlightedCells;
+    final highlightRows = {for (final cell in highlighted) cell.row};
+    final highlightCols = {for (final cell in highlighted) cell.col};
+    final byColumn = highlightRows.length > highlightCols.length;
+    final activeRows = byColumn ? const <int>{} : highlightRows;
+    final activeCols = byColumn ? highlightCols : const <int>{};
     final wandLine = step.wandLine;
     final picking = step.task == TutorialTask.pickWandLine;
     bool isWandTarget(bool isRow, int index) =>
@@ -419,7 +464,7 @@ class _TutorialBoard extends StatelessWidget {
                     clues: controller.colClues[c],
                     vertical: true,
                     complete: controller.isColComplete(c),
-                    active: isWandTarget(false, c),
+                    active: activeCols.contains(c) || isWandTarget(false, c),
                     pointed: isWandTarget(false, c),
                     onTap: pick(false, c),
                   ),
@@ -648,7 +693,9 @@ class _TutorialGridState extends State<_TutorialGrid> {
     final pending = controller.pendingTargets;
     // Bàn tay chỉ hiện khi bước vừa bắt đầu, để không che bàn khi đang tô.
     final pointAt =
-        pending.isNotEmpty && pending.length == step.targets.length
+        !step.freePlay &&
+                pending.isNotEmpty &&
+                pending.length == step.targets.length
             ? pending.first
             : null;
     final handSize = cellSize * 0.9;
@@ -709,6 +756,17 @@ class _TutorialGridState extends State<_TutorialGrid> {
                 ),
               ),
             ),
+            if (step.ghost case final ghost?)
+              Positioned.fill(
+                child: IgnorePointer(
+                  child: _GhostSlide(
+                    key: ValueKey(controller.stepIndex),
+                    ghost: ghost,
+                    cellSize: cellSize,
+                    color: colors.primary,
+                  ),
+                ),
+              ),
             Positioned.fill(
               child: IgnorePointer(
                 child: CustomPaint(
@@ -771,6 +829,137 @@ class _TutorialGridState extends State<_TutorialGrid> {
         ),
       ),
     );
+  }
+}
+
+/// Bóng mờ của nhóm khối trượt qua lại giữa vị trí xa nhất hai bên, dừng một
+/// chút ở mỗi đầu. Phần ô bóng phủ ở cả hai đầu là phần chắc chắn được tô.
+/// Khi giảm chuyển động: vẽ đứng yên cả hai vị trí chồng lên nhau.
+class _GhostSlide extends StatefulWidget {
+  const _GhostSlide({
+    super.key,
+    required this.ghost,
+    required this.cellSize,
+    required this.color,
+  });
+
+  final TutorialGhost ghost;
+  final double cellSize;
+  final Color color;
+
+  @override
+  State<_GhostSlide> createState() => _GhostSlideState();
+}
+
+class _GhostSlideState extends State<_GhostSlide>
+    with SingleTickerProviderStateMixin {
+  late final AnimationController _animation = AnimationController(
+    vsync: this,
+    duration: const Duration(milliseconds: 2600),
+  );
+  bool _still = false;
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    _still = MediaQuery.disableAnimationsOf(context);
+    if (_still) {
+      _animation.stop();
+    } else if (!_animation.isAnimating) {
+      _animation.repeat(reverse: true);
+    }
+  }
+
+  @override
+  void dispose() {
+    _animation.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return AnimatedBuilder(
+      animation: _animation,
+      builder: (context, _) {
+        // 0–25%: đứng ở đầu này, 25–75%: trượt, 75–100%: đứng ở đầu kia.
+        final v = _animation.value;
+        final t = Curves.easeInOut.transform(((v - 0.25) / 0.5).clamp(0, 1));
+        return CustomPaint(
+          painter: _GhostPainter(
+            ghost: widget.ghost,
+            cellSize: widget.cellSize,
+            color: widget.color,
+            positions: _still ? const [0.0, 1.0] : [t],
+          ),
+        );
+      },
+    );
+  }
+}
+
+class _GhostPainter extends CustomPainter {
+  _GhostPainter({
+    required this.ghost,
+    required this.cellSize,
+    required this.color,
+    required this.positions,
+  });
+
+  final TutorialGhost ghost;
+  final double cellSize;
+  final Color color;
+
+  /// Vị trí nhóm khối, 0 = [TutorialGhost.from], 1 = [TutorialGhost.to].
+  final List<double> positions;
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    final fill =
+        Paint()
+          ..color = color.withValues(alpha: positions.length > 1 ? 0.2 : 0.3);
+    final stroke =
+        Paint()
+          ..color = color.withValues(alpha: 0.9)
+          ..style = PaintingStyle.stroke
+          ..strokeWidth = 2;
+    final line = ghost.line;
+    for (final p in positions) {
+      final start = ghost.from + (ghost.to - ghost.from) * p;
+      var pos = start;
+      for (final block in ghost.blocks) {
+        final along = Rect.fromLTWH(pos * cellSize, 0, block * cellSize, 1);
+        final rect = (line.isRow
+                ? Rect.fromLTWH(
+                  along.left,
+                  line.index * cellSize,
+                  along.width,
+                  cellSize,
+                )
+                : Rect.fromLTWH(
+                  line.index * cellSize,
+                  along.left,
+                  cellSize,
+                  along.width,
+                ))
+            .deflate(cellSize * 0.12);
+        final rrect = RRect.fromRectAndRadius(
+          rect,
+          Radius.circular(cellSize * 0.18),
+        );
+        canvas.drawRRect(rrect, fill);
+        canvas.drawRRect(rrect, stroke);
+        pos += block + 1;
+      }
+    }
+  }
+
+  @override
+  bool shouldRepaint(covariant _GhostPainter oldDelegate) {
+    return oldDelegate.ghost != ghost ||
+        oldDelegate.cellSize != cellSize ||
+        oldDelegate.color != color ||
+        oldDelegate.positions.length != positions.length ||
+        oldDelegate.positions.first != positions.first;
   }
 }
 

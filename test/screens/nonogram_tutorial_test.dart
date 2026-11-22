@@ -6,6 +6,7 @@ import 'package:nonogram/core/app_theme.dart';
 import 'package:nonogram/l10n/app_localizations.dart';
 import 'package:nonogram/models/nonogram_cell_state.dart';
 import 'package:nonogram/models/nonogram_interaction_mode.dart';
+import 'package:nonogram/models/nonogram_puzzle.dart';
 import 'package:nonogram/screens/tutorial/nonogram_tutorial_controller.dart';
 import 'package:nonogram/screens/tutorial/nonogram_tutorial_page.dart';
 import 'package:provider/provider.dart';
@@ -25,7 +26,8 @@ void solveAll(NonogramTutorialController controller) {
           controller.tapCell(cell.row, cell.col);
         }
       case TutorialTask.rulesDone:
-        controller.continueToTools();
+      case TutorialTask.toolsDone:
+        controller.continueChapter();
       case TutorialTask.longPressMark:
         for (final cell in controller.pendingTargets) {
           controller.longPressCell(cell.row, cell.col);
@@ -63,7 +65,10 @@ void main() {
 
     test('tools part targets agree with its solution', () {
       const tools = NonogramTutorialScript.toolsSolution;
-      for (final step in allSteps.sublist(toolsStart)) {
+      final toolsEnd = allSteps.indexWhere(
+        (s) => s.task == TutorialTask.toolsDone,
+      );
+      for (final step in allSteps.sublist(toolsStart, toolsEnd + 1)) {
         expect(step.showTools, isTrue);
         for (final cell in step.targets) {
           expect(
@@ -113,9 +118,7 @@ void main() {
       solveAll(controller);
 
       expect(controller.isFinished, isTrue);
-      expect(controller.solution, NonogramTutorialScript.toolsSolution);
-      expect(controller.remainingHints, 2);
-      expect(controller.remainingWands, 0);
+      expect(controller.solution, NonogramTutorialScript.techniquesSolution);
       expect(controller.mistakes, 0);
       for (var r = 0; r < controller.rows; r++) {
         expect(controller.isRowComplete(r), isTrue);
@@ -182,7 +185,7 @@ void main() {
           case TutorialTask.switchMode:
             controller.selectMode(step.mode!);
           case TutorialTask.rulesDone:
-            controller.continueToTools();
+            controller.continueChapter();
           default:
             for (final cell in controller.pendingTargets) {
               controller.tapCell(cell.row, cell.col);
@@ -258,6 +261,107 @@ void main() {
         isTrue,
       );
       expect(controller.step.message, TutorialMessage.finishTools);
+    });
+  });
+
+  group('NonogramTutorialScript techniques part', () {
+    final allSteps = NonogramTutorialScript.steps;
+    final start = allSteps.indexWhere(
+      (s) => s.newPuzzle == NonogramTutorialScript.techniquesSolution,
+    );
+    final steps = allSteps.sublist(start);
+    const solution = NonogramTutorialScript.techniquesSolution;
+
+    test('comes after the tools part and ends the tutorial', () {
+      expect(start, greaterThan(0));
+      expect(allSteps[start - 1].task, TutorialTask.toolsDone);
+      expect(steps.last.task, TutorialTask.done);
+      expect(steps.last.visibleRows, solution.length);
+      for (final step in steps) {
+        expect(step.showTools, isFalse);
+        expect(step.visibleRows, solution.length);
+      }
+    });
+
+    test('every target can be deduced from its row or column alone', () {
+      // Bàn mà người chơi thấy: null = chưa biết, 1 = tô, 0 = X.
+      final known = [
+        for (final row in solution) List<int?>.filled(row.length, null),
+      ];
+      List<int> rowClue(int r) => NonogramPuzzle.deriveClues(solution[r]);
+      List<int> colClue(int c) =>
+          NonogramPuzzle.deriveClues([for (final row in solution) row[c]]);
+
+      for (final step in steps) {
+        if (step.task != TutorialTask.fill && step.task != TutorialTask.mark) {
+          continue;
+        }
+        final value = step.task == TutorialTask.fill ? 1 : 0;
+        // Bước tự giải: mỗi lần tô một ô suy ra được, như người chơi.
+        final pending = {...step.targets};
+        while (pending.isNotEmpty) {
+          final cell = pending.firstWhere((cell) {
+            final byRow = _forcedLine(rowClue(cell.row), known[cell.row]);
+            final byCol = _forcedLine(colClue(cell.col), [
+              for (final row in known) row[cell.col],
+            ]);
+            return byRow[cell.col] == value || byCol[cell.row] == value;
+          }, orElse: () => throw StateError('${step.message}: no deduction'));
+          expect(solution[cell.row][cell.col], value);
+          known[cell.row][cell.col] = value;
+          pending.remove(cell);
+          // Bước tự giải: người chơi cũng suy ra được các ô X dọc đường.
+          if (step.freePlay) _deduceMarks(known, rowClue, colClue);
+        }
+      }
+      for (var r = 0; r < solution.length; r++) {
+        for (var c = 0; c < solution[r].length; c++) {
+          if (solution[r][c] == 1) expect(known[r][c], 1);
+        }
+      }
+    });
+
+    test('the sliding ghost shows exactly the cells to fill', () {
+      for (final step in steps) {
+        final ghost = step.ghost;
+        if (ghost == null) continue;
+        Set<int> covered(int start) {
+          final cells = <int>{};
+          var pos = start;
+          for (final block in ghost.blocks) {
+            cells.addAll([for (var i = 0; i < block; i++) pos + i]);
+            pos += block + 1;
+          }
+          return cells;
+        }
+
+        final overlap = covered(ghost.from).intersection(covered(ghost.to));
+        final line = ghost.line;
+        if (step.task == TutorialTask.fill) {
+          expect({
+            for (final i in overlap)
+              line.isRow
+                  ? (row: line.index, col: i)
+                  : (row: i, col: line.index),
+          }, step.targets);
+        } else {
+          // Ngoài tầm với: các ô mục tiêu trên dòng này nằm ngoài cả hai vị
+          // trí xa nhất.
+          final reach = covered(ghost.from).union(covered(ghost.to));
+          for (final cell in step.targets) {
+            final onLine =
+                line.isRow ? cell.row == line.index : cell.col == line.index;
+            if (!onLine) continue;
+            expect(reach.contains(line.isRow ? cell.col : cell.row), isFalse);
+          }
+        }
+      }
+    });
+
+    test('free play hides the highlight', () {
+      final step = steps.firstWhere((s) => s.freePlay);
+      expect(step.highlightedCells, isEmpty);
+      expect(step.targets, isNotEmpty);
     });
   });
 
@@ -383,6 +487,58 @@ void main() {
       }
       await tester.pump(const Duration(milliseconds: 300));
 
+      expect(find.text('Controls mastered!'), findsOneWidget);
+      await tester.tap(
+        find.byKey(const ValueKey('nonogram-tutorial-continue-techniques')),
+      );
+      await tester.pump(const Duration(milliseconds: 300));
+
+      // Phần kỹ thuật giải: bàn 8×8.
+      Future<void> tap8(int row, int col) async {
+        final rect = gridRect();
+        final size = rect.width / 8;
+        await tester.tapAt(
+          rect.topLeft + Offset((col + 0.5) * size, (row + 0.5) * size),
+        );
+        await tester.pump(const Duration(milliseconds: 50));
+      }
+
+      Future<void> tapModeKey(String mode) async {
+        await tester.tap(find.byKey(ValueKey('nonogram-tutorial-mode-$mode')));
+        await tester.pump(const Duration(milliseconds: 300));
+      }
+
+      for (final c in [2, 3, 4, 5]) {
+        await tap8(1, c);
+      }
+      for (final c in [1, 2, 5, 6]) {
+        await tap8(2, c);
+      }
+      for (var c = 0; c < 8; c++) {
+        await tap8(3, c);
+      }
+      await tapModeKey('mark');
+      for (var c = 0; c < 8; c++) {
+        await tap8(7, c);
+      }
+      for (final col in [1, 6]) {
+        for (final r in [0, 5, 6]) {
+          await tap8(r, col);
+        }
+      }
+      await tapModeKey('fill');
+      for (final col in [2, 5]) {
+        for (final r in [0, 4, 5, 6]) {
+          await tap8(r, col);
+        }
+      }
+      for (final c in [(0, 3), (0, 4), (1, 1), (1, 6), (2, 0), (2, 7)]) {
+        await tap8(c.$1, c.$2);
+      }
+      await tap8(6, 3);
+      await tap8(6, 4);
+      await tester.pump(const Duration(milliseconds: 300));
+
       expect(find.text('Well done!'), findsOneWidget);
 
       await tester.tap(
@@ -468,6 +624,65 @@ void main() {
       expect(await result, isFalse);
     });
   });
+}
+
+/// Trạng thái chắc chắn của từng ô trong một dòng (null = chưa biết), xét
+/// mọi cách đặt khối hợp với [clue] và các ô đã biết.
+List<int?> _forcedLine(List<int> clue, List<int?> known) {
+  final length = known.length;
+  final blocks = clue.where((c) => c > 0).toList();
+  List<int?>? result;
+  void place(int index, int from, List<int> line) {
+    if (index == blocks.length) {
+      for (var i = 0; i < length; i++) {
+        if (known[i] != null && known[i] != line[i]) return;
+      }
+      result =
+          result == null
+              ? List<int?>.of(line)
+              : [
+                for (var i = 0; i < length; i++)
+                  result![i] == line[i] ? line[i] : null,
+              ];
+      return;
+    }
+    final rest = blocks.skip(index + 1).fold(0, (sum, b) => sum + b + 1);
+    for (var s = from; s + blocks[index] + rest <= length; s++) {
+      final next = List<int>.of(line);
+      for (var i = s; i < s + blocks[index]; i++) {
+        next[i] = 1;
+      }
+      place(index + 1, s + blocks[index] + 1, next);
+    }
+  }
+
+  place(0, 0, List.filled(length, 0));
+  return result ?? List<int?>.filled(length, null);
+}
+
+/// Đánh X mọi ô suy ra được là trống, cho tới khi không còn gì mới.
+void _deduceMarks(
+  List<List<int?>> known,
+  List<int> Function(int) rowClue,
+  List<int> Function(int) colClue,
+) {
+  var changed = true;
+  while (changed) {
+    changed = false;
+    for (var r = 0; r < known.length; r++) {
+      for (var c = 0; c < known[r].length; c++) {
+        if (known[r][c] != null) continue;
+        final byRow = _forcedLine(rowClue(r), known[r]);
+        final byCol = _forcedLine(colClue(c), [
+          for (final row in known) row[c],
+        ]);
+        if (byRow[c] == 0 || byCol[r] == 0) {
+          known[r][c] = 0;
+          changed = true;
+        }
+      }
+    }
+  }
 }
 
 class _RecordingEngine implements GameSoundEngine {

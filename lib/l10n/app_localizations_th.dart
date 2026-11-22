@@ -37,14 +37,14 @@ class AppLocalizationsTh extends AppLocalizations {
 
   @override
   String get nonogramGuideMethodDivisionDesc =>
-      'ถ้าการเชื่อมสองบล็อกที่มีอยู่จะทำให้เกิดรูปที่ยาวกว่าตัวเลขใบ้ทุกตัว ช่องว่างระหว่างสองบล็อกนั้นต้องเป็น X';
+      'ถ้าเชื่อมสองส่วนที่ระบายแล้วจะได้บล็อกยาวกว่าตัวเลขที่มากที่สุด ช่องระหว่างกลางต้องว่าง กากบาทเพื่อแยกมันออกจากกัน';
 
   @override
   String get nonogramGuideMethodDivisionTitle => '5. การแบ่งแยก';
 
   @override
   String get nonogramGuideMethodDoublePositioningDesc =>
-      'ถ้าช่องที่ระบายแล้วเป็นส่วนหนึ่งของบล็อกได้เพียงไม่กี่แบบ ช่องใดที่ไม่ถูกระบายในทุกแบบเหล่านั้นต้องทำเครื่องหมาย X';
+      'บางครั้งช่องที่ระบายแล้วเป็นของตัวเลขได้แค่หนึ่งหรือสองตัว ลองทุกความเป็นไปได้ ช่องที่ว่างในทุกกรณีให้กากบาท';
 
   @override
   String get nonogramGuideMethodDoublePositioningTitle =>
@@ -52,21 +52,21 @@ class AppLocalizationsTh extends AppLocalizations {
 
   @override
   String get nonogramGuideMethodInaccessibilityDesc =>
-      'ทำเครื่องหมายกากบาท (X) ที่ช่องซึ่งไม่มีทางเป็นส่วนหนึ่งของรูปที่เหลืออยู่ได้เลย';
+      'ช่องที่ไม่มีบล็อกใดเอื้อมถึงต้องว่าง ลองวางแต่ละบล็อกในตำแหน่งไกลสุดรอบช่องที่ระบายแล้ว ช่องที่อยู่นอกระยะนั้นให้กากบาท';
 
   @override
   String get nonogramGuideMethodInaccessibilityTitle => '3. เข้าถึงไม่ได้';
 
   @override
   String get nonogramGuideMethodNotFitDesc =>
-      'ถ้าช่องว่างระหว่างกากบาทสั้นกว่าตัวเลขใบ้ทุกตัวของแถวนั้น ช่องว่างนั้นต้องทำเครื่องหมาย X';
+      'ช่องว่างระหว่างกากบาท (หรือระหว่างกากบาทกับขอบ) ที่สั้นกว่าทุกตัวเลขที่อาจวางตรงนั้นได้ ใส่บล็อกไม่ได้: กากบาทให้หมด';
 
   @override
   String get nonogramGuideMethodNotFitTitle => '4. ใส่ไม่พอดี';
 
   @override
   String get nonogramGuideMethodSuperpositionMultiDesc =>
-      'เมื่อมีตัวเลขหลายตัว ให้ซ้อนตำแหน่งชิดซ้ายสุดและชิดขวาสุดของทั้งกลุ่ม โดยนับช่องว่างขั้นต่ำหนึ่งช่องที่ต้องมีระหว่างบล็อกสีเดียวกันด้วย ช่องที่บล็อกเดียวกันทับกันในทั้งสองแบบให้ระบาย';
+      'ถ้ามีหลายตัวเลข ให้ดันทั้งกลุ่มไปชิดซ้าย (เว้นช่องว่าง 1 ช่องระหว่างบล็อก) แล้วดันไปชิดขวา ช่องที่บล็อกเดียวกันทับทั้งสองตำแหน่งต้องระบาย วิธีคิดเร็ว: บวกตัวเลขกับช่องว่างคั่น ส่วนที่เหลือคือระยะที่แต่ละบล็อกเลื่อนได้';
 
   @override
   String get nonogramGuideMethodSuperpositionMultiTitle =>
@@ -74,7 +74,7 @@ class AppLocalizationsTh extends AppLocalizations {
 
   @override
   String get nonogramGuideMethodSuperpositionSimpleDesc =>
-      'ถ้าตัวเลขยาวกว่าครึ่งหนึ่งของแถว ช่องตรงกลางบางช่องต้องถูกระบายแน่นอน ให้ซ้อนตำแหน่งชิดซ้ายสุดกับชิดขวาสุด ช่องที่ทับกันให้ระบาย';
+      'ถ้าตัวเลขยาวเกินครึ่งเส้น บางส่วนจะถูกระบายเสมอ ลองนึกภาพดันบล็อกไปชิดซ้ายสุด แล้วดันไปชิดขวาสุด ช่องที่ถูกทับทั้งสองครั้งระบายได้แน่นอน ตัวอย่าง: 7 ใน 10 ช่อง จะระบาย 4 ช่องตรงกลางเสมอ';
 
   @override
   String get nonogramGuideMethodSuperpositionSimpleTitle =>
@@ -82,7 +82,7 @@ class AppLocalizationsTh extends AppLocalizations {
 
   @override
   String get nonogramGuideMethodWallPushingDesc =>
-      'ถ้าช่องที่รู้ว่าระบายแล้วอยู่ใกล้ขอบมากกว่าความยาวของตัวเลขตัวแรก รูปที่ช่องนั้นเป็นส่วนหนึ่งต้องยืดออกไปทางที่ห่างจากขอบ';
+      'ช่องที่ระบายแล้วซึ่งอยู่ใกล้ขอบจะจำกัดตำแหน่งของบล็อก บล็อกล้นขอบไม่ได้ จึงต้องยื่นออกไปอีกฝั่ง ตัวอย่าง: เลข 5 ที่ช่องที่ 4 ระบายแล้ว ต่อให้ดันชิดขอบซ้าย บล็อกก็ยังทับช่องที่ 5';
 
   @override
   String get nonogramGuideMethodWallPushingTitle => '2. ดันออกจากขอบ';
@@ -309,7 +309,37 @@ class AppLocalizationsTh extends AppLocalizations {
 
   @override
   String get nonogramGuideTutorialCardDesc =>
-      'เรียนรู้กติกาและการควบคุมทีละขั้นกับปริศนาขนาด 5×5';
+      'เรียนรู้กติกา การควบคุม และเทคนิคการแก้หลัก ๆ ทีละขั้นด้วยการลงมือเล่น';
+
+  @override
+  String get nonogramGuideRoutineTitle => 'เริ่มจากตรงไหน';
+
+  @override
+  String get nonogramGuideRoutineTip1 =>
+      'เริ่มจากตัวเลขใหญ่ ถ้าตัวเลขยาวเกินครึ่งเส้น บางส่วนของมันระบายได้แน่นอนแล้ว (ดูเทคนิคที่ 1 ด้านล่าง)';
+
+  @override
+  String get nonogramGuideRoutineTip2 =>
+      'แก้แถวง่าย ๆ ก่อน: 0 หมายถึงทั้งแถวว่าง และถ้าผลรวมของตัวเลขบวกช่องว่างคั่น 1 ช่องระหว่างแต่ละตัวเท่ากับความยาวแถวพอดี จะวางได้แบบเดียว';
+
+  @override
+  String get nonogramGuideRoutineTip3 =>
+      'กากบาทช่องที่รู้แน่ว่าว่าง กากบาทมีประโยชน์พอ ๆ กับช่องที่ระบายแล้ว';
+
+  @override
+  String get nonogramGuideRoutineTip4 =>
+      'สลับดูแถวกับคอลัมน์ไปมา ทุกช่องที่แก้ได้คือเบาะแสใหม่ของเส้นที่ตัดผ่านช่องนั้น';
+
+  @override
+  String get nonogramGuideRoutineTip5 =>
+      'อย่าเดา ถ้าติด ให้หาเส้นที่เหลือช่องที่ยังไม่รู้น้อยที่สุด หรือใช้คำใบ้';
+
+  @override
+  String get nonogramGuideMethodLineDoneTitle => 'เส้นที่ครบแล้ว';
+
+  @override
+  String get nonogramGuideMethodLineDoneDesc =>
+      'เมื่อบล็อกทั้งหมดของเส้นหนึ่งเข้าที่แล้ว ช่องที่เหลือในเส้นนั้นว่างทั้งหมด: กากบาทให้หมด เส้นที่มีเลข 0 ว่างตั้งแต่แรก';
 
   @override
   String get nonogramPlayInfoHide => 'ซ่อนข้อมูลด่าน';
@@ -417,6 +447,49 @@ class AppLocalizationsTh extends AppLocalizations {
   @override
   String get nonogramTutorialFinishTools =>
       'ระบายช่องที่เหลือให้ครบ ลากลงตามคอลัมน์เพื่อระบายได้เร็วขึ้น';
+
+  @override
+  String get nonogramTutorialToolsDoneTitle => 'ใช้ปุ่มควบคุมเป็นแล้ว!';
+
+  @override
+  String get nonogramTutorialToolsDone =>
+      'ปริศนาจริงใหญ่กว่านี้ และแถวส่วนใหญ่ไม่สามารถแก้ได้ในแวบเดียว ต่อไปมาเรียนเทคนิคการแก้บนปริศนาขนาด 8×8 กัน';
+
+  @override
+  String get nonogramTutorialOverlapSingle =>
+      'ในปริศนาใหญ่ ให้มองหาตัวเลขใหญ่ก่อน บล็อก 6 เลื่อนไปมาใน 8 ช่องนี้ได้ แต่ไม่ว่าจะวางตรงไหน 4 ช่องตรงกลางจะถูกระบายเสมอ ระบายช่องเหล่านั้นเลย';
+
+  @override
+  String get nonogramTutorialOverlapMulti =>
+      'หลายตัวเลขก็ใช้หลักเดียวกัน: 3 3 ต้องใช้อย่างน้อย 7 ช่อง (3 + ช่องว่าง + 3) ทั้งกลุ่มจึงเลื่อนได้แค่ 1 ช่อง ระบายช่องที่ถูกทับทั้งสองตำแหน่ง';
+
+  @override
+  String get nonogramTutorialFullRow =>
+      '8 ใน 8 ช่อง: ทั้งแถวถูกระบาย ลากผ่านทั้งแถวเลย';
+
+  @override
+  String get nonogramTutorialZeroRow =>
+      '0 หมายความว่าแถวนั้นไม่มีช่องที่ถูกระบายเลย สลับไปโหมด X';
+
+  @override
+  String get nonogramTutorialMarkZeroRow =>
+      'กากบาทแถวล่างสุดทั้งแถว กากบาทมีประโยชน์ เพราะบอกคอลัมน์ว่าบล็อกอยู่ตรงไหนไม่ได้';
+
+  @override
+  String get nonogramTutorialOutOfReach =>
+      'ต่อไปดูคอลัมน์ คอลัมน์ที่ 2 เป็นบล็อก 3 ช่องที่ต้องครอบ 2 ช่องที่ระบายแล้ว จึงยื่นออกไปได้อีกไม่เกิน 1 ช่อง กากบาทช่องที่เอื้อมไม่ถึง และทำแบบเดียวกันในคอลัมน์ที่ 7';
+
+  @override
+  String get nonogramTutorialBackToFill =>
+      'ดูคอลัมน์ที่ 3 ต้องการ 7 ช่อง สลับกลับไปโหมดระบาย';
+
+  @override
+  String get nonogramTutorialExactSpace =>
+      'กากบาทด้านล่างเหลือที่ไว้ให้เลข 7 พอดี 7 ช่อง ระบายให้หมดเลย คอลัมน์ที่ 6 ก็เหมือนกัน';
+
+  @override
+  String get nonogramTutorialFinishTechniques =>
+      'นี่คือวิธีแก้: ทำเท่าที่ทำได้ในแถว แล้วไปทำในคอลัมน์ แล้วทำซ้ำ ลองทำเห็ดให้เสร็จด้วยตัวเองเลย!';
 
   @override
   String get nonogramPlayHintNothingToFill =>

@@ -37,49 +37,49 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get nonogramGuideMethodDivisionDesc =>
-      '既にある2つのブロックをつなぐと、どのヒント数字よりも長くなってしまう場合、その間のマスは×になります。';
+      '2つの塗られた部分をつなぐと一番大きな数字より長いブロックになってしまうなら、間のマスは空白です。×を付けて分けましょう。';
 
   @override
   String get nonogramGuideMethodDivisionTitle => '5. 分断';
 
   @override
   String get nonogramGuideMethodDoublePositioningDesc =>
-      '塗られたマスが属するブロックの置き方が数通りに限られる場合、そのどの置き方でも塗られないマスには×を付けます。';
+      '塗られたマスが、1つか2つの数字にしか属せないことがあります。それぞれの可能性を試し、どの場合でも空白になるマスに×を付けましょう。';
 
   @override
   String get nonogramGuideMethodDoublePositioningTitle => '6. 二重配置';
 
   @override
   String get nonogramGuideMethodInaccessibilityDesc =>
-      '残りのどのブロックにも属することができないマスに×を付けます。';
+      'どのブロックも届かないマスは空白です。塗られたマスの周りで各ブロックを一番遠い位置まで動かしてみて、その範囲の外にあるマスには×を付けます。';
 
   @override
   String get nonogramGuideMethodInaccessibilityTitle => '3. 届かないマス';
 
   @override
   String get nonogramGuideMethodNotFitDesc =>
-      '×で挟まれた空きマスの長さが、その列のどのヒント数字よりも短い場合、そこには×を付けます。';
+      '×と×の間（または×と端の間）のすき間が、そこに入りうるどの数字よりも短ければ、ブロックは入りません。×を付けましょう。';
 
   @override
   String get nonogramGuideMethodNotFitTitle => '4. 入りきらない';
 
   @override
   String get nonogramGuideMethodSuperpositionMultiDesc =>
-      '数字が複数あるときは、同じ色のブロック同士の間に最低1マスの空きが必要なことを考慮して、グループ全体を左端に寄せた配置と右端に寄せた配置を重ねます。両方の配置で同じブロックが重なるマスは塗られます。';
+      '数字が複数あるときは、グループ全体を左へ寄せ（ブロックの間は1マス空ける）、次に右へ寄せます。同じブロックが両方の位置で重なるマスは塗られます。早見法：数字と間の空白を足し、余ったマス数が各ブロックの動ける幅です。';
 
   @override
   String get nonogramGuideMethodSuperpositionMultiTitle => '重ね合わせ（ヒントが複数）';
 
   @override
   String get nonogramGuideMethodSuperpositionSimpleDesc =>
-      '数字が列の長さの半分を超えるなら、中央のいくつかのマスは必ず塗られます。左端に寄せた配置と右端に寄せた配置を重ね、重なったマスを塗ります。';
+      '数字が列の半分より大きければ、その一部は必ず塗られます。ブロックを左端まで寄せた場合と右端まで寄せた場合を考えると、両方で重なるマスは確実に塗られます。例：10マスに7なら、真ん中の4マスは必ず塗られます。';
 
   @override
   String get nonogramGuideMethodSuperpositionSimpleTitle => '重ね合わせ（ヒントが1つ）';
 
   @override
   String get nonogramGuideMethodWallPushingDesc =>
-      '塗られていると分かっているマスが、最初のヒント数字の長さよりも端に近い場合、そのブロックは端から離れる方向へ伸びているはずです。';
+      '端に近い塗られたマスは、そのブロックの位置を制限します。ブロックは端の外には出られないので、反対側へ伸びるしかありません。例：5で4マス目が塗られているなら、左端に寄せても5マス目は必ず塗られます。';
 
   @override
   String get nonogramGuideMethodWallPushingTitle => '2. 壁から押し出す';
@@ -302,7 +302,38 @@ class AppLocalizationsJa extends AppLocalizations {
   String get nonogramGuideTutorialCardTitle => '遊びながら覚える';
 
   @override
-  String get nonogramGuideTutorialCardDesc => '小さな5×5のパズルで、ルールと操作を一歩ずつ覚えましょう。';
+  String get nonogramGuideTutorialCardDesc =>
+      'ルール、操作、主な解き方を、実際に遊びながら一歩ずつ覚えましょう。';
+
+  @override
+  String get nonogramGuideRoutineTitle => 'どこから解く？';
+
+  @override
+  String get nonogramGuideRoutineTip1 =>
+      '大きな数字から始めましょう。数字が列の長さの半分より大きければ、その一部はもう確定しています（下のテクニック1を参照）。';
+
+  @override
+  String get nonogramGuideRoutineTip2 =>
+      '簡単な列から解きましょう。0はその列が全部空白という意味です。また、数字の合計と間の空白1マスずつを足して列の長さちょうどなら、並べ方は1通りだけです。';
+
+  @override
+  String get nonogramGuideRoutineTip3 =>
+      '空白だと分かったマスには×を付けましょう。×は塗ったマスと同じくらい役に立ちます。';
+
+  @override
+  String get nonogramGuideRoutineTip4 =>
+      '行と列を行ったり来たりしましょう。解けたマスは、交わる列や行にとって新しい手がかりになります。';
+
+  @override
+  String get nonogramGuideRoutineTip5 =>
+      '当てずっぽうはやめましょう。行き詰まったら、未確定のマスが一番少ない列を探すか、ヒントを使いましょう。';
+
+  @override
+  String get nonogramGuideMethodLineDoneTitle => '完成した列';
+
+  @override
+  String get nonogramGuideMethodLineDoneDesc =>
+      '列のブロックがすべて置けたら、残りのマスはすべて空白です。×を付けましょう。数字が0の列は最初から全部空白です。';
 
   @override
   String get nonogramPlayInfoHide => 'レベル情報を隠す';
@@ -407,6 +438,47 @@ class AppLocalizationsJa extends AppLocalizations {
   @override
   String get nonogramTutorialFinishTools =>
       '残りのマスを塗って完成させましょう。列に沿って下へドラッグすると速く塗れます。';
+
+  @override
+  String get nonogramTutorialToolsDoneTitle => '操作はばっちり！';
+
+  @override
+  String get nonogramTutorialToolsDone =>
+      '本番のパズルはもっと大きく、ほとんどの行はひと目では解けません。次は8×8のパズルで解き方のテクニックを覚えましょう。';
+
+  @override
+  String get nonogramTutorialOverlapSingle =>
+      '大きなパズルでは、まず大きな数字を探しましょう。6のブロックはこの8マスの中を動けますが、どこに置いても真ん中の4マスは必ず塗られます。そこを塗りましょう。';
+
+  @override
+  String get nonogramTutorialOverlapMulti =>
+      '数字が複数でも同じです。3 3 には最低7マス（3＋空白＋3）が必要なので、全体で1マスしか動けません。どちらの位置でも塗られるマスを塗りましょう。';
+
+  @override
+  String get nonogramTutorialFullRow => '8マスに8：この行はすべて塗られます。なぞって塗りましょう。';
+
+  @override
+  String get nonogramTutorialZeroRow =>
+      '0は、その行に塗るマスが1つもないという意味です。×モードに切り替えましょう。';
+
+  @override
+  String get nonogramTutorialMarkZeroRow =>
+      '一番下の行のマスすべてに×を付けましょう。×も大事です。ブロックが置けない場所を列に教えてくれます。';
+
+  @override
+  String get nonogramTutorialOutOfReach =>
+      '次は列です。2列目は3のブロック1つで、塗られた2マスを必ず含むので、そこから1マス先までしか届きません。届かないマスに×を付けましょう。7列目も同じです。';
+
+  @override
+  String get nonogramTutorialBackToFill => '3列目を見てください。7マス必要です。塗りモードに戻しましょう。';
+
+  @override
+  String get nonogramTutorialExactSpace =>
+      '一番下の×のおかげで、7に使えるマスはちょうど7つ。全部塗りましょう。6列目も同じです。';
+
+  @override
+  String get nonogramTutorialFinishTechniques =>
+      'これが基本の流れです。行で分かるところを解いたら列へ、それを繰り返します。キノコを自分で完成させましょう！';
 
   @override
   String get nonogramPlayHintNothingToFill =>

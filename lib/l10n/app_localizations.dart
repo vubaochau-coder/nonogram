@@ -174,7 +174,7 @@ abstract class AppLocalizations {
   /// No description provided for @nonogramGuideMethodDivisionDesc.
   ///
   /// In en, this message translates to:
-  /// **'If joining two existing blocks would create a figure larger than any available clue, the gap between them must be an X.'**
+  /// **'If joining two filled pieces would make a block bigger than the largest number, the square between them must be empty. Mark it with X to keep them apart.'**
   String get nonogramGuideMethodDivisionDesc;
 
   /// No description provided for @nonogramGuideMethodDivisionTitle.
@@ -186,7 +186,7 @@ abstract class AppLocalizations {
   /// No description provided for @nonogramGuideMethodDoublePositioningDesc.
   ///
   /// In en, this message translates to:
-  /// **'If a painted cell can only belong to a few specific block variants, any cells that are never filled in any of those variants must be marked with X.'**
+  /// **'Sometimes a filled square can belong to only one or two of the numbers. Try each possibility: squares that stay empty in every one of them get an X.'**
   String get nonogramGuideMethodDoublePositioningDesc;
 
   /// No description provided for @nonogramGuideMethodDoublePositioningTitle.
@@ -198,7 +198,7 @@ abstract class AppLocalizations {
   /// No description provided for @nonogramGuideMethodInaccessibilityDesc.
   ///
   /// In en, this message translates to:
-  /// **'Mark cells that cannot possibly belong to any remaining figure with a cross (X).'**
+  /// **'Squares that no block can reach are empty. Try each block at its furthest positions around the filled squares; anything outside that range gets an X.'**
   String get nonogramGuideMethodInaccessibilityDesc;
 
   /// No description provided for @nonogramGuideMethodInaccessibilityTitle.
@@ -210,7 +210,7 @@ abstract class AppLocalizations {
   /// No description provided for @nonogramGuideMethodNotFitDesc.
   ///
   /// In en, this message translates to:
-  /// **'If an empty space between crosses is smaller than any available clue for that line, it must be marked with X.'**
+  /// **'A gap between X\'s (or between an X and the edge) that is shorter than every number that could go there can\'t hold a block: mark it with X.'**
   String get nonogramGuideMethodNotFitDesc;
 
   /// No description provided for @nonogramGuideMethodNotFitTitle.
@@ -222,7 +222,7 @@ abstract class AppLocalizations {
   /// No description provided for @nonogramGuideMethodSuperpositionMultiDesc.
   ///
   /// In en, this message translates to:
-  /// **'When there are several numbers, superpose the extreme left and right positions of the entire group, accounting for the mandatory minimum one-square gap between same-color blocks. Squares where a group overlaps with its own range in both variants are painted.'**
+  /// **'With several numbers, push the whole group left (keeping one empty square between blocks), then right. Where the same block covers a square in both positions, that square is filled. Quick check: add up the numbers and the gaps; what\'s left over is how far each block can move.'**
   String get nonogramGuideMethodSuperpositionMultiDesc;
 
   /// No description provided for @nonogramGuideMethodSuperpositionMultiTitle.
@@ -234,7 +234,7 @@ abstract class AppLocalizations {
   /// No description provided for @nonogramGuideMethodSuperpositionSimpleDesc.
   ///
   /// In en, this message translates to:
-  /// **'If a number makes more than half of the length, some squares in the middle will definitely be painted. Superpose the extreme left and extreme right positions; where they overlap, the squares are painted.'**
+  /// **'If a number is more than half its line, part of it is always filled. Imagine the block pushed all the way left, then all the way right: the squares it covers both times are filled for sure. Example: 7 in 10 squares always fills the middle 4.'**
   String get nonogramGuideMethodSuperpositionSimpleDesc;
 
   /// No description provided for @nonogramGuideMethodSuperpositionSimpleTitle.
@@ -246,7 +246,7 @@ abstract class AppLocalizations {
   /// No description provided for @nonogramGuideMethodWallPushingDesc.
   ///
   /// In en, this message translates to:
-  /// **'If a known painted cell is closer to a border than the size of the first clue, the figure it belongs to must extend away from that border.'**
+  /// **'A filled square near the edge limits where its block can be. The block can\'t go past the edge, so it must extend away from it. Example: 5 with the 4th square filled: even pushed against the left edge, the block still covers the 5th square.'**
   String get nonogramGuideMethodWallPushingDesc;
 
   /// No description provided for @nonogramGuideMethodWallPushingTitle.
@@ -630,8 +630,56 @@ abstract class AppLocalizations {
   /// No description provided for @nonogramGuideTutorialCardDesc.
   ///
   /// In en, this message translates to:
-  /// **'Learn the rules and controls step by step on a small 5×5 puzzle.'**
+  /// **'Learn the rules, the controls and the main solving techniques step by step, by playing.'**
   String get nonogramGuideTutorialCardDesc;
+
+  /// No description provided for @nonogramGuideRoutineTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Where to start'**
+  String get nonogramGuideRoutineTitle;
+
+  /// No description provided for @nonogramGuideRoutineTip1.
+  ///
+  /// In en, this message translates to:
+  /// **'Start with the big numbers. If a number is more than half its line, part of it is already certain (see technique 1 below).'**
+  String get nonogramGuideRoutineTip1;
+
+  /// No description provided for @nonogramGuideRoutineTip2.
+  ///
+  /// In en, this message translates to:
+  /// **'Solve the easy lines first: 0 means the whole line is empty, and if the numbers plus one gap between each add up to the line\'s length, it fits only one way.'**
+  String get nonogramGuideRoutineTip2;
+
+  /// No description provided for @nonogramGuideRoutineTip3.
+  ///
+  /// In en, this message translates to:
+  /// **'Mark squares you know are empty with X. An X is as useful as a filled square.'**
+  String get nonogramGuideRoutineTip3;
+
+  /// No description provided for @nonogramGuideRoutineTip4.
+  ///
+  /// In en, this message translates to:
+  /// **'Go back and forth between rows and columns. Every square you solve is a new clue for the line that crosses it.'**
+  String get nonogramGuideRoutineTip4;
+
+  /// No description provided for @nonogramGuideRoutineTip5.
+  ///
+  /// In en, this message translates to:
+  /// **'Never guess. When you\'re stuck, look for the line with the fewest unknown squares, or use a hint.'**
+  String get nonogramGuideRoutineTip5;
+
+  /// No description provided for @nonogramGuideMethodLineDoneTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Finished lines'**
+  String get nonogramGuideMethodLineDoneTitle;
+
+  /// No description provided for @nonogramGuideMethodLineDoneDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'When all the blocks of a line are in place, every other square in it is empty: mark them with X. A line with the number 0 is empty from the start.'**
+  String get nonogramGuideMethodLineDoneDesc;
 
   /// No description provided for @nonogramPlayInfoHide.
   ///
@@ -812,6 +860,72 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Fill the remaining squares to finish. Drag down a column to fill faster.'**
   String get nonogramTutorialFinishTools;
+
+  /// No description provided for @nonogramTutorialToolsDoneTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Controls mastered!'**
+  String get nonogramTutorialToolsDoneTitle;
+
+  /// No description provided for @nonogramTutorialToolsDone.
+  ///
+  /// In en, this message translates to:
+  /// **'Real puzzles are bigger, and most lines can\'t be solved at a glance. Next, learn the solving techniques on an 8×8 puzzle.'**
+  String get nonogramTutorialToolsDone;
+
+  /// No description provided for @nonogramTutorialOverlapSingle.
+  ///
+  /// In en, this message translates to:
+  /// **'In bigger puzzles, look for big numbers first. The 6 can slide anywhere in these 8 squares, but the middle 4 are covered either way. Fill them.'**
+  String get nonogramTutorialOverlapSingle;
+
+  /// No description provided for @nonogramTutorialOverlapMulti.
+  ///
+  /// In en, this message translates to:
+  /// **'Same idea with several numbers: 3 3 needs at least 7 squares (3 + gap + 3), so the group can move only 1 square. Fill the squares it covers in both positions.'**
+  String get nonogramTutorialOverlapMulti;
+
+  /// No description provided for @nonogramTutorialFullRow.
+  ///
+  /// In en, this message translates to:
+  /// **'8 in 8 squares: the whole row is filled. Drag across it.'**
+  String get nonogramTutorialFullRow;
+
+  /// No description provided for @nonogramTutorialZeroRow.
+  ///
+  /// In en, this message translates to:
+  /// **'0 means the row has no filled squares at all. Switch to X mode.'**
+  String get nonogramTutorialZeroRow;
+
+  /// No description provided for @nonogramTutorialMarkZeroRow.
+  ///
+  /// In en, this message translates to:
+  /// **'Mark the whole bottom row with X. X\'s matter: they show the columns where blocks can\'t go.'**
+  String get nonogramTutorialMarkZeroRow;
+
+  /// No description provided for @nonogramTutorialOutOfReach.
+  ///
+  /// In en, this message translates to:
+  /// **'Now the columns. Column 2 is one block of 3 that must cover its 2 filled squares, so it reaches at most 1 square further. Mark the squares out of reach with X, and the same in column 7.'**
+  String get nonogramTutorialOutOfReach;
+
+  /// No description provided for @nonogramTutorialBackToFill.
+  ///
+  /// In en, this message translates to:
+  /// **'Look at column 3: it needs 7. Switch back to fill mode.'**
+  String get nonogramTutorialBackToFill;
+
+  /// No description provided for @nonogramTutorialExactSpace.
+  ///
+  /// In en, this message translates to:
+  /// **'The X at the bottom leaves exactly 7 squares for the 7, so fill them all. Column 6 works the same way.'**
+  String get nonogramTutorialExactSpace;
+
+  /// No description provided for @nonogramTutorialFinishTechniques.
+  ///
+  /// In en, this message translates to:
+  /// **'That\'s the routine: solve what you can in the rows, then in the columns, and repeat. Finish the mushroom on your own!'**
+  String get nonogramTutorialFinishTechniques;
 
   /// No description provided for @nonogramPlayHintNothingToFill.
   ///
