@@ -329,6 +329,29 @@ class AppLocalizationsJa extends AppLocalizations {
       '当てずっぽうはやめましょう。行き詰まったら、未確定のマスが一番少ない列を探すか、ヒントを使いましょう。';
 
   @override
+  String nonogramGuideExample(int number) {
+    return '例 $number';
+  }
+
+  @override
+  String get nonogramGuideExampleSingle => '例';
+
+  @override
+  String get nonogramGuideLegendTitle => '図の見方';
+
+  @override
+  String get nonogramGuideLegendFilled => '塗られたマス';
+
+  @override
+  String get nonogramGuideLegendTrial => 'ブロックを試しに置いた位置';
+
+  @override
+  String get nonogramGuideLegendCross => '空白のマス（×）';
+
+  @override
+  String get nonogramGuideLegendResult => 'そこから分かること';
+
+  @override
   String get nonogramGuideMethodLineDoneTitle => '完成した列';
 
   @override

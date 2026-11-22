@@ -336,6 +336,29 @@ class AppLocalizationsDe extends AppLocalizations {
       'Nie raten. Wenn du feststeckst, such die Linie mit den wenigsten offenen Kästchen oder nimm einen Tipp.';
 
   @override
+  String nonogramGuideExample(int number) {
+    return 'Beispiel $number';
+  }
+
+  @override
+  String get nonogramGuideExampleSingle => 'Beispiel';
+
+  @override
+  String get nonogramGuideLegendTitle => 'So liest du die Bilder';
+
+  @override
+  String get nonogramGuideLegendFilled => 'Gefülltes Kästchen';
+
+  @override
+  String get nonogramGuideLegendTrial => 'Probeweise platzierter Block';
+
+  @override
+  String get nonogramGuideLegendCross => 'Leeres Kästchen (X)';
+
+  @override
+  String get nonogramGuideLegendResult => 'Was daraus folgt';
+
+  @override
   String get nonogramGuideMethodLineDoneTitle => 'Fertige Linien';
 
   @override

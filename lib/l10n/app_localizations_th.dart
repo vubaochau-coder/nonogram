@@ -335,6 +335,29 @@ class AppLocalizationsTh extends AppLocalizations {
       'อย่าเดา ถ้าติด ให้หาเส้นที่เหลือช่องที่ยังไม่รู้น้อยที่สุด หรือใช้คำใบ้';
 
   @override
+  String nonogramGuideExample(int number) {
+    return 'ตัวอย่างที่ $number';
+  }
+
+  @override
+  String get nonogramGuideExampleSingle => 'ตัวอย่าง';
+
+  @override
+  String get nonogramGuideLegendTitle => 'วิธีอ่านภาพประกอบ';
+
+  @override
+  String get nonogramGuideLegendFilled => 'ช่องที่ระบายแล้ว';
+
+  @override
+  String get nonogramGuideLegendTrial => 'ลองวางบล็อก';
+
+  @override
+  String get nonogramGuideLegendCross => 'ช่องว่าง (X)';
+
+  @override
+  String get nonogramGuideLegendResult => 'สิ่งที่สรุปได้';
+
+  @override
   String get nonogramGuideMethodLineDoneTitle => 'เส้นที่ครบแล้ว';
 
   @override

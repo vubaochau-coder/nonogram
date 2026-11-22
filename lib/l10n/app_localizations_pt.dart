@@ -338,6 +338,29 @@ class AppLocalizationsPt extends AppLocalizations {
       'Nunca chute. Se travar, procure a linha com menos quadrados desconhecidos, ou use uma dica.';
 
   @override
+  String nonogramGuideExample(int number) {
+    return 'Exemplo $number';
+  }
+
+  @override
+  String get nonogramGuideExampleSingle => 'Exemplo';
+
+  @override
+  String get nonogramGuideLegendTitle => 'Como ler as figuras';
+
+  @override
+  String get nonogramGuideLegendFilled => 'Quadrado preenchido';
+
+  @override
+  String get nonogramGuideLegendTrial => 'Testando a posição de um bloco';
+
+  @override
+  String get nonogramGuideLegendCross => 'Quadrado vazio (X)';
+
+  @override
+  String get nonogramGuideLegendResult => 'O que dá para deduzir';
+
+  @override
   String get nonogramGuideMethodLineDoneTitle => 'Linhas concluídas';
 
   @override

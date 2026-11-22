@@ -319,6 +319,29 @@ class AppLocalizationsZh extends AppLocalizations {
   String get nonogramGuideRoutineTip5 => '不要猜。卡住时，找未知格最少的那一行或列，或使用提示。';
 
   @override
+  String nonogramGuideExample(int number) {
+    return '示例 $number';
+  }
+
+  @override
+  String get nonogramGuideExampleSingle => '示例';
+
+  @override
+  String get nonogramGuideLegendTitle => '如何看图示';
+
+  @override
+  String get nonogramGuideLegendFilled => '已涂的格子';
+
+  @override
+  String get nonogramGuideLegendTrial => '试放色块的位置';
+
+  @override
+  String get nonogramGuideLegendCross => '空格（X）';
+
+  @override
+  String get nonogramGuideLegendResult => '可以推出的结果';
+
+  @override
   String get nonogramGuideMethodLineDoneTitle => '已完成的行列';
 
   @override
@@ -1071,6 +1094,29 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
 
   @override
   String get nonogramGuideRoutineTip5 => '不要猜。卡住時，找未知格最少的那一行或列，或使用提示。';
+
+  @override
+  String nonogramGuideExample(int number) {
+    return '範例 $number';
+  }
+
+  @override
+  String get nonogramGuideExampleSingle => '範例';
+
+  @override
+  String get nonogramGuideLegendTitle => '如何看圖示';
+
+  @override
+  String get nonogramGuideLegendFilled => '已塗的格子';
+
+  @override
+  String get nonogramGuideLegendTrial => '試放色塊的位置';
+
+  @override
+  String get nonogramGuideLegendCross => '空格（X）';
+
+  @override
+  String get nonogramGuideLegendResult => '可以推出的結果';
 
   @override
   String get nonogramGuideMethodLineDoneTitle => '已完成的行列';

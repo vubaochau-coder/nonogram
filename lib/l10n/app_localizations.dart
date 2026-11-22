@@ -669,6 +669,48 @@ abstract class AppLocalizations {
   /// **'Never guess. When you\'re stuck, look for the line with the fewest unknown squares, or use a hint.'**
   String get nonogramGuideRoutineTip5;
 
+  /// No description provided for @nonogramGuideExample.
+  ///
+  /// In en, this message translates to:
+  /// **'Example {number}'**
+  String nonogramGuideExample(int number);
+
+  /// No description provided for @nonogramGuideExampleSingle.
+  ///
+  /// In en, this message translates to:
+  /// **'Example'**
+  String get nonogramGuideExampleSingle;
+
+  /// No description provided for @nonogramGuideLegendTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'How to read the pictures'**
+  String get nonogramGuideLegendTitle;
+
+  /// No description provided for @nonogramGuideLegendFilled.
+  ///
+  /// In en, this message translates to:
+  /// **'Filled square'**
+  String get nonogramGuideLegendFilled;
+
+  /// No description provided for @nonogramGuideLegendTrial.
+  ///
+  /// In en, this message translates to:
+  /// **'Trying a block position'**
+  String get nonogramGuideLegendTrial;
+
+  /// No description provided for @nonogramGuideLegendCross.
+  ///
+  /// In en, this message translates to:
+  /// **'Empty square (X)'**
+  String get nonogramGuideLegendCross;
+
+  /// No description provided for @nonogramGuideLegendResult.
+  ///
+  /// In en, this message translates to:
+  /// **'What you can deduce'**
+  String get nonogramGuideLegendResult;
+
   /// No description provided for @nonogramGuideMethodLineDoneTitle.
   ///
   /// In en, this message translates to:

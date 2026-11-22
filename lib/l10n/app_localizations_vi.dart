@@ -336,6 +336,29 @@ class AppLocalizationsVi extends AppLocalizations {
       'Đừng đoán mò. Khi bí, hãy tìm hàng hoặc cột còn ít ô chưa biết nhất, hoặc dùng gợi ý.';
 
   @override
+  String nonogramGuideExample(int number) {
+    return 'Ví dụ $number';
+  }
+
+  @override
+  String get nonogramGuideExampleSingle => 'Ví dụ';
+
+  @override
+  String get nonogramGuideLegendTitle => 'Cách đọc hình minh hoạ';
+
+  @override
+  String get nonogramGuideLegendFilled => 'Ô đã tô';
+
+  @override
+  String get nonogramGuideLegendTrial => 'Thử đặt khối';
+
+  @override
+  String get nonogramGuideLegendCross => 'Ô trống (X)';
+
+  @override
+  String get nonogramGuideLegendResult => 'Kết quả suy ra được';
+
+  @override
   String get nonogramGuideMethodLineDoneTitle => 'Hàng đã đủ';
 
   @override

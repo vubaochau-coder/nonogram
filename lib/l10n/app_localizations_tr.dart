@@ -336,6 +336,29 @@ class AppLocalizationsTr extends AppLocalizations {
       'Asla tahmin etme. Takılırsan en az bilinmeyen karesi olan çizgiyi ara ya da ipucu kullan.';
 
   @override
+  String nonogramGuideExample(int number) {
+    return 'Örnek $number';
+  }
+
+  @override
+  String get nonogramGuideExampleSingle => 'Örnek';
+
+  @override
+  String get nonogramGuideLegendTitle => 'Resimler nasıl okunur';
+
+  @override
+  String get nonogramGuideLegendFilled => 'Dolu kare';
+
+  @override
+  String get nonogramGuideLegendTrial => 'Bloğu deneme konumu';
+
+  @override
+  String get nonogramGuideLegendCross => 'Boş kare (X)';
+
+  @override
+  String get nonogramGuideLegendResult => 'Çıkarılabilen sonuç';
+
+  @override
   String get nonogramGuideMethodLineDoneTitle => 'Tamamlanan çizgiler';
 
   @override

@@ -336,6 +336,29 @@ class AppLocalizationsEn extends AppLocalizations {
       'Never guess. When you\'re stuck, look for the line with the fewest unknown squares, or use a hint.';
 
   @override
+  String nonogramGuideExample(int number) {
+    return 'Example $number';
+  }
+
+  @override
+  String get nonogramGuideExampleSingle => 'Example';
+
+  @override
+  String get nonogramGuideLegendTitle => 'How to read the pictures';
+
+  @override
+  String get nonogramGuideLegendFilled => 'Filled square';
+
+  @override
+  String get nonogramGuideLegendTrial => 'Trying a block position';
+
+  @override
+  String get nonogramGuideLegendCross => 'Empty square (X)';
+
+  @override
+  String get nonogramGuideLegendResult => 'What you can deduce';
+
+  @override
   String get nonogramGuideMethodLineDoneTitle => 'Finished lines';
 
   @override
