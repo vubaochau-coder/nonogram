@@ -2,6 +2,10 @@
     <!-- Quảng cáo, mua gói và giờ mạng của điểm danh. Khai báo ở đây để bản
          release không phụ thuộc vào manifest của plugin quảng cáo. -->
     <uses-permission android:name="android.permission.INTERNET"/>
+    <!-- Mã quảng cáo (Android 13+): để AdMob nhận ra thiết bị thử nghiệm và
+         chọn quảng cáo. Thư viện quảng cáo cũng tự khai báo; ghi rõ ở đây để
+         không bị mất khi gộp manifest. -->
+    <uses-permission android:name="com.google.android.gms.permission.AD_ID"/>
     <application
         android:label="Pixel Nonogram"
         android:name="${applicationName}"
