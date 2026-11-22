@@ -553,7 +553,7 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get adRewardNotReady =>
-      'Reklam henüz hazır değil. İnternet bağlantını kontrol edip tekrar dene.';
+      'Reklam henüz hazır değil. Lütfen birkaç dakika sonra tekrar dene.';
 
   @override
   String get settingsAdPrivacy => 'Reklam gizliliği';

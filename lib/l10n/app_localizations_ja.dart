@@ -540,7 +540,7 @@ class AppLocalizationsJa extends AppLocalizations {
   }
 
   @override
-  String get adRewardNotReady => '広告の準備ができていません。インターネット接続を確認して、もう一度お試しください。';
+  String get adRewardNotReady => '広告の準備ができていません。数分後にもう一度お試しください。';
 
   @override
   String get settingsAdPrivacy => '広告のプライバシー';

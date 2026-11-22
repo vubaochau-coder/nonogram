@@ -151,7 +151,7 @@
   "licensesSoftwareButton": "开源软件许可",
   "licensesBy": "作者：{author}",
   "licensesLevelCount": "{count} 个谜题",
-  "adRewardNotReady": "广告还没准备好。请检查网络连接后重试。",
+  "adRewardNotReady": "广告还没准备好，请几分钟后再试。",
   "settingsAdPrivacy": "广告隐私",
   "ratingTitle": "喜欢 Pixel Nonogram 吗？",
   "ratingMessage": "点按星星为游戏评分。",

@@ -271,7 +271,7 @@
       }
     }
   },
-  "adRewardNotReady": "The ad isn't ready yet. Check your internet connection and try again.",
+  "adRewardNotReady": "The ad isn't ready yet. Please try again in a few minutes.",
   "settingsAdPrivacy": "Ad privacy",
   "ratingTitle": "Enjoying Pixel Nonogram?",
   "ratingMessage": "Tap a star to rate the game.",

@@ -556,7 +556,7 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get adRewardNotReady =>
-      'La publicité n\'est pas encore prête. Vérifiez votre connexion Internet et réessayez.';
+      'La publicité n\'est pas encore prête. Réessayez dans quelques minutes.';
 
   @override
   String get settingsAdPrivacy => 'Confidentialité des annonces';

@@ -552,7 +552,7 @@ class AppLocalizationsId extends AppLocalizations {
 
   @override
   String get adRewardNotReady =>
-      'Iklan belum siap. Periksa koneksi internetmu lalu coba lagi.';
+      'Iklan belum siap. Coba lagi dalam beberapa menit.';
 
   @override
   String get settingsAdPrivacy => 'Privasi iklan';

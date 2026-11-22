@@ -151,7 +151,7 @@
   "licensesSoftwareButton": "Açık kaynak yazılım lisansları",
   "licensesBy": "Hazırlayan: {author}",
   "licensesLevelCount": "{count} bulmaca",
-  "adRewardNotReady": "Reklam henüz hazır değil. İnternet bağlantını kontrol edip tekrar dene.",
+  "adRewardNotReady": "Reklam henüz hazır değil. Lütfen birkaç dakika sonra tekrar dene.",
   "settingsAdPrivacy": "Reklam gizliliği",
   "ratingTitle": "Pixel Nonogram'ı beğendin mi?",
   "ratingMessage": "Oyunu puanlamak için bir yıldıza dokun.",

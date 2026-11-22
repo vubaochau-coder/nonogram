@@ -553,7 +553,7 @@ class AppLocalizationsVi extends AppLocalizations {
 
   @override
   String get adRewardNotReady =>
-      'Quảng cáo chưa sẵn sàng. Hãy kiểm tra kết nối mạng rồi thử lại.';
+      'Quảng cáo chưa sẵn sàng. Vui lòng thử lại sau ít phút.';
 
   @override
   String get settingsAdPrivacy => 'Quyền riêng tư quảng cáo';

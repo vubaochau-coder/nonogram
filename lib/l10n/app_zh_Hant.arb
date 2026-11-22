@@ -151,7 +151,7 @@
   "licensesSoftwareButton": "開放原始碼軟體授權",
   "licensesBy": "作者：{author}",
   "licensesLevelCount": "{count} 個謎題",
-  "adRewardNotReady": "廣告還沒準備好。請檢查網路連線後重試。",
+  "adRewardNotReady": "廣告還沒準備好，請幾分鐘後再試。",
   "settingsAdPrivacy": "廣告隱私",
   "ratingTitle": "喜歡 Pixel Nonogram 嗎？",
   "ratingMessage": "點按星星為遊戲評分。",

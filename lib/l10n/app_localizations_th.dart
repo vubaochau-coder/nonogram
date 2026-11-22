@@ -552,7 +552,7 @@ class AppLocalizationsTh extends AppLocalizations {
 
   @override
   String get adRewardNotReady =>
-      'โฆษณายังไม่พร้อม ตรวจสอบการเชื่อมต่ออินเทอร์เน็ตแล้วลองอีกครั้ง';
+      'โฆษณายังไม่พร้อม โปรดลองอีกครั้งในอีกไม่กี่นาที';
 
   @override
   String get settingsAdPrivacy => 'ความเป็นส่วนตัวด้านโฆษณา';

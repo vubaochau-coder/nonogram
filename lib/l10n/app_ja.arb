@@ -151,7 +151,7 @@
   "licensesSoftwareButton": "オープンソースソフトウェアのライセンス",
   "licensesBy": "作者：{author}",
   "licensesLevelCount": "{count}問",
-  "adRewardNotReady": "広告の準備ができていません。インターネット接続を確認して、もう一度お試しください。",
+  "adRewardNotReady": "広告の準備ができていません。数分後にもう一度お試しください。",
   "settingsAdPrivacy": "広告のプライバシー",
   "ratingTitle": "Pixel Nonogramを楽しんでいますか？",
   "ratingMessage": "星をタップしてゲームを評価してください。",

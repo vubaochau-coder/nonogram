@@ -553,7 +553,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get adRewardNotReady =>
-      'The ad isn\'t ready yet. Check your internet connection and try again.';
+      'The ad isn\'t ready yet. Please try again in a few minutes.';
 
   @override
   String get settingsAdPrivacy => 'Ad privacy';

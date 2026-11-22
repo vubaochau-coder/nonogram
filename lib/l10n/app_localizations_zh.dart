@@ -524,7 +524,7 @@ class AppLocalizationsZh extends AppLocalizations {
   }
 
   @override
-  String get adRewardNotReady => '广告还没准备好。请检查网络连接后重试。';
+  String get adRewardNotReady => '广告还没准备好，请几分钟后再试。';
 
   @override
   String get settingsAdPrivacy => '广告隐私';
@@ -1317,7 +1317,7 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
   }
 
   @override
-  String get adRewardNotReady => '廣告還沒準備好。請檢查網路連線後重試。';
+  String get adRewardNotReady => '廣告還沒準備好，請幾分鐘後再試。';
 
   @override
   String get settingsAdPrivacy => '廣告隱私';
