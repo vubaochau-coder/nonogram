@@ -853,7 +853,7 @@ class _GhostBlink extends StatefulWidget {
   final Color color;
 
   /// Thời gian cho mỗi cách đặt: sáng lên, giữ, tắt, nghỉ.
-  static const _perPlacement = Duration(milliseconds: 1100);
+  static const _perPlacement = Duration(milliseconds: 1800);
 
   @override
   State<_GhostBlink> createState() => _GhostBlinkState();
