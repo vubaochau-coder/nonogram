@@ -321,7 +321,7 @@ void main() {
       }
     });
 
-    test('the sliding ghost shows exactly the cells to fill', () {
+    test('the two ghost bars overlap exactly on the cells to fill', () {
       for (final step in steps) {
         final ghost = step.ghost;
         if (ghost == null) continue;

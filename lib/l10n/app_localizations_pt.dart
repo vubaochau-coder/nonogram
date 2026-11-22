@@ -460,11 +460,11 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get nonogramTutorialOverlapSingle =>
-      'Em quebra-cabeças maiores, procure primeiro os números grandes. O 6 pode deslizar por estes 8 quadrados, mas sempre cobre os 4 do meio. Preencha-os.';
+      'Procure primeiro os números grandes. As duas barras azuis mostram o 6 encostado à esquerda e à direita. Onde elas se sobrepõem é sempre preenchido, esteja o bloco onde estiver. Preencha esses 4 quadrados.';
 
   @override
   String get nonogramTutorialOverlapMulti =>
-      'A mesma ideia vale para vários números: 3 3 precisa de pelo menos 7 quadrados (3 + espaço + 3), então o grupo só pode se mover 1 quadrado. Preencha os quadrados cobertos nas duas posições.';
+      'O mesmo com vários números: 3 3 precisa de pelo menos 7 quadrados (3 + espaço + 3), então o grupo só se move 1 quadrado. Barras de cima: à esquerda; de baixo: à direita. Preencha o que as duas cobrem.';
 
   @override
   String get nonogramTutorialFullRow =>
@@ -480,7 +480,7 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get nonogramTutorialOutOfReach =>
-      'Agora as colunas. A coluna 2 é um bloco de 3 que precisa cobrir seus 2 quadrados preenchidos, então alcança no máximo 1 quadrado além. Marque com X os quadrados fora de alcance, e o mesmo na coluna 7.';
+      'Agora as colunas. A coluna 2 é um bloco de 3 que precisa cobrir seus 2 quadrados preenchidos. As duas barras azuis são suas posições extremas: quadrados fora das duas não são alcançados. Marque-os com X, e o mesmo na coluna 7.';
 
   @override
   String get nonogramTutorialBackToFill =>

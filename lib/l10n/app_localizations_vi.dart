@@ -458,11 +458,11 @@ class AppLocalizationsVi extends AppLocalizations {
 
   @override
   String get nonogramTutorialOverlapSingle =>
-      'Ở câu đố lớn, hãy tìm các số lớn trước. Khối 6 có thể trượt khắp 8 ô này, nhưng dù đặt ở đâu, 4 ô ở giữa vẫn luôn được phủ. Hãy tô chúng.';
+      'Ở câu đố lớn, hãy tìm số lớn trước. Hai vạch xanh là khối 6 đặt sát trái và sát phải. Phần hai vạch trùng nhau luôn được tô, dù khối nằm ở đâu. Hãy tô 4 ô đó.';
 
   @override
   String get nonogramTutorialOverlapMulti =>
-      'Nhiều số cũng vậy: 3 3 cần ít nhất 7 ô (3 + 1 ô trống + 3), nên cả nhóm chỉ xê dịch được 1 ô. Tô các ô mà nhóm phủ ở cả hai vị trí.';
+      'Nhiều số cũng vậy: 3 3 cần ít nhất 7 ô (3 + 1 ô trống + 3), nên cả nhóm chỉ xê dịch được 1 ô. Vạch trên là nhóm đặt sát trái, vạch dưới là sát phải. Tô các ô cả hai vạch cùng phủ.';
 
   @override
   String get nonogramTutorialFullRow =>
@@ -478,7 +478,7 @@ class AppLocalizationsVi extends AppLocalizations {
 
   @override
   String get nonogramTutorialOutOfReach =>
-      'Giờ đến các cột. Cột 2 là một khối 3 ô và phải phủ 2 ô đã tô, nên chỉ với thêm được tối đa 1 ô. Đánh X các ô ngoài tầm với, cột 7 cũng làm tương tự.';
+      'Giờ đến các cột. Cột 2 là một khối 3 ô và phải phủ 2 ô đã tô. Hai vạch xanh là hai vị trí xa nhất của nó: ô nằm ngoài cả hai vạch thì không với tới được. Đánh X các ô đó, cột 7 cũng vậy.';
 
   @override
   String get nonogramTutorialBackToFill =>

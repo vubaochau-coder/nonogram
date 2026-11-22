@@ -458,11 +458,11 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get nonogramTutorialOverlapSingle =>
-      'Such in größeren Rätseln zuerst nach großen Zahlen. Die 6 kann in diesen 8 Kästchen hin- und herrutschen, aber die mittleren 4 deckt sie immer ab. Füll sie aus.';
+      'Such zuerst nach großen Zahlen. Die zwei blauen Balken zeigen die 6 ganz links und ganz rechts. Wo sie sich überlappen, ist immer gefüllt, egal wo der Block liegt. Füll diese 4 Kästchen.';
 
   @override
   String get nonogramTutorialOverlapMulti =>
-      'Mit mehreren Zahlen klappt es genauso: 3 3 braucht mindestens 7 Kästchen (3 + Lücke + 3), die Gruppe kann sich also nur um 1 verschieben. Füll die Kästchen, die sie in beiden Lagen abdeckt.';
+      'Mit mehreren Zahlen genauso: 3 3 braucht mindestens 7 Kästchen (3 + Lücke + 3), die Gruppe kann sich also nur um 1 verschieben. Obere Balken: ganz links, untere: ganz rechts. Füll, was beide abdecken.';
 
   @override
   String get nonogramTutorialFullRow =>
@@ -478,7 +478,7 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get nonogramTutorialOutOfReach =>
-      'Jetzt die Spalten. Spalte 2 ist ein Block aus 3, der ihre 2 gefüllten Kästchen abdecken muss, also reicht er höchstens 1 Kästchen weiter. Markiere die unerreichbaren Kästchen mit X, ebenso in Spalte 7.';
+      'Jetzt die Spalten. Spalte 2 ist ein Block aus 3, der ihre 2 gefüllten Kästchen abdecken muss. Die zwei blauen Balken sind seine äußersten Lagen: Kästchen außerhalb beider sind unerreichbar. Markiere sie mit X, ebenso in Spalte 7.';
 
   @override
   String get nonogramTutorialBackToFill =>

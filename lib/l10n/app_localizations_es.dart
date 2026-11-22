@@ -462,11 +462,11 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get nonogramTutorialOverlapSingle =>
-      'En puzles grandes, busca primero los números grandes. El 6 puede deslizarse por estas 8 casillas, pero siempre cubre las 4 del centro. Rellénalas.';
+      'Busca primero los números grandes. Las dos barras azules muestran el 6 pegado a la izquierda y a la derecha. Donde se solapan siempre se rellena, esté donde esté el bloque. Rellena esas 4 casillas.';
 
   @override
   String get nonogramTutorialOverlapMulti =>
-      'Con varios números funciona igual: 3 3 necesita al menos 7 casillas (3 + hueco + 3), así que el grupo solo puede moverse 1 casilla. Rellena las casillas que cubre en ambas posiciones.';
+      'Igual con varios números: 3 3 necesita al menos 7 casillas (3 + hueco + 3), así que el grupo solo se mueve 1 casilla. Barras de arriba: a la izquierda; de abajo: a la derecha. Rellena lo que cubren ambas.';
 
   @override
   String get nonogramTutorialFullRow =>
@@ -482,7 +482,7 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get nonogramTutorialOutOfReach =>
-      'Ahora las columnas. La columna 2 es un bloque de 3 que debe cubrir sus 2 casillas rellenas, así que llega como mucho 1 casilla más allá. Marca con X las casillas fuera de su alcance, y lo mismo en la columna 7.';
+      'Ahora las columnas. La columna 2 es un bloque de 3 que debe cubrir sus 2 casillas rellenas. Las dos barras azules son sus posiciones extremas: las casillas fuera de ambas no se alcanzan. Márcalas con X, y lo mismo en la columna 7.';
 
   @override
   String get nonogramTutorialBackToFill =>

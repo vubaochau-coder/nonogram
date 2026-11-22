@@ -461,11 +461,11 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get nonogramTutorialOverlapSingle =>
-      'Sur les grandes grilles, cherchez d\'abord les grands nombres. Le 6 peut glisser dans ces 8 cases, mais il couvre toujours les 4 du milieu. Noircissez-les.';
+      'Cherchez d\'abord les grands nombres. Les deux barres bleues montrent le 6 collé à gauche et collé à droite. Là où elles se chevauchent, c\'est noir quelle que soit la position. Noircissez ces 4 cases.';
 
   @override
   String get nonogramTutorialOverlapMulti =>
-      'Même principe avec plusieurs nombres : 3 3 demande au moins 7 cases (3 + espace + 3), le groupe ne peut donc bouger que d\'1 case. Noircissez les cases couvertes dans les deux positions.';
+      'Pareil avec plusieurs nombres : 3 3 demande au moins 7 cases (3 + espace + 3), le groupe ne bouge donc que d\'1 case. Barres du haut : à gauche, du bas : à droite. Noircissez les cases couvertes par les deux.';
 
   @override
   String get nonogramTutorialFullRow =>
@@ -481,7 +481,7 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get nonogramTutorialOutOfReach =>
-      'Passons aux colonnes. La colonne 2 est un bloc de 3 qui doit couvrir ses 2 cases noires : il ne peut aller qu\'1 case plus loin. Marquez d\'un X les cases hors de portée, et pareil dans la colonne 7.';
+      'Passons aux colonnes. La colonne 2 est un bloc de 3 qui doit couvrir ses 2 cases noires. Les deux barres bleues sont ses positions extrêmes : les cases hors des deux sont hors de portée. Marquez-les d\'un X, et pareil dans la colonne 7.';
 
   @override
   String get nonogramTutorialBackToFill =>

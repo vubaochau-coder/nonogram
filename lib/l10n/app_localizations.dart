@@ -876,13 +876,13 @@ abstract class AppLocalizations {
   /// No description provided for @nonogramTutorialOverlapSingle.
   ///
   /// In en, this message translates to:
-  /// **'In bigger puzzles, look for big numbers first. The 6 can slide anywhere in these 8 squares, but the middle 4 are covered either way. Fill them.'**
+  /// **'Look for big numbers first. The two blue bars show the 6 pushed fully left and fully right. Where they overlap is filled wherever the block goes. Fill those 4 squares.'**
   String get nonogramTutorialOverlapSingle;
 
   /// No description provided for @nonogramTutorialOverlapMulti.
   ///
   /// In en, this message translates to:
-  /// **'Same idea with several numbers: 3 3 needs at least 7 squares (3 + gap + 3), so the group can move only 1 square. Fill the squares it covers in both positions.'**
+  /// **'Same with several numbers: 3 3 needs at least 7 squares (3 + gap + 3), so the group moves only 1 square. Top bars: pushed left, bottom bars: pushed right. Fill the squares both cover.'**
   String get nonogramTutorialOverlapMulti;
 
   /// No description provided for @nonogramTutorialFullRow.
@@ -906,7 +906,7 @@ abstract class AppLocalizations {
   /// No description provided for @nonogramTutorialOutOfReach.
   ///
   /// In en, this message translates to:
-  /// **'Now the columns. Column 2 is one block of 3 that must cover its 2 filled squares, so it reaches at most 1 square further. Mark the squares out of reach with X, and the same in column 7.'**
+  /// **'Now the columns. Column 2 is one block of 3 that must cover its 2 filled squares. The two blue bars are its furthest positions: squares outside both can\'t be reached. Mark them with X, and the same in column 7.'**
   String get nonogramTutorialOutOfReach;
 
   /// No description provided for @nonogramTutorialBackToFill.

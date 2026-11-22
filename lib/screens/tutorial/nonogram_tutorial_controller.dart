@@ -80,8 +80,8 @@ enum TutorialMessage {
 /// Một hàng ([isRow]) hoặc cột thứ [index].
 typedef TutorialLine = ({bool isRow, int index});
 
-/// Bóng mờ của nhóm khối [blocks] trượt qua lại trên [line], từ vị trí bắt
-/// đầu [from] tới [to] (tính theo ô, giữa các khối cách đúng 1 ô). Cho người
+/// Nhóm khối [blocks] trên [line] ở hai vị trí xa nhất: bắt đầu từ ô [from]
+/// và từ ô [to] (giữa các khối cách đúng 1 ô). Vẽ thành hai vạch để người
 /// chơi thấy phần ô khối luôn phủ dù đặt ở đâu.
 class TutorialGhost {
   const TutorialGhost({
@@ -151,7 +151,7 @@ class TutorialStep {
   /// tô sẵn).
   final bool highlightPendingOnly;
 
-  /// Bóng khối trượt minh hoạ kỹ thuật chồng lấp / ngoài tầm với.
+  /// Hai vị trí xa nhất của khối, minh hoạ kỹ thuật chồng lấp / ngoài tầm với.
   final TutorialGhost? ghost;
 
   /// Người chơi tự giải: không viền sáng, không bàn tay chỉ chỗ.

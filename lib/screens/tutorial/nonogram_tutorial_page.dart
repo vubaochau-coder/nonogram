@@ -759,11 +759,12 @@ class _TutorialGridState extends State<_TutorialGrid> {
             if (step.ghost case final ghost?)
               Positioned.fill(
                 child: IgnorePointer(
-                  child: _GhostSlide(
-                    key: ValueKey(controller.stepIndex),
-                    ghost: ghost,
-                    cellSize: cellSize,
-                    color: colors.primary,
+                  child: CustomPaint(
+                    painter: _GhostPainter(
+                      ghost: ghost,
+                      cellSize: cellSize,
+                      color: colors.primary,
+                    ),
                   ),
                 ),
               ),
@@ -832,120 +833,47 @@ class _TutorialGridState extends State<_TutorialGrid> {
   }
 }
 
-/// Bóng mờ của nhóm khối trượt qua lại giữa vị trí xa nhất hai bên, dừng một
-/// chút ở mỗi đầu. Phần ô bóng phủ ở cả hai đầu là phần chắc chắn được tô.
-/// Khi giảm chuyển động: vẽ đứng yên cả hai vị trí chồng lên nhau.
-class _GhostSlide extends StatefulWidget {
-  const _GhostSlide({
-    super.key,
-    required this.ghost,
-    required this.cellSize,
-    required this.color,
-  });
-
-  final TutorialGhost ghost;
-  final double cellSize;
-  final Color color;
-
-  @override
-  State<_GhostSlide> createState() => _GhostSlideState();
-}
-
-class _GhostSlideState extends State<_GhostSlide>
-    with SingleTickerProviderStateMixin {
-  late final AnimationController _animation = AnimationController(
-    vsync: this,
-    duration: const Duration(milliseconds: 2600),
-  );
-  bool _still = false;
-
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    _still = MediaQuery.disableAnimationsOf(context);
-    if (_still) {
-      _animation.stop();
-    } else if (!_animation.isAnimating) {
-      _animation.repeat(reverse: true);
-    }
-  }
-
-  @override
-  void dispose() {
-    _animation.dispose();
-    super.dispose();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return AnimatedBuilder(
-      animation: _animation,
-      builder: (context, _) {
-        // 0–25%: đứng ở đầu này, 25–75%: trượt, 75–100%: đứng ở đầu kia.
-        final v = _animation.value;
-        final t = Curves.easeInOut.transform(((v - 0.25) / 0.5).clamp(0, 1));
-        return CustomPaint(
-          painter: _GhostPainter(
-            ghost: widget.ghost,
-            cellSize: widget.cellSize,
-            color: widget.color,
-            positions: _still ? const [0.0, 1.0] : [t],
-          ),
-        );
-      },
-    );
-  }
-}
-
+/// Hai vạch mảnh trong cùng một dòng: nhóm khối đặt ở vị trí xa nhất một
+/// bên (vạch trên / trái) và bên kia (vạch dưới / phải). Chỗ hai vạch cùng
+/// phủ là phần chắc chắn được tô; ngoài cả hai vạch là ô không với tới.
 class _GhostPainter extends CustomPainter {
   _GhostPainter({
     required this.ghost,
     required this.cellSize,
     required this.color,
-    required this.positions,
   });
 
   final TutorialGhost ghost;
   final double cellSize;
   final Color color;
 
-  /// Vị trí nhóm khối, 0 = [TutorialGhost.from], 1 = [TutorialGhost.to].
-  final List<double> positions;
-
   @override
   void paint(Canvas canvas, Size size) {
-    final fill =
-        Paint()
-          ..color = color.withValues(alpha: positions.length > 1 ? 0.2 : 0.3);
+    final fill = Paint()..color = color.withValues(alpha: 0.55);
     final stroke =
         Paint()
-          ..color = color.withValues(alpha: 0.9)
+          ..color = color
           ..style = PaintingStyle.stroke
-          ..strokeWidth = 2;
+          ..strokeWidth = 1.5;
     final line = ghost.line;
-    for (final p in positions) {
-      final start = ghost.from + (ghost.to - ghost.from) * p;
+    final inset = cellSize * 0.1;
+    final lane = cellSize * 0.3;
+    final gap = cellSize * 0.1;
+    for (final (laneIndex, start) in [(0, ghost.from), (1, ghost.to)]) {
+      // Vị trí vạch theo bề ngang của ô (trên / dưới, hoặc trái / phải).
+      final across =
+          line.index * cellSize +
+          (cellSize - 2 * lane - gap) / 2 +
+          laneIndex * (lane + gap);
       var pos = start;
       for (final block in ghost.blocks) {
-        final along = Rect.fromLTWH(pos * cellSize, 0, block * cellSize, 1);
-        final rect = (line.isRow
-                ? Rect.fromLTWH(
-                  along.left,
-                  line.index * cellSize,
-                  along.width,
-                  cellSize,
-                )
-                : Rect.fromLTWH(
-                  line.index * cellSize,
-                  along.left,
-                  cellSize,
-                  along.width,
-                ))
-            .deflate(cellSize * 0.12);
-        final rrect = RRect.fromRectAndRadius(
-          rect,
-          Radius.circular(cellSize * 0.18),
-        );
+        final from = pos * cellSize + inset;
+        final length = block * cellSize - 2 * inset;
+        final rect =
+            line.isRow
+                ? Rect.fromLTWH(from, across, length, lane)
+                : Rect.fromLTWH(across, from, lane, length);
+        final rrect = RRect.fromRectAndRadius(rect, Radius.circular(lane / 2));
         canvas.drawRRect(rrect, fill);
         canvas.drawRRect(rrect, stroke);
         pos += block + 1;
@@ -957,9 +885,7 @@ class _GhostPainter extends CustomPainter {
   bool shouldRepaint(covariant _GhostPainter oldDelegate) {
     return oldDelegate.ghost != ghost ||
         oldDelegate.cellSize != cellSize ||
-        oldDelegate.color != color ||
-        oldDelegate.positions.length != positions.length ||
-        oldDelegate.positions.first != positions.first;
+        oldDelegate.color != color;
   }
 }
 

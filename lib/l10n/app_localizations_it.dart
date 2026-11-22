@@ -461,11 +461,11 @@ class AppLocalizationsIt extends AppLocalizations {
 
   @override
   String get nonogramTutorialOverlapSingle =>
-      'Nei puzzle più grandi, cerca prima i numeri grandi. Il 6 può scorrere in queste 8 caselle, ma copre sempre le 4 centrali. Riempile.';
+      'Cerca prima i numeri grandi. Le due barre blu mostrano il 6 spinto tutto a sinistra e tutto a destra. Dove si sovrappongono è sempre pieno, ovunque sia il blocco. Riempi quelle 4 caselle.';
 
   @override
   String get nonogramTutorialOverlapMulti =>
-      'Stessa idea con più numeri: 3 3 richiede almeno 7 caselle (3 + spazio + 3), quindi il gruppo può spostarsi di 1 sola casella. Riempi le caselle coperte in entrambe le posizioni.';
+      'Lo stesso con più numeri: 3 3 richiede almeno 7 caselle (3 + spazio + 3), quindi il gruppo si sposta di 1 sola casella. Barre in alto: a sinistra, in basso: a destra. Riempi ciò che coprono entrambe.';
 
   @override
   String get nonogramTutorialFullRow =>
@@ -481,7 +481,7 @@ class AppLocalizationsIt extends AppLocalizations {
 
   @override
   String get nonogramTutorialOutOfReach =>
-      'Ora le colonne. La colonna 2 è un blocco da 3 che deve coprire le sue 2 caselle piene, quindi arriva al massimo 1 casella più in là. Segna con una X le caselle fuori portata, e lo stesso nella colonna 7.';
+      'Ora le colonne. La colonna 2 è un blocco da 3 che deve coprire le sue 2 caselle piene. Le due barre blu sono le sue posizioni estreme: le caselle fuori da entrambe sono irraggiungibili. Segnale con una X, e lo stesso nella colonna 7.';
 
   @override
   String get nonogramTutorialBackToFill =>

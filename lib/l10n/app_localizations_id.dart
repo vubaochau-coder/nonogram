@@ -457,11 +457,11 @@ class AppLocalizationsId extends AppLocalizations {
 
   @override
   String get nonogramTutorialOverlapSingle =>
-      'Di teka-teki besar, cari angka besar lebih dulu. Blok 6 bisa bergeser di 8 kotak ini, tetapi 4 kotak tengah selalu tertutup. Isi kotak-kotak itu.';
+      'Cari angka besar lebih dulu. Dua batang biru menunjukkan blok 6 mentok ke kiri dan mentok ke kanan. Bagian yang tumpang tindih selalu terisi di mana pun bloknya. Isi 4 kotak itu.';
 
   @override
   String get nonogramTutorialOverlapMulti =>
-      'Sama halnya dengan beberapa angka: 3 3 butuh minimal 7 kotak (3 + celah + 3), jadi kelompoknya hanya bisa bergeser 1 kotak. Isi kotak yang tertutup di kedua posisi.';
+      'Sama dengan beberapa angka: 3 3 butuh minimal 7 kotak (3 + celah + 3), jadi kelompoknya hanya bergeser 1 kotak. Batang atas: mentok kiri, batang bawah: mentok kanan. Isi kotak yang tertutup keduanya.';
 
   @override
   String get nonogramTutorialFullRow =>
@@ -477,7 +477,7 @@ class AppLocalizationsId extends AppLocalizations {
 
   @override
   String get nonogramTutorialOutOfReach =>
-      'Sekarang kolomnya. Kolom 2 adalah satu blok 3 yang harus menutupi 2 kotak terisinya, jadi paling jauh hanya menjangkau 1 kotak lagi. Tandai kotak di luar jangkauan dengan X, begitu juga di kolom 7.';
+      'Sekarang kolomnya. Kolom 2 adalah satu blok 3 yang harus menutupi 2 kotak terisinya. Dua batang biru adalah posisi terjauhnya: kotak di luar keduanya tidak terjangkau. Tandai dengan X, begitu juga di kolom 7.';
 
   @override
   String get nonogramTutorialBackToFill =>
