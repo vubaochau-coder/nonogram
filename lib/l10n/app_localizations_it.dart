@@ -556,7 +556,7 @@ class AppLocalizationsIt extends AppLocalizations {
 
   @override
   String get adRewardNotReady =>
-      'L\'annuncio non è ancora pronto. Controlla la connessione a Internet e riprova.';
+      'L\'annuncio non è ancora pronto. Riprova tra qualche minuto.';
 
   @override
   String get settingsAdPrivacy => 'Privacy degli annunci';

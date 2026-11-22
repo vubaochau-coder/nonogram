@@ -541,7 +541,7 @@ class AppLocalizationsKo extends AppLocalizations {
   }
 
   @override
-  String get adRewardNotReady => '광고가 아직 준비되지 않았습니다. 인터넷 연결을 확인하고 다시 시도하세요.';
+  String get adRewardNotReady => '광고가 아직 준비되지 않았습니다. 몇 분 후에 다시 시도하세요.';
 
   @override
   String get settingsAdPrivacy => '광고 개인정보 보호';

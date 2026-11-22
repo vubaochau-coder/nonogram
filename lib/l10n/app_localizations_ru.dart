@@ -554,7 +554,7 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get adRewardNotReady =>
-      'Реклама ещё не готова. Проверьте подключение к интернету и попробуйте снова.';
+      'Реклама ещё не готова. Попробуйте снова через несколько минут.';
 
   @override
   String get settingsAdPrivacy => 'Конфиденциальность рекламы';

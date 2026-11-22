@@ -553,7 +553,7 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get adRewardNotReady =>
-      'Die Werbung ist noch nicht bereit. Prüfe deine Internetverbindung und versuche es erneut.';
+      'Die Werbung ist noch nicht bereit. Bitte versuche es in ein paar Minuten erneut.';
 
   @override
   String get settingsAdPrivacy => 'Datenschutz bei Werbung';

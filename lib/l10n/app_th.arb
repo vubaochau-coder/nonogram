@@ -151,7 +151,7 @@
   "licensesSoftwareButton": "สัญญาอนุญาตซอฟต์แวร์โอเพนซอร์ส",
   "licensesBy": "โดย {author}",
   "licensesLevelCount": "{count} ปริศนา",
-  "adRewardNotReady": "โฆษณายังไม่พร้อม ตรวจสอบการเชื่อมต่ออินเทอร์เน็ตแล้วลองอีกครั้ง",
+  "adRewardNotReady": "โฆษณายังไม่พร้อม โปรดลองอีกครั้งในอีกไม่กี่นาที",
   "settingsAdPrivacy": "ความเป็นส่วนตัวด้านโฆษณา",
   "ratingTitle": "ชอบ Pixel Nonogram ไหม",
   "ratingMessage": "แตะดาวเพื่อให้คะแนนเกม",

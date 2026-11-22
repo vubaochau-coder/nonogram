@@ -1032,7 +1032,7 @@ abstract class AppLocalizations {
   /// No description provided for @adRewardNotReady.
   ///
   /// In en, this message translates to:
-  /// **'The ad isn\'t ready yet. Check your internet connection and try again.'**
+  /// **'The ad isn\'t ready yet. Please try again in a few minutes.'**
   String get adRewardNotReady;
 
   /// No description provided for @settingsAdPrivacy.
