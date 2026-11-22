@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:nonogram/ads/ad_service.dart';
 import 'package:nonogram/checkin/check_in_page.dart';
 import 'package:nonogram/checkin/check_in_policy.dart';
 import 'package:nonogram/checkin/check_in_service.dart';
@@ -13,6 +14,7 @@ import 'package:nonogram/l10n/app_localizations.dart';
 import 'package:nonogram/models/power_up_inventory.dart';
 import 'package:provider/provider.dart';
 
+import '../mocks/fake_ad_service.dart';
 import '../mocks/fake_nonogram_repository.dart';
 import '../mocks/fake_purchase_gateway.dart';
 
@@ -26,6 +28,7 @@ void main() {
     bool premium = false,
     int daysSinceStart = 0,
     int previousCheckIns = 0,
+    AdService? ads,
   }) async {
     device = DateTime(2026, 11, 13, 9);
     clock = GameClock.inMemory(
@@ -53,6 +56,7 @@ void main() {
           Provider<NonogramRepository>.value(value: repository),
           ChangeNotifierProvider.value(value: service),
           ChangeNotifierProvider.value(value: clock),
+          if (ads != null) Provider<AdService>.value(value: ads),
         ],
         child: MaterialApp(
           theme: AppTheme.lightTheme,
@@ -72,118 +76,124 @@ void main() {
     return service;
   }
 
-  /// Chạy hết hiệu ứng điểm danh (không có quà).
-  Future<void> settle(WidgetTester tester) async {
-    for (var i = 0; i < 25; i++) {
+  /// Chạy hiệu ứng thêm [ms] mili giây.
+  Future<void> run(WidgetTester tester, int ms) async {
+    for (var i = 0; i < ms ~/ 100; i++) {
       await tester.pump(const Duration(milliseconds: 100));
     }
   }
 
-  testWidgets('check in: the stamp lands on today, then the button hides', (
+  Finder day(int d, String status) =>
+      find.byKey(ValueKey('check-in-day-$d-$status'));
+  Finder node(int m, String state) =>
+      find.byKey(ValueKey('check-in-milestone-$m-$state'));
+  final collect = find.byKey(const ValueKey('check-in-gift-collect'));
+
+  testWidgets('check in: the stamp lands on today, then the button is done', (
     tester,
   ) async {
     final service = await pump(tester);
-    expect(find.text('Hôm nay chưa điểm danh'), findsOneWidget);
+    expect(find.text('Điểm danh hôm nay'), findsOneWidget);
     await tester.tap(find.byKey(const ValueKey('check-in-button')));
     await tester.pump();
     await tester.pump(const Duration(milliseconds: 300));
     // Đã lưu, nhưng ô hôm nay chờ quả cầu bay tới mới đổi.
     expect(service.checkedInToday, isTrue);
-    expect(find.byKey(const ValueKey('check-in-checked-13')), findsNothing);
+    expect(day(13, 'today'), findsOneWidget);
 
-    await settle(tester);
-    expect(find.byKey(const ValueKey('check-in-checked-13')), findsOneWidget);
+    await run(tester, 2000);
+    expect(day(13, 'checked'), findsOneWidget);
     expect(find.text('Hôm nay đã điểm danh'), findsOneWidget);
-    expect(find.byKey(const ValueKey('check-in-button')), findsNothing);
+    expect(find.text('Chuỗi 1 ngày'), findsOneWidget);
   });
 
   testWidgets('reduced motion checks in at once', (tester) async {
     tester.platformDispatcher.accessibilityFeaturesTestValue =
         const FakeAccessibilityFeatures(disableAnimations: true);
     addTearDown(tester.platformDispatcher.clearAccessibilityFeaturesTestValue);
-    final service = await pump(tester);
+    final service = await pump(tester, previousCheckIns: 6);
     await tester.tap(find.byKey(const ValueKey('check-in-button')));
     await tester.pump();
     await tester.pump();
     expect(service.checkedInToday, isTrue);
-    expect(find.byKey(const ValueKey('check-in-checked-13')), findsOneWidget);
-    expect(find.byKey(const ValueKey('check-in-gift-collect')), findsNothing);
-    await settle(tester);
+    expect(day(13, 'checked'), findsOneWidget);
+    expect(collect, findsNothing);
+    expect(node(7, 'claimed'), findsOneWidget);
+    await run(tester, 2500);
   });
 
-  testWidgets('milestone day: the gift opens and is collected into totals', (
+  testWidgets('7 days in a row: the gift jumps out of the milestone', (
     tester,
   ) async {
-    // 4 lần trước đó: lần điểm danh hôm nay là lần thứ 5, có quà gợi ý.
-    final service = await pump(tester, previousCheckIns: 4);
-    String hints() =>
-        tester
-            .widget<Text>(
-              find.byKey(const ValueKey('check-in-total-hint-kept')),
-            )
-            .data!;
-    final before = hints();
+    final service = await pump(tester, previousCheckIns: 6);
     expect(find.text('Hôm nay có quà!'), findsOneWidget);
+    expect(node(7, 'next'), findsOneWidget);
 
     await tester.tap(find.byKey(const ValueKey('check-in-button')));
-    for (var i = 0; i < 34; i++) {
-      await tester.pump(const Duration(milliseconds: 100));
-    }
-    expect(service.checkedInToday, isTrue);
-    final collect = find.byKey(const ValueKey('check-in-gift-collect'));
+    // Đóng dấu xong, thanh chạy tới mốc 7: mốc chờ mở quà.
+    await run(tester, 2700);
+    expect(node(7, 'ready'), findsOneWidget);
+    await run(tester, 2000);
     expect(collect, findsOneWidget);
-    // Chưa bấm "Nhận": tổng quà tháng chưa cộng.
-    expect(hints(), before);
+    expect(service.claimedMilestones(2026, 11), {7});
 
     await tester.tap(collect);
-    await settle(tester);
+    await run(tester, 1000);
     expect(collect, findsNothing);
-    expect(hints(), isNot(before));
-    expect(find.byKey(const ValueKey('check-in-button')), findsNothing);
-  });
-
-  testWidgets('milestone days are highlighted, no crowns without the pack', (
-    tester,
-  ) async {
-    await pump(tester);
-    // Chưa điểm danh lần nào, hôm nay 13/11: lần thứ 5 là 17/11, thứ 10 là
-    // 22/11.
-    expect(find.byKey(const ValueKey('check-in-milestone-17')), findsOneWidget);
-    expect(find.byKey(const ValueKey('check-in-milestone-22')), findsOneWidget);
-    expect(find.byKey(const ValueKey('check-in-milestone-16')), findsNothing);
-    expect(find.byKey(const ValueKey('check-in-crown-13')), findsNothing);
-    expect(find.text('Quà gói không quảng cáo'), findsNothing);
-    // Hôm nay luôn có vòng viền, kể cả khi chưa điểm danh.
-    expect(find.byKey(const ValueKey('check-in-today-ring')), findsOneWidget);
-  });
-
-  testWidgets('premium: crowns on pack days and today-only totals', (
-    tester,
-  ) async {
-    await pump(tester, premium: true);
-    // Không còn thẻ riêng của gói: lời nhắc nằm trong thẻ trạng thái.
+    expect(node(7, 'claimed'), findsOneWidget);
+    expect(node(14, 'next'), findsOneWidget);
     expect(
-      find.text('Điểm danh để nhận 2 gợi ý và 1 gậy phép dùng trong hôm nay.'),
+      (await repository.getPowerUps()).hints,
+      CheckInPolicy.streakReward(7).amount,
+    );
+  });
+
+  testWidgets('calendar: checked, missed, today and locked days', (
+    tester,
+  ) async {
+    // Bắt đầu 8/11; điểm danh 8–11, bỏ lỡ 12; hôm nay 13 chưa điểm danh.
+    final service = await pump(tester, daysSinceStart: 5);
+    expect(day(7, 'beforeStart'), findsOneWidget);
+    expect(day(8, 'missed'), findsOneWidget);
+    expect(day(13, 'today'), findsOneWidget);
+    expect(day(14, 'future'), findsOneWidget);
+    expect(service.streak(2026, 11).missed, hasLength(5));
+    // Nhắc bù ngày: chuỗi có thể nối thành 5 ngày.
+    expect(
+      find.byKey(const ValueKey('check-in-streak-make-up')),
       findsOneWidget,
     );
-    expect(find.byKey(const ValueKey('check-in-crown-13')), findsOneWidget);
-    expect(find.byKey(const ValueKey('check-in-crown-30')), findsOneWidget);
-    expect(find.text('Quà gói không quảng cáo'), findsOneWidget);
+    expect(find.byKey(const ValueKey('check-in-streak-potential')), findsOne);
+  });
 
-    await tester.tap(find.byKey(const ValueKey('check-in-button')));
-    await settle(tester);
-    // Đã điểm danh: lời nhắc của gói biến mất, ô hôm nay vẫn có vòng viền.
-    expect(
-      find.text('Điểm danh để nhận 2 gợi ý và 1 gậy phép dùng trong hôm nay.'),
-      findsNothing,
-    );
-    expect(find.byKey(const ValueKey('check-in-today-ring')), findsOneWidget);
-    expect(find.byKey(const ValueKey('check-in-total-hint-daily')), findsOne);
-    final total = tester.widget<Text>(
-      find.byKey(const ValueKey('check-in-total-hint-daily')),
-    );
-    // 13..30/11 = 18 ngày × 2.
-    expect(total.data, '2/36');
+  testWidgets('make up a missed day after watching an ad', (tester) async {
+    final ads = FakeAdService();
+    final service = await pump(tester, daysSinceStart: 3, ads: ads);
+    final missed = clock.today - 2;
+    await tester.tap(find.byKey(const ValueKey('check-in-make-up-11')));
+    await tester.pumpAndSettle();
+    expect(find.text('Xem quảng cáo'), findsOneWidget);
+    await tester.tap(find.byKey(const ValueKey('check-in-make-up-watch')));
+    await tester.pump();
+    await tester.pump(const Duration(milliseconds: 400));
+    expect(ads.rewardedShown, [AdPlacement.checkInMakeUp]);
+    expect(service.isChecked(missed), isTrue);
+    await run(tester, 2000);
+    expect(day(11, 'checked'), findsOneWidget);
+    // Bù xong vẫn còn lượt điểm danh hôm nay.
+    expect(find.text('Điểm danh hôm nay'), findsOneWidget);
+  });
+
+  testWidgets('make-up: no reward without finishing the ad', (tester) async {
+    final ads = FakeAdService(earnReward: false);
+    final service = await pump(tester, daysSinceStart: 3, ads: ads);
+    await tester.tap(find.byKey(const ValueKey('check-in-make-up-11')));
+    await tester.pumpAndSettle();
+    await tester.tap(find.byKey(const ValueKey('check-in-make-up-watch')));
+    await tester.pumpAndSettle();
+    expect(ads.rewardedShown, hasLength(1));
+    expect(service.isChecked(clock.today - 2), isFalse);
+    expect(day(11, 'missed'), findsOneWidget);
   });
 
   testWidgets('months before install cannot be opened', (tester) async {

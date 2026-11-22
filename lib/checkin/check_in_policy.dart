@@ -12,7 +12,7 @@ class CheckInReward extends Equatable {
   final int amount;
 
   /// Chỉ dùng được trong ngày điểm danh (quà của gói không quảng cáo);
-  /// false = lượt vĩnh viễn (quà mốc).
+  /// false = lượt vĩnh viễn (quà mốc chuỗi).
   final bool daily;
 
   List<int> toList() => [powerUp.index, amount, daily ? 1 : 0];
@@ -27,53 +27,74 @@ class CheckInReward extends Equatable {
   List<Object?> get props => [powerUp, amount, daily];
 }
 
+/// Quà của một mốc chuỗi vừa đạt.
+class StreakGift extends Equatable {
+  const StreakGift(this.milestone, this.reward);
+
+  /// Số ngày liên tiếp của mốc (7, 14, 21, 28).
+  final int milestone;
+  final CheckInReward reward;
+
+  @override
+  List<Object?> get props => [milestone, reward];
+}
+
+/// Số tháng tính từ năm 0, làm khoá lưu các mốc đã nhận theo tháng.
+int monthKeyOf(DateTime date) => date.year * 12 + date.month - 1;
+
 /// Luật điểm danh:
 ///
-/// - Mỗi ngày điểm danh một lần. Bỏ lỡ không mất tiến độ: chỉ đếm tổng số
-///   lần đã điểm danh.
-/// - Cứ mỗi [milestoneEvery] lần điểm danh nhận một quà mốc vĩnh viễn, xoay
-///   vòng theo [milestoneCycle] (gợi ý, gợi ý, gậy phép).
-/// - Người mua gói không quảng cáo: mỗi lần điểm danh còn nhận thêm
+/// - Mỗi ngày điểm danh một lần. Ngày đã qua mà bỏ lỡ (từ ngày bắt đầu dùng
+///   app) thì bù được, không giới hạn số lần; bù xong ngày đó tính như đã
+///   điểm danh.
+/// - Chuỗi là số ngày điểm danh liên tiếp **trong một tháng**; sang tháng
+///   mới thì tính lại từ đầu.
+/// - Chuỗi dài nhất trong tháng chạm mốc [streakMilestones] thì nhận quà của
+///   mốc đó, mỗi mốc một lần mỗi tháng (chuỗi đứt rồi chạy lại tới mốc cũ
+///   thì không nhận lại). Bù ngày làm chuỗi nối dài qua mốc cũng nhận quà.
+/// - Người mua gói không quảng cáo: mỗi lần điểm danh đúng ngày còn nhận thêm
 ///   [premiumDailyHints] gợi ý và [premiumDailyWands] gậy phép dùng trong
-///   ngày (không cộng dồn sang hôm sau).
-/// - Chống chỉnh giờ: chỉ điểm danh được khi hôm nay sau ngày điểm danh gần
-///   nhất và không sớm hơn ngày muộn nhất từng thấy (bánh cóc).
+///   ngày (không cộng dồn sang hôm sau; ngày bù không có).
+/// - Chống chỉnh giờ: chỉ điểm danh / bù được khi hôm nay không sớm hơn ngày
+///   muộn nhất từng thấy (bánh cóc).
 class CheckInPolicy {
   const CheckInPolicy._();
 
-  static const milestoneEvery = 5;
-  static const milestoneCycle = [PowerUp.hint, PowerUp.hint, PowerUp.wand];
+  static const streakMilestones = [7, 14, 21, 28];
   static const premiumDailyHints = 2;
   static const premiumDailyWands = 1;
 
-  /// Quà mốc của lần điểm danh thứ [number] (bắt đầu từ 1); null nếu không
-  /// phải mốc.
-  static CheckInReward? milestoneFor(int number) {
-    if (number <= 0 || number % milestoneEvery != 0) return null;
-    final index = (number ~/ milestoneEvery - 1) % milestoneCycle.length;
-    return CheckInReward(milestoneCycle[index], 1);
-  }
+  /// Quà của mốc chuỗi [milestone].
+  ///
+  /// Tạm thời: phần quà từng mốc sẽ được thiết kế lại sau.
+  static CheckInReward streakReward(int milestone) => switch (milestone) {
+    7 => const CheckInReward(PowerUp.hint, 1),
+    14 => const CheckInReward(PowerUp.wand, 1),
+    21 => const CheckInReward(PowerUp.hint, 2),
+    _ => const CheckInReward(PowerUp.wand, 2),
+  };
 
-  /// Toàn bộ quà của lần điểm danh thứ [number].
-  static List<CheckInReward> rewardsFor(int number, {required bool premium}) {
-    final milestone = milestoneFor(number);
-    return [
-      if (milestone != null) milestone,
-      if (premium) ...[
-        const CheckInReward(PowerUp.hint, premiumDailyHints, daily: true),
-        const CheckInReward(PowerUp.wand, premiumDailyWands, daily: true),
-      ],
-    ];
-  }
+  /// Quà trong ngày của gói không quảng cáo.
+  static List<CheckInReward> dailyRewards({required bool premium}) => [
+    if (premium) ...[
+      const CheckInReward(PowerUp.hint, premiumDailyHints, daily: true),
+      const CheckInReward(PowerUp.wand, premiumDailyWands, daily: true),
+    ],
+  ];
 
-  /// Còn bao nhiêu lần điểm danh nữa tới quà mốc tiếp theo (đã điểm danh
-  /// [count] lần).
-  static int checkInsToNextMilestone(int count) =>
-      milestoneEvery - count % milestoneEvery;
+  /// Các mốc chuỗi mới đạt khi chuỗi dài nhất lên tới [longest] mà chưa nhận
+  /// ([claimed]).
+  static List<StreakGift> newGifts({
+    required int longest,
+    required Set<int> claimed,
+  }) => [
+    for (final m in streakMilestones)
+      if (m <= longest && !claimed.contains(m)) StreakGift(m, streakReward(m)),
+  ];
 
-  /// Quà mốc tiếp theo.
-  static CheckInReward nextMilestone(int count) =>
-      milestoneFor(count + checkInsToNextMilestone(count))!;
+  /// Mốc chuỗi kế tiếp chưa nhận trong tháng; null nếu đã nhận hết.
+  static int? nextMilestone(Set<int> claimed) =>
+      streakMilestones.where((m) => !claimed.contains(m)).firstOrNull;
 
   static bool canCheckIn({
     required int today,
@@ -83,131 +104,158 @@ class CheckInPolicy {
       (lastCheckInDay == null || today > lastCheckInDay) &&
       (maxSeenDay == null || today >= maxSeenDay);
 
-  /// Dựng lịch tháng [month] / [year].
-  ///
-  /// - Ngày đã qua và hôm nay (đã điểm danh): quà thực tế trong [history].
-  /// - Hôm nay (chưa điểm danh) và ngày tới: quà dự kiến nếu từ nay ngày nào
-  ///   cũng điểm danh ([CheckInDay.projected]).
-  /// - Tổng quà tháng: đã nhận / tối đa nhận được nếu ngày nào cũng điểm danh
-  ///   (từ [startDay], ngày bắt đầu dùng app).
+  /// Bù được ngày [day]: đã qua, từ ngày bắt đầu dùng app, chưa điểm danh.
+  static bool canMakeUp({
+    required int day,
+    required int today,
+    required int startDay,
+    required bool checked,
+    required int? maxSeenDay,
+  }) =>
+      !checked &&
+      day >= startDay &&
+      day < today &&
+      (maxSeenDay == null || today >= maxSeenDay);
+
+  /// Chuỗi trong tháng [month] / [year], tính tới hôm nay.
+  static StreakStats streakStats({
+    required int year,
+    required int month,
+    required int today,
+    required int startDay,
+    required Set<int> checkedDays,
+  }) {
+    final first = dayNumberOf(DateTime(year, month));
+    final last = min(dayNumberOf(DateTime(year, month + 1, 0)), today);
+    var run = 0;
+    var longest = 0;
+    var potentialRun = 0;
+    var potential = 0;
+    final missed = <int>[];
+    for (var d = first; d <= last; d++) {
+      final checked = checkedDays.contains(d);
+      final makeUp = !checked && d >= startDay && d < today;
+      if (makeUp) missed.add(d);
+      if (checked) {
+        run++;
+        longest = max(longest, run);
+      } else {
+        run = 0;
+      }
+      if (checked || makeUp) {
+        potentialRun++;
+        potential = max(potential, potentialRun);
+      } else {
+        potentialRun = 0;
+      }
+    }
+    // Chuỗi hiện tại: tính tới hôm nay nếu đã điểm danh, không thì tới hôm
+    // qua (hôm nay chưa điểm danh chưa làm đứt chuỗi).
+    var current = 0;
+    if (today >= first) {
+      var d = checkedDays.contains(last) || last < today ? last : last - 1;
+      while (d >= first && checkedDays.contains(d)) {
+        current++;
+        d--;
+      }
+    }
+    return StreakStats(
+      current: current,
+      longest: longest,
+      potential: potential,
+      missed: missed,
+    );
+  }
+
+  /// Dựng lịch tháng [month] / [year]: trạng thái từng ngày.
   static CheckInMonth buildMonth({
     required int year,
     required int month,
     required int today,
     required int startDay,
-    required Map<int, List<CheckInReward>> history,
-    required bool premium,
+    required Set<int> checkedDays,
   }) {
     final first = dayNumberOf(DateTime(year, month));
     final last = dayNumberOf(DateTime(year, month + 1, 0));
-    final checkedDays = history.keys.toList()..sort();
-
-    // Dự kiến cho những ngày chưa tới.
-    var projectedCount = history.length;
-    final days = <CheckInDay>[];
-    for (var d = first; d <= last; d++) {
-      final checked = history.containsKey(d);
-      final upcoming = !checked && d >= today && d >= startDay;
-      List<CheckInReward> rewards = const [];
-      if (checked) {
-        rewards = history[d]!;
-      } else if (upcoming) {
-        projectedCount++;
-        rewards = rewardsFor(projectedCount, premium: premium);
-      }
-      days.add(
-        CheckInDay(
-          day: d,
-          dayOfMonth: d - first + 1,
-          checked: checked,
-          isToday: d == today,
-          beforeStart: d < startDay,
-          upcoming: upcoming,
-          rewards: rewards,
-        ),
-      );
-    }
-
-    // Tổng quà tháng.
-    final got = <RewardKind, int>{};
-    for (final d in checkedDays.where((d) => d >= first && d <= last)) {
-      for (final r in history[d]!) {
-        final k = RewardKind(r.powerUp, daily: r.daily);
-        got[k] = (got[k] ?? 0) + r.amount;
-      }
-    }
-    final most = <RewardKind, int>{};
-    final eligibleFrom = max(first, startDay);
-    var count = checkedDays.where((d) => d < eligibleFrom).length;
-    for (var d = eligibleFrom; d <= last; d++) {
-      count++;
-      for (final r in rewardsFor(count, premium: premium)) {
-        final k = RewardKind(r.powerUp, daily: r.daily);
-        most[k] = (most[k] ?? 0) + r.amount;
-      }
-    }
-    final totals = <RewardKind, MonthTotal>{
-      for (final k in RewardKind.all)
-        if ((got[k] ?? 0) > 0 || (most[k] ?? 0) > 0)
-          k: MonthTotal(got: got[k] ?? 0, max: max(most[k] ?? 0, got[k] ?? 0)),
-    };
-
-    return CheckInMonth(year: year, month: month, days: days, totals: totals);
+    return CheckInMonth(
+      year: year,
+      month: month,
+      days: [
+        for (var d = first; d <= last; d++)
+          CheckInDay(
+            day: d,
+            dayOfMonth: d - first + 1,
+            status: switch (d) {
+              _ when checkedDays.contains(d) => CheckInDayStatus.checked,
+              _ when d == today => CheckInDayStatus.today,
+              _ when d > today => CheckInDayStatus.future,
+              _ when d < startDay => CheckInDayStatus.beforeStart,
+              _ => CheckInDayStatus.missed,
+            },
+            isToday: d == today,
+          ),
+      ],
+    );
   }
 }
 
-/// Loại quà để cộng tổng: gợi ý / gậy phép, vĩnh viễn / trong ngày.
-class RewardKind extends Equatable {
-  const RewardKind(this.powerUp, {required this.daily});
+/// Chuỗi điểm danh của một tháng.
+class StreakStats extends Equatable {
+  const StreakStats({
+    required this.current,
+    required this.longest,
+    required this.potential,
+    required this.missed,
+  });
 
-  final PowerUp powerUp;
-  final bool daily;
+  /// Số ngày liên tiếp tính tới hôm nay (hoặc hôm qua nếu hôm nay chưa
+  /// điểm danh).
+  final int current;
 
-  static const all = [
-    RewardKind(PowerUp.hint, daily: false),
-    RewardKind(PowerUp.wand, daily: false),
-    RewardKind(PowerUp.hint, daily: true),
-    RewardKind(PowerUp.wand, daily: true),
-  ];
+  /// Chuỗi dài nhất trong tháng: thanh tiến trình đứng ở đây.
+  final int longest;
+
+  /// Chuỗi dài nhất nếu bù hết các ngày bỏ lỡ.
+  final int potential;
+
+  /// Các ngày bỏ lỡ bù được.
+  final List<int> missed;
 
   @override
-  List<Object?> get props => [powerUp, daily];
+  List<Object?> get props => [current, longest, potential, missed];
 }
 
-class MonthTotal extends Equatable {
-  const MonthTotal({required this.got, required this.max});
+enum CheckInDayStatus {
+  /// Đã điểm danh (đúng ngày hoặc bù).
+  checked,
 
-  final int got;
-  final int max;
+  /// Hôm nay, chưa điểm danh.
+  today,
 
-  @override
-  List<Object?> get props => [got, max];
+  /// Đã qua, chưa điểm danh: bù được.
+  missed,
+
+  /// Trước ngày bắt đầu dùng app.
+  beforeStart,
+
+  /// Chưa tới.
+  future,
 }
 
 class CheckInDay {
   const CheckInDay({
     required this.day,
     required this.dayOfMonth,
-    required this.checked,
+    required this.status,
     required this.isToday,
-    required this.beforeStart,
-    required this.upcoming,
-    required this.rewards,
   });
 
   final int day;
   final int dayOfMonth;
-  final bool checked;
+  final CheckInDayStatus status;
   final bool isToday;
 
-  /// Trước ngày bắt đầu dùng app.
-  final bool beforeStart;
-
-  /// Hôm nay (chưa điểm danh) hoặc ngày tới: [rewards] là quà dự kiến.
-  final bool upcoming;
-  final List<CheckInReward> rewards;
-
-  bool get hasMilestone => rewards.any((r) => !r.daily);
+  bool get checked => status == CheckInDayStatus.checked;
 }
 
 class CheckInMonth {
@@ -215,11 +263,9 @@ class CheckInMonth {
     required this.year,
     required this.month,
     required this.days,
-    required this.totals,
   });
 
   final int year;
   final int month;
   final List<CheckInDay> days;
-  final Map<RewardKind, MonthTotal> totals;
 }

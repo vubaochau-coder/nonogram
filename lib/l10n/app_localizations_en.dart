@@ -631,17 +631,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String get checkInDoneToday => 'Checked in today';
 
   @override
-  String checkInNextGift(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: 'Next gift in $count check-ins',
-      one: 'Next gift on your next check-in',
-    );
-    return '$_temp0';
-  }
-
-  @override
   String get checkInCheckedIn => 'Checked in!';
 
   @override
@@ -677,9 +666,6 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
-  String get checkInMonthGifts => 'Gifts this month';
-
-  @override
   String get navHome => 'Home';
 
   @override
@@ -692,54 +678,88 @@ class AppLocalizationsEn extends AppLocalizations {
   String get meMore => 'More';
 
   @override
-  String get checkInNotYetToday => 'Not checked in today';
-
-  @override
   String get checkInTodayButton => 'Check in today';
-
-  @override
-  String checkInGiftsLeftShort(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: '$count more for a gift',
-      one: '1 more for a gift',
-    );
-    return '$_temp0';
-  }
 
   @override
   String get checkInGiftToday => 'Gift today!';
 
   @override
-  String checkInGiftMilestone(int count) {
+  String get checkInGiftCollect => 'Collect';
+
+  @override
+  String checkInStreakTitle(int count) {
+    return '$count-day streak';
+  }
+
+  @override
+  String checkInStreakDays(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: 'Gift for $count check-ins',
-      one: 'Gift for 1 check-in',
+      other: '$count days',
+      one: '1 day',
     );
     return '$_temp0';
   }
 
   @override
-  String get checkInGiftCollect => 'Collect';
+  String checkInStreakMakeUp(int missed, String days) {
+    String _temp0 = intl.Intl.pluralLogic(
+      missed,
+      locale: localeName,
+      other: '$missed missed days',
+      one: '1 missed day',
+    );
+    return 'Make up $_temp0 to grow your streak to $days';
+  }
 
   @override
-  String get checkInTotalHints => 'Hints';
+  String get checkInStreakKeepGoing => 'Check in every day to keep your streak';
 
   @override
-  String get checkInTotalWands => 'Magic wands';
+  String get checkInStreakAllDone => 'You got every streak gift this month!';
 
   @override
-  String get checkInTotalDailyHints => 'Hints (today only)';
+  String checkInStreakDaysLeft(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count more days for a gift',
+      one: '1 more day for a gift',
+    );
+    return '$_temp0';
+  }
 
   @override
-  String get checkInTotalDailyWands => 'Magic wands (today only)';
+  String get checkInLegendChecked => 'Checked in';
 
   @override
-  String get checkInPremiumNotYet =>
-      'Check in to get 2 hints and 1 magic wand for today.';
+  String get checkInLegendMissed => 'Missed';
+
+  @override
+  String get checkInLegendFuture => 'Coming up';
+
+  @override
+  String checkInGiftStreak(int count) {
+    return '$count-day streak gift';
+  }
+
+  @override
+  String checkInMakeUpTitle(String date) {
+    return 'Make up $date?';
+  }
+
+  @override
+  String get checkInMakeUpBody =>
+      'Watch a short ad to make up this day. Your streak will be joined back up.';
+
+  @override
+  String get checkInMakeUpWatch => 'Watch ad';
+
+  @override
+  String checkInMadeUp(String date) {
+    return 'Made up $date';
+  }
 
   @override
   String dashboardDailyReminder(String rewards, String time) {
@@ -844,12 +864,4 @@ class AppLocalizationsEn extends AppLocalizations {
   String dashboardDailyReminderBoth(String hints, String wands) {
     return '$hints and $wands';
   }
-
-  @override
-  String checkInLegendMilestone(int count) {
-    return 'Gift every $count check-ins';
-  }
-
-  @override
-  String get checkInLegendPremium => 'Ad-free pack reward';
 }

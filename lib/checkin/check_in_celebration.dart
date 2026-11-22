@@ -20,61 +20,80 @@ abstract final class CheckInTimeline {
   static const flyStart = 0.23;
   static const land = 0.78;
 
-  /// Hết hiệu ứng đóng dấu (ngày không có quà).
-  static const stampDone = 1.7;
+  /// Hết hiệu ứng đóng dấu.
+  static const stampDone = 1.5;
 
-  // Ngày có quà.
-  static const badgeShake = 1.08;
-  static const boxOut = 1.48;
-  static const boxCentered = 1.93;
-  static const rattleStart = 2.08;
-  static const open = 2.58;
+  /// Mở quà: hiệu ứng chỉ có quà bắt đầu từ đây (bỏ qua nút và đóng dấu).
+  static const giftStart = 0.95;
+
+  /// Mốc trên thanh chuỗi nảy lên, rồi hộp quà nhảy ra theo vòng cung.
+  static const badgeShake = 1.0;
+  static const boxOut = 1.3;
+  static const boxCentered = 1.85;
+  static const rattleStart = 1.95;
+  static const open = 2.3;
 
   /// Từ lúc này mới bấm "Nhận" được.
-  static const collectReady = 3.2;
+  static const collectReady = 2.65;
 
-  /// Thời gian phần quà bay về thẻ "Quà trong tháng" sau khi bấm "Nhận".
-  static const collectDuration = 0.6;
+  /// Thời gian phần quà bay về mốc sau khi bấm "Nhận".
+  static const collectDuration = 0.55;
 }
 
-/// Hiệu ứng điểm danh, vẽ trên lớp phủ trên cùng của app:
+/// Hiệu ứng điểm danh, vẽ trên lớp phủ trên cùng của app. Có hai kiểu:
 ///
-/// 1. Nút điểm danh phồng lên rồi vỡ như bong bóng, quả cầu sáng bay lên ô
-///    hôm nay; ô được đóng dấu tích kèm gợn sóng và tia lấp lánh.
-/// 2. Ngày có quà: huy hiệu quà trên ô lắc, nền tối lại, hộp quà bay ra giữa
-///    màn hình, rung, bật nắp (tia sáng, pháo giấy), phần quà hiện ra cùng
-///    nút "Nhận". Bấm "Nhận" (hoặc nút quay lại): phần quà bay về thẻ "Quà
-///    trong tháng".
+/// - **Đóng dấu** ([gift] null): nút điểm danh phồng lên rồi vỡ như bong
+///   bóng, quả cầu sáng bay lên ô ngày; ô được đóng dấu tích kèm gợn sóng và
+///   tia lấp lánh. Ngày bù (không có [button]) thì chỉ đóng dấu.
+/// - **Mở quà** ([gift] khác null, chạy từ [CheckInTimeline.giftStart]): mốc
+///   trên thanh chuỗi ([badge]) nảy lên, nền tối lại, hộp quà nhảy ra từ mốc
+///   theo vòng cung, đáp xuống giữa màn hình, lắc, bật nắp (tia sáng, pháo
+///   giấy), phần quà hiện ra cùng nút "Nhận". Bấm "Nhận" (hoặc nút quay lại):
+///   phần quà bay về mốc ([giftTarget]).
 ///
 /// Lớp phủ chặn chạm suốt hiệu ứng (trừ nút "Nhận").
 class CheckInCelebration {
   CheckInCelebration({
     required TickerProvider vsync,
     required OverlayState overlay,
-    required this.button,
-    required this.buttonChild,
-    required this.today,
+    this.button,
+    this.buttonChild,
+    this.today,
     this.gift,
-    this.giftCheckIns = 0,
+    this.giftMilestone = 0,
+    this.badge,
     this.giftTarget,
     this.onLand,
     this.onCollected,
     this.sounds,
-  }) : _overlay = overlay {
+  }) : assert(gift == null || badge != null),
+       _overlay = overlay {
     _ticker = vsync.createTicker(_onTick);
   }
 
-  /// Vị trí (toàn màn hình) nút điểm danh, ô hôm nay, và chỗ phần quà bay về.
-  final Rect button;
-  final Rect today;
+  /// Vị trí (toàn màn hình) nút điểm danh (null: ngày bù) và ô ngày được
+  /// đóng dấu (null: chỉ mở quà).
+  final Rect? button;
+  final Rect? today;
+
+  /// Mốc trên thanh chuỗi: hộp quà nhảy ra từ đây, phần quà bay về
+  /// [giftTarget].
+  final Rect? badge;
   final Offset? giftTarget;
 
   /// Bản sao nút điểm danh để vẽ lúc nút phồng lên và vỡ.
-  final Widget buttonChild;
+  final Widget? buttonChild;
 
-  /// Quà mốc nhận hôm nay (null: ngày thường) và số lần điểm danh của mốc.
+  /// Quà của mốc chuỗi [giftMilestone] (null: chỉ đóng dấu).
   final CheckInReward? gift;
-  final int giftCheckIns;
+  final int giftMilestone;
+
+  /// Thời điểm bắt đầu trên [CheckInTimeline].
+  double get _startAt => switch ((gift, button)) {
+    (_?, _) => CheckInTimeline.giftStart,
+    (null, null) => CheckInTimeline.land - 0.02,
+    _ => 0,
+  };
 
   final VoidCallback? onLand;
   final VoidCallback? onCollected;
@@ -118,28 +137,33 @@ class CheckInCelebration {
   }
 
   void _onTick(Duration elapsed) {
-    _time.value = elapsed.inMicroseconds / 1e6;
-    _once('pop', CheckInTimeline.pop, () {
-      HapticFeedback.lightImpact();
-      sounds?.play(GameSound.pop);
-    });
-    _once('fly', CheckInTimeline.flyStart, () {
-      sounds?.play(GameSound.whoosh);
-    });
-    _once('land', CheckInTimeline.land, () {
-      HapticFeedback.mediumImpact();
-      sounds?.play(GameSound.stamp);
-      onLand?.call();
-    });
+    _time.value = _startAt + elapsed.inMicroseconds / 1e6;
+    if (button != null) {
+      _once('pop', CheckInTimeline.pop, () {
+        HapticFeedback.lightImpact();
+        sounds?.play(GameSound.pop);
+      });
+      _once('fly', CheckInTimeline.flyStart, () {
+        sounds?.play(GameSound.whoosh);
+      });
+    }
+    if (today != null) {
+      _once('land', CheckInTimeline.land, () {
+        HapticFeedback.mediumImpact();
+        sounds?.play(GameSound.stamp);
+        onLand?.call();
+      });
+    }
     if (gift == null) {
       if (time >= CheckInTimeline.stampDone) _finish();
       return;
     }
     _once('box', CheckInTimeline.boxOut, () => sounds?.play(GameSound.whoosh));
-    for (var k = 0; k < 9; k++) {
+    _once('land-box', CheckInTimeline.boxCentered, HapticFeedback.lightImpact);
+    for (var k = 0; k < 5; k++) {
       final at =
           CheckInTimeline.rattleStart +
-          (CheckInTimeline.open - CheckInTimeline.rattleStart) * k / 9;
+          (CheckInTimeline.open - CheckInTimeline.rattleStart) * k / 5;
       _once('knock$k', at, () => sounds?.play(GameSound.knock));
     }
     _once('open', CheckInTimeline.open, () {
@@ -188,12 +212,12 @@ class _CelebrationLayer extends StatelessWidget {
         box is RenderBox && box.hasSize
             ? box.localToGlobal(Offset.zero)
             : Offset.zero;
-    final button = c.button.shift(-origin);
-    final today = c.today.shift(-origin);
+    final button = c.button?.shift(-origin);
+    final today = c.today?.shift(-origin);
     final target = c.giftTarget?.translate(-origin.dx, -origin.dy);
     final size = MediaQuery.sizeOf(context);
     final boxCenter = Offset(size.width / 2, size.height * 0.42);
-    final badge = Offset(today.right - 4, today.top + 4);
+    final badge = c.badge?.shift(-origin).center ?? boxCenter;
     final colors = _FxColors.of(context);
 
     return ValueListenableBuilder<double>(
@@ -206,7 +230,7 @@ class _CelebrationLayer extends StatelessWidget {
             // Chặn chạm suốt hiệu ứng; lúc chờ nhận quà thì chạm nền cũng
             // không làm gì (phải bấm "Nhận").
             const Positioned.fill(child: AbsorbPointer()),
-            if (t < CheckInTimeline.pop + 0.07)
+            if (button != null && t < CheckInTimeline.pop + 0.07)
               Positioned.fromRect(rect: button, child: _buttonCopy(t)),
             Positioned.fill(
               child: IgnorePointer(
@@ -327,7 +351,7 @@ class _CelebrationLayer extends StatelessWidget {
                   ),
                   const SizedBox(height: 4),
                   Text(
-                    l10n.checkInGiftMilestone(c.giftCheckIns),
+                    l10n.checkInGiftStreak(c.giftMilestone),
                     textAlign: TextAlign.center,
                     style: context.bodyMedium.copyWith(
                       color: Colors.white.withValues(alpha: 0.8),
@@ -390,6 +414,10 @@ class _FxColors {
   final Color secondary;
   final Color gold;
   final Color scrim;
+
+  /// Hộp quà chuỗi: cam như ngọn lửa của thanh chuỗi.
+  static const boxTop = Color(0xFFFF922B);
+  static const boxBottom = Color(0xFFE8590C);
 }
 
 class _FxPainter extends CustomPainter {
@@ -408,8 +436,8 @@ class _FxPainter extends CustomPainter {
 
   /// Thời gian từ lúc bấm "Nhận" (null: chưa bấm).
   final double? collect;
-  final Rect button;
-  final Rect today;
+  final Rect? button;
+  final Rect? today;
   final Offset badge;
   final Offset boxCenter;
   final bool hasGift;
@@ -452,13 +480,15 @@ class _FxPainter extends CustomPainter {
 
   @override
   void paint(Canvas canvas, Size size) {
-    _burst(canvas);
-    _orb(canvas);
-    _stamp(canvas);
+    final button = this.button;
+    final today = this.today;
+    if (button != null) _burst(canvas, button);
+    if (button != null && today != null) _orb(canvas, button, today);
+    if (today != null) _stamp(canvas, today);
     if (hasGift) _giftScene(canvas, size);
   }
 
-  void _burst(Canvas c) {
+  void _burst(Canvas c, Rect button) {
     const pop = CheckInTimeline.pop;
     final center = button.center;
     final ring = _seg(t, pop, pop + 0.35);
@@ -516,7 +546,7 @@ class _FxPainter extends CustomPainter {
     }
   }
 
-  void _orb(Canvas c) {
+  void _orb(Canvas c, Rect button, Rect today) {
     final f = _seg(t, CheckInTimeline.flyStart, CheckInTimeline.land);
     if (f <= 0 || f >= 1) return;
     final u = Curves.easeInOutCubic.transform(f);
@@ -563,7 +593,7 @@ class _FxPainter extends CustomPainter {
     c.drawPath(path..close(), Paint()..color = color);
   }
 
-  void _stamp(Canvas c) {
+  void _stamp(Canvas c, Rect today) {
     const land = CheckInTimeline.land;
     if (t <= land) return;
     final ripple = _seg(t, land, land + 0.5);
@@ -630,22 +660,18 @@ class _FxPainter extends CustomPainter {
     final dimOut = collect == null ? 0.0 : _seg(collect, 0, 0.4);
     final gone = collect == null ? 0.0 : _seg(collect, 0, 0.35);
 
-    // Huy hiệu quà trên ô lắc nhẹ trước khi hộp quà bay ra.
-    if (t < CheckInTimeline.boxOut && t > CheckInTimeline.land) {
-      final shake = _seg(
-        t,
-        CheckInTimeline.badgeShake,
-        CheckInTimeline.badgeShake + 0.35,
-      );
+    // Mốc trên thanh chuỗi nảy lên, lắc, rồi hộp quà nhảy ra từ đó.
+    if (t < CheckInTimeline.boxOut + 0.05) {
+      final shake = _seg(t, CheckInTimeline.badgeShake, CheckInTimeline.boxOut);
       c.save();
       c.translate(badge.dx, badge.dy);
       if (shake > 0 && shake < 1) {
-        c.rotate(sin(shake * pi * 4) * 0.45);
-        c.scale(1 + 0.35 * sin(pi * shake));
+        c.rotate(sin(shake * pi * 4) * 0.3);
+        c.scale(1 + 0.45 * sin(pi * shake));
       }
-      c.drawCircle(Offset.zero, 9, Paint()..color = Colors.white);
-      c.drawCircle(Offset.zero, 7.5, Paint()..color = colors.primary);
-      giftBox(c, 9, colors);
+      c.drawCircle(Offset.zero, 19, Paint()..color = Colors.white);
+      c.drawCircle(Offset.zero, 17, Paint()..color = _FxColors.boxBottom);
+      giftBox(c, 20, colors);
       c.restore();
     }
 
@@ -699,15 +725,25 @@ class _FxPainter extends CustomPainter {
 
     final out = _seg(t, CheckInTimeline.boxOut, CheckInTimeline.boxCentered);
     if (out > 0 && gone < 1) {
-      final grow = Curves.easeOutBack.transform(out);
+      final grow = Curves.easeOutCubic.transform(out);
+      // Nhảy vòng cung: đi ngang theo easeInOut, vồng lên rồi rơi xuống.
+      final along = Curves.easeInOutSine.transform(out);
       final pos =
-          Offset.lerp(badge, boxCenter, Curves.easeOutCubic.transform(out))!;
-      final w = 18 + (130 - 18) * grow;
-      var angle = 0.0;
+          Offset.lerp(badge, boxCenter, along)! +
+          Offset(0, -170 * sin(pi * out));
+      final w = 20 + (130 - 20) * grow;
+      var angle = out < 1 ? -0.35 * sin(pi * out) : 0.0;
       var squash = 1.0;
+      // Đáp xuống: bẹp nhẹ rồi bật lại.
+      final landing = _seg(
+        t,
+        CheckInTimeline.boxCentered,
+        CheckInTimeline.boxCentered + 0.18,
+      );
+      if (landing > 0 && landing < 1) squash = 1 - 0.14 * sin(pi * landing);
       if (t > CheckInTimeline.rattleStart && t < open) {
         final r = _seg(t, CheckInTimeline.rattleStart, open);
-        final wave = sin(r * pi * 9);
+        final wave = sin(r * pi * 5);
         angle = wave * (0.04 + 0.10 * r);
         squash = 1 - 0.05 * wave.abs() * r;
       }
@@ -778,8 +814,8 @@ class _FxPainter extends CustomPainter {
           begin: Alignment.topCenter,
           end: Alignment.bottomCenter,
           colors: [
-            colors.primary.withValues(alpha: alpha),
-            colors.secondary.withValues(alpha: alpha),
+            _FxColors.boxTop.withValues(alpha: alpha),
+            _FxColors.boxBottom.withValues(alpha: alpha),
           ],
         ).createShader(body),
     );
@@ -801,7 +837,7 @@ class _FxPainter extends CustomPainter {
       RRect.fromRectAndRadius(lid, Radius.circular(w * 0.06)),
       Paint()
         ..color = Color.lerp(
-          colors.primary,
+          _FxColors.boxTop,
           Colors.white,
           0.12,
         )!.withValues(alpha: a),

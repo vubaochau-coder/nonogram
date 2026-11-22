@@ -630,11 +630,6 @@ class AppLocalizationsVi extends AppLocalizations {
   String get checkInDoneToday => 'Hôm nay đã điểm danh';
 
   @override
-  String checkInNextGift(int count) {
-    return 'Còn $count lần điểm danh nữa đến quà tiếp theo';
-  }
-
-  @override
   String get checkInCheckedIn => 'Đã điểm danh!';
 
   @override
@@ -658,9 +653,6 @@ class AppLocalizationsVi extends AppLocalizations {
   }
 
   @override
-  String get checkInMonthGifts => 'Quà trong tháng';
-
-  @override
   String get navHome => 'Chính';
 
   @override
@@ -673,42 +665,70 @@ class AppLocalizationsVi extends AppLocalizations {
   String get meMore => 'Khác';
 
   @override
-  String get checkInNotYetToday => 'Hôm nay chưa điểm danh';
-
-  @override
   String get checkInTodayButton => 'Điểm danh hôm nay';
-
-  @override
-  String checkInGiftsLeftShort(int count) {
-    return 'Còn $count lần nữa có quà';
-  }
 
   @override
   String get checkInGiftToday => 'Hôm nay có quà!';
 
   @override
-  String checkInGiftMilestone(int count) {
-    return 'Quà mốc $count lần điểm danh';
-  }
-
-  @override
   String get checkInGiftCollect => 'Nhận';
 
   @override
-  String get checkInTotalHints => 'Gợi ý';
+  String checkInStreakTitle(int count) {
+    return 'Chuỗi $count ngày';
+  }
 
   @override
-  String get checkInTotalWands => 'Gậy phép';
+  String checkInStreakDays(int count) {
+    return '$count ngày';
+  }
 
   @override
-  String get checkInTotalDailyHints => 'Gợi ý (trong ngày)';
+  String checkInStreakMakeUp(int missed, String days) {
+    return 'Bù $missed ngày bỏ lỡ để nối chuỗi thành $days';
+  }
 
   @override
-  String get checkInTotalDailyWands => 'Gậy phép (trong ngày)';
+  String get checkInStreakKeepGoing => 'Điểm danh mỗi ngày để giữ chuỗi';
 
   @override
-  String get checkInPremiumNotYet =>
-      'Điểm danh để nhận 2 gợi ý và 1 gậy phép dùng trong hôm nay.';
+  String get checkInStreakAllDone => 'Bạn đã nhận hết quà chuỗi tháng này!';
+
+  @override
+  String checkInStreakDaysLeft(int count) {
+    return 'Còn $count ngày nữa có quà';
+  }
+
+  @override
+  String get checkInLegendChecked => 'Đã điểm danh';
+
+  @override
+  String get checkInLegendMissed => 'Bỏ lỡ';
+
+  @override
+  String get checkInLegendFuture => 'Chưa tới';
+
+  @override
+  String checkInGiftStreak(int count) {
+    return 'Quà chuỗi $count ngày';
+  }
+
+  @override
+  String checkInMakeUpTitle(String date) {
+    return 'Bù ngày $date?';
+  }
+
+  @override
+  String get checkInMakeUpBody =>
+      'Xem một quảng cáo ngắn để bù ngày này. Chuỗi điểm danh của bạn sẽ được nối lại.';
+
+  @override
+  String get checkInMakeUpWatch => 'Xem quảng cáo';
+
+  @override
+  String checkInMadeUp(String date) {
+    return 'Đã bù ngày $date';
+  }
 
   @override
   String dashboardDailyReminder(String rewards, String time) {
@@ -813,12 +833,4 @@ class AppLocalizationsVi extends AppLocalizations {
   String dashboardDailyReminderBoth(String hints, String wands) {
     return '$hints và $wands';
   }
-
-  @override
-  String checkInLegendMilestone(int count) {
-    return 'Mốc quà mỗi $count lần điểm danh';
-  }
-
-  @override
-  String get checkInLegendPremium => 'Quà gói không quảng cáo';
 }

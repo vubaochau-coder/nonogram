@@ -631,11 +631,6 @@ class AppLocalizationsTr extends AppLocalizations {
   String get checkInDoneToday => 'Bugün giriş yapıldı';
 
   @override
-  String checkInNextGift(int count) {
-    return 'Sonraki hediyeye $count giriş kaldı';
-  }
-
-  @override
   String get checkInCheckedIn => 'Giriş yapıldı!';
 
   @override
@@ -659,9 +654,6 @@ class AppLocalizationsTr extends AppLocalizations {
   }
 
   @override
-  String get checkInMonthGifts => 'Bu ayın hediyeleri';
-
-  @override
   String get navHome => 'Ana sayfa';
 
   @override
@@ -674,42 +666,70 @@ class AppLocalizationsTr extends AppLocalizations {
   String get meMore => 'Diğer';
 
   @override
-  String get checkInNotYetToday => 'Bugün henüz giriş yapılmadı';
-
-  @override
   String get checkInTodayButton => 'Bugün giriş yap';
-
-  @override
-  String checkInGiftsLeftShort(int count) {
-    return 'Hediyeye $count giriş kaldı';
-  }
 
   @override
   String get checkInGiftToday => 'Bugün hediye var!';
 
   @override
-  String checkInGiftMilestone(int count) {
-    return '$count giriş hediyesi';
-  }
-
-  @override
   String get checkInGiftCollect => 'Al';
 
   @override
-  String get checkInTotalHints => 'İpuçları';
+  String checkInStreakTitle(int count) {
+    return '$count günlük seri';
+  }
 
   @override
-  String get checkInTotalWands => 'Sihirli değnekler';
+  String checkInStreakDays(int count) {
+    return '$count gün';
+  }
 
   @override
-  String get checkInTotalDailyHints => 'İpuçları (yalnızca bugün)';
+  String checkInStreakMakeUp(int missed, String days) {
+    return 'Serini $days yapmak için kaçırdığın $missed günü telafi et';
+  }
 
   @override
-  String get checkInTotalDailyWands => 'Sihirli değnekler (yalnızca bugün)';
+  String get checkInStreakKeepGoing => 'Serini korumak için her gün giriş yap';
 
   @override
-  String get checkInPremiumNotYet =>
-      'Bugün için 2 ipucu ve 1 sihirli değnek almak için giriş yap.';
+  String get checkInStreakAllDone => 'Bu ayın tüm seri hediyelerini aldın!';
+
+  @override
+  String checkInStreakDaysLeft(int count) {
+    return 'Hediyeye $count gün kaldı';
+  }
+
+  @override
+  String get checkInLegendChecked => 'Giriş yapıldı';
+
+  @override
+  String get checkInLegendMissed => 'Kaçırıldı';
+
+  @override
+  String get checkInLegendFuture => 'Yakında';
+
+  @override
+  String checkInGiftStreak(int count) {
+    return '$count günlük seri hediyesi';
+  }
+
+  @override
+  String checkInMakeUpTitle(String date) {
+    return '$date telafi edilsin mi?';
+  }
+
+  @override
+  String get checkInMakeUpBody =>
+      'Bu günü telafi etmek için kısa bir reklam izle. Serin yeniden birleşir.';
+
+  @override
+  String get checkInMakeUpWatch => 'Reklam izle';
+
+  @override
+  String checkInMadeUp(String date) {
+    return '$date telafi edildi';
+  }
 
   @override
   String dashboardDailyReminder(String rewards, String time) {
@@ -814,12 +834,4 @@ class AppLocalizationsTr extends AppLocalizations {
   String dashboardDailyReminderBoth(String hints, String wands) {
     return '$hints ve $wands';
   }
-
-  @override
-  String checkInLegendMilestone(int count) {
-    return 'Her $count girişte hediye';
-  }
-
-  @override
-  String get checkInLegendPremium => 'Reklamsız paket ödülü';
 }
