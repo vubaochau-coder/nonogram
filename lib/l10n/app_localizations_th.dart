@@ -253,6 +253,17 @@ class AppLocalizationsTh extends AppLocalizations {
       'มาเรียนรู้กติกาพื้นฐานกับปริศนาขนาด 5×5 กัน';
 
   @override
+  String get nonogramTutorialInfoFree => 'เล่นฟรีทุกด่าน';
+
+  @override
+  String get nonogramTutorialInfoAds =>
+      'ดูโฆษณาได้ (ไม่บังคับ) เพื่อรับคำใบ้และไม้กายสิทธิ์เพิ่ม บางครั้งจะมีโฆษณาระหว่างด่าน';
+
+  @override
+  String get nonogramTutorialInfoPremium =>
+      'ซื้อครั้งเดียวเพื่อปิดโฆษณาระหว่างด่าน และรับคำใบ้กับไม้กายสิทธิ์ใช้ได้ในวันนั้นทุกครั้งที่เช็กอิน';
+
+  @override
   String get nonogramTutorialStart => 'เริ่ม';
 
   @override
@@ -262,6 +273,10 @@ class AppLocalizationsTh extends AppLocalizations {
   @override
   String get nonogramTutorialClueIsCount =>
       'ตัวเลขบอกว่าแถวนั้นมีช่องที่ระบายกี่ช่อง แถวนี้มี 5 จึงระบายทุกช่องเลย!';
+
+  @override
+  String get nonogramTutorialDragNote =>
+      'เคล็ดลับ: ลากนิ้วผ่านทั้งแถวเพื่อระบายในครั้งเดียวได้';
 
   @override
   String get nonogramTutorialEdgeCell =>
@@ -371,6 +386,12 @@ class AppLocalizationsTh extends AppLocalizations {
   String get nonogramPlayWandLabel => 'ไม้กายสิทธิ์';
 
   @override
+  String get nonogramPlayUndo => 'เลิกทำ';
+
+  @override
+  String get nonogramPlayDragTip => 'ลากนิ้วผ่านช่องเพื่อระบายหลายช่องพร้อมกัน';
+
+  @override
   String get nonogramPlayWandSelectPrompt =>
       'แตะตัวเลขของแถวหรือคอลัมน์ที่ต้องการเปิด';
 
@@ -433,6 +454,13 @@ class AppLocalizationsTh extends AppLocalizations {
   @override
   String get nonogramCoachLongPressBody =>
       'กดค้างที่ช่องเพื่อทำสิ่งตรงข้ามกับโหมดปัจจุบัน: ใส่ X ขณะอยู่ในโหมดระบาย หรือระบายขณะอยู่ในโหมด X การสั่นสั้น ๆ หมายความว่าเสร็จแล้วและปล่อยนิ้วได้';
+
+  @override
+  String get nonogramCoachRotateTitle => 'โหมดแนวนอน';
+
+  @override
+  String get nonogramCoachRotateBody =>
+      'แตะเพื่อหมุนกระดานเป็นแนวนอน สะดวกสำหรับปริศนาที่กว้าง ปุ่มจะย้ายไปด้านข้าง แตะอีกครั้งเพื่อกลับเป็นแนวตั้ง';
 
   @override
   String get nonogramCoachScrollTitle => 'การเลื่อนดูปริศนาขนาดใหญ่';

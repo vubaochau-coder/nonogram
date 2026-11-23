@@ -254,6 +254,18 @@ class AppLocalizationsDe extends AppLocalizations {
       'Lerne die Grundregeln an einem kleinen 5×5-Rätsel.';
 
   @override
+  String get nonogramTutorialInfoFree =>
+      'Kostenlos: Alle Level sind freigeschaltet.';
+
+  @override
+  String get nonogramTutorialInfoAds =>
+      'Du kannst (freiwillig) Werbung ansehen, um zusätzliche Tipps und Zauberstäbe zu bekommen. Zwischen Leveln läuft manchmal Werbung.';
+
+  @override
+  String get nonogramTutorialInfoPremium =>
+      'Ein einmaliger Kauf schaltet die Werbung zwischen Leveln ab und gibt bei jedem Check-in Tipps und Zauberstäbe für den Tag.';
+
+  @override
   String get nonogramTutorialStart => 'Los geht\'s';
 
   @override
@@ -263,6 +275,10 @@ class AppLocalizationsDe extends AppLocalizations {
   @override
   String get nonogramTutorialClueIsCount =>
       'Die Zahl gibt an, wie viele Felder der Zeile ausgefüllt sind. Diese Zeile hat 5, also fülle alle aus!';
+
+  @override
+  String get nonogramTutorialDragNote =>
+      'Tipp: Du kannst mit dem Finger über die Zeile ziehen, um sie auf einmal zu füllen.';
 
   @override
   String get nonogramTutorialEdgeCell =>
@@ -372,6 +388,13 @@ class AppLocalizationsDe extends AppLocalizations {
   String get nonogramPlayWandLabel => 'Zauberstab';
 
   @override
+  String get nonogramPlayUndo => 'Rückgängig';
+
+  @override
+  String get nonogramPlayDragTip =>
+      'Zieh den Finger über die Felder, um mehrere auf einmal zu füllen.';
+
+  @override
   String get nonogramPlayWandSelectPrompt =>
       'Tippe auf die Hinweise der Zeile oder Spalte, die aufgedeckt werden soll';
 
@@ -434,6 +457,13 @@ class AppLocalizationsDe extends AppLocalizations {
   @override
   String get nonogramCoachLongPressBody =>
       'Halte ein Feld gedrückt, um das Gegenteil des aktuellen Modus zu tun: X beim Ausfüllen, Ausfüllen beim Markieren. Eine kurze Vibration zeigt, dass es geklappt hat und du loslassen kannst.';
+
+  @override
+  String get nonogramCoachRotateTitle => 'Querformat';
+
+  @override
+  String get nonogramCoachRotateBody =>
+      'Tippe, um das Brett quer zu drehen, praktisch für breite Rätsel; die Schaltflächen wandern an die Seiten. Tippe erneut für das Hochformat.';
 
   @override
   String get nonogramCoachScrollTitle => 'Große Rätsel bewegen';

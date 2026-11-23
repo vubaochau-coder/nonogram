@@ -255,6 +255,17 @@ class AppLocalizationsVi extends AppLocalizations {
       'Cùng học luật chơi cơ bản qua một câu đố 5×5 nhỏ.';
 
   @override
+  String get nonogramTutorialInfoFree => 'Miễn phí chơi toàn bộ các màn.';
+
+  @override
+  String get nonogramTutorialInfoAds =>
+      'Có thể xem quảng cáo (tuỳ chọn) để nhận thêm gợi ý và gậy phép. Đôi khi có quảng cáo giữa các màn.';
+
+  @override
+  String get nonogramTutorialInfoPremium =>
+      'Mua một lần để tắt quảng cáo giữa các màn và nhận thêm gợi ý, gậy phép dùng trong ngày mỗi lần điểm danh.';
+
+  @override
   String get nonogramTutorialStart => 'Bắt đầu';
 
   @override
@@ -264,6 +275,10 @@ class AppLocalizationsVi extends AppLocalizations {
   @override
   String get nonogramTutorialClueIsCount =>
       'Con số cho biết hàng đó có bao nhiêu ô được tô. Hàng này có 5 ô, hãy tô hết!';
+
+  @override
+  String get nonogramTutorialDragNote =>
+      'Mẹo: có thể kéo ngón tay qua cả hàng để tô một lần.';
 
   @override
   String get nonogramTutorialEdgeCell =>
@@ -372,6 +387,13 @@ class AppLocalizationsVi extends AppLocalizations {
   String get nonogramPlayWandLabel => 'Gậy phép';
 
   @override
+  String get nonogramPlayUndo => 'Hoàn tác';
+
+  @override
+  String get nonogramPlayDragTip =>
+      'Kéo ngón tay qua các ô để tô nhiều ô một lần.';
+
+  @override
   String get nonogramPlayWandSelectPrompt =>
       'Chạm vào dãy số của hàng hoặc cột cần hiện đáp án';
 
@@ -434,6 +456,13 @@ class AppLocalizationsVi extends AppLocalizations {
   @override
   String get nonogramCoachLongPressBody =>
       'Nhấn giữ một ô để làm việc ngược với chế độ đang chọn: đang tô thì đánh X, đang đánh X thì tô. Khi máy rung nhẹ là đã xong, có thể nhấc tay.';
+
+  @override
+  String get nonogramCoachRotateTitle => 'Chơi màn hình ngang';
+
+  @override
+  String get nonogramCoachRotateBody =>
+      'Chạm để xoay ngang bàn chơi, tiện cho các màn rộng; các nút chuyển sang hai bên. Chạm lần nữa để quay lại màn hình dọc.';
 
   @override
   String get nonogramCoachScrollTitle => 'Di chuyển trên màn lớn';

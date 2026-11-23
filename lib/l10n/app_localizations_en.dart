@@ -254,6 +254,18 @@ class AppLocalizationsEn extends AppLocalizations {
       'Let\'s learn the basic rules with a small 5×5 puzzle.';
 
   @override
+  String get nonogramTutorialInfoFree =>
+      'Free to play: every level is unlocked.';
+
+  @override
+  String get nonogramTutorialInfoAds =>
+      'You can watch an ad (optional) for extra hints and magic wands. Sometimes an ad plays between levels.';
+
+  @override
+  String get nonogramTutorialInfoPremium =>
+      'A one-time purchase turns off ads between levels and adds today-only hints and wands every time you check in.';
+
+  @override
   String get nonogramTutorialStart => 'Start';
 
   @override
@@ -263,6 +275,10 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get nonogramTutorialClueIsCount =>
       'The number tells you how many squares in the row are filled. This row has 5, so fill them all!';
+
+  @override
+  String get nonogramTutorialDragNote =>
+      'Tip: you can drag your finger across the row to fill it in one go.';
 
   @override
   String get nonogramTutorialEdgeCell =>
@@ -372,6 +388,13 @@ class AppLocalizationsEn extends AppLocalizations {
   String get nonogramPlayWandLabel => 'Magic wand';
 
   @override
+  String get nonogramPlayUndo => 'Undo';
+
+  @override
+  String get nonogramPlayDragTip =>
+      'Drag your finger across squares to fill several at once.';
+
+  @override
   String get nonogramPlayWandSelectPrompt =>
       'Tap the clues of the row or column to reveal';
 
@@ -434,6 +457,13 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get nonogramCoachLongPressBody =>
       'Press and hold a square to do the opposite of the current mode: X while filling, fill while marking. A short vibration means it\'s done and you can let go.';
+
+  @override
+  String get nonogramCoachRotateTitle => 'Landscape mode';
+
+  @override
+  String get nonogramCoachRotateBody =>
+      'Tap to turn the board sideways, handy for wide puzzles; the buttons move to the sides. Tap again to go back to portrait.';
 
   @override
   String get nonogramCoachScrollTitle => 'Moving around big puzzles';

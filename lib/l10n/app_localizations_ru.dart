@@ -254,6 +254,17 @@ class AppLocalizationsRu extends AppLocalizations {
       'Давайте разберём основные правила на маленькой головоломке 5×5.';
 
   @override
+  String get nonogramTutorialInfoFree => 'Бесплатно: все уровни открыты.';
+
+  @override
+  String get nonogramTutorialInfoAds =>
+      'Можно посмотреть рекламу (по желанию), чтобы получить дополнительные подсказки и волшебные палочки. Иногда реклама показывается между уровнями.';
+
+  @override
+  String get nonogramTutorialInfoPremium =>
+      'Разовая покупка отключает рекламу между уровнями и даёт подсказки и палочки на день при каждой отметке.';
+
+  @override
   String get nonogramTutorialStart => 'Начать';
 
   @override
@@ -263,6 +274,10 @@ class AppLocalizationsRu extends AppLocalizations {
   @override
   String get nonogramTutorialClueIsCount =>
       'Число показывает, сколько клеток в строке закрашено. В этой строке 5 — закрасьте их все!';
+
+  @override
+  String get nonogramTutorialDragNote =>
+      'Совет: проведите пальцем по строке, чтобы закрасить её за один раз.';
 
   @override
   String get nonogramTutorialEdgeCell =>
@@ -372,6 +387,13 @@ class AppLocalizationsRu extends AppLocalizations {
   String get nonogramPlayWandLabel => 'Волшебная палочка';
 
   @override
+  String get nonogramPlayUndo => 'Отменить';
+
+  @override
+  String get nonogramPlayDragTip =>
+      'Проведите пальцем по клеткам, чтобы закрасить несколько сразу.';
+
+  @override
   String get nonogramPlayWandSelectPrompt =>
       'Нажмите на числа строки или столбца, который нужно открыть';
 
@@ -435,6 +457,13 @@ class AppLocalizationsRu extends AppLocalizations {
   @override
   String get nonogramCoachLongPressBody =>
       'Удерживайте клетку, чтобы сделать обратное текущему режиму: крестик при закрашивании, закрашивание при отметке. Короткая вибрация означает, что готово и можно отпустить.';
+
+  @override
+  String get nonogramCoachRotateTitle => 'Альбомный режим';
+
+  @override
+  String get nonogramCoachRotateBody =>
+      'Нажмите, чтобы повернуть поле горизонтально — удобно для широких головоломок; кнопки переместятся по бокам. Нажмите ещё раз, чтобы вернуть вертикальный режим.';
 
   @override
   String get nonogramCoachScrollTitle => 'Перемещение по большим головоломкам';

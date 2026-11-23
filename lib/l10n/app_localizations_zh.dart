@@ -248,6 +248,16 @@ class AppLocalizationsZh extends AppLocalizations {
   String get nonogramTutorialWelcome => '让我们通过一个 5×5 的小谜题来学习基本规则。';
 
   @override
+  String get nonogramTutorialInfoFree => '免费：所有关卡都能玩。';
+
+  @override
+  String get nonogramTutorialInfoAds => '可以观看广告（自愿）获得更多提示和魔杖。关卡之间有时会出现广告。';
+
+  @override
+  String get nonogramTutorialInfoPremium =>
+      '一次性购买即可关闭关卡间的广告，每次签到还能获得当天可用的提示和魔杖。';
+
+  @override
   String get nonogramTutorialStart => '开始';
 
   @override
@@ -255,6 +265,9 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get nonogramTutorialClueIsCount => '数字表示这一行有几个方格要涂色。这一行是 5，所以全部涂上！';
+
+  @override
+  String get nonogramTutorialDragNote => '提示：手指滑过整行即可一次涂满。';
 
   @override
   String get nonogramTutorialEdgeCell =>
@@ -355,6 +368,12 @@ class AppLocalizationsZh extends AppLocalizations {
   String get nonogramPlayWandLabel => '魔杖';
 
   @override
+  String get nonogramPlayUndo => '撤销';
+
+  @override
+  String get nonogramPlayDragTip => '手指滑过格子，可以一次涂多格。';
+
+  @override
   String get nonogramPlayWandSelectPrompt => '点按要揭开的行或列的数字';
 
   @override
@@ -414,6 +433,13 @@ class AppLocalizationsZh extends AppLocalizations {
   @override
   String get nonogramCoachLongPressBody =>
       '长按方格会执行与当前模式相反的操作：涂色时标 X，标记时涂色。短暂振动表示已完成，可以松手了。';
+
+  @override
+  String get nonogramCoachRotateTitle => '横屏模式';
+
+  @override
+  String get nonogramCoachRotateBody =>
+      '点按可将棋盘横过来，方便玩较宽的谜题；按钮会移到两侧。再点按一次即可回到竖屏。';
 
   @override
   String get nonogramCoachScrollTitle => '浏览大谜题';
@@ -1047,6 +1073,16 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
   String get nonogramTutorialWelcome => '讓我們透過一個 5×5 的小謎題來學習基本規則。';
 
   @override
+  String get nonogramTutorialInfoFree => '免費：所有關卡都能玩。';
+
+  @override
+  String get nonogramTutorialInfoAds => '可以觀看廣告（自願）獲得更多提示和魔杖。關卡之間有時會出現廣告。';
+
+  @override
+  String get nonogramTutorialInfoPremium =>
+      '一次性購買即可關閉關卡間的廣告，每次簽到還能獲得當天可用的提示和魔杖。';
+
+  @override
   String get nonogramTutorialStart => '開始';
 
   @override
@@ -1054,6 +1090,9 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
 
   @override
   String get nonogramTutorialClueIsCount => '數字表示這一橫列有幾個方格要塗色。這一橫列是 5，所以全部塗上！';
+
+  @override
+  String get nonogramTutorialDragNote => '提示：手指滑過整行即可一次塗滿。';
 
   @override
   String get nonogramTutorialEdgeCell =>
@@ -1154,6 +1193,12 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
   String get nonogramPlayWandLabel => '魔杖';
 
   @override
+  String get nonogramPlayUndo => '復原';
+
+  @override
+  String get nonogramPlayDragTip => '手指滑過格子，可以一次塗多格。';
+
+  @override
   String get nonogramPlayWandSelectPrompt => '點按要揭開的橫列或直行的數字';
 
   @override
@@ -1213,6 +1258,13 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
   @override
   String get nonogramCoachLongPressBody =>
       '長按方格會執行與目前模式相反的操作：塗色時標 X，標記時塗色。短暫震動表示已完成，可以放開了。';
+
+  @override
+  String get nonogramCoachRotateTitle => '橫向模式';
+
+  @override
+  String get nonogramCoachRotateBody =>
+      '點按可將棋盤橫過來，方便玩較寬的謎題；按鈕會移到兩側。再點按一次即可回到直向。';
 
   @override
   String get nonogramCoachScrollTitle => '瀏覽大謎題';

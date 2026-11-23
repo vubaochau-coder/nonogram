@@ -24,6 +24,7 @@ import 'package:nonogram/screens/play/nonogram_transformation_controller_provide
 import 'package:nonogram/screens/play/sections/nonogram_board_shell_section.dart';
 import 'package:nonogram/screens/play/sections/nonogram_board_viewport.dart';
 import 'package:nonogram/screens/play/views/wand_action.dart';
+import 'package:nonogram/screens/play/widgets/overlay_button.dart';
 import 'package:nonogram/screens/play/sections/nonogram_landscape_info_panel.dart';
 
 import '../mocks/fake_ad_service.dart';
@@ -316,6 +317,10 @@ void main() {
     expect(hint.dy, lessThan(wand.dy));
     expect(wand.dy, lessThan(mark.dy));
     expect(mark.dy, lessThan(400 / 2));
+    // Hoàn tác ngay dưới Tô / X.
+    final undo = at(find.byKey(const ValueKey('nonogram-undo')));
+    expect(undo.dx, greaterThan(900 - NonogramBoardLayout.railReserve));
+    expect(undo.dy, greaterThan(mark.dy));
   });
 
   testWidgets('pinching with two fingers pans but never changes cell size', (
@@ -568,14 +573,14 @@ void main() {
 
     expect(find.byType(NonogramPlayCoachOverlay), findsOneWidget);
     expect(find.text('Hint'), findsOneWidget);
-    expect(find.text('1/6'), findsOneWidget);
+    expect(find.text('1/7'), findsOneWidget);
     expect(prefs.playCoachSeen, isTrue);
     expect(prefs.scrollTipSeen, isTrue);
 
     // Lớp phủ chặn thao tác bên dưới: chạm = sang bước tiếp.
     await tester.tap(find.byKey(const ValueKey('nonogram-coach-next')));
     await tester.pump(const Duration(milliseconds: 300));
-    expect(find.text('2/6'), findsOneWidget);
+    expect(find.text('2/7'), findsOneWidget);
     expect(find.text('Magic wand'), findsWidgets);
 
     await tester.tap(find.byKey(const ValueKey('nonogram-coach-skip')));
@@ -606,11 +611,172 @@ void main() {
     await tester.pumpAndSettle();
 
     expect(find.byType(NonogramPlayCoachOverlay), findsOneWidget);
-    for (var i = 0; i < 6; i++) {
+    for (var i = 0; i < 7; i++) {
       await tester.tap(find.byKey(const ValueKey('nonogram-coach-next')));
       await tester.pump(const Duration(milliseconds: 300));
     }
     expect(find.byType(NonogramPlayCoachOverlay), findsNothing);
+  });
+
+  group('drag tip', () {
+    Offset cellAt(WidgetTester tester, int row, int col) {
+      final origin = _boardOrigin(tester);
+      final offset = _gridOffset(tester);
+      final size = _bloc(tester).state.cellSize;
+      return origin +
+          Offset(
+            offset.dx + (col + 0.5) * size,
+            offset.dy + (row + 0.5) * size,
+          );
+    }
+
+    final tip = find.byKey(const ValueKey('nonogram-drag-tip'));
+
+    Future<void> tapCells(WidgetTester tester, int count) async {
+      for (var c = 0; c < count; c++) {
+        await tester.tapAt(cellAt(tester, 0, c));
+        await tester.pump(const Duration(milliseconds: 400));
+      }
+    }
+
+    testWidgets('shows after 3 single taps, "Got it" hides it for good', (
+      tester,
+    ) async {
+      final prefs = OnboardingPreferences.inMemory(
+        playCoachSeen: true,
+        scrollTipSeen: true,
+      );
+      await _pumpPlay(tester, phone, onboarding: prefs);
+      await tapCells(tester, 2);
+      expect(tip, findsNothing);
+      await tapCells(tester, 1);
+      await tester.pump(const Duration(milliseconds: 300));
+      expect(tip, findsOneWidget);
+
+      await tester.tap(find.byKey(const ValueKey('nonogram-drag-tip-ok')));
+      await tester.pump(const Duration(milliseconds: 300));
+      expect(tip, findsNothing);
+      expect(prefs.dragTipSeen, isTrue);
+    });
+
+    testWidgets('dragging across squares means no tip', (tester) async {
+      final prefs = OnboardingPreferences.inMemory(
+        playCoachSeen: true,
+        scrollTipSeen: true,
+      );
+      await _pumpPlay(tester, phone, onboarding: prefs);
+      final size = _bloc(tester).state.cellSize;
+      final gesture = await tester.startGesture(cellAt(tester, 2, 0));
+      for (var i = 0; i < 3; i++) {
+        await gesture.moveBy(Offset(size, 0));
+        await tester.pump(const Duration(milliseconds: 16));
+      }
+      await gesture.up();
+      await tester.pump(const Duration(milliseconds: 50));
+      expect(prefs.dragTipSeen, isTrue);
+      await tapCells(tester, 3);
+      expect(tip, findsNothing);
+    });
+
+    testWidgets('not shown to players who already know', (tester) async {
+      final prefs = OnboardingPreferences.inMemory(
+        playCoachSeen: true,
+        scrollTipSeen: true,
+        dragTipSeen: true,
+      );
+      await _pumpPlay(tester, phone, onboarding: prefs);
+      await tapCells(tester, 4);
+      expect(tip, findsNothing);
+    });
+  });
+
+  group('undo', () {
+    Offset cellAt(WidgetTester tester, int row, int col) {
+      final origin = _boardOrigin(tester);
+      final offset = _gridOffset(tester);
+      final size = _bloc(tester).state.cellSize;
+      return origin +
+          Offset(
+            offset.dx + (col + 0.5) * size,
+            offset.dy + (row + 0.5) * size,
+          );
+    }
+
+    OverlayButton undoButton(WidgetTester tester) => tester
+        .widget<OverlayButton>(find.byKey(const ValueKey('nonogram-undo')));
+
+    Future<void> tapUndo(WidgetTester tester) async {
+      await tester.tap(find.byKey(const ValueKey('nonogram-undo')));
+      await tester.pump(const Duration(milliseconds: 50));
+    }
+
+    testWidgets('disabled until something changes; one tap = one step', (
+      tester,
+    ) async {
+      await _pumpPlay(tester, phone);
+      expect(undoButton(tester).enabled, isFalse);
+
+      await tester.tapAt(cellAt(tester, 0, 0));
+      await tester.pump(const Duration(milliseconds: 400));
+      await tester.tapAt(cellAt(tester, 0, 1));
+      await tester.pump(const Duration(milliseconds: 400));
+      expect(_filledCount(tester), 2);
+      expect(undoButton(tester).enabled, isTrue);
+
+      await tapUndo(tester);
+      expect(_filledCount(tester), 1);
+      expect(_bloc(tester).state.gridData[0][1], NonogramCellState.empty);
+      await tapUndo(tester);
+      expect(_filledCount(tester), 0);
+      expect(undoButton(tester).enabled, isFalse);
+    });
+
+    testWidgets('a whole drag is undone in one step', (tester) async {
+      await _pumpPlay(tester, phone);
+      final size = _bloc(tester).state.cellSize;
+      final gesture = await tester.startGesture(cellAt(tester, 1, 0));
+      for (var i = 0; i < 4; i++) {
+        await gesture.moveBy(Offset(size, 0));
+        await tester.pump(const Duration(milliseconds: 16));
+      }
+      await gesture.up();
+      await tester.pump(const Duration(milliseconds: 50));
+      expect(_filledCount(tester), greaterThanOrEqualTo(4));
+
+      await tapUndo(tester);
+      expect(_filledCount(tester), 0);
+      expect(undoButton(tester).enabled, isFalse);
+    });
+
+    testWidgets('cells opened by a hint stay after undo', (tester) async {
+      await _pumpPlay(tester, phone);
+      final bloc = _bloc(tester);
+      await tester.tapAt(cellAt(tester, 0, 0));
+      await tester.pump(const Duration(milliseconds: 400));
+      await tester.tap(find.byIcon(LucideIcons.lightbulb));
+      await tester.pump(const Duration(milliseconds: 600));
+      final locked = {...bloc.state.lockedCells};
+      expect(locked, isNotEmpty);
+
+      await tapUndo(tester);
+      for (final c in locked) {
+        expect(bloc.state.isLocked(c.row, c.col), isTrue);
+        expect(
+          bloc.state.gridData[c.row][c.col],
+          isNot(NonogramCellState.empty),
+        );
+      }
+    });
+
+    testWidgets('restarting the level clears the undo history', (tester) async {
+      await _pumpPlay(tester, phone);
+      await tester.tapAt(cellAt(tester, 0, 0));
+      await tester.pump(const Duration(milliseconds: 400));
+      expect(undoButton(tester).enabled, isTrue);
+      _bloc(tester).add(const BoardReset(offsetX: 0, offsetY: 0));
+      await tester.pump(const Duration(milliseconds: 50));
+      expect(undoButton(tester).enabled, isFalse);
+    });
   });
 
   testWidgets('settings no longer list the licenses', (tester) async {
@@ -634,7 +800,7 @@ void main() {
       await tester.tap(find.byKey(const ValueKey('nonogram-coach-next')));
       await tester.pump(const Duration(milliseconds: 300));
     }
-    expect(find.text('4/6'), findsOneWidget);
+    expect(find.text('4/7'), findsOneWidget);
     expect(find.text('Drag to fill many squares'), findsOneWidget);
   });
 

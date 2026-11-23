@@ -256,6 +256,18 @@ class AppLocalizationsIt extends AppLocalizations {
       'Impariamo le regole di base con un piccolo rompicapo 5×5.';
 
   @override
+  String get nonogramTutorialInfoFree =>
+      'Gratis: tutti i livelli sono sbloccati.';
+
+  @override
+  String get nonogramTutorialInfoAds =>
+      'Puoi guardare una pubblicità (facoltativa) per avere suggerimenti e bacchette in più. A volte c\'è una pubblicità tra un livello e l\'altro.';
+
+  @override
+  String get nonogramTutorialInfoPremium =>
+      'Un acquisto una tantum elimina le pubblicità tra i livelli e aggiunge suggerimenti e bacchette del giorno a ogni check-in.';
+
+  @override
   String get nonogramTutorialStart => 'Inizia';
 
   @override
@@ -265,6 +277,10 @@ class AppLocalizationsIt extends AppLocalizations {
   @override
   String get nonogramTutorialClueIsCount =>
       'Il numero indica quante caselle della riga sono piene. Questa riga ne ha 5, quindi riempile tutte!';
+
+  @override
+  String get nonogramTutorialDragNote =>
+      'Suggerimento: puoi trascinare il dito lungo la riga per riempirla in un colpo.';
 
   @override
   String get nonogramTutorialEdgeCell =>
@@ -375,6 +391,13 @@ class AppLocalizationsIt extends AppLocalizations {
   String get nonogramPlayWandLabel => 'Bacchetta magica';
 
   @override
+  String get nonogramPlayUndo => 'Annulla';
+
+  @override
+  String get nonogramPlayDragTip =>
+      'Trascina il dito sulle caselle per riempirne diverse in una volta.';
+
+  @override
   String get nonogramPlayWandSelectPrompt =>
       'Tocca gli indizi della riga o colonna da svelare';
 
@@ -437,6 +460,13 @@ class AppLocalizationsIt extends AppLocalizations {
   @override
   String get nonogramCoachLongPressBody =>
       'Tieni premuta una casella per fare l\'opposto della modalità attuale: X mentre riempi, riempire mentre segni. Una breve vibrazione indica che è fatto e puoi lasciare.';
+
+  @override
+  String get nonogramCoachRotateTitle => 'Modalità orizzontale';
+
+  @override
+  String get nonogramCoachRotateBody =>
+      'Tocca per ruotare la griglia in orizzontale, comodo per i puzzle larghi; i pulsanti si spostano ai lati. Tocca di nuovo per tornare in verticale.';
 
   @override
   String get nonogramCoachScrollTitle => 'Muoversi nei rompicapi grandi';

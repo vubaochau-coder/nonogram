@@ -254,6 +254,17 @@ class AppLocalizationsTr extends AppLocalizations {
       'Temel kuralları küçük bir 5×5 bulmacayla öğrenelim.';
 
   @override
+  String get nonogramTutorialInfoFree => 'Ücretsiz: tüm seviyeler açık.';
+
+  @override
+  String get nonogramTutorialInfoAds =>
+      'İsteğe bağlı olarak reklam izleyip ekstra ipucu ve sihirli değnek alabilirsin. Seviyeler arasında bazen reklam çıkar.';
+
+  @override
+  String get nonogramTutorialInfoPremium =>
+      'Tek seferlik satın alma, seviyeler arası reklamları kapatır ve her girişte o güne özel ipucu ve değnek verir.';
+
+  @override
   String get nonogramTutorialStart => 'Başla';
 
   @override
@@ -263,6 +274,10 @@ class AppLocalizationsTr extends AppLocalizations {
   @override
   String get nonogramTutorialClueIsCount =>
       'Sayı, satırda kaç karenin dolu olduğunu söyler. Bu satırda 5 var, yani hepsini doldur!';
+
+  @override
+  String get nonogramTutorialDragNote =>
+      'İpucu: satırı tek seferde doldurmak için parmağını boydan boya sürükleyebilirsin.';
 
   @override
   String get nonogramTutorialEdgeCell =>
@@ -372,6 +387,13 @@ class AppLocalizationsTr extends AppLocalizations {
   String get nonogramPlayWandLabel => 'Sihirli değnek';
 
   @override
+  String get nonogramPlayUndo => 'Geri al';
+
+  @override
+  String get nonogramPlayDragTip =>
+      'Birden çok kareyi tek seferde doldurmak için parmağını üzerlerinden sürükle.';
+
+  @override
   String get nonogramPlayWandSelectPrompt =>
       'Açmak istediğin satırın veya sütunun ipuçlarına dokun';
 
@@ -434,6 +456,13 @@ class AppLocalizationsTr extends AppLocalizations {
   @override
   String get nonogramCoachLongPressBody =>
       'Geçerli modun tersini yapmak için bir kareye basılı tut: doldururken X, işaretlerken doldurma. Kısa bir titreşim işlemin bittiğini ve bırakabileceğini gösterir.';
+
+  @override
+  String get nonogramCoachRotateTitle => 'Yatay mod';
+
+  @override
+  String get nonogramCoachRotateBody =>
+      'Tahtayı yatay çevirmek için dokun, geniş bulmacalar için kullanışlı; düğmeler kenarlara geçer. Dikeye dönmek için tekrar dokun.';
 
   @override
   String get nonogramCoachScrollTitle => 'Büyük bulmacalarda gezinme';
