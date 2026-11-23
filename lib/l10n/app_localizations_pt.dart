@@ -421,7 +421,14 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get nonogramCoachModeBody =>
-      'Escolha o que um toque faz: preencher o quadrado ou marcá-lo com um X para lembrar que ele está vazio. Toque no botão para alternar. Arraste pela grade para preencher ou marcar vários quadrados de uma vez.';
+      'Escolha o que um toque faz: preencher o quadrado ou marcá-lo com um X para lembrar que ele está vazio. Toque no botão para alternar.';
+
+  @override
+  String get nonogramCoachDragTitle => 'Arraste para preencher vários';
+
+  @override
+  String get nonogramCoachDragBody =>
+      'Coloque o dedo num quadrado e deslize por outros: cada quadrado por onde passar é preenchido (ou marcado com X no modo X) de uma vez. Começando num quadrado preenchido, você limpa os quadrados por onde passa.';
 
   @override
   String get nonogramCoachLongPressTitle => 'Toque e segure para o contrário';

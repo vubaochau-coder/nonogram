@@ -422,7 +422,14 @@ class AppLocalizationsIt extends AppLocalizations {
 
   @override
   String get nonogramCoachModeBody =>
-      'Scegli cosa fa un tocco: riempire la casella o segnarla con una X per ricordare che è vuota. Tocca il pulsante per cambiare. Trascina sulla griglia per riempire o segnare molte caselle in una volta.';
+      'Scegli cosa fa un tocco: riempire la casella o segnarla con una X per ricordare che è vuota. Tocca il pulsante per cambiare.';
+
+  @override
+  String get nonogramCoachDragTitle => 'Trascina per riempire più caselle';
+
+  @override
+  String get nonogramCoachDragBody =>
+      'Metti il dito su una casella e fallo scorrere sulle altre: ogni casella che attraversi viene riempita (o segnata con una X in modalità X) in un colpo solo. Partendo da una casella piena, invece, svuoti quelle che attraversi.';
 
   @override
   String get nonogramCoachLongPressTitle => 'Tieni premuto per l\'opposto';

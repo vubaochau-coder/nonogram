@@ -422,7 +422,14 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get nonogramCoachModeBody =>
-      'Choisissez l\'effet d\'un toucher : remplir la case, ou la marquer d\'un X pour vous rappeler qu\'elle est vide. Touchez le bouton pour changer. Faites glisser sur la grille pour remplir ou marquer plusieurs cases d\'un coup.';
+      'Choisissez l\'effet d\'un toucher : remplir la case, ou la marquer d\'un X pour vous rappeler qu\'elle est vide. Touchez le bouton pour changer.';
+
+  @override
+  String get nonogramCoachDragTitle => 'Glissez pour remplir plusieurs cases';
+
+  @override
+  String get nonogramCoachDragBody =>
+      'Posez le doigt sur une case et faites-le glisser sur d\'autres : chaque case traversée est remplie (ou marquée d\'un X en mode X) d\'un coup. En partant d\'une case remplie, vous effacez les cases traversées.';
 
   @override
   String get nonogramCoachLongPressTitle => 'Appui long pour l\'inverse';

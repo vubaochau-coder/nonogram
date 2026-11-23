@@ -419,7 +419,14 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get nonogramCoachModeBody =>
-      'Wähle, was ein Tippen bewirkt: das Feld ausfüllen oder es mit einem X als leer markieren. Tippe auf die Schaltfläche, um zu wechseln. Ziehe über das Gitter, um viele Felder auf einmal auszufüllen oder zu markieren.';
+      'Wähle, was ein Tippen bewirkt: das Feld ausfüllen oder es mit einem X als leer markieren. Tippe auf die Schaltfläche, um zu wechseln.';
+
+  @override
+  String get nonogramCoachDragTitle => 'Ziehen für viele Felder';
+
+  @override
+  String get nonogramCoachDragBody =>
+      'Leg den Finger auf ein Feld und zieh ihn über andere: Jedes Feld, über das du fährst, wird auf einmal ausgefüllt (oder im X-Modus mit X markiert). Beginnst du auf einem ausgefüllten Feld, werden die Felder stattdessen geleert.';
 
   @override
   String get nonogramCoachLongPressTitle => 'Gedrückt halten für das Gegenteil';

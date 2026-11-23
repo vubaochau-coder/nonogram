@@ -418,7 +418,14 @@ class AppLocalizationsId extends AppLocalizations {
 
   @override
   String get nonogramCoachModeBody =>
-      'Pilih apa yang dilakukan ketukan: mengisi kotak, atau menandainya dengan X untuk mengingat bahwa kotak itu kosong. Ketuk tombol untuk beralih. Geser di atas kisi untuk mengisi atau menandai banyak kotak sekaligus.';
+      'Pilih apa yang dilakukan ketukan: mengisi kotak, atau menandainya dengan X untuk mengingat bahwa kotak itu kosong. Ketuk tombol untuk beralih.';
+
+  @override
+  String get nonogramCoachDragTitle => 'Geser untuk mengisi banyak kotak';
+
+  @override
+  String get nonogramCoachDragBody =>
+      'Letakkan jari di sebuah kotak lalu geser melewati kotak lain: setiap kotak yang dilewati langsung terisi (atau ditandai X di mode X). Mulai dari kotak yang sudah terisi untuk mengosongkan kotak yang dilewati.';
 
   @override
   String get nonogramCoachLongPressTitle => 'Tekan lama untuk kebalikannya';

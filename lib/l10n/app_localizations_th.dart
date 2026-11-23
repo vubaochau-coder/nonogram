@@ -418,7 +418,14 @@ class AppLocalizationsTh extends AppLocalizations {
 
   @override
   String get nonogramCoachModeBody =>
-      'เลือกว่าการแตะจะทำอะไร: ระบายช่อง หรือทำเครื่องหมาย X เพื่อจำว่าช่องนั้นว่าง แตะปุ่มเพื่อสลับ ลากบนตารางเพื่อระบายหรือทำเครื่องหมายหลายช่องพร้อมกัน';
+      'เลือกว่าการแตะจะทำอะไร: ระบายช่อง หรือทำเครื่องหมาย X เพื่อจำว่าช่องนั้นว่าง แตะปุ่มเพื่อสลับ';
+
+  @override
+  String get nonogramCoachDragTitle => 'ลากเพื่อระบายหลายช่อง';
+
+  @override
+  String get nonogramCoachDragBody =>
+      'วางนิ้วบนช่องหนึ่งแล้วลากผ่านช่องอื่น ทุกช่องที่นิ้วผ่านจะถูกระบาย (หรือกากบาทในโหมด X) ในครั้งเดียว ถ้าเริ่มลากจากช่องที่ระบายแล้ว ช่องที่ผ่านจะถูกลบแทน';
 
   @override
   String get nonogramCoachLongPressTitle => 'กดค้างเพื่อทำสิ่งตรงข้าม';

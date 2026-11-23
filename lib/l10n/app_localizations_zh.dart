@@ -399,7 +399,14 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get nonogramCoachModeBody =>
-      '选择点按时的操作：给方格涂色，或标上 X 提醒自己这里是空格。点按按钮即可切换。在网格上拖动可以一次涂色或标记多个方格。';
+      '选择点按时的操作：给方格涂色，或标上 X 提醒自己这里是空格。点按按钮即可切换。';
+
+  @override
+  String get nonogramCoachDragTitle => '拖动一次涂多格';
+
+  @override
+  String get nonogramCoachDragBody =>
+      '手指按住一格，滑过其他格子：经过的格子会一次全部涂色（X 模式下则标上 X）。从已涂的格子开始滑动，则会清除经过的格子。';
 
   @override
   String get nonogramCoachLongPressTitle => '长按执行相反操作';
@@ -1191,7 +1198,14 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
 
   @override
   String get nonogramCoachModeBody =>
-      '選擇點按時的操作：為方格塗色，或標上 X 提醒自己這裡是空格。點按按鈕即可切換。在網格上拖曳可以一次塗色或標記多個方格。';
+      '選擇點按時的操作：為方格塗色，或標上 X 提醒自己這裡是空格。點按按鈕即可切換。';
+
+  @override
+  String get nonogramCoachDragTitle => '拖曳一次塗多格';
+
+  @override
+  String get nonogramCoachDragBody =>
+      '手指按住一格，滑過其他格子：經過的格子會一次全部塗色（X 模式下則標上 X）。從已塗的格子開始滑動，則會清除經過的格子。';
 
   @override
   String get nonogramCoachLongPressTitle => '長按執行相反操作';

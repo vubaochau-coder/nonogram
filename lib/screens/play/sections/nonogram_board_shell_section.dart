@@ -123,6 +123,7 @@ class _NonogramBoardShellSectionState extends State<NonogramBoardShellSection> {
     NonogramCoachStep.hint,
     NonogramCoachStep.wand,
     NonogramCoachStep.mode,
+    NonogramCoachStep.drag,
     NonogramCoachStep.longPress,
   ];
 
@@ -167,6 +168,7 @@ class _NonogramBoardShellSectionState extends State<NonogramBoardShellSection> {
       NonogramCoachStep.hint => _keyRect(_hintKey),
       NonogramCoachStep.wand => _keyRect(_wandKey),
       NonogramCoachStep.mode => _keyRect(_modeKey),
+      NonogramCoachStep.drag ||
       NonogramCoachStep.longPress ||
       NonogramCoachStep.scroll => _visibleGridRect(),
     };

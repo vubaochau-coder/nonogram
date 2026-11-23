@@ -409,7 +409,14 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get nonogramCoachModeBody =>
-      'タップしたときの動作を選びます。マスを塗るか、空きマスだと覚えておくために×を付けるかです。ボタンをタップで切り替え。盤面をドラッグすると、まとめて塗ったり×を付けたりできます。';
+      'タップしたときの動作を選びます。マスを塗るか、空きマスだと覚えておくために×を付けるかです。ボタンをタップで切り替え。';
+
+  @override
+  String get nonogramCoachDragTitle => 'ドラッグでまとめて塗る';
+
+  @override
+  String get nonogramCoachDragBody =>
+      'マスに指を置いてほかのマスへなぞると、通ったマスがまとめて塗られます（×モードなら×が付きます）。塗ったマスからなぞり始めると、通ったマスを消せます。';
 
   @override
   String get nonogramCoachLongPressTitle => '長押しで逆の操作';

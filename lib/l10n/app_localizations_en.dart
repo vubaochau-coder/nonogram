@@ -419,7 +419,14 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get nonogramCoachModeBody =>
-      'Choose what a tap does: fill the square, or mark it with an X to remember it is empty. Tap the button to switch. Drag across the grid to fill or mark many squares at once.';
+      'Choose what a tap does: fill the square, or mark it with an X to remember it is empty. Tap the button to switch.';
+
+  @override
+  String get nonogramCoachDragTitle => 'Drag to fill many squares';
+
+  @override
+  String get nonogramCoachDragBody =>
+      'Put your finger on a square and slide it across others: every square you pass is filled (or marked with X in X mode) in one go. Start on a filled square to clear the squares you pass instead.';
 
   @override
   String get nonogramCoachLongPressTitle => 'Press and hold for the opposite';

@@ -419,7 +419,14 @@ class AppLocalizationsVi extends AppLocalizations {
 
   @override
   String get nonogramCoachModeBody =>
-      'Chọn việc sẽ làm khi chạm vào ô: tô ô, hoặc đánh X để ghi nhớ ô chắc chắn trống. Chạm vào nút để đổi chế độ. Kéo ngón tay trên lưới để tô / đánh X nhiều ô liền.';
+      'Chọn việc sẽ làm khi chạm vào ô: tô ô, hoặc đánh X để ghi nhớ ô chắc chắn trống. Chạm vào nút để đổi chế độ.';
+
+  @override
+  String get nonogramCoachDragTitle => 'Kéo để tô nhiều ô';
+
+  @override
+  String get nonogramCoachDragBody =>
+      'Đặt ngón tay lên một ô rồi kéo qua các ô khác: mọi ô ngón tay đi qua đều được tô (hoặc đánh X khi ở chế độ X) trong một lần. Bắt đầu kéo từ ô đã tô thì sẽ xoá các ô đi qua.';
 
   @override
   String get nonogramCoachLongPressTitle => 'Nhấn giữ để làm ngược lại';

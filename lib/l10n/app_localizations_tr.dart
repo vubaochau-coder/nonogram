@@ -419,7 +419,14 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get nonogramCoachModeBody =>
-      'Dokunmanın ne yapacağını seç: kareyi doldurmak ya da boş olduğunu hatırlamak için X ile işaretlemek. Değiştirmek için düğmeye dokun. Birçok kareyi tek seferde doldurmak veya işaretlemek için ızgara üzerinde sürükle.';
+      'Dokunmanın ne yapacağını seç: kareyi doldurmak ya da boş olduğunu hatırlamak için X ile işaretlemek. Değiştirmek için düğmeye dokun.';
+
+  @override
+  String get nonogramCoachDragTitle => 'Sürükleyerek çok kare doldur';
+
+  @override
+  String get nonogramCoachDragBody =>
+      'Parmağını bir kareye koy ve diğerlerinin üzerinden kaydır: geçtiğin her kare tek seferde dolar (X modunda X ile işaretlenir). Dolu bir kareden başlarsan geçtiğin kareler temizlenir.';
 
   @override
   String get nonogramCoachLongPressTitle => 'Tersi için basılı tut';

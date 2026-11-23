@@ -816,8 +816,20 @@ abstract class AppLocalizations {
   /// No description provided for @nonogramCoachModeBody.
   ///
   /// In en, this message translates to:
-  /// **'Choose what a tap does: fill the square, or mark it with an X to remember it is empty. Tap the button to switch. Drag across the grid to fill or mark many squares at once.'**
+  /// **'Choose what a tap does: fill the square, or mark it with an X to remember it is empty. Tap the button to switch.'**
   String get nonogramCoachModeBody;
+
+  /// No description provided for @nonogramCoachDragTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Drag to fill many squares'**
+  String get nonogramCoachDragTitle;
+
+  /// No description provided for @nonogramCoachDragBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Put your finger on a square and slide it across others: every square you pass is filled (or marked with X in X mode) in one go. Start on a filled square to clear the squares you pass instead.'**
+  String get nonogramCoachDragBody;
 
   /// No description provided for @nonogramCoachLongPressTitle.
   ///

@@ -9,7 +9,6 @@ import 'package:nonogram/ads/ad_service.dart';
 import 'package:nonogram/core/app_theme.dart';
 import 'package:nonogram/core/app_theme_mode.dart';
 import 'package:nonogram/core/onboarding_preferences.dart';
-import 'package:nonogram/screens/licenses/app_licenses_page.dart';
 import 'package:nonogram/data/nonogram_puzzle_source.dart';
 import 'package:nonogram/data/nonogram_repository.dart';
 import 'package:nonogram/l10n/app_localizations.dart';
@@ -569,14 +568,14 @@ void main() {
 
     expect(find.byType(NonogramPlayCoachOverlay), findsOneWidget);
     expect(find.text('Hint'), findsOneWidget);
-    expect(find.text('1/5'), findsOneWidget);
+    expect(find.text('1/6'), findsOneWidget);
     expect(prefs.playCoachSeen, isTrue);
     expect(prefs.scrollTipSeen, isTrue);
 
     // Lớp phủ chặn thao tác bên dưới: chạm = sang bước tiếp.
     await tester.tap(find.byKey(const ValueKey('nonogram-coach-next')));
     await tester.pump(const Duration(milliseconds: 300));
-    expect(find.text('2/5'), findsOneWidget);
+    expect(find.text('2/6'), findsOneWidget);
     expect(find.text('Magic wand'), findsWidgets);
 
     await tester.tap(find.byKey(const ValueKey('nonogram-coach-skip')));
@@ -607,21 +606,36 @@ void main() {
     await tester.pumpAndSettle();
 
     expect(find.byType(NonogramPlayCoachOverlay), findsOneWidget);
-    for (var i = 0; i < 5; i++) {
+    for (var i = 0; i < 6; i++) {
       await tester.tap(find.byKey(const ValueKey('nonogram-coach-next')));
       await tester.pump(const Duration(milliseconds: 300));
     }
     expect(find.byType(NonogramPlayCoachOverlay), findsNothing);
   });
 
-  testWidgets('settings open the licenses page', (tester) async {
+  testWidgets('settings no longer list the licenses', (tester) async {
     await _pumpPlay(tester, phone);
     await tester.tap(find.byIcon(LucideIcons.settings));
     await tester.pumpAndSettle();
+    expect(find.byKey(const ValueKey('nonogram-licenses')), findsNothing);
+  });
 
-    await tester.tap(find.byKey(const ValueKey('nonogram-licenses')));
+  testWidgets('the controls guide has a step about dragging', (tester) async {
+    final prefs = OnboardingPreferences.inMemory(
+      playCoachSeen: true,
+      scrollTipSeen: true,
+    );
+    await _pumpPlay(tester, phone, onboarding: prefs);
+    await tester.tap(find.byIcon(LucideIcons.settings));
     await tester.pumpAndSettle();
-    expect(find.byType(AppLicensesPage), findsOneWidget);
+    await tester.tap(find.byKey(const ValueKey('nonogram-controls-guide')));
+    await tester.pumpAndSettle();
+    for (var i = 0; i < 3; i++) {
+      await tester.tap(find.byKey(const ValueKey('nonogram-coach-next')));
+      await tester.pump(const Duration(milliseconds: 300));
+    }
+    expect(find.text('4/6'), findsOneWidget);
+    expect(find.text('Drag to fill many squares'), findsOneWidget);
   });
 
   testWidgets('cells opened by the wand cannot be changed', (tester) async {

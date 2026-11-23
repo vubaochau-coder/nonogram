@@ -7,7 +7,7 @@ import 'package:nonogram/core/context_ext.dart';
 import 'package:nonogram/l10n/app_localizations.dart';
 
 /// Các bước hướng dẫn thao tác trong màn chơi.
-enum NonogramCoachStep { hint, wand, mode, longPress, scroll }
+enum NonogramCoachStep { hint, wand, mode, drag, longPress, scroll }
 
 /// Yêu cầu mở lại hướng dẫn thao tác (từ hộp thoại cài đặt). Bàn chơi lắng
 /// nghe và hiện lại toàn bộ các bước.
@@ -157,6 +157,11 @@ class _NonogramPlayCoachOverlayState extends State<NonogramPlayCoachOverlay> {
         icon: LucideIcons.squareStack,
         title: l10n.nonogramCoachModeTitle,
         body: l10n.nonogramCoachModeBody,
+      ),
+      NonogramCoachStep.drag => (
+        icon: LucideIcons.moveHorizontal,
+        title: l10n.nonogramCoachDragTitle,
+        body: l10n.nonogramCoachDragBody,
       ),
       NonogramCoachStep.longPress => (
         icon: LucideIcons.pointer,
