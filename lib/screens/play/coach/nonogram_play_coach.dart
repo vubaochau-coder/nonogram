@@ -13,6 +13,10 @@ enum NonogramCoachStep { hint, wand, mode, drag, longPress, rotate, scroll }
 /// nghe và hiện lại toàn bộ các bước.
 class NonogramCoachReplayNotifier extends ChangeNotifier {
   void requestReplay() => notifyListeners();
+
+  /// Nút xoay màn hình ở cột trái khi màn ngang (nằm ngoài bàn chơi), để
+  /// bước "xoay màn hình" làm nổi bật được nó.
+  final GlobalKey railRotateKey = GlobalKey(debugLabel: 'coach-rotate-rail');
 }
 
 /// Vị trí cần làm nổi bật cho từng bước, tính lại mỗi lần dựng (xoay màn
@@ -90,6 +94,8 @@ class _NonogramPlayCoachOverlayState extends State<NonogramPlayCoachOverlay> {
     final raw = widget.targetFor(step);
     final target = raw?.inflate(6);
     final content = _contentFor(context.l10n, step);
+    final scrim = Colors.black.withValues(alpha: 0.62);
+    final ring = context.color.primary;
 
     return Material(
       type: MaterialType.transparency,
@@ -101,20 +107,33 @@ class _NonogramPlayCoachOverlayState extends State<NonogramPlayCoachOverlay> {
               key: const ValueKey('nonogram-coach-barrier'),
               behavior: HitTestBehavior.opaque,
               onTap: _next,
-              child: TweenAnimationBuilder<Rect?>(
-                tween: _NullableRectTween(end: target),
-                duration: const Duration(milliseconds: 260),
-                curve: Curves.easeOutCubic,
-                builder:
-                    (context, rect, _) => CustomPaint(
-                      size: screen,
-                      painter: _SpotlightPainter(
-                        hole: rect,
-                        scrim: Colors.black.withValues(alpha: 0.62),
-                        ring: context.color.primary,
+              // TweenAnimationBuilder không nhận đích null (bản release vẽ
+              // khối xám của ErrorWidget phủ kín màn): bước không có vùng
+              // sáng thì vẽ thẳng lớp tối.
+              child:
+                  target == null
+                      ? CustomPaint(
+                        size: screen,
+                        painter: _SpotlightPainter(
+                          hole: null,
+                          scrim: scrim,
+                          ring: ring,
+                        ),
+                      )
+                      : TweenAnimationBuilder<Rect?>(
+                        tween: RectTween(end: target),
+                        duration: const Duration(milliseconds: 260),
+                        curve: Curves.easeOutCubic,
+                        builder:
+                            (context, rect, _) => CustomPaint(
+                              size: screen,
+                              painter: _SpotlightPainter(
+                                hole: rect,
+                                scrim: scrim,
+                                ring: ring,
+                              ),
+                            ),
                       ),
-                    ),
-              ),
             ),
           ),
           _CoachCard(
@@ -220,6 +239,7 @@ class _CoachCard extends StatelessWidget {
     final width = min(360.0, screen.width - safe.horizontal - _margin * 2);
 
     final card = Material(
+      key: const ValueKey('nonogram-coach-card'),
       color: colors.surface,
       elevation: 8,
       borderRadius: BorderRadius.circular(18),
@@ -312,9 +332,10 @@ class _CoachCard extends StatelessWidget {
   }
 }
 
-/// Đặt thẻ dưới vùng sáng nếu vừa, không thì phía trên; không bên nào vừa
-/// (vùng sáng chiếm gần hết màn, ví dụ cả lưới khi màn ngang) hoặc không có
-/// vùng sáng thì đặt giữa màn hình, đè lên vùng sáng.
+/// Đặt thẻ dưới vùng sáng nếu vừa, không thì phía trên; màn ngang thấp
+/// thường không vừa cả hai, khi đó đặt bên trái / phải vùng sáng (bên rộng
+/// hơn). Không chỗ nào vừa (vùng sáng chiếm gần hết màn) hoặc không có vùng
+/// sáng thì đặt giữa màn hình.
 class _CardLayoutDelegate extends SingleChildLayoutDelegate {
   _CardLayoutDelegate({
     required this.target,
@@ -363,6 +384,16 @@ class _CardLayoutDelegate extends SingleChildLayoutDelegate {
     final above = t.top;
     if (fitsBelow && (below >= above || !fitsAbove)) return Offset(x, belowY);
     if (fitsAbove) return Offset(x, aboveY);
+
+    final y = (t.center.dy - child.height / 2).clamp(minY, maxY);
+    final rightX = t.right + gap;
+    final leftX = t.left - gap - child.width;
+    final fitsRight = rightX + child.width <= size.width - safe.right - margin;
+    final fitsLeft = leftX >= minX;
+    final right = size.width - t.right;
+    final left = t.left;
+    if (fitsRight && (right >= left || !fitsLeft)) return Offset(rightX, y);
+    if (fitsLeft) return Offset(leftX, y);
     return Offset(x, centerY);
   }
 
@@ -373,18 +404,6 @@ class _CardLayoutDelegate extends SingleChildLayoutDelegate {
       old.width != width ||
       old.margin != margin ||
       old.gap != gap;
-}
-
-class _NullableRectTween extends Tween<Rect?> {
-  _NullableRectTween({super.end});
-
-  @override
-  Rect? lerp(double t) {
-    final a = begin;
-    final b = end;
-    if (a == null || b == null) return b;
-    return Rect.lerp(a, b, t);
-  }
 }
 
 /// Lớp tối phủ toàn màn hình, khoét một ô bo tròn quanh [hole] và viền sáng.

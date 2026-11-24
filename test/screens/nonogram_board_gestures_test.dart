@@ -309,8 +309,8 @@ void main() {
     expect(rotate.dy, greaterThan(400 / 2));
     expect(rotate.dy, lessThan(settings.dy));
 
-    // Mép phải chỉ còn gợi ý, gậy phép và Tô / X (theo thứ tự đó), ở góc
-    // trên.
+    // Mép phải chỉ còn gợi ý, gậy phép, hoàn tác và Tô / X (theo thứ tự
+    // đó), ở góc trên.
     final wand = at(find.byKey(const ValueKey('nonogram-wand')));
     for (final p in [hint, wand, mark]) {
       expect(p.dx, greaterThan(900 - NonogramBoardLayout.railReserve));
@@ -318,12 +318,49 @@ void main() {
     final hintButton = find.byIcon(LucideIcons.lightbulb);
     expect(tester.getCenter(hintButton).dy, closeTo(back.dy, 4));
     expect(hint.dy, lessThan(wand.dy));
-    expect(wand.dy, lessThan(mark.dy));
-    expect(mark.dy, lessThan(400 / 2));
-    // Hoàn tác ngay dưới Tô / X.
+    // Hoàn tác giữa gậy phép và cụm Tô / X.
     final undo = at(find.byKey(const ValueKey('nonogram-undo')));
     expect(undo.dx, greaterThan(900 - NonogramBoardLayout.railReserve));
-    expect(undo.dy, greaterThan(mark.dy));
+    expect(wand.dy, lessThan(undo.dy));
+    expect(undo.dy, lessThan(mark.dy));
+  });
+
+  testWidgets('landscape controls guide: cards beside their target, all steps '
+      'shown', (tester) async {
+    final prefs = OnboardingPreferences.inMemory(
+      playCoachSeen: true,
+      scrollTipSeen: true,
+    );
+    // Điện thoại nằm ngang: thấp, thẻ không vừa phía trên / dưới nút nào.
+    await _pumpPlay(tester, const Size(1000, 450), onboarding: prefs);
+    await tester.tap(find.byIcon(LucideIcons.settings));
+    await tester.pumpAndSettle();
+    await tester.tap(find.byKey(const ValueKey('nonogram-controls-guide')));
+    await tester.pumpAndSettle();
+
+    final card = find.byKey(const ValueKey('nonogram-coach-card'));
+    void expectBeside(Finder target) {
+      final c = tester.getRect(card);
+      final t = tester.getRect(target);
+      expect(c.overlaps(t), isFalse, reason: 'card $c covers target $t');
+    }
+
+    final buttons = <int, Finder>{
+      1: find.byIcon(LucideIcons.lightbulb),
+      2: find.byKey(const ValueKey('nonogram-wand')),
+      3: find.byKey(const ValueKey('nonogram-mode-mark')),
+      6: find.byKey(const ValueKey('nonogram-rotate-screen')),
+    };
+    for (var step = 1; step <= 7; step++) {
+      expect(find.text('$step/7'), findsOneWidget);
+      expect(tester.takeException(), isNull);
+      final target = buttons[step];
+      if (target != null) expectBeside(target.first);
+      await tester.tap(find.byKey(const ValueKey('nonogram-coach-next')));
+      await tester.pumpAndSettle();
+    }
+    expect(card, findsNothing);
+    expect(tester.takeException(), isNull);
   });
 
   testWidgets('pinching with two fingers pans but never changes cell size', (
