@@ -100,9 +100,10 @@ void main() {
     await tester.pumpAndSettle();
     expect(find.text('14/11/2026  (tua +1 ngày)'), findsOneWidget);
 
-    await tester.tap(find.text('Điểm danh 5 ngày (tới quà mốc)'));
+    await tester.tap(find.text('Điểm danh 7 ngày (tới quà mốc)'));
     await tester.pumpAndSettle();
-    expect(checkIn.count, 5);
+    expect(checkIn.count, 7);
+    expect(checkIn.claimedMilestones(2026, 11), {7});
 
     await tester.tap(find.text('Bấm mua'));
     await tester.pumpAndSettle();

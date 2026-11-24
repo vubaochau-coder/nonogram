@@ -6,7 +6,6 @@ import 'package:nonogram/core/app_locale.dart';
 import 'package:nonogram/core/app_sounds.dart';
 import 'package:nonogram/core/context_ext.dart';
 import 'package:nonogram/core/play_mode.dart';
-import 'package:nonogram/screens/licenses/app_licenses_page.dart';
 import 'package:nonogram/widgets/app_language_selector.dart';
 import 'package:nonogram/widgets/app_theme_mode_selector.dart';
 import 'package:nonogram/widgets/dialogs/app_dialog.dart';
@@ -40,8 +39,8 @@ Future<void> showNonogramSettingsDialog(BuildContext context) async {
 enum _SettingsResult { showControlsGuide }
 
 /// Cài đặt khi đang chơi: giao diện sáng/tối, ngôn ngữ, xem lại hướng dẫn thao tác,
-/// chơi lại màn từ đầu, giấy phép, quyền riêng tư quảng cáo (khi bắt buộc)
-/// và (flavor `dev`) đổi chế độ chơi.
+/// chơi lại màn từ đầu, quyền riêng tư quảng cáo (khi bắt buộc) và (flavor
+/// `dev`) đổi chế độ chơi. Giấy phép xem ở trang Me.
 class NonogramSettingsDialog extends StatelessWidget {
   const NonogramSettingsDialog({super.key});
 
@@ -157,24 +156,6 @@ class NonogramSettingsDialog extends StatelessWidget {
               style: OutlinedButton.styleFrom(
                 foregroundColor: colors.error,
                 side: BorderSide(color: colors.error.withValues(alpha: 0.5)),
-                padding: const EdgeInsets.symmetric(vertical: 12),
-              ),
-            ),
-          ),
-          const SizedBox(height: 10),
-          SizedBox(
-            width: double.infinity,
-            child: OutlinedButton.icon(
-              key: const ValueKey('nonogram-licenses'),
-              onPressed:
-                  () => Navigator.of(context).push(
-                    MaterialPageRoute<void>(
-                      builder: (_) => const AppLicensesPage(),
-                    ),
-                  ),
-              icon: const Icon(LucideIcons.scale, size: 18),
-              label: Text(l10n.settingsLicenses),
-              style: OutlinedButton.styleFrom(
                 padding: const EdgeInsets.symmetric(vertical: 12),
               ),
             ),

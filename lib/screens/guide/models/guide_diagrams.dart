@@ -9,6 +9,20 @@ abstract final class GuideDiagrams {
   static GuideDiagramRow _r(String clues, String cells) =>
       GuideDiagramRow.parse(clues, cells);
 
+  /// Quy luật cốt lõi: `3 1` và `2 2` với khoảng trống giữa các khối.
+  static final basicRule = [
+    GuideDiagram(
+      groups: [
+        [_r('3 1', '###.#...')],
+      ],
+    ),
+    GuideDiagram(
+      groups: [
+        [_r('2 2', '##...##..')],
+      ],
+    ),
+  ];
+
   /// Chồng lấp, một số: `5` trong hàng 10 ô có X ở hai đầu, và `7`.
   static final superpositionSimple = [
     GuideDiagram(
@@ -58,6 +72,28 @@ abstract final class GuideDiagrams {
       links: [
         [],
         [GuideDiagramLink(2, 2)],
+      ],
+    ),
+  ];
+
+  /// Hàng đã đủ khối: các ô còn lại đánh X. Hàng số 0 trống hoàn toàn.
+  static final lineDone = [
+    GuideDiagram(
+      groups: [
+        [_r('2 1', '.##...#...')],
+        [_r('~2 ~1', 'X##XXX#XXX')],
+      ],
+      links: [
+        [GuideDiagramLink(0, 9)],
+      ],
+    ),
+    GuideDiagram(
+      groups: [
+        [_r('0', '..........')],
+        [_r('0', 'XXXXXXXXXX')],
+      ],
+      links: [
+        [GuideDiagramLink(0, 9)],
       ],
     ),
   ];

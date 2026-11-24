@@ -37,14 +37,14 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get nonogramGuideMethodDivisionDesc =>
-      'Se juntar dois blocos existentes formaria uma figura maior que qualquer dica disponível, o espaço entre eles deve ser um X.';
+      'Se juntar dois trechos preenchidos formaria um bloco maior que o maior número, o quadrado entre eles precisa estar vazio. Marque-o com X para separá-los.';
 
   @override
   String get nonogramGuideMethodDivisionTitle => '5. Divisão';
 
   @override
   String get nonogramGuideMethodDoublePositioningDesc =>
-      'Se um quadrado preenchido só pode pertencer a algumas variantes específicas de um bloco, todo quadrado que não é preenchido em nenhuma dessas variantes deve ser marcado com X.';
+      'Às vezes um quadrado preenchido só pode pertencer a um ou dois dos números. Teste cada possibilidade: os quadrados que ficam vazios em todas recebem um X.';
 
   @override
   String get nonogramGuideMethodDoublePositioningTitle =>
@@ -52,21 +52,21 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get nonogramGuideMethodInaccessibilityDesc =>
-      'Marque com um X os quadrados que não podem pertencer a nenhuma das figuras restantes.';
+      'Quadrados que nenhum bloco alcança estão vazios. Teste cada bloco nas posições mais distantes ao redor dos quadrados preenchidos; o que ficar fora desse alcance recebe um X.';
 
   @override
   String get nonogramGuideMethodInaccessibilityTitle => '3. Inacessibilidade';
 
   @override
   String get nonogramGuideMethodNotFitDesc =>
-      'Se um espaço vazio entre X é menor que qualquer dica disponível para aquela linha, ele deve ser marcado com X.';
+      'Um espaço entre X (ou entre um X e a borda) menor do que qualquer número que poderia ficar ali não comporta nenhum bloco: marque-o com X.';
 
   @override
   String get nonogramGuideMethodNotFitTitle => '4. Não cabe';
 
   @override
   String get nonogramGuideMethodSuperpositionMultiDesc =>
-      'Quando há vários números, sobreponha as posições extremas à esquerda e à direita do grupo inteiro, considerando o espaço mínimo obrigatório de um quadrado entre blocos da mesma cor. Os quadrados em que um bloco coincide consigo mesmo nas duas variantes são preenchidos.';
+      'Com vários números, empurre o grupo todo para a esquerda (com um quadrado vazio entre os blocos) e depois para a direita. Se o mesmo bloco cobre um quadrado nas duas posições, ele é preenchido. Dica: some os números e os espaços; o que sobra é quanto cada bloco pode se mover.';
 
   @override
   String get nonogramGuideMethodSuperpositionMultiTitle =>
@@ -74,7 +74,7 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get nonogramGuideMethodSuperpositionSimpleDesc =>
-      'Se um número ocupa mais da metade da linha, alguns quadrados do meio com certeza serão preenchidos. Sobreponha as posições extremas à esquerda e à direita; onde elas coincidem, os quadrados são preenchidos.';
+      'Se um número ocupa mais da metade da linha, parte dele é sempre preenchida. Imagine o bloco empurrado todo para a esquerda e depois todo para a direita: os quadrados cobertos nas duas vezes são certos. Exemplo: 7 em 10 quadrados sempre preenche os 4 do meio.';
 
   @override
   String get nonogramGuideMethodSuperpositionSimpleTitle =>
@@ -82,7 +82,7 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get nonogramGuideMethodWallPushingDesc =>
-      'Se um quadrado preenchido conhecido está mais perto de uma borda do que o tamanho da primeira dica, a figura a que ele pertence deve se estender para longe dessa borda.';
+      'Um quadrado preenchido perto da borda limita onde seu bloco pode ficar. O bloco não pode passar da borda, então precisa se estender para o outro lado. Exemplo: 5 com o 4º quadrado preenchido: mesmo encostado na borda esquerda, o bloco ainda cobre o 5º.';
 
   @override
   String get nonogramGuideMethodWallPushingTitle => '2. Afastar das paredes';
@@ -256,6 +256,18 @@ class AppLocalizationsPt extends AppLocalizations {
       'Vamos aprender as regras básicas com um pequeno quebra-cabeça 5×5.';
 
   @override
+  String get nonogramTutorialInfoFree =>
+      'Grátis: todos os níveis estão liberados.';
+
+  @override
+  String get nonogramTutorialInfoAds =>
+      'Você pode ver um anúncio (opcional) para ganhar dicas e varinhas extras. Às vezes aparece um anúncio entre os níveis.';
+
+  @override
+  String get nonogramTutorialInfoPremium =>
+      'Uma compra única desliga os anúncios entre níveis e dá dicas e varinhas do dia a cada check-in.';
+
+  @override
   String get nonogramTutorialStart => 'Começar';
 
   @override
@@ -265,6 +277,10 @@ class AppLocalizationsPt extends AppLocalizations {
   @override
   String get nonogramTutorialClueIsCount =>
       'O número diz quantos quadrados da linha estão preenchidos. Esta linha tem 5, então preencha todos!';
+
+  @override
+  String get nonogramTutorialDragNote =>
+      'Dica: você pode arrastar o dedo pela linha para preenchê-la de uma vez.';
 
   @override
   String get nonogramTutorialEdgeCell =>
@@ -312,13 +328,73 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get nonogramGuideTutorialCardDesc =>
-      'Aprenda as regras e os controles passo a passo em um pequeno quebra-cabeça 5×5.';
+      'Aprenda as regras, os controles e as principais técnicas passo a passo, jogando.';
+
+  @override
+  String get nonogramGuideRoutineTitle => 'Por onde começar';
+
+  @override
+  String get nonogramGuideRoutineTip1 =>
+      'Comece pelos números grandes. Se um número ocupa mais da metade da linha, parte dele já é certa (veja a técnica 1 abaixo).';
+
+  @override
+  String get nonogramGuideRoutineTip2 =>
+      'Resolva primeiro as linhas fáceis: 0 significa que a linha toda está vazia, e se os números mais um espaço entre cada um somam o comprimento da linha, só há um jeito de encaixá-los.';
+
+  @override
+  String get nonogramGuideRoutineTip3 =>
+      'Marque com X os quadrados que você sabe que estão vazios. Um X é tão útil quanto um quadrado preenchido.';
+
+  @override
+  String get nonogramGuideRoutineTip4 =>
+      'Alterne entre linhas e colunas. Cada quadrado resolvido é uma nova pista para a linha que o cruza.';
+
+  @override
+  String get nonogramGuideRoutineTip5 =>
+      'Nunca chute. Se travar, procure a linha com menos quadrados desconhecidos, ou use uma dica.';
+
+  @override
+  String nonogramGuideExample(int number) {
+    return 'Exemplo $number';
+  }
+
+  @override
+  String get nonogramGuideExampleSingle => 'Exemplo';
+
+  @override
+  String get nonogramGuideLegendTitle => 'Como ler as figuras';
+
+  @override
+  String get nonogramGuideLegendFilled => 'Quadrado preenchido';
+
+  @override
+  String get nonogramGuideLegendTrial => 'Testando a posição de um bloco';
+
+  @override
+  String get nonogramGuideLegendCross => 'Quadrado vazio (X)';
+
+  @override
+  String get nonogramGuideLegendResult => 'O que dá para deduzir';
+
+  @override
+  String get nonogramGuideMethodLineDoneTitle => 'Linhas concluídas';
+
+  @override
+  String get nonogramGuideMethodLineDoneDesc =>
+      'Quando todos os blocos de uma linha estão no lugar, todos os outros quadrados dela estão vazios: marque-os com X. Uma linha com o número 0 já começa vazia.';
 
   @override
   String get nonogramPlayInfoHide => 'Ocultar informações do nível';
 
   @override
   String get nonogramPlayWandLabel => 'Varinha mágica';
+
+  @override
+  String get nonogramPlayUndo => 'Desfazer';
+
+  @override
+  String get nonogramPlayDragTip =>
+      'Arraste o dedo pelos quadrados para preencher vários de uma vez.';
 
   @override
   String get nonogramPlayWandSelectPrompt =>
@@ -368,7 +444,14 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get nonogramCoachModeBody =>
-      'Escolha o que um toque faz: preencher o quadrado ou marcá-lo com um X para lembrar que ele está vazio. Toque no botão para alternar. Arraste pela grade para preencher ou marcar vários quadrados de uma vez.';
+      'Escolha o que um toque faz: preencher o quadrado ou marcá-lo com um X para lembrar que ele está vazio. Toque no botão para alternar.';
+
+  @override
+  String get nonogramCoachDragTitle => 'Arraste para preencher vários';
+
+  @override
+  String get nonogramCoachDragBody =>
+      'Coloque o dedo num quadrado e deslize por outros: cada quadrado por onde passar é preenchido (ou marcado com X no modo X) de uma vez. Começando num quadrado preenchido, você limpa os quadrados por onde passa.';
 
   @override
   String get nonogramCoachLongPressTitle => 'Toque e segure para o contrário';
@@ -376,6 +459,13 @@ class AppLocalizationsPt extends AppLocalizations {
   @override
   String get nonogramCoachLongPressBody =>
       'Toque e segure um quadrado para fazer o contrário do modo atual: X ao preencher, preencher ao marcar. Uma vibração curta indica que está feito e você pode soltar.';
+
+  @override
+  String get nonogramCoachRotateTitle => 'Modo paisagem';
+
+  @override
+  String get nonogramCoachRotateBody =>
+      'Toque para girar o tabuleiro na horizontal, prático para quebra-cabeças largos; os botões vão para os lados. Toque de novo para voltar ao retrato.';
 
   @override
   String get nonogramCoachScrollTitle => 'Navegando em quebra-cabeças grandes';
@@ -420,6 +510,49 @@ class AppLocalizationsPt extends AppLocalizations {
   @override
   String get nonogramTutorialFinishTools =>
       'Preencha os quadrados restantes para terminar. Arraste para baixo em uma coluna para preencher mais rápido.';
+
+  @override
+  String get nonogramTutorialToolsDoneTitle => 'Controles dominados!';
+
+  @override
+  String get nonogramTutorialToolsDone =>
+      'Os quebra-cabeças de verdade são maiores, e a maioria das linhas não se resolve num piscar de olhos. Agora aprenda as técnicas de resolução num quebra-cabeça 8×8.';
+
+  @override
+  String get nonogramTutorialOverlapSingle =>
+      'Procure primeiro os números grandes. O 6 cabe de 3 jeitos nestes 8 quadrados, e cada um pisca por vez. Os quadrados acesos em todos são certos: preencha os 4 da moldura amarela.';
+
+  @override
+  String get nonogramTutorialOverlapMulti =>
+      'O mesmo com vários números: 3 3 precisa de pelo menos 7 quadrados (3 + espaço + 3), então só cabe de 3 jeitos. Preencha os quadrados acesos nos 3.';
+
+  @override
+  String get nonogramTutorialFullRow =>
+      '8 em 8 quadrados: a linha inteira é preenchida. Arraste por ela.';
+
+  @override
+  String get nonogramTutorialZeroRow =>
+      '0 significa que a linha não tem nenhum quadrado preenchido. Mude para o modo X.';
+
+  @override
+  String get nonogramTutorialMarkZeroRow =>
+      'Marque toda a última linha com X. Os X importam: mostram às colunas onde os blocos não podem ficar.';
+
+  @override
+  String get nonogramTutorialOutOfReach =>
+      'Agora as colunas. A coluna 2 é um bloco de 3 que precisa cobrir seus 2 quadrados preenchidos, então só cabe de 2 jeitos. Quadrados que nunca acendem não são alcançados: marque-os com X, e o mesmo na coluna 7.';
+
+  @override
+  String get nonogramTutorialBackToFill =>
+      'Veja a coluna 3: ela precisa de 7. Volte ao modo de preencher.';
+
+  @override
+  String get nonogramTutorialExactSpace =>
+      'O X embaixo deixa exatamente 7 quadrados para o 7, então preencha todos. A coluna 6 funciona do mesmo jeito.';
+
+  @override
+  String get nonogramTutorialFinishTechniques =>
+      'Esse é o método: resolva o que puder nas linhas, depois nas colunas, e repita. Termine o cogumelo sozinho!';
 
   @override
   String get nonogramPlayHintNothingToFill =>
@@ -495,7 +628,7 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get adRewardNotReady =>
-      'O anúncio ainda não está pronto. Verifique sua conexão com a internet e tente novamente.';
+      'O anúncio ainda não está pronto. Tente novamente em alguns minutos.';
 
   @override
   String get settingsAdPrivacy => 'Privacidade de anúncios';
@@ -573,17 +706,6 @@ class AppLocalizationsPt extends AppLocalizations {
   String get checkInDoneToday => 'Presença marcada hoje';
 
   @override
-  String checkInNextGift(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: 'Próximo presente em $count presenças',
-      one: 'Próximo presente na sua próxima presença',
-    );
-    return '$_temp0';
-  }
-
-  @override
   String get checkInCheckedIn => 'Presença marcada!';
 
   @override
@@ -619,9 +741,6 @@ class AppLocalizationsPt extends AppLocalizations {
   }
 
   @override
-  String get checkInMonthGifts => 'Presentes do mês';
-
-  @override
   String get navHome => 'Início';
 
   @override
@@ -634,54 +753,93 @@ class AppLocalizationsPt extends AppLocalizations {
   String get meMore => 'Mais';
 
   @override
-  String get checkInNotYetToday => 'Presença ainda não marcada hoje';
-
-  @override
   String get checkInTodayButton => 'Marcar presença hoje';
-
-  @override
-  String checkInGiftsLeftShort(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: 'Faltam $count para um presente',
-      one: 'Falta 1 para um presente',
-    );
-    return '$_temp0';
-  }
 
   @override
   String get checkInGiftToday => 'Hoje tem presente!';
 
   @override
-  String checkInGiftMilestone(int count) {
+  String get checkInGiftCollect => 'Pegar';
+
+  @override
+  String get checkInGiftDouble => 'Coletar x2';
+
+  @override
+  String checkInStreakTitle(int count) {
+    return 'Sequência de $count dias';
+  }
+
+  @override
+  String checkInStreakDays(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: 'Presente de $count presenças',
-      one: 'Presente de 1 presença',
+      other: '$count dias',
+      one: '1 dia',
     );
     return '$_temp0';
   }
 
   @override
-  String get checkInGiftCollect => 'Pegar';
+  String checkInStreakMakeUp(int missed, String days) {
+    String _temp0 = intl.Intl.pluralLogic(
+      missed,
+      locale: localeName,
+      other: '$missed dias perdidos',
+      one: '1 dia perdido',
+    );
+    return 'Recupere $_temp0 para levar sua sequência a $days';
+  }
 
   @override
-  String get checkInTotalHints => 'Dicas';
+  String get checkInStreakKeepGoing =>
+      'Faça check-in todo dia para manter sua sequência';
 
   @override
-  String get checkInTotalWands => 'Varinhas mágicas';
+  String get checkInStreakAllDone =>
+      'Você ganhou todos os presentes de sequência deste mês!';
 
   @override
-  String get checkInTotalDailyHints => 'Dicas (só hoje)';
+  String checkInStreakDaysLeft(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Mais $count dias para um presente',
+      one: 'Mais 1 dia para um presente',
+    );
+    return '$_temp0';
+  }
 
   @override
-  String get checkInTotalDailyWands => 'Varinhas mágicas (só hoje)';
+  String get checkInLegendChecked => 'Feito';
 
   @override
-  String get checkInPremiumNotYet =>
-      'Marque presença para receber 2 dicas e 1 varinha mágica para hoje.';
+  String get checkInLegendMissed => 'Perdido';
+
+  @override
+  String get checkInLegendFuture => 'Em breve';
+
+  @override
+  String checkInGiftStreak(int count) {
+    return 'Presente de sequência de $count dias';
+  }
+
+  @override
+  String checkInMakeUpTitle(String date) {
+    return 'Recuperar $date?';
+  }
+
+  @override
+  String get checkInMakeUpBody =>
+      'Assista a um anúncio curto para recuperar este dia. Sua sequência será reconectada.';
+
+  @override
+  String get checkInMakeUpWatch => 'Ver anúncio';
+
+  @override
+  String checkInMadeUp(String date) {
+    return '$date recuperado';
+  }
 
   @override
   String dashboardDailyReminder(String rewards, String time) {
@@ -787,12 +945,4 @@ class AppLocalizationsPt extends AppLocalizations {
   String dashboardDailyReminderBoth(String hints, String wands) {
     return '$hints e $wands';
   }
-
-  @override
-  String checkInLegendMilestone(int count) {
-    return 'Presente a cada $count presenças';
-  }
-
-  @override
-  String get checkInLegendPremium => 'Recompensa do pacote sem anúncios';
 }

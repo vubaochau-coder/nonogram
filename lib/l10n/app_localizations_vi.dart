@@ -37,35 +37,35 @@ class AppLocalizationsVi extends AppLocalizations {
 
   @override
   String get nonogramGuideMethodDivisionDesc =>
-      'Nếu việc nối hai khối ô đã tô tạo ra một khối lớn hơn tất cả các chỉ dẫn có sẵn, ô trống giữa chúng chắc chắn phải là dấu X.';
+      'Nếu nối hai đoạn đã tô sẽ tạo ra một khối lớn hơn số lớn nhất, ô ở giữa chúng chắc chắn trống. Đánh X để tách chúng ra.';
 
   @override
   String get nonogramGuideMethodDivisionTitle => '5. Sự chia cắt';
 
   @override
   String get nonogramGuideMethodDoublePositioningDesc =>
-      'Nếu một ô đã tô chỉ có thể thuộc về một vài phương án đặt khối nhất định, bất kỳ ô nào không nằm trong phương án nào đều phải được đánh dấu X.';
+      'Đôi khi một ô đã tô chỉ có thể thuộc về một hoặc hai con số. Thử từng khả năng: ô nào trống trong mọi khả năng thì đánh X.';
 
   @override
   String get nonogramGuideMethodDoublePositioningTitle => '6. Định vị kép';
 
   @override
   String get nonogramGuideMethodInaccessibilityDesc =>
-      'Đánh dấu X vào những ô mà chắc chắn không có bất kỳ khối màu nào có thể chạm tới.';
+      'Những ô mà không khối nào chạm tới được thì chắc chắn trống. Thử đặt từng khối ở vị trí xa nhất quanh các ô đã tô; mọi ô nằm ngoài phạm vi đó đều đánh X.';
 
   @override
   String get nonogramGuideMethodInaccessibilityTitle => '3. Không thể tiếp cận';
 
   @override
   String get nonogramGuideMethodNotFitDesc =>
-      'Nếu một khoảng trống giữa các dấu X nhỏ hơn bất kỳ con số chỉ dẫn nào còn lại của hàng đó, khoảng trống đó chắc chắn phải được đánh dấu X.';
+      'Một khoảng trống giữa các dấu X (hoặc giữa dấu X và biên) ngắn hơn mọi con số có thể đặt vào đó thì không chứa được khối nào: đánh X cho cả khoảng đó.';
 
   @override
   String get nonogramGuideMethodNotFitTitle => '4. Không vừa khoảng trống';
 
   @override
   String get nonogramGuideMethodSuperpositionMultiDesc =>
-      'Khi có nhiều số chỉ dẫn, ta thử đặt toàn bộ các khối ở vị trí xa nhất bên trái và phải, luôn giữ khoảng trống tối thiểu 1 ô giữa các khối cùng màu. Ô nào mà một khối tự chồng lên chính nó trong cả hai phương án thì ô đó chắc chắn được tô.';
+      'Khi có nhiều số, đẩy cả nhóm sát sang trái (giữa các khối luôn chừa 1 ô trống), rồi sát sang phải. Ô nào được cùng một khối phủ ở cả hai vị trí thì chắc chắn được tô. Mẹo tính nhanh: cộng các số và các ô trống ở giữa; phần dư chính là số ô mỗi khối có thể xê dịch.';
 
   @override
   String get nonogramGuideMethodSuperpositionMultiTitle =>
@@ -73,7 +73,7 @@ class AppLocalizationsVi extends AppLocalizations {
 
   @override
   String get nonogramGuideMethodSuperpositionSimpleDesc =>
-      'Nếu một con số lớn hơn một nửa chiều dài hàng, một vài ô ở giữa chắc chắn sẽ được tô. Thử đặt khối ô ở vị trí xa nhất bên trái và bên phải, phần giao nhau chính là phần chắc chắn được tô.';
+      'Nếu một số lớn hơn nửa chiều dài hàng, một phần của nó luôn được tô. Hãy tưởng tượng đẩy khối sát hẳn sang trái, rồi sát hẳn sang phải: những ô khối phủ ở cả hai lần chắc chắn được tô. Ví dụ: 7 trong 10 ô luôn tô 4 ô ở giữa.';
 
   @override
   String get nonogramGuideMethodSuperpositionSimpleTitle =>
@@ -81,7 +81,7 @@ class AppLocalizationsVi extends AppLocalizations {
 
   @override
   String get nonogramGuideMethodWallPushingDesc =>
-      'Nếu một ô đã được tô nằm gần biên hơn kích thước của con số chỉ dẫn đầu tiên, khối đó chắc chắn phải kéo dài ra xa phía biên đó.';
+      'Một ô đã tô nằm gần biên sẽ giới hạn vị trí của khối chứa nó. Khối không thể vượt ra ngoài biên nên phải kéo dài về phía ngược lại. Ví dụ: số 5 với ô thứ 4 đã tô: dù đẩy sát biên trái, khối vẫn phủ ô thứ 5.';
 
   @override
   String get nonogramGuideMethodWallPushingTitle => '2. Đẩy từ biên';
@@ -255,6 +255,17 @@ class AppLocalizationsVi extends AppLocalizations {
       'Cùng học luật chơi cơ bản qua một câu đố 5×5 nhỏ.';
 
   @override
+  String get nonogramTutorialInfoFree => 'Miễn phí chơi toàn bộ các màn.';
+
+  @override
+  String get nonogramTutorialInfoAds =>
+      'Có thể xem quảng cáo (tuỳ chọn) để nhận thêm gợi ý và gậy phép. Đôi khi có quảng cáo giữa các màn.';
+
+  @override
+  String get nonogramTutorialInfoPremium =>
+      'Mua một lần để tắt quảng cáo giữa các màn và nhận thêm gợi ý, gậy phép dùng trong ngày mỗi lần điểm danh.';
+
+  @override
   String get nonogramTutorialStart => 'Bắt đầu';
 
   @override
@@ -264,6 +275,10 @@ class AppLocalizationsVi extends AppLocalizations {
   @override
   String get nonogramTutorialClueIsCount =>
       'Con số cho biết hàng đó có bao nhiêu ô được tô. Hàng này có 5 ô, hãy tô hết!';
+
+  @override
+  String get nonogramTutorialDragNote =>
+      'Mẹo: có thể kéo ngón tay qua cả hàng để tô một lần.';
 
   @override
   String get nonogramTutorialEdgeCell =>
@@ -310,13 +325,73 @@ class AppLocalizationsVi extends AppLocalizations {
 
   @override
   String get nonogramGuideTutorialCardDesc =>
-      'Học luật chơi và các thao tác từng bước trên câu đố 5×5 nhỏ.';
+      'Học luật chơi, các thao tác và những kỹ thuật giải chính qua từng bước chơi thử.';
+
+  @override
+  String get nonogramGuideRoutineTitle => 'Bắt đầu từ đâu';
+
+  @override
+  String get nonogramGuideRoutineTip1 =>
+      'Bắt đầu với các số lớn. Nếu một số lớn hơn nửa chiều dài hàng, một phần của nó đã chắc chắn được tô (xem kỹ thuật 1 bên dưới).';
+
+  @override
+  String get nonogramGuideRoutineTip2 =>
+      'Giải các hàng dễ trước: 0 nghĩa là cả hàng trống, còn nếu tổng các số cộng với 1 ô trống giữa mỗi số bằng đúng chiều dài hàng thì chỉ có một cách xếp.';
+
+  @override
+  String get nonogramGuideRoutineTip3 =>
+      'Đánh X vào những ô bạn biết chắc là trống. Một dấu X cũng hữu ích như một ô đã tô.';
+
+  @override
+  String get nonogramGuideRoutineTip4 =>
+      'Chuyển qua lại giữa hàng và cột. Mỗi ô bạn giải được là một manh mối mới cho hàng hoặc cột cắt qua nó.';
+
+  @override
+  String get nonogramGuideRoutineTip5 =>
+      'Đừng đoán mò. Khi bí, hãy tìm hàng hoặc cột còn ít ô chưa biết nhất, hoặc dùng gợi ý.';
+
+  @override
+  String nonogramGuideExample(int number) {
+    return 'Ví dụ $number';
+  }
+
+  @override
+  String get nonogramGuideExampleSingle => 'Ví dụ';
+
+  @override
+  String get nonogramGuideLegendTitle => 'Cách đọc hình minh hoạ';
+
+  @override
+  String get nonogramGuideLegendFilled => 'Ô đã tô';
+
+  @override
+  String get nonogramGuideLegendTrial => 'Thử đặt khối';
+
+  @override
+  String get nonogramGuideLegendCross => 'Ô trống (X)';
+
+  @override
+  String get nonogramGuideLegendResult => 'Kết quả suy ra được';
+
+  @override
+  String get nonogramGuideMethodLineDoneTitle => 'Hàng đã đủ';
+
+  @override
+  String get nonogramGuideMethodLineDoneDesc =>
+      'Khi mọi khối của một hàng đã nằm đúng chỗ, tất cả các ô còn lại của hàng đó đều trống: đánh X cho chúng. Hàng có số 0 thì trống ngay từ đầu.';
 
   @override
   String get nonogramPlayInfoHide => 'Ẩn thông tin màn';
 
   @override
   String get nonogramPlayWandLabel => 'Gậy phép';
+
+  @override
+  String get nonogramPlayUndo => 'Hoàn tác';
+
+  @override
+  String get nonogramPlayDragTip =>
+      'Kéo ngón tay qua các ô để tô nhiều ô một lần.';
 
   @override
   String get nonogramPlayWandSelectPrompt =>
@@ -366,7 +441,14 @@ class AppLocalizationsVi extends AppLocalizations {
 
   @override
   String get nonogramCoachModeBody =>
-      'Chọn việc sẽ làm khi chạm vào ô: tô ô, hoặc đánh X để ghi nhớ ô chắc chắn trống. Chạm vào nút để đổi chế độ. Kéo ngón tay trên lưới để tô / đánh X nhiều ô liền.';
+      'Chọn việc sẽ làm khi chạm vào ô: tô ô, hoặc đánh X để ghi nhớ ô chắc chắn trống. Chạm vào nút để đổi chế độ.';
+
+  @override
+  String get nonogramCoachDragTitle => 'Kéo để tô nhiều ô';
+
+  @override
+  String get nonogramCoachDragBody =>
+      'Đặt ngón tay lên một ô rồi kéo qua các ô khác: mọi ô ngón tay đi qua đều được tô (hoặc đánh X khi ở chế độ X) trong một lần. Bắt đầu kéo từ ô đã tô thì sẽ xoá các ô đi qua.';
 
   @override
   String get nonogramCoachLongPressTitle => 'Nhấn giữ để làm ngược lại';
@@ -374,6 +456,13 @@ class AppLocalizationsVi extends AppLocalizations {
   @override
   String get nonogramCoachLongPressBody =>
       'Nhấn giữ một ô để làm việc ngược với chế độ đang chọn: đang tô thì đánh X, đang đánh X thì tô. Khi máy rung nhẹ là đã xong, có thể nhấc tay.';
+
+  @override
+  String get nonogramCoachRotateTitle => 'Chơi màn hình ngang';
+
+  @override
+  String get nonogramCoachRotateBody =>
+      'Chạm để xoay ngang bàn chơi, tiện cho các màn rộng; các nút chuyển sang hai bên. Chạm lần nữa để quay lại màn hình dọc.';
 
   @override
   String get nonogramCoachScrollTitle => 'Di chuyển trên màn lớn';
@@ -418,6 +507,49 @@ class AppLocalizationsVi extends AppLocalizations {
   @override
   String get nonogramTutorialFinishTools =>
       'Tô nốt các ô còn lại để hoàn thành. Kéo dọc theo cột để tô nhanh hơn.';
+
+  @override
+  String get nonogramTutorialToolsDoneTitle => 'Bạn đã thạo thao tác!';
+
+  @override
+  String get nonogramTutorialToolsDone =>
+      'Câu đố thật lớn hơn, và hầu hết các hàng không thể giải ngay chỉ bằng một cái nhìn. Tiếp theo, cùng học các kỹ thuật giải trên một câu đố 8×8.';
+
+  @override
+  String get nonogramTutorialOverlapSingle =>
+      'Ở câu đố lớn, hãy tìm số lớn trước. Khối 6 có 3 cách đặt trong 8 ô này, nền xanh nháy lần lượt từng cách. Ô nào sáng ở mọi cách thì chắc chắn được tô: tô 4 ô trong khung vàng.';
+
+  @override
+  String get nonogramTutorialOverlapMulti =>
+      'Nhiều số cũng vậy: 3 3 cần ít nhất 7 ô (3 + 1 ô trống + 3), nên chỉ có 3 cách đặt. Tô các ô sáng ở cả 3 cách.';
+
+  @override
+  String get nonogramTutorialFullRow =>
+      '8 trong 8 ô: cả hàng đều được tô. Kéo một đường qua cả hàng.';
+
+  @override
+  String get nonogramTutorialZeroRow =>
+      '0 nghĩa là hàng đó không có ô nào được tô. Chuyển sang chế độ X.';
+
+  @override
+  String get nonogramTutorialMarkZeroRow =>
+      'Đánh X cả hàng cuối. Dấu X rất có ích: chúng cho các cột biết chỗ nào khối không thể nằm.';
+
+  @override
+  String get nonogramTutorialOutOfReach =>
+      'Giờ đến các cột. Cột 2 là một khối 3 ô và phải phủ 2 ô đã tô, nên chỉ có 2 cách đặt. Ô không bao giờ sáng là ô không với tới: đánh X, cột 7 cũng vậy.';
+
+  @override
+  String get nonogramTutorialBackToFill =>
+      'Xem cột 3: cột này cần 7 ô. Chuyển lại sang chế độ tô.';
+
+  @override
+  String get nonogramTutorialExactSpace =>
+      'Dấu X ở đáy chừa lại đúng 7 ô cho số 7, nên hãy tô hết. Cột 6 cũng vậy.';
+
+  @override
+  String get nonogramTutorialFinishTechniques =>
+      'Đó là cách giải: làm hết những gì có thể ở các hàng, rồi sang các cột, rồi lặp lại. Giờ hãy tự hoàn thành cây nấm!';
 
   @override
   String get nonogramPlayHintNothingToFill =>
@@ -492,7 +624,7 @@ class AppLocalizationsVi extends AppLocalizations {
 
   @override
   String get adRewardNotReady =>
-      'Quảng cáo chưa sẵn sàng. Hãy kiểm tra kết nối mạng rồi thử lại.';
+      'Quảng cáo chưa sẵn sàng. Vui lòng thử lại sau ít phút.';
 
   @override
   String get settingsAdPrivacy => 'Quyền riêng tư quảng cáo';
@@ -569,11 +701,6 @@ class AppLocalizationsVi extends AppLocalizations {
   String get checkInDoneToday => 'Hôm nay đã điểm danh';
 
   @override
-  String checkInNextGift(int count) {
-    return 'Còn $count lần điểm danh nữa đến quà tiếp theo';
-  }
-
-  @override
   String get checkInCheckedIn => 'Đã điểm danh!';
 
   @override
@@ -597,9 +724,6 @@ class AppLocalizationsVi extends AppLocalizations {
   }
 
   @override
-  String get checkInMonthGifts => 'Quà trong tháng';
-
-  @override
   String get navHome => 'Chính';
 
   @override
@@ -612,42 +736,73 @@ class AppLocalizationsVi extends AppLocalizations {
   String get meMore => 'Khác';
 
   @override
-  String get checkInNotYetToday => 'Hôm nay chưa điểm danh';
-
-  @override
   String get checkInTodayButton => 'Điểm danh hôm nay';
-
-  @override
-  String checkInGiftsLeftShort(int count) {
-    return 'Còn $count lần nữa có quà';
-  }
 
   @override
   String get checkInGiftToday => 'Hôm nay có quà!';
 
   @override
-  String checkInGiftMilestone(int count) {
-    return 'Quà mốc $count lần điểm danh';
-  }
-
-  @override
   String get checkInGiftCollect => 'Nhận';
 
   @override
-  String get checkInTotalHints => 'Gợi ý';
+  String get checkInGiftDouble => 'Nhận x2';
 
   @override
-  String get checkInTotalWands => 'Gậy phép';
+  String checkInStreakTitle(int count) {
+    return 'Chuỗi $count ngày';
+  }
 
   @override
-  String get checkInTotalDailyHints => 'Gợi ý (trong ngày)';
+  String checkInStreakDays(int count) {
+    return '$count ngày';
+  }
 
   @override
-  String get checkInTotalDailyWands => 'Gậy phép (trong ngày)';
+  String checkInStreakMakeUp(int missed, String days) {
+    return 'Bù $missed ngày bỏ lỡ để nối chuỗi thành $days';
+  }
 
   @override
-  String get checkInPremiumNotYet =>
-      'Điểm danh để nhận 2 gợi ý và 1 gậy phép dùng trong hôm nay.';
+  String get checkInStreakKeepGoing => 'Điểm danh mỗi ngày để giữ chuỗi';
+
+  @override
+  String get checkInStreakAllDone => 'Bạn đã nhận hết quà chuỗi tháng này!';
+
+  @override
+  String checkInStreakDaysLeft(int count) {
+    return 'Còn $count ngày nữa có quà';
+  }
+
+  @override
+  String get checkInLegendChecked => 'Đã điểm danh';
+
+  @override
+  String get checkInLegendMissed => 'Bỏ lỡ';
+
+  @override
+  String get checkInLegendFuture => 'Chưa tới';
+
+  @override
+  String checkInGiftStreak(int count) {
+    return 'Quà chuỗi $count ngày';
+  }
+
+  @override
+  String checkInMakeUpTitle(String date) {
+    return 'Bù ngày $date?';
+  }
+
+  @override
+  String get checkInMakeUpBody =>
+      'Xem một quảng cáo ngắn để bù ngày này. Chuỗi điểm danh của bạn sẽ được nối lại.';
+
+  @override
+  String get checkInMakeUpWatch => 'Xem quảng cáo';
+
+  @override
+  String checkInMadeUp(String date) {
+    return 'Đã bù ngày $date';
+  }
 
   @override
   String dashboardDailyReminder(String rewards, String time) {
@@ -752,12 +907,4 @@ class AppLocalizationsVi extends AppLocalizations {
   String dashboardDailyReminderBoth(String hints, String wands) {
     return '$hints và $wands';
   }
-
-  @override
-  String checkInLegendMilestone(int count) {
-    return 'Mốc quà mỗi $count lần điểm danh';
-  }
-
-  @override
-  String get checkInLegendPremium => 'Quà gói không quảng cáo';
 }

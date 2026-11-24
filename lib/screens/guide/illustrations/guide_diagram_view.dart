@@ -164,6 +164,7 @@ class GuideDiagramPainter extends CustomPainter {
       text: TextSpan(
         text: '$value',
         style: TextStyle(
+          fontFamily: AppTheme.fontFamily,
           color: color,
           fontSize: cellSize * 0.5,
           fontWeight: FontWeight.w800,

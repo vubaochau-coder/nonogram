@@ -38,6 +38,9 @@ class NonogramPlayState extends Equatable {
   /// từ đầu (người chơi đã "trả" lượt cho chúng).
   final Set<({int row, int col})> lockedCells;
 
+  /// Còn thao tác để hoàn tác (nút hoàn tác sáng lên).
+  final bool canUndo;
+
   const NonogramPlayState({
     required this.isLoading,
     this.puzzle,
@@ -56,6 +59,7 @@ class NonogramPlayState extends Equatable {
     this.dailyWands = 0,
     this.isWandActive = false,
     this.lockedCells = const {},
+    this.canUndo = false,
   });
 
   bool isLocked(int row, int col) => lockedCells.contains((row: row, col: col));
@@ -87,6 +91,7 @@ class NonogramPlayState extends Equatable {
     int? dailyWands,
     bool? isWandActive,
     Set<({int row, int col})>? lockedCells,
+    bool? canUndo,
   }) {
     return NonogramPlayState(
       isLoading: isLoading ?? this.isLoading,
@@ -106,6 +111,7 @@ class NonogramPlayState extends Equatable {
       dailyWands: dailyWands ?? this.dailyWands,
       isWandActive: isWandActive ?? this.isWandActive,
       lockedCells: lockedCells ?? this.lockedCells,
+      canUndo: canUndo ?? this.canUndo,
     );
   }
 
@@ -128,6 +134,7 @@ class NonogramPlayState extends Equatable {
     dailyWands,
     isWandActive,
     lockedCells,
+    canUndo,
   ];
 }
 
@@ -151,6 +158,7 @@ class NonogramPlayCompletedState extends NonogramPlayState {
     super.dailyWands,
     required super.isWandActive,
     required super.lockedCells,
+    super.canUndo,
   });
 
   factory NonogramPlayCompletedState.fromState(NonogramPlayState state) {
@@ -172,6 +180,7 @@ class NonogramPlayCompletedState extends NonogramPlayState {
       dailyWands: state.dailyWands,
       isWandActive: state.isWandActive,
       lockedCells: state.lockedCells,
+      canUndo: state.canUndo,
     );
   }
 }
@@ -199,6 +208,7 @@ class NonogramPlayRestoredState extends NonogramPlayState {
     super.dailyWands,
     required super.isWandActive,
     required super.lockedCells,
+    super.canUndo,
     required this.offsetX,
     required this.offsetY,
   });
@@ -226,6 +236,7 @@ class NonogramPlayRestoredState extends NonogramPlayState {
       dailyWands: state.dailyWands,
       isWandActive: state.isWandActive,
       lockedCells: state.lockedCells,
+      canUndo: state.canUndo,
       offsetX: offsetX,
       offsetY: offsetY,
     );
@@ -257,6 +268,7 @@ class NonogramPlayErrorState extends NonogramPlayState {
     super.dailyWands,
     required super.isWandActive,
     required super.lockedCells,
+    super.canUndo,
     required this.error,
   });
 
@@ -282,6 +294,7 @@ class NonogramPlayErrorState extends NonogramPlayState {
       dailyWands: state.dailyWands,
       isWandActive: state.isWandActive,
       lockedCells: state.lockedCells,
+      canUndo: state.canUndo,
       error: error,
     );
   }
@@ -315,6 +328,7 @@ class NonogramPlayHintAppliedState extends NonogramPlayState {
     super.dailyWands,
     required super.isWandActive,
     required super.lockedCells,
+    super.canUndo,
     required this.axis,
     required this.lineIndex,
   });
@@ -342,6 +356,7 @@ class NonogramPlayHintAppliedState extends NonogramPlayState {
       dailyWands: state.dailyWands,
       isWandActive: state.isWandActive,
       lockedCells: state.lockedCells,
+      canUndo: state.canUndo,
       axis: axis,
       lineIndex: lineIndex,
     );
@@ -374,6 +389,7 @@ class NonogramPlayHintCellsAppliedState extends NonogramPlayState {
     super.dailyWands,
     required super.isWandActive,
     required super.lockedCells,
+    super.canUndo,
     required this.cells,
   });
 
@@ -399,6 +415,7 @@ class NonogramPlayHintCellsAppliedState extends NonogramPlayState {
       dailyWands: state.dailyWands,
       isWandActive: state.isWandActive,
       lockedCells: state.lockedCells,
+      canUndo: state.canUndo,
       cells: cells,
     );
   }

@@ -4,38 +4,49 @@ import 'package:nonogram/data/nonogram_repository.dart';
 import 'package:nonogram/models/power_up_inventory.dart';
 
 void main() {
-  const hint = CheckInReward(PowerUp.hint, 1);
-  const wand = CheckInReward(PowerUp.wand, 1);
-  const dailyHints = CheckInReward(PowerUp.hint, 2, daily: true);
-  const dailyWand = CheckInReward(PowerUp.wand, 1, daily: true);
+  /// Ngày [d] của tháng 11/2026 (1/11/2026 là Chủ nhật).
+  int nov(int d) => dayNumberOf(DateTime(2026, 11, d));
 
-  test('every 5th check-in: hint, hint, wand, then again', () {
-    final milestones = [
-      for (var n = 1; n <= 30; n++) CheckInPolicy.milestoneFor(n),
-    ];
-    expect(milestones.whereType<CheckInReward>(), [
-      hint, hint, wand, hint, hint, wand, //
-    ]);
-    expect(CheckInPolicy.milestoneFor(4), isNull);
-    expect(CheckInPolicy.milestoneFor(5), hint);
-    expect(CheckInPolicy.milestoneFor(15), wand);
+  Set<int> days(Iterable<int> list) => {for (final d in list) nov(d)};
+
+  StreakStats stats(
+    Set<int> checked, {
+    int today = 22,
+    int startDay = 1,
+    int month = 11,
+  }) => CheckInPolicy.streakStats(
+    year: 2026,
+    month: month,
+    today: nov(today),
+    startDay: nov(startDay),
+    checkedDays: checked,
+  );
+
+  Iterable<int> range(int a, int b) => [for (var d = a; d <= b; d++) d];
+
+  test('milestones every 7 days, each with a gift', () {
+    expect(CheckInPolicy.streakMilestones, [7, 14, 21, 28]);
+    for (final m in CheckInPolicy.streakMilestones) {
+      expect(CheckInPolicy.streakReward(m).daily, isFalse);
+    }
   });
 
-  test('premium adds today-only uses on every check-in', () {
-    expect(CheckInPolicy.rewardsFor(1, premium: true), [dailyHints, dailyWand]);
-    expect(CheckInPolicy.rewardsFor(5, premium: true), [
-      hint,
-      dailyHints,
-      dailyWand,
+  test('premium adds today-only uses', () {
+    expect(CheckInPolicy.dailyRewards(premium: false), isEmpty);
+    expect(CheckInPolicy.dailyRewards(premium: true), const [
+      CheckInReward(PowerUp.hint, 2, daily: true),
+      CheckInReward(PowerUp.wand, 1, daily: true),
     ]);
-    expect(CheckInPolicy.rewardsFor(1, premium: false), isEmpty);
   });
 
-  test('next milestone', () {
-    expect(CheckInPolicy.checkInsToNextMilestone(0), 5);
-    expect(CheckInPolicy.checkInsToNextMilestone(3), 2);
-    expect(CheckInPolicy.checkInsToNextMilestone(5), 5);
-    expect(CheckInPolicy.nextMilestone(12), wand);
+  test('new gifts: milestones reached and not claimed yet', () {
+    expect(CheckInPolicy.newGifts(longest: 6, claimed: {}), isEmpty);
+    expect(
+      CheckInPolicy.newGifts(longest: 22, claimed: {7}).map((g) => g.milestone),
+      [14, 21],
+    );
+    expect(CheckInPolicy.nextMilestone({7, 14}), 21);
+    expect(CheckInPolicy.nextMilestone({7, 14, 21, 28}), isNull);
   });
 
   test('ratchet: once a day, never on an earlier day', () {
@@ -63,101 +74,89 @@ void main() {
     );
   });
 
-  group('month calendar', () {
-    final nov1 = dayNumberOf(DateTime(2026, 11, 1));
-    int nov(int d) => nov1 + d - 1;
+  test('make-up: only past days since install that were missed', () {
+    bool can(int day, {bool checked = false, int? maxSeen}) =>
+        CheckInPolicy.canMakeUp(
+          day: nov(day),
+          today: nov(22),
+          startDay: nov(5),
+          checked: checked,
+          maxSeenDay: maxSeen,
+        );
+    expect(can(10), isTrue);
+    expect(can(21), isTrue);
+    expect(can(10, checked: true), isFalse);
+    expect(can(22), isFalse, reason: 'hôm nay: điểm danh, không bù');
+    expect(can(25), isFalse, reason: 'chưa tới');
+    expect(can(4), isFalse, reason: 'trước ngày bắt đầu dùng app');
+    expect(can(10, maxSeen: nov(24)), isFalse, reason: 'lùi giờ');
+  });
 
-    test('past days show what was received, future days are projected', () {
-      // Bắt đầu 3/11, điểm danh 3, 4, 6 (bỏ lỡ 5); hôm nay 8/11 chưa
-      // điểm danh.
-      final month = CheckInPolicy.buildMonth(
-        year: 2026,
-        month: 11,
-        today: nov(8),
-        startDay: nov(3),
-        history: {nov(3): const [], nov(4): const [], nov(6): const []},
-        premium: false,
-      );
-      expect(month.days.length, 30);
-      final d = {for (final day in month.days) day.dayOfMonth: day};
-      expect(d[1]!.beforeStart, isTrue);
-      expect(d[3]!.checked, isTrue);
-      expect(d[5]!.checked, isFalse);
-      expect(d[5]!.upcoming, isFalse);
-      expect(d[8]!.isToday, isTrue);
-      expect(d[8]!.upcoming, isTrue);
-      // Đã điểm danh 3 lần: lần thứ 5 rơi vào 9/11 nếu từ nay ngày nào cũng
-      // điểm danh, lần thứ 10 vào 14/11.
-      expect(d[8]!.rewards, isEmpty);
-      expect(d[9]!.rewards, [hint]);
-      expect(d[9]!.hasMilestone, isTrue);
-      expect(d[14]!.rewards, [hint]);
-      expect(d[19]!.rewards, [wand]);
+  group('streak', () {
+    test('current, longest and what make-ups could reach', () {
+      // 1–12, bỏ lỡ 13, 14–21; hôm nay 22 chưa điểm danh.
+      final s = stats(days([...range(1, 12), ...range(14, 21)]));
+      expect(s.current, 8);
+      expect(s.longest, 12);
+      expect(s.potential, 21);
+      expect(s.missed, [nov(13)]);
     });
 
-    test('monthly totals: received out of the most possible', () {
-      final month = CheckInPolicy.buildMonth(
-        year: 2026,
-        month: 11,
-        today: nov(20),
-        startDay: nov(1),
-        history: {
-          for (var d = 1; d <= 5; d++) nov(d): d == 5 ? const [hint] : const [],
-        },
-        premium: false,
-      );
-      // 30 ngày: tối đa 6 mốc = 4 gợi ý + 2 gậy phép; đã nhận 1 gợi ý.
-      expect(
-        month.totals[const RewardKind(PowerUp.hint, daily: false)],
-        const MonthTotal(got: 1, max: 4),
-      );
-      expect(
-        month.totals[const RewardKind(PowerUp.wand, daily: false)],
-        const MonthTotal(got: 0, max: 2),
-      );
-      expect(
-        month.totals.containsKey(const RewardKind(PowerUp.hint, daily: true)),
-        isFalse,
-      );
+    test('checking in today extends the current streak', () {
+      final s = stats(days([...range(14, 22)]), startDay: 14);
+      expect(s.current, 9);
+      expect(s.longest, 9);
     });
 
-    test('premium totals count today-only uses apart', () {
-      final month = CheckInPolicy.buildMonth(
-        year: 2026,
-        month: 11,
-        today: nov(2),
-        startDay: nov(1),
-        history: {
-          nov(1): const [dailyHints, dailyWand],
-        },
-        premium: true,
-      );
-      expect(
-        month.totals[const RewardKind(PowerUp.hint, daily: true)],
-        const MonthTotal(got: 2, max: 60),
-      );
-      expect(
-        month.totals[const RewardKind(PowerUp.wand, daily: true)],
-        const MonthTotal(got: 1, max: 30),
-      );
-      final d2 = month.days[1];
-      expect(d2.rewards, [dailyHints, dailyWand]);
+    test('a missed day before today breaks the current streak', () {
+      final s = stats(days([...range(1, 20)]));
+      // Bỏ lỡ hôm qua (21): chuỗi hiện tại về 0, chuỗi dài nhất vẫn 20.
+      expect(s.current, 0);
+      expect(s.longest, 20);
+      expect(s.potential, 21);
     });
 
-    test('a month that started mid-way only counts days since install', () {
-      final month = CheckInPolicy.buildMonth(
+    test('resets every month', () {
+      // Cả tháng 10 và tháng 11 tới hôm nay đều điểm danh.
+      final checked = {
+        for (var d = 1; d <= 31; d++) dayNumberOf(DateTime(2026, 10, d)),
+        ...days(range(1, 5)),
+      };
+      final s = stats(checked, today: 5, startDay: -40);
+      expect(s.current, 5);
+      expect(s.longest, 5);
+      final october = CheckInPolicy.streakStats(
         year: 2026,
-        month: 11,
-        today: nov(26),
-        startDay: nov(26),
-        history: const {},
-        premium: false,
+        month: 10,
+        today: nov(5),
+        startDay: nov(-40),
+        checkedDays: checked,
       );
-      // 26..30: 5 ngày, đủ một mốc gợi ý.
-      expect(
-        month.totals[const RewardKind(PowerUp.hint, daily: false)],
-        const MonthTotal(got: 0, max: 1),
-      );
+      expect(october.longest, 31);
     });
+
+    test('days before install cannot be made up', () {
+      final s = stats(days(range(10, 21)), startDay: 10);
+      expect(s.missed, isEmpty);
+      expect(s.potential, 12);
+    });
+  });
+
+  test('month calendar: one status per day', () {
+    final month = CheckInPolicy.buildMonth(
+      year: 2026,
+      month: 11,
+      today: nov(22),
+      startDay: nov(3),
+      checkedDays: days([...range(3, 9), ...range(11, 21)]),
+    );
+    CheckInDayStatus at(int d) => month.days[d - 1].status;
+    expect(month.days, hasLength(30));
+    expect(at(1), CheckInDayStatus.beforeStart);
+    expect(at(3), CheckInDayStatus.checked);
+    expect(at(10), CheckInDayStatus.missed);
+    expect(at(22), CheckInDayStatus.today);
+    expect(month.days[21].isToday, isTrue);
+    expect(at(23), CheckInDayStatus.future);
   });
 }

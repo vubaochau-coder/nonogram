@@ -1,7 +1,8 @@
 import 'package:hive_flutter/hive_flutter.dart';
 
 /// Ghi nhớ các hướng dẫn đã hiện cho người chơi: bài "Cách chơi" lần đầu mở
-/// app, hướng dẫn thao tác trong màn chơi, và mẹo di chuyển trên màn lớn.
+/// app, hướng dẫn thao tác trong màn chơi, mẹo di chuyển trên màn lớn và mẹo
+/// kéo để tô nhiều ô.
 /// Dùng chung box tuỳ chọn với `AppThemeModeController`.
 class OnboardingPreferences {
   OnboardingPreferences._(
@@ -9,19 +10,23 @@ class OnboardingPreferences {
     required bool tutorialSeen,
     required bool playCoachSeen,
     required bool scrollTipSeen,
+    required bool dragTipSeen,
   }) : _tutorialSeen = tutorialSeen,
        _playCoachSeen = playCoachSeen,
-       _scrollTipSeen = scrollTipSeen;
+       _scrollTipSeen = scrollTipSeen,
+       _dragTipSeen = dragTipSeen;
 
   static const _boxName = 'nonogram_preferences_v1';
   static const _tutorialSeenKey = 'tutorial_seen';
   static const _playCoachSeenKey = 'play_coach_seen';
   static const _scrollTipSeenKey = 'scroll_tip_seen';
+  static const _dragTipSeenKey = 'drag_tip_seen';
 
   final Box<dynamic>? _box;
   bool _tutorialSeen;
   bool _playCoachSeen;
   bool _scrollTipSeen;
+  bool _dragTipSeen;
 
   /// Gọi sau `Hive.initFlutter()`.
   static Future<OnboardingPreferences> load() async {
@@ -32,6 +37,7 @@ class OnboardingPreferences {
         tutorialSeen: box.get(_tutorialSeenKey) == true,
         playCoachSeen: box.get(_playCoachSeenKey) == true,
         scrollTipSeen: box.get(_scrollTipSeenKey) == true,
+        dragTipSeen: box.get(_dragTipSeenKey) == true,
       );
     } catch (_) {
       return OnboardingPreferences._(
@@ -39,6 +45,7 @@ class OnboardingPreferences {
         tutorialSeen: false,
         playCoachSeen: false,
         scrollTipSeen: false,
+        dragTipSeen: false,
       );
     }
   }
@@ -48,10 +55,12 @@ class OnboardingPreferences {
     bool tutorialSeen = false,
     bool playCoachSeen = false,
     bool scrollTipSeen = false,
+    bool dragTipSeen = false,
   }) : _box = null,
        _tutorialSeen = tutorialSeen,
        _playCoachSeen = playCoachSeen,
-       _scrollTipSeen = scrollTipSeen;
+       _scrollTipSeen = scrollTipSeen,
+       _dragTipSeen = dragTipSeen;
 
   bool get tutorialSeen => _tutorialSeen;
 
@@ -60,6 +69,10 @@ class OnboardingPreferences {
 
   /// Đã xem mẹo kéo bàn chơi trên màn lớn.
   bool get scrollTipSeen => _scrollTipSeen;
+
+  /// Đã biết kéo ngón tay để tô nhiều ô (đã kéo, học xong phần thao tác của
+  /// "Cách chơi", hoặc đã bấm "Đã hiểu" ở mẹo kéo).
+  bool get dragTipSeen => _dragTipSeen;
 
   Future<void> markTutorialSeen() async {
     if (_tutorialSeen) return;
@@ -71,6 +84,12 @@ class OnboardingPreferences {
     if (_playCoachSeen) return;
     _playCoachSeen = true;
     await _box?.put(_playCoachSeenKey, true);
+  }
+
+  Future<void> markDragTipSeen() async {
+    if (_dragTipSeen) return;
+    _dragTipSeen = true;
+    await _box?.put(_dragTipSeenKey, true);
   }
 
   Future<void> markScrollTipSeen() async {

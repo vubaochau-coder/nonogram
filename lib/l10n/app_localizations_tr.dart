@@ -37,14 +37,14 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get nonogramGuideMethodDivisionDesc =>
-      'İki mevcut bloğu birleştirmek, elindeki tüm ipuçlarından daha büyük bir şekil oluşturacaksa aradaki boşluk X olmalıdır.';
+      'İki dolu parçayı birleştirmek en büyük sayıdan uzun bir blok oluşturacaksa, aradaki kare boş olmalıdır. Onları ayırmak için X koy.';
 
   @override
   String get nonogramGuideMethodDivisionTitle => '5. Ayırma';
 
   @override
   String get nonogramGuideMethodDoublePositioningDesc =>
-      'Dolu bir kare bir bloğun yalnızca birkaç belirli yerleşimine ait olabiliyorsa, bu yerleşimlerin hiçbirinde dolmayan tüm kareler X ile işaretlenmelidir.';
+      'Bazen dolu bir kare sayılardan yalnızca birine ya da ikisine ait olabilir. Her olasılığı dene: hepsinde boş kalan karelere X koy.';
 
   @override
   String get nonogramGuideMethodDoublePositioningTitle =>
@@ -52,21 +52,21 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get nonogramGuideMethodInaccessibilityDesc =>
-      'Kalan hiçbir şekle ait olamayacak kareleri çarpı (X) ile işaretle.';
+      'Hiçbir bloğun ulaşamadığı kareler boştur. Her bloğu dolu karelerin çevresindeki en uç konumlarında dene; bu aralığın dışında kalan her kareye X koy.';
 
   @override
   String get nonogramGuideMethodInaccessibilityTitle => '3. Erişilemezlik';
 
   @override
   String get nonogramGuideMethodNotFitDesc =>
-      'Çarpılar arasındaki boş alan o satırdaki tüm ipuçlarından küçükse X ile işaretlenmelidir.';
+      'X\'ler arasındaki (veya X ile kenar arasındaki) boşluk, oraya girebilecek her sayıdan kısaysa hiçbir blok sığmaz: X ile işaretle.';
 
   @override
   String get nonogramGuideMethodNotFitTitle => '4. Sığmıyor';
 
   @override
   String get nonogramGuideMethodSuperpositionMultiDesc =>
-      'Birden fazla sayı varsa, aynı renkteki bloklar arasındaki zorunlu en az bir karelik boşluğu hesaba katarak tüm grubun en sol ve en sağ konumlarını üst üste koy. Bir bloğun her iki konumda da kendisiyle çakıştığı kareler doldurulur.';
+      'Birden çok sayı varsa tüm grubu sola (bloklar arasında birer boş kare bırakarak), sonra sağa it. Aynı blok bir kareyi iki konumda da kaplıyorsa o kare doludur. Hızlı yol: sayıları ve boşlukları topla; artan kısım her bloğun ne kadar kayabileceğidir.';
 
   @override
   String get nonogramGuideMethodSuperpositionMultiTitle =>
@@ -74,7 +74,7 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get nonogramGuideMethodSuperpositionSimpleDesc =>
-      'Bir sayı satırın yarısından uzunsa ortadaki bazı kareler kesinlikle doludur. En sol ve en sağ konumları üst üste koy; çakıştıkları kareler doldurulur.';
+      'Bir sayı çizgisinin yarısından büyükse bir kısmı her zaman doludur. Bloğu önce tamamen sola, sonra tamamen sağa ittiğini düşün: iki seferde de kapladığı kareler kesin doludur. Örnek: 10 karede 7, ortadaki 4 kareyi her zaman doldurur.';
 
   @override
   String get nonogramGuideMethodSuperpositionSimpleTitle =>
@@ -82,7 +82,7 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get nonogramGuideMethodWallPushingDesc =>
-      'Bilinen dolu bir kare kenara ilk ipucunun uzunluğundan daha yakınsa, ait olduğu şekil o kenardan uzağa doğru uzanmalıdır.';
+      'Kenara yakın dolu bir kare, bloğunun nerede olabileceğini sınırlar. Blok kenarı aşamaz, bu yüzden kenardan uzağa doğru uzanmalıdır. Örnek: 4. karesi dolu bir 5: sol kenara dayansa bile blok 5. kareyi kaplar.';
 
   @override
   String get nonogramGuideMethodWallPushingTitle => '2. Kenardan itme';
@@ -254,6 +254,17 @@ class AppLocalizationsTr extends AppLocalizations {
       'Temel kuralları küçük bir 5×5 bulmacayla öğrenelim.';
 
   @override
+  String get nonogramTutorialInfoFree => 'Ücretsiz: tüm seviyeler açık.';
+
+  @override
+  String get nonogramTutorialInfoAds =>
+      'İsteğe bağlı olarak reklam izleyip ekstra ipucu ve sihirli değnek alabilirsin. Seviyeler arasında bazen reklam çıkar.';
+
+  @override
+  String get nonogramTutorialInfoPremium =>
+      'Tek seferlik satın alma, seviyeler arası reklamları kapatır ve her girişte o güne özel ipucu ve değnek verir.';
+
+  @override
   String get nonogramTutorialStart => 'Başla';
 
   @override
@@ -263,6 +274,10 @@ class AppLocalizationsTr extends AppLocalizations {
   @override
   String get nonogramTutorialClueIsCount =>
       'Sayı, satırda kaç karenin dolu olduğunu söyler. Bu satırda 5 var, yani hepsini doldur!';
+
+  @override
+  String get nonogramTutorialDragNote =>
+      'İpucu: satırı tek seferde doldurmak için parmağını boydan boya sürükleyebilirsin.';
 
   @override
   String get nonogramTutorialEdgeCell =>
@@ -310,13 +325,73 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get nonogramGuideTutorialCardDesc =>
-      'Kuralları ve kontrolleri küçük bir 5×5 bulmacada adım adım öğren.';
+      'Kuralları, kontrolleri ve temel çözüm tekniklerini oynayarak adım adım öğren.';
+
+  @override
+  String get nonogramGuideRoutineTitle => 'Nereden başlamalı';
+
+  @override
+  String get nonogramGuideRoutineTip1 =>
+      'Büyük sayılarla başla. Bir sayı çizgisinin yarısından büyükse bir kısmı zaten kesindir (aşağıdaki 1. tekniğe bak).';
+
+  @override
+  String get nonogramGuideRoutineTip2 =>
+      'Önce kolay satırları çöz: 0 satırın tamamen boş olduğu anlamına gelir; sayıların toplamı ve aralarındaki birer boşluk satırın uzunluğuna eşitse tek bir yerleşim vardır.';
+
+  @override
+  String get nonogramGuideRoutineTip3 =>
+      'Boş olduğunu bildiğin kareleri X ile işaretle. Bir X, dolu bir kare kadar işe yarar.';
+
+  @override
+  String get nonogramGuideRoutineTip4 =>
+      'Satırlarla sütunlar arasında gidip gel. Çözdüğün her kare, onu kesen çizgi için yeni bir ipucudur.';
+
+  @override
+  String get nonogramGuideRoutineTip5 =>
+      'Asla tahmin etme. Takılırsan en az bilinmeyen karesi olan çizgiyi ara ya da ipucu kullan.';
+
+  @override
+  String nonogramGuideExample(int number) {
+    return 'Örnek $number';
+  }
+
+  @override
+  String get nonogramGuideExampleSingle => 'Örnek';
+
+  @override
+  String get nonogramGuideLegendTitle => 'Resimler nasıl okunur';
+
+  @override
+  String get nonogramGuideLegendFilled => 'Dolu kare';
+
+  @override
+  String get nonogramGuideLegendTrial => 'Bloğu deneme konumu';
+
+  @override
+  String get nonogramGuideLegendCross => 'Boş kare (X)';
+
+  @override
+  String get nonogramGuideLegendResult => 'Çıkarılabilen sonuç';
+
+  @override
+  String get nonogramGuideMethodLineDoneTitle => 'Tamamlanan çizgiler';
+
+  @override
+  String get nonogramGuideMethodLineDoneDesc =>
+      'Bir çizginin tüm blokları yerleştiğinde diğer bütün kareleri boştur: onları X ile işaretle. 0 sayılı bir çizgi baştan boştur.';
 
   @override
   String get nonogramPlayInfoHide => 'Bölüm bilgisini gizle';
 
   @override
   String get nonogramPlayWandLabel => 'Sihirli değnek';
+
+  @override
+  String get nonogramPlayUndo => 'Geri al';
+
+  @override
+  String get nonogramPlayDragTip =>
+      'Birden çok kareyi tek seferde doldurmak için parmağını üzerlerinden sürükle.';
 
   @override
   String get nonogramPlayWandSelectPrompt =>
@@ -366,7 +441,14 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get nonogramCoachModeBody =>
-      'Dokunmanın ne yapacağını seç: kareyi doldurmak ya da boş olduğunu hatırlamak için X ile işaretlemek. Değiştirmek için düğmeye dokun. Birçok kareyi tek seferde doldurmak veya işaretlemek için ızgara üzerinde sürükle.';
+      'Dokunmanın ne yapacağını seç: kareyi doldurmak ya da boş olduğunu hatırlamak için X ile işaretlemek. Değiştirmek için düğmeye dokun.';
+
+  @override
+  String get nonogramCoachDragTitle => 'Sürükleyerek çok kare doldur';
+
+  @override
+  String get nonogramCoachDragBody =>
+      'Parmağını bir kareye koy ve diğerlerinin üzerinden kaydır: geçtiğin her kare tek seferde dolar (X modunda X ile işaretlenir). Dolu bir kareden başlarsan geçtiğin kareler temizlenir.';
 
   @override
   String get nonogramCoachLongPressTitle => 'Tersi için basılı tut';
@@ -374,6 +456,13 @@ class AppLocalizationsTr extends AppLocalizations {
   @override
   String get nonogramCoachLongPressBody =>
       'Geçerli modun tersini yapmak için bir kareye basılı tut: doldururken X, işaretlerken doldurma. Kısa bir titreşim işlemin bittiğini ve bırakabileceğini gösterir.';
+
+  @override
+  String get nonogramCoachRotateTitle => 'Yatay mod';
+
+  @override
+  String get nonogramCoachRotateBody =>
+      'Tahtayı yatay çevirmek için dokun, geniş bulmacalar için kullanışlı; düğmeler kenarlara geçer. Dikeye dönmek için tekrar dokun.';
 
   @override
   String get nonogramCoachScrollTitle => 'Büyük bulmacalarda gezinme';
@@ -418,6 +507,49 @@ class AppLocalizationsTr extends AppLocalizations {
   @override
   String get nonogramTutorialFinishTools =>
       'Bitirmek için kalan kareleri doldur. Daha hızlı doldurmak için bir sütun boyunca aşağı sürükle.';
+
+  @override
+  String get nonogramTutorialToolsDoneTitle => 'Kontroller tamam!';
+
+  @override
+  String get nonogramTutorialToolsDone =>
+      'Gerçek bulmacalar daha büyüktür ve çoğu satır bir bakışta çözülmez. Şimdi çözüm tekniklerini 8×8 bir bulmacada öğren.';
+
+  @override
+  String get nonogramTutorialOverlapSingle =>
+      'Önce büyük sayılara bak. 6 bu 8 kareye 3 şekilde sığar ve her biri sırayla yanıp söner. Her şekilde yanan kareler kesin doludur: sarı çerçevedeki 4 kareyi doldur.';
+
+  @override
+  String get nonogramTutorialOverlapMulti =>
+      'Birden çok sayıda da aynı: 3 3 en az 7 kare ister (3 + boşluk + 3), yani yalnızca 3 şekilde sığar. Üçünde de yanan kareleri doldur.';
+
+  @override
+  String get nonogramTutorialFullRow =>
+      '8 karede 8: satırın tamamı dolu. Parmağını boydan boya sürükle.';
+
+  @override
+  String get nonogramTutorialZeroRow =>
+      '0, satırda hiç dolu kare olmadığı anlamına gelir. X moduna geç.';
+
+  @override
+  String get nonogramTutorialMarkZeroRow =>
+      'En alt satırın tamamını X ile işaretle. X\'ler önemlidir: sütunlara blokların nereye gelemeyeceğini gösterir.';
+
+  @override
+  String get nonogramTutorialOutOfReach =>
+      'Şimdi sütunlar. 2. sütun, 2 dolu karesini kaplaması gereken tek bir 3\'lük blok; yalnızca 2 şekilde sığar. Hiç yanmayan karelere ulaşılamaz: onları X ile işaretle, 7. sütunda da aynısını yap.';
+
+  @override
+  String get nonogramTutorialBackToFill =>
+      '3. sütuna bak: 7 kare istiyor. Doldurma moduna geri dön.';
+
+  @override
+  String get nonogramTutorialExactSpace =>
+      'Alttaki X, 7 için tam 7 kare bırakıyor; hepsini doldur. 6. sütun da aynı şekilde.';
+
+  @override
+  String get nonogramTutorialFinishTechniques =>
+      'Yöntem bu: satırlarda çözebildiğini çöz, sonra sütunlarda, ve tekrarla. Mantarı kendin tamamla!';
 
   @override
   String get nonogramPlayHintNothingToFill =>
@@ -492,7 +624,7 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get adRewardNotReady =>
-      'Reklam henüz hazır değil. İnternet bağlantını kontrol edip tekrar dene.';
+      'Reklam henüz hazır değil. Lütfen birkaç dakika sonra tekrar dene.';
 
   @override
   String get settingsAdPrivacy => 'Reklam gizliliği';
@@ -570,11 +702,6 @@ class AppLocalizationsTr extends AppLocalizations {
   String get checkInDoneToday => 'Bugün giriş yapıldı';
 
   @override
-  String checkInNextGift(int count) {
-    return 'Sonraki hediyeye $count giriş kaldı';
-  }
-
-  @override
   String get checkInCheckedIn => 'Giriş yapıldı!';
 
   @override
@@ -598,9 +725,6 @@ class AppLocalizationsTr extends AppLocalizations {
   }
 
   @override
-  String get checkInMonthGifts => 'Bu ayın hediyeleri';
-
-  @override
   String get navHome => 'Ana sayfa';
 
   @override
@@ -613,42 +737,73 @@ class AppLocalizationsTr extends AppLocalizations {
   String get meMore => 'Diğer';
 
   @override
-  String get checkInNotYetToday => 'Bugün henüz giriş yapılmadı';
-
-  @override
   String get checkInTodayButton => 'Bugün giriş yap';
-
-  @override
-  String checkInGiftsLeftShort(int count) {
-    return 'Hediyeye $count giriş kaldı';
-  }
 
   @override
   String get checkInGiftToday => 'Bugün hediye var!';
 
   @override
-  String checkInGiftMilestone(int count) {
-    return '$count giriş hediyesi';
-  }
-
-  @override
   String get checkInGiftCollect => 'Al';
 
   @override
-  String get checkInTotalHints => 'İpuçları';
+  String get checkInGiftDouble => 'x2 Al';
 
   @override
-  String get checkInTotalWands => 'Sihirli değnekler';
+  String checkInStreakTitle(int count) {
+    return '$count günlük seri';
+  }
 
   @override
-  String get checkInTotalDailyHints => 'İpuçları (yalnızca bugün)';
+  String checkInStreakDays(int count) {
+    return '$count gün';
+  }
 
   @override
-  String get checkInTotalDailyWands => 'Sihirli değnekler (yalnızca bugün)';
+  String checkInStreakMakeUp(int missed, String days) {
+    return 'Serini $days yapmak için kaçırdığın $missed günü telafi et';
+  }
 
   @override
-  String get checkInPremiumNotYet =>
-      'Bugün için 2 ipucu ve 1 sihirli değnek almak için giriş yap.';
+  String get checkInStreakKeepGoing => 'Serini korumak için her gün giriş yap';
+
+  @override
+  String get checkInStreakAllDone => 'Bu ayın tüm seri hediyelerini aldın!';
+
+  @override
+  String checkInStreakDaysLeft(int count) {
+    return 'Hediyeye $count gün kaldı';
+  }
+
+  @override
+  String get checkInLegendChecked => 'Giriş yapıldı';
+
+  @override
+  String get checkInLegendMissed => 'Kaçırıldı';
+
+  @override
+  String get checkInLegendFuture => 'Yakında';
+
+  @override
+  String checkInGiftStreak(int count) {
+    return '$count günlük seri hediyesi';
+  }
+
+  @override
+  String checkInMakeUpTitle(String date) {
+    return '$date telafi edilsin mi?';
+  }
+
+  @override
+  String get checkInMakeUpBody =>
+      'Bu günü telafi etmek için kısa bir reklam izle. Serin yeniden birleşir.';
+
+  @override
+  String get checkInMakeUpWatch => 'Reklam izle';
+
+  @override
+  String checkInMadeUp(String date) {
+    return '$date telafi edildi';
+  }
 
   @override
   String dashboardDailyReminder(String rewards, String time) {
@@ -753,12 +908,4 @@ class AppLocalizationsTr extends AppLocalizations {
   String dashboardDailyReminderBoth(String hints, String wands) {
     return '$hints ve $wands';
   }
-
-  @override
-  String checkInLegendMilestone(int count) {
-    return 'Her $count girişte hediye';
-  }
-
-  @override
-  String get checkInLegendPremium => 'Reklamsız paket ödülü';
 }

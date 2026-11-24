@@ -174,7 +174,7 @@ abstract class AppLocalizations {
   /// No description provided for @nonogramGuideMethodDivisionDesc.
   ///
   /// In en, this message translates to:
-  /// **'If joining two existing blocks would create a figure larger than any available clue, the gap between them must be an X.'**
+  /// **'If joining two filled pieces would make a block bigger than the largest number, the square between them must be empty. Mark it with X to keep them apart.'**
   String get nonogramGuideMethodDivisionDesc;
 
   /// No description provided for @nonogramGuideMethodDivisionTitle.
@@ -186,7 +186,7 @@ abstract class AppLocalizations {
   /// No description provided for @nonogramGuideMethodDoublePositioningDesc.
   ///
   /// In en, this message translates to:
-  /// **'If a painted cell can only belong to a few specific block variants, any cells that are never filled in any of those variants must be marked with X.'**
+  /// **'Sometimes a filled square can belong to only one or two of the numbers. Try each possibility: squares that stay empty in every one of them get an X.'**
   String get nonogramGuideMethodDoublePositioningDesc;
 
   /// No description provided for @nonogramGuideMethodDoublePositioningTitle.
@@ -198,7 +198,7 @@ abstract class AppLocalizations {
   /// No description provided for @nonogramGuideMethodInaccessibilityDesc.
   ///
   /// In en, this message translates to:
-  /// **'Mark cells that cannot possibly belong to any remaining figure with a cross (X).'**
+  /// **'Squares that no block can reach are empty. Try each block at its furthest positions around the filled squares; anything outside that range gets an X.'**
   String get nonogramGuideMethodInaccessibilityDesc;
 
   /// No description provided for @nonogramGuideMethodInaccessibilityTitle.
@@ -210,7 +210,7 @@ abstract class AppLocalizations {
   /// No description provided for @nonogramGuideMethodNotFitDesc.
   ///
   /// In en, this message translates to:
-  /// **'If an empty space between crosses is smaller than any available clue for that line, it must be marked with X.'**
+  /// **'A gap between X\'s (or between an X and the edge) that is shorter than every number that could go there can\'t hold a block: mark it with X.'**
   String get nonogramGuideMethodNotFitDesc;
 
   /// No description provided for @nonogramGuideMethodNotFitTitle.
@@ -222,7 +222,7 @@ abstract class AppLocalizations {
   /// No description provided for @nonogramGuideMethodSuperpositionMultiDesc.
   ///
   /// In en, this message translates to:
-  /// **'When there are several numbers, superpose the extreme left and right positions of the entire group, accounting for the mandatory minimum one-square gap between same-color blocks. Squares where a group overlaps with its own range in both variants are painted.'**
+  /// **'With several numbers, push the whole group left (keeping one empty square between blocks), then right. Where the same block covers a square in both positions, that square is filled. Quick check: add up the numbers and the gaps; what\'s left over is how far each block can move.'**
   String get nonogramGuideMethodSuperpositionMultiDesc;
 
   /// No description provided for @nonogramGuideMethodSuperpositionMultiTitle.
@@ -234,7 +234,7 @@ abstract class AppLocalizations {
   /// No description provided for @nonogramGuideMethodSuperpositionSimpleDesc.
   ///
   /// In en, this message translates to:
-  /// **'If a number makes more than half of the length, some squares in the middle will definitely be painted. Superpose the extreme left and extreme right positions; where they overlap, the squares are painted.'**
+  /// **'If a number is more than half its line, part of it is always filled. Imagine the block pushed all the way left, then all the way right: the squares it covers both times are filled for sure. Example: 7 in 10 squares always fills the middle 4.'**
   String get nonogramGuideMethodSuperpositionSimpleDesc;
 
   /// No description provided for @nonogramGuideMethodSuperpositionSimpleTitle.
@@ -246,7 +246,7 @@ abstract class AppLocalizations {
   /// No description provided for @nonogramGuideMethodWallPushingDesc.
   ///
   /// In en, this message translates to:
-  /// **'If a known painted cell is closer to a border than the size of the first clue, the figure it belongs to must extend away from that border.'**
+  /// **'A filled square near the edge limits where its block can be. The block can\'t go past the edge, so it must extend away from it. Example: 5 with the 4th square filled: even pushed against the left edge, the block still covers the 5th square.'**
   String get nonogramGuideMethodWallPushingDesc;
 
   /// No description provided for @nonogramGuideMethodWallPushingTitle.
@@ -537,6 +537,24 @@ abstract class AppLocalizations {
   /// **'Let\'s learn the basic rules with a small 5×5 puzzle.'**
   String get nonogramTutorialWelcome;
 
+  /// No description provided for @nonogramTutorialInfoFree.
+  ///
+  /// In en, this message translates to:
+  /// **'Free to play: every level is unlocked.'**
+  String get nonogramTutorialInfoFree;
+
+  /// No description provided for @nonogramTutorialInfoAds.
+  ///
+  /// In en, this message translates to:
+  /// **'You can watch an ad (optional) for extra hints and magic wands. Sometimes an ad plays between levels.'**
+  String get nonogramTutorialInfoAds;
+
+  /// No description provided for @nonogramTutorialInfoPremium.
+  ///
+  /// In en, this message translates to:
+  /// **'A one-time purchase turns off ads between levels and adds today-only hints and wands every time you check in.'**
+  String get nonogramTutorialInfoPremium;
+
   /// No description provided for @nonogramTutorialStart.
   ///
   /// In en, this message translates to:
@@ -554,6 +572,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'The number tells you how many squares in the row are filled. This row has 5, so fill them all!'**
   String get nonogramTutorialClueIsCount;
+
+  /// No description provided for @nonogramTutorialDragNote.
+  ///
+  /// In en, this message translates to:
+  /// **'Tip: you can drag your finger across the row to fill it in one go.'**
+  String get nonogramTutorialDragNote;
 
   /// No description provided for @nonogramTutorialEdgeCell.
   ///
@@ -630,8 +654,98 @@ abstract class AppLocalizations {
   /// No description provided for @nonogramGuideTutorialCardDesc.
   ///
   /// In en, this message translates to:
-  /// **'Learn the rules and controls step by step on a small 5×5 puzzle.'**
+  /// **'Learn the rules, the controls and the main solving techniques step by step, by playing.'**
   String get nonogramGuideTutorialCardDesc;
+
+  /// No description provided for @nonogramGuideRoutineTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Where to start'**
+  String get nonogramGuideRoutineTitle;
+
+  /// No description provided for @nonogramGuideRoutineTip1.
+  ///
+  /// In en, this message translates to:
+  /// **'Start with the big numbers. If a number is more than half its line, part of it is already certain (see technique 1 below).'**
+  String get nonogramGuideRoutineTip1;
+
+  /// No description provided for @nonogramGuideRoutineTip2.
+  ///
+  /// In en, this message translates to:
+  /// **'Solve the easy lines first: 0 means the whole line is empty, and if the numbers plus one gap between each add up to the line\'s length, it fits only one way.'**
+  String get nonogramGuideRoutineTip2;
+
+  /// No description provided for @nonogramGuideRoutineTip3.
+  ///
+  /// In en, this message translates to:
+  /// **'Mark squares you know are empty with X. An X is as useful as a filled square.'**
+  String get nonogramGuideRoutineTip3;
+
+  /// No description provided for @nonogramGuideRoutineTip4.
+  ///
+  /// In en, this message translates to:
+  /// **'Go back and forth between rows and columns. Every square you solve is a new clue for the line that crosses it.'**
+  String get nonogramGuideRoutineTip4;
+
+  /// No description provided for @nonogramGuideRoutineTip5.
+  ///
+  /// In en, this message translates to:
+  /// **'Never guess. When you\'re stuck, look for the line with the fewest unknown squares, or use a hint.'**
+  String get nonogramGuideRoutineTip5;
+
+  /// No description provided for @nonogramGuideExample.
+  ///
+  /// In en, this message translates to:
+  /// **'Example {number}'**
+  String nonogramGuideExample(int number);
+
+  /// No description provided for @nonogramGuideExampleSingle.
+  ///
+  /// In en, this message translates to:
+  /// **'Example'**
+  String get nonogramGuideExampleSingle;
+
+  /// No description provided for @nonogramGuideLegendTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'How to read the pictures'**
+  String get nonogramGuideLegendTitle;
+
+  /// No description provided for @nonogramGuideLegendFilled.
+  ///
+  /// In en, this message translates to:
+  /// **'Filled square'**
+  String get nonogramGuideLegendFilled;
+
+  /// No description provided for @nonogramGuideLegendTrial.
+  ///
+  /// In en, this message translates to:
+  /// **'Trying a block position'**
+  String get nonogramGuideLegendTrial;
+
+  /// No description provided for @nonogramGuideLegendCross.
+  ///
+  /// In en, this message translates to:
+  /// **'Empty square (X)'**
+  String get nonogramGuideLegendCross;
+
+  /// No description provided for @nonogramGuideLegendResult.
+  ///
+  /// In en, this message translates to:
+  /// **'What you can deduce'**
+  String get nonogramGuideLegendResult;
+
+  /// No description provided for @nonogramGuideMethodLineDoneTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Finished lines'**
+  String get nonogramGuideMethodLineDoneTitle;
+
+  /// No description provided for @nonogramGuideMethodLineDoneDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'When all the blocks of a line are in place, every other square in it is empty: mark them with X. A line with the number 0 is empty from the start.'**
+  String get nonogramGuideMethodLineDoneDesc;
 
   /// No description provided for @nonogramPlayInfoHide.
   ///
@@ -644,6 +758,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Magic wand'**
   String get nonogramPlayWandLabel;
+
+  /// No description provided for @nonogramPlayUndo.
+  ///
+  /// In en, this message translates to:
+  /// **'Undo'**
+  String get nonogramPlayUndo;
+
+  /// No description provided for @nonogramPlayDragTip.
+  ///
+  /// In en, this message translates to:
+  /// **'Drag your finger across squares to fill several at once.'**
+  String get nonogramPlayDragTip;
 
   /// No description provided for @nonogramPlayWandSelectPrompt.
   ///
@@ -726,8 +852,20 @@ abstract class AppLocalizations {
   /// No description provided for @nonogramCoachModeBody.
   ///
   /// In en, this message translates to:
-  /// **'Choose what a tap does: fill the square, or mark it with an X to remember it is empty. Tap the button to switch. Drag across the grid to fill or mark many squares at once.'**
+  /// **'Choose what a tap does: fill the square, or mark it with an X to remember it is empty. Tap the button to switch.'**
   String get nonogramCoachModeBody;
+
+  /// No description provided for @nonogramCoachDragTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Drag to fill many squares'**
+  String get nonogramCoachDragTitle;
+
+  /// No description provided for @nonogramCoachDragBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Put your finger on a square and slide it across others: every square you pass is filled (or marked with X in X mode) in one go. Start on a filled square to clear the squares you pass instead.'**
+  String get nonogramCoachDragBody;
 
   /// No description provided for @nonogramCoachLongPressTitle.
   ///
@@ -740,6 +878,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Press and hold a square to do the opposite of the current mode: X while filling, fill while marking. A short vibration means it\'s done and you can let go.'**
   String get nonogramCoachLongPressBody;
+
+  /// No description provided for @nonogramCoachRotateTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Landscape mode'**
+  String get nonogramCoachRotateTitle;
+
+  /// No description provided for @nonogramCoachRotateBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Tap to turn the board sideways, handy for wide puzzles; the buttons move to the sides. Tap again to go back to portrait.'**
+  String get nonogramCoachRotateBody;
 
   /// No description provided for @nonogramCoachScrollTitle.
   ///
@@ -812,6 +962,72 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Fill the remaining squares to finish. Drag down a column to fill faster.'**
   String get nonogramTutorialFinishTools;
+
+  /// No description provided for @nonogramTutorialToolsDoneTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Controls mastered!'**
+  String get nonogramTutorialToolsDoneTitle;
+
+  /// No description provided for @nonogramTutorialToolsDone.
+  ///
+  /// In en, this message translates to:
+  /// **'Real puzzles are bigger, and most lines can\'t be solved at a glance. Next, learn the solving techniques on an 8×8 puzzle.'**
+  String get nonogramTutorialToolsDone;
+
+  /// No description provided for @nonogramTutorialOverlapSingle.
+  ///
+  /// In en, this message translates to:
+  /// **'Look for big numbers first. The 6 fits these 8 squares in 3 ways, and each one blinks in turn. Squares lit in every way are filled for sure: fill the 4 in the yellow frame.'**
+  String get nonogramTutorialOverlapSingle;
+
+  /// No description provided for @nonogramTutorialOverlapMulti.
+  ///
+  /// In en, this message translates to:
+  /// **'Same with several numbers: 3 3 needs at least 7 squares (3 + gap + 3), so it fits in only 3 ways. Fill the squares lit in all 3.'**
+  String get nonogramTutorialOverlapMulti;
+
+  /// No description provided for @nonogramTutorialFullRow.
+  ///
+  /// In en, this message translates to:
+  /// **'8 in 8 squares: the whole row is filled. Drag across it.'**
+  String get nonogramTutorialFullRow;
+
+  /// No description provided for @nonogramTutorialZeroRow.
+  ///
+  /// In en, this message translates to:
+  /// **'0 means the row has no filled squares at all. Switch to X mode.'**
+  String get nonogramTutorialZeroRow;
+
+  /// No description provided for @nonogramTutorialMarkZeroRow.
+  ///
+  /// In en, this message translates to:
+  /// **'Mark the whole bottom row with X. X\'s matter: they show the columns where blocks can\'t go.'**
+  String get nonogramTutorialMarkZeroRow;
+
+  /// No description provided for @nonogramTutorialOutOfReach.
+  ///
+  /// In en, this message translates to:
+  /// **'Now the columns. Column 2 is one block of 3 that must cover its 2 filled squares, so it fits in only 2 ways. Squares never lit can\'t be reached: mark them with X, and the same in column 7.'**
+  String get nonogramTutorialOutOfReach;
+
+  /// No description provided for @nonogramTutorialBackToFill.
+  ///
+  /// In en, this message translates to:
+  /// **'Look at column 3: it needs 7. Switch back to fill mode.'**
+  String get nonogramTutorialBackToFill;
+
+  /// No description provided for @nonogramTutorialExactSpace.
+  ///
+  /// In en, this message translates to:
+  /// **'The X at the bottom leaves exactly 7 squares for the 7, so fill them all. Column 6 works the same way.'**
+  String get nonogramTutorialExactSpace;
+
+  /// No description provided for @nonogramTutorialFinishTechniques.
+  ///
+  /// In en, this message translates to:
+  /// **'That\'s the routine: solve what you can in the rows, then in the columns, and repeat. Finish the mushroom on your own!'**
+  String get nonogramTutorialFinishTechniques;
 
   /// No description provided for @nonogramPlayHintNothingToFill.
   ///
@@ -936,7 +1152,7 @@ abstract class AppLocalizations {
   /// No description provided for @adRewardNotReady.
   ///
   /// In en, this message translates to:
-  /// **'The ad isn\'t ready yet. Check your internet connection and try again.'**
+  /// **'The ad isn\'t ready yet. Please try again in a few minutes.'**
   String get adRewardNotReady;
 
   /// No description provided for @settingsAdPrivacy.
@@ -1071,12 +1287,6 @@ abstract class AppLocalizations {
   /// **'Checked in today'**
   String get checkInDoneToday;
 
-  /// No description provided for @checkInNextGift.
-  ///
-  /// In en, this message translates to:
-  /// **'{count, plural, =1{Next gift on your next check-in} other{Next gift in {count} check-ins}}'**
-  String checkInNextGift(int count);
-
   /// No description provided for @checkInCheckedIn.
   ///
   /// In en, this message translates to:
@@ -1107,12 +1317,6 @@ abstract class AppLocalizations {
   /// **'{reward} (today only)'**
   String rewardTodayOnly(String reward);
 
-  /// No description provided for @checkInMonthGifts.
-  ///
-  /// In en, this message translates to:
-  /// **'Gifts this month'**
-  String get checkInMonthGifts;
-
   /// No description provided for @navHome.
   ///
   /// In en, this message translates to:
@@ -1137,23 +1341,11 @@ abstract class AppLocalizations {
   /// **'More'**
   String get meMore;
 
-  /// No description provided for @checkInNotYetToday.
-  ///
-  /// In en, this message translates to:
-  /// **'Not checked in today'**
-  String get checkInNotYetToday;
-
   /// No description provided for @checkInTodayButton.
   ///
   /// In en, this message translates to:
   /// **'Check in today'**
   String get checkInTodayButton;
-
-  /// No description provided for @checkInGiftsLeftShort.
-  ///
-  /// In en, this message translates to:
-  /// **'{count, plural, =1{1 more for a gift} other{{count} more for a gift}}'**
-  String checkInGiftsLeftShort(int count);
 
   /// No description provided for @checkInGiftToday.
   ///
@@ -1161,47 +1353,101 @@ abstract class AppLocalizations {
   /// **'Gift today!'**
   String get checkInGiftToday;
 
-  /// No description provided for @checkInGiftMilestone.
-  ///
-  /// In en, this message translates to:
-  /// **'{count, plural, =1{Gift for 1 check-in} other{Gift for {count} check-ins}}'**
-  String checkInGiftMilestone(int count);
-
   /// No description provided for @checkInGiftCollect.
   ///
   /// In en, this message translates to:
   /// **'Collect'**
   String get checkInGiftCollect;
 
-  /// No description provided for @checkInTotalHints.
+  /// No description provided for @checkInGiftDouble.
   ///
   /// In en, this message translates to:
-  /// **'Hints'**
-  String get checkInTotalHints;
+  /// **'Collect x2'**
+  String get checkInGiftDouble;
 
-  /// No description provided for @checkInTotalWands.
+  /// No description provided for @checkInStreakTitle.
   ///
   /// In en, this message translates to:
-  /// **'Magic wands'**
-  String get checkInTotalWands;
+  /// **'{count}-day streak'**
+  String checkInStreakTitle(int count);
 
-  /// No description provided for @checkInTotalDailyHints.
+  /// No description provided for @checkInStreakDays.
   ///
   /// In en, this message translates to:
-  /// **'Hints (today only)'**
-  String get checkInTotalDailyHints;
+  /// **'{count, plural, =1{1 day} other{{count} days}}'**
+  String checkInStreakDays(int count);
 
-  /// No description provided for @checkInTotalDailyWands.
+  /// No description provided for @checkInStreakMakeUp.
   ///
   /// In en, this message translates to:
-  /// **'Magic wands (today only)'**
-  String get checkInTotalDailyWands;
+  /// **'Make up {missed, plural, =1{1 missed day} other{{missed} missed days}} to grow your streak to {days}'**
+  String checkInStreakMakeUp(int missed, String days);
 
-  /// No description provided for @checkInPremiumNotYet.
+  /// No description provided for @checkInStreakKeepGoing.
   ///
   /// In en, this message translates to:
-  /// **'Check in to get 2 hints and 1 magic wand for today.'**
-  String get checkInPremiumNotYet;
+  /// **'Check in every day to keep your streak'**
+  String get checkInStreakKeepGoing;
+
+  /// No description provided for @checkInStreakAllDone.
+  ///
+  /// In en, this message translates to:
+  /// **'You got every streak gift this month!'**
+  String get checkInStreakAllDone;
+
+  /// No description provided for @checkInStreakDaysLeft.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =1{1 more day for a gift} other{{count} more days for a gift}}'**
+  String checkInStreakDaysLeft(int count);
+
+  /// No description provided for @checkInLegendChecked.
+  ///
+  /// In en, this message translates to:
+  /// **'Checked in'**
+  String get checkInLegendChecked;
+
+  /// No description provided for @checkInLegendMissed.
+  ///
+  /// In en, this message translates to:
+  /// **'Missed'**
+  String get checkInLegendMissed;
+
+  /// No description provided for @checkInLegendFuture.
+  ///
+  /// In en, this message translates to:
+  /// **'Coming up'**
+  String get checkInLegendFuture;
+
+  /// No description provided for @checkInGiftStreak.
+  ///
+  /// In en, this message translates to:
+  /// **'{count}-day streak gift'**
+  String checkInGiftStreak(int count);
+
+  /// No description provided for @checkInMakeUpTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Make up {date}?'**
+  String checkInMakeUpTitle(String date);
+
+  /// No description provided for @checkInMakeUpBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Watch a short ad to make up this day. Your streak will be joined back up.'**
+  String get checkInMakeUpBody;
+
+  /// No description provided for @checkInMakeUpWatch.
+  ///
+  /// In en, this message translates to:
+  /// **'Watch ad'**
+  String get checkInMakeUpWatch;
+
+  /// No description provided for @checkInMadeUp.
+  ///
+  /// In en, this message translates to:
+  /// **'Made up {date}'**
+  String checkInMadeUp(String date);
 
   /// No description provided for @dashboardDailyReminder.
   ///
@@ -1382,18 +1628,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'{hints} and {wands}'**
   String dashboardDailyReminderBoth(String hints, String wands);
-
-  /// No description provided for @checkInLegendMilestone.
-  ///
-  /// In en, this message translates to:
-  /// **'Gift every {count} check-ins'**
-  String checkInLegendMilestone(int count);
-
-  /// No description provided for @checkInLegendPremium.
-  ///
-  /// In en, this message translates to:
-  /// **'Ad-free pack reward'**
-  String get checkInLegendPremium;
 }
 
 class _AppLocalizationsDelegate
