@@ -258,6 +258,18 @@ class AppLocalizationsEs extends AppLocalizations {
       'Aprendamos las reglas básicas con un pequeño puzle de 5×5.';
 
   @override
+  String get nonogramTutorialInfoFree =>
+      'Gratis: todos los niveles están disponibles.';
+
+  @override
+  String get nonogramTutorialInfoAds =>
+      'Puedes ver un anuncio (opcional) para conseguir pistas y varitas extra. A veces aparece un anuncio entre niveles.';
+
+  @override
+  String get nonogramTutorialInfoPremium =>
+      'Una compra única quita los anuncios entre niveles y añade pistas y varitas para el día cada vez que haces check-in.';
+
+  @override
   String get nonogramTutorialStart => 'Empezar';
 
   @override
@@ -267,6 +279,10 @@ class AppLocalizationsEs extends AppLocalizations {
   @override
   String get nonogramTutorialClueIsCount =>
       'El número indica cuántas casillas de la fila están rellenas. Esta fila tiene 5, ¡así que rellénalas todas!';
+
+  @override
+  String get nonogramTutorialDragNote =>
+      'Consejo: puedes arrastrar el dedo por la fila para rellenarla de una vez.';
 
   @override
   String get nonogramTutorialEdgeCell =>
@@ -376,6 +392,13 @@ class AppLocalizationsEs extends AppLocalizations {
   String get nonogramPlayWandLabel => 'Varita mágica';
 
   @override
+  String get nonogramPlayUndo => 'Deshacer';
+
+  @override
+  String get nonogramPlayDragTip =>
+      'Arrastra el dedo por las casillas para rellenar varias a la vez.';
+
+  @override
   String get nonogramPlayWandSelectPrompt =>
       'Toca las pistas de la fila o columna que quieres revelar';
 
@@ -423,7 +446,14 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get nonogramCoachModeBody =>
-      'Elige qué hace un toque: rellenar la casilla o marcarla con una X para recordar que está vacía. Toca el botón para cambiar. Arrastra por la cuadrícula para rellenar o marcar muchas casillas a la vez.';
+      'Elige qué hace un toque: rellenar la casilla o marcarla con una X para recordar que está vacía. Toca el botón para cambiar.';
+
+  @override
+  String get nonogramCoachDragTitle => 'Arrastra para rellenar varias';
+
+  @override
+  String get nonogramCoachDragBody =>
+      'Pon el dedo en una casilla y deslízalo por otras: cada casilla por la que pases se rellena (o se marca con X en modo X) de una vez. Si empiezas en una casilla rellena, las vacías en su lugar.';
 
   @override
   String get nonogramCoachLongPressTitle => 'Mantén pulsado para lo contrario';
@@ -431,6 +461,13 @@ class AppLocalizationsEs extends AppLocalizations {
   @override
   String get nonogramCoachLongPressBody =>
       'Mantén pulsada una casilla para hacer lo contrario del modo actual: X mientras rellenas, rellenar mientras marcas. Una vibración corta indica que ya está y puedes soltar.';
+
+  @override
+  String get nonogramCoachRotateTitle => 'Modo horizontal';
+
+  @override
+  String get nonogramCoachRotateBody =>
+      'Toca para girar el tablero en horizontal, útil para puzles anchos; los botones pasan a los lados. Toca otra vez para volver a vertical.';
 
   @override
   String get nonogramCoachScrollTitle => 'Moverse por puzles grandes';

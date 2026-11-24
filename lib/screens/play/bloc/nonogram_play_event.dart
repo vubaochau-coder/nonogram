@@ -93,6 +93,14 @@ class BoardReset extends NonogramPlayEvent {
   const BoardReset({required this.offsetX, required this.offsetY});
 }
 
+/// Nút hoàn tác: quay lại bàn trước lần chạm / lần kéo gần nhất.
+class UndoRequested extends NonogramPlayEvent {
+  final double offsetX;
+  final double offsetY;
+
+  const UndoRequested({required this.offsetX, required this.offsetY});
+}
+
 class ViewportChanged extends NonogramPlayEvent {
   final double offsetX;
   final double offsetY;

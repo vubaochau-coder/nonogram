@@ -256,6 +256,18 @@ class AppLocalizationsFr extends AppLocalizations {
       'Découvrons les règles de base avec une petite grille de 5×5.';
 
   @override
+  String get nonogramTutorialInfoFree =>
+      'Gratuit : tous les niveaux sont débloqués.';
+
+  @override
+  String get nonogramTutorialInfoAds =>
+      'Vous pouvez regarder une pub (facultatif) pour obtenir des indices et baguettes en plus. Une pub s\'affiche parfois entre les niveaux.';
+
+  @override
+  String get nonogramTutorialInfoPremium =>
+      'Un achat unique supprime les pubs entre les niveaux et ajoute des indices et baguettes du jour à chaque pointage.';
+
+  @override
   String get nonogramTutorialStart => 'Commencer';
 
   @override
@@ -265,6 +277,10 @@ class AppLocalizationsFr extends AppLocalizations {
   @override
   String get nonogramTutorialClueIsCount =>
       'Le nombre indique combien de cases de la ligne sont remplies. Cette ligne en a 5 : remplissez-les toutes !';
+
+  @override
+  String get nonogramTutorialDragNote =>
+      'Astuce : faites glisser le doigt sur la ligne pour la remplir d\'un coup.';
 
   @override
   String get nonogramTutorialEdgeCell =>
@@ -375,6 +391,13 @@ class AppLocalizationsFr extends AppLocalizations {
   String get nonogramPlayWandLabel => 'Baguette magique';
 
   @override
+  String get nonogramPlayUndo => 'Annuler';
+
+  @override
+  String get nonogramPlayDragTip =>
+      'Faites glisser le doigt sur les cases pour en remplir plusieurs d\'un coup.';
+
+  @override
   String get nonogramPlayWandSelectPrompt =>
       'Touchez les indices de la ligne ou de la colonne à révéler';
 
@@ -422,7 +445,14 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get nonogramCoachModeBody =>
-      'Choisissez l\'effet d\'un toucher : remplir la case, ou la marquer d\'un X pour vous rappeler qu\'elle est vide. Touchez le bouton pour changer. Faites glisser sur la grille pour remplir ou marquer plusieurs cases d\'un coup.';
+      'Choisissez l\'effet d\'un toucher : remplir la case, ou la marquer d\'un X pour vous rappeler qu\'elle est vide. Touchez le bouton pour changer.';
+
+  @override
+  String get nonogramCoachDragTitle => 'Glissez pour remplir plusieurs cases';
+
+  @override
+  String get nonogramCoachDragBody =>
+      'Posez le doigt sur une case et faites-le glisser sur d\'autres : chaque case traversée est remplie (ou marquée d\'un X en mode X) d\'un coup. En partant d\'une case remplie, vous effacez les cases traversées.';
 
   @override
   String get nonogramCoachLongPressTitle => 'Appui long pour l\'inverse';
@@ -430,6 +460,13 @@ class AppLocalizationsFr extends AppLocalizations {
   @override
   String get nonogramCoachLongPressBody =>
       'Appuyez longuement sur une case pour faire l\'inverse du mode actuel : un X en mode remplissage, remplir en mode croix. Une courte vibration indique que c\'est fait et que vous pouvez relâcher.';
+
+  @override
+  String get nonogramCoachRotateTitle => 'Mode paysage';
+
+  @override
+  String get nonogramCoachRotateBody =>
+      'Touchez pour passer la grille en paysage, pratique pour les grilles larges ; les boutons passent sur les côtés. Touchez à nouveau pour revenir en portrait.';
 
   @override
   String get nonogramCoachScrollTitle => 'Se déplacer sur les grandes grilles';

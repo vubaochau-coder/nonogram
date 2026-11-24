@@ -248,6 +248,17 @@ class AppLocalizationsKo extends AppLocalizations {
   String get nonogramTutorialWelcome => '작은 5×5 퍼즐로 기본 규칙을 배워 봅시다.';
 
   @override
+  String get nonogramTutorialInfoFree => '무료: 모든 레벨을 플레이할 수 있어요.';
+
+  @override
+  String get nonogramTutorialInfoAds =>
+      '광고를 보면(선택) 힌트와 마법 지팡이를 더 받을 수 있어요. 레벨 사이에 광고가 나올 때도 있어요.';
+
+  @override
+  String get nonogramTutorialInfoPremium =>
+      '한 번 구매하면 레벨 사이 광고가 사라지고, 출석할 때마다 그날 쓸 수 있는 힌트와 지팡이를 받아요.';
+
+  @override
   String get nonogramTutorialStart => '시작';
 
   @override
@@ -257,6 +268,9 @@ class AppLocalizationsKo extends AppLocalizations {
   @override
   String get nonogramTutorialClueIsCount =>
       '숫자는 그 행에서 칠할 칸의 수를 알려 줍니다. 이 행은 5이니 모두 칠하세요!';
+
+  @override
+  String get nonogramTutorialDragNote => '팁: 손가락으로 줄을 쭉 밀면 한 번에 칠할 수 있어요.';
 
   @override
   String get nonogramTutorialEdgeCell =>
@@ -365,6 +379,12 @@ class AppLocalizationsKo extends AppLocalizations {
   String get nonogramPlayWandLabel => '마법 지팡이';
 
   @override
+  String get nonogramPlayUndo => '실행 취소';
+
+  @override
+  String get nonogramPlayDragTip => '손가락으로 칸을 쭉 밀면 여러 칸을 한 번에 칠할 수 있어요.';
+
+  @override
   String get nonogramPlayWandSelectPrompt => '답을 볼 행이나 열의 숫자를 탭하세요';
 
   @override
@@ -409,7 +429,14 @@ class AppLocalizationsKo extends AppLocalizations {
 
   @override
   String get nonogramCoachModeBody =>
-      '탭했을 때 할 동작을 고르세요. 칸을 칠하거나, 빈칸임을 기억하도록 X를 표시합니다. 버튼을 탭해 전환하세요. 격자 위를 드래그하면 여러 칸을 한 번에 칠하거나 표시할 수 있습니다.';
+      '탭했을 때 할 동작을 고르세요. 칸을 칠하거나, 빈칸임을 기억하도록 X를 표시합니다. 버튼을 탭해 전환하세요.';
+
+  @override
+  String get nonogramCoachDragTitle => '드래그로 여러 칸 칠하기';
+
+  @override
+  String get nonogramCoachDragBody =>
+      '칸에 손가락을 대고 다른 칸으로 밀면, 지나간 모든 칸이 한 번에 칠해집니다(X 모드에서는 X 표시). 칠해진 칸에서 시작하면 지나간 칸이 지워집니다.';
 
   @override
   String get nonogramCoachLongPressTitle => '길게 눌러 반대 동작';
@@ -417,6 +444,13 @@ class AppLocalizationsKo extends AppLocalizations {
   @override
   String get nonogramCoachLongPressBody =>
       '칸을 길게 누르면 현재 모드의 반대 동작을 합니다. 칠하기 중에는 X, 표시 중에는 칠하기입니다. 짧게 진동하면 완료된 것이니 손을 떼세요.';
+
+  @override
+  String get nonogramCoachRotateTitle => '가로 모드';
+
+  @override
+  String get nonogramCoachRotateBody =>
+      '탭하면 보드가 가로로 바뀌어 넓은 퍼즐을 보기 편해집니다. 버튼은 양옆으로 이동합니다. 다시 탭하면 세로로 돌아갑니다.';
 
   @override
   String get nonogramCoachScrollTitle => '큰 퍼즐 둘러보기';

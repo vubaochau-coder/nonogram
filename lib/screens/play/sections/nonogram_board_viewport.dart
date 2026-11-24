@@ -22,6 +22,7 @@ import '../bloc/nonogram_play_state.dart';
 import '../engine/clue_overflow.dart';
 import '../engine/nonogram_board_layout.dart';
 import '../nonogram_transformation_controller_provider.dart';
+import '../views/drag_tip.dart';
 import '../views/wand_action.dart';
 
 /// Bàn chơi: lưới kéo được, hai dải gợi ý dính mép.
@@ -63,6 +64,9 @@ class _NonogramBoardViewportState extends State<NonogramBoardViewport>
   _GestureKind _gesture = _GestureKind.none;
   Offset? _pointerDownPosition;
   ({int row, int col})? _lastDragCell;
+
+  /// Số ô đã đi qua thêm (ngoài ô đầu) trong lần kéo đang diễn ra.
+  int _drawCells = 0;
   Offset _navStartOffset = Offset.zero;
   Offset _navStartFocal = Offset.zero;
 
@@ -147,6 +151,7 @@ class _NonogramBoardViewportState extends State<NonogramBoardViewport>
     if (_rejectLocked(cell)) return;
     final o = _offset;
     _bloc.add(CellTapped(cell.row, cell.col, offsetX: o.dx, offsetY: o.dy));
+    DragTip.maybeOf(context)?.cellTapped();
   }
 
   void _onLongPressStart(LongPressStartDetails details) {
@@ -268,11 +273,15 @@ class _NonogramBoardViewportState extends State<NonogramBoardViewport>
     // Tô cả các ô nằm giữa nếu ngón tay lướt nhanh qua nhiều ô.
     for (final step in _cellsBetween(last, cell)) {
       _bloc.add(DragUpdated(step.row, step.col));
+      _drawCells++;
     }
     _lastDragCell = cell;
   }
 
   void _endDraw() {
+    // Đã kéo qua nhiều ô: người chơi biết kéo, không cần mẹo nữa.
+    if (_drawCells > 0) DragTip.maybeOf(context)?.dragged();
+    _drawCells = 0;
     _autoScroll.stop();
     _drawStartPoint = null;
     _lastDrawPoint = null;

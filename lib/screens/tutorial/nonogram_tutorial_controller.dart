@@ -97,6 +97,7 @@ class TutorialStep {
     this.highlightPendingOnly = false,
     this.ghostLine,
     this.freePlay = false,
+    this.dragNote = false,
   });
 
   final TutorialTask task;
@@ -140,6 +141,9 @@ class TutorialStep {
 
   /// Người chơi tự giải: không viền sáng, không bàn tay chỉ chỗ.
   final bool freePlay;
+
+  /// Dòng nhỏ dưới lời dẫn: có thể kéo ngón tay để tô nhiều ô một lần.
+  final bool dragNote;
 
   Set<TutorialCell> get highlightedCells =>
       freePlay ? const {} : highlight ?? targets;
@@ -230,6 +234,7 @@ abstract final class NonogramTutorialScript {
       message: TutorialMessage.clueIsCount,
       visibleRows: 1,
       targets: _row(0, [0, 1, 2, 3, 4]),
+      dragNote: true,
     ),
     // Ô cuối đã tô sẵn: khối 4 phải chạm nó nên chỉ có một cách đặt.
     TutorialStep(

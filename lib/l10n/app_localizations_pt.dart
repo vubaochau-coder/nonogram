@@ -256,6 +256,18 @@ class AppLocalizationsPt extends AppLocalizations {
       'Vamos aprender as regras básicas com um pequeno quebra-cabeça 5×5.';
 
   @override
+  String get nonogramTutorialInfoFree =>
+      'Grátis: todos os níveis estão liberados.';
+
+  @override
+  String get nonogramTutorialInfoAds =>
+      'Você pode ver um anúncio (opcional) para ganhar dicas e varinhas extras. Às vezes aparece um anúncio entre os níveis.';
+
+  @override
+  String get nonogramTutorialInfoPremium =>
+      'Uma compra única desliga os anúncios entre níveis e dá dicas e varinhas do dia a cada check-in.';
+
+  @override
   String get nonogramTutorialStart => 'Começar';
 
   @override
@@ -265,6 +277,10 @@ class AppLocalizationsPt extends AppLocalizations {
   @override
   String get nonogramTutorialClueIsCount =>
       'O número diz quantos quadrados da linha estão preenchidos. Esta linha tem 5, então preencha todos!';
+
+  @override
+  String get nonogramTutorialDragNote =>
+      'Dica: você pode arrastar o dedo pela linha para preenchê-la de uma vez.';
 
   @override
   String get nonogramTutorialEdgeCell =>
@@ -374,6 +390,13 @@ class AppLocalizationsPt extends AppLocalizations {
   String get nonogramPlayWandLabel => 'Varinha mágica';
 
   @override
+  String get nonogramPlayUndo => 'Desfazer';
+
+  @override
+  String get nonogramPlayDragTip =>
+      'Arraste o dedo pelos quadrados para preencher vários de uma vez.';
+
+  @override
   String get nonogramPlayWandSelectPrompt =>
       'Toque nas dicas da linha ou coluna que quer revelar';
 
@@ -421,7 +444,14 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get nonogramCoachModeBody =>
-      'Escolha o que um toque faz: preencher o quadrado ou marcá-lo com um X para lembrar que ele está vazio. Toque no botão para alternar. Arraste pela grade para preencher ou marcar vários quadrados de uma vez.';
+      'Escolha o que um toque faz: preencher o quadrado ou marcá-lo com um X para lembrar que ele está vazio. Toque no botão para alternar.';
+
+  @override
+  String get nonogramCoachDragTitle => 'Arraste para preencher vários';
+
+  @override
+  String get nonogramCoachDragBody =>
+      'Coloque o dedo num quadrado e deslize por outros: cada quadrado por onde passar é preenchido (ou marcado com X no modo X) de uma vez. Começando num quadrado preenchido, você limpa os quadrados por onde passa.';
 
   @override
   String get nonogramCoachLongPressTitle => 'Toque e segure para o contrário';
@@ -429,6 +459,13 @@ class AppLocalizationsPt extends AppLocalizations {
   @override
   String get nonogramCoachLongPressBody =>
       'Toque e segure um quadrado para fazer o contrário do modo atual: X ao preencher, preencher ao marcar. Uma vibração curta indica que está feito e você pode soltar.';
+
+  @override
+  String get nonogramCoachRotateTitle => 'Modo paisagem';
+
+  @override
+  String get nonogramCoachRotateBody =>
+      'Toque para girar o tabuleiro na horizontal, prático para quebra-cabeças largos; os botões vão para os lados. Toque de novo para voltar ao retrato.';
 
   @override
   String get nonogramCoachScrollTitle => 'Navegando em quebra-cabeças grandes';

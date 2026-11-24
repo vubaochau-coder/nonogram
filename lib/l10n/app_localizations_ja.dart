@@ -248,6 +248,17 @@ class AppLocalizationsJa extends AppLocalizations {
   String get nonogramTutorialWelcome => '小さな5×5のパズルで基本ルールを覚えましょう。';
 
   @override
+  String get nonogramTutorialInfoFree => '無料：すべてのステージを遊べます。';
+
+  @override
+  String get nonogramTutorialInfoAds =>
+      '広告を見ると（任意）、ヒントと魔法の杖がもらえます。ステージの合間に広告が流れることがあります。';
+
+  @override
+  String get nonogramTutorialInfoPremium =>
+      '一度の購入で、ステージ間の広告がなくなり、チェックインのたびにその日だけ使えるヒントと杖がもらえます。';
+
+  @override
   String get nonogramTutorialStart => 'はじめる';
 
   @override
@@ -257,6 +268,9 @@ class AppLocalizationsJa extends AppLocalizations {
   @override
   String get nonogramTutorialClueIsCount =>
       '数字はその行で塗るマスの数を表します。この行は5なので、全部塗りましょう！';
+
+  @override
+  String get nonogramTutorialDragNote => 'ヒント：行を指でなぞると、一度にまとめて塗れます。';
 
   @override
   String get nonogramTutorialEdgeCell =>
@@ -365,6 +379,12 @@ class AppLocalizationsJa extends AppLocalizations {
   String get nonogramPlayWandLabel => '魔法の杖';
 
   @override
+  String get nonogramPlayUndo => '元に戻す';
+
+  @override
+  String get nonogramPlayDragTip => 'マスを指でなぞると、まとめて塗れます。';
+
+  @override
   String get nonogramPlayWandSelectPrompt => '答えを見たい行または列のヒント数字をタップ';
 
   @override
@@ -409,7 +429,14 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get nonogramCoachModeBody =>
-      'タップしたときの動作を選びます。マスを塗るか、空きマスだと覚えておくために×を付けるかです。ボタンをタップで切り替え。盤面をドラッグすると、まとめて塗ったり×を付けたりできます。';
+      'タップしたときの動作を選びます。マスを塗るか、空きマスだと覚えておくために×を付けるかです。ボタンをタップで切り替え。';
+
+  @override
+  String get nonogramCoachDragTitle => 'ドラッグでまとめて塗る';
+
+  @override
+  String get nonogramCoachDragBody =>
+      'マスに指を置いてほかのマスへなぞると、通ったマスがまとめて塗られます（×モードなら×が付きます）。塗ったマスからなぞり始めると、通ったマスを消せます。';
 
   @override
   String get nonogramCoachLongPressTitle => '長押しで逆の操作';
@@ -417,6 +444,13 @@ class AppLocalizationsJa extends AppLocalizations {
   @override
   String get nonogramCoachLongPressBody =>
       'マスを長押しすると、今のモードと逆の操作になります。塗りモードなら×、×モードなら塗り。短く振動したら完了なので指を離してください。';
+
+  @override
+  String get nonogramCoachRotateTitle => '横向きモード';
+
+  @override
+  String get nonogramCoachRotateBody =>
+      'タップすると盤面が横向きになり、横長のパズルが見やすくなります。ボタンは左右に移ります。もう一度タップで縦向きに戻ります。';
 
   @override
   String get nonogramCoachScrollTitle => '大きなパズルの移動';

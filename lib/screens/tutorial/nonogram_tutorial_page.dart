@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:lucide_icons/lucide_icons.dart';
+import 'package:nonogram/ads/ad_scope.dart';
 import 'package:nonogram/core/app_haptics.dart';
 import 'package:nonogram/core/app_sounds.dart';
 import 'package:nonogram/core/app_theme.dart';
@@ -112,7 +113,10 @@ class _NonogramTutorialPageState extends State<NonogramTutorialPage> {
       return;
     }
     try {
-      context.read<OnboardingPreferences>().markPlayCoachSeen();
+      final prefs = context.read<OnboardingPreferences>();
+      prefs.markPlayCoachSeen();
+      // Phần thao tác đã dạy kéo để tô nhiều ô.
+      prefs.markDragTipSeen();
     } on ProviderNotFoundException {
       // Không có tuỳ chọn (test): bỏ qua.
     }
@@ -160,6 +164,10 @@ class _NonogramTutorialPageState extends State<NonogramTutorialPage> {
                                     task == TutorialTask.toolsDone
                                 ? ''
                                 : tutorialMessageText(l10n, step.message),
+                        note:
+                            step.dragNote
+                                ? l10n.nonogramTutorialDragNote
+                                : null,
                         mistakes: _controller.mistakes,
                       ),
                     ),
@@ -212,6 +220,11 @@ class _NonogramTutorialPageState extends State<NonogramTutorialPage> {
                     child: _OverlayCard(
                       title: l10n.nonogramTutorialWelcomeTitle,
                       body: l10n.nonogramTutorialWelcome,
+                      // Nói rõ ngay từ đầu: miễn phí, có quảng cáo (tuỳ
+                      // chọn) và gói mua một lần. Bản không có quảng cáo
+                      // (web, iOS) thì không cần.
+                      extra:
+                          context.ads.isEnabled ? const _WelcomeInfo() : null,
                       actions: [
                         FilledButton(
                           key: const ValueKey('nonogram-tutorial-start'),
@@ -327,9 +340,12 @@ String tutorialMessageText(AppLocalizations l10n, TutorialMessage message) {
 
 /// Lời dẫn của bước hiện tại. Rung nhẹ mỗi khi người chơi làm sai.
 class _MessageCard extends StatelessWidget {
-  const _MessageCard({required this.text, required this.mistakes});
+  const _MessageCard({required this.text, this.note, required this.mistakes});
 
   final String text;
+
+  /// Dòng mẹo nhỏ dưới lời dẫn (null: không có).
+  final String? note;
   final int mistakes;
 
   @override
@@ -357,11 +373,41 @@ class _MessageCard extends StatelessWidget {
         ),
         child: AnimatedSwitcher(
           duration: const Duration(milliseconds: 220),
-          child: Text(
-            text,
+          child: Column(
             key: ValueKey(text),
-            textAlign: TextAlign.center,
-            style: context.bodyLarge.copyWith(height: 1.4),
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text(
+                text,
+                textAlign: TextAlign.center,
+                style: context.bodyLarge.copyWith(height: 1.4),
+              ),
+              if (note case final note?) ...[
+                const SizedBox(height: 8),
+                Row(
+                  key: const ValueKey('nonogram-tutorial-drag-note'),
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Icon(
+                      Icons.swipe_right_alt_rounded,
+                      size: 18,
+                      color: colors.primary,
+                    ),
+                    const SizedBox(width: 6),
+                    Flexible(
+                      child: Text(
+                        note,
+                        textAlign: TextAlign.center,
+                        style: context.bodySmall.copyWith(
+                          color: colors.onSurfaceVariant,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ],
           ),
         ),
       ),
@@ -1566,7 +1612,11 @@ class _Overlay extends StatelessWidget {
         color: Colors.black.withValues(alpha: 0.4),
         child: Align(
           alignment: alignment,
-          child: Padding(padding: const EdgeInsets.all(16), child: child),
+          // Màn hình thấp (máy nhỏ, màn ngang): thẻ cuộn được, không tràn.
+          child: SingleChildScrollView(
+            padding: const EdgeInsets.all(16),
+            child: child,
+          ),
         ),
       ),
     );
@@ -1577,11 +1627,15 @@ class _OverlayCard extends StatelessWidget {
   const _OverlayCard({
     required this.title,
     required this.body,
+    this.extra,
     required this.actions,
   });
 
   final String title;
   final String body;
+
+  /// Nội dung thêm giữa lời dẫn và các nút.
+  final Widget? extra;
   final List<Widget> actions;
 
   @override
@@ -1614,6 +1668,10 @@ class _OverlayCard extends StatelessWidget {
                   height: 1.4,
                 ),
               ),
+              if (extra case final extra?) ...[
+                const SizedBox(height: 16),
+                extra,
+              ],
               const SizedBox(height: 20),
               for (final action in actions) ...[
                 action,
@@ -1622,6 +1680,66 @@ class _OverlayCard extends StatelessWidget {
             ],
           ),
         ),
+      ),
+    );
+  }
+}
+
+/// Khung thông tin trong thẻ chào mừng: chơi miễn phí, quảng cáo tuỳ chọn,
+/// gói mua một lần.
+class _WelcomeInfo extends StatelessWidget {
+  const _WelcomeInfo();
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = context.l10n;
+    final colors = context.color;
+    final game = context.gameColors;
+
+    Widget row(IconData icon, Color color, String text) => Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Container(
+          width: 26,
+          height: 26,
+          decoration: BoxDecoration(color: color, shape: BoxShape.circle),
+          child: Icon(icon, size: 15, color: Colors.white),
+        ),
+        const SizedBox(width: 10),
+        Expanded(
+          child: Padding(
+            padding: const EdgeInsets.only(top: 3),
+            child: Text(
+              text,
+              style: context.bodySmall.copyWith(
+                color: colors.onSurface,
+                height: 1.35,
+              ),
+            ),
+          ),
+        ),
+      ],
+    );
+
+    return Container(
+      key: const ValueKey('nonogram-tutorial-welcome-info'),
+      padding: const EdgeInsets.all(14),
+      decoration: BoxDecoration(
+        color: colors.surfaceContainerLow,
+        borderRadius: BorderRadius.circular(16),
+      ),
+      child: Column(
+        children: [
+          row(Icons.check_rounded, game.success, l10n.nonogramTutorialInfoFree),
+          const SizedBox(height: 10),
+          row(
+            Icons.play_arrow_rounded,
+            const Color(0xFFF08C00),
+            l10n.nonogramTutorialInfoAds,
+          ),
+          const SizedBox(height: 10),
+          row(LucideIcons.crown, game.reward, l10n.nonogramTutorialInfoPremium),
+        ],
       ),
     );
   }

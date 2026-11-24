@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:nonogram/ads/ad_service.dart';
 import 'package:nonogram/core/app_sounds.dart';
 import 'package:nonogram/core/app_theme.dart';
 import 'package:nonogram/l10n/app_localizations.dart';
@@ -10,6 +11,8 @@ import 'package:nonogram/models/nonogram_puzzle.dart';
 import 'package:nonogram/screens/tutorial/nonogram_tutorial_controller.dart';
 import 'package:nonogram/screens/tutorial/nonogram_tutorial_page.dart';
 import 'package:provider/provider.dart';
+
+import '../mocks/fake_ad_service.dart';
 
 /// Làm đúng mọi bước của kịch bản.
 void solveAll(NonogramTutorialController controller) {
@@ -620,6 +623,49 @@ void main() {
       expect(engine.played.first, GameSound.fill);
       // Tô đủ hàng đầu: tiếng khớp hàng.
       expect(engine.played.last, GameSound.line);
+    });
+
+    testWidgets('first fill step shows the drag note', (tester) async {
+      final navigatorKey = GlobalKey<NavigatorState>();
+      await tester.pumpWidget(buildPage(navigatorKey));
+      navigatorKey.currentState!.push<bool>(
+        MaterialPageRoute(builder: (_) => const NonogramTutorialPage()),
+      );
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 500));
+      final note = find.byKey(const ValueKey('nonogram-tutorial-drag-note'));
+      expect(note, findsNothing);
+      await tester.tap(find.byKey(const ValueKey('nonogram-tutorial-start')));
+      await tester.pump(const Duration(milliseconds: 300));
+      await tapMode(tester);
+      expect(note, findsOneWidget);
+    });
+
+    testWidgets('welcome card explains ads only when there are ads', (
+      tester,
+    ) async {
+      final navigatorKey = GlobalKey<NavigatorState>();
+      await tester.pumpWidget(buildPage(navigatorKey));
+      navigatorKey.currentState!.push<bool>(
+        MaterialPageRoute(builder: (_) => const NonogramTutorialPage()),
+      );
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 500));
+      final info = find.byKey(const ValueKey('nonogram-tutorial-welcome-info'));
+      expect(info, findsNothing);
+
+      await tester.pumpWidget(
+        Provider<AdService>.value(
+          value: FakeAdService(),
+          child: buildPage(navigatorKey),
+        ),
+      );
+      navigatorKey.currentState!.push<bool>(
+        MaterialPageRoute(builder: (_) => const NonogramTutorialPage()),
+      );
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 500));
+      expect(info, findsWidgets);
     });
 
     testWidgets('skip closes the tutorial without the techniques', (

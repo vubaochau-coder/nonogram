@@ -253,6 +253,17 @@ class AppLocalizationsId extends AppLocalizations {
       'Ayo pelajari aturan dasarnya dengan teka-teki kecil 5×5.';
 
   @override
+  String get nonogramTutorialInfoFree => 'Gratis: semua level terbuka.';
+
+  @override
+  String get nonogramTutorialInfoAds =>
+      'Kamu bisa menonton iklan (opsional) untuk petunjuk dan tongkat sihir tambahan. Kadang ada iklan di antara level.';
+
+  @override
+  String get nonogramTutorialInfoPremium =>
+      'Pembelian sekali bayar mematikan iklan di antara level dan menambah petunjuk serta tongkat sihir harian setiap kali absen.';
+
+  @override
   String get nonogramTutorialStart => 'Mulai';
 
   @override
@@ -262,6 +273,10 @@ class AppLocalizationsId extends AppLocalizations {
   @override
   String get nonogramTutorialClueIsCount =>
       'Angka menunjukkan berapa kotak di baris itu yang terisi. Baris ini punya 5, jadi isi semuanya!';
+
+  @override
+  String get nonogramTutorialDragNote =>
+      'Tips: kamu bisa menggeser jari di sepanjang baris untuk mengisinya sekaligus.';
 
   @override
   String get nonogramTutorialEdgeCell =>
@@ -371,6 +386,13 @@ class AppLocalizationsId extends AppLocalizations {
   String get nonogramPlayWandLabel => 'Tongkat ajaib';
 
   @override
+  String get nonogramPlayUndo => 'Urungkan';
+
+  @override
+  String get nonogramPlayDragTip =>
+      'Geser jari melewati kotak untuk mengisi beberapa sekaligus.';
+
+  @override
   String get nonogramPlayWandSelectPrompt =>
       'Ketuk petunjuk baris atau kolom yang ingin dibuka';
 
@@ -418,7 +440,14 @@ class AppLocalizationsId extends AppLocalizations {
 
   @override
   String get nonogramCoachModeBody =>
-      'Pilih apa yang dilakukan ketukan: mengisi kotak, atau menandainya dengan X untuk mengingat bahwa kotak itu kosong. Ketuk tombol untuk beralih. Geser di atas kisi untuk mengisi atau menandai banyak kotak sekaligus.';
+      'Pilih apa yang dilakukan ketukan: mengisi kotak, atau menandainya dengan X untuk mengingat bahwa kotak itu kosong. Ketuk tombol untuk beralih.';
+
+  @override
+  String get nonogramCoachDragTitle => 'Geser untuk mengisi banyak kotak';
+
+  @override
+  String get nonogramCoachDragBody =>
+      'Letakkan jari di sebuah kotak lalu geser melewati kotak lain: setiap kotak yang dilewati langsung terisi (atau ditandai X di mode X). Mulai dari kotak yang sudah terisi untuk mengosongkan kotak yang dilewati.';
 
   @override
   String get nonogramCoachLongPressTitle => 'Tekan lama untuk kebalikannya';
@@ -426,6 +455,13 @@ class AppLocalizationsId extends AppLocalizations {
   @override
   String get nonogramCoachLongPressBody =>
       'Tekan lama sebuah kotak untuk melakukan kebalikan dari mode saat ini: X saat mengisi, mengisi saat menandai. Getaran singkat berarti sudah selesai dan kamu bisa melepas jari.';
+
+  @override
+  String get nonogramCoachRotateTitle => 'Mode lanskap';
+
+  @override
+  String get nonogramCoachRotateBody =>
+      'Ketuk untuk memutar papan ke samping, cocok untuk teka-teki lebar; tombol pindah ke sisi. Ketuk lagi untuk kembali ke potret.';
 
   @override
   String get nonogramCoachScrollTitle => 'Menjelajah teka-teki besar';

@@ -537,6 +537,24 @@ abstract class AppLocalizations {
   /// **'Let\'s learn the basic rules with a small 5×5 puzzle.'**
   String get nonogramTutorialWelcome;
 
+  /// No description provided for @nonogramTutorialInfoFree.
+  ///
+  /// In en, this message translates to:
+  /// **'Free to play: every level is unlocked.'**
+  String get nonogramTutorialInfoFree;
+
+  /// No description provided for @nonogramTutorialInfoAds.
+  ///
+  /// In en, this message translates to:
+  /// **'You can watch an ad (optional) for extra hints and magic wands. Sometimes an ad plays between levels.'**
+  String get nonogramTutorialInfoAds;
+
+  /// No description provided for @nonogramTutorialInfoPremium.
+  ///
+  /// In en, this message translates to:
+  /// **'A one-time purchase turns off ads between levels and adds today-only hints and wands every time you check in.'**
+  String get nonogramTutorialInfoPremium;
+
   /// No description provided for @nonogramTutorialStart.
   ///
   /// In en, this message translates to:
@@ -554,6 +572,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'The number tells you how many squares in the row are filled. This row has 5, so fill them all!'**
   String get nonogramTutorialClueIsCount;
+
+  /// No description provided for @nonogramTutorialDragNote.
+  ///
+  /// In en, this message translates to:
+  /// **'Tip: you can drag your finger across the row to fill it in one go.'**
+  String get nonogramTutorialDragNote;
 
   /// No description provided for @nonogramTutorialEdgeCell.
   ///
@@ -735,6 +759,18 @@ abstract class AppLocalizations {
   /// **'Magic wand'**
   String get nonogramPlayWandLabel;
 
+  /// No description provided for @nonogramPlayUndo.
+  ///
+  /// In en, this message translates to:
+  /// **'Undo'**
+  String get nonogramPlayUndo;
+
+  /// No description provided for @nonogramPlayDragTip.
+  ///
+  /// In en, this message translates to:
+  /// **'Drag your finger across squares to fill several at once.'**
+  String get nonogramPlayDragTip;
+
   /// No description provided for @nonogramPlayWandSelectPrompt.
   ///
   /// In en, this message translates to:
@@ -816,8 +852,20 @@ abstract class AppLocalizations {
   /// No description provided for @nonogramCoachModeBody.
   ///
   /// In en, this message translates to:
-  /// **'Choose what a tap does: fill the square, or mark it with an X to remember it is empty. Tap the button to switch. Drag across the grid to fill or mark many squares at once.'**
+  /// **'Choose what a tap does: fill the square, or mark it with an X to remember it is empty. Tap the button to switch.'**
   String get nonogramCoachModeBody;
+
+  /// No description provided for @nonogramCoachDragTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Drag to fill many squares'**
+  String get nonogramCoachDragTitle;
+
+  /// No description provided for @nonogramCoachDragBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Put your finger on a square and slide it across others: every square you pass is filled (or marked with X in X mode) in one go. Start on a filled square to clear the squares you pass instead.'**
+  String get nonogramCoachDragBody;
 
   /// No description provided for @nonogramCoachLongPressTitle.
   ///
@@ -830,6 +878,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Press and hold a square to do the opposite of the current mode: X while filling, fill while marking. A short vibration means it\'s done and you can let go.'**
   String get nonogramCoachLongPressBody;
+
+  /// No description provided for @nonogramCoachRotateTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Landscape mode'**
+  String get nonogramCoachRotateTitle;
+
+  /// No description provided for @nonogramCoachRotateBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Tap to turn the board sideways, handy for wide puzzles; the buttons move to the sides. Tap again to go back to portrait.'**
+  String get nonogramCoachRotateBody;
 
   /// No description provided for @nonogramCoachScrollTitle.
   ///
