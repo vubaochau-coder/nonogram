@@ -174,8 +174,13 @@ class _NonogramBoardShellSectionState extends State<NonogramBoardShellSection> {
       NonogramCoachStep.hint => _keyRect(_hintKey),
       NonogramCoachStep.wand => _keyRect(_wandKey),
       NonogramCoachStep.mode => _keyRect(_modeKey),
-      // Màn ngang: nút xoay nằm ở cột trái, thẻ hiện giữa màn.
-      NonogramCoachStep.rotate => _keyRect(_rotateKey),
+      // Màn ngang: nút xoay nằm ở cột trái (ngoài bàn chơi).
+      NonogramCoachStep.rotate =>
+        _keyRect(_rotateKey) ??
+            switch (_replay) {
+              final replay? => _keyRect(replay.railRotateKey),
+              null => null,
+            },
       NonogramCoachStep.drag ||
       NonogramCoachStep.longPress ||
       NonogramCoachStep.scroll => _visibleGridRect(),
@@ -222,7 +227,7 @@ class _NonogramBoardShellSectionState extends State<NonogramBoardShellSection> {
   }
 
   /// Màn ngang: mép phải chỉ giữ các thao tác chơi, ở góc trên (thẳng hàng
-  /// với nút quay lại bên trái): gợi ý, gậy phép, Tô / X, rồi hoàn tác.
+  /// với nút quay lại bên trái): gợi ý, gậy phép, hoàn tác, rồi Tô / X.
   /// Quay lại, thông tin màn, xoay màn hình và cài đặt nằm ở cột trái
   /// (`NonogramLandscapeLeftRail`).
   Widget _buildRail() {
@@ -236,12 +241,12 @@ class _NonogramBoardShellSectionState extends State<NonogramBoardShellSection> {
           const SizedBox(height: 12),
           KeyedSubtree(key: _wandKey, child: const WandAction()),
           const SizedBox(height: 12),
+          KeyedSubtree(key: _undoKey, child: const UndoAction()),
+          const SizedBox(height: 12),
           KeyedSubtree(
             key: _modeKey,
             child: const ModeToggleAction(vertical: true),
           ),
-          const SizedBox(height: 12),
-          KeyedSubtree(key: _undoKey, child: const UndoAction()),
         ],
       ),
     );
