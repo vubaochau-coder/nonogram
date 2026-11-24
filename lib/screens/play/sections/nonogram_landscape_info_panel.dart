@@ -7,6 +7,7 @@ import 'package:nonogram/tester/tester_solve_button.dart';
 
 import '../bloc/nonogram_play_bloc.dart';
 import '../bloc/nonogram_play_state.dart';
+import '../coach/nonogram_play_coach.dart';
 import '../engine/nonogram_board_layout.dart';
 import '../modals/nonogram_settings_dialog.dart';
 import '../views/rotate_screen_action.dart';
@@ -116,6 +117,16 @@ class _NonogramLandscapeLeftRailState extends State<NonogramLandscapeLeftRail>
     }
   }
 
+  /// Để hướng dẫn thao tác làm nổi bật nút xoay (không có khi dựng cột
+  /// riêng lẻ, ngoài trang chơi).
+  static GlobalKey? _coachRotateKey(BuildContext context) {
+    try {
+      return context.read<NonogramCoachReplayNotifier>().railRotateKey;
+    } on ProviderNotFoundException {
+      return null;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     const gap = SizedBox(height: 10);
@@ -165,7 +176,10 @@ class _NonogramLandscapeLeftRailState extends State<NonogramLandscapeLeftRail>
                       // Chỉ bản `dev` (công cụ tester).
                       const TesterSolveButton(),
                       if (RotateScreenAction.isSupported) ...[
-                        const RotateScreenAction(),
+                        KeyedSubtree(
+                          key: _coachRotateKey(context),
+                          child: const RotateScreenAction(),
+                        ),
                         gap,
                       ],
                       OverlayButton(
