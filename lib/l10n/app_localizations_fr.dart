@@ -37,14 +37,14 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get nonogramGuideMethodDivisionDesc =>
-      'Si relier deux blocs existants créait une figure plus grande que tous les indices disponibles, l\'espace entre eux doit être un X.';
+      'Si relier deux morceaux noircis formait un bloc plus grand que le plus grand nombre, la case entre eux doit être vide. Marquez-la d\'un X pour les séparer.';
 
   @override
   String get nonogramGuideMethodDivisionTitle => '5. Séparation';
 
   @override
   String get nonogramGuideMethodDoublePositioningDesc =>
-      'Si une case remplie ne peut appartenir qu\'à quelques variantes précises d\'un bloc, toutes les cases qui ne sont remplies dans aucune de ces variantes doivent être marquées d\'un X.';
+      'Parfois, une case noircie ne peut appartenir qu\'à un ou deux des nombres. Essayez chaque possibilité : les cases vides dans toutes reçoivent un X.';
 
   @override
   String get nonogramGuideMethodDoublePositioningTitle =>
@@ -52,21 +52,21 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get nonogramGuideMethodInaccessibilityDesc =>
-      'Marquez d\'une croix (X) les cases qui ne peuvent appartenir à aucune des figures restantes.';
+      'Les cases qu\'aucun bloc ne peut atteindre sont vides. Essayez chaque bloc dans ses positions extrêmes autour des cases noircies ; tout ce qui est hors de portée reçoit un X.';
 
   @override
   String get nonogramGuideMethodInaccessibilityTitle => '3. Inaccessibilité';
 
   @override
   String get nonogramGuideMethodNotFitDesc =>
-      'Si un espace vide entre des croix est plus petit que tous les indices disponibles pour cette ligne, il doit être marqué d\'un X.';
+      'Un espace entre des X (ou entre un X et le bord) plus court que tous les nombres qui pourraient s\'y placer ne peut contenir aucun bloc : marquez-le d\'un X.';
 
   @override
   String get nonogramGuideMethodNotFitTitle => '4. Pas assez de place';
 
   @override
   String get nonogramGuideMethodSuperpositionMultiDesc =>
-      'Lorsqu\'il y a plusieurs nombres, superposez les positions extrêmes à gauche et à droite de tout le groupe, en tenant compte de l\'espace minimal obligatoire d\'une case entre deux blocs de même couleur. Les cases où un bloc se recouvre lui-même dans les deux variantes sont remplies.';
+      'Avec plusieurs nombres, poussez tout le groupe à gauche (une case vide entre les blocs), puis à droite. Si le même bloc couvre une case dans les deux positions, elle est noircie. Astuce : additionnez les nombres et les espaces ; le reste indique de combien chaque bloc peut bouger.';
 
   @override
   String get nonogramGuideMethodSuperpositionMultiTitle =>
@@ -74,7 +74,7 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get nonogramGuideMethodSuperpositionSimpleDesc =>
-      'Si un nombre dépasse la moitié de la longueur, certaines cases du milieu seront forcément remplies. Superposez les positions extrêmes à gauche et à droite ; là où elles se recouvrent, les cases sont remplies.';
+      'Si un nombre dépasse la moitié de sa ligne, une partie est toujours noircie. Imaginez le bloc poussé tout à gauche, puis tout à droite : les cases couvertes les deux fois sont sûres. Exemple : 7 sur 10 cases noircit toujours les 4 du milieu.';
 
   @override
   String get nonogramGuideMethodSuperpositionSimpleTitle =>
@@ -82,7 +82,7 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get nonogramGuideMethodWallPushingDesc =>
-      'Si une case remplie connue est plus proche d\'un bord que la taille du premier indice, la figure à laquelle elle appartient doit s\'étendre en s\'éloignant de ce bord.';
+      'Une case noircie près du bord limite la position de son bloc. Le bloc ne peut pas dépasser le bord, il doit donc s\'étendre de l\'autre côté. Exemple : 5 avec la 4e case noircie : même collé au bord gauche, le bloc couvre encore la 5e case.';
 
   @override
   String get nonogramGuideMethodWallPushingTitle =>
@@ -256,6 +256,18 @@ class AppLocalizationsFr extends AppLocalizations {
       'Découvrons les règles de base avec une petite grille de 5×5.';
 
   @override
+  String get nonogramTutorialInfoFree =>
+      'Gratuit : tous les niveaux sont débloqués.';
+
+  @override
+  String get nonogramTutorialInfoAds =>
+      'Vous pouvez regarder une pub (facultatif) pour obtenir des indices et baguettes en plus. Une pub s\'affiche parfois entre les niveaux.';
+
+  @override
+  String get nonogramTutorialInfoPremium =>
+      'Un achat unique supprime les pubs entre les niveaux et ajoute des indices et baguettes du jour à chaque pointage.';
+
+  @override
   String get nonogramTutorialStart => 'Commencer';
 
   @override
@@ -265,6 +277,10 @@ class AppLocalizationsFr extends AppLocalizations {
   @override
   String get nonogramTutorialClueIsCount =>
       'Le nombre indique combien de cases de la ligne sont remplies. Cette ligne en a 5 : remplissez-les toutes !';
+
+  @override
+  String get nonogramTutorialDragNote =>
+      'Astuce : faites glisser le doigt sur la ligne pour la remplir d\'un coup.';
 
   @override
   String get nonogramTutorialEdgeCell =>
@@ -313,13 +329,73 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get nonogramGuideTutorialCardDesc =>
-      'Apprenez les règles et les commandes pas à pas sur une petite grille de 5×5.';
+      'Apprenez les règles, les commandes et les principales techniques pas à pas, en jouant.';
+
+  @override
+  String get nonogramGuideRoutineTitle => 'Par où commencer';
+
+  @override
+  String get nonogramGuideRoutineTip1 =>
+      'Commencez par les grands nombres. Si un nombre dépasse la moitié de sa ligne, une partie est déjà certaine (voir la technique 1 plus bas).';
+
+  @override
+  String get nonogramGuideRoutineTip2 =>
+      'Résolvez d\'abord les lignes faciles : 0 signifie que toute la ligne est vide, et si les nombres plus un espace entre chacun font la longueur de la ligne, ils ne rentrent que d\'une façon.';
+
+  @override
+  String get nonogramGuideRoutineTip3 =>
+      'Marquez d\'un X les cases que vous savez vides. Un X est aussi utile qu\'une case noircie.';
+
+  @override
+  String get nonogramGuideRoutineTip4 =>
+      'Alternez entre lignes et colonnes. Chaque case résolue est un nouvel indice pour la ligne qui la croise.';
+
+  @override
+  String get nonogramGuideRoutineTip5 =>
+      'Ne devinez jamais. Si vous bloquez, cherchez la ligne avec le moins de cases inconnues, ou utilisez un indice.';
+
+  @override
+  String nonogramGuideExample(int number) {
+    return 'Exemple $number';
+  }
+
+  @override
+  String get nonogramGuideExampleSingle => 'Exemple';
+
+  @override
+  String get nonogramGuideLegendTitle => 'Comment lire les schémas';
+
+  @override
+  String get nonogramGuideLegendFilled => 'Case noircie';
+
+  @override
+  String get nonogramGuideLegendTrial => 'Position de bloc à l\'essai';
+
+  @override
+  String get nonogramGuideLegendCross => 'Case vide (X)';
+
+  @override
+  String get nonogramGuideLegendResult => 'Ce qu\'on en déduit';
+
+  @override
+  String get nonogramGuideMethodLineDoneTitle => 'Lignes terminées';
+
+  @override
+  String get nonogramGuideMethodLineDoneDesc =>
+      'Quand tous les blocs d\'une ligne sont placés, toutes ses autres cases sont vides : marquez-les d\'un X. Une ligne avec le nombre 0 est vide dès le départ.';
 
   @override
   String get nonogramPlayInfoHide => 'Masquer les infos du niveau';
 
   @override
   String get nonogramPlayWandLabel => 'Baguette magique';
+
+  @override
+  String get nonogramPlayUndo => 'Annuler';
+
+  @override
+  String get nonogramPlayDragTip =>
+      'Faites glisser le doigt sur les cases pour en remplir plusieurs d\'un coup.';
 
   @override
   String get nonogramPlayWandSelectPrompt =>
@@ -369,7 +445,14 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get nonogramCoachModeBody =>
-      'Choisissez l\'effet d\'un toucher : remplir la case, ou la marquer d\'un X pour vous rappeler qu\'elle est vide. Touchez le bouton pour changer. Faites glisser sur la grille pour remplir ou marquer plusieurs cases d\'un coup.';
+      'Choisissez l\'effet d\'un toucher : remplir la case, ou la marquer d\'un X pour vous rappeler qu\'elle est vide. Touchez le bouton pour changer.';
+
+  @override
+  String get nonogramCoachDragTitle => 'Glissez pour remplir plusieurs cases';
+
+  @override
+  String get nonogramCoachDragBody =>
+      'Posez le doigt sur une case et faites-le glisser sur d\'autres : chaque case traversée est remplie (ou marquée d\'un X en mode X) d\'un coup. En partant d\'une case remplie, vous effacez les cases traversées.';
 
   @override
   String get nonogramCoachLongPressTitle => 'Appui long pour l\'inverse';
@@ -377,6 +460,13 @@ class AppLocalizationsFr extends AppLocalizations {
   @override
   String get nonogramCoachLongPressBody =>
       'Appuyez longuement sur une case pour faire l\'inverse du mode actuel : un X en mode remplissage, remplir en mode croix. Une courte vibration indique que c\'est fait et que vous pouvez relâcher.';
+
+  @override
+  String get nonogramCoachRotateTitle => 'Mode paysage';
+
+  @override
+  String get nonogramCoachRotateBody =>
+      'Touchez pour passer la grille en paysage, pratique pour les grilles larges ; les boutons passent sur les côtés. Touchez à nouveau pour revenir en portrait.';
 
   @override
   String get nonogramCoachScrollTitle => 'Se déplacer sur les grandes grilles';
@@ -421,6 +511,49 @@ class AppLocalizationsFr extends AppLocalizations {
   @override
   String get nonogramTutorialFinishTools =>
       'Remplissez les cases restantes pour terminer. Faites glisser vers le bas le long d\'une colonne pour aller plus vite.';
+
+  @override
+  String get nonogramTutorialToolsDoneTitle => 'Commandes maîtrisées !';
+
+  @override
+  String get nonogramTutorialToolsDone =>
+      'Les vraies grilles sont plus grandes, et la plupart des lignes ne se résolvent pas d\'un coup d\'œil. Découvrez maintenant les techniques de résolution sur une grille 8×8.';
+
+  @override
+  String get nonogramTutorialOverlapSingle =>
+      'Cherchez d\'abord les grands nombres. Le 6 tient de 3 façons dans ces 8 cases, et chacune clignote tour à tour. Les cases allumées à chaque fois sont sûres : noircissez les 4 du cadre jaune.';
+
+  @override
+  String get nonogramTutorialOverlapMulti =>
+      'Pareil avec plusieurs nombres : 3 3 demande au moins 7 cases (3 + espace + 3), il ne tient donc que de 3 façons. Noircissez les cases allumées dans les 3.';
+
+  @override
+  String get nonogramTutorialFullRow =>
+      '8 sur 8 cases : toute la ligne est noircie. Glissez le doigt dessus.';
+
+  @override
+  String get nonogramTutorialZeroRow =>
+      '0 signifie qu\'aucune case de la ligne n\'est noircie. Passez en mode X.';
+
+  @override
+  String get nonogramTutorialMarkZeroRow =>
+      'Marquez toute la dernière ligne d\'un X. Les X comptent : ils montrent aux colonnes où les blocs ne peuvent pas aller.';
+
+  @override
+  String get nonogramTutorialOutOfReach =>
+      'Passons aux colonnes. La colonne 2 est un bloc de 3 qui doit couvrir ses 2 cases noires : il ne tient que de 2 façons. Les cases jamais allumées sont hors de portée : marquez-les d\'un X, et pareil dans la colonne 7.';
+
+  @override
+  String get nonogramTutorialBackToFill =>
+      'Regardez la colonne 3 : elle demande 7. Revenez en mode remplissage.';
+
+  @override
+  String get nonogramTutorialExactSpace =>
+      'Le X du bas laisse exactement 7 cases pour le 7 : noircissez-les toutes. La colonne 6 fonctionne pareil.';
+
+  @override
+  String get nonogramTutorialFinishTechniques =>
+      'Voilà la méthode : résolvez ce que vous pouvez dans les lignes, puis dans les colonnes, et recommencez. Terminez le champignon tout seul !';
 
   @override
   String get nonogramPlayHintNothingToFill =>
@@ -496,7 +629,7 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get adRewardNotReady =>
-      'La publicité n\'est pas encore prête. Vérifiez votre connexion Internet et réessayez.';
+      'La publicité n\'est pas encore prête. Réessayez dans quelques minutes.';
 
   @override
   String get settingsAdPrivacy => 'Confidentialité des annonces';
@@ -574,17 +707,6 @@ class AppLocalizationsFr extends AppLocalizations {
   String get checkInDoneToday => 'Présence validée aujourd\'hui';
 
   @override
-  String checkInNextGift(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: 'Prochain cadeau dans $count présences',
-      one: 'Prochain cadeau à ta prochaine présence',
-    );
-    return '$_temp0';
-  }
-
-  @override
   String get checkInCheckedIn => 'Présence validée !';
 
   @override
@@ -620,9 +742,6 @@ class AppLocalizationsFr extends AppLocalizations {
   }
 
   @override
-  String get checkInMonthGifts => 'Cadeaux du mois';
-
-  @override
   String get navHome => 'Accueil';
 
   @override
@@ -635,55 +754,93 @@ class AppLocalizationsFr extends AppLocalizations {
   String get meMore => 'Plus';
 
   @override
-  String get checkInNotYetToday => 'Présence pas encore validée aujourd\'hui';
-
-  @override
   String get checkInTodayButton => 'Valider ma présence';
-
-  @override
-  String checkInGiftsLeftShort(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: 'Encore $count pour un cadeau',
-      one: 'Encore 1 pour un cadeau',
-    );
-    return '$_temp0';
-  }
 
   @override
   String get checkInGiftToday => 'Cadeau aujourd\'hui !';
 
   @override
-  String checkInGiftMilestone(int count) {
+  String get checkInGiftCollect => 'Récupérer';
+
+  @override
+  String get checkInGiftDouble => 'Récupérer x2';
+
+  @override
+  String checkInStreakTitle(int count) {
+    return 'Série de $count jours';
+  }
+
+  @override
+  String checkInStreakDays(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: 'Cadeau pour $count présences',
-      one: 'Cadeau pour 1 présence',
+      other: '$count jours',
+      one: '1 jour',
     );
     return '$_temp0';
   }
 
   @override
-  String get checkInGiftCollect => 'Récupérer';
+  String checkInStreakMakeUp(int missed, String days) {
+    String _temp0 = intl.Intl.pluralLogic(
+      missed,
+      locale: localeName,
+      other: '$missed jours manqués',
+      one: '1 jour manqué',
+    );
+    return 'Rattrapez $_temp0 pour porter votre série à $days';
+  }
 
   @override
-  String get checkInTotalHints => 'Indices';
+  String get checkInStreakKeepGoing =>
+      'Pointez chaque jour pour garder votre série';
 
   @override
-  String get checkInTotalWands => 'Baguettes magiques';
+  String get checkInStreakAllDone =>
+      'Vous avez tous les cadeaux de série ce mois-ci !';
 
   @override
-  String get checkInTotalDailyHints => 'Indices (aujourd\'hui seulement)';
+  String checkInStreakDaysLeft(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Encore $count jours pour un cadeau',
+      one: 'Encore 1 jour pour un cadeau',
+    );
+    return '$_temp0';
+  }
 
   @override
-  String get checkInTotalDailyWands =>
-      'Baguettes magiques (aujourd\'hui seulement)';
+  String get checkInLegendChecked => 'Pointé';
 
   @override
-  String get checkInPremiumNotYet =>
-      'Valide ta présence pour recevoir 2 indices et 1 baguette magique pour aujourd\'hui.';
+  String get checkInLegendMissed => 'Manqué';
+
+  @override
+  String get checkInLegendFuture => 'À venir';
+
+  @override
+  String checkInGiftStreak(int count) {
+    return 'Cadeau de série de $count jours';
+  }
+
+  @override
+  String checkInMakeUpTitle(String date) {
+    return 'Rattraper le $date ?';
+  }
+
+  @override
+  String get checkInMakeUpBody =>
+      'Regardez une courte pub pour rattraper ce jour. Votre série sera reconstituée.';
+
+  @override
+  String get checkInMakeUpWatch => 'Voir la pub';
+
+  @override
+  String checkInMadeUp(String date) {
+    return '$date rattrapé';
+  }
 
   @override
   String dashboardDailyReminder(String rewards, String time) {
@@ -790,12 +947,4 @@ class AppLocalizationsFr extends AppLocalizations {
   String dashboardDailyReminderBoth(String hints, String wands) {
     return '$hints et $wands';
   }
-
-  @override
-  String checkInLegendMilestone(int count) {
-    return 'Cadeau toutes les $count présences';
-  }
-
-  @override
-  String get checkInLegendPremium => 'Récompense du pack sans publicité';
 }

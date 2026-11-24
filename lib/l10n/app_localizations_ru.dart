@@ -37,14 +37,14 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get nonogramGuideMethodDivisionDesc =>
-      'Если соединение двух уже закрашенных блоков дало бы фигуру длиннее любого из доступных чисел, промежуток между ними должен быть крестиком.';
+      'Если соединение двух закрашенных кусков даст блок больше самого большого числа, клетка между ними пустая. Отметьте её крестиком, чтобы разделить их.';
 
   @override
   String get nonogramGuideMethodDivisionTitle => '5. Разделение';
 
   @override
   String get nonogramGuideMethodDoublePositioningDesc =>
-      'Если закрашенная клетка может принадлежать лишь нескольким определённым вариантам блока, все клетки, которые не закрашены ни в одном из этих вариантов, нужно отметить крестиком.';
+      'Иногда закрашенная клетка может принадлежать только одному или двум числам. Переберите варианты: клетки, пустые во всех вариантах, отмечайте крестиком.';
 
   @override
   String get nonogramGuideMethodDoublePositioningTitle =>
@@ -52,21 +52,21 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get nonogramGuideMethodInaccessibilityDesc =>
-      'Отметьте крестиком (X) клетки, которые не могут принадлежать ни одной из оставшихся фигур.';
+      'Клетки, до которых не может дотянуться ни один блок, пустые. Поставьте каждый блок в крайние положения вокруг закрашенных клеток; всё, что за пределами, отмечайте крестиком.';
 
   @override
   String get nonogramGuideMethodInaccessibilityTitle => '3. Недоступность';
 
   @override
   String get nonogramGuideMethodNotFitDesc =>
-      'Если пустой участок между крестиками короче любого из доступных чисел этой линии, его нужно отметить крестиками.';
+      'Промежуток между крестиками (или между крестиком и краем), который короче любого числа, способного туда попасть, не вместит блок: отметьте его крестиками.';
 
   @override
   String get nonogramGuideMethodNotFitTitle => '4. Не помещается';
 
   @override
   String get nonogramGuideMethodSuperpositionMultiDesc =>
-      'Если чисел несколько, наложите крайнее левое и крайнее правое положения всей группы, учитывая обязательный промежуток минимум в одну клетку между блоками одного цвета. Клетки, где блок пересекается сам с собой в обоих вариантах, закрашиваются.';
+      'Если чисел несколько, сдвиньте всю группу влево (с одной пустой клеткой между блоками), затем вправо. Если один и тот же блок закрывает клетку в обоих положениях, она закрашена. Быстрый способ: сложите числа и промежутки — остаток показывает, насколько может сдвинуться каждый блок.';
 
   @override
   String get nonogramGuideMethodSuperpositionMultiTitle =>
@@ -74,7 +74,7 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get nonogramGuideMethodSuperpositionSimpleDesc =>
-      'Если число больше половины длины линии, некоторые клетки в середине точно закрашены. Наложите крайнее левое и крайнее правое положения; там, где они пересекаются, клетки закрашиваются.';
+      'Если число больше половины линии, часть его клеток закрашена всегда. Представьте блок, сдвинутый до упора влево, а потом вправо: клетки, закрытые в обоих случаях, точно закрашены. Пример: 7 в 10 клетках всегда закрашивает 4 средние.';
 
   @override
   String get nonogramGuideMethodSuperpositionSimpleTitle =>
@@ -82,7 +82,7 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get nonogramGuideMethodWallPushingDesc =>
-      'Если известная закрашенная клетка ближе к краю, чем длина первого числа, фигура, к которой она относится, должна продолжаться в сторону от этого края.';
+      'Закрашенная клетка у края ограничивает положение своего блока. Блок не может выйти за край, поэтому тянется от него. Пример: 5, и 4-я клетка закрашена: даже прижатый к левому краю, блок всё равно закрывает 5-ю клетку.';
 
   @override
   String get nonogramGuideMethodWallPushingTitle => '2. Отталкивание от края';
@@ -254,6 +254,17 @@ class AppLocalizationsRu extends AppLocalizations {
       'Давайте разберём основные правила на маленькой головоломке 5×5.';
 
   @override
+  String get nonogramTutorialInfoFree => 'Бесплатно: все уровни открыты.';
+
+  @override
+  String get nonogramTutorialInfoAds =>
+      'Можно посмотреть рекламу (по желанию), чтобы получить дополнительные подсказки и волшебные палочки. Иногда реклама показывается между уровнями.';
+
+  @override
+  String get nonogramTutorialInfoPremium =>
+      'Разовая покупка отключает рекламу между уровнями и даёт подсказки и палочки на день при каждой отметке.';
+
+  @override
   String get nonogramTutorialStart => 'Начать';
 
   @override
@@ -263,6 +274,10 @@ class AppLocalizationsRu extends AppLocalizations {
   @override
   String get nonogramTutorialClueIsCount =>
       'Число показывает, сколько клеток в строке закрашено. В этой строке 5 — закрасьте их все!';
+
+  @override
+  String get nonogramTutorialDragNote =>
+      'Совет: проведите пальцем по строке, чтобы закрасить её за один раз.';
 
   @override
   String get nonogramTutorialEdgeCell =>
@@ -310,13 +325,73 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get nonogramGuideTutorialCardDesc =>
-      'Шаг за шагом освойте правила и управление на маленькой головоломке 5×5.';
+      'Правила, управление и основные приёмы решения — шаг за шагом, прямо в игре.';
+
+  @override
+  String get nonogramGuideRoutineTitle => 'С чего начать';
+
+  @override
+  String get nonogramGuideRoutineTip1 =>
+      'Начинайте с больших чисел. Если число больше половины линии, часть его клеток уже известна (см. приём 1 ниже).';
+
+  @override
+  String get nonogramGuideRoutineTip2 =>
+      'Сначала решайте простые линии: 0 значит, что вся линия пустая, а если сумма чисел плюс по одному промежутку между ними равна длине линии, расстановка только одна.';
+
+  @override
+  String get nonogramGuideRoutineTip3 =>
+      'Отмечайте крестиком клетки, которые точно пустые. Крестик так же полезен, как закрашенная клетка.';
+
+  @override
+  String get nonogramGuideRoutineTip4 =>
+      'Чередуйте строки и столбцы. Каждая решённая клетка — новая подсказка для пересекающей её линии.';
+
+  @override
+  String get nonogramGuideRoutineTip5 =>
+      'Никогда не угадывайте. Если застряли, найдите линию с наименьшим числом неизвестных клеток или возьмите подсказку.';
+
+  @override
+  String nonogramGuideExample(int number) {
+    return 'Пример $number';
+  }
+
+  @override
+  String get nonogramGuideExampleSingle => 'Пример';
+
+  @override
+  String get nonogramGuideLegendTitle => 'Как читать схемы';
+
+  @override
+  String get nonogramGuideLegendFilled => 'Закрашенная клетка';
+
+  @override
+  String get nonogramGuideLegendTrial => 'Пробное положение блока';
+
+  @override
+  String get nonogramGuideLegendCross => 'Пустая клетка (X)';
+
+  @override
+  String get nonogramGuideLegendResult => 'Что из этого следует';
+
+  @override
+  String get nonogramGuideMethodLineDoneTitle => 'Готовые линии';
+
+  @override
+  String get nonogramGuideMethodLineDoneDesc =>
+      'Когда все блоки линии на месте, остальные её клетки пустые: отметьте их крестиком. Линия с числом 0 пуста с самого начала.';
 
   @override
   String get nonogramPlayInfoHide => 'Скрыть сведения об уровне';
 
   @override
   String get nonogramPlayWandLabel => 'Волшебная палочка';
+
+  @override
+  String get nonogramPlayUndo => 'Отменить';
+
+  @override
+  String get nonogramPlayDragTip =>
+      'Проведите пальцем по клеткам, чтобы закрасить несколько сразу.';
 
   @override
   String get nonogramPlayWandSelectPrompt =>
@@ -366,7 +441,14 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get nonogramCoachModeBody =>
-      'Выберите, что делает нажатие: закрашивает клетку или ставит крестик, чтобы запомнить, что она пустая. Нажмите кнопку, чтобы переключиться. Проведите по сетке, чтобы закрасить или отметить сразу много клеток.';
+      'Выберите, что делает нажатие: закрашивает клетку или ставит крестик, чтобы запомнить, что она пустая. Нажмите кнопку, чтобы переключиться.';
+
+  @override
+  String get nonogramCoachDragTitle => 'Проведите, чтобы закрасить несколько';
+
+  @override
+  String get nonogramCoachDragBody =>
+      'Поставьте палец на клетку и проведите по другим: все клетки на пути закрасятся (или отметятся крестиком в режиме X) за один раз. Если начать с закрашенной клетки, клетки на пути очистятся.';
 
   @override
   String get nonogramCoachLongPressTitle =>
@@ -375,6 +457,13 @@ class AppLocalizationsRu extends AppLocalizations {
   @override
   String get nonogramCoachLongPressBody =>
       'Удерживайте клетку, чтобы сделать обратное текущему режиму: крестик при закрашивании, закрашивание при отметке. Короткая вибрация означает, что готово и можно отпустить.';
+
+  @override
+  String get nonogramCoachRotateTitle => 'Альбомный режим';
+
+  @override
+  String get nonogramCoachRotateBody =>
+      'Нажмите, чтобы повернуть поле горизонтально — удобно для широких головоломок; кнопки переместятся по бокам. Нажмите ещё раз, чтобы вернуть вертикальный режим.';
 
   @override
   String get nonogramCoachScrollTitle => 'Перемещение по большим головоломкам';
@@ -419,6 +508,49 @@ class AppLocalizationsRu extends AppLocalizations {
   @override
   String get nonogramTutorialFinishTools =>
       'Закрасьте оставшиеся клетки, чтобы закончить. Проведите вниз по столбцу, чтобы закрашивать быстрее.';
+
+  @override
+  String get nonogramTutorialToolsDoneTitle => 'Управление освоено!';
+
+  @override
+  String get nonogramTutorialToolsDone =>
+      'Настоящие головоломки больше, и большинство линий не решить с первого взгляда. Дальше изучим приёмы решения на поле 8×8.';
+
+  @override
+  String get nonogramTutorialOverlapSingle =>
+      'Сначала ищите большие числа. Блок 6 помещается в эти 8 клеток 3 способами, и каждый по очереди мигает. Клетки, горящие при любом способе, точно закрашены: закрасьте 4 в жёлтой рамке.';
+
+  @override
+  String get nonogramTutorialOverlapMulti =>
+      'С несколькими числами так же: для 3 3 нужно минимум 7 клеток (3 + промежуток + 3), поэтому способов всего 3. Закрасьте клетки, горящие во всех трёх.';
+
+  @override
+  String get nonogramTutorialFullRow =>
+      '8 в 8 клетках: вся строка закрашена. Проведите по ней пальцем.';
+
+  @override
+  String get nonogramTutorialZeroRow =>
+      '0 значит, что в строке нет ни одной закрашенной клетки. Переключитесь в режим X.';
+
+  @override
+  String get nonogramTutorialMarkZeroRow =>
+      'Отметьте всю нижнюю строку крестиками. Крестики важны: они показывают столбцам, где блоков быть не может.';
+
+  @override
+  String get nonogramTutorialOutOfReach =>
+      'Теперь столбцы. Столбец 2 — один блок из 3, который должен накрыть 2 закрашенные клетки, поэтому способов всего 2. Клетки, которые ни разу не загораются, недосягаемы: отметьте их крестиком, и так же в столбце 7.';
+
+  @override
+  String get nonogramTutorialBackToFill =>
+      'Посмотрите на столбец 3: ему нужно 7. Вернитесь в режим закрашивания.';
+
+  @override
+  String get nonogramTutorialExactSpace =>
+      'Крестик внизу оставляет ровно 7 клеток для числа 7, так что закрасьте их все. Со столбцом 6 то же самое.';
+
+  @override
+  String get nonogramTutorialFinishTechniques =>
+      'Вот и весь порядок: решите что можно в строках, потом в столбцах, и повторяйте. Дорисуйте гриб сами!';
 
   @override
   String get nonogramPlayHintNothingToFill =>
@@ -494,7 +626,7 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get adRewardNotReady =>
-      'Реклама ещё не готова. Проверьте подключение к интернету и попробуйте снова.';
+      'Реклама ещё не готова. Попробуйте снова через несколько минут.';
 
   @override
   String get settingsAdPrivacy => 'Конфиденциальность рекламы';
@@ -570,19 +702,6 @@ class AppLocalizationsRu extends AppLocalizations {
   String get checkInDoneToday => 'Сегодня вы уже отметились';
 
   @override
-  String checkInNextGift(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: 'До следующего подарка $count отметки',
-      many: 'До следующего подарка $count отметок',
-      few: 'До следующего подарка $count отметки',
-      one: 'До следующего подарка $count отметка',
-    );
-    return '$_temp0';
-  }
-
-  @override
   String get checkInCheckedIn => 'Вы отметились!';
 
   @override
@@ -622,9 +741,6 @@ class AppLocalizationsRu extends AppLocalizations {
   }
 
   @override
-  String get checkInMonthGifts => 'Подарки за месяц';
-
-  @override
   String get navHome => 'Главная';
 
   @override
@@ -637,58 +753,96 @@ class AppLocalizationsRu extends AppLocalizations {
   String get meMore => 'Ещё';
 
   @override
-  String get checkInNotYetToday => 'Сегодня вы ещё не отметились';
-
-  @override
   String get checkInTodayButton => 'Отметиться сегодня';
-
-  @override
-  String checkInGiftsLeftShort(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: 'Ещё $count отметки до подарка',
-      many: 'Ещё $count отметок до подарка',
-      few: 'Ещё $count отметки до подарка',
-      one: 'Ещё $count отметка до подарка',
-    );
-    return '$_temp0';
-  }
 
   @override
   String get checkInGiftToday => 'Сегодня подарок!';
 
   @override
-  String checkInGiftMilestone(int count) {
+  String get checkInGiftCollect => 'Забрать';
+
+  @override
+  String get checkInGiftDouble => 'Забрать x2';
+
+  @override
+  String checkInStreakTitle(int count) {
+    return 'Серия: $count дн.';
+  }
+
+  @override
+  String checkInStreakDays(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: 'Подарок за $count отметки',
-      many: 'Подарок за $count отметок',
-      few: 'Подарок за $count отметки',
-      one: 'Подарок за $count отметку',
+      other: '$count дней',
+      few: '$count дня',
+      one: '$count день',
     );
     return '$_temp0';
   }
 
   @override
-  String get checkInGiftCollect => 'Забрать';
+  String checkInStreakMakeUp(int missed, String days) {
+    String _temp0 = intl.Intl.pluralLogic(
+      missed,
+      locale: localeName,
+      other: '$missed пропущенных дней',
+      few: '$missed пропущенных дня',
+      one: '$missed пропущенный день',
+    );
+    return 'Восполните $_temp0, чтобы серия выросла до $days';
+  }
 
   @override
-  String get checkInTotalHints => 'Подсказки';
+  String get checkInStreakKeepGoing =>
+      'Отмечайтесь каждый день, чтобы не прерывать серию';
 
   @override
-  String get checkInTotalWands => 'Волшебные палочки';
+  String get checkInStreakAllDone =>
+      'Все подарки за серию в этом месяце получены!';
 
   @override
-  String get checkInTotalDailyHints => 'Подсказки (только сегодня)';
+  String checkInStreakDaysLeft(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Ещё $count дней до подарка',
+      few: 'Ещё $count дня до подарка',
+      one: 'Ещё $count день до подарка',
+    );
+    return '$_temp0';
+  }
 
   @override
-  String get checkInTotalDailyWands => 'Волшебные палочки (только сегодня)';
+  String get checkInLegendChecked => 'Отмечено';
 
   @override
-  String get checkInPremiumNotYet =>
-      'Отметьтесь, чтобы получить 2 подсказки и 1 волшебную палочку на сегодня.';
+  String get checkInLegendMissed => 'Пропущено';
+
+  @override
+  String get checkInLegendFuture => 'Впереди';
+
+  @override
+  String checkInGiftStreak(int count) {
+    return 'Подарок за серию $count дн.';
+  }
+
+  @override
+  String checkInMakeUpTitle(String date) {
+    return 'Восполнить $date?';
+  }
+
+  @override
+  String get checkInMakeUpBody =>
+      'Посмотрите короткую рекламу, чтобы восполнить этот день. Серия снова соединится.';
+
+  @override
+  String get checkInMakeUpWatch => 'Смотреть рекламу';
+
+  @override
+  String checkInMadeUp(String date) {
+    return '$date восполнено';
+  }
 
   @override
   String dashboardDailyReminder(String rewards, String time) {
@@ -794,12 +948,4 @@ class AppLocalizationsRu extends AppLocalizations {
   String dashboardDailyReminderBoth(String hints, String wands) {
     return '$hints и $wands';
   }
-
-  @override
-  String checkInLegendMilestone(int count) {
-    return 'Подарок каждые $count отметок';
-  }
-
-  @override
-  String get checkInLegendPremium => 'Награда набора без рекламы';
 }

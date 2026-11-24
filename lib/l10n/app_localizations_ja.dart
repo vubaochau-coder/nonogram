@@ -37,49 +37,49 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get nonogramGuideMethodDivisionDesc =>
-      '既にある2つのブロックをつなぐと、どのヒント数字よりも長くなってしまう場合、その間のマスは×になります。';
+      '2つの塗られた部分をつなぐと一番大きな数字より長いブロックになってしまうなら、間のマスは空白です。×を付けて分けましょう。';
 
   @override
   String get nonogramGuideMethodDivisionTitle => '5. 分断';
 
   @override
   String get nonogramGuideMethodDoublePositioningDesc =>
-      '塗られたマスが属するブロックの置き方が数通りに限られる場合、そのどの置き方でも塗られないマスには×を付けます。';
+      '塗られたマスが、1つか2つの数字にしか属せないことがあります。それぞれの可能性を試し、どの場合でも空白になるマスに×を付けましょう。';
 
   @override
   String get nonogramGuideMethodDoublePositioningTitle => '6. 二重配置';
 
   @override
   String get nonogramGuideMethodInaccessibilityDesc =>
-      '残りのどのブロックにも属することができないマスに×を付けます。';
+      'どのブロックも届かないマスは空白です。塗られたマスの周りで各ブロックを一番遠い位置まで動かしてみて、その範囲の外にあるマスには×を付けます。';
 
   @override
   String get nonogramGuideMethodInaccessibilityTitle => '3. 届かないマス';
 
   @override
   String get nonogramGuideMethodNotFitDesc =>
-      '×で挟まれた空きマスの長さが、その列のどのヒント数字よりも短い場合、そこには×を付けます。';
+      '×と×の間（または×と端の間）のすき間が、そこに入りうるどの数字よりも短ければ、ブロックは入りません。×を付けましょう。';
 
   @override
   String get nonogramGuideMethodNotFitTitle => '4. 入りきらない';
 
   @override
   String get nonogramGuideMethodSuperpositionMultiDesc =>
-      '数字が複数あるときは、同じ色のブロック同士の間に最低1マスの空きが必要なことを考慮して、グループ全体を左端に寄せた配置と右端に寄せた配置を重ねます。両方の配置で同じブロックが重なるマスは塗られます。';
+      '数字が複数あるときは、グループ全体を左へ寄せ（ブロックの間は1マス空ける）、次に右へ寄せます。同じブロックが両方の位置で重なるマスは塗られます。早見法：数字と間の空白を足し、余ったマス数が各ブロックの動ける幅です。';
 
   @override
   String get nonogramGuideMethodSuperpositionMultiTitle => '重ね合わせ（ヒントが複数）';
 
   @override
   String get nonogramGuideMethodSuperpositionSimpleDesc =>
-      '数字が列の長さの半分を超えるなら、中央のいくつかのマスは必ず塗られます。左端に寄せた配置と右端に寄せた配置を重ね、重なったマスを塗ります。';
+      '数字が列の半分より大きければ、その一部は必ず塗られます。ブロックを左端まで寄せた場合と右端まで寄せた場合を考えると、両方で重なるマスは確実に塗られます。例：10マスに7なら、真ん中の4マスは必ず塗られます。';
 
   @override
   String get nonogramGuideMethodSuperpositionSimpleTitle => '重ね合わせ（ヒントが1つ）';
 
   @override
   String get nonogramGuideMethodWallPushingDesc =>
-      '塗られていると分かっているマスが、最初のヒント数字の長さよりも端に近い場合、そのブロックは端から離れる方向へ伸びているはずです。';
+      '端に近い塗られたマスは、そのブロックの位置を制限します。ブロックは端の外には出られないので、反対側へ伸びるしかありません。例：5で4マス目が塗られているなら、左端に寄せても5マス目は必ず塗られます。';
 
   @override
   String get nonogramGuideMethodWallPushingTitle => '2. 壁から押し出す';
@@ -248,6 +248,17 @@ class AppLocalizationsJa extends AppLocalizations {
   String get nonogramTutorialWelcome => '小さな5×5のパズルで基本ルールを覚えましょう。';
 
   @override
+  String get nonogramTutorialInfoFree => '無料：すべてのステージを遊べます。';
+
+  @override
+  String get nonogramTutorialInfoAds =>
+      '広告を見ると（任意）、ヒントと魔法の杖がもらえます。ステージの合間に広告が流れることがあります。';
+
+  @override
+  String get nonogramTutorialInfoPremium =>
+      '一度の購入で、ステージ間の広告がなくなり、チェックインのたびにその日だけ使えるヒントと杖がもらえます。';
+
+  @override
   String get nonogramTutorialStart => 'はじめる';
 
   @override
@@ -257,6 +268,9 @@ class AppLocalizationsJa extends AppLocalizations {
   @override
   String get nonogramTutorialClueIsCount =>
       '数字はその行で塗るマスの数を表します。この行は5なので、全部塗りましょう！';
+
+  @override
+  String get nonogramTutorialDragNote => 'ヒント：行を指でなぞると、一度にまとめて塗れます。';
 
   @override
   String get nonogramTutorialEdgeCell =>
@@ -302,13 +316,73 @@ class AppLocalizationsJa extends AppLocalizations {
   String get nonogramGuideTutorialCardTitle => '遊びながら覚える';
 
   @override
-  String get nonogramGuideTutorialCardDesc => '小さな5×5のパズルで、ルールと操作を一歩ずつ覚えましょう。';
+  String get nonogramGuideTutorialCardDesc =>
+      'ルール、操作、主な解き方を、実際に遊びながら一歩ずつ覚えましょう。';
+
+  @override
+  String get nonogramGuideRoutineTitle => 'どこから解く？';
+
+  @override
+  String get nonogramGuideRoutineTip1 =>
+      '大きな数字から始めましょう。数字が列の長さの半分より大きければ、その一部はもう確定しています（下のテクニック1を参照）。';
+
+  @override
+  String get nonogramGuideRoutineTip2 =>
+      '簡単な列から解きましょう。0はその列が全部空白という意味です。また、数字の合計と間の空白1マスずつを足して列の長さちょうどなら、並べ方は1通りだけです。';
+
+  @override
+  String get nonogramGuideRoutineTip3 =>
+      '空白だと分かったマスには×を付けましょう。×は塗ったマスと同じくらい役に立ちます。';
+
+  @override
+  String get nonogramGuideRoutineTip4 =>
+      '行と列を行ったり来たりしましょう。解けたマスは、交わる列や行にとって新しい手がかりになります。';
+
+  @override
+  String get nonogramGuideRoutineTip5 =>
+      '当てずっぽうはやめましょう。行き詰まったら、未確定のマスが一番少ない列を探すか、ヒントを使いましょう。';
+
+  @override
+  String nonogramGuideExample(int number) {
+    return '例 $number';
+  }
+
+  @override
+  String get nonogramGuideExampleSingle => '例';
+
+  @override
+  String get nonogramGuideLegendTitle => '図の見方';
+
+  @override
+  String get nonogramGuideLegendFilled => '塗られたマス';
+
+  @override
+  String get nonogramGuideLegendTrial => 'ブロックを試しに置いた位置';
+
+  @override
+  String get nonogramGuideLegendCross => '空白のマス（×）';
+
+  @override
+  String get nonogramGuideLegendResult => 'そこから分かること';
+
+  @override
+  String get nonogramGuideMethodLineDoneTitle => '完成した列';
+
+  @override
+  String get nonogramGuideMethodLineDoneDesc =>
+      '列のブロックがすべて置けたら、残りのマスはすべて空白です。×を付けましょう。数字が0の列は最初から全部空白です。';
 
   @override
   String get nonogramPlayInfoHide => 'レベル情報を隠す';
 
   @override
   String get nonogramPlayWandLabel => '魔法の杖';
+
+  @override
+  String get nonogramPlayUndo => '元に戻す';
+
+  @override
+  String get nonogramPlayDragTip => 'マスを指でなぞると、まとめて塗れます。';
 
   @override
   String get nonogramPlayWandSelectPrompt => '答えを見たい行または列のヒント数字をタップ';
@@ -355,7 +429,14 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get nonogramCoachModeBody =>
-      'タップしたときの動作を選びます。マスを塗るか、空きマスだと覚えておくために×を付けるかです。ボタンをタップで切り替え。盤面をドラッグすると、まとめて塗ったり×を付けたりできます。';
+      'タップしたときの動作を選びます。マスを塗るか、空きマスだと覚えておくために×を付けるかです。ボタンをタップで切り替え。';
+
+  @override
+  String get nonogramCoachDragTitle => 'ドラッグでまとめて塗る';
+
+  @override
+  String get nonogramCoachDragBody =>
+      'マスに指を置いてほかのマスへなぞると、通ったマスがまとめて塗られます（×モードなら×が付きます）。塗ったマスからなぞり始めると、通ったマスを消せます。';
 
   @override
   String get nonogramCoachLongPressTitle => '長押しで逆の操作';
@@ -363,6 +444,13 @@ class AppLocalizationsJa extends AppLocalizations {
   @override
   String get nonogramCoachLongPressBody =>
       'マスを長押しすると、今のモードと逆の操作になります。塗りモードなら×、×モードなら塗り。短く振動したら完了なので指を離してください。';
+
+  @override
+  String get nonogramCoachRotateTitle => '横向きモード';
+
+  @override
+  String get nonogramCoachRotateBody =>
+      'タップすると盤面が横向きになり、横長のパズルが見やすくなります。ボタンは左右に移ります。もう一度タップで縦向きに戻ります。';
 
   @override
   String get nonogramCoachScrollTitle => '大きなパズルの移動';
@@ -407,6 +495,47 @@ class AppLocalizationsJa extends AppLocalizations {
   @override
   String get nonogramTutorialFinishTools =>
       '残りのマスを塗って完成させましょう。列に沿って下へドラッグすると速く塗れます。';
+
+  @override
+  String get nonogramTutorialToolsDoneTitle => '操作はばっちり！';
+
+  @override
+  String get nonogramTutorialToolsDone =>
+      '本番のパズルはもっと大きく、ほとんどの行はひと目では解けません。次は8×8のパズルで解き方のテクニックを覚えましょう。';
+
+  @override
+  String get nonogramTutorialOverlapSingle =>
+      'まず大きな数字を探しましょう。6はこの8マスに3通りの置き方があり、順番に点滅します。どの置き方でも光るマスは必ず塗られます。黄色い枠の4マスを塗りましょう。';
+
+  @override
+  String get nonogramTutorialOverlapMulti =>
+      '数字が複数でも同じです。3 3 には最低7マス（3＋空白＋3）が必要なので、置き方は3通りだけ。3通りすべてで光るマスを塗りましょう。';
+
+  @override
+  String get nonogramTutorialFullRow => '8マスに8：この行はすべて塗られます。なぞって塗りましょう。';
+
+  @override
+  String get nonogramTutorialZeroRow =>
+      '0は、その行に塗るマスが1つもないという意味です。×モードに切り替えましょう。';
+
+  @override
+  String get nonogramTutorialMarkZeroRow =>
+      '一番下の行のマスすべてに×を付けましょう。×も大事です。ブロックが置けない場所を列に教えてくれます。';
+
+  @override
+  String get nonogramTutorialOutOfReach =>
+      '次は列です。2列目は塗られた2マスを必ず含む3のブロック1つなので、置き方は2通りだけ。一度も光らないマスには届きません。×を付けましょう。7列目も同じです。';
+
+  @override
+  String get nonogramTutorialBackToFill => '3列目を見てください。7マス必要です。塗りモードに戻しましょう。';
+
+  @override
+  String get nonogramTutorialExactSpace =>
+      '一番下の×のおかげで、7に使えるマスはちょうど7つ。全部塗りましょう。6列目も同じです。';
+
+  @override
+  String get nonogramTutorialFinishTechniques =>
+      'これが基本の流れです。行で分かるところを解いたら列へ、それを繰り返します。キノコを自分で完成させましょう！';
 
   @override
   String get nonogramPlayHintNothingToFill =>
@@ -479,7 +608,7 @@ class AppLocalizationsJa extends AppLocalizations {
   }
 
   @override
-  String get adRewardNotReady => '広告の準備ができていません。インターネット接続を確認して、もう一度お試しください。';
+  String get adRewardNotReady => '広告の準備ができていません。数分後にもう一度お試しください。';
 
   @override
   String get settingsAdPrivacy => '広告のプライバシー';
@@ -552,11 +681,6 @@ class AppLocalizationsJa extends AppLocalizations {
   String get checkInDoneToday => '今日はチェックイン済み';
 
   @override
-  String checkInNextGift(int count) {
-    return 'あと$count回のチェックインで次のプレゼント';
-  }
-
-  @override
   String get checkInCheckedIn => 'チェックインしました！';
 
   @override
@@ -580,9 +704,6 @@ class AppLocalizationsJa extends AppLocalizations {
   }
 
   @override
-  String get checkInMonthGifts => '今月のプレゼント';
-
-  @override
   String get navHome => 'ホーム';
 
   @override
@@ -595,41 +716,72 @@ class AppLocalizationsJa extends AppLocalizations {
   String get meMore => 'その他';
 
   @override
-  String get checkInNotYetToday => '今日はまだチェックインしていません';
-
-  @override
   String get checkInTodayButton => '今日のチェックイン';
-
-  @override
-  String checkInGiftsLeftShort(int count) {
-    return 'あと$count回でプレゼント';
-  }
 
   @override
   String get checkInGiftToday => '今日はプレゼントあり！';
 
   @override
-  String checkInGiftMilestone(int count) {
-    return 'チェックイン$count回達成のプレゼント';
-  }
-
-  @override
   String get checkInGiftCollect => '受け取る';
 
   @override
-  String get checkInTotalHints => 'ヒント';
+  String get checkInGiftDouble => '2倍で受け取る';
 
   @override
-  String get checkInTotalWands => '魔法の杖';
+  String checkInStreakTitle(int count) {
+    return '$count日連続';
+  }
 
   @override
-  String get checkInTotalDailyHints => 'ヒント（今日のみ）';
+  String checkInStreakDays(int count) {
+    return '$count日';
+  }
 
   @override
-  String get checkInTotalDailyWands => '魔法の杖（今日のみ）';
+  String checkInStreakMakeUp(int missed, String days) {
+    return '逃した$missed日を取り戻すと、連続記録が$daysになります';
+  }
 
   @override
-  String get checkInPremiumNotYet => 'チェックインすると今日使えるヒント2回と魔法の杖1回がもらえます。';
+  String get checkInStreakKeepGoing => '毎日チェックインして連続記録をキープしよう';
+
+  @override
+  String get checkInStreakAllDone => '今月の連続ボーナスをすべて獲得しました！';
+
+  @override
+  String checkInStreakDaysLeft(int count) {
+    return 'あと$count日でプレゼント';
+  }
+
+  @override
+  String get checkInLegendChecked => 'チェックイン済み';
+
+  @override
+  String get checkInLegendMissed => '未チェック';
+
+  @override
+  String get checkInLegendFuture => 'これから';
+
+  @override
+  String checkInGiftStreak(int count) {
+    return '$count日連続ボーナス';
+  }
+
+  @override
+  String checkInMakeUpTitle(String date) {
+    return '$dateを取り戻しますか？';
+  }
+
+  @override
+  String get checkInMakeUpBody => '短い広告を見ると、この日を取り戻せます。連続記録がつながります。';
+
+  @override
+  String get checkInMakeUpWatch => '広告を見る';
+
+  @override
+  String checkInMadeUp(String date) {
+    return '$dateを取り戻しました';
+  }
 
   @override
   String dashboardDailyReminder(String rewards, String time) {
@@ -733,12 +885,4 @@ class AppLocalizationsJa extends AppLocalizations {
   String dashboardDailyReminderBoth(String hints, String wands) {
     return '$hintsと$wands';
   }
-
-  @override
-  String checkInLegendMilestone(int count) {
-    return '$count回チェックインごとのプレゼント';
-  }
-
-  @override
-  String get checkInLegendPremium => '広告なしパックの特典';
 }

@@ -37,14 +37,14 @@ class AppLocalizationsTh extends AppLocalizations {
 
   @override
   String get nonogramGuideMethodDivisionDesc =>
-      'ถ้าการเชื่อมสองบล็อกที่มีอยู่จะทำให้เกิดรูปที่ยาวกว่าตัวเลขใบ้ทุกตัว ช่องว่างระหว่างสองบล็อกนั้นต้องเป็น X';
+      'ถ้าเชื่อมสองส่วนที่ระบายแล้วจะได้บล็อกยาวกว่าตัวเลขที่มากที่สุด ช่องระหว่างกลางต้องว่าง กากบาทเพื่อแยกมันออกจากกัน';
 
   @override
   String get nonogramGuideMethodDivisionTitle => '5. การแบ่งแยก';
 
   @override
   String get nonogramGuideMethodDoublePositioningDesc =>
-      'ถ้าช่องที่ระบายแล้วเป็นส่วนหนึ่งของบล็อกได้เพียงไม่กี่แบบ ช่องใดที่ไม่ถูกระบายในทุกแบบเหล่านั้นต้องทำเครื่องหมาย X';
+      'บางครั้งช่องที่ระบายแล้วเป็นของตัวเลขได้แค่หนึ่งหรือสองตัว ลองทุกความเป็นไปได้ ช่องที่ว่างในทุกกรณีให้กากบาท';
 
   @override
   String get nonogramGuideMethodDoublePositioningTitle =>
@@ -52,21 +52,21 @@ class AppLocalizationsTh extends AppLocalizations {
 
   @override
   String get nonogramGuideMethodInaccessibilityDesc =>
-      'ทำเครื่องหมายกากบาท (X) ที่ช่องซึ่งไม่มีทางเป็นส่วนหนึ่งของรูปที่เหลืออยู่ได้เลย';
+      'ช่องที่ไม่มีบล็อกใดเอื้อมถึงต้องว่าง ลองวางแต่ละบล็อกในตำแหน่งไกลสุดรอบช่องที่ระบายแล้ว ช่องที่อยู่นอกระยะนั้นให้กากบาท';
 
   @override
   String get nonogramGuideMethodInaccessibilityTitle => '3. เข้าถึงไม่ได้';
 
   @override
   String get nonogramGuideMethodNotFitDesc =>
-      'ถ้าช่องว่างระหว่างกากบาทสั้นกว่าตัวเลขใบ้ทุกตัวของแถวนั้น ช่องว่างนั้นต้องทำเครื่องหมาย X';
+      'ช่องว่างระหว่างกากบาท (หรือระหว่างกากบาทกับขอบ) ที่สั้นกว่าทุกตัวเลขที่อาจวางตรงนั้นได้ ใส่บล็อกไม่ได้: กากบาทให้หมด';
 
   @override
   String get nonogramGuideMethodNotFitTitle => '4. ใส่ไม่พอดี';
 
   @override
   String get nonogramGuideMethodSuperpositionMultiDesc =>
-      'เมื่อมีตัวเลขหลายตัว ให้ซ้อนตำแหน่งชิดซ้ายสุดและชิดขวาสุดของทั้งกลุ่ม โดยนับช่องว่างขั้นต่ำหนึ่งช่องที่ต้องมีระหว่างบล็อกสีเดียวกันด้วย ช่องที่บล็อกเดียวกันทับกันในทั้งสองแบบให้ระบาย';
+      'ถ้ามีหลายตัวเลข ให้ดันทั้งกลุ่มไปชิดซ้าย (เว้นช่องว่าง 1 ช่องระหว่างบล็อก) แล้วดันไปชิดขวา ช่องที่บล็อกเดียวกันทับทั้งสองตำแหน่งต้องระบาย วิธีคิดเร็ว: บวกตัวเลขกับช่องว่างคั่น ส่วนที่เหลือคือระยะที่แต่ละบล็อกเลื่อนได้';
 
   @override
   String get nonogramGuideMethodSuperpositionMultiTitle =>
@@ -74,7 +74,7 @@ class AppLocalizationsTh extends AppLocalizations {
 
   @override
   String get nonogramGuideMethodSuperpositionSimpleDesc =>
-      'ถ้าตัวเลขยาวกว่าครึ่งหนึ่งของแถว ช่องตรงกลางบางช่องต้องถูกระบายแน่นอน ให้ซ้อนตำแหน่งชิดซ้ายสุดกับชิดขวาสุด ช่องที่ทับกันให้ระบาย';
+      'ถ้าตัวเลขยาวเกินครึ่งเส้น บางส่วนจะถูกระบายเสมอ ลองนึกภาพดันบล็อกไปชิดซ้ายสุด แล้วดันไปชิดขวาสุด ช่องที่ถูกทับทั้งสองครั้งระบายได้แน่นอน ตัวอย่าง: 7 ใน 10 ช่อง จะระบาย 4 ช่องตรงกลางเสมอ';
 
   @override
   String get nonogramGuideMethodSuperpositionSimpleTitle =>
@@ -82,7 +82,7 @@ class AppLocalizationsTh extends AppLocalizations {
 
   @override
   String get nonogramGuideMethodWallPushingDesc =>
-      'ถ้าช่องที่รู้ว่าระบายแล้วอยู่ใกล้ขอบมากกว่าความยาวของตัวเลขตัวแรก รูปที่ช่องนั้นเป็นส่วนหนึ่งต้องยืดออกไปทางที่ห่างจากขอบ';
+      'ช่องที่ระบายแล้วซึ่งอยู่ใกล้ขอบจะจำกัดตำแหน่งของบล็อก บล็อกล้นขอบไม่ได้ จึงต้องยื่นออกไปอีกฝั่ง ตัวอย่าง: เลข 5 ที่ช่องที่ 4 ระบายแล้ว ต่อให้ดันชิดขอบซ้าย บล็อกก็ยังทับช่องที่ 5';
 
   @override
   String get nonogramGuideMethodWallPushingTitle => '2. ดันออกจากขอบ';
@@ -253,6 +253,17 @@ class AppLocalizationsTh extends AppLocalizations {
       'มาเรียนรู้กติกาพื้นฐานกับปริศนาขนาด 5×5 กัน';
 
   @override
+  String get nonogramTutorialInfoFree => 'เล่นฟรีทุกด่าน';
+
+  @override
+  String get nonogramTutorialInfoAds =>
+      'ดูโฆษณาได้ (ไม่บังคับ) เพื่อรับคำใบ้และไม้กายสิทธิ์เพิ่ม บางครั้งจะมีโฆษณาระหว่างด่าน';
+
+  @override
+  String get nonogramTutorialInfoPremium =>
+      'ซื้อครั้งเดียวเพื่อปิดโฆษณาระหว่างด่าน และรับคำใบ้กับไม้กายสิทธิ์ใช้ได้ในวันนั้นทุกครั้งที่เช็กอิน';
+
+  @override
   String get nonogramTutorialStart => 'เริ่ม';
 
   @override
@@ -262,6 +273,10 @@ class AppLocalizationsTh extends AppLocalizations {
   @override
   String get nonogramTutorialClueIsCount =>
       'ตัวเลขบอกว่าแถวนั้นมีช่องที่ระบายกี่ช่อง แถวนี้มี 5 จึงระบายทุกช่องเลย!';
+
+  @override
+  String get nonogramTutorialDragNote =>
+      'เคล็ดลับ: ลากนิ้วผ่านทั้งแถวเพื่อระบายในครั้งเดียวได้';
 
   @override
   String get nonogramTutorialEdgeCell =>
@@ -309,13 +324,72 @@ class AppLocalizationsTh extends AppLocalizations {
 
   @override
   String get nonogramGuideTutorialCardDesc =>
-      'เรียนรู้กติกาและการควบคุมทีละขั้นกับปริศนาขนาด 5×5';
+      'เรียนรู้กติกา การควบคุม และเทคนิคการแก้หลัก ๆ ทีละขั้นด้วยการลงมือเล่น';
+
+  @override
+  String get nonogramGuideRoutineTitle => 'เริ่มจากตรงไหน';
+
+  @override
+  String get nonogramGuideRoutineTip1 =>
+      'เริ่มจากตัวเลขใหญ่ ถ้าตัวเลขยาวเกินครึ่งเส้น บางส่วนของมันระบายได้แน่นอนแล้ว (ดูเทคนิคที่ 1 ด้านล่าง)';
+
+  @override
+  String get nonogramGuideRoutineTip2 =>
+      'แก้แถวง่าย ๆ ก่อน: 0 หมายถึงทั้งแถวว่าง และถ้าผลรวมของตัวเลขบวกช่องว่างคั่น 1 ช่องระหว่างแต่ละตัวเท่ากับความยาวแถวพอดี จะวางได้แบบเดียว';
+
+  @override
+  String get nonogramGuideRoutineTip3 =>
+      'กากบาทช่องที่รู้แน่ว่าว่าง กากบาทมีประโยชน์พอ ๆ กับช่องที่ระบายแล้ว';
+
+  @override
+  String get nonogramGuideRoutineTip4 =>
+      'สลับดูแถวกับคอลัมน์ไปมา ทุกช่องที่แก้ได้คือเบาะแสใหม่ของเส้นที่ตัดผ่านช่องนั้น';
+
+  @override
+  String get nonogramGuideRoutineTip5 =>
+      'อย่าเดา ถ้าติด ให้หาเส้นที่เหลือช่องที่ยังไม่รู้น้อยที่สุด หรือใช้คำใบ้';
+
+  @override
+  String nonogramGuideExample(int number) {
+    return 'ตัวอย่างที่ $number';
+  }
+
+  @override
+  String get nonogramGuideExampleSingle => 'ตัวอย่าง';
+
+  @override
+  String get nonogramGuideLegendTitle => 'วิธีอ่านภาพประกอบ';
+
+  @override
+  String get nonogramGuideLegendFilled => 'ช่องที่ระบายแล้ว';
+
+  @override
+  String get nonogramGuideLegendTrial => 'ลองวางบล็อก';
+
+  @override
+  String get nonogramGuideLegendCross => 'ช่องว่าง (X)';
+
+  @override
+  String get nonogramGuideLegendResult => 'สิ่งที่สรุปได้';
+
+  @override
+  String get nonogramGuideMethodLineDoneTitle => 'เส้นที่ครบแล้ว';
+
+  @override
+  String get nonogramGuideMethodLineDoneDesc =>
+      'เมื่อบล็อกทั้งหมดของเส้นหนึ่งเข้าที่แล้ว ช่องที่เหลือในเส้นนั้นว่างทั้งหมด: กากบาทให้หมด เส้นที่มีเลข 0 ว่างตั้งแต่แรก';
 
   @override
   String get nonogramPlayInfoHide => 'ซ่อนข้อมูลด่าน';
 
   @override
   String get nonogramPlayWandLabel => 'ไม้กายสิทธิ์';
+
+  @override
+  String get nonogramPlayUndo => 'เลิกทำ';
+
+  @override
+  String get nonogramPlayDragTip => 'ลากนิ้วผ่านช่องเพื่อระบายหลายช่องพร้อมกัน';
 
   @override
   String get nonogramPlayWandSelectPrompt =>
@@ -365,7 +439,14 @@ class AppLocalizationsTh extends AppLocalizations {
 
   @override
   String get nonogramCoachModeBody =>
-      'เลือกว่าการแตะจะทำอะไร: ระบายช่อง หรือทำเครื่องหมาย X เพื่อจำว่าช่องนั้นว่าง แตะปุ่มเพื่อสลับ ลากบนตารางเพื่อระบายหรือทำเครื่องหมายหลายช่องพร้อมกัน';
+      'เลือกว่าการแตะจะทำอะไร: ระบายช่อง หรือทำเครื่องหมาย X เพื่อจำว่าช่องนั้นว่าง แตะปุ่มเพื่อสลับ';
+
+  @override
+  String get nonogramCoachDragTitle => 'ลากเพื่อระบายหลายช่อง';
+
+  @override
+  String get nonogramCoachDragBody =>
+      'วางนิ้วบนช่องหนึ่งแล้วลากผ่านช่องอื่น ทุกช่องที่นิ้วผ่านจะถูกระบาย (หรือกากบาทในโหมด X) ในครั้งเดียว ถ้าเริ่มลากจากช่องที่ระบายแล้ว ช่องที่ผ่านจะถูกลบแทน';
 
   @override
   String get nonogramCoachLongPressTitle => 'กดค้างเพื่อทำสิ่งตรงข้าม';
@@ -373,6 +454,13 @@ class AppLocalizationsTh extends AppLocalizations {
   @override
   String get nonogramCoachLongPressBody =>
       'กดค้างที่ช่องเพื่อทำสิ่งตรงข้ามกับโหมดปัจจุบัน: ใส่ X ขณะอยู่ในโหมดระบาย หรือระบายขณะอยู่ในโหมด X การสั่นสั้น ๆ หมายความว่าเสร็จแล้วและปล่อยนิ้วได้';
+
+  @override
+  String get nonogramCoachRotateTitle => 'โหมดแนวนอน';
+
+  @override
+  String get nonogramCoachRotateBody =>
+      'แตะเพื่อหมุนกระดานเป็นแนวนอน สะดวกสำหรับปริศนาที่กว้าง ปุ่มจะย้ายไปด้านข้าง แตะอีกครั้งเพื่อกลับเป็นแนวตั้ง';
 
   @override
   String get nonogramCoachScrollTitle => 'การเลื่อนดูปริศนาขนาดใหญ่';
@@ -417,6 +505,49 @@ class AppLocalizationsTh extends AppLocalizations {
   @override
   String get nonogramTutorialFinishTools =>
       'ระบายช่องที่เหลือให้ครบ ลากลงตามคอลัมน์เพื่อระบายได้เร็วขึ้น';
+
+  @override
+  String get nonogramTutorialToolsDoneTitle => 'ใช้ปุ่มควบคุมเป็นแล้ว!';
+
+  @override
+  String get nonogramTutorialToolsDone =>
+      'ปริศนาจริงใหญ่กว่านี้ และแถวส่วนใหญ่ไม่สามารถแก้ได้ในแวบเดียว ต่อไปมาเรียนเทคนิคการแก้บนปริศนาขนาด 8×8 กัน';
+
+  @override
+  String get nonogramTutorialOverlapSingle =>
+      'มองหาตัวเลขใหญ่ก่อน บล็อก 6 วางใน 8 ช่องนี้ได้ 3 แบบ และแต่ละแบบจะกะพริบทีละแบบ ช่องที่สว่างในทุกแบบระบายได้แน่นอน: ระบาย 4 ช่องในกรอบสีเหลือง';
+
+  @override
+  String get nonogramTutorialOverlapMulti =>
+      'หลายตัวเลขก็เหมือนกัน: 3 3 ต้องใช้อย่างน้อย 7 ช่อง (3 + ช่องว่าง + 3) จึงวางได้แค่ 3 แบบ ระบายช่องที่สว่างในทั้ง 3 แบบ';
+
+  @override
+  String get nonogramTutorialFullRow =>
+      '8 ใน 8 ช่อง: ทั้งแถวถูกระบาย ลากผ่านทั้งแถวเลย';
+
+  @override
+  String get nonogramTutorialZeroRow =>
+      '0 หมายความว่าแถวนั้นไม่มีช่องที่ถูกระบายเลย สลับไปโหมด X';
+
+  @override
+  String get nonogramTutorialMarkZeroRow =>
+      'กากบาทแถวล่างสุดทั้งแถว กากบาทมีประโยชน์ เพราะบอกคอลัมน์ว่าบล็อกอยู่ตรงไหนไม่ได้';
+
+  @override
+  String get nonogramTutorialOutOfReach =>
+      'ต่อไปดูคอลัมน์ คอลัมน์ที่ 2 เป็นบล็อก 3 ช่องที่ต้องครอบ 2 ช่องที่ระบายแล้ว จึงวางได้แค่ 2 แบบ ช่องที่ไม่เคยสว่างเลยเอื้อมไม่ถึง: กากบาทให้หมด และทำแบบเดียวกันในคอลัมน์ที่ 7';
+
+  @override
+  String get nonogramTutorialBackToFill =>
+      'ดูคอลัมน์ที่ 3 ต้องการ 7 ช่อง สลับกลับไปโหมดระบาย';
+
+  @override
+  String get nonogramTutorialExactSpace =>
+      'กากบาทด้านล่างเหลือที่ไว้ให้เลข 7 พอดี 7 ช่อง ระบายให้หมดเลย คอลัมน์ที่ 6 ก็เหมือนกัน';
+
+  @override
+  String get nonogramTutorialFinishTechniques =>
+      'นี่คือวิธีแก้: ทำเท่าที่ทำได้ในแถว แล้วไปทำในคอลัมน์ แล้วทำซ้ำ ลองทำเห็ดให้เสร็จด้วยตัวเองเลย!';
 
   @override
   String get nonogramPlayHintNothingToFill =>
@@ -491,7 +622,7 @@ class AppLocalizationsTh extends AppLocalizations {
 
   @override
   String get adRewardNotReady =>
-      'โฆษณายังไม่พร้อม ตรวจสอบการเชื่อมต่ออินเทอร์เน็ตแล้วลองอีกครั้ง';
+      'โฆษณายังไม่พร้อม โปรดลองอีกครั้งในอีกไม่กี่นาที';
 
   @override
   String get settingsAdPrivacy => 'ความเป็นส่วนตัวด้านโฆษณา';
@@ -568,11 +699,6 @@ class AppLocalizationsTh extends AppLocalizations {
   String get checkInDoneToday => 'วันนี้เช็กอินแล้ว';
 
   @override
-  String checkInNextGift(int count) {
-    return 'อีก $count ครั้งจะได้ของขวัญถัดไป';
-  }
-
-  @override
   String get checkInCheckedIn => 'เช็กอินแล้ว!';
 
   @override
@@ -596,9 +722,6 @@ class AppLocalizationsTh extends AppLocalizations {
   }
 
   @override
-  String get checkInMonthGifts => 'ของขวัญเดือนนี้';
-
-  @override
   String get navHome => 'หน้าหลัก';
 
   @override
@@ -611,42 +734,74 @@ class AppLocalizationsTh extends AppLocalizations {
   String get meMore => 'อื่น ๆ';
 
   @override
-  String get checkInNotYetToday => 'วันนี้ยังไม่ได้เช็กอิน';
-
-  @override
   String get checkInTodayButton => 'เช็กอินวันนี้';
-
-  @override
-  String checkInGiftsLeftShort(int count) {
-    return 'อีก $count ครั้งได้ของขวัญ';
-  }
 
   @override
   String get checkInGiftToday => 'วันนี้มีของขวัญ!';
 
   @override
-  String checkInGiftMilestone(int count) {
-    return 'ของขวัญเช็กอินครบ $count ครั้ง';
-  }
-
-  @override
   String get checkInGiftCollect => 'รับ';
 
   @override
-  String get checkInTotalHints => 'คำใบ้';
+  String get checkInGiftDouble => 'รับ x2';
 
   @override
-  String get checkInTotalWands => 'ไม้กายสิทธิ์';
+  String checkInStreakTitle(int count) {
+    return 'ต่อเนื่อง $count วัน';
+  }
 
   @override
-  String get checkInTotalDailyHints => 'คำใบ้ (เฉพาะวันนี้)';
+  String checkInStreakDays(int count) {
+    return '$count วัน';
+  }
 
   @override
-  String get checkInTotalDailyWands => 'ไม้กายสิทธิ์ (เฉพาะวันนี้)';
+  String checkInStreakMakeUp(int missed, String days) {
+    return 'ชดเชย $missed วันที่พลาดไป เพื่อให้ต่อเนื่องเป็น $days';
+  }
 
   @override
-  String get checkInPremiumNotYet =>
-      'เช็กอินเพื่อรับคำใบ้ 2 ครั้งและไม้กายสิทธิ์ 1 ครั้งสำหรับวันนี้';
+  String get checkInStreakKeepGoing => 'เช็กอินทุกวันเพื่อรักษาความต่อเนื่อง';
+
+  @override
+  String get checkInStreakAllDone =>
+      'คุณได้รับของขวัญต่อเนื่องครบทุกชิ้นของเดือนนี้แล้ว!';
+
+  @override
+  String checkInStreakDaysLeft(int count) {
+    return 'อีก $count วันจะได้ของขวัญ';
+  }
+
+  @override
+  String get checkInLegendChecked => 'เช็กอินแล้ว';
+
+  @override
+  String get checkInLegendMissed => 'พลาด';
+
+  @override
+  String get checkInLegendFuture => 'ยังไม่ถึง';
+
+  @override
+  String checkInGiftStreak(int count) {
+    return 'ของขวัญต่อเนื่อง $count วัน';
+  }
+
+  @override
+  String checkInMakeUpTitle(String date) {
+    return 'ชดเชยวันที่ $date ไหม?';
+  }
+
+  @override
+  String get checkInMakeUpBody =>
+      'ดูโฆษณาสั้น ๆ เพื่อชดเชยวันนี้ ความต่อเนื่องของคุณจะกลับมาเชื่อมกัน';
+
+  @override
+  String get checkInMakeUpWatch => 'ดูโฆษณา';
+
+  @override
+  String checkInMadeUp(String date) {
+    return 'ชดเชยวันที่ $date แล้ว';
+  }
 
   @override
   String dashboardDailyReminder(String rewards, String time) {
@@ -751,12 +906,4 @@ class AppLocalizationsTh extends AppLocalizations {
   String dashboardDailyReminderBoth(String hints, String wands) {
     return '$hintsและ$wands';
   }
-
-  @override
-  String checkInLegendMilestone(int count) {
-    return 'ของขวัญทุก $count ครั้งที่เช็กอิน';
-  }
-
-  @override
-  String get checkInLegendPremium => 'รางวัลแพ็กไม่มีโฆษณา';
 }

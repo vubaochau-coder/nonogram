@@ -1,20 +1,14 @@
 import 'package:nonogram/core/app_route_intent.dart';
-import 'package:nonogram/core/app_theme.dart';
 import 'package:nonogram/core/context_ext.dart';
 import 'package:nonogram/screens/guide/illustrations/guide_illustration_card.dart';
-import 'package:nonogram/screens/guide/illustrations/guide_nonogram_illustration.dart';
+import 'package:nonogram/screens/guide/illustrations/guide_diagram_view.dart';
 import 'package:nonogram/screens/guide/models/guide_diagrams.dart';
 import 'package:nonogram/screens/guide/models/nonogram_guide_item.dart';
-import 'package:nonogram/screens/painters/nonogram_illustration_painter.dart';
 import 'package:flutter/material.dart';
 import 'package:lucide_icons/lucide_icons.dart';
 
 class NonogramGuidePage extends StatelessWidget {
   const NonogramGuidePage({super.key});
-
-  Color _clueBackgroundColor(BuildContext context) {
-    return context.gameColors.clueBackground;
-  }
 
   List<NonogramGuideItem> _guideItems(BuildContext context) {
     final l10n = context.l10n;
@@ -33,6 +27,11 @@ class NonogramGuidePage extends StatelessWidget {
         ),
         description: l10n.nonogramGuideMethodSuperpositionMultiDesc,
         diagrams: GuideDiagrams.superpositionMulti,
+      ),
+      NonogramGuideItem(
+        title: l10n.nonogramGuideMethodLineDoneTitle,
+        description: l10n.nonogramGuideMethodLineDoneDesc,
+        diagrams: GuideDiagrams.lineDone,
       ),
       NonogramGuideItem(
         title: _normalizedTitle(l10n.nonogramGuideMethodWallPushingTitle),
@@ -90,11 +89,24 @@ class NonogramGuidePage extends StatelessWidget {
               title: context.l10n.nonogramGuideRuleTitle,
               description: context.l10n.nonogramGuideRuleDesc,
               examples: [
-                _basicRuleIllustration(context),
-                const SizedBox(height: 16),
-                _basicRuleWideGapIllustration(context),
+                for (final diagram in GuideDiagrams.basicRule) ...[
+                  GuideExampleBlock(child: GuideDiagramView(diagram: diagram)),
+                  const SizedBox(height: 12),
+                ],
               ],
             ),
+            _RoutineSection(
+              title: context.l10n.nonogramGuideRoutineTitle,
+              tips: [
+                context.l10n.nonogramGuideRoutineTip1,
+                context.l10n.nonogramGuideRoutineTip2,
+                context.l10n.nonogramGuideRoutineTip3,
+                context.l10n.nonogramGuideRoutineTip4,
+                context.l10n.nonogramGuideRoutineTip5,
+              ],
+            ),
+            const _GuideLegend(),
+            const SizedBox(height: 24),
             ...List.generate(guideItems.length, (index) {
               return Padding(
                 padding: const EdgeInsets.only(bottom: 24),
@@ -108,34 +120,6 @@ class NonogramGuidePage extends StatelessWidget {
           ],
         ),
       ),
-    );
-  }
-
-  Widget _basicRuleIllustration(BuildContext context) {
-    return GuideNonogramIllustration(
-      clues: const [3, 1],
-      rows: [
-        NonogramIllustrationRow.fromIndices(length: 8, filled: [0, 1, 2, 4]),
-      ],
-      filledColor: context.color.primary,
-      markerColor: context.color.error,
-      lineColor: context.color.outlineVariant,
-      textColor: context.color.onSurface,
-      clueBackgroundColor: _clueBackgroundColor(context),
-    );
-  }
-
-  Widget _basicRuleWideGapIllustration(BuildContext context) {
-    return GuideNonogramIllustration(
-      clues: const [2, 2],
-      rows: [
-        NonogramIllustrationRow.fromIndices(length: 9, filled: [0, 1, 5, 6]),
-      ],
-      filledColor: context.color.primary,
-      markerColor: context.color.error,
-      lineColor: context.color.outlineVariant,
-      textColor: context.color.onSurface,
-      clueBackgroundColor: _clueBackgroundColor(context),
     );
   }
 }
@@ -171,6 +155,143 @@ class _GuideSection extends StatelessWidget {
           ),
           const SizedBox(height: 16),
           ...examples,
+        ],
+      ),
+    );
+  }
+}
+
+/// Chú giải các ký hiệu dùng trong hình minh hoạ kỹ thuật giải.
+class _GuideLegend extends StatelessWidget {
+  const _GuideLegend();
+
+  @override
+  Widget build(BuildContext context) {
+    final colors = context.color;
+    final l10n = context.l10n;
+    const size = 22.0;
+
+    Widget item(Widget icon, String label) {
+      return Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          SizedBox(width: size, height: size, child: Center(child: icon)),
+          const SizedBox(width: 8),
+          Flexible(child: Text(label, style: context.bodySmall)),
+        ],
+      );
+    }
+
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        color: colors.surfaceContainer,
+        borderRadius: BorderRadius.circular(16),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            l10n.nonogramGuideLegendTitle,
+            style: context.titleSmall.copyWith(color: colors.primary),
+          ),
+          const SizedBox(height: 12),
+          Wrap(
+            spacing: 20,
+            runSpacing: 10,
+            children: [
+              item(
+                Container(
+                  width: 18,
+                  height: 18,
+                  decoration: BoxDecoration(
+                    color: colors.onSurface,
+                    borderRadius: BorderRadius.circular(4),
+                  ),
+                ),
+                l10n.nonogramGuideLegendFilled,
+              ),
+              item(
+                Container(
+                  width: 14,
+                  height: 14,
+                  decoration: BoxDecoration(
+                    color: colors.primary,
+                    shape: BoxShape.circle,
+                  ),
+                ),
+                l10n.nonogramGuideLegendTrial,
+              ),
+              item(
+                Icon(LucideIcons.x, size: 18, color: colors.onSurfaceVariant),
+                l10n.nonogramGuideLegendCross,
+              ),
+              item(
+                Icon(
+                  Icons.arrow_downward_rounded,
+                  size: 20,
+                  color: colors.primary,
+                ),
+                l10n.nonogramGuideLegendResult,
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+/// Các bước nên làm khi bắt đầu một câu đố, trước khi vào từng kỹ thuật.
+class _RoutineSection extends StatelessWidget {
+  const _RoutineSection({required this.title, required this.tips});
+
+  final String title;
+  final List<String> tips;
+
+  @override
+  Widget build(BuildContext context) {
+    final colors = context.color;
+
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 40),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            title,
+            style: context.titleSmall.copyWith(color: colors.primary),
+          ),
+          const SizedBox(height: 12),
+          for (final tip in tips)
+            Padding(
+              padding: const EdgeInsets.only(bottom: 10),
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.only(top: 7, right: 12),
+                    child: Container(
+                      width: 8,
+                      height: 8,
+                      decoration: BoxDecoration(
+                        color: colors.primary,
+                        borderRadius: BorderRadius.circular(2),
+                      ),
+                    ),
+                  ),
+                  Expanded(
+                    child: Text(
+                      tip,
+                      style: context.bodyMedium.copyWith(
+                        color: colors.onSurfaceVariant,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
         ],
       ),
     );

@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/foundation.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 
+import '../../ad_config.dart';
 import '../../ad_events.dart';
 import '../../ad_placement.dart';
 import '../ad_network.dart';
@@ -18,7 +19,14 @@ class AdMobNetwork implements AdNetwork {
   final ConsentGate consent = _UmpConsentGate();
 
   @override
-  Future<void> initialize() => MobileAds.instance.initialize();
+  Future<void> initialize() async {
+    // Đặt trước khi khởi động SDK để cả lượt tải đầu tiên đã là quảng cáo mẫu
+    // trên máy thử nghiệm.
+    await MobileAds.instance.updateRequestConfiguration(
+      RequestConfiguration(testDeviceIds: AdTestDevices.ids),
+    );
+    await MobileAds.instance.initialize();
+  }
 
   @override
   FullScreenAdSlot createSlot({

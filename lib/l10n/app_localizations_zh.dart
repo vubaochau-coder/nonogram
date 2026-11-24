@@ -37,49 +37,49 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get nonogramGuideMethodDivisionDesc =>
-      '如果把两个已有的色块连起来会形成比任何可用数字都长的图形，那么它们之间的空隙必须是 X。';
+      '如果把两段已涂格连起来会得到比最大数字还长的色块，它们之间的格子一定为空。标上 X 把它们隔开。';
 
   @override
   String get nonogramGuideMethodDivisionTitle => '5. 分隔';
 
   @override
   String get nonogramGuideMethodDoublePositioningDesc =>
-      '如果一个已涂的方格只能属于某个色块的少数几种摆法，那么在所有这些摆法中都不会被涂的方格都必须标记为 X。';
+      '有时一个已涂格只可能属于其中一两个数字。逐一尝试每种可能：在所有可能中都为空的格子标上 X。';
 
   @override
   String get nonogramGuideMethodDoublePositioningTitle => '6. 双重定位';
 
   @override
   String get nonogramGuideMethodInaccessibilityDesc =>
-      '将不可能属于任何剩余色块的方格标上叉号（X）。';
+      '任何色块都够不到的格子一定为空。把每个色块放在已涂格周围最远的位置试试，范围之外的格子都标 X。';
 
   @override
   String get nonogramGuideMethodInaccessibilityTitle => '3. 不可达';
 
   @override
   String get nonogramGuideMethodNotFitDesc =>
-      '如果两个叉号之间的空格比该行任何可用数字都短，就必须标记为 X。';
+      'X 之间（或 X 与边缘之间）的空隙如果比任何可能放进去的数字都短，就放不下色块：把它标上 X。';
 
   @override
   String get nonogramGuideMethodNotFitTitle => '4. 放不下';
 
   @override
   String get nonogramGuideMethodSuperpositionMultiDesc =>
-      '有多个数字时，考虑同色色块之间至少要空一格的规定，把整组数字分别靠最左和靠最右摆放后叠在一起。同一个色块在两种摆法中都重叠的方格要涂上。';
+      '有多个数字时，把整组推到最左（色块之间留 1 个空格），再推到最右。同一个色块在两种位置都覆盖的格子一定要涂。速算法：把数字和间隔加起来，剩下的格数就是每个色块能移动的距离。';
 
   @override
   String get nonogramGuideMethodSuperpositionMultiTitle => '叠加法（多个数字）';
 
   @override
   String get nonogramGuideMethodSuperpositionSimpleDesc =>
-      '如果一个数字超过该行长度的一半，中间的某些方格一定会被涂。把靠最左和靠最右的摆法叠在一起，重叠的方格就要涂上。';
+      '如果一个数字超过该行长度的一半，它总有一部分会被涂上。想象把色块推到最左，再推到最右：两次都覆盖的格子一定要涂。例如：10 格中的 7 总会涂满中间 4 格。';
 
   @override
   String get nonogramGuideMethodSuperpositionSimpleTitle => '叠加法（单个数字）';
 
   @override
   String get nonogramGuideMethodWallPushingDesc =>
-      '如果一个确定已涂的方格离边缘的距离比第一个数字还短，那么它所属的色块必须向远离该边缘的方向延伸。';
+      '靠近边缘的已涂格会限制它所在色块的位置。色块不能超出边缘，只能往另一侧延伸。例如：5 且第 4 格已涂：即使推到最左，色块仍会覆盖第 5 格。';
 
   @override
   String get nonogramGuideMethodWallPushingTitle => '2. 从边缘推开';
@@ -248,6 +248,16 @@ class AppLocalizationsZh extends AppLocalizations {
   String get nonogramTutorialWelcome => '让我们通过一个 5×5 的小谜题来学习基本规则。';
 
   @override
+  String get nonogramTutorialInfoFree => '免费：所有关卡都能玩。';
+
+  @override
+  String get nonogramTutorialInfoAds => '可以观看广告（自愿）获得更多提示和魔杖。关卡之间有时会出现广告。';
+
+  @override
+  String get nonogramTutorialInfoPremium =>
+      '一次性购买即可关闭关卡间的广告，每次签到还能获得当天可用的提示和魔杖。';
+
+  @override
   String get nonogramTutorialStart => '开始';
 
   @override
@@ -255,6 +265,9 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get nonogramTutorialClueIsCount => '数字表示这一行有几个方格要涂色。这一行是 5，所以全部涂上！';
+
+  @override
+  String get nonogramTutorialDragNote => '提示：手指滑过整行即可一次涂满。';
 
   @override
   String get nonogramTutorialEdgeCell =>
@@ -296,13 +309,69 @@ class AppLocalizationsZh extends AppLocalizations {
   String get nonogramGuideTutorialCardTitle => '边玩边学';
 
   @override
-  String get nonogramGuideTutorialCardDesc => '在一个 5×5 的小谜题上一步步学习规则和操作。';
+  String get nonogramGuideTutorialCardDesc => '边玩边学，一步步掌握规则、操作和主要解题技巧。';
+
+  @override
+  String get nonogramGuideRoutineTitle => '从哪里开始';
+
+  @override
+  String get nonogramGuideRoutineTip1 =>
+      '从大数字开始。如果一个数字超过所在行列长度的一半，它的一部分已经可以确定（见下方技巧 1）。';
+
+  @override
+  String get nonogramGuideRoutineTip2 =>
+      '先解简单的行：0 表示整行为空；如果数字之和加上每两个数字之间 1 个空格正好等于行长，就只有一种排法。';
+
+  @override
+  String get nonogramGuideRoutineTip3 => '确定为空的格子要标上 X。X 和涂色的格子一样有用。';
+
+  @override
+  String get nonogramGuideRoutineTip4 => '在行与列之间来回切换。每解出一格，都是与它交叉的那一行或列的新线索。';
+
+  @override
+  String get nonogramGuideRoutineTip5 => '不要猜。卡住时，找未知格最少的那一行或列，或使用提示。';
+
+  @override
+  String nonogramGuideExample(int number) {
+    return '示例 $number';
+  }
+
+  @override
+  String get nonogramGuideExampleSingle => '示例';
+
+  @override
+  String get nonogramGuideLegendTitle => '如何看图示';
+
+  @override
+  String get nonogramGuideLegendFilled => '已涂的格子';
+
+  @override
+  String get nonogramGuideLegendTrial => '试放色块的位置';
+
+  @override
+  String get nonogramGuideLegendCross => '空格（X）';
+
+  @override
+  String get nonogramGuideLegendResult => '可以推出的结果';
+
+  @override
+  String get nonogramGuideMethodLineDoneTitle => '已完成的行列';
+
+  @override
+  String get nonogramGuideMethodLineDoneDesc =>
+      '当一行的所有色块都已就位，其余格子都是空的：把它们标上 X。数字为 0 的行一开始就是全空的。';
 
   @override
   String get nonogramPlayInfoHide => '隐藏关卡信息';
 
   @override
   String get nonogramPlayWandLabel => '魔杖';
+
+  @override
+  String get nonogramPlayUndo => '撤销';
+
+  @override
+  String get nonogramPlayDragTip => '手指滑过格子，可以一次涂多格。';
 
   @override
   String get nonogramPlayWandSelectPrompt => '点按要揭开的行或列的数字';
@@ -349,7 +418,14 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get nonogramCoachModeBody =>
-      '选择点按时的操作：给方格涂色，或标上 X 提醒自己这里是空格。点按按钮即可切换。在网格上拖动可以一次涂色或标记多个方格。';
+      '选择点按时的操作：给方格涂色，或标上 X 提醒自己这里是空格。点按按钮即可切换。';
+
+  @override
+  String get nonogramCoachDragTitle => '拖动一次涂多格';
+
+  @override
+  String get nonogramCoachDragBody =>
+      '手指按住一格，滑过其他格子：经过的格子会一次全部涂色（X 模式下则标上 X）。从已涂的格子开始滑动，则会清除经过的格子。';
 
   @override
   String get nonogramCoachLongPressTitle => '长按执行相反操作';
@@ -357,6 +433,13 @@ class AppLocalizationsZh extends AppLocalizations {
   @override
   String get nonogramCoachLongPressBody =>
       '长按方格会执行与当前模式相反的操作：涂色时标 X，标记时涂色。短暂振动表示已完成，可以松手了。';
+
+  @override
+  String get nonogramCoachRotateTitle => '横屏模式';
+
+  @override
+  String get nonogramCoachRotateBody =>
+      '点按可将棋盘横过来，方便玩较宽的谜题；按钮会移到两侧。再点按一次即可回到竖屏。';
 
   @override
   String get nonogramCoachScrollTitle => '浏览大谜题';
@@ -398,6 +481,45 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get nonogramTutorialFinishTools => '涂完剩下的方格就完成了。沿着一列向下拖动可以涂得更快。';
+
+  @override
+  String get nonogramTutorialToolsDoneTitle => '操作已掌握！';
+
+  @override
+  String get nonogramTutorialToolsDone =>
+      '正式谜题更大，大多数行列无法一眼看出答案。接下来，在一个 8×8 谜题上学习解题技巧。';
+
+  @override
+  String get nonogramTutorialOverlapSingle =>
+      '先找大数字。6 在这 8 格里有 3 种放法，会轮流闪烁。每种放法都亮起的格子一定要涂：涂上黄框里的 4 格。';
+
+  @override
+  String get nonogramTutorialOverlapMulti =>
+      '多个数字也一样：3 3 至少需要 7 格（3 + 空格 + 3），所以只有 3 种放法。涂上 3 种放法都亮起的格子。';
+
+  @override
+  String get nonogramTutorialFullRow => '8 格里是 8：整行都要涂。滑动涂满整行。';
+
+  @override
+  String get nonogramTutorialZeroRow => '0 表示这一行没有任何要涂的格子。切换到 X 模式。';
+
+  @override
+  String get nonogramTutorialMarkZeroRow => '把最下面一整行都标上 X。X 很有用：它告诉各列哪里不可能有色块。';
+
+  @override
+  String get nonogramTutorialOutOfReach =>
+      '现在看列。第 2 列是一个长度 3 的色块，必须盖住已涂的 2 格，所以只有 2 种放法。从不亮起的格子够不到：标上 X，第 7 列也一样。';
+
+  @override
+  String get nonogramTutorialBackToFill => '看第 3 列：它需要 7 格。切换回涂色模式。';
+
+  @override
+  String get nonogramTutorialExactSpace =>
+      '底部的 X 让 7 正好剩下 7 格，所以全部涂上。第 6 列也一样。';
+
+  @override
+  String get nonogramTutorialFinishTechniques =>
+      '这就是解题套路：先在行里解出能确定的格子，再看列，如此反复。自己完成这个蘑菇吧！';
 
   @override
   String get nonogramPlayHintNothingToFill => '所有该涂的方格都已经涂好了。检查一下是否有多涂的方格。';
@@ -468,7 +590,7 @@ class AppLocalizationsZh extends AppLocalizations {
   }
 
   @override
-  String get adRewardNotReady => '广告还没准备好。请检查网络连接后重试。';
+  String get adRewardNotReady => '广告还没准备好，请几分钟后再试。';
 
   @override
   String get settingsAdPrivacy => '广告隐私';
@@ -541,11 +663,6 @@ class AppLocalizationsZh extends AppLocalizations {
   String get checkInDoneToday => '今天已签到';
 
   @override
-  String checkInNextGift(int count) {
-    return '再签到 $count 次即可获得下一份礼物';
-  }
-
-  @override
   String get checkInCheckedIn => '签到成功！';
 
   @override
@@ -569,9 +686,6 @@ class AppLocalizationsZh extends AppLocalizations {
   }
 
   @override
-  String get checkInMonthGifts => '本月礼物';
-
-  @override
   String get navHome => '首页';
 
   @override
@@ -584,41 +698,72 @@ class AppLocalizationsZh extends AppLocalizations {
   String get meMore => '更多';
 
   @override
-  String get checkInNotYetToday => '今天还没签到';
-
-  @override
   String get checkInTodayButton => '今日签到';
-
-  @override
-  String checkInGiftsLeftShort(int count) {
-    return '再签 $count 次得礼物';
-  }
 
   @override
   String get checkInGiftToday => '今天有礼物！';
 
   @override
-  String checkInGiftMilestone(int count) {
-    return '累计签到 $count 次礼物';
-  }
-
-  @override
   String get checkInGiftCollect => '领取';
 
   @override
-  String get checkInTotalHints => '提示';
+  String get checkInGiftDouble => '领取 x2';
 
   @override
-  String get checkInTotalWands => '魔法棒';
+  String checkInStreakTitle(int count) {
+    return '连续 $count 天';
+  }
 
   @override
-  String get checkInTotalDailyHints => '提示（仅限今天）';
+  String checkInStreakDays(int count) {
+    return '$count 天';
+  }
 
   @override
-  String get checkInTotalDailyWands => '魔法棒（仅限今天）';
+  String checkInStreakMakeUp(int missed, String days) {
+    return '补签 $missed 天，连续天数将达到 $days';
+  }
 
   @override
-  String get checkInPremiumNotYet => '签到即可获得今天可用的 2 次提示和 1 次魔法棒。';
+  String get checkInStreakKeepGoing => '每天签到，保持连续';
+
+  @override
+  String get checkInStreakAllDone => '本月连续签到奖励已全部领取！';
+
+  @override
+  String checkInStreakDaysLeft(int count) {
+    return '再签 $count 天得礼物';
+  }
+
+  @override
+  String get checkInLegendChecked => '已签到';
+
+  @override
+  String get checkInLegendMissed => '漏签';
+
+  @override
+  String get checkInLegendFuture => '未到';
+
+  @override
+  String checkInGiftStreak(int count) {
+    return '连续 $count 天礼物';
+  }
+
+  @override
+  String checkInMakeUpTitle(String date) {
+    return '补签 $date？';
+  }
+
+  @override
+  String get checkInMakeUpBody => '观看一段短广告即可补签这一天，连续天数会重新接上。';
+
+  @override
+  String get checkInMakeUpWatch => '观看广告';
+
+  @override
+  String checkInMadeUp(String date) {
+    return '已补签 $date';
+  }
 
   @override
   String dashboardDailyReminder(String rewards, String time) {
@@ -715,14 +860,6 @@ class AppLocalizationsZh extends AppLocalizations {
   String dashboardDailyReminderBoth(String hints, String wands) {
     return '$hints和$wands';
   }
-
-  @override
-  String checkInLegendMilestone(int count) {
-    return '每签到 $count 次有礼物';
-  }
-
-  @override
-  String get checkInLegendPremium => '无广告套餐奖励';
 }
 
 /// The translations for Chinese, using the Han script (`zh_Hant`).
@@ -758,49 +895,49 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
 
   @override
   String get nonogramGuideMethodDivisionDesc =>
-      '如果把兩個已有的色塊連起來會形成比任何可用數字都長的圖形，那麼它們之間的空隙必須是 X。';
+      '如果把兩段已塗格連起來會得到比最大數字還長的色塊，它們之間的格子一定為空。標上 X 把它們隔開。';
 
   @override
   String get nonogramGuideMethodDivisionTitle => '5. 分隔';
 
   @override
   String get nonogramGuideMethodDoublePositioningDesc =>
-      '如果一個已塗的方格只能屬於某個色塊的少數幾種擺法，那麼在所有這些擺法中都不會被塗的方格都必須標記為 X。';
+      '有時一個已塗格只可能屬於其中一兩個數字。逐一嘗試每種可能：在所有可能中都為空的格子標上 X。';
 
   @override
   String get nonogramGuideMethodDoublePositioningTitle => '6. 雙重定位';
 
   @override
   String get nonogramGuideMethodInaccessibilityDesc =>
-      '將不可能屬於任何剩餘色塊的方格標上叉號（X）。';
+      '任何色塊都搆不到的格子一定為空。把每個色塊放在已塗格周圍最遠的位置試試，範圍之外的格子都標 X。';
 
   @override
   String get nonogramGuideMethodInaccessibilityTitle => '3. 不可達';
 
   @override
   String get nonogramGuideMethodNotFitDesc =>
-      '如果兩個叉號之間的空格比這條線上任何可用數字都短，就必須標記為 X。';
+      'X 之間（或 X 與邊緣之間）的空隙如果比任何可能放進去的數字都短，就放不下色塊：把它標上 X。';
 
   @override
   String get nonogramGuideMethodNotFitTitle => '4. 放不下';
 
   @override
   String get nonogramGuideMethodSuperpositionMultiDesc =>
-      '有多個數字時，考慮同色色塊之間至少要空一格的規定，把整組數字分別靠最左和靠最右擺放後疊在一起。同一個色塊在兩種擺法中都重疊的方格要塗上。';
+      '有多個數字時，把整組推到最左（色塊之間留 1 個空格），再推到最右。同一個色塊在兩種位置都覆蓋的格子一定要塗。速算法：把數字和間隔加起來，剩下的格數就是每個色塊能移動的距離。';
 
   @override
   String get nonogramGuideMethodSuperpositionMultiTitle => '疊加法（多個數字）';
 
   @override
   String get nonogramGuideMethodSuperpositionSimpleDesc =>
-      '如果一個數字超過這條線長度的一半，中間的某些方格一定會被塗。把靠最左和靠最右的擺法疊在一起，重疊的方格就要塗上。';
+      '如果一個數字超過該行長度的一半，它總有一部分會被塗上。想像把色塊推到最左，再推到最右：兩次都覆蓋的格子一定要塗。例如：10 格中的 7 總會塗滿中間 4 格。';
 
   @override
   String get nonogramGuideMethodSuperpositionSimpleTitle => '疊加法（單個數字）';
 
   @override
   String get nonogramGuideMethodWallPushingDesc =>
-      '如果一個確定已塗的方格離邊緣的距離比第一個數字還短，那麼它所屬的色塊必須朝遠離該邊緣的方向延伸。';
+      '靠近邊緣的已塗格會限制它所在色塊的位置。色塊不能超出邊緣，只能往另一側延伸。例如：5 且第 4 格已塗：即使推到最左，色塊仍會覆蓋第 5 格。';
 
   @override
   String get nonogramGuideMethodWallPushingTitle => '2. 從邊緣推開';
@@ -969,6 +1106,16 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
   String get nonogramTutorialWelcome => '讓我們透過一個 5×5 的小謎題來學習基本規則。';
 
   @override
+  String get nonogramTutorialInfoFree => '免費：所有關卡都能玩。';
+
+  @override
+  String get nonogramTutorialInfoAds => '可以觀看廣告（自願）獲得更多提示和魔杖。關卡之間有時會出現廣告。';
+
+  @override
+  String get nonogramTutorialInfoPremium =>
+      '一次性購買即可關閉關卡間的廣告，每次簽到還能獲得當天可用的提示和魔杖。';
+
+  @override
   String get nonogramTutorialStart => '開始';
 
   @override
@@ -976,6 +1123,9 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
 
   @override
   String get nonogramTutorialClueIsCount => '數字表示這一橫列有幾個方格要塗色。這一橫列是 5，所以全部塗上！';
+
+  @override
+  String get nonogramTutorialDragNote => '提示：手指滑過整行即可一次塗滿。';
 
   @override
   String get nonogramTutorialEdgeCell =>
@@ -1017,13 +1167,69 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
   String get nonogramGuideTutorialCardTitle => '邊玩邊學';
 
   @override
-  String get nonogramGuideTutorialCardDesc => '在一個 5×5 的小謎題上一步步學習規則和操作。';
+  String get nonogramGuideTutorialCardDesc => '邊玩邊學，一步步掌握規則、操作和主要解題技巧。';
+
+  @override
+  String get nonogramGuideRoutineTitle => '從哪裡開始';
+
+  @override
+  String get nonogramGuideRoutineTip1 =>
+      '從大數字開始。如果一個數字超過所在行列長度的一半，它的一部分已經可以確定（見下方技巧 1）。';
+
+  @override
+  String get nonogramGuideRoutineTip2 =>
+      '先解簡單的行列：0 表示整行為空；如果數字之和加上每兩個數字之間 1 個空格正好等於長度，就只有一種排法。';
+
+  @override
+  String get nonogramGuideRoutineTip3 => '確定為空的格子要標上 X。X 和塗色的格子一樣有用。';
+
+  @override
+  String get nonogramGuideRoutineTip4 => '在橫列與直行之間來回切換。每解出一格，都是與它交叉的那一行或列的新線索。';
+
+  @override
+  String get nonogramGuideRoutineTip5 => '不要猜。卡住時，找未知格最少的那一行或列，或使用提示。';
+
+  @override
+  String nonogramGuideExample(int number) {
+    return '範例 $number';
+  }
+
+  @override
+  String get nonogramGuideExampleSingle => '範例';
+
+  @override
+  String get nonogramGuideLegendTitle => '如何看圖示';
+
+  @override
+  String get nonogramGuideLegendFilled => '已塗的格子';
+
+  @override
+  String get nonogramGuideLegendTrial => '試放色塊的位置';
+
+  @override
+  String get nonogramGuideLegendCross => '空格（X）';
+
+  @override
+  String get nonogramGuideLegendResult => '可以推出的結果';
+
+  @override
+  String get nonogramGuideMethodLineDoneTitle => '已完成的行列';
+
+  @override
+  String get nonogramGuideMethodLineDoneDesc =>
+      '當一行的所有色塊都已就位，其餘格子都是空的：把它們標上 X。數字為 0 的行一開始就是全空的。';
 
   @override
   String get nonogramPlayInfoHide => '隱藏關卡資訊';
 
   @override
   String get nonogramPlayWandLabel => '魔杖';
+
+  @override
+  String get nonogramPlayUndo => '復原';
+
+  @override
+  String get nonogramPlayDragTip => '手指滑過格子，可以一次塗多格。';
 
   @override
   String get nonogramPlayWandSelectPrompt => '點按要揭開的橫列或直行的數字';
@@ -1070,7 +1276,14 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
 
   @override
   String get nonogramCoachModeBody =>
-      '選擇點按時的操作：為方格塗色，或標上 X 提醒自己這裡是空格。點按按鈕即可切換。在網格上拖曳可以一次塗色或標記多個方格。';
+      '選擇點按時的操作：為方格塗色，或標上 X 提醒自己這裡是空格。點按按鈕即可切換。';
+
+  @override
+  String get nonogramCoachDragTitle => '拖曳一次塗多格';
+
+  @override
+  String get nonogramCoachDragBody =>
+      '手指按住一格，滑過其他格子：經過的格子會一次全部塗色（X 模式下則標上 X）。從已塗的格子開始滑動，則會清除經過的格子。';
 
   @override
   String get nonogramCoachLongPressTitle => '長按執行相反操作';
@@ -1078,6 +1291,13 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
   @override
   String get nonogramCoachLongPressBody =>
       '長按方格會執行與目前模式相反的操作：塗色時標 X，標記時塗色。短暫震動表示已完成，可以放開了。';
+
+  @override
+  String get nonogramCoachRotateTitle => '橫向模式';
+
+  @override
+  String get nonogramCoachRotateBody =>
+      '點按可將棋盤橫過來，方便玩較寬的謎題；按鈕會移到兩側。再點按一次即可回到直向。';
 
   @override
   String get nonogramCoachScrollTitle => '瀏覽大謎題';
@@ -1119,6 +1339,46 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
 
   @override
   String get nonogramTutorialFinishTools => '塗完剩下的方格就完成了。沿著一直行向下拖曳可以塗得更快。';
+
+  @override
+  String get nonogramTutorialToolsDoneTitle => '操作已掌握！';
+
+  @override
+  String get nonogramTutorialToolsDone =>
+      '正式謎題更大，大多數橫列和直行無法一眼看出答案。接下來，在一個 8×8 謎題上學習解題技巧。';
+
+  @override
+  String get nonogramTutorialOverlapSingle =>
+      '先找大數字。6 在這 8 格裡有 3 種放法，會輪流閃爍。每種放法都亮起的格子一定要塗：塗上黃框裡的 4 格。';
+
+  @override
+  String get nonogramTutorialOverlapMulti =>
+      '多個數字也一樣：3 3 至少需要 7 格（3 + 空格 + 3），所以只有 3 種放法。塗上 3 種放法都亮起的格子。';
+
+  @override
+  String get nonogramTutorialFullRow => '8 格裡是 8：整列都要塗。滑動塗滿整列。';
+
+  @override
+  String get nonogramTutorialZeroRow => '0 表示這一橫列沒有任何要塗的格子。切換到 X 模式。';
+
+  @override
+  String get nonogramTutorialMarkZeroRow =>
+      '把最下面一整列都標上 X。X 很有用：它告訴各直行哪裡不可能有色塊。';
+
+  @override
+  String get nonogramTutorialOutOfReach =>
+      '現在看直行。第 2 行是一個長度 3 的色塊，必須蓋住已塗的 2 格，所以只有 2 種放法。從不亮起的格子搆不到：標上 X，第 7 行也一樣。';
+
+  @override
+  String get nonogramTutorialBackToFill => '看第 3 行：它需要 7 格。切換回塗色模式。';
+
+  @override
+  String get nonogramTutorialExactSpace =>
+      '底部的 X 讓 7 正好剩下 7 格，所以全部塗上。第 6 行也一樣。';
+
+  @override
+  String get nonogramTutorialFinishTechniques =>
+      '這就是解題套路：先在橫列裡解出能確定的格子，再看直行，如此反覆。自己完成這個蘑菇吧！';
 
   @override
   String get nonogramPlayHintNothingToFill => '所有該塗的方格都已經塗好了。檢查一下是否有多塗的方格。';
@@ -1189,7 +1449,7 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
   }
 
   @override
-  String get adRewardNotReady => '廣告還沒準備好。請檢查網路連線後重試。';
+  String get adRewardNotReady => '廣告還沒準備好，請幾分鐘後再試。';
 
   @override
   String get settingsAdPrivacy => '廣告隱私';
@@ -1262,11 +1522,6 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
   String get checkInDoneToday => '今天已簽到';
 
   @override
-  String checkInNextGift(int count) {
-    return '再簽到 $count 次即可獲得下一份禮物';
-  }
-
-  @override
   String get checkInCheckedIn => '簽到成功！';
 
   @override
@@ -1290,9 +1545,6 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
   }
 
   @override
-  String get checkInMonthGifts => '本月禮物';
-
-  @override
   String get navHome => '首頁';
 
   @override
@@ -1305,41 +1557,72 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
   String get meMore => '更多';
 
   @override
-  String get checkInNotYetToday => '今天還沒簽到';
-
-  @override
   String get checkInTodayButton => '今日簽到';
-
-  @override
-  String checkInGiftsLeftShort(int count) {
-    return '再簽 $count 次得禮物';
-  }
 
   @override
   String get checkInGiftToday => '今天有禮物！';
 
   @override
-  String checkInGiftMilestone(int count) {
-    return '累計簽到 $count 次禮物';
-  }
-
-  @override
   String get checkInGiftCollect => '領取';
 
   @override
-  String get checkInTotalHints => '提示';
+  String get checkInGiftDouble => '領取 x2';
 
   @override
-  String get checkInTotalWands => '魔法棒';
+  String checkInStreakTitle(int count) {
+    return '連續 $count 天';
+  }
 
   @override
-  String get checkInTotalDailyHints => '提示（僅限今天）';
+  String checkInStreakDays(int count) {
+    return '$count 天';
+  }
 
   @override
-  String get checkInTotalDailyWands => '魔法棒（僅限今天）';
+  String checkInStreakMakeUp(int missed, String days) {
+    return '補簽 $missed 天，連續天數將達到 $days';
+  }
 
   @override
-  String get checkInPremiumNotYet => '簽到即可獲得今天可用的 2 次提示和 1 次魔法棒。';
+  String get checkInStreakKeepGoing => '每天簽到，保持連續';
+
+  @override
+  String get checkInStreakAllDone => '本月連續簽到獎勵已全部領取！';
+
+  @override
+  String checkInStreakDaysLeft(int count) {
+    return '再簽 $count 天得禮物';
+  }
+
+  @override
+  String get checkInLegendChecked => '已簽到';
+
+  @override
+  String get checkInLegendMissed => '漏簽';
+
+  @override
+  String get checkInLegendFuture => '未到';
+
+  @override
+  String checkInGiftStreak(int count) {
+    return '連續 $count 天禮物';
+  }
+
+  @override
+  String checkInMakeUpTitle(String date) {
+    return '補簽 $date？';
+  }
+
+  @override
+  String get checkInMakeUpBody => '觀看一段短廣告即可補簽這一天，連續天數會重新接上。';
+
+  @override
+  String get checkInMakeUpWatch => '觀看廣告';
+
+  @override
+  String checkInMadeUp(String date) {
+    return '已補簽 $date';
+  }
 
   @override
   String dashboardDailyReminder(String rewards, String time) {
@@ -1436,12 +1719,4 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
   String dashboardDailyReminderBoth(String hints, String wands) {
     return '$hints和$wands';
   }
-
-  @override
-  String checkInLegendMilestone(int count) {
-    return '每簽到 $count 次有禮物';
-  }
-
-  @override
-  String get checkInLegendPremium => '無廣告套餐獎勵';
 }

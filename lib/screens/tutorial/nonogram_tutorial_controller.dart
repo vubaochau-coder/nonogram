@@ -38,6 +38,9 @@ enum TutorialTask {
   /// Chạm vào dãy số của [TutorialStep.wandLine].
   pickWandLine,
 
+  /// Xong phần thao tác; chờ bấm "Tiếp tục" để sang phần kỹ thuật giải.
+  toolsDone,
+
   /// Đã giải xong.
   done,
 }
@@ -61,6 +64,16 @@ enum TutorialMessage {
   activateWand,
   pickWandLine,
   finishTools,
+  toolsDone,
+  overlapSingle,
+  overlapMulti,
+  fullRow,
+  zeroRow,
+  markZeroRow,
+  outOfReach,
+  backToFill,
+  exactSpace,
+  finishTechniques,
   done,
 }
 
@@ -82,6 +95,9 @@ class TutorialStep {
     this.showTools = false,
     this.wandLine,
     this.highlightPendingOnly = false,
+    this.ghostLine,
+    this.freePlay = false,
+    this.dragNote = false,
   });
 
   final TutorialTask task;
@@ -119,7 +135,18 @@ class TutorialStep {
   /// tô sẵn).
   final bool highlightPendingOnly;
 
-  Set<TutorialCell> get highlightedCells => highlight ?? targets;
+  /// Dòng có hoạt ảnh nháy lần lượt từng cách đặt khối hợp lệ, minh hoạ kỹ
+  /// thuật chồng lấp / ngoài tầm với. Bước này không có bàn tay chỉ chỗ.
+  final TutorialLine? ghostLine;
+
+  /// Người chơi tự giải: không viền sáng, không bàn tay chỉ chỗ.
+  final bool freePlay;
+
+  /// Dòng nhỏ dưới lời dẫn: có thể kéo ngón tay để tô nhiều ô một lần.
+  final bool dragNote;
+
+  Set<TutorialCell> get highlightedCells =>
+      freePlay ? const {} : highlight ?? targets;
 }
 
 /// Bài 5×5 và kịch bản từng bước của luồng "Cách chơi".
@@ -156,7 +183,35 @@ abstract final class NonogramTutorialScript {
     [1, 1, 1, 1, 1],
   ];
 
+  /// Câu đố phần kỹ thuật giải (cây nấm):
+  /// ```
+  /// · · ■ ■ ■ ■ · ·   4
+  /// · ■ ■ ■ ■ ■ ■ ·   6
+  /// ■ ■ ■ · · ■ ■ ■   3 3
+  /// ■ ■ ■ ■ ■ ■ ■ ■   8
+  /// · · ■ · · ■ · ·   1 1
+  /// · · ■ · · ■ · ·   1 1
+  /// · · ■ ■ ■ ■ · ·   4
+  /// · · · · · · · ·   0
+  /// ```
+  /// Mỗi bước có hướng dẫn chỉ dùng một kỹ thuật trên đúng một hàng / cột;
+  /// test kiểm tra từng ô mục tiêu đều suy ra được từ bàn lúc đó.
+  static const List<List<int>> techniquesSolution = [
+    [0, 0, 1, 1, 1, 1, 0, 0],
+    [0, 1, 1, 1, 1, 1, 1, 0],
+    [1, 1, 1, 0, 0, 1, 1, 1],
+    [1, 1, 1, 1, 1, 1, 1, 1],
+    [0, 0, 1, 0, 0, 1, 0, 0],
+    [0, 0, 1, 0, 0, 1, 0, 0],
+    [0, 0, 1, 1, 1, 1, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0],
+  ];
+
   static TutorialCell _cell(int row, int col) => (row: row, col: col);
+
+  static Set<TutorialCell> _col(int col, List<int> rows) {
+    return {for (final r in rows) _cell(r, col)};
+  }
 
   static Set<TutorialCell> _row(int row, List<int> cols) {
     return {for (final c in cols) _cell(row, c)};
@@ -179,6 +234,7 @@ abstract final class NonogramTutorialScript {
       message: TutorialMessage.clueIsCount,
       visibleRows: 1,
       targets: _row(0, [0, 1, 2, 3, 4]),
+      dragNote: true,
     ),
     // Ô cuối đã tô sẵn: khối 4 phải chạm nó nên chỉ có một cách đặt.
     TutorialStep(
@@ -305,11 +361,108 @@ abstract final class NonogramTutorialScript {
       },
     ),
     const TutorialStep(
-      task: TutorialTask.done,
-      message: TutorialMessage.done,
+      task: TutorialTask.toolsDone,
+      message: TutorialMessage.toolsDone,
       visibleRows: 5,
       showColumnClues: true,
       showTools: true,
+    ),
+
+    // --- Phần 3: kỹ thuật giải trên câu đố 8×8 ---
+    // 6 trong 8 ô: dù sát trái hay sát phải, 4 ô giữa luôn được tô.
+    TutorialStep(
+      task: TutorialTask.fill,
+      message: TutorialMessage.overlapSingle,
+      visibleRows: 8,
+      showColumnClues: true,
+      newPuzzle: techniquesSolution,
+      startMode: NonogramInteractionMode.fill,
+      targets: _row(1, [2, 3, 4, 5]),
+      ghostLine: (isRow: true, index: 1),
+    ),
+    // 3 3 cần ít nhất 7 ô, dư 1: cả nhóm chỉ xê dịch được 1 ô.
+    TutorialStep(
+      task: TutorialTask.fill,
+      message: TutorialMessage.overlapMulti,
+      visibleRows: 8,
+      showColumnClues: true,
+      targets: _row(2, [1, 2, 5, 6]),
+      ghostLine: (isRow: true, index: 2),
+    ),
+    TutorialStep(
+      task: TutorialTask.fill,
+      message: TutorialMessage.fullRow,
+      visibleRows: 8,
+      showColumnClues: true,
+      targets: _row(3, [0, 1, 2, 3, 4, 5, 6, 7]),
+    ),
+    TutorialStep(
+      task: TutorialTask.switchMode,
+      message: TutorialMessage.zeroRow,
+      visibleRows: 8,
+      showColumnClues: true,
+      mode: NonogramInteractionMode.mark,
+      highlight: _row(7, [0, 1, 2, 3, 4, 5, 6, 7]),
+    ),
+    TutorialStep(
+      task: TutorialTask.mark,
+      message: TutorialMessage.markZeroRow,
+      visibleRows: 8,
+      showColumnClues: true,
+      targets: _row(7, [0, 1, 2, 3, 4, 5, 6, 7]),
+    ),
+    // Cột 2 (và cột 7): khối 3 phải phủ 2 ô đã tô nên chỉ với thêm được 1 ô.
+    TutorialStep(
+      task: TutorialTask.mark,
+      message: TutorialMessage.outOfReach,
+      visibleRows: 8,
+      showColumnClues: true,
+      targets: {
+        ..._col(1, [0, 5, 6]),
+        ..._col(6, [0, 5, 6]),
+      },
+      ghostLine: (isRow: false, index: 1),
+    ),
+    TutorialStep(
+      task: TutorialTask.switchMode,
+      message: TutorialMessage.backToFill,
+      visibleRows: 8,
+      showColumnClues: true,
+      mode: NonogramInteractionMode.fill,
+      highlight: {
+        ..._col(2, [0, 4, 5, 6]),
+        ..._col(5, [0, 4, 5, 6]),
+      },
+    ),
+    // Cột 3 (và cột 6): dấu X ở đáy chừa đúng 7 ô cho số 7.
+    TutorialStep(
+      task: TutorialTask.fill,
+      message: TutorialMessage.exactSpace,
+      visibleRows: 8,
+      showColumnClues: true,
+      targets: {
+        ..._col(2, [0, 4, 5, 6]),
+        ..._col(5, [0, 4, 5, 6]),
+      },
+    ),
+    TutorialStep(
+      task: TutorialTask.fill,
+      message: TutorialMessage.finishTechniques,
+      visibleRows: 8,
+      showColumnClues: true,
+      freePlay: true,
+      targets: {
+        ..._row(0, [3, 4]),
+        ..._row(1, [1, 6]),
+        ..._row(2, [0, 7]),
+        ..._row(6, [3, 4]),
+      },
+    ),
+    const TutorialStep(
+      task: TutorialTask.done,
+      message: TutorialMessage.done,
+      visibleRows: 8,
+      showColumnClues: true,
     ),
   ];
 }
@@ -377,6 +530,7 @@ class NonogramTutorialController extends ChangeNotifier {
   Set<TutorialCell> _locked = const {};
   int _stepIndex = 0;
   int _mistakes = 0;
+  List<Set<int>> _ghostPlacements = const [];
 
   /// Mở đầu ở chế độ X để bước đầu tiên dạy cách chuyển sang chế độ tô.
   NonogramInteractionMode _mode = NonogramInteractionMode.mark;
@@ -405,6 +559,15 @@ class NonogramTutorialController extends ChangeNotifier {
       step.highlightPendingOnly
           ? pendingTargets.toSet()
           : step.highlightedCells;
+
+  /// Mọi cách đặt khối hợp lệ trên [TutorialStep.ghostLine] lúc vào bước
+  /// (mỗi cách là tập chỉ số ô được tô), để hoạt ảnh nháy lần lượt.
+  List<Set<int>> get ghostPlacements => _ghostPlacements;
+
+  /// Hoạt ảnh chỉ chạy tới khi người chơi làm ô đầu tiên của bước.
+  bool get showGhost =>
+      _ghostPlacements.isNotEmpty &&
+      pendingTargets.length == step.targets.length;
 
   /// Bản sao mới mỗi lần đổi, để painter so sánh bằng `!=`.
   List<List<NonogramCellState>> get grid => _grid;
@@ -459,9 +622,12 @@ class NonogramTutorialController extends ChangeNotifier {
     _advance();
   }
 
-  /// Bấm "Tiếp tục" sau phần luật chơi.
-  void continueToTools() {
-    if (step.task != TutorialTask.rulesDone) return;
+  /// Bấm "Tiếp tục" ở thẻ cuối phần luật chơi / phần thao tác.
+  void continueChapter() {
+    if (step.task != TutorialTask.rulesDone &&
+        step.task != TutorialTask.toolsDone) {
+      return;
+    }
     _advance();
   }
 
@@ -611,11 +777,48 @@ class NonogramTutorialController extends ChangeNotifier {
       _mode = next.startMode ?? _mode;
     }
     final prefilled = next.prefilled;
-    if (prefilled.isEmpty) return;
-    _grid = [for (final r in _grid) List.of(r)];
-    for (final cell in prefilled) {
-      _grid[cell.row][cell.col] = NonogramCellState.filled;
+    if (prefilled.isNotEmpty) {
+      _grid = [for (final r in _grid) List.of(r)];
+      for (final cell in prefilled) {
+        _grid[cell.row][cell.col] = NonogramCellState.filled;
+      }
     }
+    final line = next.ghostLine;
+    _ghostPlacements = line == null ? const [] : linePlacements(line);
+  }
+
+  /// Mọi cách đặt các khối của [line] khớp với các ô đã tô / đánh X.
+  List<Set<int>> linePlacements(TutorialLine line) {
+    final clue = line.isRow ? rowClues[line.index] : colClues[line.index];
+    final states = [
+      if (line.isRow)
+        for (var c = 0; c < cols; c++) _grid[line.index][c]
+      else
+        for (var r = 0; r < rows; r++) _grid[r][line.index],
+    ];
+    final blocks = clue.where((b) => b > 0).toList();
+    final out = <Set<int>>[];
+    void place(int index, int from, Set<int> cells) {
+      if (index == blocks.length) {
+        for (var i = 0; i < states.length; i++) {
+          final filled = cells.contains(i);
+          if (states[i] == NonogramCellState.filled && !filled) return;
+          if (states[i] == NonogramCellState.marked && filled) return;
+        }
+        out.add(cells);
+        return;
+      }
+      final rest = blocks.skip(index + 1).fold(0, (sum, b) => sum + b + 1);
+      for (var s = from; s + blocks[index] + rest <= states.length; s++) {
+        place(index + 1, s + blocks[index] + 1, {
+          ...cells,
+          for (var i = s; i < s + blocks[index]; i++) i,
+        });
+      }
+    }
+
+    place(0, 0, const {});
+    return out;
   }
 
   static bool _keepRevealed(TutorialStep step) =>

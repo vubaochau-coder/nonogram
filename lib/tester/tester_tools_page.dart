@@ -129,7 +129,14 @@ class _CheckInSection extends StatelessWidget {
       listenable: Listenable.merge([clock, checkIn]),
       builder: (context, _) {
         final shift = tester.dayShiftDays;
-        final toNext = CheckInPolicy.checkInsToNextMilestone(checkIn.count);
+        final now = dateOfDayNumber(checkIn.today);
+        final next = CheckInPolicy.nextMilestone(
+          checkIn.claimedMilestones(now.year, now.month),
+        );
+        final toNext =
+            next == null
+                ? null
+                : next - checkIn.streak(now.year, now.month).current;
         return _Section(
           title: 'Ngày & điểm danh',
           children: [
@@ -147,7 +154,12 @@ class _CheckInSection extends StatelessWidget {
                   ? 'chưa điểm danh'
                   : 'bị chặn (đã lùi giờ)',
             ),
-            _Info('Quà mốc tiếp theo', 'sau $toNext lần nữa'),
+            _Info(
+              'Quà mốc tiếp theo',
+              toNext == null
+                  ? 'đã nhận hết trong tháng'
+                  : 'sau $toNext ngày nữa',
+            ),
             _Info('Gói không quảng cáo', checkIn.isPremium ? 'có' : 'không'),
             const SizedBox(height: 8),
             _Buttons([
@@ -162,8 +174,10 @@ class _CheckInSection extends StatelessWidget {
             _Buttons([
               _Btn('Điểm danh 1 ngày', () => _checkInDays(context, 1)),
               _Btn(
-                'Điểm danh $toNext ngày (tới quà mốc)',
-                () => _checkInDays(context, toNext),
+                'Điểm danh ${toNext ?? 0} ngày (tới quà mốc)',
+                toNext == null || toNext <= 0
+                    ? null
+                    : () => _checkInDays(context, toNext),
               ),
             ]),
             _Buttons([

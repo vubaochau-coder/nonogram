@@ -37,35 +37,35 @@ class AppLocalizationsId extends AppLocalizations {
 
   @override
   String get nonogramGuideMethodDivisionDesc =>
-      'Jika menggabungkan dua blok yang sudah ada akan membentuk figur yang lebih besar dari petunjuk mana pun, celah di antaranya harus berupa X.';
+      'Jika menyambung dua potongan terisi akan membentuk blok yang lebih besar dari angka terbesar, kotak di antaranya pasti kosong. Tandai dengan X untuk memisahkannya.';
 
   @override
   String get nonogramGuideMethodDivisionTitle => '5. Pemisahan';
 
   @override
   String get nonogramGuideMethodDoublePositioningDesc =>
-      'Jika kotak yang terisi hanya bisa menjadi bagian dari beberapa varian blok tertentu, setiap kotak yang tidak pernah terisi di varian mana pun harus ditandai X.';
+      'Kadang sebuah kotak terisi hanya bisa milik satu atau dua angka. Coba tiap kemungkinan: kotak yang tetap kosong di semua kemungkinan diberi X.';
 
   @override
   String get nonogramGuideMethodDoublePositioningTitle => '6. Posisi ganda';
 
   @override
   String get nonogramGuideMethodInaccessibilityDesc =>
-      'Tandai dengan silang (X) kotak yang tidak mungkin menjadi bagian dari figur mana pun yang tersisa.';
+      'Kotak yang tidak bisa dijangkau blok mana pun pasti kosong. Coba tiap blok di posisi terjauhnya di sekitar kotak terisi; semua yang di luar jangkauan diberi X.';
 
   @override
   String get nonogramGuideMethodInaccessibilityTitle => '3. Tak terjangkau';
 
   @override
   String get nonogramGuideMethodNotFitDesc =>
-      'Jika ruang kosong di antara tanda silang lebih kecil dari petunjuk mana pun di baris itu, ruang itu harus ditandai X.';
+      'Celah di antara tanda X (atau antara X dan tepi) yang lebih pendek dari semua angka yang mungkin masuk ke sana tidak bisa memuat blok: tandai dengan X.';
 
   @override
   String get nonogramGuideMethodNotFitTitle => '4. Tidak muat';
 
   @override
   String get nonogramGuideMethodSuperpositionMultiDesc =>
-      'Jika ada beberapa angka, tumpuk posisi paling kiri dan paling kanan dari seluruh kelompok, dengan memperhitungkan celah wajib minimal satu kotak di antara blok berwarna sama. Kotak tempat sebuah blok bertumpuk dengan dirinya sendiri di kedua varian harus diisi.';
+      'Dengan beberapa angka, dorong seluruh kelompok ke kiri (sisakan satu kotak kosong di antara blok), lalu ke kanan. Jika blok yang sama menutupi sebuah kotak di kedua posisi, kotak itu terisi. Cara cepat: jumlahkan angka dan celahnya; sisanya adalah seberapa jauh setiap blok bisa bergeser.';
 
   @override
   String get nonogramGuideMethodSuperpositionMultiTitle =>
@@ -73,7 +73,7 @@ class AppLocalizationsId extends AppLocalizations {
 
   @override
   String get nonogramGuideMethodSuperpositionSimpleDesc =>
-      'Jika sebuah angka lebih dari setengah panjang baris, beberapa kotak di tengah pasti terisi. Tumpuk posisi paling kiri dan paling kanan; di bagian yang bertumpuk, kotaknya diisi.';
+      'Jika sebuah angka lebih dari setengah garisnya, sebagian selalu terisi. Bayangkan bloknya didorong mentok ke kiri, lalu mentok ke kanan: kotak yang tertutup di kedua posisi pasti terisi. Contoh: 7 dalam 10 kotak selalu mengisi 4 kotak tengah.';
 
   @override
   String get nonogramGuideMethodSuperpositionSimpleTitle =>
@@ -81,7 +81,7 @@ class AppLocalizationsId extends AppLocalizations {
 
   @override
   String get nonogramGuideMethodWallPushingDesc =>
-      'Jika kotak terisi yang sudah diketahui lebih dekat ke tepi daripada panjang petunjuk pertama, figur tempat kotak itu berada harus memanjang menjauhi tepi tersebut.';
+      'Kotak terisi di dekat tepi membatasi posisi bloknya. Blok tidak bisa melewati tepi, jadi harus memanjang menjauhinya. Contoh: 5 dengan kotak ke-4 terisi: meski didorong ke tepi kiri, blok tetap menutupi kotak ke-5.';
 
   @override
   String get nonogramGuideMethodWallPushingTitle => '2. Mendorong dari dinding';
@@ -253,6 +253,17 @@ class AppLocalizationsId extends AppLocalizations {
       'Ayo pelajari aturan dasarnya dengan teka-teki kecil 5×5.';
 
   @override
+  String get nonogramTutorialInfoFree => 'Gratis: semua level terbuka.';
+
+  @override
+  String get nonogramTutorialInfoAds =>
+      'Kamu bisa menonton iklan (opsional) untuk petunjuk dan tongkat sihir tambahan. Kadang ada iklan di antara level.';
+
+  @override
+  String get nonogramTutorialInfoPremium =>
+      'Pembelian sekali bayar mematikan iklan di antara level dan menambah petunjuk serta tongkat sihir harian setiap kali absen.';
+
+  @override
   String get nonogramTutorialStart => 'Mulai';
 
   @override
@@ -262,6 +273,10 @@ class AppLocalizationsId extends AppLocalizations {
   @override
   String get nonogramTutorialClueIsCount =>
       'Angka menunjukkan berapa kotak di baris itu yang terisi. Baris ini punya 5, jadi isi semuanya!';
+
+  @override
+  String get nonogramTutorialDragNote =>
+      'Tips: kamu bisa menggeser jari di sepanjang baris untuk mengisinya sekaligus.';
 
   @override
   String get nonogramTutorialEdgeCell =>
@@ -309,13 +324,73 @@ class AppLocalizationsId extends AppLocalizations {
 
   @override
   String get nonogramGuideTutorialCardDesc =>
-      'Pelajari aturan dan kontrol langkah demi langkah di teka-teki kecil 5×5.';
+      'Pelajari aturan, kontrol, dan teknik penyelesaian utama langkah demi langkah sambil bermain.';
+
+  @override
+  String get nonogramGuideRoutineTitle => 'Mulai dari mana';
+
+  @override
+  String get nonogramGuideRoutineTip1 =>
+      'Mulai dari angka besar. Jika sebuah angka lebih dari setengah garisnya, sebagian sudah pasti terisi (lihat teknik 1 di bawah).';
+
+  @override
+  String get nonogramGuideRoutineTip2 =>
+      'Selesaikan baris yang mudah dulu: 0 berarti seluruh baris kosong, dan jika jumlah angka ditambah satu celah di antaranya sama dengan panjang baris, hanya ada satu susunan.';
+
+  @override
+  String get nonogramGuideRoutineTip3 =>
+      'Tandai kotak yang pasti kosong dengan X. Tanda X sama bergunanya dengan kotak terisi.';
+
+  @override
+  String get nonogramGuideRoutineTip4 =>
+      'Bolak-balik antara baris dan kolom. Setiap kotak yang terpecahkan adalah petunjuk baru bagi garis yang memotongnya.';
+
+  @override
+  String get nonogramGuideRoutineTip5 =>
+      'Jangan menebak. Saat buntu, cari garis dengan kotak belum diketahui paling sedikit, atau gunakan petunjuk.';
+
+  @override
+  String nonogramGuideExample(int number) {
+    return 'Contoh $number';
+  }
+
+  @override
+  String get nonogramGuideExampleSingle => 'Contoh';
+
+  @override
+  String get nonogramGuideLegendTitle => 'Cara membaca gambar';
+
+  @override
+  String get nonogramGuideLegendFilled => 'Kotak terisi';
+
+  @override
+  String get nonogramGuideLegendTrial => 'Mencoba posisi blok';
+
+  @override
+  String get nonogramGuideLegendCross => 'Kotak kosong (X)';
+
+  @override
+  String get nonogramGuideLegendResult => 'Yang bisa disimpulkan';
+
+  @override
+  String get nonogramGuideMethodLineDoneTitle => 'Garis yang sudah lengkap';
+
+  @override
+  String get nonogramGuideMethodLineDoneDesc =>
+      'Jika semua blok dalam satu garis sudah di tempatnya, semua kotak lainnya kosong: tandai dengan X. Garis dengan angka 0 kosong sejak awal.';
 
   @override
   String get nonogramPlayInfoHide => 'Sembunyikan info level';
 
   @override
   String get nonogramPlayWandLabel => 'Tongkat ajaib';
+
+  @override
+  String get nonogramPlayUndo => 'Urungkan';
+
+  @override
+  String get nonogramPlayDragTip =>
+      'Geser jari melewati kotak untuk mengisi beberapa sekaligus.';
 
   @override
   String get nonogramPlayWandSelectPrompt =>
@@ -365,7 +440,14 @@ class AppLocalizationsId extends AppLocalizations {
 
   @override
   String get nonogramCoachModeBody =>
-      'Pilih apa yang dilakukan ketukan: mengisi kotak, atau menandainya dengan X untuk mengingat bahwa kotak itu kosong. Ketuk tombol untuk beralih. Geser di atas kisi untuk mengisi atau menandai banyak kotak sekaligus.';
+      'Pilih apa yang dilakukan ketukan: mengisi kotak, atau menandainya dengan X untuk mengingat bahwa kotak itu kosong. Ketuk tombol untuk beralih.';
+
+  @override
+  String get nonogramCoachDragTitle => 'Geser untuk mengisi banyak kotak';
+
+  @override
+  String get nonogramCoachDragBody =>
+      'Letakkan jari di sebuah kotak lalu geser melewati kotak lain: setiap kotak yang dilewati langsung terisi (atau ditandai X di mode X). Mulai dari kotak yang sudah terisi untuk mengosongkan kotak yang dilewati.';
 
   @override
   String get nonogramCoachLongPressTitle => 'Tekan lama untuk kebalikannya';
@@ -373,6 +455,13 @@ class AppLocalizationsId extends AppLocalizations {
   @override
   String get nonogramCoachLongPressBody =>
       'Tekan lama sebuah kotak untuk melakukan kebalikan dari mode saat ini: X saat mengisi, mengisi saat menandai. Getaran singkat berarti sudah selesai dan kamu bisa melepas jari.';
+
+  @override
+  String get nonogramCoachRotateTitle => 'Mode lanskap';
+
+  @override
+  String get nonogramCoachRotateBody =>
+      'Ketuk untuk memutar papan ke samping, cocok untuk teka-teki lebar; tombol pindah ke sisi. Ketuk lagi untuk kembali ke potret.';
 
   @override
   String get nonogramCoachScrollTitle => 'Menjelajah teka-teki besar';
@@ -417,6 +506,49 @@ class AppLocalizationsId extends AppLocalizations {
   @override
   String get nonogramTutorialFinishTools =>
       'Isi kotak yang tersisa untuk menyelesaikan. Geser ke bawah di sepanjang kolom agar lebih cepat.';
+
+  @override
+  String get nonogramTutorialToolsDoneTitle => 'Kontrol sudah dikuasai!';
+
+  @override
+  String get nonogramTutorialToolsDone =>
+      'Teka-teki sungguhan lebih besar, dan sebagian besar baris tidak bisa langsung diselesaikan sekilas. Berikutnya, pelajari teknik penyelesaian pada teka-teki 8×8.';
+
+  @override
+  String get nonogramTutorialOverlapSingle =>
+      'Cari angka besar lebih dulu. Blok 6 punya 3 cara masuk ke 8 kotak ini, dan tiap cara berkedip bergantian. Kotak yang menyala di semua cara pasti terisi: isi 4 kotak di bingkai kuning.';
+
+  @override
+  String get nonogramTutorialOverlapMulti =>
+      'Sama dengan beberapa angka: 3 3 butuh minimal 7 kotak (3 + celah + 3), jadi hanya ada 3 cara. Isi kotak yang menyala di ketiganya.';
+
+  @override
+  String get nonogramTutorialFullRow =>
+      '8 dalam 8 kotak: seluruh baris terisi. Seret di sepanjang baris.';
+
+  @override
+  String get nonogramTutorialZeroRow =>
+      '0 berarti baris itu sama sekali tidak punya kotak terisi. Beralih ke mode X.';
+
+  @override
+  String get nonogramTutorialMarkZeroRow =>
+      'Tandai seluruh baris paling bawah dengan X. Tanda X itu penting: ia menunjukkan pada kolom di mana blok tidak bisa berada.';
+
+  @override
+  String get nonogramTutorialOutOfReach =>
+      'Sekarang kolomnya. Kolom 2 adalah satu blok 3 yang harus menutupi 2 kotak terisinya, jadi hanya ada 2 cara. Kotak yang tak pernah menyala tidak terjangkau: tandai dengan X, begitu juga di kolom 7.';
+
+  @override
+  String get nonogramTutorialBackToFill =>
+      'Lihat kolom 3: kolom itu butuh 7. Beralih kembali ke mode isi.';
+
+  @override
+  String get nonogramTutorialExactSpace =>
+      'Tanda X di bawah menyisakan tepat 7 kotak untuk angka 7, jadi isi semuanya. Kolom 6 juga sama.';
+
+  @override
+  String get nonogramTutorialFinishTechniques =>
+      'Begitulah caranya: selesaikan yang bisa di baris, lalu di kolom, dan ulangi. Selesaikan jamurnya sendiri!';
 
   @override
   String get nonogramPlayHintNothingToFill =>
@@ -490,7 +622,7 @@ class AppLocalizationsId extends AppLocalizations {
 
   @override
   String get adRewardNotReady =>
-      'Iklan belum siap. Periksa koneksi internetmu lalu coba lagi.';
+      'Iklan belum siap. Coba lagi dalam beberapa menit.';
 
   @override
   String get settingsAdPrivacy => 'Privasi iklan';
@@ -568,17 +700,6 @@ class AppLocalizationsId extends AppLocalizations {
   String get checkInDoneToday => 'Sudah absen hari ini';
 
   @override
-  String checkInNextGift(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: 'Hadiah berikutnya dalam $count kali absen',
-      one: 'Hadiah berikutnya di absen berikutnya',
-    );
-    return '$_temp0';
-  }
-
-  @override
   String get checkInCheckedIn => 'Berhasil absen!';
 
   @override
@@ -602,9 +723,6 @@ class AppLocalizationsId extends AppLocalizations {
   }
 
   @override
-  String get checkInMonthGifts => 'Hadiah bulan ini';
-
-  @override
   String get navHome => 'Beranda';
 
   @override
@@ -617,42 +735,75 @@ class AppLocalizationsId extends AppLocalizations {
   String get meMore => 'Lainnya';
 
   @override
-  String get checkInNotYetToday => 'Belum absen hari ini';
-
-  @override
   String get checkInTodayButton => 'Absen hari ini';
-
-  @override
-  String checkInGiftsLeftShort(int count) {
-    return '$count kali lagi dapat hadiah';
-  }
 
   @override
   String get checkInGiftToday => 'Hari ini ada hadiah!';
 
   @override
-  String checkInGiftMilestone(int count) {
-    return 'Hadiah $count kali absen';
-  }
-
-  @override
   String get checkInGiftCollect => 'Ambil';
 
   @override
-  String get checkInTotalHints => 'Petunjuk';
+  String get checkInGiftDouble => 'Ambil x2';
 
   @override
-  String get checkInTotalWands => 'Tongkat ajaib';
+  String checkInStreakTitle(int count) {
+    return 'Beruntun $count hari';
+  }
 
   @override
-  String get checkInTotalDailyHints => 'Petunjuk (hanya hari ini)';
+  String checkInStreakDays(int count) {
+    return '$count hari';
+  }
 
   @override
-  String get checkInTotalDailyWands => 'Tongkat ajaib (hanya hari ini)';
+  String checkInStreakMakeUp(int missed, String days) {
+    return 'Ganti $missed hari yang terlewat agar beruntunmu jadi $days';
+  }
 
   @override
-  String get checkInPremiumNotYet =>
-      'Absen untuk mendapat 2 petunjuk dan 1 tongkat ajaib hari ini.';
+  String get checkInStreakKeepGoing =>
+      'Absen setiap hari agar beruntunmu terjaga';
+
+  @override
+  String get checkInStreakAllDone =>
+      'Kamu sudah dapat semua hadiah beruntun bulan ini!';
+
+  @override
+  String checkInStreakDaysLeft(int count) {
+    return '$count hari lagi untuk hadiah';
+  }
+
+  @override
+  String get checkInLegendChecked => 'Sudah absen';
+
+  @override
+  String get checkInLegendMissed => 'Terlewat';
+
+  @override
+  String get checkInLegendFuture => 'Mendatang';
+
+  @override
+  String checkInGiftStreak(int count) {
+    return 'Hadiah beruntun $count hari';
+  }
+
+  @override
+  String checkInMakeUpTitle(String date) {
+    return 'Ganti tanggal $date?';
+  }
+
+  @override
+  String get checkInMakeUpBody =>
+      'Tonton iklan singkat untuk mengganti hari ini. Beruntunmu akan tersambung lagi.';
+
+  @override
+  String get checkInMakeUpWatch => 'Tonton iklan';
+
+  @override
+  String checkInMadeUp(String date) {
+    return 'Tanggal $date sudah diganti';
+  }
 
   @override
   String dashboardDailyReminder(String rewards, String time) {
@@ -758,12 +909,4 @@ class AppLocalizationsId extends AppLocalizations {
   String dashboardDailyReminderBoth(String hints, String wands) {
     return '$hints dan $wands';
   }
-
-  @override
-  String checkInLegendMilestone(int count) {
-    return 'Hadiah setiap $count kali absen';
-  }
-
-  @override
-  String get checkInLegendPremium => 'Hadiah paket tanpa iklan';
 }

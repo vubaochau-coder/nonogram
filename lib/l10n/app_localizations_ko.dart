@@ -37,49 +37,49 @@ class AppLocalizationsKo extends AppLocalizations {
 
   @override
   String get nonogramGuideMethodDivisionDesc =>
-      '이미 있는 두 블록을 이으면 남은 어떤 숫자보다도 긴 모양이 된다면, 그 사이 칸은 X여야 합니다.';
+      '칠해진 두 조각을 이으면 가장 큰 숫자보다 긴 블록이 된다면, 그 사이 칸은 비어 있어야 합니다. X를 표시해 나누세요.';
 
   @override
   String get nonogramGuideMethodDivisionTitle => '5. 나누기';
 
   @override
   String get nonogramGuideMethodDoublePositioningDesc =>
-      '칠해진 칸이 블록의 몇 가지 배치에만 속할 수 있다면, 그 배치 중 어디에서도 칠해지지 않는 칸은 모두 X로 표시해야 합니다.';
+      '칠해진 칸이 한두 개의 숫자에만 속할 수 있을 때가 있습니다. 가능한 경우를 하나씩 놓아 보고, 모든 경우에 비어 있는 칸에 X를 표시하세요.';
 
   @override
   String get nonogramGuideMethodDoublePositioningTitle => '6. 이중 배치';
 
   @override
   String get nonogramGuideMethodInaccessibilityDesc =>
-      '남은 어떤 블록에도 속할 수 없는 칸은 X로 표시하세요.';
+      '어떤 블록도 닿을 수 없는 칸은 비어 있습니다. 칠해진 칸 주변에서 각 블록을 가장 먼 위치까지 놓아 보고, 그 범위 밖의 칸에는 X를 표시하세요.';
 
   @override
   String get nonogramGuideMethodInaccessibilityTitle => '3. 닿을 수 없는 칸';
 
   @override
   String get nonogramGuideMethodNotFitDesc =>
-      'X 사이의 빈 공간이 그 줄의 어떤 숫자보다도 짧다면, 그 공간은 X로 표시해야 합니다.';
+      'X 사이(또는 X와 가장자리 사이)의 빈틈이 그곳에 들어갈 수 있는 어떤 숫자보다도 짧으면 블록이 들어갈 수 없습니다. X를 표시하세요.';
 
   @override
   String get nonogramGuideMethodNotFitTitle => '4. 들어가지 않음';
 
   @override
   String get nonogramGuideMethodSuperpositionMultiDesc =>
-      '숫자가 여러 개일 때는, 같은 색 블록 사이에 반드시 한 칸 이상 비어야 한다는 점을 고려해 전체 묶음을 가장 왼쪽과 가장 오른쪽으로 붙인 두 배치를 겹쳐 보세요. 같은 블록이 두 배치 모두에서 겹치는 칸은 칠합니다.';
+      '숫자가 여러 개면 묶음 전체를 왼쪽으로(블록 사이에 빈칸 1칸씩) 민 다음 오른쪽으로 밀어 보세요. 같은 블록이 두 위치 모두에서 덮는 칸은 칠해집니다. 빠른 계산: 숫자와 빈칸을 더하고 남는 칸 수가 각 블록이 움직일 수 있는 거리입니다.';
 
   @override
   String get nonogramGuideMethodSuperpositionMultiTitle => '겹치기 (숫자 여러 개)';
 
   @override
   String get nonogramGuideMethodSuperpositionSimpleDesc =>
-      '숫자가 줄 길이의 절반보다 크면 가운데 몇 칸은 반드시 칠해집니다. 가장 왼쪽과 가장 오른쪽으로 붙인 배치를 겹쳐 보고, 겹치는 칸을 칠하세요.';
+      '숫자가 줄 길이의 절반보다 크면 일부는 항상 칠해집니다. 블록을 왼쪽 끝까지, 그다음 오른쪽 끝까지 밀어 본다고 생각하세요. 두 번 모두 덮이는 칸은 확실히 칠해집니다. 예: 10칸에 7이면 가운데 4칸은 항상 칠해집니다.';
 
   @override
   String get nonogramGuideMethodSuperpositionSimpleTitle => '겹치기 (숫자 하나)';
 
   @override
   String get nonogramGuideMethodWallPushingDesc =>
-      '칠해진 것이 확실한 칸이 첫 번째 숫자의 길이보다 벽에 더 가깝다면, 그 칸이 속한 블록은 벽에서 멀어지는 방향으로 이어져야 합니다.';
+      '가장자리에 가까운 칠해진 칸은 그 블록의 위치를 제한합니다. 블록은 가장자리 밖으로 나갈 수 없으니 반대쪽으로 뻗어야 합니다. 예: 5에서 4번째 칸이 칠해져 있으면, 왼쪽 끝에 붙여도 블록은 5번째 칸을 덮습니다.';
 
   @override
   String get nonogramGuideMethodWallPushingTitle => '2. 벽에서 밀어내기';
@@ -248,6 +248,17 @@ class AppLocalizationsKo extends AppLocalizations {
   String get nonogramTutorialWelcome => '작은 5×5 퍼즐로 기본 규칙을 배워 봅시다.';
 
   @override
+  String get nonogramTutorialInfoFree => '무료: 모든 레벨을 플레이할 수 있어요.';
+
+  @override
+  String get nonogramTutorialInfoAds =>
+      '광고를 보면(선택) 힌트와 마법 지팡이를 더 받을 수 있어요. 레벨 사이에 광고가 나올 때도 있어요.';
+
+  @override
+  String get nonogramTutorialInfoPremium =>
+      '한 번 구매하면 레벨 사이 광고가 사라지고, 출석할 때마다 그날 쓸 수 있는 힌트와 지팡이를 받아요.';
+
+  @override
   String get nonogramTutorialStart => '시작';
 
   @override
@@ -257,6 +268,9 @@ class AppLocalizationsKo extends AppLocalizations {
   @override
   String get nonogramTutorialClueIsCount =>
       '숫자는 그 행에서 칠할 칸의 수를 알려 줍니다. 이 행은 5이니 모두 칠하세요!';
+
+  @override
+  String get nonogramTutorialDragNote => '팁: 손가락으로 줄을 쭉 밀면 한 번에 칠할 수 있어요.';
 
   @override
   String get nonogramTutorialEdgeCell =>
@@ -303,13 +317,72 @@ class AppLocalizationsKo extends AppLocalizations {
 
   @override
   String get nonogramGuideTutorialCardDesc =>
-      '작은 5×5 퍼즐로 규칙과 조작법을 차근차근 배워 보세요.';
+      '규칙, 조작법, 주요 풀이 기법을 직접 플레이하며 단계별로 배워 보세요.';
+
+  @override
+  String get nonogramGuideRoutineTitle => '어디서부터 풀까';
+
+  @override
+  String get nonogramGuideRoutineTip1 =>
+      '큰 숫자부터 시작하세요. 숫자가 줄 길이의 절반보다 크면 일부는 이미 확정입니다(아래 기법 1 참고).';
+
+  @override
+  String get nonogramGuideRoutineTip2 =>
+      '쉬운 줄부터 푸세요. 0은 줄 전체가 비어 있다는 뜻이고, 숫자들의 합에 사이마다 빈칸 1칸을 더한 값이 줄 길이와 같으면 배치는 한 가지뿐입니다.';
+
+  @override
+  String get nonogramGuideRoutineTip3 =>
+      '비어 있다고 확신하는 칸에는 X를 표시하세요. X는 칠한 칸만큼 유용합니다.';
+
+  @override
+  String get nonogramGuideRoutineTip4 =>
+      '행과 열을 번갈아 보세요. 푼 칸 하나하나가 그 칸을 지나는 다른 줄의 새 단서가 됩니다.';
+
+  @override
+  String get nonogramGuideRoutineTip5 =>
+      '절대 찍지 마세요. 막히면 모르는 칸이 가장 적은 줄을 찾거나 힌트를 사용하세요.';
+
+  @override
+  String nonogramGuideExample(int number) {
+    return '예시 $number';
+  }
+
+  @override
+  String get nonogramGuideExampleSingle => '예시';
+
+  @override
+  String get nonogramGuideLegendTitle => '그림 보는 법';
+
+  @override
+  String get nonogramGuideLegendFilled => '칠해진 칸';
+
+  @override
+  String get nonogramGuideLegendTrial => '블록을 시험 삼아 놓은 자리';
+
+  @override
+  String get nonogramGuideLegendCross => '빈칸 (X)';
+
+  @override
+  String get nonogramGuideLegendResult => '알아낼 수 있는 결과';
+
+  @override
+  String get nonogramGuideMethodLineDoneTitle => '완성된 줄';
+
+  @override
+  String get nonogramGuideMethodLineDoneDesc =>
+      '한 줄의 블록이 모두 자리를 잡으면 나머지 칸은 모두 비어 있습니다. X를 표시하세요. 숫자가 0인 줄은 처음부터 비어 있습니다.';
 
   @override
   String get nonogramPlayInfoHide => '레벨 정보 숨기기';
 
   @override
   String get nonogramPlayWandLabel => '마법 지팡이';
+
+  @override
+  String get nonogramPlayUndo => '실행 취소';
+
+  @override
+  String get nonogramPlayDragTip => '손가락으로 칸을 쭉 밀면 여러 칸을 한 번에 칠할 수 있어요.';
 
   @override
   String get nonogramPlayWandSelectPrompt => '답을 볼 행이나 열의 숫자를 탭하세요';
@@ -356,7 +429,14 @@ class AppLocalizationsKo extends AppLocalizations {
 
   @override
   String get nonogramCoachModeBody =>
-      '탭했을 때 할 동작을 고르세요. 칸을 칠하거나, 빈칸임을 기억하도록 X를 표시합니다. 버튼을 탭해 전환하세요. 격자 위를 드래그하면 여러 칸을 한 번에 칠하거나 표시할 수 있습니다.';
+      '탭했을 때 할 동작을 고르세요. 칸을 칠하거나, 빈칸임을 기억하도록 X를 표시합니다. 버튼을 탭해 전환하세요.';
+
+  @override
+  String get nonogramCoachDragTitle => '드래그로 여러 칸 칠하기';
+
+  @override
+  String get nonogramCoachDragBody =>
+      '칸에 손가락을 대고 다른 칸으로 밀면, 지나간 모든 칸이 한 번에 칠해집니다(X 모드에서는 X 표시). 칠해진 칸에서 시작하면 지나간 칸이 지워집니다.';
 
   @override
   String get nonogramCoachLongPressTitle => '길게 눌러 반대 동작';
@@ -364,6 +444,13 @@ class AppLocalizationsKo extends AppLocalizations {
   @override
   String get nonogramCoachLongPressBody =>
       '칸을 길게 누르면 현재 모드의 반대 동작을 합니다. 칠하기 중에는 X, 표시 중에는 칠하기입니다. 짧게 진동하면 완료된 것이니 손을 떼세요.';
+
+  @override
+  String get nonogramCoachRotateTitle => '가로 모드';
+
+  @override
+  String get nonogramCoachRotateBody =>
+      '탭하면 보드가 가로로 바뀌어 넓은 퍼즐을 보기 편해집니다. 버튼은 양옆으로 이동합니다. 다시 탭하면 세로로 돌아갑니다.';
 
   @override
   String get nonogramCoachScrollTitle => '큰 퍼즐 둘러보기';
@@ -408,6 +495,48 @@ class AppLocalizationsKo extends AppLocalizations {
   @override
   String get nonogramTutorialFinishTools =>
       '남은 칸을 칠해 완성하세요. 열을 따라 아래로 드래그하면 더 빨리 칠할 수 있습니다.';
+
+  @override
+  String get nonogramTutorialToolsDoneTitle => '조작법 마스터!';
+
+  @override
+  String get nonogramTutorialToolsDone =>
+      '실제 퍼즐은 더 크고, 대부분의 줄은 한눈에 풀리지 않습니다. 이제 8×8 퍼즐로 풀이 기법을 배워 보세요.';
+
+  @override
+  String get nonogramTutorialOverlapSingle =>
+      '먼저 큰 숫자를 찾으세요. 6은 이 8칸에 놓는 방법이 3가지이고, 하나씩 차례로 깜박입니다. 모든 방법에서 빛나는 칸은 확실히 칠해집니다. 노란 테두리 안의 4칸을 칠하세요.';
+
+  @override
+  String get nonogramTutorialOverlapMulti =>
+      '숫자가 여러 개여도 같습니다. 3 3은 최소 7칸(3 + 빈칸 + 3)이 필요해서 놓는 방법이 3가지뿐입니다. 3가지 모두에서 빛나는 칸을 칠하세요.';
+
+  @override
+  String get nonogramTutorialFullRow => '8칸에 8: 줄 전체를 칠합니다. 줄을 따라 쓸어 보세요.';
+
+  @override
+  String get nonogramTutorialZeroRow =>
+      '0은 그 줄에 칠할 칸이 하나도 없다는 뜻입니다. X 모드로 바꾸세요.';
+
+  @override
+  String get nonogramTutorialMarkZeroRow =>
+      '맨 아랫줄 전체에 X를 표시하세요. X도 중요합니다. 열에서 블록이 들어갈 수 없는 곳을 알려 줍니다.';
+
+  @override
+  String get nonogramTutorialOutOfReach =>
+      '이제 열을 봅니다. 2열은 칠해진 2칸을 반드시 덮는 3짜리 블록 하나라서 놓는 방법이 2가지뿐입니다. 한 번도 빛나지 않는 칸에는 닿을 수 없습니다. X를 표시하고, 7열도 똑같이 하세요.';
+
+  @override
+  String get nonogramTutorialBackToFill =>
+      '3열을 보세요. 7칸이 필요합니다. 다시 칠하기 모드로 바꾸세요.';
+
+  @override
+  String get nonogramTutorialExactSpace =>
+      '맨 아래 X 덕분에 7이 들어갈 칸이 딱 7칸 남았습니다. 모두 칠하세요. 6열도 마찬가지입니다.';
+
+  @override
+  String get nonogramTutorialFinishTechniques =>
+      '이것이 기본 흐름입니다. 행에서 풀 수 있는 만큼 풀고, 열로 넘어가고, 반복하세요. 버섯을 혼자 완성해 보세요!';
 
   @override
   String get nonogramPlayHintNothingToFill =>
@@ -480,7 +609,7 @@ class AppLocalizationsKo extends AppLocalizations {
   }
 
   @override
-  String get adRewardNotReady => '광고가 아직 준비되지 않았습니다. 인터넷 연결을 확인하고 다시 시도하세요.';
+  String get adRewardNotReady => '광고가 아직 준비되지 않았습니다. 몇 분 후에 다시 시도하세요.';
 
   @override
   String get settingsAdPrivacy => '광고 개인정보 보호';
@@ -553,11 +682,6 @@ class AppLocalizationsKo extends AppLocalizations {
   String get checkInDoneToday => '오늘 출석 완료';
 
   @override
-  String checkInNextGift(int count) {
-    return '다음 선물까지 출석 $count번 남음';
-  }
-
-  @override
   String get checkInCheckedIn => '출석 완료!';
 
   @override
@@ -581,9 +705,6 @@ class AppLocalizationsKo extends AppLocalizations {
   }
 
   @override
-  String get checkInMonthGifts => '이번 달 선물';
-
-  @override
   String get navHome => '홈';
 
   @override
@@ -596,41 +717,72 @@ class AppLocalizationsKo extends AppLocalizations {
   String get meMore => '기타';
 
   @override
-  String get checkInNotYetToday => '오늘 아직 출석하지 않았어요';
-
-  @override
   String get checkInTodayButton => '오늘 출석 체크';
-
-  @override
-  String checkInGiftsLeftShort(int count) {
-    return '선물까지 $count번 남음';
-  }
 
   @override
   String get checkInGiftToday => '오늘은 선물이 있어요!';
 
   @override
-  String checkInGiftMilestone(int count) {
-    return '출석 $count번 달성 선물';
-  }
-
-  @override
   String get checkInGiftCollect => '받기';
 
   @override
-  String get checkInTotalHints => '힌트';
+  String get checkInGiftDouble => '2배로 받기';
 
   @override
-  String get checkInTotalWands => '마법 지팡이';
+  String checkInStreakTitle(int count) {
+    return '$count일 연속';
+  }
 
   @override
-  String get checkInTotalDailyHints => '힌트 (오늘만)';
+  String checkInStreakDays(int count) {
+    return '$count일';
+  }
 
   @override
-  String get checkInTotalDailyWands => '마법 지팡이 (오늘만)';
+  String checkInStreakMakeUp(int missed, String days) {
+    return '놓친 $missed일을 채우면 연속 기록이 $days이 됩니다';
+  }
 
   @override
-  String get checkInPremiumNotYet => '출석하면 오늘 쓸 수 있는 힌트 2개와 마법 지팡이 1개를 받아요.';
+  String get checkInStreakKeepGoing => '매일 출석해서 연속 기록을 이어가세요';
+
+  @override
+  String get checkInStreakAllDone => '이번 달 연속 보상을 모두 받았어요!';
+
+  @override
+  String checkInStreakDaysLeft(int count) {
+    return '선물까지 $count일 남음';
+  }
+
+  @override
+  String get checkInLegendChecked => '출석함';
+
+  @override
+  String get checkInLegendMissed => '놓침';
+
+  @override
+  String get checkInLegendFuture => '예정';
+
+  @override
+  String checkInGiftStreak(int count) {
+    return '$count일 연속 선물';
+  }
+
+  @override
+  String checkInMakeUpTitle(String date) {
+    return '$date을 채울까요?';
+  }
+
+  @override
+  String get checkInMakeUpBody => '짧은 광고를 보면 이 날을 채울 수 있어요. 연속 기록이 다시 이어집니다.';
+
+  @override
+  String get checkInMakeUpWatch => '광고 보기';
+
+  @override
+  String checkInMadeUp(String date) {
+    return '$date을 채웠어요';
+  }
 
   @override
   String dashboardDailyReminder(String rewards, String time) {
@@ -735,12 +887,4 @@ class AppLocalizationsKo extends AppLocalizations {
   String dashboardDailyReminderBoth(String hints, String wands) {
     return '$hints와 $wands';
   }
-
-  @override
-  String checkInLegendMilestone(int count) {
-    return '출석 $count회마다 선물';
-  }
-
-  @override
-  String get checkInLegendPremium => '광고 제거 패키지 보상';
 }

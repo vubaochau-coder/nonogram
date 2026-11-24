@@ -46,6 +46,19 @@ class AppAdMobIds {
   static const interstitial = 'ca-app-pub-8391885617554349/6489349626';
 }
 
+/// Máy của nhà phát triển: luôn nhận quảng cáo mẫu (có nhãn "Test Ad") kể cả
+/// ở bản release dùng ID thật, để thử luồng quảng cáo mà không bấm vào quảng
+/// cáo thật. Chỉ ảnh hưởng đúng các máy này.
+///
+/// Lấy mã: mở app trên máy, chạy `adb logcat | grep "setTestDeviceIds"`, chép
+/// chuỗi trong dòng "Use RequestConfiguration.Builder().setTestDeviceIds(...)".
+abstract final class AdTestDevices {
+  static const ids = [
+    // Poco X7 Pro.
+    'DB4FF7003D8724BA6E3BFF2F10685548',
+  ];
+}
+
 /// ID thử nghiệm của Google: luôn hiện quảng cáo mẫu, không tính tiền.
 class AdMobTestIds {
   AdMobTestIds._();

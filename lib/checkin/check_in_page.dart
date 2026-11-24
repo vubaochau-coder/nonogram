@@ -1,11 +1,14 @@
+import 'dart:math' as math;
+
 import 'package:flutter/material.dart';
 import 'package:lucide_icons/lucide_icons.dart';
+import 'package:nonogram/ads/ad_scope.dart';
+import 'package:nonogram/ads/ad_service.dart';
 import 'package:nonogram/core/app_sounds.dart';
 import 'package:nonogram/core/app_theme.dart';
 import 'package:nonogram/core/context_ext.dart';
 import 'package:nonogram/core/toast_utils.dart';
 import 'package:nonogram/data/nonogram_repository.dart';
-import 'package:nonogram/models/power_up_inventory.dart';
 import 'package:provider/provider.dart';
 
 import 'check_in_celebration.dart';
@@ -13,14 +16,30 @@ import 'check_in_policy.dart';
 import 'check_in_service.dart';
 import 'reward_view.dart';
 
-/// Tab điểm danh: thẻ trạng thái hôm nay, quà trong ngày của gói không
-/// quảng cáo, lịch tháng (xem lại được các tháng trước, từ tháng bắt đầu dùng
-/// app), tổng quà đã nhận trong tháng, và nút "Điểm danh hôm nay" nổi ở dưới
-/// (ẩn khi đã điểm danh).
+/// Màu cam của chuỗi (ngọn lửa, thanh tiến trình, hộp quà).
+Color _fireColor(BuildContext context) =>
+    Theme.of(context).brightness == Brightness.dark
+        ? const Color(0xFFFF8A3D)
+        : const Color(0xFFF76707);
+
+/// Màu của ngày bỏ lỡ (bù được).
+Color _missedColor(BuildContext context) =>
+    Theme.of(context).brightness == Brightness.dark
+        ? const Color(0xFFFFB547)
+        : const Color(0xFFF08C00);
+
+/// Tab điểm danh: lịch tháng (xem lại được các tháng trước, từ tháng bắt đầu
+/// dùng app), thanh chuỗi của tháng với các mốc quà, và nút "Điểm danh hôm
+/// nay" ở dưới.
 ///
-/// Bấm điểm danh chạy [CheckInCelebration]; trong lúc đó ô hôm nay, thẻ
-/// trạng thái và tổng quà vẫn hiện như chưa điểm danh, tới khi hiệu ứng tới
-/// đúng bước (quả cầu chạm ô / phần quà bay về).
+/// - Ngày bỏ lỡ: chạm để bù (xem quảng cáo có thưởng sau khi xác nhận).
+/// - Điểm danh / bù xong: [CheckInCelebration] đóng dấu ô ngày, thanh chuỗi
+///   chạy tới chuỗi dài nhất mới, rồi mở lần lượt quà các mốc vừa đạt (hộp
+///   quà nhảy ra từ mốc, phần quà bay về mốc). Lúc mở quà có nút "Nhận x2":
+///   xem quảng cáo để nhận gấp đôi.
+///
+/// Trong lúc hiệu ứng chạy, ô ngày, thanh chuỗi và các mốc vẫn hiện như cũ
+/// tới đúng bước của hiệu ứng.
 class CheckInTab extends StatefulWidget {
   const CheckInTab({super.key});
 
@@ -34,46 +53,55 @@ class _CheckInTabState extends State<CheckInTab> with TickerProviderStateMixin {
   final _scroll = ScrollController();
   final _listKey = GlobalKey(debugLabel: 'check-in-list');
   final _buttonKey = GlobalKey(debugLabel: 'check-in-button');
-  final _todayKey = GlobalKey(debugLabel: 'check-in-today');
-  final _totalKeys = {
-    for (final kind in RewardKind.all)
-      kind: GlobalKey(debugLabel: 'check-in-total-$kind'),
+  final _stampKey = GlobalKey(debugLabel: 'check-in-stamp');
+  final _streakKey = GlobalKey(debugLabel: 'check-in-streak');
+  final _nodeKeys = {
+    for (final m in CheckInPolicy.streakMilestones)
+      m: GlobalKey(debugLabel: 'check-in-milestone-$m'),
   };
 
-  /// Đang chạy hiệu ứng: ô hôm nay / thẻ trạng thái chưa đổi.
-  bool _holdToday = false;
+  /// Ô nhận [_stampKey] (ô sắp được đóng dấu); mặc định hôm nay.
+  int? _stampDay;
+
+  /// Đang chạy hiệu ứng: ô này vẽ như chưa điểm danh, thẻ chuỗi hiện số cũ.
+  int? _holdDay;
+  StreakStats? _heldStats;
+
+  /// Thanh chuỗi đang chạy (null: theo chuỗi dài nhất thật).
+  double? _barOverride;
+
+  /// Các mốc đã nhận đang hiện (null: theo service). Quà vừa đạt chưa bấm
+  /// "Nhận" thì chưa có trong này.
+  Set<int>? _claimedOverride;
+
+  /// Quà vừa đạt, đang chờ mở.
+  Set<int> _pendingGifts = const {};
 
   /// Hiệu ứng đã vẽ bản sao của nút trên lớp phủ: ẩn nút thật.
   bool _hideButton = false;
-
-  /// Quà mốc hôm nay chưa bấm "Nhận": chưa cộng vào tổng quà tháng.
-  CheckInReward? _heldGift;
   CheckInCelebration? _celebration;
-
-  /// Số "Gợi ý" / "Gậy phép" vừa tăng: nảy lên.
-  late final AnimationController _bump = AnimationController(
+  late final AnimationController _bar = AnimationController.unbounded(
     vsync: this,
-    duration: const Duration(milliseconds: 380),
   );
-  RewardKind? _bumpKind;
 
   @override
   void initState() {
     super.initState();
-    _month = _thisMonth(context.read<CheckInService>());
+    _month = _monthOf(context.read<CheckInService>().today);
+    _bar.addListener(() => setState(() => _barOverride = _bar.value));
   }
 
   @override
   void dispose() {
     _celebration?.dispose();
-    _bump.dispose();
+    _bar.dispose();
     _scroll.dispose();
     super.dispose();
   }
 
-  static DateTime _thisMonth(CheckInService service) {
-    final today = dateOfDayNumber(service.today);
-    return DateTime(today.year, today.month);
+  static DateTime _monthOf(int day) {
+    final date = dateOfDayNumber(day);
+    return DateTime(date.year, date.month);
   }
 
   static Rect? _rectOf(GlobalKey key) {
@@ -82,118 +110,254 @@ class _CheckInTabState extends State<CheckInTab> with TickerProviderStateMixin {
     return box.localToGlobal(Offset.zero) & box.size;
   }
 
-  /// Ô hôm nay đang nằm trọn trong vùng nhìn (không bị nút che).
-  bool _todayInView() {
-    final today = _rectOf(_todayKey);
+  /// Cuộn cho [key] nằm trọn trong vùng nhìn, phía trên nút điểm danh.
+  Future<void> _reveal(GlobalKey key) async {
+    final rect = _rectOf(key);
     final view = _scroll.hasClients ? _rectOf(_listKey) : null;
-    if (today == null || view == null) return false;
-    return today.top >= view.top && today.bottom <= view.bottom - 96;
-  }
-
-  Future<void> _checkIn(CheckInService service) async {
-    if (_busy) return;
-    setState(() => _busy = true);
-    // Về tháng này và cuộn cho thấy ô hôm nay trước khi hiệu ứng bay tới.
-    final thisMonth = _thisMonth(service);
-    if (_month != thisMonth) setState(() => _month = thisMonth);
-    await WidgetsBinding.instance.endOfFrame;
-    if (!mounted) return;
-    final todayContext = _todayKey.currentContext;
-    if (todayContext != null && todayContext.mounted && !_todayInView()) {
-      await Scrollable.ensureVisible(
-        todayContext,
-        alignment: 0.2,
-        alignmentPolicy: ScrollPositionAlignmentPolicy.keepVisibleAtStart,
-        duration: const Duration(milliseconds: 200),
-      );
-    }
-    if (!mounted) return;
-    final button = _rectOf(_buttonKey);
-    final today = _rectOf(_todayKey);
-    final animate =
-        !MediaQuery.disableAnimationsOf(context) &&
-        button != null &&
-        today != null;
-
-    final countBefore = service.count;
-    final rewards = await service.checkIn();
-    if (!mounted) return;
-    if (rewards == null) {
-      setState(() => _busy = false);
+    final target = key.currentContext;
+    if (rect == null || view == null || target == null || !target.mounted) {
       return;
     }
-    final gift = rewards.where((r) => !r.daily).firstOrNull;
-    final daily = rewards.where((r) => r.daily).toList();
+    if (rect.top >= view.top && rect.bottom <= view.bottom - 110) return;
+    await Scrollable.ensureVisible(
+      target,
+      alignment: 0.5,
+      duration: const Duration(milliseconds: 250),
+      curve: Curves.easeOutCubic,
+    );
+  }
+
+  Future<void> _checkIn(CheckInService service) =>
+      _record(service, service.today, service.checkIn, withButton: true);
+
+  Future<void> _makeUp(CheckInService service, int day) async {
+    if (_busy || !service.canMakeUp(day)) return;
+    final l10n = context.l10n;
+    final date = MaterialLocalizations.of(
+      context,
+    ).formatShortMonthDay(dateOfDayNumber(day));
+    final ads = context.ads;
+    final confirmed = await showModalBottomSheet<bool>(
+      context: context,
+      showDragHandle: true,
+      builder: (context) => _MakeUpSheet(date: date),
+    );
+    if (confirmed != true || !mounted) return;
+    if (ads.isEnabled) {
+      if (!ads.isReady(AdPlacement.checkInMakeUp)) {
+        ToastUtils.warning(title: l10n.adRewardNotReady);
+        return;
+      }
+      setState(() => _busy = true);
+      final rewarded = await ads.showRewarded(AdPlacement.checkInMakeUp);
+      if (!mounted) return;
+      setState(() => _busy = false);
+      if (!rewarded) return;
+    }
+    await _record(service, day, () => service.makeUp(day), withButton: false);
+  }
+
+  /// Điểm danh / bù [day] rồi chạy hiệu ứng.
+  Future<void> _record(
+    CheckInService service,
+    int day,
+    Future<CheckInOutcome?> Function() action, {
+    required bool withButton,
+  }) async {
+    if (_busy) return;
+    final month = _monthOf(day);
+    final before = service.streak(month.year, month.month);
+    setState(() {
+      _busy = true;
+      _month = month;
+      _stampDay = day;
+    });
+    await WidgetsBinding.instance.endOfFrame;
+    if (!mounted) return;
+    await _reveal(_stampKey);
+    if (!mounted) return;
+    final button = withButton ? _rectOf(_buttonKey) : null;
+    final cell = _rectOf(_stampKey);
+    final animate =
+        !MediaQuery.disableAnimationsOf(context) &&
+        cell != null &&
+        (!withButton || button != null);
+
+    // Giữ ô, thanh và mốc như cũ trước khi service báo đổi.
+    setState(() {
+      _holdDay = animate ? day : null;
+      _heldStats = animate ? before : null;
+      _barOverride = animate ? before.longest.toDouble() : null;
+      _claimedOverride =
+          animate
+              ? {...service.claimedMilestones(month.year, month.month)}
+              : null;
+    });
+    final outcome = await action();
+    if (!mounted) return;
+    if (outcome == null) {
+      _reset();
+      return;
+    }
 
     if (animate) {
-      setState(() {
-        _holdToday = true;
-        _heldGift = gift;
-        // Từ đây bản sao của nút được vẽ trên lớp phủ.
-        _hideButton = true;
-      });
-      final giftKind =
-          gift == null ? null : RewardKind(gift.powerUp, daily: false);
-      final target = giftKind == null ? null : _rectOf(_totalKeys[giftKind]!);
-      final celebration =
+      await _celebrate(service, outcome, button: button, cell: cell);
+    }
+    if (!mounted) return;
+    _reset();
+    _toast(outcome, animated: animate);
+  }
+
+  Future<void> _celebrate(
+    CheckInService service,
+    CheckInOutcome outcome, {
+    required Rect? button,
+    required Rect cell,
+  }) async {
+    final sounds = AppSoundController.maybeOf(context);
+    final overlay = Overlay.of(context, rootOverlay: true);
+    final ads = context.ads;
+    final l10n = context.l10n;
+
+    // 1. Đóng dấu ô ngày.
+    setState(() => _hideButton = button != null);
+    final stamp =
+        _celebration = CheckInCelebration(
+          vsync: this,
+          overlay: overlay,
+          button: button,
+          buttonChild: button == null ? null : _buttonFor(service),
+          today: cell,
+          sounds: sounds,
+          onLand: () {
+            if (mounted) setState(() => _holdDay = null);
+          },
+        );
+    await stamp.run();
+    stamp.dispose();
+    _celebration = null;
+    if (!mounted) return;
+    setState(() {
+      _hideButton = false;
+      _holdDay = null;
+      _heldStats = null;
+      _pendingGifts = {for (final g in outcome.gifts) g.milestone};
+    });
+
+    // 2. Thanh chuỗi chạy tới chuỗi dài nhất mới.
+    if (outcome.longestAfter > outcome.longestBefore) {
+      await _reveal(_streakKey);
+      if (!mounted) return;
+      final from = outcome.longestBefore.toDouble();
+      final to = math.min(outcome.longestAfter, 28).toDouble();
+      _bar.value = from;
+      final ms = math.max(450, ((to - from) * 60).round());
+      await _bar.animateTo(
+        to,
+        duration: Duration(milliseconds: ms),
+        curve: Curves.easeOutCubic,
+      );
+      if (!mounted) return;
+    }
+
+    // 3. Mở lần lượt quà các mốc vừa đạt.
+    for (final gift in outcome.gifts) {
+      final node = _rectOf(_nodeKeys[gift.milestone]!);
+      if (node == null) continue;
+      final open =
           _celebration = CheckInCelebration(
             vsync: this,
-            overlay: Overlay.of(context, rootOverlay: true),
-            button: button,
-            buttonChild: _CheckInButton(
-              giftToday: gift != null,
-              left: CheckInPolicy.checkInsToNextMilestone(countBefore),
-            ),
-            today: today,
-            gift: gift,
-            giftCheckIns: countBefore + 1,
-            giftTarget: target?.centerLeft.translate(-6, 0),
-            sounds: AppSoundController.maybeOf(context),
-            onLand: () {
-              if (mounted) setState(() => _holdToday = false);
-            },
+            overlay: overlay,
+            gift: gift.reward,
+            giftMilestone: gift.milestone,
+            badge: node,
+            giftTarget: node.center,
+            sounds: sounds,
+            // Không có quảng cáo (web, iOS): không có nút "Nhận x2".
+            onDouble:
+                ads.isEnabled
+                    ? () async {
+                      if (!ads.isReady(AdPlacement.checkInDoubleGift)) {
+                        ToastUtils.warning(title: l10n.adRewardNotReady);
+                        return false;
+                      }
+                      if (!await ads.showRewarded(
+                        AdPlacement.checkInDoubleGift,
+                      )) {
+                        return false;
+                      }
+                      return service.doubleGift(
+                        day: outcome.day,
+                        milestone: gift.milestone,
+                      );
+                    }
+                    : null,
             onCollected: () {
               if (!mounted) return;
               setState(() {
-                _heldGift = null;
-                _bumpKind = giftKind;
+                _claimedOverride = {...?_claimedOverride, gift.milestone};
+                _pendingGifts = {..._pendingGifts}..remove(gift.milestone);
               });
-              _bump.forward(from: 0);
             },
           );
-      await celebration.run();
-      celebration.dispose();
+      await open.run();
+      open.dispose();
       _celebration = null;
+      if (!mounted) return;
     }
+  }
+
+  void _reset() {
     if (!mounted) return;
     setState(() {
       _busy = false;
       _hideButton = false;
-      _holdToday = false;
-      _heldGift = null;
+      _holdDay = null;
+      _heldStats = null;
+      _barOverride = null;
+      _claimedOverride = null;
+      _pendingGifts = const {};
+      _stampDay = null;
     });
+  }
+
+  void _toast(CheckInOutcome outcome, {required bool animated}) {
     final l10n = context.l10n;
-    if (!animate) {
-      ToastUtils.success(
-        title: l10n.checkInCheckedIn,
-        description:
-            rewards.isEmpty
-                ? l10n.checkInNextGift(
-                  CheckInPolicy.checkInsToNextMilestone(service.count),
-                )
-                : l10n.checkInReceived(
-                  rewards.map(context.rewardLabel).join(', '),
-                ),
-      );
-    } else if (daily.isNotEmpty) {
-      // Quà trong ngày của gói không quảng cáo: chỉ báo nhỏ.
-      ToastUtils.success(
-        title: l10n.checkInCheckedIn,
-        description: l10n.checkInReceived(
-          daily.map(context.rewardLabel).join(', '),
-        ),
-      );
-    }
+    final isToday = outcome.day == context.read<CheckInService>().today;
+    final title =
+        isToday
+            ? l10n.checkInCheckedIn
+            : l10n.checkInMadeUp(
+              MaterialLocalizations.of(
+                context,
+              ).formatShortMonthDay(dateOfDayNumber(outcome.day)),
+            );
+    // Có hiệu ứng: quà chuỗi đã hiện trong hiệu ứng, chỉ báo quà trong ngày.
+    final rewards = animated ? outcome.daily : outcome.rewards;
+    if (animated && rewards.isEmpty) return;
+    ToastUtils.success(
+      title: title,
+      description:
+          rewards.isEmpty
+              ? null
+              : l10n.checkInReceived(
+                rewards.map(context.rewardLabel).join(', '),
+              ),
+    );
+  }
+
+  _CheckInButton _buttonFor(CheckInService service, {VoidCallback? onPressed}) {
+    final today = dateOfDayNumber(service.today);
+    final stats = service.streak(today.year, today.month);
+    final next = CheckInPolicy.nextMilestone(
+      service.claimedMilestones(today.year, today.month),
+    );
+    return _CheckInButton(
+      key: onPressed == null ? null : _buttonKey,
+      done: !service.canCheckIn && !_busy,
+      daysLeft: next == null ? null : next - stats.current,
+      onPressed: onPressed,
+    );
   }
 
   @override
@@ -206,11 +370,11 @@ class _CheckInTabState extends State<CheckInTab> with TickerProviderStateMixin {
     if (_month.isAfter(lastMonth)) _month = lastMonth;
     if (_month.isBefore(firstMonth)) _month = firstMonth;
     final month = service.month(_month.year, _month.month);
-    // Lúc hiệu ứng chưa tới ô hôm nay: hiện như chưa điểm danh.
-    final hold = _holdToday && service.checkedInToday;
-    final count = service.count - (hold ? 1 : 0);
-    final checkedIn = service.checkedInToday && !hold;
-    final showButton = service.canCheckIn || _busy;
+    final stats = _heldStats ?? service.streak(_month.year, _month.month);
+    final claimed =
+        _claimedOverride ??
+        service.claimedMilestones(_month.year, _month.month);
+    final stampDay = _stampDay ?? service.today;
 
     return PopScope(
       // Đang chờ nhận quà: nút quay lại = nhận quà.
@@ -223,14 +387,8 @@ class _CheckInTabState extends State<CheckInTab> with TickerProviderStateMixin {
           child: ListView(
             key: _listKey,
             controller: _scroll,
-            padding: const EdgeInsets.fromLTRB(16, 12, 16, 110),
+            padding: const EdgeInsets.fromLTRB(16, 12, 16, 120),
             children: [
-              _StatusCard(
-                checkedIn: checkedIn,
-                count: count,
-                premium: service.isPremium,
-              ),
-              const SizedBox(height: 16),
               Card(
                 child: Padding(
                   padding: const EdgeInsets.fromLTRB(10, 6, 10, 12),
@@ -238,235 +396,129 @@ class _CheckInTabState extends State<CheckInTab> with TickerProviderStateMixin {
                     children: [
                       _MonthNavigator(
                         month: _month,
-                        canGoBack: _month.isAfter(firstMonth),
-                        canGoForward: _month.isBefore(lastMonth),
+                        canGoBack: !_busy && _month.isAfter(firstMonth),
+                        canGoForward: !_busy && _month.isBefore(lastMonth),
                         onChanged: (m) => setState(() => _month = m),
                       ),
                       const SizedBox(height: 4),
                       _CalendarGrid(
                         month: month,
-                        todayKey: _todayKey,
-                        holdToday: hold,
+                        stampDay: stampDay,
+                        stampKey: _stampKey,
+                        holdDay: _holdDay,
+                        onMakeUp: _busy ? null : (d) => _makeUp(service, d),
                       ),
-                      _CalendarLegend(
-                        // Vương miện: đang có gói, hoặc tháng này từng nhận
-                        // quà của gói.
-                        premium:
-                            service.isPremium ||
-                            month.days.any(
-                              (d) => d.checked && d.rewards.any((r) => r.daily),
-                            ),
-                      ),
+                      const _CalendarLegend(),
                     ],
                   ),
                 ),
               ),
               const SizedBox(height: 16),
-              _MonthTotals(
-                month: month,
-                keys: _totalKeys,
-                held: _heldGift,
+              _StreakCard(
+                key: _streakKey,
+                stats: stats,
                 isThisMonth: _month == lastMonth,
-                bumpKind: _bumpKind,
-                bump: _bump,
+                longest: _barOverride ?? stats.longest.toDouble(),
+                claimed: claimed,
+                pending: _pendingGifts,
+                nodeKeys: _nodeKeys,
               ),
             ],
           ),
         ),
         floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
-        floatingActionButton:
-            showButton
-                ? Visibility(
-                  // Lúc hiệu ứng chạy, bản sao của nút được vẽ trên lớp phủ.
-                  visible: !_hideButton,
-                  maintainSize: true,
-                  maintainAnimation: true,
-                  maintainState: true,
-                  child: _CheckInButton(
-                    key: _buttonKey,
-                    giftToday:
-                        CheckInPolicy.checkInsToNextMilestone(service.count) ==
-                        1,
-                    left: CheckInPolicy.checkInsToNextMilestone(service.count),
-                    onPressed: () => _checkIn(service),
-                  ),
-                )
-                : null,
+        floatingActionButton: Visibility(
+          // Lúc hiệu ứng chạy, bản sao của nút được vẽ trên lớp phủ.
+          visible: !_hideButton,
+          maintainSize: true,
+          maintainAnimation: true,
+          maintainState: true,
+          child: _buttonFor(
+            service,
+            onPressed: service.canCheckIn ? () => _checkIn(service) : () {},
+          ),
+        ),
       ),
     );
   }
 }
 
-/// Thẻ trên cùng: hôm nay đã / chưa điểm danh, còn mấy lần tới quà. Chưa
-/// điểm danh: nền gradient để kéo chú ý (người có gói thấy thêm dòng nhắc
-/// nhận quà gói). Đã điểm danh: nền xanh lá nhạt.
-class _StatusCard extends StatelessWidget {
-  const _StatusCard({
-    required this.checkedIn,
-    required this.count,
-    required this.premium,
-  });
+/// Hỏi lại trước khi phát quảng cáo bù ngày.
+class _MakeUpSheet extends StatelessWidget {
+  const _MakeUpSheet({required this.date});
 
-  final bool checkedIn;
-  final int count;
-  final bool premium;
+  final String date;
 
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
-    final colors = context.color;
-    final game = context.gameColors;
-    final success = game.success;
-    final next = l10n.checkInNextGift(
-      CheckInPolicy.checkInsToNextMilestone(count),
-    );
-
-    final Widget icon;
-    final Widget text;
-    final BoxDecoration decoration;
-    if (checkedIn) {
-      decoration = BoxDecoration(
-        color: Color.alphaBlend(
-          success.withValues(alpha: 0.12),
-          colors.surfaceContainerLow,
-        ),
-        borderRadius: BorderRadius.circular(20),
-        border: Border.all(color: success.withValues(alpha: 0.35)),
-      );
-      icon = _StatusIcon(
-        background: success.withValues(alpha: 0.22),
-        child: Icon(LucideIcons.checkCircle2, color: success, size: 22),
-      );
-      text = Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            l10n.checkInDoneToday,
-            style: context.titleSmall.copyWith(color: success),
-          ),
-          const SizedBox(height: 4),
-          Text(
-            next,
-            style: context.bodySmall.copyWith(color: colors.onSurfaceVariant),
-          ),
-        ],
-      );
-    } else {
-      decoration = BoxDecoration(
-        gradient: LinearGradient(
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-          colors: [game.heroStart, game.heroEnd],
-        ),
-        borderRadius: BorderRadius.circular(20),
-        boxShadow: [
-          BoxShadow(
-            color: game.heroStart.withValues(alpha: 0.28),
-            blurRadius: 20,
-            offset: const Offset(0, 8),
-          ),
-        ],
-      );
-      icon = _StatusIcon(
-        background: Colors.white.withValues(alpha: 0.2),
-        child: const Icon(LucideIcons.gift, color: Colors.white, size: 22),
-      );
-      text = Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            l10n.checkInNotYetToday,
-            style: context.titleSmall.copyWith(color: Colors.white),
-          ),
-          const SizedBox(height: 4),
-          Text(
-            next,
-            style: context.bodySmall.copyWith(
-              color: Colors.white.withValues(alpha: 0.88),
+    final missed = _missedColor(context);
+    return SafeArea(
+      child: Padding(
+        padding: const EdgeInsets.fromLTRB(24, 0, 24, 20),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Container(
+              width: 56,
+              height: 56,
+              decoration: BoxDecoration(
+                color: missed.withValues(alpha: 0.16),
+                shape: BoxShape.circle,
+              ),
+              child: Icon(Icons.play_arrow_rounded, color: missed, size: 32),
             ),
-          ),
-          if (premium) ...[
+            const SizedBox(height: 14),
+            Text(
+              l10n.checkInMakeUpTitle(date),
+              textAlign: TextAlign.center,
+              style: context.titleLarge.copyWith(fontWeight: FontWeight.w800),
+            ),
             const SizedBox(height: 8),
-            Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const Padding(
-                  padding: EdgeInsets.only(top: 1),
-                  child: Icon(
-                    LucideIcons.crown,
-                    size: 15,
-                    color: Color(0xFFFFD66B),
-                  ),
-                ),
-                const SizedBox(width: 6),
-                Expanded(
-                  child: Text(
-                    l10n.checkInPremiumNotYet,
-                    style: context.bodySmall.copyWith(
-                      color: Colors.white,
-                      fontWeight: FontWeight.w700,
-                    ),
-                  ),
-                ),
-              ],
+            Text(
+              l10n.checkInMakeUpBody,
+              textAlign: TextAlign.center,
+              style: context.bodyMedium.copyWith(
+                color: context.color.onSurfaceVariant,
+              ),
+            ),
+            const SizedBox(height: 20),
+            SizedBox(
+              width: double.infinity,
+              height: 52,
+              child: FilledButton.icon(
+                key: const ValueKey('check-in-make-up-watch'),
+                onPressed: () => Navigator.of(context).pop(true),
+                icon: const Icon(Icons.play_arrow_rounded),
+                label: Text(l10n.checkInMakeUpWatch),
+              ),
+            ),
+            const SizedBox(height: 6),
+            TextButton(
+              onPressed: () => Navigator.of(context).pop(false),
+              child: Text(l10n.commonCancel),
             ),
           ],
-        ],
-      );
-    }
-
-    return AnimatedContainer(
-      key: const ValueKey('check-in-status'),
-      duration: const Duration(milliseconds: 300),
-      padding: const EdgeInsets.all(16),
-      decoration: decoration,
-      child: Row(
-        children: [
-          AnimatedSwitcher(
-            duration: const Duration(milliseconds: 300),
-            transitionBuilder:
-                (child, animation) =>
-                    ScaleTransition(scale: animation, child: child),
-            child: KeyedSubtree(key: ValueKey(checkedIn), child: icon),
-          ),
-          const SizedBox(width: 14),
-          Expanded(child: text),
-        ],
+        ),
       ),
     );
   }
 }
 
-class _StatusIcon extends StatelessWidget {
-  const _StatusIcon({required this.background, required this.child});
-
-  final Color background;
-  final Widget child;
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      width: 44,
-      height: 44,
-      decoration: BoxDecoration(color: background, shape: BoxShape.circle),
-      alignment: Alignment.center,
-      child: child,
-    );
-  }
-}
-
-/// Nút "Điểm danh hôm nay": viên gradient, dòng dưới báo còn mấy lần tới
-/// quà (hay hôm nay có quà). Nhấn thì lún nhẹ.
+/// Nút "Điểm danh hôm nay": viên gradient, dòng dưới báo còn mấy ngày tới
+/// quà chuỗi (hay hôm nay có quà). Đã điểm danh: viên xám, không bấm được.
 class _CheckInButton extends StatefulWidget {
   const _CheckInButton({
     super.key,
-    required this.giftToday,
-    required this.left,
+    required this.done,
+    required this.daysLeft,
     this.onPressed,
   });
 
-  final bool giftToday;
-  final int left;
+  final bool done;
+
+  /// Còn mấy ngày tới mốc kế tiếp (null: đã nhận hết quà tháng này).
+  final int? daysLeft;
   final VoidCallback? onPressed;
 
   @override
@@ -480,19 +532,37 @@ class _CheckInButtonState extends State<_CheckInButton> {
   Widget build(BuildContext context) {
     final l10n = context.l10n;
     final game = context.gameColors;
+    final colors = context.color;
+    final done = widget.done;
+    final daysLeft = widget.daysLeft;
+    final giftToday = daysLeft != null && daysLeft <= 1;
+    final subtitle =
+        daysLeft == null
+            ? l10n.checkInStreakAllDone
+            : giftToday
+            ? l10n.checkInGiftToday
+            : l10n.checkInStreakDaysLeft(daysLeft);
+    final ink = done ? colors.onSurfaceVariant : Colors.white;
     final pill = Container(
       height: 62,
       padding: const EdgeInsets.fromLTRB(8, 8, 24, 8),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(31),
-        gradient: LinearGradient(colors: [game.heroStart, game.heroEnd]),
-        boxShadow: [
-          BoxShadow(
-            color: game.heroStart.withValues(alpha: 0.35),
-            blurRadius: 18,
-            offset: const Offset(0, 8),
-          ),
-        ],
+        color: done ? colors.surfaceContainerHigh : null,
+        gradient:
+            done
+                ? null
+                : LinearGradient(colors: [game.heroStart, game.heroEnd]),
+        boxShadow:
+            done
+                ? null
+                : [
+                  BoxShadow(
+                    color: game.heroStart.withValues(alpha: 0.35),
+                    blurRadius: 18,
+                    offset: const Offset(0, 8),
+                  ),
+                ],
       ),
       child: Row(
         mainAxisSize: MainAxisSize.min,
@@ -500,13 +570,17 @@ class _CheckInButtonState extends State<_CheckInButton> {
           Container(
             width: 46,
             height: 46,
-            decoration: const BoxDecoration(
-              color: Colors.white,
+            decoration: BoxDecoration(
+              color: done ? colors.surface : Colors.white,
               shape: BoxShape.circle,
             ),
             child: Icon(
-              widget.giftToday ? LucideIcons.gift : LucideIcons.calendarCheck,
-              color: game.heroStart,
+              done
+                  ? LucideIcons.check
+                  : giftToday
+                  ? LucideIcons.gift
+                  : LucideIcons.calendarCheck,
+              color: done ? colors.onSurfaceVariant : game.heroStart,
               size: 22,
             ),
           ),
@@ -517,23 +591,21 @@ class _CheckInButtonState extends State<_CheckInButton> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  l10n.checkInTodayButton,
+                  done ? l10n.checkInDoneToday : l10n.checkInTodayButton,
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
                   style: context.titleMedium.copyWith(
-                    color: Colors.white,
+                    color: ink,
                     fontWeight: FontWeight.w800,
                     height: 1.15,
                   ),
                 ),
                 Text(
-                  widget.giftToday
-                      ? l10n.checkInGiftToday
-                      : l10n.checkInGiftsLeftShort(widget.left),
+                  subtitle,
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
                   style: context.labelMedium.copyWith(
-                    color: Colors.white.withValues(alpha: 0.85),
+                    color: ink.withValues(alpha: 0.85),
                     height: 1.2,
                   ),
                 ),
@@ -546,13 +618,14 @@ class _CheckInButtonState extends State<_CheckInButton> {
     if (widget.onPressed == null) return pill;
     return Semantics(
       button: true,
-      label: l10n.checkInTodayButton,
+      enabled: !done,
+      label: done ? l10n.checkInDoneToday : l10n.checkInTodayButton,
       child: GestureDetector(
         key: const ValueKey('check-in-button'),
-        onTapDown: (_) => setState(() => _down = true),
+        onTapDown: done ? null : (_) => setState(() => _down = true),
         onTapCancel: () => setState(() => _down = false),
         onTapUp: (_) => setState(() => _down = false),
-        onTap: widget.onPressed,
+        onTap: done ? null : widget.onPressed,
         child: AnimatedScale(
           scale: _down ? 0.94 : 1,
           duration: const Duration(milliseconds: 90),
@@ -614,15 +687,23 @@ class _MonthNavigator extends StatelessWidget {
 class _CalendarGrid extends StatelessWidget {
   const _CalendarGrid({
     required this.month,
-    required this.todayKey,
-    required this.holdToday,
+    required this.stampDay,
+    required this.stampKey,
+    required this.holdDay,
+    required this.onMakeUp,
   });
 
   final CheckInMonth month;
-  final GlobalKey todayKey;
 
-  /// Ô hôm nay vẽ như chưa điểm danh (hiệu ứng chưa tới).
-  final bool holdToday;
+  /// Ô nhận [stampKey]: ô hiệu ứng đóng dấu bay tới.
+  final int stampDay;
+  final GlobalKey stampKey;
+
+  /// Ô vẽ như chưa điểm danh (hiệu ứng chưa tới).
+  final int? holdDay;
+
+  /// Chạm ngày bỏ lỡ (null: đang bận).
+  final ValueChanged<int>? onMakeUp;
 
   @override
   Widget build(BuildContext context) {
@@ -669,13 +750,22 @@ class _CalendarGrid extends StatelessWidget {
                     child: Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 3),
                       child: SizedBox(
-                        height: 46,
+                        height: 50,
                         child: switch (cells[row * 7 + col]) {
                           null => null,
                           final day => _DayCell(
-                            key: day.isToday ? todayKey : null,
+                            key: day.day == stampDay ? stampKey : null,
                             day: day,
-                            checked: day.checked && !(day.isToday && holdToday),
+                            status:
+                                day.day == holdDay
+                                    ? (day.isToday
+                                        ? CheckInDayStatus.today
+                                        : CheckInDayStatus.missed)
+                                    : day.status,
+                            onMakeUp:
+                                onMakeUp == null
+                                    ? null
+                                    : () => onMakeUp!(day.day),
                           ),
                         },
                       ),
@@ -689,234 +779,182 @@ class _CalendarGrid extends StatelessWidget {
   }
 }
 
-/// Màu của ngày mốc quà (mỗi [CheckInPolicy.milestoneEvery] lần điểm danh).
-/// Chế độ tối dùng nền đậm và gradient tươi hơn để ngày mốc vẫn nổi.
-class _MilestoneColors {
-  _MilestoneColors.of(BuildContext context)
-    : this._(context, Theme.of(context).brightness == Brightness.dark);
-
-  _MilestoneColors._(BuildContext context, bool dark)
-    : background = Color.alphaBlend(
-        context.color.primary.withValues(alpha: dark ? 0.40 : 0.13),
-        context.color.surfaceContainerLow,
-      ),
-      ink = dark ? const Color(0xFFDCE3FF) : context.color.primary,
-      gradient =
-          dark
-              ? const [Color(0xFF4C6EF5), Color(0xFF7950F2)]
-              : [context.gameColors.heroStart, context.gameColors.heroEnd];
-
-  /// Nền của ngày mốc chưa tới.
-  final Color background;
-
-  /// Chữ của ngày mốc chưa tới.
-  final Color ink;
-
-  /// Nền của ngày mốc đã điểm danh.
-  final List<Color> gradient;
-}
-
-/// Một ngày trên lịch.
-/// - Đã điểm danh: nền nhạt, số nhỏ và dấu tích mảnh; ngày mốc quà thì nền
-///   gradient, dấu tích đậm.
-/// - Ngày mốc chưa tới: số to, nền màu, không viền (viền dành cho hôm nay).
-/// - Hôm nay: luôn có vòng viền bao ngoài ô.
-/// - Ngày có quà gói không quảng cáo: vương miện ở góc (đã nhận: đặc; sắp
-///   tới: viền).
+/// Một ngày trên lịch (icon trơn, không chữ):
+/// - Đã điểm danh: nền xanh nhạt, dấu tích.
+/// - Bỏ lỡ: nền cam nhạt, viền cam nét đứt, nút ▶ (chạm để bù).
+/// - Hôm nay chưa điểm danh: viền xanh đậm, chấm xanh.
+/// - Chưa tới: nền xám nhạt, ổ khoá.
+/// - Trước ngày bắt đầu dùng app: chỉ có số, mờ.
 class _DayCell extends StatelessWidget {
-  const _DayCell({super.key, required this.day, required this.checked});
+  const _DayCell({
+    super.key,
+    required this.day,
+    required this.status,
+    this.onMakeUp,
+  });
 
   final CheckInDay day;
-  final bool checked;
+  final CheckInDayStatus status;
+  final VoidCallback? onMakeUp;
 
   @override
   Widget build(BuildContext context) {
     final colors = context.color;
-    final milestone = day.hasMilestone;
-    final ms = _MilestoneColors.of(context);
     final dark = Theme.of(context).brightness == Brightness.dark;
-    final premiumDay = day.rewards.any((r) => r.daily);
+    final missed = _missedColor(context);
+    final soft = Color.alphaBlend(
+      colors.primary.withValues(alpha: dark ? 0.22 : 0.14),
+      colors.surfaceContainerLow,
+    );
 
-    final Widget content;
-    BoxDecoration decoration;
-    if (checked) {
-      final ink = milestone ? Colors.white : colors.primary;
-      decoration = BoxDecoration(
-        color:
-            milestone
-                ? null
-                : Color.alphaBlend(
-                  colors.primary.withValues(alpha: dark ? 0.20 : 0.14),
-                  colors.surfaceContainerLow,
-                ),
-        gradient:
-            milestone
-                ? LinearGradient(
-                  begin: Alignment.topLeft,
-                  end: Alignment.bottomRight,
-                  colors: ms.gradient,
-                )
+    final (Color? background, Color ink, Widget? icon) = switch (status) {
+      CheckInDayStatus.checked => (
+        soft,
+        colors.primary,
+        Icon(LucideIcons.check, size: 16, color: colors.primary),
+      ),
+      CheckInDayStatus.missed => (
+        Color.alphaBlend(
+          missed.withValues(alpha: dark ? 0.18 : 0.14),
+          colors.surfaceContainerLow,
+        ),
+        missed,
+        Icon(Icons.play_arrow_rounded, size: 18, color: missed),
+      ),
+      CheckInDayStatus.today => (
+        colors.surface,
+        colors.primary,
+        Container(
+          width: 6,
+          height: 6,
+          decoration: BoxDecoration(
+            color: colors.primary,
+            shape: BoxShape.circle,
+          ),
+        ),
+      ),
+      CheckInDayStatus.future => (
+        colors.surfaceContainerHigh.withValues(alpha: 0.6),
+        colors.onSurfaceVariant.withValues(alpha: 0.6),
+        Icon(
+          LucideIcons.lock,
+          size: 13,
+          color: colors.onSurfaceVariant.withValues(alpha: 0.5),
+        ),
+      ),
+      CheckInDayStatus.beforeStart => (
+        null,
+        colors.onSurfaceVariant.withValues(alpha: 0.4),
+        null,
+      ),
+    };
+
+    Widget cell = Container(
+      key: ValueKey('check-in-day-${day.dayOfMonth}-${status.name}'),
+      decoration: BoxDecoration(
+        color: background,
+        borderRadius: BorderRadius.circular(12),
+        border:
+            status == CheckInDayStatus.today
+                ? Border.all(color: colors.primary, width: 2.5)
                 : null,
-        boxShadow:
-            milestone
-                ? [
-                  BoxShadow(
-                    color: ms.gradient.first.withValues(alpha: 0.4),
-                    blurRadius: 10,
-                    offset: const Offset(0, 4),
-                  ),
-                ]
-                : null,
-        borderRadius: BorderRadius.circular(10),
-      );
-      content = Column(
-        key: ValueKey('check-in-checked-${day.dayOfMonth}'),
+      ),
+      child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Text(
             '${day.dayOfMonth}',
-            style: context.labelSmall.copyWith(
-              color:
-                  milestone
-                      ? Colors.white
-                      : Color.lerp(colors.primary, colors.onSurface, 0.25),
-              fontSize: milestone ? 13.5 : null,
-              fontWeight: milestone ? FontWeight.w800 : FontWeight.w700,
-              height: 1,
+            style: context.labelLarge.copyWith(
+              color: ink,
+              fontWeight: FontWeight.w700,
+              height: 1.1,
             ),
           ),
-          const SizedBox(height: 2),
-          milestone
-              ? Icon(Icons.check_rounded, color: ink, size: 20)
-              : Icon(LucideIcons.check, color: ink, size: 16),
+          if (icon != null) ...[const SizedBox(height: 3), icon],
         ],
-      );
-    } else {
-      final upcomingMilestone = milestone && !day.beforeStart;
-      final Border? border;
-      if (day.beforeStart || upcomingMilestone || day.isToday) {
-        border = null;
-      } else {
-        border = Border.all(color: colors.outlineVariant);
-      }
-      decoration = BoxDecoration(
-        color: upcomingMilestone ? ms.background : null,
-        border: border,
-        borderRadius: BorderRadius.circular(10),
-      );
-      final TextStyle style;
-      if (upcomingMilestone) {
-        style = context.labelLarge.copyWith(
-          fontSize: 17,
-          fontWeight: FontWeight.w800,
-          color: ms.ink,
-        );
-      } else {
-        style = context.labelLarge.copyWith(
-          fontSize: day.isToday ? 13.5 : 12.5,
-          fontWeight: day.isToday ? FontWeight.w800 : FontWeight.w600,
-          color:
-              day.beforeStart
-                  ? colors.onSurfaceVariant.withValues(alpha: 0.4)
-                  : colors.onSurface,
-        );
-      }
-      content = Center(child: Text('${day.dayOfMonth}', style: style));
-    }
-
-    return Stack(
-      clipBehavior: Clip.none,
-      children: [
-        Positioned.fill(
-          child: KeyedSubtree(
-            key:
-                milestone
-                    ? ValueKey('check-in-milestone-${day.dayOfMonth}')
-                    : null,
-            child: Container(
-              key: ValueKey('check-in-day-${day.dayOfMonth}'),
-              decoration: decoration,
-              child: content,
-            ),
-          ),
-        ),
-        // Hôm nay: vòng viền bao ngoài ô (cách 1px), thấy rõ cả trên nền
-        // gradient của ngày mốc.
-        if (day.isToday)
-          Positioned(
-            left: -3,
-            top: -3,
-            right: -3,
-            bottom: -3,
-            child: IgnorePointer(
-              child: DecoratedBox(
-                key: const ValueKey('check-in-today-ring'),
-                decoration: BoxDecoration(
-                  border: Border.all(color: colors.primary, width: 2),
-                  borderRadius: BorderRadius.circular(13),
-                ),
-              ),
-            ),
-          ),
-        if (premiumDay)
-          Positioned(
-            right: -5,
-            top: -5,
-            child: _CrownBadge(
-              key: ValueKey('check-in-crown-${day.dayOfMonth}'),
-              upcoming: !checked,
-            ),
-          ),
-      ],
+      ),
     );
+    if (status == CheckInDayStatus.missed) {
+      cell = CustomPaint(
+        foregroundPainter: _DashedBorderPainter(color: missed),
+        child: cell,
+      );
+      cell = Semantics(
+        button: true,
+        label: context.l10n.checkInLegendMissed,
+        child: GestureDetector(
+          key: ValueKey('check-in-make-up-${day.dayOfMonth}'),
+          behavior: HitTestBehavior.opaque,
+          onTap: onMakeUp,
+          child: cell,
+        ),
+      );
+    }
+    return cell;
   }
 }
 
-/// Vương miện ở góc ô: ngày nhận quà của gói không quảng cáo. Đã nhận: nền
-/// vàng đặc; sắp tới: viền vàng.
-class _CrownBadge extends StatelessWidget {
-  const _CrownBadge({super.key, this.upcoming = false});
+/// Viền nét đứt bo góc của ngày bỏ lỡ.
+class _DashedBorderPainter extends CustomPainter {
+  _DashedBorderPainter({required this.color});
 
-  final bool upcoming;
+  final Color color;
 
   @override
-  Widget build(BuildContext context) {
-    final gold = context.gameColors.reward;
-    final card = context.color.surfaceContainerLow;
-    return Container(
-      width: 18,
-      height: 18,
-      decoration: BoxDecoration(
-        color: upcoming ? card : gold,
-        shape: BoxShape.circle,
-        border: Border.all(
-          color: upcoming ? gold.withValues(alpha: 0.65) : card,
-          width: 1.5,
-        ),
-      ),
-      alignment: Alignment.center,
-      child: Icon(
-        LucideIcons.crown,
-        size: 10,
-        color: upcoming ? gold : const Color(0xFF2B1A00),
-      ),
-    );
+  void paint(Canvas canvas, Size size) {
+    final path =
+        Path()..addRRect(
+          RRect.fromRectAndRadius(
+            (Offset.zero & size).deflate(0.75),
+            const Radius.circular(12),
+          ),
+        );
+    final paint =
+        Paint()
+          ..color = color
+          ..style = PaintingStyle.stroke
+          ..strokeWidth = 1.5;
+    for (final metric in path.computeMetrics()) {
+      for (var d = 0.0; d < metric.length; d += 7) {
+        canvas.drawPath(metric.extractPath(d, d + 4), paint);
+      }
+    }
   }
+
+  @override
+  bool shouldRepaint(_DashedBorderPainter old) => old.color != color;
 }
 
-/// Chú thích dưới lịch: ô mốc quà, và vương miện của gói (nếu có).
+/// Chú thích dưới lịch: đã điểm danh, bỏ lỡ, chưa tới.
 class _CalendarLegend extends StatelessWidget {
-  const _CalendarLegend({required this.premium});
-
-  final bool premium;
+  const _CalendarLegend();
 
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
-    final ms = _MilestoneColors.of(context);
-    final style = context.bodySmall.copyWith(
-      color: context.color.onSurfaceVariant,
+    final colors = context.color;
+    final dark = Theme.of(context).brightness == Brightness.dark;
+    final missed = _missedColor(context);
+    final style = context.bodySmall.copyWith(color: colors.onSurfaceVariant);
+
+    Widget item(Widget swatch, String label) => Row(
+      mainAxisSize: MainAxisSize.min,
+      children: [swatch, const SizedBox(width: 6), Text(label, style: style)],
     );
+    Widget swatch(Color color, {Color? dashed}) => SizedBox.square(
+      dimension: 12,
+      child: CustomPaint(
+        foregroundPainter:
+            dashed == null ? null : _DashedBorderPainter(color: dashed),
+        child: DecoratedBox(
+          decoration: BoxDecoration(
+            color: color,
+            borderRadius: BorderRadius.circular(4),
+          ),
+        ),
+      ),
+    );
+
     return Padding(
       padding: const EdgeInsets.fromLTRB(6, 6, 6, 0),
       child: Align(
@@ -925,45 +963,18 @@ class _CalendarLegend extends StatelessWidget {
           spacing: 16,
           runSpacing: 6,
           children: [
-            Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Container(
-                  constraints: const BoxConstraints(minWidth: 22),
-                  height: 22,
-                  alignment: Alignment.center,
-                  decoration: BoxDecoration(
-                    color: ms.background,
-                    borderRadius: BorderRadius.circular(6),
-                  ),
-                  child: Text(
-                    '${CheckInPolicy.milestoneEvery}',
-                    style: context.labelSmall.copyWith(
-                      color: ms.ink,
-                      fontWeight: FontWeight.w800,
-                    ),
-                  ),
-                ),
-                const SizedBox(width: 6),
-                Flexible(
-                  child: Text(
-                    l10n.checkInLegendMilestone(CheckInPolicy.milestoneEvery),
-                    style: style,
-                  ),
-                ),
-              ],
+            item(
+              swatch(colors.primary.withValues(alpha: dark ? 0.3 : 0.18)),
+              l10n.checkInLegendChecked,
             ),
-            if (premium)
-              Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  const _CrownBadge(),
-                  const SizedBox(width: 6),
-                  Flexible(
-                    child: Text(l10n.checkInLegendPremium, style: style),
-                  ),
-                ],
+            item(
+              swatch(
+                missed.withValues(alpha: dark ? 0.2 : 0.16),
+                dashed: missed,
               ),
+              l10n.checkInLegendMissed,
+            ),
+            item(swatch(colors.surfaceContainerHigh), l10n.checkInLegendFuture),
           ],
         ),
       ),
@@ -971,89 +982,343 @@ class _CalendarLegend extends StatelessWidget {
   }
 }
 
-class _MonthTotals extends StatelessWidget {
-  const _MonthTotals({
-    required this.month,
-    required this.keys,
-    required this.held,
+/// Thẻ chuỗi của tháng: ngọn lửa và chuỗi hiện tại, dòng nhắc bù ngày, và
+/// thanh tiến trình đứng ở chuỗi dài nhất trong tháng với các mốc quà. Phần
+/// sọc cam là chỗ chuỗi dài thêm được nếu bù hết ngày bỏ lỡ.
+class _StreakCard extends StatelessWidget {
+  const _StreakCard({
+    super.key,
+    required this.stats,
     required this.isThisMonth,
-    required this.bumpKind,
-    required this.bump,
+    required this.longest,
+    required this.claimed,
+    required this.pending,
+    required this.nodeKeys,
   });
 
-  final CheckInMonth month;
-  final Map<RewardKind, GlobalKey> keys;
-
-  /// Quà mốc hôm nay chưa bấm "Nhận": chưa cộng vào.
-  final CheckInReward? held;
+  final StreakStats stats;
   final bool isThisMonth;
-  final RewardKind? bumpKind;
-  final Animation<double> bump;
+
+  /// Vị trí thanh (chuỗi dài nhất, có thể đang chạy).
+  final double longest;
+  final Set<int> claimed;
+
+  /// Mốc vừa đạt, quà chưa mở.
+  final Set<int> pending;
+  final Map<int, GlobalKey> nodeKeys;
 
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
-    String label(RewardKind k) => switch ((k.powerUp, k.daily)) {
-      (PowerUp.hint, false) => l10n.checkInTotalHints,
-      (PowerUp.wand, false) => l10n.checkInTotalWands,
-      (PowerUp.hint, true) => l10n.checkInTotalDailyHints,
-      (PowerUp.wand, true) => l10n.checkInTotalDailyWands,
-    };
-    final held = isThisMonth ? this.held : null;
+    final colors = context.color;
+    final fire = _fireColor(context);
+    final missed = _missedColor(context);
+    final allClaimed = CheckInPolicy.nextMilestone(claimed) == null;
+    final canGrow = stats.missed.isNotEmpty && stats.potential > longest;
+
+    final Widget sub;
+    if (canGrow) {
+      // Ký tự riêng (vùng Private Use) đánh dấu chỗ số ngày được tô màu.
+      const mark = '';
+      final text = l10n.checkInStreakMakeUp(stats.missed.length, mark);
+      final parts = text.split(mark);
+      sub = Text.rich(
+        TextSpan(
+          children: [
+            TextSpan(text: parts.first),
+            TextSpan(
+              text: l10n.checkInStreakDays(stats.potential),
+              style: TextStyle(color: missed, fontWeight: FontWeight.w800),
+            ),
+            if (parts.length > 1) TextSpan(text: parts.sublist(1).join(mark)),
+          ],
+        ),
+        key: const ValueKey('check-in-streak-make-up'),
+      );
+    } else {
+      sub = Text(
+        allClaimed ? l10n.checkInStreakAllDone : l10n.checkInStreakKeepGoing,
+      );
+    }
+
     return Card(
       child: Padding(
-        padding: const EdgeInsets.all(16),
+        padding: const EdgeInsets.fromLTRB(16, 14, 16, 16),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(l10n.checkInMonthGifts, style: context.titleSmall),
-            const SizedBox(height: 10),
-            for (final entry in month.totals.entries)
-              Padding(
-                padding: const EdgeInsets.symmetric(vertical: 4),
-                child: Row(
-                  children: [
-                    PowerUpGlyph(
-                      powerUp: entry.key.powerUp,
-                      timeLimited: entry.key.daily,
-                      color: rewardColor(context, daily: false),
+            Row(
+              children: [
+                Icon(Icons.local_fire_department_rounded, color: fire),
+                const SizedBox(width: 6),
+                Expanded(
+                  child: Text(
+                    l10n.checkInStreakTitle(
+                      isThisMonth ? stats.current : stats.longest,
                     ),
-                    const SizedBox(width: 10),
-                    Expanded(
-                      child: Text(label(entry.key), style: context.bodyMedium),
+                    key: const ValueKey('check-in-streak-title'),
+                    style: context.titleMedium.copyWith(
+                      color: fire,
+                      fontWeight: FontWeight.w800,
                     ),
-                    AnimatedBuilder(
-                      key: keys[entry.key],
-                      animation: bump,
-                      builder: (context, child) {
-                        final t =
-                            entry.key == bumpKind && bump.isAnimating
-                                ? bump.value
-                                : 0.0;
-                        return Transform.scale(
-                          scale: 1 + 0.35 * (t * (1 - t) * 4),
-                          alignment: Alignment.centerRight,
-                          child: child,
-                        );
-                      },
-                      child: Text(
-                        '${entry.value.got - (held != null && held.powerUp == entry.key.powerUp && !entry.key.daily ? held.amount : 0)}'
-                        '/${entry.value.max}',
-                        key: ValueKey(
-                          'check-in-total-${entry.key.powerUp.name}'
-                          '-${entry.key.daily ? 'daily' : 'kept'}',
-                        ),
-                        style: context.titleSmall.copyWith(
-                          fontWeight: FontWeight.w800,
-                        ),
-                      ),
-                    ),
-                  ],
+                  ),
                 ),
+              ],
+            ),
+            const SizedBox(height: 4),
+            DefaultTextStyle.merge(
+              style: context.bodySmall.copyWith(
+                color: colors.onSurfaceVariant,
+                fontWeight: FontWeight.w600,
               ),
+              child: sub,
+            ),
+            const SizedBox(height: 22),
+            _StreakBar(
+              longest: longest,
+              potential: canGrow ? stats.potential.toDouble() : null,
+              claimed: claimed,
+              pending: pending,
+              nodeKeys: nodeKeys,
+            ),
           ],
         ),
       ),
     );
   }
+}
+
+class _StreakBar extends StatelessWidget {
+  const _StreakBar({
+    required this.longest,
+    required this.potential,
+    required this.claimed,
+    required this.pending,
+    required this.nodeKeys,
+  });
+
+  final double longest;
+  final double? potential;
+  final Set<int> claimed;
+  final Set<int> pending;
+  final Map<int, GlobalKey> nodeKeys;
+
+  static const _max = 28.0;
+  static const _node = 34.0;
+
+  @override
+  Widget build(BuildContext context) {
+    final colors = context.color;
+    final fire = _fireColor(context);
+    final missed = _missedColor(context);
+    final next = CheckInPolicy.nextMilestone({...claimed, ...pending});
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        // Chừa nửa mốc ở hai đầu cho mốc 28 và nhãn không bị cắt.
+        const inset = _node / 2 + 6;
+        final width = constraints.maxWidth - inset * 2;
+        double x(double v) => inset + width * (v.clamp(0, _max) / _max);
+        final fillEnd = x(longest);
+        final potentialEnd = potential == null ? null : x(potential!);
+        return SizedBox(
+          height: _node + 22,
+          child: Stack(
+            clipBehavior: Clip.none,
+            children: [
+              Positioned(
+                left: inset,
+                right: inset,
+                top: _node / 2 - 5,
+                height: 10,
+                child: DecoratedBox(
+                  decoration: BoxDecoration(
+                    color: colors.surfaceContainerHigh,
+                    borderRadius: BorderRadius.circular(5),
+                  ),
+                ),
+              ),
+              if (potentialEnd != null && potentialEnd > fillEnd)
+                Positioned(
+                  left: fillEnd - 5,
+                  width: potentialEnd - fillEnd + 5,
+                  top: _node / 2 - 5,
+                  height: 10,
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(5),
+                    child: CustomPaint(
+                      key: const ValueKey('check-in-streak-potential'),
+                      painter: _StripesPainter(
+                        color: missed.withValues(alpha: 0.6),
+                      ),
+                    ),
+                  ),
+                ),
+              if (longest > 0)
+                Positioned(
+                  left: inset,
+                  width: math.max(10, fillEnd - inset),
+                  top: _node / 2 - 5,
+                  height: 10,
+                  child: DecoratedBox(
+                    key: const ValueKey('check-in-streak-fill'),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(5),
+                      gradient: LinearGradient(
+                        colors: [const Color(0xFFFAB005), fire],
+                      ),
+                    ),
+                  ),
+                ),
+              for (final m in CheckInPolicy.streakMilestones)
+                Positioned(
+                  left: x(m.toDouble()) - _node / 2,
+                  top: 0,
+                  width: _node,
+                  child: _MilestoneNode(
+                    key: nodeKeys[m],
+                    milestone: m,
+                    state:
+                        claimed.contains(m)
+                            ? _NodeState.claimed
+                            : pending.contains(m) && longest >= m
+                            ? _NodeState.ready
+                            : m == next
+                            ? _NodeState.next
+                            : _NodeState.later,
+                  ),
+                ),
+            ],
+          ),
+        );
+      },
+    );
+  }
+}
+
+enum _NodeState { claimed, ready, next, later }
+
+/// Mốc trên thanh chuỗi: hộp quà (đã nhận: dấu tích). Nảy lên mỗi khi đổi
+/// trạng thái (thanh vừa chạm tới, vừa nhận quà).
+class _MilestoneNode extends StatefulWidget {
+  const _MilestoneNode({
+    super.key,
+    required this.milestone,
+    required this.state,
+  });
+
+  final int milestone;
+  final _NodeState state;
+
+  @override
+  State<_MilestoneNode> createState() => _MilestoneNodeState();
+}
+
+class _MilestoneNodeState extends State<_MilestoneNode>
+    with SingleTickerProviderStateMixin {
+  late final AnimationController _bump = AnimationController(
+    vsync: this,
+    duration: const Duration(milliseconds: 420),
+  );
+
+  @override
+  void didUpdateWidget(_MilestoneNode old) {
+    super.didUpdateWidget(old);
+    if (old.state != widget.state &&
+        (widget.state == _NodeState.ready ||
+            widget.state == _NodeState.claimed)) {
+      _bump.forward(from: 0);
+    }
+  }
+
+  @override
+  void dispose() {
+    _bump.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final colors = context.color;
+    final fire = _fireColor(context);
+    final state = widget.state;
+    final filled = state == _NodeState.claimed || state == _NodeState.ready;
+    final border = switch (state) {
+      _NodeState.claimed || _NodeState.ready || _NodeState.next => fire,
+      _NodeState.later => colors.outlineVariant,
+    };
+    final ink = switch (state) {
+      _NodeState.claimed || _NodeState.ready => Colors.white,
+      _NodeState.next => fire,
+      _NodeState.later => colors.onSurfaceVariant,
+    };
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        AnimatedBuilder(
+          animation: _bump,
+          builder: (context, child) {
+            final t = _bump.value;
+            final scale =
+                _bump.isAnimating ? 1 + 0.45 * math.sin(math.pi * t) : 1.0;
+            return Transform.scale(scale: scale, child: child);
+          },
+          child: Container(
+            key: ValueKey(
+              'check-in-milestone-${widget.milestone}-${state.name}',
+            ),
+            width: _StreakBar._node,
+            height: _StreakBar._node,
+            decoration: BoxDecoration(
+              color: filled ? fire : colors.surface,
+              shape: BoxShape.circle,
+              border: Border.all(color: border, width: 2),
+            ),
+            child: Icon(
+              state == _NodeState.claimed
+                  ? LucideIcons.check
+                  : LucideIcons.gift,
+              size: 17,
+              color: ink,
+            ),
+          ),
+        ),
+        const SizedBox(height: 4),
+        Text(
+          context.l10n.checkInStreakDays(widget.milestone),
+          maxLines: 1,
+          softWrap: false,
+          overflow: TextOverflow.visible,
+          style: context.labelSmall.copyWith(
+            fontWeight: FontWeight.w700,
+            color: colors.onSurface,
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+/// Sọc chéo của phần chuỗi có thể nối thêm nếu bù ngày.
+class _StripesPainter extends CustomPainter {
+  _StripesPainter({required this.color});
+
+  final Color color;
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    final paint =
+        Paint()
+          ..color = color
+          ..strokeWidth = 3;
+    for (var x = -size.height; x < size.width + size.height; x += 7) {
+      canvas.drawLine(
+        Offset(x, size.height),
+        Offset(x + size.height, 0),
+        paint,
+      );
+    }
+  }
+
+  @override
+  bool shouldRepaint(_StripesPainter old) => old.color != color;
 }

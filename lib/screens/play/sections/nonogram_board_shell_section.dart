@@ -2,7 +2,8 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:provider/provider.dart' show ChangeNotifierProvider;
+import 'package:provider/provider.dart'
+    show ChangeNotifierProvider, Consumer, MultiProvider;
 import 'package:nonogram/core/onboarding_preferences.dart';
 
 import '../bloc/nonogram_play_bloc.dart';
@@ -15,6 +16,8 @@ import '../views/fullscreen_toggle_action.dart';
 import '../views/hint_action.dart';
 import '../views/mode_toggle_action.dart';
 import '../views/rotate_screen_action.dart';
+import '../views/drag_tip.dart';
+import '../views/undo_action.dart';
 import '../views/wand_action.dart';
 import '../widgets/nonogram_fullscreen_action_dock.dart';
 import 'nonogram_board_viewport.dart';
@@ -36,6 +39,8 @@ class _NonogramBoardShellSectionState extends State<NonogramBoardShellSection> {
   final _hintKey = GlobalKey(debugLabel: 'coach-hint');
   final _wandKey = GlobalKey(debugLabel: 'coach-wand');
   final _modeKey = GlobalKey(debugLabel: 'coach-mode');
+  final _undoKey = GlobalKey(debugLabel: 'coach-undo');
+  final _rotateKey = GlobalKey(debugLabel: 'coach-rotate');
 
   NonogramCoachReplayNotifier? _replay;
   Size? _boardSize;
@@ -119,11 +124,13 @@ class _NonogramBoardShellSectionState extends State<NonogramBoardShellSection> {
     _showCoach(steps);
   }
 
-  static const _basicSteps = [
+  static final _basicSteps = [
     NonogramCoachStep.hint,
     NonogramCoachStep.wand,
     NonogramCoachStep.mode,
+    NonogramCoachStep.drag,
     NonogramCoachStep.longPress,
+    if (RotateScreenAction.isSupported) NonogramCoachStep.rotate,
   ];
 
   void _onReplayRequested() {
@@ -167,6 +174,9 @@ class _NonogramBoardShellSectionState extends State<NonogramBoardShellSection> {
       NonogramCoachStep.hint => _keyRect(_hintKey),
       NonogramCoachStep.wand => _keyRect(_wandKey),
       NonogramCoachStep.mode => _keyRect(_modeKey),
+      // Màn ngang: nút xoay nằm ở cột trái, thẻ hiện giữa màn.
+      NonogramCoachStep.rotate => _keyRect(_rotateKey),
+      NonogramCoachStep.drag ||
       NonogramCoachStep.longPress ||
       NonogramCoachStep.scroll => _visibleGridRect(),
     };
@@ -175,9 +185,18 @@ class _NonogramBoardShellSectionState extends State<NonogramBoardShellSection> {
   Widget _buildOverlayActions({required bool compactHint}) {
     // Chừa phía trên cho huy hiệu số lượt (nhô lên khỏi nút): hàng nút nằm
     // sát mép trên vùng bàn chơi, và khung dock toàn màn hình cắt phần tràn.
+    // Hàng nút dồn về bên phải; máy quá hẹp thì co cả hàng lại cho vừa,
+    // không để nút nào bị đẩy ra ngoài màn hình.
     return Padding(
       padding: const EdgeInsets.only(top: 6),
-      child: _overlayActionsRow(compactHint: compactHint),
+      child: Align(
+        alignment: Alignment.centerRight,
+        child: FittedBox(
+          fit: BoxFit.scaleDown,
+          alignment: Alignment.centerRight,
+          child: _overlayActionsRow(compactHint: compactHint),
+        ),
+      ),
     );
   }
 
@@ -185,6 +204,8 @@ class _NonogramBoardShellSectionState extends State<NonogramBoardShellSection> {
     return Row(
       mainAxisSize: MainAxisSize.min,
       children: [
+        KeyedSubtree(key: _undoKey, child: const UndoAction()),
+        const SizedBox(width: 8),
         KeyedSubtree(key: _hintKey, child: HintAction(compact: compactHint)),
         const SizedBox(width: 8),
         KeyedSubtree(key: _wandKey, child: const WandAction()),
@@ -192,7 +213,7 @@ class _NonogramBoardShellSectionState extends State<NonogramBoardShellSection> {
         KeyedSubtree(key: _modeKey, child: const ModeToggleAction()),
         if (RotateScreenAction.isSupported) ...[
           const SizedBox(width: 8),
-          const RotateScreenAction(),
+          KeyedSubtree(key: _rotateKey, child: const RotateScreenAction()),
         ],
         const SizedBox(width: 8),
         const FullscreenToggleAction(),
@@ -201,7 +222,7 @@ class _NonogramBoardShellSectionState extends State<NonogramBoardShellSection> {
   }
 
   /// Màn ngang: mép phải chỉ giữ các thao tác chơi, ở góc trên (thẳng hàng
-  /// với nút quay lại bên trái): gợi ý, gậy phép, rồi Tô / X.
+  /// với nút quay lại bên trái): gợi ý, gậy phép, Tô / X, rồi hoàn tác.
   /// Quay lại, thông tin màn, xoay màn hình và cài đặt nằm ở cột trái
   /// (`NonogramLandscapeLeftRail`).
   Widget _buildRail() {
@@ -219,6 +240,8 @@ class _NonogramBoardShellSectionState extends State<NonogramBoardShellSection> {
             key: _modeKey,
             child: const ModeToggleAction(vertical: true),
           ),
+          const SizedBox(height: 12),
+          KeyedSubtree(key: _undoKey, child: const UndoAction()),
         ],
       ),
     );
@@ -226,9 +249,13 @@ class _NonogramBoardShellSectionState extends State<NonogramBoardShellSection> {
 
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider<WandNudge>(
-      // Nhắc khi bấm thao tác bị chặn lúc gậy phép đang chờ chọn hàng / cột.
-      create: (_) => WandNudge(),
+    return MultiProvider(
+      providers: [
+        // Nhắc khi bấm thao tác bị chặn lúc gậy phép đang chờ chọn hàng / cột.
+        ChangeNotifierProvider<WandNudge>(create: (_) => WandNudge()),
+        // Mẹo kéo để tô nhiều ô, khi người chơi đang chạm từng ô.
+        ChangeNotifierProvider<DragTip>(create: (_) => DragTip(_prefs)),
+      ],
       child: MultiBlocListener(
         listeners: [
           BlocListener<NonogramPlayBloc, NonogramPlayState>(
@@ -255,7 +282,7 @@ class _NonogramBoardShellSectionState extends State<NonogramBoardShellSection> {
               constraints.biggest,
             );
             // Màn dọc hẹp: nút gợi ý chỉ còn icon + huy hiệu để hàng nút vừa.
-            final compactHint = constraints.maxWidth < 400;
+            final compactHint = constraints.maxWidth < 480;
             return Stack(
               children: [
                 const Positioned.fill(child: NonogramBoardViewport()),
@@ -269,6 +296,7 @@ class _NonogramBoardShellSectionState extends State<NonogramBoardShellSection> {
                 else
                   Positioned(
                     top: 0,
+                    left: 16,
                     right: 16,
                     child: BlocSelector<
                       NonogramPlayBloc,
@@ -307,7 +335,24 @@ class _NonogramBoardShellSectionState extends State<NonogramBoardShellSection> {
                               child:
                                   active
                                       ? const Center(child: WandSelectBanner())
-                                      : const SizedBox.shrink(),
+                                      : Consumer<DragTip>(
+                                        builder:
+                                            (
+                                              context,
+                                              tip,
+                                              _,
+                                            ) => AnimatedSwitcher(
+                                              duration: const Duration(
+                                                milliseconds: 220,
+                                              ),
+                                              child:
+                                                  tip.visible
+                                                      ? const Center(
+                                                        child: DragTipBanner(),
+                                                      )
+                                                      : const SizedBox.shrink(),
+                                            ),
+                                      ),
                             ),
                       ),
                 ),

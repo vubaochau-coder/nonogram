@@ -39,6 +39,25 @@ class NonogramPlayBloc extends AppBloc<NonogramPlayEvent, NonogramPlayState> {
   final Random _random;
 
   _DragSession? _dragSession;
+
+  /// Bàn trước mỗi lần chạm / nhấn giữ / kéo, mới nhất ở cuối. Ô khoá (gợi
+  /// ý, gậy phép) không theo lịch sử: hoàn tác giữ nguyên chúng.
+  final List<List<List<NonogramCellState>>> _undoHistory = [];
+  static const maxUndoSteps = 100;
+
+  /// Bàn lúc bắt đầu lần kéo đang diễn ra.
+  List<List<NonogramCellState>>? _dragBefore;
+
+  void _pushUndo(List<List<NonogramCellState>> grid) {
+    _undoHistory.add(grid);
+    if (_undoHistory.length > maxUndoSteps) _undoHistory.removeAt(0);
+  }
+
+  void _clearUndo() {
+    _undoHistory.clear();
+    _dragBefore = null;
+  }
+
   StreamSubscription<PowerUpInventory>? _powerUpsSub;
 
   /// Kho hiện tại (đã bỏ lượt trong ngày hết hạn).
@@ -101,6 +120,7 @@ class NonogramPlayBloc extends AppBloc<NonogramPlayEvent, NonogramPlayState> {
     );
     on<FullscreenToggled>(_onFullscreenToggled, transformer: sequential());
     on<BoardReset>(_onBoardReset, transformer: sequential());
+    on<UndoRequested>(_onUndoRequested, transformer: sequential());
     on<HintRequested>(_onHintRequested, transformer: sequential());
     on<WandToggled>(_onWandToggled, transformer: sequential());
     on<WandLineSelected>(_onWandLineSelected, transformer: sequential());
@@ -204,7 +224,9 @@ class NonogramPlayBloc extends AppBloc<NonogramPlayEvent, NonogramPlayState> {
       gridData: initialGrid,
     );
 
+    _clearUndo();
     final readyState = state.copyWith(
+      canUndo: false,
       isLoading: false,
       puzzle: puzzle,
       level: puzzle.level,
@@ -288,6 +310,7 @@ class NonogramPlayBloc extends AppBloc<NonogramPlayEvent, NonogramPlayState> {
     double offsetY,
     Emitter emit,
   ) {
+    _pushUndo(state.gridData);
     final newGrid = _engine.setCell(
       gridData: state.gridData,
       row: row,
@@ -298,7 +321,7 @@ class NonogramPlayBloc extends AppBloc<NonogramPlayEvent, NonogramPlayState> {
     final nextState = _buildGridDerivedState(
       sourceState: state,
       gridData: newGrid.toUnmodifiable2D(),
-    );
+    ).copyWith(canUndo: true);
     emit(nextState);
 
     add(
@@ -365,6 +388,7 @@ class NonogramPlayBloc extends AppBloc<NonogramPlayEvent, NonogramPlayState> {
             : active;
 
     _dragSession = _DragSession(targetState: targetState, marking: mark);
+    _dragBefore = state.gridData;
 
     _applyCellChange(event.row, event.col, emit);
   }
@@ -378,6 +402,13 @@ class NonogramPlayBloc extends AppBloc<NonogramPlayEvent, NonogramPlayState> {
 
   _onDragEnded(DragEnded event, Emitter emit) {
     _dragSession = null;
+    // Cả lần kéo là một bước hoàn tác (chỉ khi có ô đổi).
+    final before = _dragBefore;
+    _dragBefore = null;
+    if (before != null && !identical(before, state.gridData)) {
+      _pushUndo(before);
+      emit(state.copyWith(canUndo: true));
+    }
 
     add(
       CurrentProgressSaveRequested(
@@ -456,6 +487,7 @@ class NonogramPlayBloc extends AppBloc<NonogramPlayEvent, NonogramPlayState> {
   _onBoardReset(BoardReset event, Emitter emit) {
     if (state.puzzle == null) return;
     _dragSession = null;
+    _clearUndo();
 
     // Xoá bàn nhưng giữ các ô khoá (mở bằng gợi ý / gậy phép).
     final puzzle = state.puzzle!;
@@ -476,8 +508,34 @@ class NonogramPlayBloc extends AppBloc<NonogramPlayEvent, NonogramPlayState> {
       gridData: emptyGrid.toUnmodifiable2D(),
       isLoading: false,
       isSolved: false,
-    );
+    ).copyWith(canUndo: false);
 
+    emit(nextState);
+
+    add(
+      CurrentProgressSaveRequested(
+        sourceState: nextState,
+        offsetX: event.offsetX,
+        offsetY: event.offsetY,
+      ),
+    );
+  }
+
+  _onUndoRequested(UndoRequested event, Emitter emit) {
+    final puzzle = state.puzzle;
+    if (puzzle == null || state.isLoading || state.isSolved) return;
+    if (state.isWandActive || _dragSession != null) return;
+    if (_undoHistory.isEmpty) return;
+
+    final grid = [for (final row in _undoHistory.removeLast()) List.of(row)];
+    // Ô khoá mở sau thao tác đó vẫn giữ nguyên.
+    for (final cell in state.lockedCells) {
+      grid[cell.row][cell.col] = state.gridData[cell.row][cell.col];
+    }
+    final nextState = _buildGridDerivedState(
+      sourceState: state,
+      gridData: grid.toUnmodifiable2D(),
+    ).copyWith(canUndo: _undoHistory.isNotEmpty);
     emit(nextState);
 
     add(
