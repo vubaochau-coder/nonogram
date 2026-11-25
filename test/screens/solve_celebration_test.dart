@@ -10,7 +10,7 @@ import 'package:nonogram/core/app_theme_mode.dart';
 import 'package:nonogram/data/nonogram_puzzle_source.dart';
 import 'package:nonogram/data/nonogram_repository.dart';
 import 'package:nonogram/l10n/app_localizations.dart';
-import 'package:nonogram/models/nonogram_puzzle.dart';
+import 'package:nonogram/engine/model/nonogram_puzzle.dart';
 import 'package:nonogram/screens/play/bloc/nonogram_play_bloc.dart';
 import 'package:nonogram/screens/play/bloc/nonogram_play_event.dart';
 import 'package:nonogram/screens/play/celebration/solve_celebration.dart';

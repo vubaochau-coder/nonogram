@@ -3,7 +3,7 @@ import 'dart:io';
 
 import 'package:flutter_test/flutter_test.dart';
 import 'package:nonogram/data/nonogram_puzzle_source.dart';
-import 'package:nonogram/screens/play/engine/nonogram_solver.dart';
+import 'package:nonogram/engine/nonogram_solver.dart';
 
 /// Kiểm tra toàn bộ dữ liệu màn chơi đóng gói trong app (assets/levels/).
 /// Dữ liệu nằm trong app nên lỗi ở đây chỉ sửa được bằng bản phát hành mới.

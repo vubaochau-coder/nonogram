@@ -1,11 +1,10 @@
 import 'dart:math';
 
 import 'package:flutter/foundation.dart';
-import 'package:flutter/painting.dart' show Axis;
-import 'package:nonogram/models/nonogram_cell_state.dart';
+import 'package:nonogram/engine/model/nonogram_cell_state.dart';
 import 'package:nonogram/models/nonogram_interaction_mode.dart';
-import 'package:nonogram/models/nonogram_puzzle.dart';
-import 'package:nonogram/screens/play/engine/nonogram_engine.dart';
+import 'package:nonogram/engine/model/nonogram_puzzle.dart';
+import 'package:nonogram/engine/nonogram_engine.dart';
 
 typedef TutorialCell = ({int row, int col});
 
@@ -704,7 +703,7 @@ class NonogramTutorialController extends ChangeNotifier {
 
   void _reveal(bool isRow, int index) {
     _grid = _engine.revealLine(
-      axis: isRow ? Axis.horizontal : Axis.vertical,
+      isRow: isRow,
       index: index,
       puzzle: _puzzle,
       gridData: _grid,

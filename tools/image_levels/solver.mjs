@@ -1,5 +1,5 @@
 // Bộ giải nonogram dùng cho công cụ sinh màn — chuyển từ
-// lib/screens/play/engine/nonogram_solver.dart (giữ cùng thuật toán suy luận
+// lib/engine/nonogram_solver.dart (giữ cùng thuật toán suy luận
 // hàng/cột), thêm phần đo độ khó.
 //
 // -1 = chưa biết, 0 = trống, 1 = tô.

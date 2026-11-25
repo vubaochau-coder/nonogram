@@ -3,7 +3,7 @@ import 'package:nonogram/core/context_ext.dart';
 import 'package:nonogram/core/duration_format.dart';
 import 'package:nonogram/data/nonogram_repository.dart';
 import 'package:nonogram/models/nonogram_completed_progress.dart';
-import 'package:nonogram/models/nonogram_puzzle.dart';
+import 'package:nonogram/engine/model/nonogram_puzzle.dart';
 import 'package:nonogram/widgets/nonogram_pixel_art.dart';
 import 'package:nonogram/widgets/app_skeleton_box.dart';
 import 'package:flutter/material.dart';

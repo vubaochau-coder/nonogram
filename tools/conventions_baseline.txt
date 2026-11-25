@@ -26,5 +26,5 @@ lib/screens/tutorial/nonogram_tutorial_page.dart 1741
 lib/tester/tester_tools_page.dart 672
 test/screens/nonogram_bloc_test.dart 967
 test/screens/nonogram_board_gestures_test.dart 923
-test/screens/nonogram_engine_test.dart 340
+test/engine/nonogram_engine_test.dart 340
 test/screens/nonogram_tutorial_test.dart 757

@@ -8,7 +8,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'bloc/nonogram_play_bloc.dart';
 import 'bloc/nonogram_play_event.dart';
 import 'bloc/nonogram_play_state.dart';
-import 'engine/nonogram_board_layout.dart';
+import 'layout/nonogram_board_layout.dart';
 import 'nonogram_transformation_controller_provider.dart';
 import 'widgets/board_viewport_reporter.dart';
 import 'sections/nonogram_board_shell_section.dart';

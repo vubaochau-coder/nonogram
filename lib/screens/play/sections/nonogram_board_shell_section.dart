@@ -10,7 +10,7 @@ import '../bloc/nonogram_play_bloc.dart';
 import '../bloc/nonogram_play_event.dart';
 import '../bloc/nonogram_play_state.dart';
 import '../coach/nonogram_play_coach.dart';
-import '../engine/nonogram_board_layout.dart';
+import '../layout/nonogram_board_layout.dart';
 import '../nonogram_transformation_controller_provider.dart';
 import '../views/fullscreen_toggle_action.dart';
 import '../views/hint_action.dart';

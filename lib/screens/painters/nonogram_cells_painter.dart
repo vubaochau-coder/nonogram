@@ -1,7 +1,7 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
-import 'package:nonogram/models/nonogram_cell_state.dart';
+import 'package:nonogram/engine/model/nonogram_cell_state.dart';
 
 typedef LockedCell = ({int row, int col});
 

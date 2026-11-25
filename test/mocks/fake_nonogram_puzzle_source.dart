@@ -1,5 +1,5 @@
 import 'package:nonogram/data/nonogram_puzzle_source.dart';
-import 'package:nonogram/models/nonogram_puzzle.dart';
+import 'package:nonogram/engine/model/nonogram_puzzle.dart';
 
 /// Nguồn màn chơi trong bộ nhớ: [levelCount] màn giống nhau (mặc định 2x2).
 class FakeNonogramPuzzleSource implements NonogramPuzzleSource {

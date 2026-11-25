@@ -1,5 +1,5 @@
 import 'package:nonogram/models/power_up_inventory.dart';
-import 'package:nonogram/models/nonogram_puzzle.dart';
+import 'package:nonogram/engine/model/nonogram_puzzle.dart';
 import 'package:nonogram/models/nonogram_board_snapshot.dart';
 import 'nonogram_play_state.dart';
 

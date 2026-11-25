@@ -16,7 +16,7 @@ import 'package:nonogram/core/app_theme_mode.dart';
 import 'package:nonogram/data/nonogram_repository.dart';
 import 'package:nonogram/l10n/app_localizations.dart';
 import 'package:nonogram/models/nonogram_completed_progress.dart';
-import 'package:nonogram/models/nonogram_puzzle.dart';
+import 'package:nonogram/engine/model/nonogram_puzzle.dart';
 import 'package:nonogram/rating/app_rating_dialog.dart';
 import 'package:nonogram/screens/dashboard/nonogram_dashboard_page.dart';
 import 'package:nonogram/screens/guide/nonogram_guide_page.dart';

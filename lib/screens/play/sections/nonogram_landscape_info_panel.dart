@@ -7,7 +7,7 @@ import 'package:nonogram/core/context_ext.dart';
 import '../bloc/nonogram_play_bloc.dart';
 import '../bloc/nonogram_play_state.dart';
 import '../coach/nonogram_play_coach.dart';
-import '../engine/nonogram_board_layout.dart';
+import '../layout/nonogram_board_layout.dart';
 import '../modals/nonogram_settings_dialog.dart';
 import '../views/rotate_screen_action.dart';
 import '../widgets/overlay_button.dart';
