@@ -137,21 +137,18 @@ void main() {
         value: controller,
         child: ListenableBuilder(
           listenable: controller,
-          builder:
-              (context, _) => MaterialApp(
-                locale: controller.value,
-                localeListResolutionCallback: resolveAppLocale,
-                localizationsDelegates: const [
-                  AppLocalizations.delegate,
-                  GlobalMaterialLocalizations.delegate,
-                  GlobalWidgetsLocalizations.delegate,
-                  GlobalCupertinoLocalizations.delegate,
-                ],
-                supportedLocales: supported,
-                home: const Scaffold(
-                  body: Center(child: AppLanguageSelector()),
-                ),
-              ),
+          builder: (context, _) => MaterialApp(
+            locale: controller.value,
+            localeListResolutionCallback: resolveAppLocale,
+            localizationsDelegates: const [
+              AppLocalizations.delegate,
+              GlobalMaterialLocalizations.delegate,
+              GlobalWidgetsLocalizations.delegate,
+              GlobalCupertinoLocalizations.delegate,
+            ],
+            supportedLocales: supported,
+            home: const Scaffold(body: Center(child: AppLanguageSelector())),
+          ),
         ),
       ),
     );

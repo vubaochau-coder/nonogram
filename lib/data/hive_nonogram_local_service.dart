@@ -64,8 +64,9 @@ class HiveNonogramLocalService implements NonogramLocalService {
   @override
   Future<void> saveCompletedProgress(NonogramCompletedProgress progress) async {
     final raw = _requiredBox().get(_completedProgressKey);
-    final map =
-        raw is Map ? Map<dynamic, dynamic>.from(raw) : <dynamic, dynamic>{};
+    final map = raw is Map
+        ? Map<dynamic, dynamic>.from(raw)
+        : <dynamic, dynamic>{};
 
     map[progress.level.toString()] = progress.toMap();
     await _requiredBox().put(_completedProgressKey, map);

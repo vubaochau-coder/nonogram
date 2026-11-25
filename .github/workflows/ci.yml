@@ -46,6 +46,7 @@ jobs:
           channel: stable
           cache: true
       - run: flutter pub get --enforce-lockfile
-      - run: dart format --output=none --set-exit-if-changed lib test
+      - run: dart format --output=none --set-exit-if-changed lib test tools
       - run: flutter analyze
+      - run: dart run tools/check_conventions.dart
       - run: flutter test

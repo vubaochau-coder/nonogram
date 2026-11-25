@@ -29,13 +29,12 @@ void _checkLevels(Directory dir) {
 
   test('no stray pack files', () {
     final listed = index.packs.map((p) => p.file).toSet();
-    final onDisk =
-        dir
-            .listSync()
-            .whereType<File>()
-            .map((f) => f.uri.pathSegments.last)
-            .where((name) => name.startsWith('pack_'))
-            .toSet();
+    final onDisk = dir
+        .listSync()
+        .whereType<File>()
+        .map((f) => f.uri.pathSegments.last)
+        .where((name) => name.startsWith('pack_'))
+        .toSet();
     expect(onDisk, listed);
   });
 

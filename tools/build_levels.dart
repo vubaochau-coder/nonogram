@@ -53,10 +53,9 @@ void main(List<String> args) {
 
   final inputPath = positional.single;
   final inputText = File(inputPath).readAsStringSync();
-  dynamic decoded =
-      inputPath.toLowerCase().endsWith('.csv')
-          ? _parseCsvRecords(inputText)
-          : jsonDecode(inputText);
+  dynamic decoded = inputPath.toLowerCase().endsWith('.csv')
+      ? _parseCsvRecords(inputText)
+      : jsonDecode(inputText);
   if (decoded is Map && decoded['data'] is List) decoded = decoded['data'];
   if (decoded is! List) {
     stderr.writeln('Input must be a JSON array of puzzles.');
@@ -79,10 +78,9 @@ void main(List<String> args) {
     final originalLevel = _asInt(row['level']);
     final level = renumber ? entries.length + 1 : originalLevel;
     final sourceId = row['source_puzzle_id']?.toString() ?? '';
-    final id =
-        sourceId.isNotEmpty
-            ? 'src-$sourceId'
-            : 'L${originalLevel.toString().padLeft(4, '0')}';
+    final id = sourceId.isNotEmpty
+        ? 'src-$sourceId'
+        : 'L${originalLevel.toString().padLeft(4, '0')}';
 
     final entry = <String, dynamic>{
       'id': id,

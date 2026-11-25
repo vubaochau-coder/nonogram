@@ -19,7 +19,7 @@ void main() {
       'id': 'L1',
       'level': 1,
       'solution': ['10', '01'],
-      if (pinned != null) 'pinned': pinned,
+      'pinned': ?pinned,
     };
 
     test('are parsed as row/column pairs', () {

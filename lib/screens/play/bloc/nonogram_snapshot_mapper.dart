@@ -16,10 +16,9 @@ class NonogramSnapshotMapper {
     return NonogramBoardSnapshot(
       puzzleId: puzzle.id,
       level: puzzle.level,
-      gridData:
-          state.gridData
-              .map((row) => List<NonogramCellState>.from(row))
-              .toList(),
+      gridData: state.gridData
+          .map((row) => List<NonogramCellState>.from(row))
+          .toList(),
       startTime: state.startTime,
       interactionMode: state.interactionMode,
       viewportOffsetX: viewportOffsetX ?? 0,

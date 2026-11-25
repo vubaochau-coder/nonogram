@@ -200,9 +200,9 @@ class _ModeCard extends StatelessWidget {
                           s == null
                               ? ' '
                               : context.l10n.playModeProgress(
-                                s.solved,
-                                s.total,
-                              ),
+                                  s.solved,
+                                  s.total,
+                                ),
                           style: context.labelLarge.copyWith(
                             color: colors.primary,
                             fontWeight: FontWeight.bold,

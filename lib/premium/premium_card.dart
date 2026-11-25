@@ -79,13 +79,12 @@ class _OfferCard extends StatelessWidget {
               child: FilledButton(
                 key: const ValueKey('premium-buy'),
                 onPressed: premium.isBusy ? null : () => _buy(context),
-                child:
-                    premium.isBusy
-                        ? const SizedBox.square(
-                          dimension: 18,
-                          child: CircularProgressIndicator(strokeWidth: 2),
-                        )
-                        : Text(l10n.premiumBuy(premium.price ?? '')),
+                child: premium.isBusy
+                    ? const SizedBox.square(
+                        dimension: 18,
+                        child: CircularProgressIndicator(strokeWidth: 2),
+                      )
+                    : Text(l10n.premiumBuy(premium.price ?? '')),
               ),
             ),
             const SizedBox(height: 6),
@@ -127,12 +126,11 @@ class _ViewBenefitsButton extends StatelessWidget {
               padding: const EdgeInsets.symmetric(horizontal: 8),
               minimumSize: const Size(0, 32),
             ),
-            onPressed:
-                () => Navigator.of(context).push(
-                  MaterialPageRoute<void>(
-                    builder: (_) => const PremiumBenefitsPage(),
-                  ),
-                ),
+            onPressed: () => Navigator.of(context).push(
+              MaterialPageRoute<void>(
+                builder: (_) => const PremiumBenefitsPage(),
+              ),
+            ),
             icon: const Icon(LucideIcons.sparkles, size: 16),
             label: Text(l10n.premiumViewBenefits),
           ),

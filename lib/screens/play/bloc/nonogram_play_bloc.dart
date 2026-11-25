@@ -140,12 +140,15 @@ class NonogramPlayBloc extends AppBloc<NonogramPlayEvent, NonogramPlayState> {
     on<PuzzleSolved>(_onPuzzleSolved, transformer: sequential());
   }
 
-  _onInitialRequested(InitialRequested event, Emitter emit) async {
+  Future<void> _onInitialRequested(InitialRequested event, Emitter emit) async {
     emit(state.copyWith(level: state.level, isLoading: true, isSolved: false));
     add(const LevelLoadRequested());
   }
 
-  _onLevelLoadRequested(LevelLoadRequested event, Emitter emit) async {
+  Future<void> _onLevelLoadRequested(
+    LevelLoadRequested event,
+    Emitter emit,
+  ) async {
     final targetLevel = state.level;
 
     try {
@@ -195,13 +198,16 @@ class NonogramPlayBloc extends AppBloc<NonogramPlayEvent, NonogramPlayState> {
     }
   }
 
-  _onNextLevelRequested(NextLevelRequested event, Emitter emit) async {
+  Future<void> _onNextLevelRequested(
+    NextLevelRequested event,
+    Emitter emit,
+  ) async {
     if (!state.isSolved) return;
     emit(state.copyWith(level: state.level + 1, isLoading: true));
     add(const LevelLoadRequested());
   }
 
-  _onStarted(Started event, Emitter emit) async {
+  Future<void> _onStarted(Started event, Emitter emit) async {
     final puzzle = event.puzzle;
     final snapshot = event.snapshot;
 
@@ -263,7 +269,7 @@ class NonogramPlayBloc extends AppBloc<NonogramPlayEvent, NonogramPlayState> {
     emit(readyState);
   }
 
-  _onCellTapped(CellTapped event, Emitter emit) {
+  void _onCellTapped(CellTapped event, Emitter emit) {
     if (state.isLoading || state.isSolved || state.puzzle == null) return;
     // Ô khoá (mở bằng gợi ý / gậy phép) không đổi được.
     if (state.isLocked(event.row, event.col)) return;
@@ -272,10 +278,9 @@ class NonogramPlayBloc extends AppBloc<NonogramPlayEvent, NonogramPlayState> {
     final NonogramCellState targetState;
     if (state.interactionMode == NonogramInteractionMode.mark) {
       // Chế độ X: bỏ X nếu đang có, còn lại đánh X (kể cả ô đang tô).
-      targetState =
-          currentCell == NonogramCellState.marked
-              ? NonogramCellState.empty
-              : NonogramCellState.marked;
+      targetState = currentCell == NonogramCellState.marked
+          ? NonogramCellState.empty
+          : NonogramCellState.marked;
     } else {
       if (!_engine.canFillCell(
         row: event.row,
@@ -286,10 +291,9 @@ class NonogramPlayBloc extends AppBloc<NonogramPlayEvent, NonogramPlayState> {
       )) {
         return;
       }
-      targetState =
-          currentCell == NonogramCellState.filled
-              ? NonogramCellState.empty
-              : NonogramCellState.filled;
+      targetState = currentCell == NonogramCellState.filled
+          ? NonogramCellState.empty
+          : NonogramCellState.filled;
     }
 
     _commitCell(
@@ -336,7 +340,7 @@ class NonogramPlayBloc extends AppBloc<NonogramPlayEvent, NonogramPlayState> {
 
   /// Nhấn giữ làm việc ngược với chế độ hiện tại: chế độ tô thì đánh X vào
   /// ô trống, chế độ X thì tô ô.
-  _onCellLongPressed(CellLongPressed event, Emitter emit) {
+  void _onCellLongPressed(CellLongPressed event, Emitter emit) {
     if (state.isLoading || state.isSolved || state.puzzle == null) return;
     if (state.isLocked(event.row, event.col)) return;
 
@@ -374,7 +378,7 @@ class NonogramPlayBloc extends AppBloc<NonogramPlayEvent, NonogramPlayState> {
     );
   }
 
-  _onDragStarted(DragStarted event, Emitter emit) {
+  void _onDragStarted(DragStarted event, Emitter emit) {
     if (state.isLoading || state.isSolved || state.puzzle == null) return;
 
     final currentCell = state.gridData[event.row][event.col];
@@ -384,8 +388,8 @@ class NonogramPlayBloc extends AppBloc<NonogramPlayEvent, NonogramPlayState> {
     // thành xoá các ô phía sau.
     final targetState =
         currentCell == active && !state.isLocked(event.row, event.col)
-            ? NonogramCellState.empty
-            : active;
+        ? NonogramCellState.empty
+        : active;
 
     _dragSession = _DragSession(targetState: targetState, marking: mark);
     _dragBefore = state.gridData;
@@ -393,14 +397,14 @@ class NonogramPlayBloc extends AppBloc<NonogramPlayEvent, NonogramPlayState> {
     _applyCellChange(event.row, event.col, emit);
   }
 
-  _onDragUpdated(DragUpdated event, Emitter emit) {
+  void _onDragUpdated(DragUpdated event, Emitter emit) {
     if (state.isLoading || state.isSolved || state.puzzle == null) return;
     if (_dragSession == null) return;
 
     _applyCellChange(event.row, event.col, emit);
   }
 
-  _onDragEnded(DragEnded event, Emitter emit) {
+  void _onDragEnded(DragEnded event, Emitter emit) {
     _dragSession = null;
     // Cả lần kéo là một bước hoàn tác (chỉ khi có ô đổi).
     final before = _dragBefore;
@@ -420,14 +424,13 @@ class NonogramPlayBloc extends AppBloc<NonogramPlayEvent, NonogramPlayState> {
     add(const SolveCheckRequested());
   }
 
-  _onInteractionModeChanged(InteractionModeChanged event, Emitter emit) {
+  void _onInteractionModeChanged(InteractionModeChanged event, Emitter emit) {
     // Gậy phép đang chờ chọn hàng / cột: các thao tác khác bị chặn.
     if (state.isSolved || state.isWandActive) return;
     _dragSession = null;
-    final nextMode =
-        state.interactionMode == NonogramInteractionMode.mark
-            ? NonogramInteractionMode.fill
-            : NonogramInteractionMode.mark;
+    final nextMode = state.interactionMode == NonogramInteractionMode.mark
+        ? NonogramInteractionMode.fill
+        : NonogramInteractionMode.mark;
 
     final nextState = state.copyWith(interactionMode: nextMode);
     emit(nextState);
@@ -465,7 +468,7 @@ class NonogramPlayBloc extends AppBloc<NonogramPlayEvent, NonogramPlayState> {
 
   /// Khung nhìn đổi (lần đo đầu, xoay màn hình, bật/tắt toàn màn hình):
   /// tính lại cỡ ô cho vừa.
-  _onBoardViewportMeasured(BoardViewportMeasured event, Emitter emit) {
+  void _onBoardViewportMeasured(BoardViewportMeasured event, Emitter emit) {
     final size = Size(event.width, event.height);
     if (size == _viewportSize || size.isEmpty) return;
     _viewportSize = size;
@@ -476,7 +479,7 @@ class NonogramPlayBloc extends AppBloc<NonogramPlayEvent, NonogramPlayState> {
     if (cellSize != state.cellSize) emit(state.copyWith(cellSize: cellSize));
   }
 
-  _onFullscreenToggled(FullscreenToggled event, Emitter emit) {
+  void _onFullscreenToggled(FullscreenToggled event, Emitter emit) {
     final nextFullscreen = !state.isFullscreen;
     final nextState = state.copyWith(isFullscreen: nextFullscreen);
     emit(nextState);
@@ -484,7 +487,7 @@ class NonogramPlayBloc extends AppBloc<NonogramPlayEvent, NonogramPlayState> {
     // UI preference, no persistence by default at Phase 4.3 as decided.
   }
 
-  _onBoardReset(BoardReset event, Emitter emit) {
+  void _onBoardReset(BoardReset event, Emitter emit) {
     if (state.puzzle == null) return;
     _dragSession = null;
     _clearUndo();
@@ -496,10 +499,9 @@ class NonogramPlayBloc extends AppBloc<NonogramPlayEvent, NonogramPlayState> {
       cols: puzzle.cols,
     );
     for (final cell in state.lockedCells) {
-      emptyGrid[cell.row][cell.col] =
-          puzzle.solution[cell.row][cell.col] == 1
-              ? NonogramCellState.filled
-              : NonogramCellState.marked;
+      emptyGrid[cell.row][cell.col] = puzzle.solution[cell.row][cell.col] == 1
+          ? NonogramCellState.filled
+          : NonogramCellState.marked;
     }
 
     final nextState = _buildGridDerivedState(
@@ -521,7 +523,7 @@ class NonogramPlayBloc extends AppBloc<NonogramPlayEvent, NonogramPlayState> {
     );
   }
 
-  _onUndoRequested(UndoRequested event, Emitter emit) {
+  void _onUndoRequested(UndoRequested event, Emitter emit) {
     final puzzle = state.puzzle;
     if (puzzle == null || state.isLoading || state.isSolved) return;
     if (state.isWandActive || _dragSession != null) return;
@@ -547,7 +549,7 @@ class NonogramPlayBloc extends AppBloc<NonogramPlayEvent, NonogramPlayState> {
     );
   }
 
-  _onViewportChanged(ViewportChanged event, Emitter emit) {
+  void _onViewportChanged(ViewportChanged event, Emitter emit) {
     if (state.isSolved || state.isLoading) return;
     add(
       CurrentProgressSaveRequested(
@@ -558,7 +560,7 @@ class NonogramPlayBloc extends AppBloc<NonogramPlayEvent, NonogramPlayState> {
     );
   }
 
-  _onWandToggled(WandToggled event, Emitter emit) {
+  void _onWandToggled(WandToggled event, Emitter emit) {
     if (state.isLoading || state.isSolved || state.puzzle == null) return;
     if (!state.isWandActive && _current.totalWands <= 0) {
       emit(_withInventory(state, _inventory));
@@ -570,7 +572,7 @@ class NonogramPlayBloc extends AppBloc<NonogramPlayEvent, NonogramPlayState> {
 
   /// Gậy phép: hiện đáp án của đúng hàng / cột người chơi chọn. Hàng / cột
   /// đã đúng thì không tốn lượt, vẫn giữ chế độ chọn để chọn hàng khác.
-  _onWandLineSelected(WandLineSelected event, Emitter emit) async {
+  Future<void> _onWandLineSelected(WandLineSelected event, Emitter emit) async {
     final puzzle = state.puzzle;
     if (state.isLoading ||
         state.isSolved ||
@@ -591,10 +593,9 @@ class NonogramPlayBloc extends AppBloc<NonogramPlayEvent, NonogramPlayState> {
         ) ==
         0) {
       ToastUtils.info(
-        title:
-            event.isRow
-                ? l10n.nonogramPlayWandRowSolved
-                : l10n.nonogramPlayWandColSolved,
+        title: event.isRow
+            ? l10n.nonogramPlayWandRowSolved
+            : l10n.nonogramPlayWandColSolved,
       );
       return;
     }
@@ -607,21 +608,24 @@ class NonogramPlayBloc extends AppBloc<NonogramPlayEvent, NonogramPlayState> {
     );
 
     final inventory = _current.consume(PowerUp.wand);
-    final nextState = _withInventory(
-      _buildGridDerivedState(
-        sourceState: state,
-        gridData: newGrid.toUnmodifiable2D(),
-      ),
-      inventory,
-    ).copyWith(
-      isWandActive: false,
-      lockedCells: {
-        ...state.lockedCells,
-        // Số ô trên đường: hàng có `cols` ô, cột có `rows` ô.
-        for (var i = 0; i < (event.isRow ? puzzle.cols : puzzle.rows); i++)
-          event.isRow ? (row: event.index, col: i) : (row: i, col: event.index),
-      },
-    );
+    final nextState =
+        _withInventory(
+          _buildGridDerivedState(
+            sourceState: state,
+            gridData: newGrid.toUnmodifiable2D(),
+          ),
+          inventory,
+        ).copyWith(
+          isWandActive: false,
+          lockedCells: {
+            ...state.lockedCells,
+            // Số ô trên đường: hàng có `cols` ô, cột có `rows` ô.
+            for (var i = 0; i < (event.isRow ? puzzle.cols : puzzle.rows); i++)
+              event.isRow
+                  ? (row: event.index, col: i)
+                  : (row: i, col: event.index),
+          },
+        );
 
     emit(
       NonogramPlayHintAppliedState.fromState(
@@ -658,7 +662,7 @@ class NonogramPlayBloc extends AppBloc<NonogramPlayEvent, NonogramPlayState> {
     return false;
   }
 
-  _onPowerUpsChanged(PowerUpsChanged event, Emitter emit) {
+  void _onPowerUpsChanged(PowerUpsChanged event, Emitter emit) {
     _inventory = event.inventory;
     if (state.puzzle == null || state.isLoading) return;
     final next = _withInventory(state, _current);
@@ -666,7 +670,7 @@ class NonogramPlayBloc extends AppBloc<NonogramPlayEvent, NonogramPlayState> {
   }
 
   /// Lượt dùng thêm (sau quảng cáo) chỉ có khi kho đã hết: không tích luỹ.
-  _onRewardGranted(RewardGranted event, Emitter emit) async {
+  Future<void> _onRewardGranted(RewardGranted event, Emitter emit) async {
     if (state.isLoading || state.isSolved || state.puzzle == null) return;
     switch (event.powerUp) {
       case PowerUp.hint:
@@ -688,7 +692,7 @@ class NonogramPlayBloc extends AppBloc<NonogramPlayEvent, NonogramPlayState> {
     }
   }
 
-  _onHintRequested(HintRequested event, Emitter emit) async {
+  Future<void> _onHintRequested(HintRequested event, Emitter emit) async {
     // Gậy phép đang chờ chọn hàng / cột: không tiêu lượt gợi ý.
     if (state.isWandActive) return;
     final inventory = _current;
@@ -752,7 +756,7 @@ class NonogramPlayBloc extends AppBloc<NonogramPlayEvent, NonogramPlayState> {
     if (inventoryAfter != null) await _savePowerUps(inventoryAfter);
   }
 
-  _onDebugSolveRequested(DebugSolveRequested event, Emitter emit) {
+  void _onDebugSolveRequested(DebugSolveRequested event, Emitter emit) {
     final puzzle = state.puzzle;
     if (state.isLoading || state.isSolved || puzzle == null) return;
     _dragSession = null;
@@ -774,7 +778,7 @@ class NonogramPlayBloc extends AppBloc<NonogramPlayEvent, NonogramPlayState> {
 
   // --- Internal Handlers ---
 
-  _onCurrentProgressSaveRequested(
+  void _onCurrentProgressSaveRequested(
     CurrentProgressSaveRequested event,
     Emitter emit,
   ) async {
@@ -788,7 +792,7 @@ class NonogramPlayBloc extends AppBloc<NonogramPlayEvent, NonogramPlayState> {
     }
   }
 
-  _onSolveCheckRequested(SolveCheckRequested event, Emitter emit) {
+  void _onSolveCheckRequested(SolveCheckRequested event, Emitter emit) {
     if (state.isSolved || state.puzzle == null) return;
 
     if (_engine.isSolved(puzzle: state.puzzle!, gridData: state.gridData)) {
@@ -796,7 +800,7 @@ class NonogramPlayBloc extends AppBloc<NonogramPlayEvent, NonogramPlayState> {
     }
   }
 
-  _onPuzzleSolved(PuzzleSolved event, Emitter emit) async {
+  Future<void> _onPuzzleSolved(PuzzleSolved event, Emitter emit) async {
     final puzzle = state.puzzle!;
     final now = DateTime.now();
     final duration = now.difference(state.startTime);
@@ -809,12 +813,11 @@ class NonogramPlayBloc extends AppBloc<NonogramPlayEvent, NonogramPlayState> {
       orElse: () => null,
     );
 
-    final bestTime =
-        levelRecord == null
-            ? completionMs
-            : (completionMs < levelRecord.bestCompletionMs
-                ? completionMs
-                : levelRecord.bestCompletionMs);
+    final bestTime = levelRecord == null
+        ? completionMs
+        : (completionMs < levelRecord.bestCompletionMs
+              ? completionMs
+              : levelRecord.bestCompletionMs);
 
     await _repository.saveCompletedProgress(
       NonogramCompletedProgress(
@@ -856,24 +859,22 @@ class NonogramPlayBloc extends AppBloc<NonogramPlayEvent, NonogramPlayState> {
       // Kéo đánh X chỉ đổi ô trống (không đè lên ô đã tô); kéo bỏ X chỉ
       // đổi ô đang có X.
       final current = state.gridData[row][col];
-      final from =
-          session.targetState == NonogramCellState.marked
-              ? NonogramCellState.empty
-              : NonogramCellState.marked;
+      final from = session.targetState == NonogramCellState.marked
+          ? NonogramCellState.empty
+          : NonogramCellState.marked;
       session.processedCells.add(cellKey);
       if (current != from) return;
       emit(
         _buildGridDerivedState(
           sourceState: state,
-          gridData:
-              _engine
-                  .setCell(
-                    gridData: state.gridData,
-                    row: row,
-                    col: col,
-                    value: session.targetState,
-                  )
-                  .toUnmodifiable2D(),
+          gridData: _engine
+              .setCell(
+                gridData: state.gridData,
+                row: row,
+                col: col,
+                value: session.targetState,
+              )
+              .toUnmodifiable2D(),
         ),
       );
       return;

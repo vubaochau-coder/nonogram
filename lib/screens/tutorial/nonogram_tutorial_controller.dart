@@ -555,10 +555,9 @@ class NonogramTutorialController extends ChangeNotifier {
   Set<TutorialCell> get lockedCells => _locked;
 
   /// Các ô được viền sáng ở bước hiện tại.
-  Set<TutorialCell> get highlightedCells =>
-      step.highlightPendingOnly
-          ? pendingTargets.toSet()
-          : step.highlightedCells;
+  Set<TutorialCell> get highlightedCells => step.highlightPendingOnly
+      ? pendingTargets.toSet()
+      : step.highlightedCells;
 
   /// Mọi cách đặt khối hợp lệ trên [TutorialStep.ghostLine] lúc vào bước
   /// (mỗi cách là tập chỉ số ô được tô), để hoạt ảnh nháy lần lượt.
@@ -576,10 +575,9 @@ class NonogramTutorialController extends ChangeNotifier {
 
   /// Ô mục tiêu chưa làm, theo thứ tự đọc (trên xuống, trái sang).
   List<TutorialCell> get pendingTargets {
-    final desired =
-        step.task == TutorialTask.longPressMark
-            ? NonogramCellState.marked
-            : _desiredState;
+    final desired = step.task == TutorialTask.longPressMark
+        ? NonogramCellState.marked
+        : _desiredState;
     if (desired == null) return const [];
     final pending = [
       for (final cell in step.targets)

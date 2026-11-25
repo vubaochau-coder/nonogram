@@ -99,21 +99,19 @@ Future<void> _pumpPlay(
 
 Offset _gridOffset(WidgetTester tester) {
   final element = tester.element(find.byType(NonogramBoardViewport));
-  final t =
-      NonogramTransformationControllerProvider.of(
-        element,
-      ).value.getTranslation();
+  final t = NonogramTransformationControllerProvider.of(
+    element,
+  ).value.getTranslation();
   return Offset(t.x, t.y);
 }
 
 NonogramPlayBloc _bloc(WidgetTester tester) =>
     tester.element(find.byType(NonogramBoardViewport)).read<NonogramPlayBloc>();
 
-int _filledCount(WidgetTester tester) =>
-    _bloc(tester).state.gridData
-        .expand((r) => r)
-        .where((c) => c == NonogramCellState.filled)
-        .length;
+int _filledCount(WidgetTester tester) => _bloc(tester).state.gridData
+    .expand((r) => r)
+    .where((c) => c == NonogramCellState.filled)
+    .length;
 
 /// Toạ độ toàn cục của góc trên-trái bàn chơi.
 Offset _boardOrigin(WidgetTester tester) =>

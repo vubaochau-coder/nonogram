@@ -48,36 +48,34 @@ class NonogramSettingsDialog extends StatelessWidget {
     final l10n = context.l10n;
     final confirmed = await showDialog<bool>(
       context: context,
-      builder:
-          (dialogContext) => AppDialog(
-            title: Text(l10n.nonogramSettingsRestartConfirmTitle),
-            content: Text(l10n.nonogramSettingsRestartConfirmMessage),
-            actions: [
-              TextButton(
-                onPressed: () => Navigator.pop(dialogContext, false),
-                child: Text(l10n.commonCancel),
-              ),
-              TextButton(
-                key: const ValueKey('nonogram-restart-confirm'),
-                onPressed: () => Navigator.pop(dialogContext, true),
-                style: TextButton.styleFrom(
-                  foregroundColor: dialogContext.color.error,
-                  // Giữ font của theme, chỉ đậm hơn.
-                  textStyle: dialogContext.labelLarge.copyWith(
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                child: Text(l10n.nonogramSettingsRestartConfirm),
-              ),
-            ],
+      builder: (dialogContext) => AppDialog(
+        title: Text(l10n.nonogramSettingsRestartConfirmTitle),
+        content: Text(l10n.nonogramSettingsRestartConfirmMessage),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(dialogContext, false),
+            child: Text(l10n.commonCancel),
           ),
+          TextButton(
+            key: const ValueKey('nonogram-restart-confirm'),
+            onPressed: () => Navigator.pop(dialogContext, true),
+            style: TextButton.styleFrom(
+              foregroundColor: dialogContext.color.error,
+              // Giữ font của theme, chỉ đậm hơn.
+              textStyle: dialogContext.labelLarge.copyWith(
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            child: Text(l10n.nonogramSettingsRestartConfirm),
+          ),
+        ],
+      ),
     );
     if (confirmed != true || !context.mounted) return;
 
-    final t =
-        NonogramTransformationControllerProvider.of(
-          context,
-        ).value.getTranslation();
+    final t = NonogramTransformationControllerProvider.of(
+      context,
+    ).value.getTranslation();
     context.read<NonogramPlayBloc>().add(
       BoardReset(offsetX: t.x, offsetY: t.y),
     );
@@ -135,9 +133,8 @@ class NonogramSettingsDialog extends StatelessWidget {
             width: double.infinity,
             child: OutlinedButton.icon(
               key: const ValueKey('nonogram-controls-guide'),
-              onPressed:
-                  () =>
-                      Navigator.pop(context, _SettingsResult.showControlsGuide),
+              onPressed: () =>
+                  Navigator.pop(context, _SettingsResult.showControlsGuide),
               icon: const Icon(LucideIcons.graduationCap, size: 18),
               label: Text(l10n.nonogramSettingsControlsGuide),
               style: OutlinedButton.styleFrom(

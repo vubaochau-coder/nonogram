@@ -245,10 +245,9 @@ class _CelebrationLayer extends StatelessWidget {
   Widget build(BuildContext context) {
     // Toạ độ toàn màn hình → toạ độ lớp phủ.
     final box = context.findRenderObject();
-    final origin =
-        box is RenderBox && box.hasSize
-            ? box.localToGlobal(Offset.zero)
-            : Offset.zero;
+    final origin = box is RenderBox && box.hasSize
+        ? box.localToGlobal(Offset.zero)
+        : Offset.zero;
     final button = c.button?.shift(-origin);
     final today = c.today?.shift(-origin);
     final target = c.giftTarget?.translate(-origin.dx, -origin.dy);
@@ -325,25 +324,26 @@ class _CelebrationLayer extends StatelessWidget {
     const open = CheckInTimeline.open;
     final rise = _seg(t, open + 0.05, open + 0.45);
     if (rise <= 0) return const [];
-    final fly =
-        collecting
-            ? Curves.easeInOutCubic.transform(
-              _seg(ct, 0.05, CheckInTimeline.collectDuration),
-            )
-            : 0.0;
+    final fly = collecting
+        ? Curves.easeInOutCubic.transform(
+            _seg(ct, 0.05, CheckInTimeline.collectDuration),
+          )
+        : 0.0;
     final start = boxCenter + const Offset(0, -110);
     final end = target ?? start;
     final iconPos =
         Offset.lerp(start, end, fly)! + Offset(0, -80 * sin(pi * fly));
-    final iconScale =
-        collecting ? 1 - 0.75 * fly : Curves.easeOutBack.transform(rise);
+    final iconScale = collecting
+        ? 1 - 0.75 * fly
+        : Curves.easeOutBack.transform(rise);
     final hide = collecting ? _seg(ct, 0, 0.2) : 0.0;
     final textA = _seg(t, open + 0.3, open + 0.6) * (1 - hide);
     final buttonA =
         _seg(t, open + 0.6, open + 0.9) * (1 - hide) * (c.doubled ? 0 : 1);
     final doubledAt = c._doubledAt;
-    final shown =
-        c.doubled ? CheckInReward(gift.powerUp, gift.amount * 2) : gift;
+    final shown = c.doubled
+        ? CheckInReward(gift.powerUp, gift.amount * 2)
+        : gift;
     // Vừa nhân đôi: số quà nảy lên.
     final pop = doubledAt == null ? 0.0 : _seg(t, doubledAt, doubledAt + 0.4);
     final popScale = pop > 0 && pop < 1 ? 1 + 0.35 * sin(pi * pop) : 1.0;
@@ -428,8 +428,9 @@ class _CelebrationLayer extends StatelessWidget {
                       height: 56,
                       child: FilledButton.icon(
                         key: const ValueKey('check-in-gift-double'),
-                        onPressed:
-                            collecting || c._doubling ? null : c.doubleUp,
+                        onPressed: collecting || c._doubling
+                            ? null
+                            : c.doubleUp,
                         icon: const Icon(Icons.play_circle_fill_rounded),
                         label: Text(l10n.checkInGiftDouble),
                         style: FilledButton.styleFrom(
@@ -450,38 +451,38 @@ class _CelebrationLayer extends StatelessWidget {
                   SizedBox(
                     width: 230,
                     height: c.onDouble != null ? 46 : 54,
-                    child:
-                        c.onDouble != null
-                            ? TextButton(
-                              key: const ValueKey('check-in-gift-collect'),
-                              onPressed:
-                                  collecting || c._doubling ? null : c.collect,
-                              style: TextButton.styleFrom(
-                                backgroundColor: Colors.white.withValues(
-                                  alpha: 0.16,
-                                ),
-                                foregroundColor: Colors.white,
-                                disabledForegroundColor: Colors.white70,
-                                textStyle: context.titleMedium.copyWith(
-                                  fontWeight: FontWeight.w800,
-                                ),
+                    child: c.onDouble != null
+                        ? TextButton(
+                            key: const ValueKey('check-in-gift-collect'),
+                            onPressed: collecting || c._doubling
+                                ? null
+                                : c.collect,
+                            style: TextButton.styleFrom(
+                              backgroundColor: Colors.white.withValues(
+                                alpha: 0.16,
                               ),
-                              child: Text(l10n.checkInGiftCollect),
-                            )
-                            : FilledButton(
-                              key: const ValueKey('check-in-gift-collect'),
-                              onPressed: collecting ? null : c.collect,
-                              style: FilledButton.styleFrom(
-                                backgroundColor: Colors.white,
-                                foregroundColor: context.color.primary,
-                                disabledBackgroundColor: Colors.white,
-                                disabledForegroundColor: context.color.primary,
-                                textStyle: context.titleMedium.copyWith(
-                                  fontWeight: FontWeight.w900,
-                                ),
+                              foregroundColor: Colors.white,
+                              disabledForegroundColor: Colors.white70,
+                              textStyle: context.titleMedium.copyWith(
+                                fontWeight: FontWeight.w800,
                               ),
-                              child: Text(l10n.checkInGiftCollect),
                             ),
+                            child: Text(l10n.checkInGiftCollect),
+                          )
+                        : FilledButton(
+                            key: const ValueKey('check-in-gift-collect'),
+                            onPressed: collecting ? null : c.collect,
+                            style: FilledButton.styleFrom(
+                              backgroundColor: Colors.white,
+                              foregroundColor: context.color.primary,
+                              disabledBackgroundColor: Colors.white,
+                              disabledForegroundColor: context.color.primary,
+                              textStyle: context.titleMedium.copyWith(
+                                fontWeight: FontWeight.w900,
+                              ),
+                            ),
+                            child: Text(l10n.checkInGiftCollect),
+                          ),
                   ),
                 ],
               ),
@@ -944,36 +945,34 @@ class _FxPainter extends CustomPainter {
       Paint()..color = colors.gold.withValues(alpha: a),
     );
     final bowFill = Paint()..color = colors.gold.withValues(alpha: a);
-    final bowEdge =
-        Paint()
-          ..style = PaintingStyle.stroke
-          ..strokeWidth = max(1, w * 0.018)
-          ..color = Color.lerp(
-            colors.gold,
-            Colors.brown,
-            0.35,
-          )!.withValues(alpha: a);
+    final bowEdge = Paint()
+      ..style = PaintingStyle.stroke
+      ..strokeWidth = max(1, w * 0.018)
+      ..color = Color.lerp(
+        colors.gold,
+        Colors.brown,
+        0.35,
+      )!.withValues(alpha: a);
     for (final side in const [-1.0, 1.0]) {
-      final loop =
-          Path()
-            ..moveTo(0, lid.top)
-            ..cubicTo(
-              side * w * 0.10,
-              lid.top - w * 0.30,
-              side * w * 0.38,
-              lid.top - w * 0.24,
-              side * w * 0.26,
-              lid.top - w * 0.02,
-            )
-            ..cubicTo(
-              side * w * 0.20,
-              lid.top + w * 0.02,
-              side * w * 0.08,
-              lid.top + w * 0.01,
-              0,
-              lid.top,
-            )
-            ..close();
+      final loop = Path()
+        ..moveTo(0, lid.top)
+        ..cubicTo(
+          side * w * 0.10,
+          lid.top - w * 0.30,
+          side * w * 0.38,
+          lid.top - w * 0.24,
+          side * w * 0.26,
+          lid.top - w * 0.02,
+        )
+        ..cubicTo(
+          side * w * 0.20,
+          lid.top + w * 0.02,
+          side * w * 0.08,
+          lid.top + w * 0.01,
+          0,
+          lid.top,
+        )
+        ..close();
       c.drawPath(loop, bowFill);
       c.drawPath(loop, bowEdge);
     }

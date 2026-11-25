@@ -44,10 +44,9 @@ class PowerUpGlyph extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final base =
-        timeLimited
-            ? context.gameColors.reward
-            : (color ?? context.color.onSurface);
+    final base = timeLimited
+        ? context.gameColors.reward
+        : (color ?? context.color.onSurface);
     final icon = Icon(powerUpIcon(powerUp), size: size, color: base);
     if (!timeLimited) return icon;
 

@@ -62,8 +62,9 @@ Locale resolveAppLocale(List<Locale>? preferred, Iterable<Locale> supported) {
 const _traditionalChineseRegions = {'TW', 'HK', 'MO'};
 
 Locale? _match(Locale locale, Iterable<Locale> supported) {
-  final sameLanguage =
-      supported.where((s) => s.languageCode == locale.languageCode).toList();
+  final sameLanguage = supported
+      .where((s) => s.languageCode == locale.languageCode)
+      .toList();
   if (sameLanguage.isEmpty) return null;
 
   var script = locale.scriptCode;
@@ -119,10 +120,9 @@ class AppLocaleController extends ValueNotifier<Locale?> {
 
   /// `null` = theo ngôn ngữ của máy.
   Future<void> setLocale(Locale? locale) async {
-    final next =
-        locale == null
-            ? null
-            : appLanguages.firstWhere((l) => l.tag == _tagOf(locale)).locale;
+    final next = locale == null
+        ? null
+        : appLanguages.firstWhere((l) => l.tag == _tagOf(locale)).locale;
     if (value == next) return;
     value = next;
     if (next == null) {

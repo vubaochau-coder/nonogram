@@ -18,11 +18,10 @@ class NonogramPlayAppBarSection extends StatelessWidget
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<NonogramPlayBloc, NonogramPlayState>(
-      buildWhen:
-          (p, c) =>
-              p.isFullscreen != c.isFullscreen ||
-              p.isSolved != c.isSolved ||
-              p.puzzle != c.puzzle,
+      buildWhen: (p, c) =>
+          p.isFullscreen != c.isFullscreen ||
+          p.isSolved != c.isSolved ||
+          p.puzzle != c.puzzle,
       builder: (context, state) {
         if (state.isFullscreen) return const SizedBox.shrink();
 

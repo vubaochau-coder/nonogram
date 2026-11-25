@@ -87,23 +87,24 @@ abstract final class AppTheme {
   static const brand = Color(0xFF3B5BDB);
 
   static final lightTheme = _build(
-    scheme: ColorScheme.fromSeed(
-      seedColor: brand,
-      dynamicSchemeVariant: DynamicSchemeVariant.fidelity,
-    ).copyWith(
-      primary: brand,
-      onPrimary: Colors.white,
-      surface: const Color(0xFFF5F6FA),
-      onSurface: const Color(0xFF1B1F2A),
-      onSurfaceVariant: const Color(0xFF5B6274),
-      surfaceContainerLowest: Colors.white,
-      surfaceContainerLow: Colors.white,
-      surfaceContainer: const Color(0xFFEEF0F6),
-      surfaceContainerHigh: const Color(0xFFE6E9F1),
-      surfaceContainerHighest: const Color(0xFFDDE1EB),
-      outline: const Color(0xFFB5BBCB),
-      outlineVariant: const Color(0xFFDDE1EB),
-    ),
+    scheme:
+        ColorScheme.fromSeed(
+          seedColor: brand,
+          dynamicSchemeVariant: DynamicSchemeVariant.fidelity,
+        ).copyWith(
+          primary: brand,
+          onPrimary: Colors.white,
+          surface: const Color(0xFFF5F6FA),
+          onSurface: const Color(0xFF1B1F2A),
+          onSurfaceVariant: const Color(0xFF5B6274),
+          surfaceContainerLowest: Colors.white,
+          surfaceContainerLow: Colors.white,
+          surfaceContainer: const Color(0xFFEEF0F6),
+          surfaceContainerHigh: const Color(0xFFE6E9F1),
+          surfaceContainerHighest: const Color(0xFFDDE1EB),
+          outline: const Color(0xFFB5BBCB),
+          outlineVariant: const Color(0xFFDDE1EB),
+        ),
     game: const GameColors(
       success: Color(0xFF1F9D63),
       reward: Color(0xFFF2A516),
@@ -118,24 +119,25 @@ abstract final class AppTheme {
   );
 
   static final darkTheme = _build(
-    scheme: ColorScheme.fromSeed(
-      seedColor: brand,
-      brightness: Brightness.dark,
-      dynamicSchemeVariant: DynamicSchemeVariant.fidelity,
-    ).copyWith(
-      primary: const Color(0xFF91A7FF),
-      onPrimary: const Color(0xFF0F1A4A),
-      surface: const Color(0xFF0F1218),
-      onSurface: const Color(0xFFE6E8EF),
-      onSurfaceVariant: const Color(0xFF9AA1B2),
-      surfaceContainerLowest: const Color(0xFF0B0D12),
-      surfaceContainerLow: const Color(0xFF171B23),
-      surfaceContainer: const Color(0xFF1C212B),
-      surfaceContainerHigh: const Color(0xFF242A35),
-      surfaceContainerHighest: const Color(0xFF2E3542),
-      outline: const Color(0xFF4A5263),
-      outlineVariant: const Color(0xFF2E3542),
-    ),
+    scheme:
+        ColorScheme.fromSeed(
+          seedColor: brand,
+          brightness: Brightness.dark,
+          dynamicSchemeVariant: DynamicSchemeVariant.fidelity,
+        ).copyWith(
+          primary: const Color(0xFF91A7FF),
+          onPrimary: const Color(0xFF0F1A4A),
+          surface: const Color(0xFF0F1218),
+          onSurface: const Color(0xFFE6E8EF),
+          onSurfaceVariant: const Color(0xFF9AA1B2),
+          surfaceContainerLowest: const Color(0xFF0B0D12),
+          surfaceContainerLow: const Color(0xFF171B23),
+          surfaceContainer: const Color(0xFF1C212B),
+          surfaceContainerHigh: const Color(0xFF242A35),
+          surfaceContainerHighest: const Color(0xFF2E3542),
+          outline: const Color(0xFF4A5263),
+          outlineVariant: const Color(0xFF2E3542),
+        ),
     game: const GameColors(
       success: Color(0xFF3DD68C),
       reward: Color(0xFFFFC53D),

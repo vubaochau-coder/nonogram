@@ -59,10 +59,9 @@ Future<void> showAppLanguageDialog(
               fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
             ),
           ),
-          trailing:
-              isSelected
-                  ? Icon(LucideIcons.check, color: dialogContext.color.primary)
-                  : null,
+          trailing: isSelected
+              ? Icon(LucideIcons.check, color: dialogContext.color.primary)
+              : null,
           onTap: () => Navigator.pop(dialogContext, (locale: locale)),
         );
       }

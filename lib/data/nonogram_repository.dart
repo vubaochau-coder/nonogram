@@ -122,10 +122,9 @@ class NonogramRepository {
     return NonogramCompletionSummary(
       recent: recent,
       totalPlayMs: completed.fold(0, (sum, e) => sum + e.bestCompletionMs),
-      bestMs:
-          completed.isEmpty
-              ? null
-              : completed.map((e) => e.bestCompletionMs).reduce(min),
+      bestMs: completed.isEmpty
+          ? null
+          : completed.map((e) => e.bestCompletionMs).reduce(min),
     );
   }
 
@@ -171,8 +170,8 @@ class NonogramRepository {
     // Snapshot của màn đã hoàn thành là "stale", không được resume.
     final inProgressSnapshot =
         snapshot != null && !completedLevels.contains(snapshot.level)
-            ? snapshot
-            : null;
+        ? snapshot
+        : null;
 
     final nextPlayableLevel = await getNextPlayableLevel();
     final currentLevel = inProgressSnapshot?.level ?? nextPlayableLevel ?? 1;
@@ -187,8 +186,10 @@ class NonogramRepository {
   }
 }
 
-typedef NonogramSolvedPuzzle =
-    ({NonogramCompletedProgress record, NonogramPuzzle puzzle});
+typedef NonogramSolvedPuzzle = ({
+  NonogramCompletedProgress record,
+  NonogramPuzzle puzzle,
+});
 
 class NonogramCompletionSummary {
   const NonogramCompletionSummary({

@@ -175,7 +175,11 @@ class _GuideLegend extends StatelessWidget {
       return Row(
         mainAxisSize: MainAxisSize.min,
         children: [
-          SizedBox(width: size, height: size, child: Center(child: icon)),
+          SizedBox(
+            width: size,
+            height: size,
+            child: Center(child: icon),
+          ),
           const SizedBox(width: 8),
           Flexible(child: Text(label, style: context.bodySmall)),
         ],

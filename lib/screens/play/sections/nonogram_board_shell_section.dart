@@ -158,10 +158,9 @@ class _NonogramBoardShellSectionState extends State<NonogramBoardShellSection> {
     final layout = _currentLayout();
     final box = context.findRenderObject();
     if (layout == null || box is! RenderBox || !box.attached) return null;
-    final t =
-        NonogramTransformationControllerProvider.of(
-          context,
-        ).value.getTranslation();
+    final t = NonogramTransformationControllerProvider.of(
+      context,
+    ).value.getTranslation();
     final offset = layout.clamp(Offset(t.x, t.y));
     final grid = offset & Size(layout.gridWidth, layout.gridHeight);
     final visible = grid.intersect(layout.gridArea(offset));
@@ -211,7 +210,10 @@ class _NonogramBoardShellSectionState extends State<NonogramBoardShellSection> {
       children: [
         KeyedSubtree(key: _undoKey, child: const UndoAction()),
         const SizedBox(width: 8),
-        KeyedSubtree(key: _hintKey, child: HintAction(compact: compactHint)),
+        KeyedSubtree(
+          key: _hintKey,
+          child: HintAction(compact: compactHint),
+        ),
         const SizedBox(width: 8),
         KeyedSubtree(key: _wandKey, child: const WandAction()),
         const SizedBox(width: 8),
@@ -303,28 +305,26 @@ class _NonogramBoardShellSectionState extends State<NonogramBoardShellSection> {
                     top: 0,
                     left: 16,
                     right: 16,
-                    child: BlocSelector<
-                      NonogramPlayBloc,
-                      NonogramPlayState,
-                      bool
-                    >(
-                      selector: (state) => state.isFullscreen,
-                      builder: (context, isFullscreen) {
-                        final actions = _buildOverlayActions(
-                          compactHint: compactHint,
-                        );
-                        return SafeArea(
-                          left: false,
-                          right: false,
-                          bottom: false,
-                          minimum: EdgeInsets.only(top: isFullscreen ? 16 : 0),
-                          child:
-                              isFullscreen
+                    child:
+                        BlocSelector<NonogramPlayBloc, NonogramPlayState, bool>(
+                          selector: (state) => state.isFullscreen,
+                          builder: (context, isFullscreen) {
+                            final actions = _buildOverlayActions(
+                              compactHint: compactHint,
+                            );
+                            return SafeArea(
+                              left: false,
+                              right: false,
+                              bottom: false,
+                              minimum: EdgeInsets.only(
+                                top: isFullscreen ? 16 : 0,
+                              ),
+                              child: isFullscreen
                                   ? NonogramFullscreenActionDock(child: actions)
                                   : actions,
-                        );
-                      },
-                    ),
+                            );
+                          },
+                        ),
                   ),
                 // Đang chọn hàng / cột cho gậy phép: dải hướng dẫn ở mép dưới.
                 Positioned(
@@ -334,31 +334,24 @@ class _NonogramBoardShellSectionState extends State<NonogramBoardShellSection> {
                   child:
                       BlocSelector<NonogramPlayBloc, NonogramPlayState, bool>(
                         selector: (state) => state.isWandActive,
-                        builder:
-                            (context, active) => AnimatedSwitcher(
-                              duration: const Duration(milliseconds: 180),
-                              child:
-                                  active
-                                      ? const Center(child: WandSelectBanner())
-                                      : Consumer<DragTip>(
-                                        builder:
-                                            (
-                                              context,
-                                              tip,
-                                              _,
-                                            ) => AnimatedSwitcher(
-                                              duration: const Duration(
-                                                milliseconds: 220,
-                                              ),
-                                              child:
-                                                  tip.visible
-                                                      ? const Center(
-                                                        child: DragTipBanner(),
-                                                      )
-                                                      : const SizedBox.shrink(),
-                                            ),
+                        builder: (context, active) => AnimatedSwitcher(
+                          duration: const Duration(milliseconds: 180),
+                          child: active
+                              ? const Center(child: WandSelectBanner())
+                              : Consumer<DragTip>(
+                                  builder: (context, tip, _) =>
+                                      AnimatedSwitcher(
+                                        duration: const Duration(
+                                          milliseconds: 220,
+                                        ),
+                                        child: tip.visible
+                                            ? const Center(
+                                                child: DragTipBanner(),
+                                              )
+                                            : const SizedBox.shrink(),
                                       ),
-                            ),
+                                ),
+                        ),
                       ),
                 ),
               ],
