@@ -3,7 +3,6 @@
 # limit, remove its line. Never add new entries: split the file instead.
 lib/main.dart 389
 lib/checkin/check_in_celebration.dart 995
-lib/checkin/check_in_screen.dart 1309
 lib/checkin/check_in_service.dart 419
 lib/premium/premium_benefits_screen.dart 607
 lib/screens/dashboard/sections/nonogram_dashboard_hero_section.dart 396

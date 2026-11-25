@@ -36,6 +36,10 @@
   dòng thì xoá dòng đó khỏi danh sách. **Không thêm file mới vào danh sách.**
 - Mỗi hàm tối đa **50 dòng** (mục tiêu 40), lồng khối không quá **3 tầng**;
   ưu tiên early return. Chưa có công cụ kiểm tra tự động: review khi đọc code.
+- Tách file: widget độc lập chuyển sang file riêng (đổi thành public). Chỉ
+  dùng `part` / `part of` khi một `State` quá dài: chuyển một nhóm logic của
+  nó thành mixin private trong file `part` (ví dụ
+  `lib/checkin/check_in_flow.dart`).
 
 ## Tách engine khỏi UI
 
