@@ -125,10 +125,9 @@ class _NonogramPlayView extends StatelessWidget {
   Widget build(BuildContext context) {
     final celebration = context.watch<SolveCelebration>();
     return BlocConsumer<NonogramPlayBloc, NonogramPlayState>(
-      listenWhen:
-          (p, c) =>
-              c is NonogramPlayCompletedState ||
-              (celebration.isActive && !c.isSolved),
+      listenWhen: (p, c) =>
+          c is NonogramPlayCompletedState ||
+          (celebration.isActive && !c.isSolved),
       listener: (context, state) {
         if (!state.isSolved) {
           celebration.reset();

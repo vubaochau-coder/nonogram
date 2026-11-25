@@ -14,14 +14,14 @@ class FakeNonogramRepository extends NonogramRepository {
   }) : super(
          solution == null
              ? FakeNonogramPuzzleSource(
-               levelCount: levelCount,
-               pinnedCells: pinnedCells,
-             )
+                 levelCount: levelCount,
+                 pinnedCells: pinnedCells,
+               )
              : FakeNonogramPuzzleSource(
-               levelCount: levelCount,
-               solution: solution,
-               pinnedCells: pinnedCells,
-             ),
+                 levelCount: levelCount,
+                 solution: solution,
+                 pinnedCells: pinnedCells,
+               ),
          FakeNonogramLocalService(),
          today: today,
        );

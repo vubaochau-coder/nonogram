@@ -186,10 +186,9 @@ void main() {
       tester,
       sounds: AppSoundController.inMemory(engine: engine),
     );
-    final bloc =
-        tester
-            .element(find.byType(NonogramBoardViewport))
-            .read<NonogramPlayBloc>();
+    final bloc = tester
+        .element(find.byType(NonogramBoardViewport))
+        .read<NonogramPlayBloc>();
 
     // Đánh X (nhấn giữ khi đang ở chế độ Tô) rồi giải xong.
     bloc.add(const CellLongPressed(row: 0, col: 0));

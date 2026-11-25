@@ -133,10 +133,9 @@ class _CheckInSection extends StatelessWidget {
         final next = CheckInPolicy.nextMilestone(
           checkIn.claimedMilestones(now.year, now.month),
         );
-        final toNext =
-            next == null
-                ? null
-                : next - checkIn.streak(now.year, now.month).current;
+        final toNext = next == null
+            ? null
+            : next - checkIn.streak(now.year, now.month).current;
         return _Section(
           title: 'Ngày & điểm danh',
           children: [
@@ -337,11 +336,11 @@ class _PremiumSection extends StatelessWidget {
             _Note(
               fake
                   ? 'Cửa hàng giả không tốn tiền. Có thể mua ở đây hoặc ở thẻ '
-                      'gói trong tab Tôi. "Hoàn tiền / thu hồi" giống lúc '
-                      'Google Play báo đã hoàn tiền khi mở app.'
+                        'gói trong tab Tôi. "Hoàn tiền / thu hồi" giống lúc '
+                        'Google Play báo đã hoàn tiền khi mở app.'
                   : 'Google Play thật: cần cài app từ kênh thử nghiệm và đăng '
-                      'nhập tài khoản có trong "Thử nghiệm giấy phép" của Play '
-                      'Console. Huỷ đơn thử ở Play Console → Quản lý đơn hàng.',
+                        'nhập tài khoản có trong "Thử nghiệm giấy phép" của Play '
+                        'Console. Huỷ đơn thử ở Play Console → Quản lý đơn hàng.',
             ),
           ],
         );
@@ -485,31 +484,30 @@ class _AdsRatingSection extends StatelessWidget {
         ),
         if (rating != null)
           StatefulBuilder(
-            builder:
-                (context, setState) => Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
-                    _Info(
-                      'Lời mời đánh giá',
-                      rating.state.answered
-                          ? 'đã trả lời'
-                          : 'đã hỏi ${rating.state.prompts} lần',
-                    ),
-                    _Buttons([
-                      _Btn('Đặt lại lời mời đánh giá', () async {
-                        await rating.debugReset();
-                        setState(() {});
-                        if (context.mounted) {
-                          _toast(
-                            context,
-                            'Đã đặt lại: hỏi khi rời màn hoàn thành, từ màn đã giải '
-                            'thứ ${rating.policy.firstAfter}',
-                          );
-                        }
-                      }),
-                    ]),
-                  ],
+            builder: (context, setState) => Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                _Info(
+                  'Lời mời đánh giá',
+                  rating.state.answered
+                      ? 'đã trả lời'
+                      : 'đã hỏi ${rating.state.prompts} lần',
                 ),
+                _Buttons([
+                  _Btn('Đặt lại lời mời đánh giá', () async {
+                    await rating.debugReset();
+                    setState(() {});
+                    if (context.mounted) {
+                      _toast(
+                        context,
+                        'Đã đặt lại: hỏi khi rời màn hoàn thành, từ màn đã giải '
+                        'thứ ${rating.policy.firstAfter}',
+                      );
+                    }
+                  }),
+                ]),
+              ],
+            ),
           ),
       ],
     );
@@ -525,21 +523,20 @@ Future<bool?> _confirm(
 }) {
   return showDialog<bool>(
     context: context,
-    builder:
-        (context) => AlertDialog(
-          title: Text(title),
-          content: Text(message),
-          actions: [
-            TextButton(
-              onPressed: () => Navigator.of(context).pop(false),
-              child: const Text('Huỷ'),
-            ),
-            FilledButton(
-              onPressed: () => Navigator.of(context).pop(true),
-              child: const Text('Xoá'),
-            ),
-          ],
+    builder: (context) => AlertDialog(
+      title: Text(title),
+      content: Text(message),
+      actions: [
+        TextButton(
+          onPressed: () => Navigator.of(context).pop(false),
+          child: const Text('Huỷ'),
         ),
+        FilledButton(
+          onPressed: () => Navigator.of(context).pop(true),
+          child: const Text('Xoá'),
+        ),
+      ],
+    ),
   );
 }
 
@@ -660,15 +657,14 @@ class _Buttons extends StatelessWidget {
             b.primary
                 ? FilledButton(onPressed: b.onPressed, child: Text(b.label))
                 : OutlinedButton(
-                  onPressed: b.onPressed,
-                  style:
-                      b.danger
-                          ? OutlinedButton.styleFrom(
+                    onPressed: b.onPressed,
+                    style: b.danger
+                        ? OutlinedButton.styleFrom(
                             foregroundColor: context.color.error,
                           )
-                          : null,
-                  child: Text(b.label),
-                ),
+                        : null,
+                    child: Text(b.label),
+                  ),
         ],
       ),
     );

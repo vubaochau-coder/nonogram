@@ -56,8 +56,8 @@ class AdManager extends AdService {
   }
 
   Future<void> _refreshPrivacyStatus() async {
-    _privacyOptionsRequired.value =
-        await _network.consent.privacyOptionsRequired();
+    _privacyOptionsRequired.value = await _network.consent
+        .privacyOptionsRequired();
   }
 
   Future<void> _startIfAllowed() async {

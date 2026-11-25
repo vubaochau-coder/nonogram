@@ -80,10 +80,9 @@ void main() {
       trusted: FakeTrustedClock(null),
       device: () => DateTime(2026, 11, 13, 9),
     );
-    final checkIn =
-        withCheckIn
-            ? (CheckInService.inMemory(clock: clock)..attach(repository))
-            : null;
+    final checkIn = withCheckIn
+        ? (CheckInService.inMemory(clock: clock)..attach(repository))
+        : null;
     if (checkIn != null) addTearDown(checkIn.dispose);
     await tester.pumpWidget(
       MultiRepositoryProvider(

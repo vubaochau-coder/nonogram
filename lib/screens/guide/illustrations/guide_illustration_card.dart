@@ -64,10 +64,9 @@ class GuideIllustrationCard extends StatelessWidget {
           for (var i = 0; i < item.diagrams.length; i++) ...[
             const SizedBox(height: 16),
             GuideExampleBlock(
-              label:
-                  item.diagrams.length > 1
-                      ? context.l10n.nonogramGuideExample(i + 1)
-                      : context.l10n.nonogramGuideExampleSingle,
+              label: item.diagrams.length > 1
+                  ? context.l10n.nonogramGuideExample(i + 1)
+                  : context.l10n.nonogramGuideExampleSingle,
               child: GuideDiagramView(diagram: item.diagrams[i]),
             ),
           ],

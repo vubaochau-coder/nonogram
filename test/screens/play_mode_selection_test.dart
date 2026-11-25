@@ -25,11 +25,9 @@ Future<void> _pump(
       home: PlayModeSelectionPage(
         lastMode: lastMode,
         onSelected: onSelected,
-        loadStats:
-            (mode) async =>
-                mode == PlayMode.user
-                    ? (solved: 3, total: 121)
-                    : (solved: 40, total: 574),
+        loadStats: (mode) async => mode == PlayMode.user
+            ? (solved: 3, total: 121)
+            : (solved: 40, total: 574),
       ),
     ),
   );

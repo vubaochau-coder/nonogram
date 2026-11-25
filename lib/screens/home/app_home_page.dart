@@ -148,10 +148,9 @@ class _NavItem extends StatelessWidget {
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 6),
         child: Material(
-          color:
-              selected
-                  ? colors.primary.withValues(alpha: 0.10)
-                  : Colors.transparent,
+          color: selected
+              ? colors.primary.withValues(alpha: 0.10)
+              : Colors.transparent,
           borderRadius: BorderRadius.circular(16),
           child: InkWell(
             borderRadius: BorderRadius.circular(16),

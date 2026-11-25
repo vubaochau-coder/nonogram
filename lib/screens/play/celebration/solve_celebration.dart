@@ -344,10 +344,9 @@ class _FlyingPicture extends StatelessWidget {
           }
           // Đổi toạ độ toàn màn hình sang toạ độ của lớp phủ này.
           final box = context.findRenderObject();
-          final origin =
-              box is RenderBox && box.hasSize
-                  ? box.localToGlobal(Offset.zero)
-                  : Offset.zero;
+          final origin = box is RenderBox && box.hasSize
+              ? box.localToGlobal(Offset.zero)
+              : Offset.zero;
           final src = from.shift(-origin);
           // Khung hình đầu của màn kết quả chưa đo được thẻ tranh: giữ tranh
           // đúng chỗ lưới để không bị nháy trống.
@@ -440,13 +439,12 @@ class SolveFramePainter extends CustomPainter {
     final radius = fromRadius + (toRadius - fromRadius) * move;
     final PathMetric metric = outline(rect, radius).computeMetrics().first;
     final length = metric.length * trace.clamp(0.0, 1.0);
-    final stroke =
-        Paint()
-          ..style = PaintingStyle.stroke
-          ..strokeWidth = 3 - settle
-          ..strokeCap = StrokeCap.round
-          ..strokeJoin = StrokeJoin.round
-          ..color = Color.lerp(color, settledColor, settle)!;
+    final stroke = Paint()
+      ..style = PaintingStyle.stroke
+      ..strokeWidth = 3 - settle
+      ..strokeCap = StrokeCap.round
+      ..strokeJoin = StrokeJoin.round
+      ..color = Color.lerp(color, settledColor, settle)!;
     canvas.drawPath(metric.extractPath(0, length), stroke);
 
     if (trace < 1) {

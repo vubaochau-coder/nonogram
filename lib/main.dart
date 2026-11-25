@@ -78,10 +78,9 @@ Future<void> main() async {
     clock: clock,
     checkIn: checkIn,
     // Lời mời đánh giá mở CH Play: chỉ có trên Android.
-    rating:
-        !kIsWeb && defaultTargetPlatform == TargetPlatform.android
-            ? await AppRatingController.load()
-            : null,
+    rating: !kIsWeb && defaultTargetPlatform == TargetPlatform.android
+        ? await AppRatingController.load()
+        : null,
     themeMode: await AppThemeModeController.load(),
     sounds: await AppSoundController.load(),
     locale: await AppLocaleController.load(),
@@ -207,10 +206,9 @@ class AppLauncher {
         rating: rating,
         onboarding: onboarding,
         showTutorialOnStart: showTutorial,
-        playModeSwitcher:
-            flavor.hasPlayModeSelection
-                ? PlayModeSwitcher(current: mode, switchMode: showModeSelection)
-                : null,
+        playModeSwitcher: flavor.hasPlayModeSelection
+            ? PlayModeSwitcher(current: mode, switchMode: showModeSelection)
+            : null,
       ),
     );
 
@@ -226,10 +224,9 @@ class AppLauncher {
     var total = 0;
     var solved = 0;
     try {
-      total =
-          await AssetNonogramPuzzleSource(
-            basePath: mode.levelsPath,
-          ).totalLevels();
+      total = await AssetNonogramPuzzleSource(
+        basePath: mode.levelsPath,
+      ).totalLevels();
     } catch (_) {}
     try {
       final local = HiveNonogramLocalService(boxName: mode.progressBoxName);
@@ -258,27 +255,25 @@ class _AppMaterial extends StatelessWidget {
   Widget build(BuildContext context) {
     return ListenableBuilder(
       listenable: Listenable.merge([themeMode, locale]),
-      builder:
-          (context, _) => MaterialApp(
-            navigatorKey: navigatorKey,
-            onGenerateTitle:
-                (context) => AppLocalizations.of(context)!.appTitle,
-            debugShowCheckedModeBanner: false,
-            theme: AppTheme.lightTheme,
-            darkTheme: AppTheme.darkTheme,
-            themeMode: themeMode.value,
-            localizationsDelegates: const [
-              AppLocalizations.delegate,
-              GlobalMaterialLocalizations.delegate,
-              GlobalWidgetsLocalizations.delegate,
-              GlobalCupertinoLocalizations.delegate,
-            ],
-            supportedLocales: AppLocalizations.supportedLocales,
-            // null = theo ngôn ngữ của máy (chọn bằng resolveAppLocale).
-            locale: locale.value,
-            localeListResolutionCallback: resolveAppLocale,
-            home: home,
-          ),
+      builder: (context, _) => MaterialApp(
+        navigatorKey: navigatorKey,
+        onGenerateTitle: (context) => AppLocalizations.of(context)!.appTitle,
+        debugShowCheckedModeBanner: false,
+        theme: AppTheme.lightTheme,
+        darkTheme: AppTheme.darkTheme,
+        themeMode: themeMode.value,
+        localizationsDelegates: const [
+          AppLocalizations.delegate,
+          GlobalMaterialLocalizations.delegate,
+          GlobalWidgetsLocalizations.delegate,
+          GlobalCupertinoLocalizations.delegate,
+        ],
+        supportedLocales: AppLocalizations.supportedLocales,
+        // null = theo ngôn ngữ của máy (chọn bằng resolveAppLocale).
+        locale: locale.value,
+        localeListResolutionCallback: resolveAppLocale,
+        home: home,
+      ),
     );
   }
 }

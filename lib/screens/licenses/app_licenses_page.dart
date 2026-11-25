@@ -101,11 +101,10 @@ class _AppLicensesPageState extends State<AppLicensesPage> {
               width: double.infinity,
               child: OutlinedButton.icon(
                 key: const ValueKey('licenses-software'),
-                onPressed:
-                    () => showLicensePage(
-                      context: context,
-                      applicationName: l10n.appTitle,
-                    ),
+                onPressed: () => showLicensePage(
+                  context: context,
+                  applicationName: l10n.appTitle,
+                ),
                 icon: const Icon(LucideIcons.fileText, size: 18),
                 label: Text(l10n.licensesSoftwareButton),
                 style: OutlinedButton.styleFrom(

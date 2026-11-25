@@ -160,14 +160,13 @@ class _NonogramTutorialPageState extends State<NonogramTutorialPage> {
                       child: _MessageCard(
                         text:
                             task == TutorialTask.intro ||
-                                    task == TutorialTask.rulesDone ||
-                                    task == TutorialTask.toolsDone
-                                ? ''
-                                : tutorialMessageText(l10n, step.message),
-                        note:
-                            step.dragNote
-                                ? l10n.nonogramTutorialDragNote
-                                : null,
+                                task == TutorialTask.rulesDone ||
+                                task == TutorialTask.toolsDone
+                            ? ''
+                            : tutorialMessageText(l10n, step.message),
+                        note: step.dragNote
+                            ? l10n.nonogramTutorialDragNote
+                            : null,
                         mistakes: _controller.mistakes,
                       ),
                     ),
@@ -223,8 +222,9 @@ class _NonogramTutorialPageState extends State<NonogramTutorialPage> {
                       // Nói rõ ngay từ đầu: miễn phí, có quảng cáo (tuỳ
                       // chọn) và gói mua một lần. Bản không có quảng cáo
                       // (web, iOS) thì không cần.
-                      extra:
-                          context.ads.isEnabled ? const _WelcomeInfo() : null,
+                      extra: context.ads.isEnabled
+                          ? const _WelcomeInfo()
+                          : null,
                       actions: [
                         FilledButton(
                           key: const ValueKey('nonogram-tutorial-start'),
@@ -486,10 +486,9 @@ class _TutorialBoard extends StatelessWidget {
     final picking = step.task == TutorialTask.pickWandLine;
     bool isWandTarget(bool isRow, int index) =>
         picking && wandLine == (isRow: isRow, index: index);
-    VoidCallback? pick(bool isRow, int index) =>
-        picking
-            ? () => controller.pickClueLine((isRow: isRow, index: index))
-            : null;
+    VoidCallback? pick(bool isRow, int index) => picking
+        ? () => controller.pickClueLine((isRow: isRow, index: index))
+        : null;
 
     return Column(
       mainAxisSize: MainAxisSize.min,
@@ -616,25 +615,25 @@ class _ClueTile extends StatelessWidget {
                 ),
               Expanded(
                 child: Align(
-                  alignment:
-                      vertical ? Alignment.bottomCenter : Alignment.centerRight,
+                  alignment: vertical
+                      ? Alignment.bottomCenter
+                      : Alignment.centerRight,
                   child: FittedBox(
                     fit: BoxFit.scaleDown,
-                    child:
-                        vertical
-                            ? Column(
-                              mainAxisSize: MainAxisSize.min,
-                              children: numbers,
-                            )
-                            : Row(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                for (var i = 0; i < numbers.length; i++) ...[
-                                  if (i > 0) SizedBox(width: shortSide * 0.12),
-                                  numbers[i],
-                                ],
+                    child: vertical
+                        ? Column(
+                            mainAxisSize: MainAxisSize.min,
+                            children: numbers,
+                          )
+                        : Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              for (var i = 0; i < numbers.length; i++) ...[
+                                if (i > 0) SizedBox(width: shortSide * 0.12),
+                                numbers[i],
                               ],
-                            ),
+                            ],
+                          ),
                   ),
                 ),
               ),
@@ -740,11 +739,11 @@ class _TutorialGridState extends State<_TutorialGrid> {
     // Bàn tay chỉ hiện khi bước vừa bắt đầu, để không che bàn khi đang tô.
     final pointAt =
         !step.freePlay &&
-                step.ghostLine == null &&
-                pending.isNotEmpty &&
-                pending.length == step.targets.length
-            ? pending.first
-            : null;
+            step.ghostLine == null &&
+            pending.isNotEmpty &&
+            pending.length == step.targets.length
+        ? pending.first
+        : null;
     final handSize = cellSize * 0.9;
     // Bước tập kéo: bàn tay lướt dọc theo các ô cần tô.
     final swipe = step.message == TutorialMessage.dragRow && pointAt != null;
@@ -868,10 +867,9 @@ class _TutorialGridState extends State<_TutorialGrid> {
                   (pointAt.row + 0.5) * cellSize,
                 ),
                 size: handSize,
-                child:
-                    step.task == TutorialTask.longPressMark
-                        ? _HoldHint(size: handSize)
-                        : _TapHint(size: handSize),
+                child: step.task == TutorialTask.longPressMark
+                    ? _HoldHint(size: handSize)
+                    : _TapHint(size: handSize),
               ),
           ],
         ),
@@ -944,14 +942,13 @@ class _GhostBlinkState extends State<_GhostBlink>
           final index = t.floor().clamp(0, placements.length - 1);
           final f = t - index;
           // 0–20%: sáng lên, 20–65%: giữ, 65–85%: tắt, 85–100%: nghỉ.
-          final opacity =
-              f < 0.2
-                  ? f / 0.2
-                  : f < 0.65
-                  ? 1.0
-                  : f < 0.85
-                  ? (0.85 - f) / 0.2
-                  : 0.0;
+          final opacity = f < 0.2
+              ? f / 0.2
+              : f < 0.65
+              ? 1.0
+              : f < 0.85
+              ? (0.85 - f) / 0.2
+              : 0.0;
           shown = [(placements[index], opacity)];
         }
         return CustomPaint(
@@ -988,20 +985,21 @@ class _GhostPainter extends CustomPainter {
       if (opacity <= 0) continue;
       final paint = Paint()..color = color.withValues(alpha: 0.45 * opacity);
       for (final i in cells) {
-        final rect = (line.isRow
-                ? Rect.fromLTWH(
-                  i * cellSize,
-                  line.index * cellSize,
-                  cellSize,
-                  cellSize,
-                )
-                : Rect.fromLTWH(
-                  line.index * cellSize,
-                  i * cellSize,
-                  cellSize,
-                  cellSize,
-                ))
-            .deflate(cellSize * 0.08);
+        final rect =
+            (line.isRow
+                    ? Rect.fromLTWH(
+                        i * cellSize,
+                        line.index * cellSize,
+                        cellSize,
+                        cellSize,
+                      )
+                    : Rect.fromLTWH(
+                        line.index * cellSize,
+                        i * cellSize,
+                        cellSize,
+                        cellSize,
+                      ))
+                .deflate(cellSize * 0.08);
         canvas.drawRRect(
           RRect.fromRectAndRadius(rect, Radius.circular(cellSize * 0.12)),
           paint,
@@ -1029,11 +1027,10 @@ class _HighlightPainter extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
     if (cells.isEmpty) return;
-    final paint =
-        Paint()
-          ..color = color
-          ..style = PaintingStyle.stroke
-          ..strokeWidth = 3;
+    final paint = Paint()
+      ..color = color
+      ..style = PaintingStyle.stroke
+      ..strokeWidth = 3;
 
     // Cả một cột (ô vừa hiện đáp án): một khung dọc.
     final sameCol = cells.map((c) => c.col).toSet();
@@ -1542,18 +1539,16 @@ class _TutorialToolButton extends StatelessWidget {
                 height: _size,
                 alignment: Alignment.center,
                 decoration: BoxDecoration(
-                  color:
-                      active
-                          ? colors.primary.withValues(alpha: 0.12)
-                          : colors.surfaceContainerLow,
+                  color: active
+                      ? colors.primary.withValues(alpha: 0.12)
+                      : colors.surfaceContainerLow,
                   borderRadius: BorderRadius.circular(17),
                   border: Border.all(
-                    color:
-                        pointed
-                            ? game.reward
-                            : (active
-                                ? colors.primary.withValues(alpha: 0.4)
-                                : game.cardBorder),
+                    color: pointed
+                        ? game.reward
+                        : (active
+                              ? colors.primary.withValues(alpha: 0.4)
+                              : game.cardBorder),
                     width: pointed ? 2 : 1,
                   ),
                 ),

@@ -13,11 +13,8 @@ class NonogramTransformationControllerProvider
   });
 
   static TransformationController of(BuildContext context) {
-    final scope =
-        context
-            .dependOnInheritedWidgetOfExactType<
-              _TransformationControllerScope
-            >();
+    final scope = context
+        .dependOnInheritedWidgetOfExactType<_TransformationControllerScope>();
     if (scope?.notifier case final controller?) return controller;
     throw FlutterError(
       'NonogramTransformationControllerProvider is missing in the widget tree.',

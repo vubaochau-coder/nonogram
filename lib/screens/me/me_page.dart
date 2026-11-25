@@ -93,8 +93,9 @@ class MePage extends StatelessWidget {
                     valueListenable: sounds,
                     builder: (context, enabled, _) {
                       return _Tile(
-                        icon:
-                            enabled ? LucideIcons.volume2 : LucideIcons.volumeX,
+                        icon: enabled
+                            ? LucideIcons.volume2
+                            : LucideIcons.volumeX,
                         color: const Color(0xFF7C5CDB),
                         label: l10n.settingsSound,
                         onTap: () => sounds.setEnabled(!enabled),
@@ -141,12 +142,11 @@ class MePage extends StatelessWidget {
                     icon: LucideIcons.flaskConical,
                     color: const Color(0xFFF97316),
                     label: 'Công cụ tester',
-                    onTap:
-                        () => Navigator.of(context).push(
-                          MaterialPageRoute<void>(
-                            builder: (_) => const TesterToolsPage(),
-                          ),
-                        ),
+                    onTap: () => Navigator.of(context).push(
+                      MaterialPageRoute<void>(
+                        builder: (_) => const TesterToolsPage(),
+                      ),
+                    ),
                   ),
                 ],
               ),
@@ -171,12 +171,11 @@ class MePage extends StatelessWidget {
                       icon: LucideIcons.scale,
                       color: const Color(0xFF8A93A6),
                       label: l10n.settingsLicenses,
-                      onTap:
-                          () => Navigator.of(context).push(
-                            MaterialPageRoute<void>(
-                              builder: (_) => const AppLicensesPage(),
-                            ),
-                          ),
+                      onTap: () => Navigator.of(context).push(
+                        MaterialPageRoute<void>(
+                          builder: (_) => const AppLicensesPage(),
+                        ),
+                      ),
                     ),
                     if (switcher != null)
                       _Tile(

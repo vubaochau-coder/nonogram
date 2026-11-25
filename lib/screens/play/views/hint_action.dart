@@ -22,12 +22,11 @@ class HintAction extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<NonogramPlayBloc, NonogramPlayState>(
-      buildWhen:
-          (p, c) =>
-              p.remainingHints != c.remainingHints ||
-              p.dailyHints != c.dailyHints ||
-              p.isWandActive != c.isWandActive ||
-              p.isSolved != c.isSolved,
+      buildWhen: (p, c) =>
+          p.remainingHints != c.remainingHints ||
+          p.dailyHints != c.dailyHints ||
+          p.isWandActive != c.isWandActive ||
+          p.isSolved != c.isSolved,
       builder: (context, state) {
         final l10n = context.l10n;
         // Hết lượt: nút vẫn bấm được, bấm là xem quảng cáo để dùng một lượt.
@@ -40,12 +39,12 @@ class HintAction extends StatelessWidget {
         final timeLimited = !state.isSolved && !blocked && state.dailyHints > 0;
         final button = OverlayButton(
           icon: LucideIcons.lightbulb,
-          iconWidget:
-              timeLimited
-                  ? const PowerUpGlyph(powerUp: PowerUp.hint, timeLimited: true)
-                  : null,
-          label:
-              compact ? null : l10n.nonogramPlayHintLabel(state.remainingHints),
+          iconWidget: timeLimited
+              ? const PowerUpGlyph(powerUp: PowerUp.hint, timeLimited: true)
+              : null,
+          label: compact
+              ? null
+              : l10n.nonogramPlayHintLabel(state.remainingHints),
           enabled: !state.isSolved,
           muted: blocked,
           onPressed: () {

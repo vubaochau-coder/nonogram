@@ -140,10 +140,9 @@ class NonogramPuzzle {
     return NonogramPuzzle(
       id: id,
       level: level,
-      title:
-          (json['title'] as String?)?.trim().isNotEmpty == true
-              ? (json['title'] as String).trim()
-              : 'Level $level',
+      title: (json['title'] as String?)?.trim().isNotEmpty == true
+          ? (json['title'] as String).trim()
+          : 'Level $level',
       author: (json['author'] as String?) ?? '',
       difficulty: (json['difficulty'] as String?) ?? '',
       difficultyScore: (json['difficultyScore'] as num?)?.toDouble() ?? 0,

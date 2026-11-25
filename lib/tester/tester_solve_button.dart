@@ -26,9 +26,8 @@ class TesterSolveButton extends StatelessWidget {
       key: const ValueKey('tester-solve'),
       tooltip: 'Tester: giải ngay',
       icon: const Icon(LucideIcons.zap, size: 20, color: Color(0xFFF59E0B)),
-      onPressed:
-          () =>
-              context.read<NonogramPlayBloc>().add(const DebugSolveRequested()),
+      onPressed: () =>
+          context.read<NonogramPlayBloc>().add(const DebugSolveRequested()),
     );
   }
 }

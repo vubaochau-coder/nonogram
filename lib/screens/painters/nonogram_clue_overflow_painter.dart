@@ -33,10 +33,9 @@ class NonogramClueOverflowPainter extends CustomPainter {
     void chip(int line, bool far, int count) {
       final along = far ? 0.0 : extent - clueDepth;
       final across = line * cellSize;
-      final rect =
-          horizontal
-              ? Rect.fromLTWH(along, across, clueDepth, cellSize)
-              : Rect.fromLTWH(across, along, cellSize, clueDepth);
+      final rect = horizontal
+          ? Rect.fromLTWH(along, across, clueDepth, cellSize)
+          : Rect.fromLTWH(across, along, cellSize, clueDepth);
       final box = rect.deflate(1.5);
       canvas.drawRRect(
         RRect.fromRectAndRadius(box, const Radius.circular(4)),

@@ -69,15 +69,14 @@ void main() {
     }
   }
 
-  bool dotVisible(WidgetTester tester) =>
-      tester
-          .widget<Badge>(
-            find.descendant(
-              of: find.byKey(const ValueKey('home-tab-checkIn')),
-              matching: find.byType(Badge),
-            ),
-          )
-          .isLabelVisible;
+  bool dotVisible(WidgetTester tester) => tester
+      .widget<Badge>(
+        find.descendant(
+          of: find.byKey(const ValueKey('home-tab-checkIn')),
+          matching: find.byType(Badge),
+        ),
+      )
+      .isLabelVisible;
 
   testWidgets('three tabs; the check-in tab has a dot until checked in', (
     tester,

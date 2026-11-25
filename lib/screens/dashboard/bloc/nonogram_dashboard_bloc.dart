@@ -21,7 +21,10 @@ class NonogramDashboardBloc
     on<RefreshRequested>(_onRefreshRequested, transformer: droppable());
   }
 
-  Future<void> _onDashboardInitialized(DashboardInitialized event, Emitter emit) async {
+  Future<void> _onDashboardInitialized(
+    DashboardInitialized event,
+    Emitter emit,
+  ) async {
     if (event.showLoading) {
       emit(state.copyWith(isLoading: true));
     }
@@ -31,10 +34,9 @@ class NonogramDashboardBloc
       final hasTarget =
           overview.currentProgress != null ||
           overview.nextPlayableLevel != null;
-      final puzzle =
-          hasTarget
-              ? await _repository.getPuzzleByLevel(overview.currentLevel)
-              : null;
+      final puzzle = hasTarget
+          ? await _repository.getPuzzleByLevel(overview.currentLevel)
+          : null;
       final summary = await _repository.getCompletionSummary();
       emit(
         state.copyWith(

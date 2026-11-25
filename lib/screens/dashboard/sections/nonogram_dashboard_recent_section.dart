@@ -45,11 +45,10 @@ class NonogramDashboardRecentSection extends StatelessWidget {
                       padding: const EdgeInsets.symmetric(horizontal: 8),
                       minimumSize: const Size(0, 32),
                     ),
-                    onPressed:
-                        () => openFromDashboard(
-                          context,
-                          const NonogramCompletedResultsIntent(),
-                        ),
+                    onPressed: () => openFromDashboard(
+                      context,
+                      const NonogramCompletedResultsIntent(),
+                    ),
                     child: Text(context.l10n.nonogramDashboardSeeAll),
                   ),
               ],
@@ -65,9 +64,8 @@ class NonogramDashboardRecentSection extends StatelessWidget {
                   clipBehavior: Clip.none,
                   itemCount: recent.length,
                   separatorBuilder: (_, _) => const SizedBox(width: 12),
-                  itemBuilder:
-                      (context, index) =>
-                          _RecentTile(item: recent[index], width: _tileWidth),
+                  itemBuilder: (context, index) =>
+                      _RecentTile(item: recent[index], width: _tileWidth),
                 ),
               ),
           ],
@@ -90,11 +88,10 @@ class _RecentTile extends StatelessWidget {
       width: width,
       child: Card(
         child: InkWell(
-          onTap:
-              () => openFromDashboard(
-                context,
-                NonogramCompletedResultDetailIntent(level: puzzle.level),
-              ),
+          onTap: () => openFromDashboard(
+            context,
+            NonogramCompletedResultDetailIntent(level: puzzle.level),
+          ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [

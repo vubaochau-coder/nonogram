@@ -17,32 +17,29 @@ class NonogramDashboardProgressSection extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<NonogramDashboardBloc, NonogramDashboardState>(
-      buildWhen:
-          (p, c) =>
-              p.isLoading != c.isLoading ||
-              p.completedCount != c.completedCount ||
-              p.totalLevels != c.totalLevels ||
-              p.summary != c.summary,
+      buildWhen: (p, c) =>
+          p.isLoading != c.isLoading ||
+          p.completedCount != c.completedCount ||
+          p.totalLevels != c.totalLevels ||
+          p.summary != c.summary,
       builder: (context, state) {
         final l10n = context.l10n;
         final game = context.gameColors;
         final pct = state.progress * 100;
         // Dưới 10% hiện một chữ số thập phân để 1/574 không hiện thành "0%".
-        final percent =
-            pct > 0 && pct < 10
-                ? pct.toStringAsFixed(1)
-                : pct.floor().toString();
+        final percent = pct > 0 && pct < 10
+            ? pct.toStringAsFixed(1)
+            : pct.floor().toString();
         final summary = state.summary;
 
         return Card(
           child: InkWell(
-            onTap:
-                state.completedCount == 0
-                    ? null
-                    : () => openFromDashboard(
-                      context,
-                      const NonogramCompletedResultsIntent(),
-                    ),
+            onTap: state.completedCount == 0
+                ? null
+                : () => openFromDashboard(
+                    context,
+                    const NonogramCompletedResultsIntent(),
+                  ),
             child: Padding(
               padding: const EdgeInsets.all(18),
               child: Column(
@@ -70,20 +67,19 @@ class NonogramDashboardProgressSection extends StatelessWidget {
                     tween: Tween(end: state.isLoading ? 0 : state.progress),
                     duration: const Duration(milliseconds: 700),
                     curve: Curves.easeOutCubic,
-                    builder:
-                        (context, value, _) => LinearProgressIndicator(
-                          value: value == 0 ? 0 : value.clamp(0.015, 1.0),
-                          minHeight: 10,
-                        ),
+                    builder: (context, value, _) => LinearProgressIndicator(
+                      value: value == 0 ? 0 : value.clamp(0.015, 1.0),
+                      minHeight: 10,
+                    ),
                   ),
                   const SizedBox(height: 8),
                   Text(
                     state.isLoading
                         ? ''
                         : l10n.nonogramDashboardSolvedOfTotal(
-                          state.completedCount,
-                          state.totalLevels,
-                        ),
+                            state.completedCount,
+                            state.totalLevels,
+                          ),
                     style: context.bodySmall.copyWith(
                       color: context.color.onSurfaceVariant,
                     ),
@@ -102,19 +98,17 @@ class NonogramDashboardProgressSection extends StatelessWidget {
                       _Stat(
                         icon: LucideIcons.zap,
                         color: context.color.primary,
-                        value:
-                            summary.bestMs == null
-                                ? '–'
-                                : context.formatPlayTime(summary.bestMs!),
+                        value: summary.bestMs == null
+                            ? '–'
+                            : context.formatPlayTime(summary.bestMs!),
                         label: l10n.nonogramDashboardStatFastest,
                       ),
                       _Stat(
                         icon: LucideIcons.clock,
                         color: game.success,
-                        value:
-                            summary.totalPlayMs == 0
-                                ? '–'
-                                : context.formatPlayTime(summary.totalPlayMs),
+                        value: summary.totalPlayMs == 0
+                            ? '–'
+                            : context.formatPlayTime(summary.totalPlayMs),
                         label: l10n.nonogramDashboardStatTotalTime,
                       ),
                     ],
