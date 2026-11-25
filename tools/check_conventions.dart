@@ -6,7 +6,10 @@
 //     tools/conventions_baseline.txt with their current length: they may
 //     shrink but not grow, and must leave the list once they fit the limit.
 //     A listed file that does not exist only warns (see
-//     missingBaselineFiles).
+//     missingBaselineFiles);
+//   * lib/engine/ is pure Dart: no Flutter, no dart:ui, nothing from lib/
+//     outside lib/engine/;
+//   * tools/ only uses lib/engine/ from the app.
 //
 // Run from the repo root: dart run tools/check_conventions.dart
 import 'dart:io';
@@ -79,6 +82,48 @@ Violation? checkLength(String path, int lines, Map<String, int> baseline) {
   return null;
 }
 
+final _directive = RegExp(
+  r'''^\s*(?:import|export)\s+['"]([^'"]+)['"]''',
+  multiLine: true,
+);
+
+/// URIs of all `import` / `export` directives in [source].
+List<String> directivesOf(String source) =>
+    _directive.allMatches(source).map((m) => m.group(1)!).toList();
+
+/// Resolves [uri] imported from the file at [path] to a repo-relative path,
+/// or returns `null` for `dart:` and third-party packages.
+String? resolveToRepoPath(String path, String uri) {
+  const self = 'package:nonogram/';
+  if (uri.startsWith(self)) return 'lib/${uri.substring(self.length)}';
+  if (uri.contains(':')) return null;
+  final resolved = Uri.parse(path).resolve(uri).path;
+  return resolved.startsWith('/') ? resolved.substring(1) : resolved;
+}
+
+/// Checks the imports of one file. [path] is repo-relative and uses `/`.
+List<Violation> checkImports(String path, String source) => [
+  for (final uri in directivesOf(source))
+    if (_importProblem(path, uri) case final problem?) Violation(path, problem),
+];
+
+String? _importProblem(String path, String uri) {
+  final inEngine = path.startsWith('lib/engine/');
+  final inTools = path.startsWith('tools/');
+  if (!inEngine && !inTools) return null;
+
+  if (inEngine && (uri.startsWith('package:flutter') || uri == 'dart:ui')) {
+    return "imports '$uri': lib/engine/ must be pure Dart";
+  }
+  final target = resolveToRepoPath(path, uri);
+  if (target == null) return null;
+  if (target.startsWith('lib/') && !target.startsWith('lib/engine/')) {
+    final who = inEngine ? 'lib/engine/' : 'tools/';
+    return "imports '$uri': $who may only use lib/engine/ from the app";
+  }
+  return null;
+}
+
 /// Checks [files] (repo-relative path -> line count) against [baseline].
 List<Violation> checkLengths(
   Map<String, int> files,
@@ -99,9 +144,10 @@ List<String> missingBaselineFiles(
     if (!files.containsKey(path)) path,
 ];
 
-/// Line counts of every Dart file under [scannedRoots] in [repoRoot].
-Map<String, int> scanRepo(Directory repoRoot) {
-  final files = <String, int>{};
+/// Sources of every Dart file under [scannedRoots] in [repoRoot], keyed by
+/// repo-relative path.
+Map<String, String> scanRepo(Directory repoRoot) {
+  final files = <String, String>{};
   for (final root in scannedRoots) {
     final dir = Directory('${repoRoot.path}/$root');
     if (!dir.existsSync()) continue;
@@ -113,7 +159,7 @@ Map<String, int> scanRepo(Directory repoRoot) {
       final path = file.path
           .substring(repoRoot.path.length + 1)
           .replaceAll(r'\', '/');
-      files[path] = lineCount(file.readAsStringSync());
+      files[path] = file.readAsStringSync();
     }
   }
   return files;
@@ -125,11 +171,16 @@ void main() {
   final baseline = baselineFile.existsSync()
       ? parseBaseline(baselineFile.readAsStringSync())
       : <String, int>{};
-  final files = scanRepo(root);
-  for (final path in missingBaselineFiles(files, baseline)) {
+  final sources = scanRepo(root);
+  final lengths = sources.map((path, src) => MapEntry(path, lineCount(src)));
+  for (final path in missingBaselineFiles(lengths, baseline)) {
     stdout.writeln('warning: $path is in $baselinePath but does not exist');
   }
-  final violations = checkLengths(files, baseline);
+  final violations = [
+    ...checkLengths(lengths, baseline),
+    for (final MapEntry(key: path, value: src) in sources.entries)
+      ...checkImports(path, src),
+  ];
   if (violations.isEmpty) {
     stdout.writeln('Conventions OK (${baseline.length} file(s) in baseline).');
     return;

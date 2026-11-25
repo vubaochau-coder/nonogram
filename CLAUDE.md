@@ -24,6 +24,8 @@ trên repo này.
 - File ≤ 300 dòng (trừ file sinh tự động), hàm ≤ 50 dòng, lồng khối ≤ 3 tầng.
   File cũ còn vượt ngưỡng nằm trong `tools/conventions_baseline.txt`: chỉ
   được ngắn đi; không thêm file mới vào danh sách.
+- `lib/engine/` là Dart thuần: cấm Flutter, `dart:ui` và mọi file `lib/` ngoài
+  `engine/`. `tools/` chỉ dùng `lib/engine/`.
 - Màn hình mới `*_screen.dart`, widget thành phần `*_widget.dart` hoặc trong
   `widgets/` / `sections/`.
 - Tên trong code và comment mới bằng tiếng Anh; tài liệu bằng tiếng Việt.

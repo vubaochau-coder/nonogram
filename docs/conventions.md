@@ -37,6 +37,16 @@
 - Mỗi hàm tối đa **50 dòng** (mục tiêu 40), lồng khối không quá **3 tầng**;
   ưu tiên early return. Chưa có công cụ kiểm tra tự động: review khi đọc code.
 
+## Tách engine khỏi UI
+
+- `lib/engine/` là lõi game (model puzzle / trạng thái ô, luật, solver):
+  **Dart thuần**, cấm `package:flutter/...`, `dart:ui` và mọi file `lib/`
+  nằm ngoài `engine/`. Kiểu của Flutter (`Size`, `Offset`, `Axis`…) không
+  dùng trong engine; hình học hiển thị nằm ở `screens/play/layout/`.
+- `tools/` chỉ dùng `lib/engine/` trong code của app.
+- `lib/models/` chứa dữ liệu trạng thái của app (snapshot ván dở, tiến độ,
+  kho gợi ý).
+
 ## Đặt tên
 
 - Chuẩn Dart: file / thư mục `snake_case`, class / enum `PascalCase`, biến /
