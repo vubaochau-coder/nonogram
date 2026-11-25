@@ -159,6 +159,7 @@ docs/
   level_format.md            Định dạng dữ liệu màn chơi
   credits.md                 Ghi công + giấy phép hình dùng làm màn chơi
   gameplay_rules.md          Quy tắc campaign, snapshot, hint
+  conventions.md             Quy ước code và quy trình Git
 ```
 
 - Sửa chuỗi dịch trong `lib/l10n/*.arb` rồi chạy `flutter gen-l10n`.
@@ -167,10 +168,14 @@ docs/
 ## Kiểm tra
 
 ```bash
-dart format --output=none --set-exit-if-changed lib test
+dart format --output=none --set-exit-if-changed lib test tools
 flutter analyze
+dart run tools/check_conventions.dart
 flutter test
 ```
+
+Quy ước code (độ dài file, đặt tên, cách kiểm tra) xem
+[docs/conventions.md](docs/conventions.md).
 
 `test/data/level_assets_test.dart` kiểm tra toàn bộ dữ liệu trong
 `assets/levels/` (đủ level, đúng định dạng, mỗi màn có đúng một nghiệm).
