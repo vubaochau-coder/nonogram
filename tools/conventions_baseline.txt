@@ -22,7 +22,6 @@ lib/screens/play/sections/nonogram_completion_result_section.dart 330
 lib/screens/play/sections/nonogram_landscape_info_panel.dart 332
 lib/screens/play/views/wand_action.dart 338
 lib/screens/tutorial/nonogram_tutorial_controller.dart 824
-lib/screens/tutorial/nonogram_tutorial_screen.dart 1741
 lib/tester/tester_tools_screen.dart 672
 test/screens/nonogram_bloc_test.dart 967
 test/screens/nonogram_board_gestures_test.dart 923
