@@ -4,7 +4,7 @@ import 'package:lucide_icons/lucide_icons.dart';
 import 'package:nonogram/core/app_route_intent.dart';
 import 'package:nonogram/core/app_theme.dart';
 import 'package:nonogram/core/context_ext.dart';
-import 'package:nonogram/models/nonogram_cell_state.dart';
+import 'package:nonogram/engine/model/nonogram_cell_state.dart';
 import 'package:nonogram/widgets/nonogram_pixel_art.dart';
 import 'package:shimmer/shimmer.dart';
 

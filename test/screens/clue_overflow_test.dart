@@ -1,5 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:nonogram/screens/play/engine/clue_overflow.dart';
+import 'package:nonogram/screens/play/layout/clue_overflow.dart';
 
 void main() {
   // Dải hiện được 6 ô số, mỗi ô dày 20.

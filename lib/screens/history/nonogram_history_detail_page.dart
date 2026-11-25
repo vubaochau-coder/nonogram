@@ -2,7 +2,7 @@ import 'dart:math';
 import 'package:nonogram/core/context_ext.dart';
 import 'package:nonogram/core/duration_format.dart';
 import 'package:nonogram/models/nonogram_completed_progress.dart';
-import 'package:nonogram/models/nonogram_puzzle.dart';
+import 'package:nonogram/engine/model/nonogram_puzzle.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';

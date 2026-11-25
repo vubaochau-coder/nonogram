@@ -3,11 +3,10 @@ import 'dart:ui';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:nonogram/models/nonogram_board_snapshot.dart';
 import 'package:nonogram/models/nonogram_interaction_mode.dart';
-import 'package:nonogram/models/nonogram_puzzle.dart';
+import 'package:nonogram/engine/model/nonogram_puzzle.dart';
 import 'package:nonogram/screens/play/bloc/nonogram_play_bloc.dart';
 import 'package:nonogram/screens/play/bloc/nonogram_play_event.dart';
-import 'package:nonogram/screens/play/engine/nonogram_board_layout.dart';
-import 'package:nonogram/screens/play/engine/nonogram_engine.dart';
+import 'package:nonogram/screens/play/layout/nonogram_board_layout.dart';
 
 import '../mocks/fake_nonogram_repository.dart';
 
@@ -23,13 +22,12 @@ NonogramPuzzle _square(int n) => NonogramPuzzle(
 );
 
 void main() {
-  const engine = NonogramEngine();
   const phone = Size(390, 700);
 
   group('fitCellSize', () {
     test('small puzzle uses the largest cell size', () {
       expect(
-        engine.fitCellSize(puzzle: _square(4), viewport: phone),
+        NonogramBoardLayout.fitCellSizeFor(_square(4), phone),
         NonogramBoardLayout.maxCellSize,
       );
     });
@@ -37,9 +35,9 @@ void main() {
     test('medium puzzle shrinks to fit, within the allowed range', () {
       // 8×8, 4 gợi ý mỗi hàng: khung rộng 390 không đủ cho cỡ 44 nhưng
       // thừa cho cỡ 28.
-      final size = engine.fitCellSize(
-        puzzle: _square(8),
-        viewport: const Size(390, 900),
+      final size = NonogramBoardLayout.fitCellSizeFor(
+        _square(8),
+        const Size(390, 900),
       );
       expect(size, greaterThan(NonogramBoardLayout.minCellSize));
       expect(size, lessThan(NonogramBoardLayout.maxCellSize));
@@ -47,7 +45,7 @@ void main() {
 
     test('large puzzle never goes below the minimum tap size', () {
       expect(
-        engine.fitCellSize(puzzle: _square(45), viewport: phone),
+        NonogramBoardLayout.fitCellSizeFor(_square(45), phone),
         NonogramBoardLayout.minCellSize,
       );
     });
