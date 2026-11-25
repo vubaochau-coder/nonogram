@@ -21,7 +21,7 @@ class NonogramDashboardBloc
     on<RefreshRequested>(_onRefreshRequested, transformer: droppable());
   }
 
-  _onDashboardInitialized(DashboardInitialized event, Emitter emit) async {
+  Future<void> _onDashboardInitialized(DashboardInitialized event, Emitter emit) async {
     if (event.showLoading) {
       emit(state.copyWith(isLoading: true));
     }
@@ -58,7 +58,7 @@ class NonogramDashboardBloc
     }
   }
 
-  _onRefreshRequested(RefreshRequested event, Emitter emit) async {
+  Future<void> _onRefreshRequested(RefreshRequested event, Emitter emit) async {
     add(const DashboardInitialized());
   }
 }

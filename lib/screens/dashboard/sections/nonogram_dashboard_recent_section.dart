@@ -64,7 +64,7 @@ class NonogramDashboardRecentSection extends StatelessWidget {
                   scrollDirection: Axis.horizontal,
                   clipBehavior: Clip.none,
                   itemCount: recent.length,
-                  separatorBuilder: (_, __) => const SizedBox(width: 12),
+                  separatorBuilder: (_, _) => const SizedBox(width: 12),
                   itemBuilder:
                       (context, index) =>
                           _RecentTile(item: recent[index], width: _tileWidth),
