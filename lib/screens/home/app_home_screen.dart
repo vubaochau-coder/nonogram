@@ -1,27 +1,27 @@
 import 'package:flutter/material.dart';
-import 'package:nonogram/checkin/check_in_page.dart';
+import 'package:nonogram/checkin/check_in_screen.dart';
 import 'package:nonogram/checkin/check_in_service.dart';
 import 'package:nonogram/core/context_ext.dart';
-import 'package:nonogram/screens/dashboard/nonogram_dashboard_page.dart';
-import 'package:nonogram/screens/me/me_page.dart';
+import 'package:nonogram/screens/dashboard/nonogram_dashboard_screen.dart';
+import 'package:nonogram/screens/me/me_screen.dart';
 import 'package:provider/provider.dart';
 
 /// Trang gốc của app: 3 tab Chính, Điểm danh, Tôi với thanh điều hướng dưới.
 /// Các tab giữ nguyên trạng thái khi chuyển qua lại. Không có điểm danh
 /// (test) thì chỉ có 2 tab.
-class AppHomePage extends StatefulWidget {
-  const AppHomePage({super.key, this.showTutorialOnStart = false});
+class AppHomeScreen extends StatefulWidget {
+  const AppHomeScreen({super.key, this.showTutorialOnStart = false});
 
   /// Mở bài hướng dẫn "Cách chơi" ngay khi vào (lần đầu mở app).
   final bool showTutorialOnStart;
 
   @override
-  State<AppHomePage> createState() => _AppHomePageState();
+  State<AppHomeScreen> createState() => _AppHomeScreenState();
 }
 
 enum _HomeTab { home, checkIn, me }
 
-class _AppHomePageState extends State<AppHomePage> {
+class _AppHomeScreenState extends State<AppHomeScreen> {
   _HomeTab _tab = _HomeTab.home;
 
   @override
@@ -40,11 +40,11 @@ class _AppHomePageState extends State<AppHomePage> {
         children: [
           for (final tab in tabs)
             switch (tab) {
-              _HomeTab.home => NonogramDashboardPage(
+              _HomeTab.home => NonogramDashboardScreen(
                 showTutorialOnStart: widget.showTutorialOnStart,
               ),
-              _HomeTab.checkIn => const CheckInTab(),
-              _HomeTab.me => const MePage(),
+              _HomeTab.checkIn => const CheckInScreen(),
+              _HomeTab.me => const MeScreen(),
             },
         ],
       ),

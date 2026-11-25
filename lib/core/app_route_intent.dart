@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:nonogram/screens/dashboard/nonogram_dashboard_page.dart';
-import 'package:nonogram/screens/guide/nonogram_guide_page.dart';
-import 'package:nonogram/screens/history/nonogram_history_detail_page.dart';
-import 'package:nonogram/screens/history/nonogram_history_page.dart';
-import 'package:nonogram/screens/play/nonogram_play_page.dart';
-import 'package:nonogram/screens/tutorial/nonogram_tutorial_page.dart';
+import 'package:nonogram/screens/dashboard/nonogram_dashboard_screen.dart';
+import 'package:nonogram/screens/guide/nonogram_guide_screen.dart';
+import 'package:nonogram/screens/history/nonogram_history_detail_screen.dart';
+import 'package:nonogram/screens/history/nonogram_history_screen.dart';
+import 'package:nonogram/screens/play/nonogram_play_screen.dart';
+import 'package:nonogram/screens/tutorial/nonogram_tutorial_screen.dart';
 
 /// Các màn hình của app. Giữ cùng tên với bản trong Nexora để code UI
 /// chuyển sang không phải sửa, nhưng điều hướng chỉ là Navigator thường.
@@ -18,7 +18,7 @@ class NonogramIntent extends AppRouteIntent<void> {
   const NonogramIntent();
 
   @override
-  Widget build() => const NonogramDashboardPage();
+  Widget build() => const NonogramDashboardScreen();
 }
 
 class NonogramPlayIntent extends AppRouteIntent<void> {
@@ -26,14 +26,14 @@ class NonogramPlayIntent extends AppRouteIntent<void> {
   const NonogramPlayIntent({this.initialLevel = 1});
 
   @override
-  Widget build() => NonogramPlayPage(initialLevel: initialLevel);
+  Widget build() => NonogramPlayScreen(initialLevel: initialLevel);
 }
 
 class NonogramCompletedResultsIntent extends AppRouteIntent<void> {
   const NonogramCompletedResultsIntent();
 
   @override
-  Widget build() => const NonogramHistoryPage();
+  Widget build() => const NonogramHistoryScreen();
 }
 
 class NonogramCompletedResultDetailIntent extends AppRouteIntent<void> {
@@ -41,14 +41,14 @@ class NonogramCompletedResultDetailIntent extends AppRouteIntent<void> {
   const NonogramCompletedResultDetailIntent({required this.level});
 
   @override
-  Widget build() => NonogramHistoryDetailPage(level: level);
+  Widget build() => NonogramHistoryDetailScreen(level: level);
 }
 
 class NonogramGuideIntent extends AppRouteIntent<void> {
   const NonogramGuideIntent();
 
   @override
-  Widget build() => const NonogramGuidePage();
+  Widget build() => const NonogramGuideScreen();
 }
 
 /// Bài hướng dẫn tương tác. Kết quả `true`: người chơi muốn xem tiếp các kỹ
@@ -57,7 +57,7 @@ class NonogramTutorialIntent extends AppRouteIntent<bool> {
   const NonogramTutorialIntent();
 
   @override
-  Widget build() => const NonogramTutorialPage();
+  Widget build() => const NonogramTutorialScreen();
 }
 
 extension AppRouteNavigation on BuildContext {

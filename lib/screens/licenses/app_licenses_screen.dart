@@ -7,17 +7,17 @@ import 'package:nonogram/data/nonogram_puzzle_source.dart';
 
 /// Ghi công hình ảnh màn chơi và font, kèm lối vào trang giấy phép phần mềm
 /// của Flutter (có cả các giấy phép đăng ký trong `registerAppLicenses`).
-class AppLicensesPage extends StatefulWidget {
-  const AppLicensesPage({super.key, this.levelSource});
+class AppLicensesScreen extends StatefulWidget {
+  const AppLicensesScreen({super.key, this.levelSource});
 
   /// Nguồn bộ màn có bản quyền, để đếm số màn của mỗi bộ hình.
   final AssetNonogramPuzzleSource? levelSource;
 
   @override
-  State<AppLicensesPage> createState() => _AppLicensesPageState();
+  State<AppLicensesScreen> createState() => _AppLicensesScreenState();
 }
 
-class _AppLicensesPageState extends State<AppLicensesPage> {
+class _AppLicensesScreenState extends State<AppLicensesScreen> {
   late final Future<Map<String, int>> _counts = _countLevels();
 
   Future<Map<String, int>> _countLevels() async {

@@ -9,15 +9,15 @@ import 'package:nonogram/core/app_theme_mode.dart';
 import 'package:nonogram/core/context_ext.dart';
 import 'package:nonogram/premium/premium_card.dart';
 import 'package:nonogram/premium/premium_controller.dart';
-import 'package:nonogram/screens/licenses/app_licenses_page.dart';
+import 'package:nonogram/screens/licenses/app_licenses_screen.dart';
 import 'package:nonogram/widgets/app_language_selector.dart';
 import 'package:provider/provider.dart';
 
 /// Tab "Tôi": gói không quảng cáo, cài đặt (giao diện, ngôn ngữ, âm thanh),
 /// trợ giúp (cách chơi, kỹ thuật giải) và các mục khác (quyền riêng tư quảng
 /// cáo, giấy phép).
-class MePage extends StatelessWidget {
-  const MePage({super.key});
+class MeScreen extends StatelessWidget {
+  const MeScreen({super.key});
 
   static T? _maybe<T>(BuildContext context, {bool listen = false}) {
     try {
@@ -150,7 +150,7 @@ class MePage extends StatelessWidget {
                       label: l10n.settingsLicenses,
                       onTap: () => Navigator.of(context).push(
                         MaterialPageRoute<void>(
-                          builder: (_) => const AppLicensesPage(),
+                          builder: (_) => const AppLicensesScreen(),
                         ),
                       ),
                     ),

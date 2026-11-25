@@ -30,7 +30,7 @@ import 'checkin/check_in_service.dart';
 import 'checkin/game_clock.dart';
 import 'checkin/trusted_clock.dart';
 import 'rating/app_rating.dart';
-import 'screens/home/app_home_page.dart';
+import 'screens/home/app_home_screen.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -257,7 +257,7 @@ class NonogramApp extends StatelessWidget {
           themeMode: themeMode,
           locale: locale,
           navigatorKey: AppNavigator.navigatorKey,
-          home: AppHomePage(showTutorialOnStart: showTutorialOnStart),
+          home: AppHomeScreen(showTutorialOnStart: showTutorialOnStart),
         ),
       ),
     );

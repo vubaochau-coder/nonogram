@@ -32,14 +32,14 @@ import 'nonogram_tutorial_controller.dart';
 /// tự giải nốt.
 ///
 /// Đóng trang trả về `true` nếu người chơi bấm "Xem các kỹ thuật giải".
-class NonogramTutorialPage extends StatefulWidget {
-  const NonogramTutorialPage({super.key});
+class NonogramTutorialScreen extends StatefulWidget {
+  const NonogramTutorialScreen({super.key});
 
   @override
-  State<NonogramTutorialPage> createState() => _NonogramTutorialPageState();
+  State<NonogramTutorialScreen> createState() => _NonogramTutorialScreenState();
 }
 
-class _NonogramTutorialPageState extends State<NonogramTutorialPage> {
+class _NonogramTutorialScreenState extends State<NonogramTutorialScreen> {
   final _controller = NonogramTutorialController();
 
   @override

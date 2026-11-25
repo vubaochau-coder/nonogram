@@ -9,7 +9,7 @@ import 'package:nonogram/engine/model/nonogram_cell_state.dart';
 import 'package:nonogram/models/nonogram_interaction_mode.dart';
 import 'package:nonogram/engine/model/nonogram_puzzle.dart';
 import 'package:nonogram/screens/tutorial/nonogram_tutorial_controller.dart';
-import 'package:nonogram/screens/tutorial/nonogram_tutorial_page.dart';
+import 'package:nonogram/screens/tutorial/nonogram_tutorial_screen.dart';
 import 'package:provider/provider.dart';
 
 import '../mocks/fake_ad_service.dart';
@@ -384,7 +384,7 @@ void main() {
     });
   });
 
-  group('NonogramTutorialPage', () {
+  group('NonogramTutorialScreen', () {
     Widget buildPage(GlobalKey<NavigatorState> navigatorKey) {
       return MaterialApp(
         navigatorKey: navigatorKey,
@@ -424,7 +424,7 @@ void main() {
       await tester.pumpWidget(buildPage(navigatorKey));
 
       final result = navigatorKey.currentState!.push<bool>(
-        MaterialPageRoute(builder: (_) => const NonogramTutorialPage()),
+        MaterialPageRoute(builder: (_) => const NonogramTutorialScreen()),
       );
       await tester.pump();
       await tester.pump(const Duration(milliseconds: 500));
@@ -600,7 +600,7 @@ void main() {
         ),
       );
       navigatorKey.currentState!.push<bool>(
-        MaterialPageRoute(builder: (_) => const NonogramTutorialPage()),
+        MaterialPageRoute(builder: (_) => const NonogramTutorialScreen()),
       );
       await tester.pump();
       await tester.pump(const Duration(milliseconds: 500));
@@ -628,7 +628,7 @@ void main() {
       final navigatorKey = GlobalKey<NavigatorState>();
       await tester.pumpWidget(buildPage(navigatorKey));
       navigatorKey.currentState!.push<bool>(
-        MaterialPageRoute(builder: (_) => const NonogramTutorialPage()),
+        MaterialPageRoute(builder: (_) => const NonogramTutorialScreen()),
       );
       await tester.pump();
       await tester.pump(const Duration(milliseconds: 500));
@@ -646,7 +646,7 @@ void main() {
       final navigatorKey = GlobalKey<NavigatorState>();
       await tester.pumpWidget(buildPage(navigatorKey));
       navigatorKey.currentState!.push<bool>(
-        MaterialPageRoute(builder: (_) => const NonogramTutorialPage()),
+        MaterialPageRoute(builder: (_) => const NonogramTutorialScreen()),
       );
       await tester.pump();
       await tester.pump(const Duration(milliseconds: 500));
@@ -660,7 +660,7 @@ void main() {
         ),
       );
       navigatorKey.currentState!.push<bool>(
-        MaterialPageRoute(builder: (_) => const NonogramTutorialPage()),
+        MaterialPageRoute(builder: (_) => const NonogramTutorialScreen()),
       );
       await tester.pump();
       await tester.pump(const Duration(milliseconds: 500));
@@ -674,7 +674,7 @@ void main() {
       await tester.pumpWidget(buildPage(navigatorKey));
 
       final result = navigatorKey.currentState!.push<bool>(
-        MaterialPageRoute(builder: (_) => const NonogramTutorialPage()),
+        MaterialPageRoute(builder: (_) => const NonogramTutorialScreen()),
       );
       await tester.pump();
       await tester.pump(const Duration(milliseconds: 500));

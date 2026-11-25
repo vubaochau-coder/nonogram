@@ -28,9 +28,8 @@ Color _missedColor(BuildContext context) =>
     ? const Color(0xFFFFB547)
     : const Color(0xFFF08C00);
 
-/// Tab điểm danh: lịch tháng (xem lại được các tháng trước, từ tháng bắt đầu
-/// dùng app), thanh chuỗi của tháng với các mốc quà, và nút "Điểm danh hôm
-/// nay" ở dưới.
+/// Tab điểm danh: lịch tháng (xem lại từ tháng bắt đầu dùng app), thanh chuỗi
+/// của tháng với các mốc quà, và nút "Điểm danh hôm nay" ở dưới.
 ///
 /// - Ngày bỏ lỡ: chạm để bù (xem quảng cáo có thưởng sau khi xác nhận).
 /// - Điểm danh / bù xong: [CheckInCelebration] đóng dấu ô ngày, thanh chuỗi
@@ -40,14 +39,15 @@ Color _missedColor(BuildContext context) =>
 ///
 /// Trong lúc hiệu ứng chạy, ô ngày, thanh chuỗi và các mốc vẫn hiện như cũ
 /// tới đúng bước của hiệu ứng.
-class CheckInTab extends StatefulWidget {
-  const CheckInTab({super.key});
+class CheckInScreen extends StatefulWidget {
+  const CheckInScreen({super.key});
 
   @override
-  State<CheckInTab> createState() => _CheckInTabState();
+  State<CheckInScreen> createState() => _CheckInScreenState();
 }
 
-class _CheckInTabState extends State<CheckInTab> with TickerProviderStateMixin {
+class _CheckInScreenState extends State<CheckInScreen>
+    with TickerProviderStateMixin {
   late DateTime _month;
   bool _busy = false;
   final _scroll = ScrollController();

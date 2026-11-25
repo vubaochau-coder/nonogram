@@ -19,7 +19,7 @@ import 'package:nonogram/screens/play/bloc/nonogram_play_bloc.dart';
 import 'package:nonogram/screens/play/bloc/nonogram_play_event.dart';
 import 'package:nonogram/screens/play/coach/nonogram_play_coach.dart';
 import 'package:nonogram/screens/play/layout/nonogram_board_layout.dart';
-import 'package:nonogram/screens/play/nonogram_play_page.dart';
+import 'package:nonogram/screens/play/nonogram_play_screen.dart';
 import 'package:nonogram/screens/play/nonogram_transformation_controller_provider.dart';
 import 'package:nonogram/screens/play/sections/nonogram_board_shell_section.dart';
 import 'package:nonogram/screens/play/sections/nonogram_board_viewport.dart';
@@ -84,7 +84,7 @@ Future<void> _pumpPlay(
           GlobalCupertinoLocalizations.delegate,
         ],
         supportedLocales: AppLocalizations.supportedLocales,
-        home: const NonogramPlayPage(),
+        home: const NonogramPlayScreen(),
       ),
     ),
   );
