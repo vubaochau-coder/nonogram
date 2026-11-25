@@ -1,8 +1,8 @@
 import 'dart:math';
 
 import 'package:flutter_test/flutter_test.dart';
-import 'package:nonogram/models/nonogram_puzzle.dart';
-import 'package:nonogram/screens/play/engine/nonogram_solver.dart';
+import 'package:nonogram/engine/model/nonogram_puzzle.dart';
+import 'package:nonogram/engine/nonogram_solver.dart';
 
 void main() {
   const solver = NonogramSolver();

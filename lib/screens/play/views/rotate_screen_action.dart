@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:lucide_icons/lucide_icons.dart';
 
-import '../engine/nonogram_board_layout.dart';
+import '../layout/nonogram_board_layout.dart';
 import '../widgets/overlay_button.dart';
 
 /// Xoay màn hình sang hướng còn lại (dọc ⇄ ngang) và khoá ở hướng đó, không

@@ -1,5 +1,5 @@
 import 'package:nonogram/models/nonogram_board_snapshot.dart';
-import 'package:nonogram/models/nonogram_cell_state.dart';
+import 'package:nonogram/engine/model/nonogram_cell_state.dart';
 import 'nonogram_play_state.dart';
 
 class NonogramSnapshotMapper {

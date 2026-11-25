@@ -7,14 +7,14 @@ import 'package:bloc_concurrency/bloc_concurrency.dart';
 import 'package:nonogram/core/app_bloc.dart';
 import 'package:nonogram/core/toast_utils.dart';
 import 'package:nonogram/models/nonogram_board_snapshot.dart';
-import 'package:nonogram/models/nonogram_cell_state.dart';
+import 'package:nonogram/engine/model/nonogram_cell_state.dart';
 import 'package:nonogram/models/nonogram_interaction_mode.dart';
 import 'package:nonogram/models/nonogram_completed_progress.dart';
 import 'package:nonogram/data/nonogram_repository.dart';
-import 'package:nonogram/models/nonogram_puzzle.dart';
+import 'package:nonogram/engine/model/nonogram_puzzle.dart';
 import 'package:nonogram/models/power_up_inventory.dart';
-import 'package:nonogram/screens/play/engine/nonogram_board_layout.dart';
-import 'package:nonogram/screens/play/engine/nonogram_engine.dart';
+import 'package:nonogram/screens/play/layout/nonogram_board_layout.dart';
+import 'package:nonogram/engine/nonogram_engine.dart';
 import 'package:nonogram/core/list_ext.dart';
 import 'nonogram_play_event.dart';
 import 'nonogram_play_state.dart';
@@ -211,7 +211,8 @@ class NonogramPlayBloc extends AppBloc<NonogramPlayEvent, NonogramPlayState> {
     final puzzle = event.puzzle;
     final snapshot = event.snapshot;
 
-    final initialGrid = _engine.restoreGrid(puzzle: puzzle, snapshot: snapshot);
+    final saved = snapshot?.puzzleId == puzzle.id ? snapshot?.gridData : null;
+    final initialGrid = _engine.restoreGrid(puzzle: puzzle, savedGrid: saved);
 
     final startTime = snapshot?.startTime ?? DateTime.now();
     final interactionMode = snapshot?.interactionMode ?? state.interactionMode;
@@ -463,7 +464,7 @@ class NonogramPlayBloc extends AppBloc<NonogramPlayEvent, NonogramPlayState> {
   double _autoCellSize(NonogramPuzzle puzzle) {
     final viewport = _viewportSize;
     if (viewport == null) return NonogramBoardLayout.maxCellSize;
-    return _engine.fitCellSize(puzzle: puzzle, viewport: viewport);
+    return NonogramBoardLayout.fitCellSizeFor(puzzle, viewport);
   }
 
   /// Khung nhìn đổi (lần đo đầu, xoay màn hình, bật/tắt toàn màn hình):
@@ -581,12 +582,11 @@ class NonogramPlayBloc extends AppBloc<NonogramPlayEvent, NonogramPlayState> {
         state.remainingWands <= 0) {
       return;
     }
-    final axis = event.isRow ? Axis.horizontal : Axis.vertical;
     final length = event.isRow ? puzzle.rows : puzzle.cols;
     if (event.index < 0 || event.index >= length) return;
 
     if (_engine.lineMismatchCount(
-          axis: axis,
+          isRow: event.isRow,
           index: event.index,
           puzzle: puzzle,
           gridData: state.gridData,
@@ -601,7 +601,7 @@ class NonogramPlayBloc extends AppBloc<NonogramPlayEvent, NonogramPlayState> {
     }
 
     final newGrid = _engine.revealLine(
-      axis: axis,
+      isRow: event.isRow,
       index: event.index,
       puzzle: puzzle,
       gridData: state.gridData,
@@ -630,7 +630,7 @@ class NonogramPlayBloc extends AppBloc<NonogramPlayEvent, NonogramPlayState> {
     emit(
       NonogramPlayHintAppliedState.fromState(
         nextState,
-        axis: axis,
+        axis: event.isRow ? Axis.horizontal : Axis.vertical,
         lineIndex: event.index,
       ),
     );

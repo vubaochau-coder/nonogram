@@ -22,8 +22,8 @@
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:nonogram/models/nonogram_puzzle.dart';
-import 'package:nonogram/screens/play/engine/nonogram_solver.dart';
+import 'package:nonogram/engine/model/nonogram_puzzle.dart';
+import 'package:nonogram/engine/nonogram_solver.dart';
 
 void main(List<String> args) {
   final positional = args.where((a) => !a.startsWith('--')).toList();

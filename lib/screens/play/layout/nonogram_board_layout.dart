@@ -1,7 +1,7 @@
 import 'dart:math';
 import 'dart:ui';
 
-import 'package:nonogram/models/nonogram_puzzle.dart';
+import 'package:nonogram/engine/model/nonogram_puzzle.dart';
 
 /// Vùng của bàn chơi dưới một điểm chạm.
 enum NonogramBoardRegion { grid, leftStrip, topStrip, empty }
@@ -51,6 +51,14 @@ class NonogramBoardLayout {
       cellSize: cellSize,
     );
   }
+
+  /// Cell size for a new level of [puzzle] in [viewport] ([fitCellSize]).
+  static double fitCellSizeFor(NonogramPuzzle puzzle, Size viewport) =>
+      NonogramBoardLayout.forPuzzle(
+        puzzle: puzzle,
+        cellSize: maxCellSize,
+        viewport: viewport,
+      ).fitCellSize();
 
   /// Khung nhìn ngang hay dọc. Bàn chơi, bloc (tự co cỡ ô) và hàng nút đều
   /// dùng chung quy tắc này để khớp nhau.

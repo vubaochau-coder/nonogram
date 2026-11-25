@@ -12,7 +12,7 @@ import 'package:nonogram/core/app_theme.dart';
 import 'package:nonogram/core/context_ext.dart';
 import 'package:nonogram/core/onboarding_preferences.dart';
 import 'package:nonogram/l10n/app_localizations.dart';
-import 'package:nonogram/models/nonogram_cell_state.dart';
+import 'package:nonogram/engine/model/nonogram_cell_state.dart';
 import 'package:nonogram/models/nonogram_interaction_mode.dart';
 import 'package:nonogram/screens/painters/nonogram_cells_painter.dart';
 import 'package:nonogram/screens/painters/nonogram_grid_painter.dart';

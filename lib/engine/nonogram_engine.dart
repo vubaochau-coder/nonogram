@@ -1,26 +1,12 @@
 import 'dart:math';
 
-import 'package:flutter/painting.dart';
-import 'package:nonogram/models/nonogram_cell_state.dart';
-import 'package:nonogram/models/nonogram_puzzle.dart';
-import 'package:nonogram/models/nonogram_board_snapshot.dart';
-import 'package:nonogram/screens/play/engine/nonogram_board_layout.dart';
+import 'package:nonogram/engine/model/nonogram_cell_state.dart';
+import 'package:nonogram/engine/model/nonogram_puzzle.dart';
 
 /// A stateless rule engine for Nonogram logic.
 /// It provides pure functions to calculate next states based on inputs.
 final class NonogramEngine {
   const NonogramEngine();
-
-  /// Cỡ ô cho màn mới: lớn nhất có thể để cả lưới vừa khung nhìn (sau khi
-  /// trừ hai dải gợi ý), trong khoảng [NonogramBoardLayout.minCellSize] ..
-  /// [NonogramBoardLayout.maxCellSize]; lưới lớn hơn thì kéo để xem.
-  double fitCellSize({required NonogramPuzzle puzzle, required Size viewport}) {
-    return NonogramBoardLayout.forPuzzle(
-      puzzle: puzzle,
-      cellSize: NonogramBoardLayout.maxCellSize,
-      viewport: viewport,
-    ).fitCellSize();
-  }
 
   List<int> deriveLineRuns(List<NonogramCellState> line) {
     final runs = <int>[];
@@ -175,19 +161,19 @@ final class NonogramEngine {
     return newGrid;
   }
 
-  /// Số ô sai so với đáp án trên một hàng ([Axis.horizontal]) hoặc cột:
+  /// Số ô sai so với đáp án trên một hàng ([isRow]) hoặc cột:
   /// ô phải tô mà chưa tô, hoặc ô không được tô mà đang tô.
   int lineMismatchCount({
-    required Axis axis,
+    required bool isRow,
     required int index,
     required NonogramPuzzle puzzle,
     required List<List<NonogramCellState>> gridData,
   }) {
-    final length = axis == Axis.horizontal ? puzzle.cols : puzzle.rows;
+    final length = isRow ? puzzle.cols : puzzle.rows;
     var mismatch = 0;
     for (var i = 0; i < length; i++) {
-      final r = axis == Axis.horizontal ? index : i;
-      final c = axis == Axis.horizontal ? i : index;
+      final r = isRow ? index : i;
+      final c = isRow ? i : index;
       final filled = gridData[r][c] == NonogramCellState.filled;
       if ((puzzle.solution[r][c] == 1) != filled) mismatch++;
     }
@@ -196,7 +182,7 @@ final class NonogramEngine {
 
   /// Reveals a whole line based on the solution.
   List<List<NonogramCellState>> revealLine({
-    required Axis axis,
+    required bool isRow,
     required int index,
     required NonogramPuzzle puzzle,
     required List<List<NonogramCellState>> gridData,
@@ -205,7 +191,7 @@ final class NonogramEngine {
         .map((r) => List<NonogramCellState>.from(r))
         .toList();
 
-    if (axis == Axis.horizontal) {
+    if (isRow) {
       for (int c = 0; c < puzzle.cols; c++) {
         newGrid[index][c] = puzzle.solution[index][c] == 1
             ? NonogramCellState.filled
@@ -246,20 +232,17 @@ final class NonogramEngine {
     return true;
   }
 
-  /// Restores grid data from a snapshot if available and valid.
-  /// Otherwise, returns a fresh empty grid.
+  /// Restores a saved grid of [puzzle] if it has the puzzle's dimensions.
+  /// Otherwise, returns a fresh empty grid. Pinned cells are always applied.
   List<List<NonogramCellState>> restoreGrid({
     required NonogramPuzzle puzzle,
-    required NonogramBoardSnapshot? snapshot,
+    required List<List<NonogramCellState>>? savedGrid,
   }) {
     final grid =
-        snapshot != null &&
-            snapshot.puzzleId == puzzle.id &&
-            snapshot.gridData.length == puzzle.rows &&
-            snapshot.gridData.every((row) => row.length == puzzle.cols)
-        ? snapshot.gridData
-              .map((row) => List<NonogramCellState>.from(row))
-              .toList()
+        savedGrid != null &&
+            savedGrid.length == puzzle.rows &&
+            savedGrid.every((row) => row.length == puzzle.cols)
+        ? savedGrid.map((row) => List<NonogramCellState>.from(row)).toList()
         : createEmptyGrid(rows: puzzle.rows, cols: puzzle.cols);
     applyPinnedCells(puzzle: puzzle, grid: grid);
     return grid;

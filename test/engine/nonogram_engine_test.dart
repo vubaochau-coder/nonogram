@@ -1,10 +1,9 @@
 import 'dart:math';
 
-import 'package:nonogram/models/nonogram_cell_state.dart';
-import 'package:nonogram/models/nonogram_puzzle.dart';
-import 'package:nonogram/screens/play/engine/nonogram_engine.dart';
+import 'package:nonogram/engine/model/nonogram_cell_state.dart';
+import 'package:nonogram/engine/model/nonogram_puzzle.dart';
+import 'package:nonogram/engine/nonogram_engine.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:flutter/painting.dart';
 
 void main() {
   const engine = NonogramEngine();
@@ -305,7 +304,7 @@ void main() {
         (_) => List.filled(5, NonogramCellState.empty),
       );
       final newGrid = engine.revealLine(
-        axis: Axis.horizontal,
+        isRow: true,
         index: 0,
         puzzle: puzzle,
         gridData: grid,
@@ -325,7 +324,7 @@ void main() {
         (_) => List.filled(5, NonogramCellState.empty),
       );
       final newGrid = engine.revealLine(
-        axis: Axis.vertical,
+        isRow: false,
         index: 1,
         puzzle: puzzle,
         gridData: grid,

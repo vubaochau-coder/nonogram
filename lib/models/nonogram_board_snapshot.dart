@@ -1,4 +1,4 @@
-import 'package:nonogram/models/nonogram_cell_state.dart';
+import 'package:nonogram/engine/model/nonogram_cell_state.dart';
 import 'package:nonogram/models/nonogram_interaction_mode.dart';
 
 /// Represents a persistent save state of the nonogram grid and all runtime session info.
