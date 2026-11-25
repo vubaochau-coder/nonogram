@@ -138,10 +138,11 @@ lib/
     nonogram_puzzle_source.dart   Đọc màn chơi từ assets/levels/
     hive_nonogram_local_service.dart  Lưu ván dở + màn đã hoàn thành
     nonogram_repository.dart      Gom dữ liệu màn chơi + tiến độ, logic campaign
-  models/                    Puzzle, snapshot ván dở, kết quả hoàn thành
+  engine/                    Lõi game, Dart thuần (không import Flutter): puzzle, trạng thái ô, luật, solver
+  models/                    Snapshot ván dở, kết quả hoàn thành, kho gợi ý / gậy phép
   screens/
     dashboard/               Màn chính: chơi tiếp / thử thách tiếp theo, thống kê
-    play/                    Gameplay (bloc, engine, solver, bố cục bàn chơi, UI)
+    play/                    Gameplay (bloc, bố cục bàn chơi trong layout/, UI)
     history/                 Danh sách + chi tiết màn đã hoàn thành
     guide/                   Hướng dẫn cách giải (lý thuyết, có lối vào bài tập)
     tutorial/                Bài hướng dẫn tương tác 5×5 ("Cách chơi")
