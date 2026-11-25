@@ -9,7 +9,8 @@
 //     missingBaselineFiles);
 //   * lib/engine/ is pure Dart: no Flutter, no dart:ui, nothing from lib/
 //     outside lib/engine/;
-//   * tools/ only uses lib/engine/ from the app.
+//   * tools/ only uses lib/engine/ from the app;
+//   * screens are named *_screen.dart, never *_page.dart.
 //
 // Run from the repo root: dart run tools/check_conventions.dart
 import 'dart:io';
@@ -124,6 +125,12 @@ String? _importProblem(String path, String uri) {
   return null;
 }
 
+/// Screens are `*_screen.dart`; the old `*_page.dart` naming is rejected.
+Violation? checkFileName(String path) =>
+    RegExp(r'_page(_test)?\.dart$').hasMatch(path)
+    ? Violation(path, 'name screens *_screen.dart, not *_page.dart')
+    : null;
+
 /// Checks [files] (repo-relative path -> line count) against [baseline].
 List<Violation> checkLengths(
   Map<String, int> files,
@@ -178,8 +185,10 @@ void main() {
   }
   final violations = [
     ...checkLengths(lengths, baseline),
-    for (final MapEntry(key: path, value: src) in sources.entries)
+    for (final MapEntry(key: path, value: src) in sources.entries) ...[
       ...checkImports(path, src),
+      ?checkFileName(path),
+    ],
   ];
   if (violations.isEmpty) {
     stdout.writeln('Conventions OK (${baseline.length} file(s) in baseline).');

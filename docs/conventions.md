@@ -51,9 +51,9 @@
 
 - Chuẩn Dart: file / thư mục `snake_case`, class / enum `PascalCase`, biến /
   hàm `camelCase`.
-- Màn hình mới đặt tên `*_screen.dart` (class `...Screen`), widget thành phần
-  `*_widget.dart` hoặc nằm trong `widgets/` / `sections/`. Các file
-  `*_page.dart` hiện có sẽ được đổi tên trong một pull request riêng.
+- Màn hình đặt tên `*_screen.dart` (class `...Screen`), widget thành phần
+  `*_widget.dart` hoặc nằm trong `widgets/` / `sections/`. Không dùng
+  `*_page.dart` (`check_conventions` chặn).
 - Từ vựng game dùng thống nhất, không thay bằng từ đồng nghĩa:
 
 | Khái niệm | Trong code |

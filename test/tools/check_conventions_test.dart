@@ -104,4 +104,11 @@ test/b_test.dart   950  # trailing comment
     final source = "import 'package:flutter/material.dart';\n";
     expect(checkImports('lib/screens/play/a.dart', source), isEmpty);
   });
+
+  test('screens are *_screen.dart, not *_page.dart', () {
+    expect(checkFileName('lib/screens/me/me_screen.dart'), isNull);
+    expect(checkFileName('lib/screens/me/me_page.dart'), isNotNull);
+    expect(checkFileName('test/screens/me_page_test.dart'), isNotNull);
+    expect(checkFileName('lib/screens/home/page_dots.dart'), isNull);
+  });
 }
