@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:nonogram/ads/ad_service.dart';
-import 'package:nonogram/checkin/check_in_page.dart';
+import 'package:nonogram/checkin/check_in_screen.dart';
 import 'package:nonogram/checkin/check_in_policy.dart';
 import 'package:nonogram/checkin/check_in_service.dart';
 import 'package:nonogram/checkin/game_clock.dart';
@@ -68,7 +68,7 @@ void main() {
             GlobalCupertinoLocalizations.delegate,
           ],
           supportedLocales: AppLocalizations.supportedLocales,
-          home: const CheckInTab(),
+          home: const CheckInScreen(),
         ),
       ),
     );
@@ -271,7 +271,7 @@ void main() {
     await tester.tap(prev);
     await tester.pump();
     final material = MaterialLocalizations.of(
-      tester.element(find.byType(CheckInTab)),
+      tester.element(find.byType(CheckInScreen)),
     );
     expect(
       find.text(material.formatMonthYear(DateTime(2026, 10))),

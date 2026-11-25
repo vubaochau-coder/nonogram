@@ -14,7 +14,7 @@ import 'package:nonogram/engine/model/nonogram_puzzle.dart';
 import 'package:nonogram/screens/play/bloc/nonogram_play_bloc.dart';
 import 'package:nonogram/screens/play/bloc/nonogram_play_event.dart';
 import 'package:nonogram/screens/play/celebration/solve_celebration.dart';
-import 'package:nonogram/screens/play/nonogram_play_page.dart';
+import 'package:nonogram/screens/play/nonogram_play_screen.dart';
 import 'package:nonogram/screens/play/nonogram_play_sounds.dart';
 import 'package:nonogram/screens/play/sections/nonogram_board_viewport.dart';
 import 'package:nonogram/screens/play/sections/nonogram_completion_result_section.dart';
@@ -91,7 +91,7 @@ Future<void> _pumpPlay(
           GlobalCupertinoLocalizations.delegate,
         ],
         supportedLocales: AppLocalizations.supportedLocales,
-        home: const NonogramPlayPage(),
+        home: const NonogramPlayScreen(),
       ),
     ),
   );

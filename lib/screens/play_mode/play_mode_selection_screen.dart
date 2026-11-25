@@ -10,8 +10,8 @@ typedef PlayModeStats = ({int solved, int total});
 typedef PlayModeStatsLoader = Future<PlayModeStats> Function(PlayMode mode);
 
 /// Màn chọn chế độ chơi (chỉ có ở flavor `dev`), hiện trước màn chính.
-class PlayModeSelectionPage extends StatefulWidget {
-  const PlayModeSelectionPage({
+class PlayModeSelectionScreen extends StatefulWidget {
+  const PlayModeSelectionScreen({
     super.key,
     required this.onSelected,
     required this.loadStats,
@@ -25,10 +25,11 @@ class PlayModeSelectionPage extends StatefulWidget {
   final PlayMode? lastMode;
 
   @override
-  State<PlayModeSelectionPage> createState() => _PlayModeSelectionPageState();
+  State<PlayModeSelectionScreen> createState() =>
+      _PlayModeSelectionScreenState();
 }
 
-class _PlayModeSelectionPageState extends State<PlayModeSelectionPage> {
+class _PlayModeSelectionScreenState extends State<PlayModeSelectionScreen> {
   late final Map<PlayMode, Future<PlayModeStats>> _stats = {
     for (final mode in PlayMode.values) mode: widget.loadStats(mode),
   };

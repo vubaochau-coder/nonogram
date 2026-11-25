@@ -7,10 +7,10 @@ import 'package:nonogram/core/app_theme.dart';
 import 'package:nonogram/data/nonogram_repository.dart';
 import 'package:nonogram/l10n/app_localizations.dart';
 import 'package:nonogram/premium/premium_controller.dart';
-import 'package:nonogram/screens/me/me_page.dart';
+import 'package:nonogram/screens/me/me_screen.dart';
 import 'package:nonogram/tester/tester_purchase_gateway.dart';
 import 'package:nonogram/tester/tester_settings.dart';
-import 'package:nonogram/tester/tester_tools_page.dart';
+import 'package:nonogram/tester/tester_tools_screen.dart';
 import 'package:provider/provider.dart';
 
 import '../mocks/fake_nonogram_repository.dart';
@@ -83,17 +83,17 @@ void main() {
   testWidgets('me page links to the tools only in the dev build', (
     tester,
   ) async {
-    await pump(tester, const MePage(), withTester: false);
+    await pump(tester, const MeScreen(), withTester: false);
     expect(find.byKey(const ValueKey('me-tester-tools')), findsNothing);
 
-    await pump(tester, const MePage());
+    await pump(tester, const MeScreen());
     await tester.tap(find.byKey(const ValueKey('me-tester-tools')));
     await tester.pumpAndSettle();
-    expect(find.byType(TesterToolsPage), findsOneWidget);
+    expect(find.byType(TesterToolsScreen), findsOneWidget);
   });
 
   testWidgets('time travel, fast check-in and fake purchase', (tester) async {
-    await pump(tester, const TesterToolsPage());
+    await pump(tester, const TesterToolsScreen());
     expect(find.text('13/11/2026'), findsOneWidget);
 
     await tester.tap(find.text('+1 ngày'));

@@ -10,8 +10,8 @@ import 'sections/nonogram_dashboard_hero_section.dart';
 import 'sections/nonogram_dashboard_progress_section.dart';
 import 'sections/nonogram_dashboard_recent_section.dart';
 
-class NonogramDashboardPage extends StatelessWidget {
-  const NonogramDashboardPage({super.key, this.showTutorialOnStart = false});
+class NonogramDashboardScreen extends StatelessWidget {
+  const NonogramDashboardScreen({super.key, this.showTutorialOnStart = false});
 
   /// Mở bài hướng dẫn "Cách chơi" ngay khi vào (lần đầu mở app).
   final bool showTutorialOnStart;

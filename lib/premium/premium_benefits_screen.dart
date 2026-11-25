@@ -12,8 +12,8 @@ import 'premium_controller.dart';
 /// được, hai vật phẩm hỗ trợ (gợi ý / gậy phép) và sự khác nhau giữa lượt có
 /// thời hạn (icon vàng kèm đồng hồ) và lượt vĩnh viễn, cùng thứ tự app tiêu
 /// lượt. Mở từ nút "Xem chi tiết quyền lợi" trên thẻ gói.
-class PremiumBenefitsPage extends StatelessWidget {
-  const PremiumBenefitsPage({super.key});
+class PremiumBenefitsScreen extends StatelessWidget {
+  const PremiumBenefitsScreen({super.key});
 
   @override
   Widget build(BuildContext context) {

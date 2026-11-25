@@ -5,7 +5,7 @@ import 'package:nonogram/core/context_ext.dart';
 import 'package:nonogram/core/toast_utils.dart';
 import 'package:provider/provider.dart';
 
-import 'premium_benefits_page.dart';
+import 'premium_benefits_screen.dart';
 import 'premium_controller.dart';
 import 'purchase_gateway.dart';
 
@@ -104,7 +104,7 @@ class _OfferCard extends StatelessWidget {
   }
 }
 
-/// Nút chữ "Xem chi tiết quyền lợi": mở [PremiumBenefitsPage].
+/// Nút chữ "Xem chi tiết quyền lợi": mở [PremiumBenefitsScreen].
 class _ViewBenefitsButton extends StatelessWidget {
   const _ViewBenefitsButton({this.divider = false});
 
@@ -128,7 +128,7 @@ class _ViewBenefitsButton extends StatelessWidget {
             ),
             onPressed: () => Navigator.of(context).push(
               MaterialPageRoute<void>(
-                builder: (_) => const PremiumBenefitsPage(),
+                builder: (_) => const PremiumBenefitsScreen(),
               ),
             ),
             icon: const Icon(LucideIcons.sparkles, size: 16),

@@ -20,8 +20,8 @@ import 'tester_settings.dart';
 /// cáo xen kẽ, lời mời đánh giá.
 ///
 /// Chuỗi trên màn này không dịch: chỉ dành cho người test nội bộ.
-class TesterToolsPage extends StatelessWidget {
-  const TesterToolsPage({super.key});
+class TesterToolsScreen extends StatelessWidget {
+  const TesterToolsScreen({super.key});
 
   static T? _maybe<T>(BuildContext context) {
     try {

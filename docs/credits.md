@@ -25,7 +25,7 @@ Các màn CC BY-SA phải tiếp tục để dưới CC BY-SA 4.0. Không dùng 
 của nonogram-db (nhóm qnonograms) và các màn là logo (Blender, GNOME, KDE,
 Ubuntu, Wikimedia).
 
-App hiện nội dung ghi công này ở Cài đặt → Giấy phép (`AppLicensesPage`);
+App hiện nội dung ghi công này ở Cài đặt → Giấy phép (`AppLicensesScreen`);
 văn bản giấy phép đầy đủ nằm trong `assets/licenses/` và được đăng ký vào trang
 giấy phép phần mềm của Flutter:
 

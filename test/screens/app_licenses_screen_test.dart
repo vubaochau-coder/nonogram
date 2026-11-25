@@ -6,7 +6,7 @@ import 'package:nonogram/core/app_flavor.dart';
 import 'package:nonogram/core/app_licenses.dart';
 import 'package:nonogram/core/app_theme.dart';
 import 'package:nonogram/l10n/app_localizations.dart';
-import 'package:nonogram/screens/licenses/app_licenses_page.dart';
+import 'package:nonogram/screens/licenses/app_licenses_screen.dart';
 
 Future<void> _pump(WidgetTester tester, AppFlavor flavor) async {
   tester.view.physicalSize = const Size(412, 1400);
@@ -23,7 +23,7 @@ Future<void> _pump(WidgetTester tester, AppFlavor flavor) async {
         GlobalCupertinoLocalizations.delegate,
       ],
       supportedLocales: AppLocalizations.supportedLocales,
-      home: AppLicensesPage(flavor: flavor),
+      home: AppLicensesScreen(flavor: flavor),
     ),
   );
   // Đếm số màn đọc asset thật: chạy ngoài fake async.

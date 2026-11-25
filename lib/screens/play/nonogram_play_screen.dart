@@ -22,16 +22,16 @@ import 'coach/nonogram_play_coach.dart';
 import 'nonogram_play_sounds.dart';
 import 'package:nonogram/core/app_sounds.dart';
 
-class NonogramPlayPage extends StatefulWidget {
+class NonogramPlayScreen extends StatefulWidget {
   final int initialLevel;
 
-  const NonogramPlayPage({super.key, this.initialLevel = 1});
+  const NonogramPlayScreen({super.key, this.initialLevel = 1});
 
   @override
-  State<NonogramPlayPage> createState() => _NonogramPlayPageState();
+  State<NonogramPlayScreen> createState() => _NonogramPlayScreenState();
 }
 
-class _NonogramPlayPageState extends State<NonogramPlayPage> {
+class _NonogramPlayScreenState extends State<NonogramPlayScreen> {
   late final TransformationController _transformationController;
 
   @override

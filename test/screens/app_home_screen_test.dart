@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:nonogram/checkin/check_in_page.dart';
+import 'package:nonogram/checkin/check_in_screen.dart';
 import 'package:nonogram/checkin/check_in_service.dart';
 import 'package:nonogram/checkin/game_clock.dart';
 import 'package:nonogram/core/app_sounds.dart';
@@ -9,9 +9,9 @@ import 'package:nonogram/core/app_theme.dart';
 import 'package:nonogram/core/app_theme_mode.dart';
 import 'package:nonogram/data/nonogram_repository.dart';
 import 'package:nonogram/l10n/app_localizations.dart';
-import 'package:nonogram/screens/dashboard/nonogram_dashboard_page.dart';
-import 'package:nonogram/screens/home/app_home_page.dart';
-import 'package:nonogram/screens/me/me_page.dart';
+import 'package:nonogram/screens/dashboard/nonogram_dashboard_screen.dart';
+import 'package:nonogram/screens/home/app_home_screen.dart';
+import 'package:nonogram/screens/me/me_screen.dart';
 import 'package:provider/provider.dart';
 
 import '../mocks/fake_nonogram_repository.dart';
@@ -60,7 +60,7 @@ void main() {
             GlobalCupertinoLocalizations.delegate,
           ],
           supportedLocales: AppLocalizations.supportedLocales,
-          home: const AppHomePage(),
+          home: const AppHomeScreen(),
         ),
       ),
     );
@@ -82,14 +82,14 @@ void main() {
     tester,
   ) async {
     await pump(tester);
-    expect(find.byType(NonogramDashboardPage), findsOneWidget);
+    expect(find.byType(NonogramDashboardScreen), findsOneWidget);
     expect(find.text('Chính'), findsOneWidget);
     expect(find.text('Tôi'), findsOneWidget);
     expect(dotVisible(tester), isTrue);
 
     await tester.tap(find.byKey(const ValueKey('home-tab-checkIn')));
     await tester.pump();
-    expect(find.byType(CheckInTab).hitTestable(), findsOneWidget);
+    expect(find.byType(CheckInScreen).hitTestable(), findsOneWidget);
 
     await checkIn.checkIn();
     await tester.pump();
@@ -108,7 +108,7 @@ void main() {
     await pump(tester);
     await tester.tap(find.byKey(const ValueKey('home-tab-me')));
     await tester.pump();
-    expect(find.byType(MePage).hitTestable(), findsOneWidget);
+    expect(find.byType(MeScreen).hitTestable(), findsOneWidget);
 
     expect(themeMode.isDark, isFalse);
     await tester.tap(find.byKey(const ValueKey('me-theme')));

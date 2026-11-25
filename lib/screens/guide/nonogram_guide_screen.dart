@@ -7,8 +7,8 @@ import 'package:nonogram/screens/guide/models/nonogram_guide_item.dart';
 import 'package:flutter/material.dart';
 import 'package:lucide_icons/lucide_icons.dart';
 
-class NonogramGuidePage extends StatelessWidget {
-  const NonogramGuidePage({super.key});
+class NonogramGuideScreen extends StatelessWidget {
+  const NonogramGuideScreen({super.key});
 
   List<NonogramGuideItem> _guideItems(BuildContext context) {
     final l10n = context.l10n;

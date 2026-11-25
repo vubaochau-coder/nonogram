@@ -4,7 +4,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:nonogram/core/app_theme.dart';
 import 'package:nonogram/core/play_mode.dart';
 import 'package:nonogram/l10n/app_localizations.dart';
-import 'package:nonogram/screens/play_mode/play_mode_selection_page.dart';
+import 'package:nonogram/screens/play_mode/play_mode_selection_screen.dart';
 
 Future<void> _pump(
   WidgetTester tester, {
@@ -22,7 +22,7 @@ Future<void> _pump(
         GlobalCupertinoLocalizations.delegate,
       ],
       supportedLocales: AppLocalizations.supportedLocales,
-      home: PlayModeSelectionPage(
+      home: PlayModeSelectionScreen(
         lastMode: lastMode,
         onSelected: onSelected,
         loadStats: (mode) async => mode == PlayMode.user
