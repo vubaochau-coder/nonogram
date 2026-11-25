@@ -9,17 +9,18 @@ import 'package:intl/intl.dart';
 import 'package:nonogram/data/nonogram_repository.dart';
 import 'package:nonogram/screens/play/widgets/nonogram_completion_board.dart';
 
-class NonogramHistoryDetailPage extends StatefulWidget {
+class NonogramHistoryDetailScreen extends StatefulWidget {
   final int level;
 
-  const NonogramHistoryDetailPage({super.key, required this.level});
+  const NonogramHistoryDetailScreen({super.key, required this.level});
 
   @override
-  State<NonogramHistoryDetailPage> createState() =>
-      _NonogramHistoryDetailPageState();
+  State<NonogramHistoryDetailScreen> createState() =>
+      _NonogramHistoryDetailScreenState();
 }
 
-class _NonogramHistoryDetailPageState extends State<NonogramHistoryDetailPage> {
+class _NonogramHistoryDetailScreenState
+    extends State<NonogramHistoryDetailScreen> {
   late Future<({NonogramCompletedProgress record, NonogramPuzzle puzzle})?>
   _detailFuture;
 

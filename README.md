@@ -39,12 +39,12 @@ Hỗ trợ Android, iOS và Web.
 
 ## Điều hướng
 
-Thanh điều hướng dưới có 3 tab (`lib/screens/home/app_home_page.dart`):
+Thanh điều hướng dưới có 3 tab (`lib/screens/home/app_home_screen.dart`):
 
-- **Chính** (`NonogramDashboardPage`): màn tiếp theo kèm nút Chơi, tiến trình,
+- **Chính** (`NonogramDashboardScreen`): màn tiếp theo kèm nút Chơi, tiến trình,
   vừa giải xong.
-- **Điểm danh** (`CheckInTab`): xem [Điểm danh hằng ngày](#điểm-danh-hằng-ngày).
-- **Tôi** (`MePage`): gói không quảng cáo; cài đặt (giao diện: bấm là đổi
+- **Điểm danh** (`CheckInScreen`): xem [Điểm danh hằng ngày](#điểm-danh-hằng-ngày).
+- **Tôi** (`MeScreen`): gói không quảng cáo; cài đặt (giao diện: bấm là đổi
   Sáng ⇄ Tối, ngôn ngữ, âm thanh); trợ giúp (cách chơi, kỹ thuật giải); quyền
   riêng tư quảng cáo (khi bắt buộc), giấy phép, đổi chế độ chơi (bản `dev`).
 

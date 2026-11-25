@@ -15,8 +15,8 @@ import 'bloc/nonogram_history_bloc.dart';
 import 'bloc/nonogram_history_event.dart';
 import 'bloc/nonogram_history_state.dart';
 
-class NonogramHistoryPage extends StatelessWidget {
-  const NonogramHistoryPage({super.key});
+class NonogramHistoryScreen extends StatelessWidget {
+  const NonogramHistoryScreen({super.key});
 
   @override
   Widget build(BuildContext context) {

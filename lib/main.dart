@@ -34,8 +34,8 @@ import 'checkin/check_in_service.dart';
 import 'checkin/game_clock.dart';
 import 'checkin/trusted_clock.dart';
 import 'rating/app_rating.dart';
-import 'screens/home/app_home_page.dart';
-import 'screens/play_mode/play_mode_selection_page.dart';
+import 'screens/home/app_home_screen.dart';
+import 'screens/play_mode/play_mode_selection_screen.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -300,7 +300,7 @@ class PlayModeSelectionApp extends StatelessWidget {
     return _AppMaterial(
       themeMode: themeMode,
       locale: locale,
-      home: PlayModeSelectionPage(
+      home: PlayModeSelectionScreen(
         onSelected: onSelected,
         loadStats: loadStats,
         lastMode: lastMode,
@@ -381,7 +381,7 @@ class NonogramApp extends StatelessWidget {
           themeMode: themeMode,
           locale: locale,
           navigatorKey: AppNavigator.navigatorKey,
-          home: AppHomePage(showTutorialOnStart: showTutorialOnStart),
+          home: AppHomeScreen(showTutorialOnStart: showTutorialOnStart),
         ),
       ),
     );
