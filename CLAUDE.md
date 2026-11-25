@@ -26,8 +26,8 @@ trên repo này.
   được ngắn đi; không thêm file mới vào danh sách.
 - `lib/engine/` là Dart thuần: cấm Flutter, `dart:ui` và mọi file `lib/` ngoài
   `engine/`. `tools/` chỉ dùng `lib/engine/`.
-- Màn hình mới `*_screen.dart`, widget thành phần `*_widget.dart` hoặc trong
-  `widgets/` / `sections/`.
+- Màn hình `*_screen.dart` (không dùng `*_page.dart`), widget thành phần
+  `*_widget.dart` hoặc trong `widgets/` / `sections/`.
 - Tên trong code và comment mới bằng tiếng Anh; tài liệu bằng tiếng Việt.
   Comment tiếng Việt có sẵn không cần dịch.
 - Dùng đúng từ vựng game trong `docs/conventions.md` (`clue`, `filled`,
