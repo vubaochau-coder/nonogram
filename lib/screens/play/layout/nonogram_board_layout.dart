@@ -71,12 +71,14 @@ class NonogramBoardLayout {
   /// Màn ngang: chừa bên phải cho cột nút công cụ.
   static const double railReserve = 60;
 
+  /// Màn dọc: chừa đáy cho cụm hoàn tác + Tô / X (lưới vẽ tràn bên dưới).
+  static const double dockReserve = 156;
+
   /// Khoảng cách tối thiểu từ mép trái và mép phải/dưới.
   static const double edgeInset = 8;
   static const double endMargin = 16;
 
-  /// Khoảng cỡ ô (dp): bàn chơi dùng cỡ lớn nhất vừa khung nhìn trong
-  /// khoảng này.
+  /// Khoảng cỡ ô (dp): bàn chơi dùng cỡ lớn nhất vừa khung nhìn.
   static const double minCellSize = 28;
   static const double maxCellSize = 44;
 
@@ -104,10 +106,11 @@ class NonogramBoardLayout {
 
   double get topReserve => isLandscape ? 0 : toolbarReserve;
   double get rightReserve => isLandscape ? railReserve : 0;
+  double get bottomReserve => isLandscape ? 0 : dockReserve;
 
   /// Chiều rộng / cao dành cho dải + lưới.
   double get _roomWidth => viewport.width - _startX - rightReserve;
-  double get _roomHeight => viewport.height - _startY;
+  double get _roomHeight => viewport.height - _startY - bottomReserve;
 
   double get _naturalDepth =>
       (cellSize * clueDepthRatio).clamp(minClueDepth, maxClueDepth);
@@ -176,7 +179,7 @@ class NonogramBoardLayout {
   );
 
   ({double min, double max}) get yRange => _range(
-    end: viewport.height,
+    end: viewport.height - bottomReserve,
     start: _startY,
     strip: topStripHeight,
     grid: gridHeight,
@@ -202,7 +205,7 @@ class NonogramBoardLayout {
     stickyLeft(t) + leftStripWidth,
     stickyTop(t) + topStripHeight,
     viewport.width - rightReserve,
-    viewport.height,
+    viewport.height - bottomReserve,
   );
 
   /// Vùng cả tranh nằm gọn khi vừa giải xong (dải số đã mờ đi): cả khung
@@ -211,7 +214,7 @@ class NonogramBoardLayout {
     endMargin,
     max(topReserve, endMargin),
     viewport.width - rightReserve - endMargin,
-    viewport.height - endMargin,
+    viewport.height - bottomReserve - endMargin,
   );
 
   /// Ô dưới điểm [p] (toạ độ khung nhìn), hoặc null nếu điểm nằm ngoài lưới

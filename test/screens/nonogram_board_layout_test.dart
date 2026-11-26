@@ -55,15 +55,23 @@ void main() {
       expect(layout.stickyTop(scrolled), NonogramBoardLayout.toolbarReserve);
     });
 
-    test('cannot scroll the grid end past the right/bottom margin', () {
+    test('cannot scroll the grid end past the right margin or the dock', () {
       final t = layout.clamp(const Offset(-99999, -99999));
       expect(
         t.dx + layout.gridWidth,
         layout.viewport.width - NonogramBoardLayout.endMargin,
       );
+      // The last row can be lifted above the undo + Fill / X dock.
+      expect(layout.bottomReserve, NonogramBoardLayout.dockReserve);
       expect(
         t.dy + layout.gridHeight,
-        layout.viewport.height - NonogramBoardLayout.endMargin,
+        layout.viewport.height -
+            NonogramBoardLayout.dockReserve -
+            NonogramBoardLayout.endMargin,
+      );
+      expect(
+        layout.gridArea(t).bottom,
+        layout.viewport.height - NonogramBoardLayout.dockReserve,
       );
     });
 
@@ -168,6 +176,7 @@ void main() {
       expect(layout.isLandscape, isTrue);
       expect(layout.topReserve, 0);
       expect(layout.rightReserve, NonogramBoardLayout.railReserve);
+      expect(layout.bottomReserve, 0);
       expect(layout.startOffset.dy, layout.topStripHeight);
     });
 

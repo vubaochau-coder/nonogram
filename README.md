@@ -73,7 +73,10 @@ flutter build web --no-web-resources-cdn
 
 ## Điều khiển
 
-Nút gạt **Tô / X** trên thanh công cụ chọn việc một lần chạm sẽ làm:
+Màn dọc: hàng nút ở góc trên bên phải có gợi ý, gậy phép, xoay màn hình và
+toàn màn hình; **hoàn tác** và nút gạt **Tô / X** xếp dọc ở góc dưới bên phải,
+trong tầm ngón cái (bàn chơi chừa đáy cho cụm này, lưới vẫn kéo được lên khỏi
+nó). Nút gạt **Tô / X** chọn việc một lần chạm sẽ làm:
 
 | Thao tác | Chế độ Tô (■) | Chế độ X (✕) |
 |---|---|---|
@@ -95,7 +98,9 @@ Nút gạt **Tô / X** trên thanh công cụ chọn việc một lần chạm s
 - Không có zoom: cỡ ô luôn là cỡ lớn nhất vừa màn hình trong khoảng
   28–44px (tính lại khi xoay màn hình); lưới lớn hơn thì kéo để xem.
 - Nút xoay màn hình (điện thoại / máy tính bảng) chuyển dọc ⇄ ngang và khoá
-  ở hướng đó; rời trang chơi thì bỏ khoá.
+  ở hướng đó; rời trang chơi thì bỏ khoá. Icon (`RotateScreenIcon`) luôn vẽ
+  máy dọc ở trên trái, máy ngang ở dưới phải và hai vệt cong ở góc trên phải;
+  hướng đang dùng mờ, hướng sẽ xoay tới đậm.
 - Màn hình ngang tự ẩn thanh hệ thống, không có app bar. Cột trái: quay
   lại và ⓘ ở góc trên, xoay màn hình và cài đặt ở góc dưới. Bấm ⓘ thì bảng
   thông tin màn (tên, số màn, kích thước, độ khó) trượt ra từ trái, phủ lên

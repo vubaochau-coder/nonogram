@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:provider/provider.dart'
-    show ChangeNotifierProvider, Consumer, MultiProvider;
+    show ChangeNotifierProvider, MultiProvider;
 import 'package:nonogram/core/onboarding_preferences.dart';
 
 import '../bloc/nonogram_play_bloc.dart';
@@ -20,10 +20,12 @@ import '../views/drag_tip.dart';
 import '../views/undo_action.dart';
 import '../views/wand_action.dart';
 import '../widgets/nonogram_fullscreen_action_dock.dart';
+import '../widgets/nonogram_bottom_banner.dart';
+import '../widgets/nonogram_play_dock.dart';
 import 'nonogram_board_viewport.dart';
 
-/// Bàn chơi + nút công cụ: hàng nút nổi ở góc trên-phải khi màn dọc, cột
-/// nút dọc mép phải khi màn ngang.
+/// Bàn chơi + nút công cụ: màn dọc có hàng nút ở góc trên-phải và cụm hoàn
+/// tác + Tô / X ở góc dưới-phải; màn ngang có cột nút dọc mép phải.
 ///
 /// Cũng là nơi hiện hướng dẫn thao tác (lần đầu vào màn chơi, hoặc khi mở
 /// lại từ cài đặt) và mẹo kéo bàn chơi ở màn lớn đầu tiên.
@@ -208,16 +210,12 @@ class _NonogramBoardShellSectionState extends State<NonogramBoardShellSection> {
     return Row(
       mainAxisSize: MainAxisSize.min,
       children: [
-        KeyedSubtree(key: _undoKey, child: const UndoAction()),
-        const SizedBox(width: 8),
         KeyedSubtree(
           key: _hintKey,
           child: HintAction(compact: compactHint),
         ),
         const SizedBox(width: 8),
         KeyedSubtree(key: _wandKey, child: const WandAction()),
-        const SizedBox(width: 8),
-        KeyedSubtree(key: _modeKey, child: const ModeToggleAction()),
         if (RotateScreenAction.isSupported) ...[
           const SizedBox(width: 8),
           KeyedSubtree(key: _rotateKey, child: const RotateScreenAction()),
@@ -326,33 +324,23 @@ class _NonogramBoardShellSectionState extends State<NonogramBoardShellSection> {
                           },
                         ),
                   ),
+                if (!landscape)
+                  Positioned(
+                    right: NonogramPlayDock.margin,
+                    bottom: NonogramPlayDock.margin,
+                    child: NonogramPlayDock(
+                      undoKey: _undoKey,
+                      modeKey: _modeKey,
+                    ),
+                  ),
                 // Đang chọn hàng / cột cho gậy phép: dải hướng dẫn ở mép dưới.
                 Positioned(
                   left: 16,
-                  right: landscape ? NonogramBoardLayout.railReserve + 8 : 16,
+                  right: landscape
+                      ? NonogramBoardLayout.railReserve + 8
+                      : NonogramPlayDock.margin * 2 + NonogramPlayDock.width,
                   bottom: 16,
-                  child:
-                      BlocSelector<NonogramPlayBloc, NonogramPlayState, bool>(
-                        selector: (state) => state.isWandActive,
-                        builder: (context, active) => AnimatedSwitcher(
-                          duration: const Duration(milliseconds: 180),
-                          child: active
-                              ? const Center(child: WandSelectBanner())
-                              : Consumer<DragTip>(
-                                  builder: (context, tip, _) =>
-                                      AnimatedSwitcher(
-                                        duration: const Duration(
-                                          milliseconds: 220,
-                                        ),
-                                        child: tip.visible
-                                            ? const Center(
-                                                child: DragTipBanner(),
-                                              )
-                                            : const SizedBox.shrink(),
-                                      ),
-                                ),
-                        ),
-                      ),
+                  child: const NonogramBottomBanner(),
                 ),
               ],
             );
