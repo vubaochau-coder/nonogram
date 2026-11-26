@@ -26,6 +26,9 @@ part 'nonogram_play_bloc_power_ups.dart';
 
 class NonogramPlayBloc extends _PlayBlocBase
     with _LevelHandlers, _CellHandlers, _PowerUpHandlers {
+  /// Undo keeps at most this many boards.
+  static const maxUndoSteps = 100;
+
   NonogramPlayBloc({
     required NonogramRepository repository,
     NonogramEngine? engine,
@@ -116,14 +119,14 @@ abstract class _PlayBlocBase
   /// Bàn trước mỗi lần chạm / nhấn giữ / kéo, mới nhất ở cuối. Ô khoá (gợi
   /// ý, gậy phép) không theo lịch sử: hoàn tác giữ nguyên chúng.
   final List<List<List<NonogramCellState>>> _undoHistory = [];
-  static const maxUndoSteps = 100;
 
   /// Bàn lúc bắt đầu lần kéo đang diễn ra.
   List<List<NonogramCellState>>? _dragBefore;
 
   void _pushUndo(List<List<NonogramCellState>> grid) {
     _undoHistory.add(grid);
-    if (_undoHistory.length > maxUndoSteps) _undoHistory.removeAt(0);
+    if (_undoHistory.length > NonogramPlayBloc.maxUndoSteps)
+      _undoHistory.removeAt(0);
   }
 
   void _clearUndo() {
