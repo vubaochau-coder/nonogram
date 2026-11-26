@@ -140,9 +140,8 @@ List<Violation> checkLengths(
     ?checkLength(entry.key, entry.value, baseline),
 ];
 
-/// Baseline entries whose file does not exist. Only a warning: `main` has
-/// no tester code, so it shares the baseline with `develop` but lacks some
-/// of its files.
+/// Baseline entries whose file does not exist. Only a warning: a file can be
+/// deleted or renamed in the same change that forgets to update the list.
 List<String> missingBaselineFiles(
   Map<String, int> files,
   Map<String, int> baseline,

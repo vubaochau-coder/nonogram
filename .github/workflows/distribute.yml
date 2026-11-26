@@ -1,11 +1,8 @@
 name: Distribute
 
-# Bản thử nội bộ, build từ nhánh `develop`: chạy sau khi CI trên develop xanh
-# (không đẩy bản build chưa qua test), hoặc chạy tay từ tab Actions (luôn build
-# develop, chọn nhánh nào cũng vậy).
-#
-# File này phải có trên nhánh mặc định (`main`): GitHub chỉ đọc trigger
-# `workflow_run` / `workflow_dispatch` từ đó. Sửa file thì sửa ở cả hai nhánh.
+# Bản thử nội bộ (flavor `dev`), build từ nhánh `main`: chạy sau khi CI trên
+# main xanh (không đẩy bản build chưa qua test), hoặc chạy tay từ tab Actions
+# (luôn build đầu nhánh main).
 #
 # Cần cấu hình trong Settings → Secrets and variables → Actions:
 #   Secrets:
@@ -25,7 +22,7 @@ on:
   workflow_run:
     workflows: [CI]
     types: [completed]
-    branches: [develop]
+    branches: [main]
   workflow_dispatch:
     inputs:
       release_notes:
@@ -56,8 +53,8 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
-          # Chạy tay: lấy đầu nhánh develop (bản thử nội bộ).
-          ref: ${{ github.event.workflow_run.head_sha || 'develop' }}
+          # Chạy tay: lấy đầu nhánh main.
+          ref: ${{ github.event.workflow_run.head_sha || 'main' }}
 
       - name: Read Flutter version from .fvmrc
         id: fvm

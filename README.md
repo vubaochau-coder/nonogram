@@ -19,7 +19,7 @@ flutter run --flavor dev      # Android: luôn phải chọn flavor
 
 | Flavor | Dùng cho | Công cụ tester | ID quảng cáo |
 |---|---|---|---|
-| `dev` | Bản thử nội bộ, build từ nhánh `develop` (workflow Distribute) | Có ([docs/tester_tools.md](docs/tester_tools.md)) | Thử nghiệm của Google |
+| `dev` | Bản thử nội bộ, tự build từ `main` sau mỗi lần merge (workflow Distribute) | Có ([docs/tester_tools.md](docs/tester_tools.md)) | Thử nghiệm của Google |
 | `store` | Bản phát hành lên store (workflow "Store build", chạy tay trên `main`) | Không | Thật |
 
 - Hai flavor dùng chung code và bộ màn `assets/levels/`; khác nhau ở công cụ
@@ -307,26 +307,26 @@ quảng cáo xen kẽ.
 
 ## Nhánh và phát hành
 
-| Nhánh | Dùng cho | GitHub Actions |
-|---|---|---|
-| `develop` | Phát triển và thử nội bộ (flavor `dev`) | `CI` tự chạy cho mỗi push / pull request vào develop; CI xanh thì `Distribute` đẩy bản thử lên Firebase App Distribution |
-| `main` | Bản phát hành (flavor `store`) | Không tự chạy gì. Khi cần phát hành thì chạy tay `Store build` |
+Chỉ có một nhánh lâu dài là `main`. Nhánh phụ tạo từ `main` và mở pull
+request vào `main`. Bản thử và bản store build từ cùng code, khác nhau ở
+flavor:
 
-Hai nhánh có cùng code; bản store khác bản thử ở flavor, không ở nhánh.
-Phát hành: mở pull request `develop` → `main` và merge bằng **Create a merge
-commit** (không squash / rebase, để lần sau merge không bị xung đột). Sửa gấp
-trên `main` thì merge ngược `main` → `develop` ngay sau đó.
+| Việc | Workflow | Khi nào |
+|---|---|---|
+| Kiểm tra | `CI` | Mỗi pull request và push vào `main` |
+| Bản thử nội bộ (flavor `dev`) | `Distribute` | Tự chạy khi CI trên `main` xanh; chạy tay cũng được |
+| Bản store (flavor `store`) | `Store build` | Chạy tay trên `main` khi muốn phát hành; gắn tag `v<version>+<build>` |
 
 App Android `com.chauvb.nonogram` (**Pixel Nonogram**) nằm chung project Firebase
 với app chess (`chess-app-chauvb`).
 
-- `Distribute` build APK release flavor `dev` từ nhánh `develop`; chạy tay từ
+- `Distribute` build APK release flavor `dev` từ nhánh `main`; chạy tay từ
   tab Actions cũng được (có ô nhập ghi chú phát hành). Số build = số thứ tự
   lần chạy của workflow, tự tăng mỗi lần phát hành.
 - `Store build` chạy format / analyze / test rồi build `.aab` đã ký; số build
   nhập tay khi chạy.
 - GitHub đọc trigger của `Distribute` từ nhánh mặc định (`main`): sửa
-  workflow thì chỉ có hiệu lực sau khi đã merge sang `main`.
+  workflow này thì chỉ có hiệu lực sau khi đã merge.
 
 Secrets/variables cần cấu hình được mô tả ở đầu
 `.github/workflows/distribute.yml`.

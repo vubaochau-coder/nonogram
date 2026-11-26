@@ -10,12 +10,10 @@
   không phân biệt hoa thường). Đặt tên theo nội dung: `feat/...`, `fix/...`,
   `refactor/...`, `chore/...`, `ci/...`, `docs/...`, `test/...`. Workflow
   `Branch name` chặn pull request từ nhánh vi phạm.
-- `main` là bản store, `develop` là bản thử nội bộ; hai nhánh có cùng code
-  (bản store khác bản thử ở flavor `store` / `dev`). Nhánh phụ tạo từ
-  `develop` và mở pull request vào đó; nhánh phụ tự xoá sau khi merge.
-- Phát hành: pull request `develop` → `main`, merge bằng **Create a merge
-  commit** (không squash / rebase). Sửa gấp trên `main` thì merge ngược
-  `main` → `develop` ngay sau đó.
+- Chỉ có một nhánh lâu dài là `main`. Nhánh phụ tạo từ `main` và mở pull
+  request vào `main`; nhánh phụ tự xoá sau khi merge.
+- Merge vào `main` thì bản thử nội bộ (flavor `dev`) tự lên Firebase App
+  Distribution. Phát hành store: chạy tay `Store build` (flavor `store`).
 - Commit message theo Conventional Commits, **tiếng Anh**: `feat`, `fix`,
   `refactor`, `docs`, `chore`, `test`, `ci`, `perf`, `style`; có thể kèm
   phạm vi: `fix(play): …`, `feat(checkin): …`.
@@ -86,5 +84,5 @@ flutter test
 ```
 
 Tất cả phải sạch / pass (`flutter analyze` 0 issue). CI chạy đúng các bước
-này cho mọi push / pull request vào `develop`, `Store build` chạy lại trên
-`main`.
+này cho mọi push / pull request vào `main`; `Store build` chạy lại trước khi
+build bản store.
