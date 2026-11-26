@@ -15,10 +15,9 @@ class FullscreenToggleAction extends StatelessWidget {
       buildWhen: (p, c) => p.isFullscreen != c.isFullscreen,
       builder: (context, state) {
         return OverlayButton(
-          icon:
-              state.isFullscreen
-                  ? LucideIcons.minimize2
-                  : LucideIcons.maximize2,
+          icon: state.isFullscreen
+              ? LucideIcons.minimize2
+              : LucideIcons.maximize2,
           onPressed: () {
             context.read<NonogramPlayBloc>().add(const FullscreenToggled());
           },

@@ -130,8 +130,9 @@ final class NonogramEngine {
     }
 
     // Create a new representation
-    final newGrid =
-        gridData.map((r) => List<NonogramCellState>.from(r)).toList();
+    final newGrid = gridData
+        .map((r) => List<NonogramCellState>.from(r))
+        .toList();
     newGrid[row][col] = value;
 
     return newGrid;
@@ -165,8 +166,9 @@ final class NonogramEngine {
     required List<List<NonogramCellState>> gridData,
     required Iterable<({int row, int col})> cells,
   }) {
-    final newGrid =
-        gridData.map((r) => List<NonogramCellState>.from(r)).toList();
+    final newGrid = gridData
+        .map((r) => List<NonogramCellState>.from(r))
+        .toList();
     for (final cell in cells) {
       newGrid[cell.row][cell.col] = NonogramCellState.filled;
     }
@@ -199,22 +201,21 @@ final class NonogramEngine {
     required NonogramPuzzle puzzle,
     required List<List<NonogramCellState>> gridData,
   }) {
-    final newGrid =
-        gridData.map((r) => List<NonogramCellState>.from(r)).toList();
+    final newGrid = gridData
+        .map((r) => List<NonogramCellState>.from(r))
+        .toList();
 
     if (axis == Axis.horizontal) {
       for (int c = 0; c < puzzle.cols; c++) {
-        newGrid[index][c] =
-            puzzle.solution[index][c] == 1
-                ? NonogramCellState.filled
-                : NonogramCellState.marked;
+        newGrid[index][c] = puzzle.solution[index][c] == 1
+            ? NonogramCellState.filled
+            : NonogramCellState.marked;
       }
     } else {
       for (int r = 0; r < puzzle.rows; r++) {
-        newGrid[r][index] =
-            puzzle.solution[r][index] == 1
-                ? NonogramCellState.filled
-                : NonogramCellState.marked;
+        newGrid[r][index] = puzzle.solution[r][index] == 1
+            ? NonogramCellState.filled
+            : NonogramCellState.marked;
       }
     }
 
@@ -253,13 +254,13 @@ final class NonogramEngine {
   }) {
     final grid =
         snapshot != null &&
-                snapshot.puzzleId == puzzle.id &&
-                snapshot.gridData.length == puzzle.rows &&
-                snapshot.gridData.every((row) => row.length == puzzle.cols)
-            ? snapshot.gridData
-                .map((row) => List<NonogramCellState>.from(row))
-                .toList()
-            : createEmptyGrid(rows: puzzle.rows, cols: puzzle.cols);
+            snapshot.puzzleId == puzzle.id &&
+            snapshot.gridData.length == puzzle.rows &&
+            snapshot.gridData.every((row) => row.length == puzzle.cols)
+        ? snapshot.gridData
+              .map((row) => List<NonogramCellState>.from(row))
+              .toList()
+        : createEmptyGrid(rows: puzzle.rows, cols: puzzle.cols);
     applyPinnedCells(puzzle: puzzle, grid: grid);
     return grid;
   }
@@ -270,10 +271,9 @@ final class NonogramEngine {
     required List<List<NonogramCellState>> grid,
   }) {
     for (final cell in puzzle.pinnedCells) {
-      grid[cell.row][cell.col] =
-          puzzle.solution[cell.row][cell.col] == 1
-              ? NonogramCellState.filled
-              : NonogramCellState.marked;
+      grid[cell.row][cell.col] = puzzle.solution[cell.row][cell.col] == 1
+          ? NonogramCellState.filled
+          : NonogramCellState.marked;
     }
   }
 }

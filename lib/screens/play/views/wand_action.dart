@@ -24,12 +24,11 @@ class WandAction extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<NonogramPlayBloc, NonogramPlayState>(
-      buildWhen:
-          (p, c) =>
-              p.remainingWands != c.remainingWands ||
-              p.dailyWands != c.dailyWands ||
-              p.isWandActive != c.isWandActive ||
-              p.isSolved != c.isSolved,
+      buildWhen: (p, c) =>
+          p.remainingWands != c.remainingWands ||
+          p.dailyWands != c.dailyWands ||
+          p.isWandActive != c.isWandActive ||
+          p.isSolved != c.isSolved,
       builder: (context, state) {
         // Hết lượt: nút vẫn bấm được, bấm là xem quảng cáo để dùng một lượt.
         final adOffer = !state.isWandActive && state.remainingWands <= 0;
@@ -48,13 +47,12 @@ class WandAction extends StatelessWidget {
                 child: OverlayButton(
                   key: const ValueKey('nonogram-wand'),
                   icon: LucideIcons.wand2,
-                  iconWidget:
-                      timeLimited
-                          ? const PowerUpGlyph(
-                            powerUp: PowerUp.wand,
-                            timeLimited: true,
-                          )
-                          : null,
+                  iconWidget: timeLimited
+                      ? const PowerUpGlyph(
+                          powerUp: PowerUp.wand,
+                          timeLimited: true,
+                        )
+                      : null,
                   color: state.isWandActive ? context.gameColors.reward : null,
                   enabled: enabled,
                   onPressed: () {
@@ -215,26 +213,24 @@ class CountBadge extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 4),
       alignment: Alignment.center,
       decoration: BoxDecoration(
-        color:
-            yellow
-                ? context.gameColors.reward
-                : active || adOffer
-                ? context.color.primary
-                : context.color.outline,
+        color: yellow
+            ? context.gameColors.reward
+            : active || adOffer
+            ? context.color.primary
+            : context.color.outline,
         borderRadius: BorderRadius.circular(8),
       ),
-      child:
-          adOffer
-              ? Icon(LucideIcons.video, size: 10, color: foreground)
-              : Text(
-                '$count',
-                style: context.labelSmall.copyWith(
-                  fontSize: 10,
-                  height: 1,
-                  fontWeight: FontWeight.w800,
-                  color: foreground,
-                ),
+      child: adOffer
+          ? Icon(LucideIcons.video, size: 10, color: foreground)
+          : Text(
+              '$count',
+              style: context.labelSmall.copyWith(
+                fontSize: 10,
+                height: 1,
+                fontWeight: FontWeight.w800,
+                color: foreground,
               ),
+            ),
     );
   }
 }
@@ -286,11 +282,10 @@ class _WandSelectBannerState extends State<WandSelectBanner>
   Widget build(BuildContext context) {
     return AnimatedBuilder(
       animation: _bounce,
-      builder:
-          (context, child) => Transform.scale(
-            scale: 1 + 0.07 * sin(pi * _bounce.value),
-            child: child,
-          ),
+      builder: (context, child) => Transform.scale(
+        scale: 1 + 0.07 * sin(pi * _bounce.value),
+        child: child,
+      ),
       child: _banner(context),
     );
   }
@@ -331,9 +326,8 @@ class _WandSelectBannerState extends State<WandSelectBanner>
                   fontWeight: FontWeight.w800,
                 ),
               ),
-              onPressed:
-                  () =>
-                      context.read<NonogramPlayBloc>().add(const WandToggled()),
+              onPressed: () =>
+                  context.read<NonogramPlayBloc>().add(const WandToggled()),
               child: Text(context.l10n.commonCancel),
             ),
           ],

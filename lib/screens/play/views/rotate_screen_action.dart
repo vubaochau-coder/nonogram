@@ -33,9 +33,9 @@ class RotateScreenAction extends StatelessWidget {
           landscape
               ? const [DeviceOrientation.portraitUp]
               : const [
-                DeviceOrientation.landscapeLeft,
-                DeviceOrientation.landscapeRight,
-              ],
+                  DeviceOrientation.landscapeLeft,
+                  DeviceOrientation.landscapeRight,
+                ],
         );
       },
     );

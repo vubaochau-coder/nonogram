@@ -109,10 +109,9 @@ class GuideDiagramPainter extends CustomPainter {
     canvas.drawRect(clueRect, Paint()..color = clueBackground);
     canvas.drawRect(gridRect, Paint()..color = gridBackground);
 
-    final thin =
-        Paint()
-          ..color = lineColor
-          ..strokeWidth = 1;
+    final thin = Paint()
+      ..color = lineColor
+      ..strokeWidth = 1;
     for (var c = 1; c < clueCols + cellCols; c++) {
       if (c == clueCols) continue;
       final x = c * cellSize;
@@ -148,18 +147,18 @@ class GuideDiagramPainter extends CustomPainter {
       }
     }
 
-    final border =
-        Paint()
-          ..color = borderColor
-          ..style = PaintingStyle.stroke
-          ..strokeWidth = 1.5;
+    final border = Paint()
+      ..color = borderColor
+      ..style = PaintingStyle.stroke
+      ..strokeWidth = 1.5;
     canvas.drawRect(clueRect, border);
     canvas.drawRect(gridRect, border);
   }
 
   void _paintClue(Canvas canvas, Rect rect, int value, bool crossed) {
-    final color =
-        crossed ? clueTextColor.withValues(alpha: 0.4) : clueTextColor;
+    final color = crossed
+        ? clueTextColor.withValues(alpha: 0.4)
+        : clueTextColor;
     final tp = TextPainter(
       text: TextSpan(
         text: '$value',
@@ -214,11 +213,10 @@ class GuideDiagramPainter extends CustomPainter {
   }
 
   void _paintX(Canvas canvas, Rect rect, Color color, double width) {
-    final paint =
-        Paint()
-          ..color = color
-          ..strokeWidth = width
-          ..strokeCap = StrokeCap.round;
+    final paint = Paint()
+      ..color = color
+      ..strokeWidth = width
+      ..strokeCap = StrokeCap.round;
     canvas.drawLine(rect.topLeft, rect.bottomRight, paint);
     canvas.drawLine(rect.topRight, rect.bottomLeft, paint);
   }
@@ -229,13 +227,12 @@ class GuideDiagramPainter extends CustomPainter {
     double top,
     double height,
   ) {
-    final stroke =
-        Paint()
-          ..color = linkColor
-          ..style = PaintingStyle.stroke
-          ..strokeWidth = 2
-          ..strokeCap = StrokeCap.round
-          ..strokeJoin = StrokeJoin.round;
+    final stroke = Paint()
+      ..color = linkColor
+      ..style = PaintingStyle.stroke
+      ..strokeWidth = 2
+      ..strokeCap = StrokeCap.round
+      ..strokeJoin = StrokeJoin.round;
     final fill = Paint()..color = linkColor;
     final gridLeft = diagram.clueColumns * cellSize;
     final pad = cellSize * 0.18;
@@ -275,8 +272,9 @@ class GuideDiagramPainter extends CustomPainter {
       );
 
       final x = (toL + toR) / 2;
-      final fromX =
-          ((fromL + fromR) / 2 - x).abs() < 1 ? x : (fromL + fromR) / 2;
+      final fromX = ((fromL + fromR) / 2 - x).abs() < 1
+          ? x
+          : (fromL + fromR) / 2;
       final startY = topY + bracketDepth;
       final endY = bottomY - bracketDepth;
       if (fromX != x) {

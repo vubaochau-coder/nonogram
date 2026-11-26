@@ -35,14 +35,12 @@ class NonogramLeftCluesPainter extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
     final rows = clues.length;
-    final minor =
-        Paint()
-          ..color = lineColor
-          ..strokeWidth = 1;
-    final major =
-        Paint()
-          ..color = majorLineColor ?? lineColor
-          ..strokeWidth = 1.6;
+    final minor = Paint()
+      ..color = lineColor
+      ..strokeWidth = 1;
+    final major = Paint()
+      ..color = majorLineColor ?? lineColor
+      ..strokeWidth = 1.6;
 
     canvas.drawRRect(
       RRect.fromRectAndCorners(

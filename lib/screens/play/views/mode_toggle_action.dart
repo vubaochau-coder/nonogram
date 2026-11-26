@@ -25,10 +25,9 @@ class ModeToggleAction extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<NonogramPlayBloc, NonogramPlayState>(
-      buildWhen:
-          (p, c) =>
-              p.interactionMode != c.interactionMode ||
-              p.isWandActive != c.isWandActive,
+      buildWhen: (p, c) =>
+          p.interactionMode != c.interactionMode ||
+          p.isWandActive != c.isWandActive,
       builder: (context, state) {
         final l10n = context.l10n;
         final colors = context.color;
@@ -41,10 +40,9 @@ class ModeToggleAction extends StatelessWidget {
             WandNudge.of(context);
             return;
           }
-          final t =
-              NonogramTransformationControllerProvider.of(
-                context,
-              ).value.getTranslation();
+          final t = NonogramTransformationControllerProvider.of(
+            context,
+          ).value.getTranslation();
           context.read<NonogramPlayBloc>().add(
             InteractionModeChanged(offsetX: t.x, offsetY: t.y),
           );

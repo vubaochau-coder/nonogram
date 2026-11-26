@@ -339,10 +339,9 @@ void main() {
           final placements = controller.ghostPlacements;
           counts[step.message] = placements.length;
           expect(controller.showGhost, isTrue);
-          TutorialCell cellAt(int i) =>
-              line.isRow
-                  ? (row: line.index, col: i)
-                  : (row: i, col: line.index);
+          TutorialCell cellAt(int i) => line.isRow
+              ? (row: line.index, col: i)
+              : (row: i, col: line.index);
           final onLine = {
             for (final cell in step.targets)
               if (line.isRow ? cell.row == line.index : cell.col == line.index)
@@ -700,13 +699,12 @@ List<int?> _forcedLine(List<int> clue, List<int?> known) {
       for (var i = 0; i < length; i++) {
         if (known[i] != null && known[i] != line[i]) return;
       }
-      result =
-          result == null
-              ? List<int?>.of(line)
-              : [
-                for (var i = 0; i < length; i++)
-                  result![i] == line[i] ? line[i] : null,
-              ];
+      result = result == null
+          ? List<int?>.of(line)
+          : [
+              for (var i = 0; i < length; i++)
+                result![i] == line[i] ? line[i] : null,
+            ];
       return;
     }
     final rest = blocks.skip(index + 1).fold(0, (sum, b) => sum + b + 1);

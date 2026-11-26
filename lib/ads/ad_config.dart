@@ -21,16 +21,15 @@ class AdConfig {
   /// khi phát triển) dùng ID thử nghiệm của Google, để không bấm nhầm vào
   /// quảng cáo thật (AdMob có thể khoá tài khoản vì lượt bấm không hợp lệ).
   factory AdConfig.forBuild({bool release = kReleaseMode}) => AdConfig(
-    unitIds:
-        release
-            ? const {
-              AdFormat.rewarded: AppAdMobIds.rewarded,
-              AdFormat.interstitial: AppAdMobIds.interstitial,
-            }
-            : const {
-              AdFormat.rewarded: AdMobTestIds.rewarded,
-              AdFormat.interstitial: AdMobTestIds.interstitial,
-            },
+    unitIds: release
+        ? const {
+            AdFormat.rewarded: AppAdMobIds.rewarded,
+            AdFormat.interstitial: AppAdMobIds.interstitial,
+          }
+        : const {
+            AdFormat.rewarded: AdMobTestIds.rewarded,
+            AdFormat.interstitial: AdMobTestIds.interstitial,
+          },
   );
 }
 

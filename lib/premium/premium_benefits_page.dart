@@ -461,8 +461,9 @@ class _MiniButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final onBadge =
-        timeLimited ? const Color(0xFF2B1A00) : context.color.onPrimary;
+    final onBadge = timeLimited
+        ? const Color(0xFF2B1A00)
+        : context.color.onPrimary;
     final surface = context.color.surface;
     return Stack(
       clipBehavior: Clip.none,

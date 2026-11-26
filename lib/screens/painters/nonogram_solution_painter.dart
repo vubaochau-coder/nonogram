@@ -21,10 +21,9 @@ class NonogramSolutionPainter extends CustomPainter {
     final cols = solution[0].length;
 
     final cellPaint = Paint()..color = filledColor;
-    final linePaint =
-        Paint()
-          ..color = gridLineColor
-          ..strokeWidth = 1.0;
+    final linePaint = Paint()
+      ..color = gridLineColor
+      ..strokeWidth = 1.0;
 
     // Draw filled cells (1 = filled)
     for (int r = 0; r < rows; r++) {

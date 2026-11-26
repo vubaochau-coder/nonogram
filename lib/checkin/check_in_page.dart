@@ -19,14 +19,14 @@ import 'reward_view.dart';
 /// Màu cam của chuỗi (ngọn lửa, thanh tiến trình, hộp quà).
 Color _fireColor(BuildContext context) =>
     Theme.of(context).brightness == Brightness.dark
-        ? const Color(0xFFFF8A3D)
-        : const Color(0xFFF76707);
+    ? const Color(0xFFFF8A3D)
+    : const Color(0xFFF76707);
 
 /// Màu của ngày bỏ lỡ (bù được).
 Color _missedColor(BuildContext context) =>
     Theme.of(context).brightness == Brightness.dark
-        ? const Color(0xFFFFB547)
-        : const Color(0xFFF08C00);
+    ? const Color(0xFFFFB547)
+    : const Color(0xFFF08C00);
 
 /// Tab điểm danh: lịch tháng (xem lại được các tháng trước, từ tháng bắt đầu
 /// dùng app), thanh chuỗi của tháng với các mốc quà, và nút "Điểm danh hôm
@@ -188,10 +188,9 @@ class _CheckInTabState extends State<CheckInTab> with TickerProviderStateMixin {
       _holdDay = animate ? day : null;
       _heldStats = animate ? before : null;
       _barOverride = animate ? before.longest.toDouble() : null;
-      _claimedOverride =
-          animate
-              ? {...service.claimedMilestones(month.year, month.month)}
-              : null;
+      _claimedOverride = animate
+          ? {...service.claimedMilestones(month.year, month.month)}
+          : null;
     });
     final outcome = await action();
     if (!mounted) return;
@@ -221,18 +220,17 @@ class _CheckInTabState extends State<CheckInTab> with TickerProviderStateMixin {
 
     // 1. Đóng dấu ô ngày.
     setState(() => _hideButton = button != null);
-    final stamp =
-        _celebration = CheckInCelebration(
-          vsync: this,
-          overlay: overlay,
-          button: button,
-          buttonChild: button == null ? null : _buttonFor(service),
-          today: cell,
-          sounds: sounds,
-          onLand: () {
-            if (mounted) setState(() => _holdDay = null);
-          },
-        );
+    final stamp = _celebration = CheckInCelebration(
+      vsync: this,
+      overlay: overlay,
+      button: button,
+      buttonChild: button == null ? null : _buttonFor(service),
+      today: cell,
+      sounds: sounds,
+      onLand: () {
+        if (mounted) setState(() => _holdDay = null);
+      },
+    );
     await stamp.run();
     stamp.dispose();
     _celebration = null;
@@ -264,42 +262,38 @@ class _CheckInTabState extends State<CheckInTab> with TickerProviderStateMixin {
     for (final gift in outcome.gifts) {
       final node = _rectOf(_nodeKeys[gift.milestone]!);
       if (node == null) continue;
-      final open =
-          _celebration = CheckInCelebration(
-            vsync: this,
-            overlay: overlay,
-            gift: gift.reward,
-            giftMilestone: gift.milestone,
-            badge: node,
-            giftTarget: node.center,
-            sounds: sounds,
-            // Không có quảng cáo (web, iOS): không có nút "Nhận x2".
-            onDouble:
-                ads.isEnabled
-                    ? () async {
-                      if (!ads.isReady(AdPlacement.checkInDoubleGift)) {
-                        ToastUtils.warning(title: l10n.adRewardNotReady);
-                        return false;
-                      }
-                      if (!await ads.showRewarded(
-                        AdPlacement.checkInDoubleGift,
-                      )) {
-                        return false;
-                      }
-                      return service.doubleGift(
-                        day: outcome.day,
-                        milestone: gift.milestone,
-                      );
-                    }
-                    : null,
-            onCollected: () {
-              if (!mounted) return;
-              setState(() {
-                _claimedOverride = {...?_claimedOverride, gift.milestone};
-                _pendingGifts = {..._pendingGifts}..remove(gift.milestone);
-              });
-            },
-          );
+      final open = _celebration = CheckInCelebration(
+        vsync: this,
+        overlay: overlay,
+        gift: gift.reward,
+        giftMilestone: gift.milestone,
+        badge: node,
+        giftTarget: node.center,
+        sounds: sounds,
+        // Không có quảng cáo (web, iOS): không có nút "Nhận x2".
+        onDouble: ads.isEnabled
+            ? () async {
+                if (!ads.isReady(AdPlacement.checkInDoubleGift)) {
+                  ToastUtils.warning(title: l10n.adRewardNotReady);
+                  return false;
+                }
+                if (!await ads.showRewarded(AdPlacement.checkInDoubleGift)) {
+                  return false;
+                }
+                return service.doubleGift(
+                  day: outcome.day,
+                  milestone: gift.milestone,
+                );
+              }
+            : null,
+        onCollected: () {
+          if (!mounted) return;
+          setState(() {
+            _claimedOverride = {...?_claimedOverride, gift.milestone};
+            _pendingGifts = {..._pendingGifts}..remove(gift.milestone);
+          });
+        },
+      );
       await open.run();
       open.dispose();
       _celebration = null;
@@ -324,25 +318,21 @@ class _CheckInTabState extends State<CheckInTab> with TickerProviderStateMixin {
   void _toast(CheckInOutcome outcome, {required bool animated}) {
     final l10n = context.l10n;
     final isToday = outcome.day == context.read<CheckInService>().today;
-    final title =
-        isToday
-            ? l10n.checkInCheckedIn
-            : l10n.checkInMadeUp(
-              MaterialLocalizations.of(
-                context,
-              ).formatShortMonthDay(dateOfDayNumber(outcome.day)),
-            );
+    final title = isToday
+        ? l10n.checkInCheckedIn
+        : l10n.checkInMadeUp(
+            MaterialLocalizations.of(
+              context,
+            ).formatShortMonthDay(dateOfDayNumber(outcome.day)),
+          );
     // Có hiệu ứng: quà chuỗi đã hiện trong hiệu ứng, chỉ báo quà trong ngày.
     final rewards = animated ? outcome.daily : outcome.rewards;
     if (animated && rewards.isEmpty) return;
     ToastUtils.success(
       title: title,
-      description:
-          rewards.isEmpty
-              ? null
-              : l10n.checkInReceived(
-                rewards.map(context.rewardLabel).join(', '),
-              ),
+      description: rewards.isEmpty
+          ? null
+          : l10n.checkInReceived(rewards.map(context.rewardLabel).join(', ')),
     );
   }
 
@@ -536,12 +526,11 @@ class _CheckInButtonState extends State<_CheckInButton> {
     final done = widget.done;
     final daysLeft = widget.daysLeft;
     final giftToday = daysLeft != null && daysLeft <= 1;
-    final subtitle =
-        daysLeft == null
-            ? l10n.checkInStreakAllDone
-            : giftToday
-            ? l10n.checkInGiftToday
-            : l10n.checkInStreakDaysLeft(daysLeft);
+    final subtitle = daysLeft == null
+        ? l10n.checkInStreakAllDone
+        : giftToday
+        ? l10n.checkInGiftToday
+        : l10n.checkInStreakDaysLeft(daysLeft);
     final ink = done ? colors.onSurfaceVariant : Colors.white;
     final pill = Container(
       height: 62,
@@ -549,20 +538,18 @@ class _CheckInButtonState extends State<_CheckInButton> {
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(31),
         color: done ? colors.surfaceContainerHigh : null,
-        gradient:
-            done
-                ? null
-                : LinearGradient(colors: [game.heroStart, game.heroEnd]),
-        boxShadow:
-            done
-                ? null
-                : [
-                  BoxShadow(
-                    color: game.heroStart.withValues(alpha: 0.35),
-                    blurRadius: 18,
-                    offset: const Offset(0, 8),
-                  ),
-                ],
+        gradient: done
+            ? null
+            : LinearGradient(colors: [game.heroStart, game.heroEnd]),
+        boxShadow: done
+            ? null
+            : [
+                BoxShadow(
+                  color: game.heroStart.withValues(alpha: 0.35),
+                  blurRadius: 18,
+                  offset: const Offset(0, 8),
+                ),
+              ],
       ),
       child: Row(
         mainAxisSize: MainAxisSize.min,
@@ -656,10 +643,9 @@ class _MonthNavigator extends StatelessWidget {
       children: [
         IconButton(
           key: const ValueKey('check-in-prev-month'),
-          onPressed:
-              canGoBack
-                  ? () => onChanged(DateTime(month.year, month.month - 1))
-                  : null,
+          onPressed: canGoBack
+              ? () => onChanged(DateTime(month.year, month.month - 1))
+              : null,
           icon: const Icon(LucideIcons.chevronLeft),
           tooltip: material.previousMonthTooltip,
         ),
@@ -672,10 +658,9 @@ class _MonthNavigator extends StatelessWidget {
         ),
         IconButton(
           key: const ValueKey('check-in-next-month'),
-          onPressed:
-              canGoForward
-                  ? () => onChanged(DateTime(month.year, month.month + 1))
-                  : null,
+          onPressed: canGoForward
+              ? () => onChanged(DateTime(month.year, month.month + 1))
+              : null,
           icon: const Icon(LucideIcons.chevronRight),
           tooltip: material.nextMonthTooltip,
         ),
@@ -756,16 +741,14 @@ class _CalendarGrid extends StatelessWidget {
                           final day => _DayCell(
                             key: day.day == stampDay ? stampKey : null,
                             day: day,
-                            status:
-                                day.day == holdDay
-                                    ? (day.isToday
-                                        ? CheckInDayStatus.today
-                                        : CheckInDayStatus.missed)
-                                    : day.status,
-                            onMakeUp:
-                                onMakeUp == null
-                                    ? null
-                                    : () => onMakeUp!(day.day),
+                            status: day.day == holdDay
+                                ? (day.isToday
+                                      ? CheckInDayStatus.today
+                                      : CheckInDayStatus.missed)
+                                : day.status,
+                            onMakeUp: onMakeUp == null
+                                ? null
+                                : () => onMakeUp!(day.day),
                           ),
                         },
                       ),
@@ -854,10 +837,9 @@ class _DayCell extends StatelessWidget {
       decoration: BoxDecoration(
         color: background,
         borderRadius: BorderRadius.circular(12),
-        border:
-            status == CheckInDayStatus.today
-                ? Border.all(color: colors.primary, width: 2.5)
-                : null,
+        border: status == CheckInDayStatus.today
+            ? Border.all(color: colors.primary, width: 2.5)
+            : null,
       ),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -902,18 +884,17 @@ class _DashedBorderPainter extends CustomPainter {
 
   @override
   void paint(Canvas canvas, Size size) {
-    final path =
-        Path()..addRRect(
-          RRect.fromRectAndRadius(
-            (Offset.zero & size).deflate(0.75),
-            const Radius.circular(12),
-          ),
-        );
-    final paint =
-        Paint()
-          ..color = color
-          ..style = PaintingStyle.stroke
-          ..strokeWidth = 1.5;
+    final path = Path()
+      ..addRRect(
+        RRect.fromRectAndRadius(
+          (Offset.zero & size).deflate(0.75),
+          const Radius.circular(12),
+        ),
+      );
+    final paint = Paint()
+      ..color = color
+      ..style = PaintingStyle.stroke
+      ..strokeWidth = 1.5;
     for (final metric in path.computeMetrics()) {
       for (var d = 0.0; d < metric.length; d += 7) {
         canvas.drawPath(metric.extractPath(d, d + 4), paint);
@@ -939,13 +920,18 @@ class _CalendarLegend extends StatelessWidget {
 
     Widget item(Widget swatch, String label) => Row(
       mainAxisSize: MainAxisSize.min,
-      children: [swatch, const SizedBox(width: 6), Text(label, style: style)],
+      children: [
+        swatch,
+        const SizedBox(width: 6),
+        Text(label, style: style),
+      ],
     );
     Widget swatch(Color color, {Color? dashed}) => SizedBox.square(
       dimension: 12,
       child: CustomPaint(
-        foregroundPainter:
-            dashed == null ? null : _DashedBorderPainter(color: dashed),
+        foregroundPainter: dashed == null
+            ? null
+            : _DashedBorderPainter(color: dashed),
         child: DecoratedBox(
           decoration: BoxDecoration(
             color: color,
@@ -1177,14 +1163,13 @@ class _StreakBar extends StatelessWidget {
                   child: _MilestoneNode(
                     key: nodeKeys[m],
                     milestone: m,
-                    state:
-                        claimed.contains(m)
-                            ? _NodeState.claimed
-                            : pending.contains(m) && longest >= m
-                            ? _NodeState.ready
-                            : m == next
-                            ? _NodeState.next
-                            : _NodeState.later,
+                    state: claimed.contains(m)
+                        ? _NodeState.claimed
+                        : pending.contains(m) && longest >= m
+                        ? _NodeState.ready
+                        : m == next
+                        ? _NodeState.next
+                        : _NodeState.later,
                   ),
                 ),
             ],
@@ -1258,8 +1243,9 @@ class _MilestoneNodeState extends State<_MilestoneNode>
           animation: _bump,
           builder: (context, child) {
             final t = _bump.value;
-            final scale =
-                _bump.isAnimating ? 1 + 0.45 * math.sin(math.pi * t) : 1.0;
+            final scale = _bump.isAnimating
+                ? 1 + 0.45 * math.sin(math.pi * t)
+                : 1.0;
             return Transform.scale(scale: scale, child: child);
           },
           child: Container(
@@ -1306,10 +1292,9 @@ class _StripesPainter extends CustomPainter {
 
   @override
   void paint(Canvas canvas, Size size) {
-    final paint =
-        Paint()
-          ..color = color
-          ..strokeWidth = 3;
+    final paint = Paint()
+      ..color = color
+      ..strokeWidth = 3;
     for (var x = -size.height; x < size.width + size.height; x += 7) {
       canvas.drawLine(
         Offset(x, size.height),

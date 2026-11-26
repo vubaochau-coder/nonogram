@@ -554,12 +554,11 @@ void main() {
       // Tự tô thêm một ô (không phải ô gợi ý) để xem chơi lại có xoá nó.
       final hinted = bloc.state.lockedCells;
       expect(hinted.length, 5);
-      final own =
-          [
-            for (var r = 0; r < 4; r++)
-              for (var c = 0; c < 4; c++)
-                if (!hinted.contains((row: r, col: c))) (row: r, col: c),
-          ].first;
+      final own = [
+        for (var r = 0; r < 4; r++)
+          for (var c = 0; c < 4; c++)
+            if (!hinted.contains((row: r, col: c))) (row: r, col: c),
+      ].first;
       bloc.add(CellLongPressed(row: own.row, col: own.col));
       await bloc.stream.firstWhere(
         (s) => s.gridData[own.row][own.col] != NonogramCellState.empty,

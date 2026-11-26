@@ -67,28 +67,24 @@ class NonogramCellsPainter extends CustomPainter {
     if (backgroundColor != null) {
       canvas.drawRect(Offset.zero & size, Paint()..color = backgroundColor!);
     }
-    final fillPaint =
-        Paint()
-          ..color = filledColor
-          ..style = PaintingStyle.fill;
+    final fillPaint = Paint()
+      ..color = filledColor
+      ..style = PaintingStyle.fill;
     // Ô trống trên hàng/cột đã khớp: chấm tròn nhỏ (gọn hơn dấu X, và phân
     // biệt được với dấu X người chơi tự đánh).
-    final markerPaint =
-        Paint()
-          ..color = markerColor
-          ..style = PaintingStyle.fill;
+    final markerPaint = Paint()
+      ..color = markerColor
+      ..style = PaintingStyle.fill;
     final dotRadius = (cellSize * 0.075).clamp(1.2, 3.2);
-    final markedMarkerPaint =
-        Paint()
-          ..color = markedMarkerColor
-          ..style = PaintingStyle.stroke
-          // Dấu X người chơi tự đánh: nhỏ, nét mảnh vừa phải.
-          ..strokeWidth = (cellSize * 0.06).clamp(1.2, 2.2)
-          ..strokeCap = StrokeCap.round;
-    final markedBackgroundPaint =
-        Paint()
-          ..color = markedMarkerColor.withValues(alpha: 0.07)
-          ..style = PaintingStyle.fill;
+    final markedMarkerPaint = Paint()
+      ..color = markedMarkerColor
+      ..style = PaintingStyle.stroke
+      // Dấu X người chơi tự đánh: nhỏ, nét mảnh vừa phải.
+      ..strokeWidth = (cellSize * 0.06).clamp(1.2, 2.2)
+      ..strokeCap = StrokeCap.round;
+    final markedBackgroundPaint = Paint()
+      ..color = markedMarkerColor.withValues(alpha: 0.07)
+      ..style = PaintingStyle.fill;
 
     for (int r = 0; r < rows; r++) {
       for (int c = 0; c < cols; c++) {

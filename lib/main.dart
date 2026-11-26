@@ -39,10 +39,9 @@ Future<void> main() async {
 
   final android = !kIsWeb && defaultTargetPlatform == TargetPlatform.android;
   // Gói "Chơi không quảng cáo" bán qua Google Play: chỉ có trên Android.
-  final premium =
-      android
-          ? await PremiumController.load(gateway: PlayBillingGateway())
-          : null;
+  final premium = android
+      ? await PremiumController.load(gateway: PlayBillingGateway())
+      : null;
   // Giờ của game theo giờ mạng (điểm danh, hạn của lượt trong ngày).
   final clock = await GameClock.load(trusted: NetworkTrustedClock());
   final checkIn = await CheckInService.load(
@@ -173,27 +172,25 @@ class _AppMaterial extends StatelessWidget {
   Widget build(BuildContext context) {
     return ListenableBuilder(
       listenable: Listenable.merge([themeMode, locale]),
-      builder:
-          (context, _) => MaterialApp(
-            navigatorKey: navigatorKey,
-            onGenerateTitle:
-                (context) => AppLocalizations.of(context)!.appTitle,
-            debugShowCheckedModeBanner: false,
-            theme: AppTheme.lightTheme,
-            darkTheme: AppTheme.darkTheme,
-            themeMode: themeMode.value,
-            localizationsDelegates: const [
-              AppLocalizations.delegate,
-              GlobalMaterialLocalizations.delegate,
-              GlobalWidgetsLocalizations.delegate,
-              GlobalCupertinoLocalizations.delegate,
-            ],
-            supportedLocales: AppLocalizations.supportedLocales,
-            // null = theo ngôn ngữ của máy (chọn bằng resolveAppLocale).
-            locale: locale.value,
-            localeListResolutionCallback: resolveAppLocale,
-            home: home,
-          ),
+      builder: (context, _) => MaterialApp(
+        navigatorKey: navigatorKey,
+        onGenerateTitle: (context) => AppLocalizations.of(context)!.appTitle,
+        debugShowCheckedModeBanner: false,
+        theme: AppTheme.lightTheme,
+        darkTheme: AppTheme.darkTheme,
+        themeMode: themeMode.value,
+        localizationsDelegates: const [
+          AppLocalizations.delegate,
+          GlobalMaterialLocalizations.delegate,
+          GlobalWidgetsLocalizations.delegate,
+          GlobalCupertinoLocalizations.delegate,
+        ],
+        supportedLocales: AppLocalizations.supportedLocales,
+        // null = theo ngôn ngữ của máy (chọn bằng resolveAppLocale).
+        locale: locale.value,
+        localeListResolutionCallback: resolveAppLocale,
+        home: home,
+      ),
     );
   }
 }

@@ -82,10 +82,9 @@ class _NonogramHistoryViewState extends State<_NonogramHistoryView> {
                     ),
                     const SizedBox(height: 16),
                     FilledButton.tonal(
-                      onPressed:
-                          () => context.read<NonogramHistoryBloc>().add(
-                            const HistoryInitialized(),
-                          ),
+                      onPressed: () => context.read<NonogramHistoryBloc>().add(
+                        const HistoryInitialized(),
+                      ),
                       child: Text(context.l10n.commonRetry),
                     ),
                   ],
@@ -243,13 +242,9 @@ class _HistoryListTile extends StatelessWidget {
                         color: context.color.surfaceContainer,
                         borderRadius: BorderRadius.circular(14),
                       ),
-                      child:
-                          puzzle == null
-                              ? null
-                              : NonogramPixelArt.picture(
-                                context,
-                                puzzle.solution,
-                              ),
+                      child: puzzle == null
+                          ? null
+                          : NonogramPixelArt.picture(context, puzzle.solution),
                     ),
                     const SizedBox(width: 14),
                     Expanded(

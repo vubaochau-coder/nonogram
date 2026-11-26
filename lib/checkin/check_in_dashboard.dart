@@ -80,10 +80,9 @@ TextSpan _reminderText(
   const wandMark = '\uE001';
   final hasHints = inv.dailyHints > 0;
   final hasWands = inv.dailyWands > 0;
-  final rewards =
-      hasHints && hasWands
-          ? l10n.dashboardDailyReminderBoth(hintMark, wandMark)
-          : (hasHints ? hintMark : wandMark);
+  final rewards = hasHints && hasWands
+      ? l10n.dashboardDailyReminderBoth(hintMark, wandMark)
+      : (hasHints ? hintMark : wandMark);
   final message = l10n.dashboardDailyReminder(
     rewards,
     context.timeLeft(now, endOfTodayOf(context, now)),

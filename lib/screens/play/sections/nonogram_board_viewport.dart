@@ -427,10 +427,9 @@ class _NonogramBoardViewportState extends State<NonogramBoardViewport>
   @override
   Widget build(BuildContext context) {
     return BlocListener<NonogramPlayBloc, NonogramPlayState>(
-      listenWhen:
-          (p, c) =>
-              c is NonogramPlayHintAppliedState ||
-              c is NonogramPlayHintCellsAppliedState,
+      listenWhen: (p, c) =>
+          c is NonogramPlayHintAppliedState ||
+          c is NonogramPlayHintCellsAppliedState,
       listener: (context, state) {
         if (state is NonogramPlayHintAppliedState) {
           _showHint(axis: state.axis, index: state.lineIndex);
@@ -439,17 +438,16 @@ class _NonogramBoardViewportState extends State<NonogramBoardViewport>
         }
       },
       child: BlocBuilder<NonogramPlayBloc, NonogramPlayState>(
-        buildWhen:
-            (p, c) =>
-                p.puzzle != c.puzzle ||
-                p.cellSize != c.cellSize ||
-                p.satisfiedRows != c.satisfiedRows ||
-                p.satisfiedCols != c.satisfiedCols ||
-                p.isLoading != c.isLoading ||
-                p.startTime != c.startTime ||
-                p.isWandActive != c.isWandActive ||
-                p.lockedCells != c.lockedCells ||
-                !NonogramGridEquality.equals(p.gridData, c.gridData),
+        buildWhen: (p, c) =>
+            p.puzzle != c.puzzle ||
+            p.cellSize != c.cellSize ||
+            p.satisfiedRows != c.satisfiedRows ||
+            p.satisfiedCols != c.satisfiedCols ||
+            p.isLoading != c.isLoading ||
+            p.startTime != c.startTime ||
+            p.isWandActive != c.isWandActive ||
+            p.lockedCells != c.lockedCells ||
+            !NonogramGridEquality.equals(p.gridData, c.gridData),
         builder: (context, state) {
           final puzzle = state.puzzle;
           if (puzzle == null) return const SizedBox.shrink();
@@ -647,10 +645,9 @@ class _BoardPaint extends StatelessWidget {
     );
 
     // Lúc giải xong hai dải số mờ đi để lộ trọn tranh.
-    Widget strip(Widget child) =>
-        revealing
-            ? FadeTransition(opacity: celebration.cluesOpacity, child: child)
-            : child;
+    Widget strip(Widget child) => revealing
+        ? FadeTransition(opacity: celebration.cluesOpacity, child: child)
+        : child;
 
     return Stack(
       clipBehavior: Clip.hardEdge,
@@ -878,20 +875,19 @@ class _BoardPaint extends StatelessWidget {
         // 7. Dải sáng khi dùng gợi ý (cả lưới lẫn dải số của hàng/cột đó).
         if (hintAxis != null && hintIndex != null)
           _HintBand(
-            rect:
-                hintAxis == Axis.vertical
-                    ? Rect.fromLTWH(
-                      offset.dx + hintIndex! * cell,
-                      stickyTop,
-                      cell,
-                      offset.dy + gridH - stickyTop,
-                    )
-                    : Rect.fromLTWH(
-                      stickyLeft,
-                      offset.dy + hintIndex! * cell,
-                      offset.dx + gridW - stickyLeft,
-                      cell,
-                    ),
+            rect: hintAxis == Axis.vertical
+                ? Rect.fromLTWH(
+                    offset.dx + hintIndex! * cell,
+                    stickyTop,
+                    cell,
+                    offset.dy + gridH - stickyTop,
+                  )
+                : Rect.fromLTWH(
+                    stickyLeft,
+                    offset.dy + hintIndex! * cell,
+                    offset.dx + gridW - stickyLeft,
+                    cell,
+                  ),
             pulse: hintPulse,
           ),
 
@@ -1220,13 +1216,12 @@ class _HintBand extends StatelessWidget {
               decoration: BoxDecoration(
                 color: primary.withValues(alpha: 0.28 * opacity),
                 borderRadius: BorderRadius.circular(4),
-                border:
-                    strong
-                        ? Border.all(
-                          color: primary.withValues(alpha: opacity),
-                          width: 2.5,
-                        )
-                        : null,
+                border: strong
+                    ? Border.all(
+                        color: primary.withValues(alpha: opacity),
+                        width: 2.5,
+                      )
+                    : null,
               ),
             );
           },

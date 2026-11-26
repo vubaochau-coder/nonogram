@@ -19,11 +19,10 @@ class UndoAction extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<NonogramPlayBloc, NonogramPlayState>(
-      buildWhen:
-          (p, c) =>
-              p.canUndo != c.canUndo ||
-              p.isSolved != c.isSolved ||
-              p.isWandActive != c.isWandActive,
+      buildWhen: (p, c) =>
+          p.canUndo != c.canUndo ||
+          p.isSolved != c.isSolved ||
+          p.isWandActive != c.isWandActive,
       builder: (context, state) {
         final label = context.l10n.nonogramPlayUndo;
         return Semantics(
@@ -43,10 +42,9 @@ class UndoAction extends StatelessWidget {
                   return;
                 }
                 HapticFeedback.selectionClick();
-                final t =
-                    NonogramTransformationControllerProvider.of(
-                      context,
-                    ).value.getTranslation();
+                final t = NonogramTransformationControllerProvider.of(
+                  context,
+                ).value.getTranslation();
                 context.read<NonogramPlayBloc>().add(
                   UndoRequested(offsetX: t.x, offsetY: t.y),
                 );
