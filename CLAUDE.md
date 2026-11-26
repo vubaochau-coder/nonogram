@@ -10,9 +10,10 @@ trên repo này.
   `devin`... (không phân biệt hoa thường). Đặt tên theo nội dung thay đổi, ví
   dụ `feat/check-in-streak`, `fix/ad-not-ready-message`, `ci/store-build-tag`.
   Workflow `Branch name` chặn pull request từ nhánh vi phạm.
-- `main` là bản phát hành (Store build chạy tay trên nhánh này), `develop` là
-  bản thử nội bộ (Firebase App Distribution). Nhánh phụ tạo từ nhánh đích và
-  mở pull request vào đó.
+- Chỉ có một nhánh lâu dài là `main`. Nhánh phụ tạo từ `main` và mở pull
+  request vào `main`. Merge xong thì bản thử (flavor `dev`) tự lên Firebase
+  App Distribution; bản store (flavor `store`) build bằng `Store build` chạy
+  tay.
 - Nhánh phụ được xoá tự động sau khi pull request được merge (cài đặt
   "Automatically delete head branches" của repo). Không giữ lại nhánh đã
   merge.

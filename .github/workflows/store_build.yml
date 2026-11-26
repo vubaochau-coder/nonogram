@@ -3,8 +3,8 @@ name: Store build
 # Bản phát hành lên Google Play: flavor `store` (không có công cụ tester, ID
 # quảng cáo thật). Chỉ chạy tay từ tab Actions, trên nhánh `main`;
 # kết quả là file .aab đã ký ở mục Artifacts của lần chạy, tải về rồi tự đưa
-# lên Play Console. Nhánh main không có CI tự động nên workflow này chạy
-# format / analyze / test trước khi build.
+# lên Play Console. Workflow tự chạy lại format / analyze / test trước khi
+# build, để bản store luôn được kiểm tra trên đúng commit được build.
 #
 # Build xong (đã qua test, đã upload artifact) thì gắn tag
 # `v<versionName>+<buildNumber>` (ví dụ `v1.0.0+12`) vào đúng commit vừa build,
