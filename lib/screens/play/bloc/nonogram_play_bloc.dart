@@ -125,8 +125,9 @@ abstract class _PlayBlocBase
 
   void _pushUndo(List<List<NonogramCellState>> grid) {
     _undoHistory.add(grid);
-    if (_undoHistory.length > NonogramPlayBloc.maxUndoSteps)
+    if (_undoHistory.length > NonogramPlayBloc.maxUndoSteps) {
       _undoHistory.removeAt(0);
+    }
   }
 
   void _clearUndo() {
