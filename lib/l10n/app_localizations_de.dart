@@ -563,9 +563,6 @@ class AppLocalizationsDe extends AppLocalizations {
   String get settingsLicenses => 'Lizenzen';
 
   @override
-  String get settingsSwitchPlayMode => 'Spielmodus wechseln';
-
-  @override
   String get licensesTitle => 'Lizenzen';
 
   @override
@@ -582,33 +579,6 @@ class AppLocalizationsDe extends AppLocalizations {
   String get licensesSoftwareButton => 'Open-Source-Lizenzen';
 
   @override
-  String get licensesDeveloperLevelsNote =>
-      'Die Rätsel im Entwicklermodus stammen von nonogram.org und sind nur für interne Tests gedacht. Sie sind nicht in der Store-Version enthalten.';
-
-  @override
-  String get playModeTitle => 'Spielmodus wählen';
-
-  @override
-  String get playModeSubtitle =>
-      'Der Fortschritt wird für jeden Modus getrennt gespeichert.';
-
-  @override
-  String get playModeUserTitle => 'Spielermodus';
-
-  @override
-  String get playModeUserBody => 'Die lizenzierten Rätsel der Store-Version.';
-
-  @override
-  String get playModeDeveloperTitle => 'Entwicklermodus';
-
-  @override
-  String get playModeDeveloperBody =>
-      'Die Originalrätsel von nonogram.org für interne Tests. Behält deinen bisherigen Fortschritt.';
-
-  @override
-  String get playModeLastUsed => 'Zuletzt verwendet';
-
-  @override
   String licensesBy(String author) {
     return 'Von $author';
   }
@@ -616,11 +586,6 @@ class AppLocalizationsDe extends AppLocalizations {
   @override
   String licensesLevelCount(int count) {
     return '$count Rätsel';
-  }
-
-  @override
-  String playModeProgress(int solved, int total) {
-    return '$solved/$total gelöst';
   }
 
   @override

@@ -7,7 +7,6 @@ import 'package:nonogram/core/app_sounds.dart';
 import 'package:nonogram/core/app_theme.dart';
 import 'package:nonogram/core/app_theme_mode.dart';
 import 'package:nonogram/core/context_ext.dart';
-import 'package:nonogram/core/play_mode.dart';
 import 'package:nonogram/premium/premium_card.dart';
 import 'package:nonogram/premium/premium_controller.dart';
 import 'package:nonogram/screens/licenses/app_licenses_screen.dart';
@@ -18,7 +17,7 @@ import 'package:provider/provider.dart';
 
 /// Tab "Tôi": gói không quảng cáo, cài đặt (giao diện, ngôn ngữ, âm thanh),
 /// trợ giúp (cách chơi, kỹ thuật giải) và các mục khác (quyền riêng tư quảng
-/// cáo, giấy phép, đổi chế độ chơi ở bản dev).
+/// cáo, giấy phép; công cụ tester ở bản dev).
 class MeScreen extends StatelessWidget {
   const MeScreen({super.key});
 
@@ -47,7 +46,6 @@ class MeScreen extends StatelessWidget {
     final themeMode = _maybe<AppThemeModeController>(context);
     final locale = _maybe<AppLocaleController>(context);
     final sounds = _maybe<AppSoundController>(context);
-    final switcher = _maybe<PlayModeSwitcher>(context);
     final tester = _maybe<TesterSettings>(context);
 
     return Scaffold(
@@ -177,14 +175,6 @@ class MeScreen extends StatelessWidget {
                         ),
                       ),
                     ),
-                    if (switcher != null)
-                      _Tile(
-                        key: const ValueKey('me-switch-play-mode'),
-                        icon: LucideIcons.repeat,
-                        color: const Color(0xFF6741D9),
-                        label: l10n.settingsSwitchPlayMode,
-                        onTap: switcher.switchMode,
-                      ),
                   ],
                 );
               },

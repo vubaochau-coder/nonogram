@@ -21,7 +21,6 @@ import 'core/app_theme.dart';
 import 'core/app_theme_mode.dart';
 import 'core/app_sounds.dart';
 import 'core/onboarding_preferences.dart';
-import 'core/play_mode.dart';
 import 'data/hive_nonogram_local_service.dart';
 import 'data/nonogram_puzzle_source.dart';
 import 'data/nonogram_repository.dart';
@@ -35,7 +34,6 @@ import 'checkin/game_clock.dart';
 import 'checkin/trusted_clock.dart';
 import 'rating/app_rating.dart';
 import 'screens/home/app_home_screen.dart';
-import 'screens/play_mode/play_mode_selection_screen.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -85,7 +83,6 @@ Future<void> main() async {
     sounds: await AppSoundController.load(),
     locale: await AppLocaleController.load(),
     onboarding: await OnboardingPreferences.load(),
-    playModes: await PlayModePreferences.load(),
   );
   await launcher.launch();
 }
@@ -113,8 +110,7 @@ AdService createAdService(
   );
 }
 
-/// Khởi động app: flavor `dev` hiện màn chọn chế độ chơi trước, flavor
-/// `store` vào thẳng bộ màn có bản quyền (chế độ người dùng).
+/// Khởi động app: dựng các dịch vụ chạy nền rồi mở màn chính.
 class AppLauncher {
   AppLauncher({
     required this.flavor,
@@ -128,7 +124,6 @@ class AppLauncher {
     required this.sounds,
     required this.locale,
     required this.onboarding,
-    required this.playModes,
   });
 
   final AppFlavor flavor;
@@ -142,7 +137,6 @@ class AppLauncher {
   final AppSoundController sounds;
   final AppLocaleController locale;
   final OnboardingPreferences onboarding;
-  final PlayModePreferences playModes;
 
   Future<void> launch() async {
     // Không chặn lúc mở app: hỏi Google Play và đồng bộ giờ ở nền.
@@ -152,32 +146,11 @@ class AppLauncher {
       premium.initialize();
     }
     checkIn.initialize();
-    if (flavor.hasPlayModeSelection) {
-      showModeSelection();
-    } else {
-      await start(PlayMode.user);
-    }
+    await start();
   }
 
-  void showModeSelection() {
-    runApp(
-      PlayModeSelectionApp(
-        themeMode: themeMode,
-        locale: locale,
-        lastMode: playModes.lastMode,
-        loadStats: loadPlayModeStats,
-        onSelected: (mode) async {
-          await playModes.save(mode);
-          await start(mode);
-        },
-      ),
-    );
-  }
-
-  Future<void> start(PlayMode mode) async {
-    final localService = HiveNonogramLocalService(
-      boxName: mode.progressBoxName,
-    );
+  Future<void> start() async {
+    final localService = HiveNonogramLocalService();
     await localService.initialize();
 
     // Bài hướng dẫn tự mở một lần, chỉ với người chưa giải màn nào. Đánh dấu
@@ -187,7 +160,7 @@ class AppLauncher {
     await onboarding.markTutorialSeen();
 
     final repository = NonogramRepository(
-      AssetNonogramPuzzleSource(basePath: mode.levelsPath),
+      AssetNonogramPuzzleSource(),
       localService,
       today: () => clock.today,
     );
@@ -206,9 +179,6 @@ class AppLauncher {
         rating: rating,
         onboarding: onboarding,
         showTutorialOnStart: showTutorial,
-        playModeSwitcher: flavor.hasPlayModeSelection
-            ? PlayModeSwitcher(current: mode, switchMode: showModeSelection)
-            : null,
       ),
     );
 
@@ -217,23 +187,6 @@ class AppLauncher {
     // Sau khi app đã hiện: hộp thoại xin đồng ý (nếu cần) nằm trên giao
     // diện game, và việc tải quảng cáo không làm chậm lúc mở app.
     adService.initialize();
-  }
-
-  /// Số màn đã giải / tổng số màn của một chế độ, hiện trên màn chọn chế độ.
-  static Future<PlayModeStats> loadPlayModeStats(PlayMode mode) async {
-    var total = 0;
-    var solved = 0;
-    try {
-      total = await AssetNonogramPuzzleSource(
-        basePath: mode.levelsPath,
-      ).totalLevels();
-    } catch (_) {}
-    try {
-      final local = HiveNonogramLocalService(boxName: mode.progressBoxName);
-      await local.initialize();
-      solved = (await local.getCompletedProgress()).length;
-    } catch (_) {}
-    return (solved: solved, total: total);
   }
 }
 
@@ -278,37 +231,6 @@ class _AppMaterial extends StatelessWidget {
   }
 }
 
-/// App rút gọn chỉ có màn chọn chế độ chơi.
-class PlayModeSelectionApp extends StatelessWidget {
-  const PlayModeSelectionApp({
-    super.key,
-    required this.themeMode,
-    required this.locale,
-    required this.onSelected,
-    required this.loadStats,
-    this.lastMode,
-  });
-
-  final AppThemeModeController themeMode;
-  final AppLocaleController locale;
-  final ValueChanged<PlayMode> onSelected;
-  final PlayModeStatsLoader loadStats;
-  final PlayMode? lastMode;
-
-  @override
-  Widget build(BuildContext context) {
-    return _AppMaterial(
-      themeMode: themeMode,
-      locale: locale,
-      home: PlayModeSelectionScreen(
-        onSelected: onSelected,
-        loadStats: loadStats,
-        lastMode: lastMode,
-      ),
-    );
-  }
-}
-
 class NonogramApp extends StatelessWidget {
   const NonogramApp({
     super.key,
@@ -324,7 +246,6 @@ class NonogramApp extends StatelessWidget {
     this.rating,
     this.onboarding,
     this.showTutorialOnStart = false,
-    this.playModeSwitcher,
   });
 
   final NonogramRepository repository;
@@ -354,9 +275,6 @@ class NonogramApp extends StatelessWidget {
   final OnboardingPreferences? onboarding;
   final bool showTutorialOnStart;
 
-  /// Null ở flavor `store` (và trong test): không có lối đổi chế độ chơi.
-  final PlayModeSwitcher? playModeSwitcher;
-
   @override
   Widget build(BuildContext context) {
     return MultiRepositoryProvider(
@@ -374,7 +292,6 @@ class NonogramApp extends StatelessWidget {
         if (checkIn != null) ChangeNotifierProvider.value(value: checkIn!),
         if (clock != null) ChangeNotifierProvider.value(value: clock!),
         if (onboarding != null) Provider.value(value: onboarding!),
-        if (playModeSwitcher != null) Provider.value(value: playModeSwitcher!),
       ],
       child: ToastificationWrapper(
         child: _AppMaterial(

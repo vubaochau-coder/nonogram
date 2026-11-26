@@ -1,7 +1,7 @@
 # Files written before the 300-line rule (docs/conventions.md), with their
 # current length. A listed file may shrink but not grow; once it fits the
 # limit, remove its line. Never add new entries: split the file instead.
-lib/main.dart 389
+lib/main.dart 306
 lib/checkin/check_in_celebration.dart 995
 lib/checkin/check_in_service.dart 419
 lib/premium/premium_benefits_screen.dart 607
@@ -9,7 +9,6 @@ lib/screens/dashboard/sections/nonogram_dashboard_hero_section.dart 396
 lib/screens/guide/illustrations/guide_diagram_view.dart 330
 lib/screens/guide/nonogram_guide_screen.dart 363
 lib/screens/history/nonogram_history_screen.dart 305
-lib/screens/me/me_screen.dart 308
 lib/screens/play/bloc/nonogram_play_state.dart 425
 lib/screens/play/celebration/solve_celebration.dart 586
 lib/screens/play/coach/nonogram_play_coach.dart 445

@@ -1047,12 +1047,6 @@ abstract class AppLocalizations {
   /// **'Licenses'**
   String get settingsLicenses;
 
-  /// No description provided for @settingsSwitchPlayMode.
-  ///
-  /// In en, this message translates to:
-  /// **'Switch play mode'**
-  String get settingsSwitchPlayMode;
-
   /// No description provided for @licensesTitle.
   ///
   /// In en, this message translates to:
@@ -1083,54 +1077,6 @@ abstract class AppLocalizations {
   /// **'Open-source software licenses'**
   String get licensesSoftwareButton;
 
-  /// No description provided for @licensesDeveloperLevelsNote.
-  ///
-  /// In en, this message translates to:
-  /// **'Developer mode puzzles come from nonogram.org and are for internal testing only. They are not included in the store version.'**
-  String get licensesDeveloperLevelsNote;
-
-  /// No description provided for @playModeTitle.
-  ///
-  /// In en, this message translates to:
-  /// **'Choose a play mode'**
-  String get playModeTitle;
-
-  /// No description provided for @playModeSubtitle.
-  ///
-  /// In en, this message translates to:
-  /// **'Progress is saved separately for each mode.'**
-  String get playModeSubtitle;
-
-  /// No description provided for @playModeUserTitle.
-  ///
-  /// In en, this message translates to:
-  /// **'Player mode'**
-  String get playModeUserTitle;
-
-  /// No description provided for @playModeUserBody.
-  ///
-  /// In en, this message translates to:
-  /// **'The licensed puzzles that ship in the store version.'**
-  String get playModeUserBody;
-
-  /// No description provided for @playModeDeveloperTitle.
-  ///
-  /// In en, this message translates to:
-  /// **'Developer mode'**
-  String get playModeDeveloperTitle;
-
-  /// No description provided for @playModeDeveloperBody.
-  ///
-  /// In en, this message translates to:
-  /// **'The original puzzles from nonogram.org, for internal testing. Keeps your earlier progress.'**
-  String get playModeDeveloperBody;
-
-  /// No description provided for @playModeLastUsed.
-  ///
-  /// In en, this message translates to:
-  /// **'Last used'**
-  String get playModeLastUsed;
-
   /// No description provided for @licensesBy.
   ///
   /// In en, this message translates to:
@@ -1142,12 +1088,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'{count} puzzles'**
   String licensesLevelCount(int count);
-
-  /// No description provided for @playModeProgress.
-  ///
-  /// In en, this message translates to:
-  /// **'{solved}/{total} solved'**
-  String playModeProgress(int solved, int total);
 
   /// No description provided for @adRewardNotReady.
   ///

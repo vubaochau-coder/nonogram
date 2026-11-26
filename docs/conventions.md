@@ -10,8 +10,12 @@
   không phân biệt hoa thường). Đặt tên theo nội dung: `feat/...`, `fix/...`,
   `refactor/...`, `chore/...`, `ci/...`, `docs/...`, `test/...`. Workflow
   `Branch name` chặn pull request từ nhánh vi phạm.
-- `main` là bản store, `develop` là bản thử nội bộ. Nhánh phụ tạo từ nhánh
-  đích và mở pull request vào đó; nhánh phụ tự xoá sau khi merge.
+- `main` là bản store, `develop` là bản thử nội bộ; hai nhánh có cùng code
+  (bản store khác bản thử ở flavor `store` / `dev`). Nhánh phụ tạo từ
+  `develop` và mở pull request vào đó; nhánh phụ tự xoá sau khi merge.
+- Phát hành: pull request `develop` → `main`, merge bằng **Create a merge
+  commit** (không squash / rebase). Sửa gấp trên `main` thì merge ngược
+  `main` → `develop` ngay sau đó.
 - Commit message theo Conventional Commits, **tiếng Anh**: `feat`, `fix`,
   `refactor`, `docs`, `chore`, `test`, `ci`, `perf`, `style`; có thể kèm
   phạm vi: `fix(play): …`, `feat(checkin): …`.

@@ -560,9 +560,6 @@ class AppLocalizationsTh extends AppLocalizations {
   String get settingsLicenses => 'สัญญาอนุญาต';
 
   @override
-  String get settingsSwitchPlayMode => 'เปลี่ยนโหมดการเล่น';
-
-  @override
   String get licensesTitle => 'สัญญาอนุญาต';
 
   @override
@@ -579,33 +576,6 @@ class AppLocalizationsTh extends AppLocalizations {
   String get licensesSoftwareButton => 'สัญญาอนุญาตซอฟต์แวร์โอเพนซอร์ส';
 
   @override
-  String get licensesDeveloperLevelsNote =>
-      'ปริศนาในโหมดนักพัฒนามาจาก nonogram.org และใช้สำหรับทดสอบภายในเท่านั้น ไม่มีอยู่ในเวอร์ชันบนสโตร์';
-
-  @override
-  String get playModeTitle => 'เลือกโหมดการเล่น';
-
-  @override
-  String get playModeSubtitle => 'ความคืบหน้าของแต่ละโหมดบันทึกแยกกัน';
-
-  @override
-  String get playModeUserTitle => 'โหมดผู้เล่น';
-
-  @override
-  String get playModeUserBody =>
-      'ปริศนาที่มีสัญญาอนุญาตซึ่งอยู่ในเวอร์ชันบนสโตร์';
-
-  @override
-  String get playModeDeveloperTitle => 'โหมดนักพัฒนา';
-
-  @override
-  String get playModeDeveloperBody =>
-      'ปริศนาต้นฉบับจาก nonogram.org สำหรับทดสอบภายใน เก็บความคืบหน้าเดิมของคุณไว้';
-
-  @override
-  String get playModeLastUsed => 'ใช้ล่าสุด';
-
-  @override
   String licensesBy(String author) {
     return 'โดย $author';
   }
@@ -613,11 +583,6 @@ class AppLocalizationsTh extends AppLocalizations {
   @override
   String licensesLevelCount(int count) {
     return '$count ปริศนา';
-  }
-
-  @override
-  String playModeProgress(int solved, int total) {
-    return 'ไขแล้ว $solved/$total';
   }
 
   @override

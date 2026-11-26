@@ -566,9 +566,6 @@ class AppLocalizationsIt extends AppLocalizations {
   String get settingsLicenses => 'Licenze';
 
   @override
-  String get settingsSwitchPlayMode => 'Cambia modalità di gioco';
-
-  @override
   String get licensesTitle => 'Licenze';
 
   @override
@@ -585,34 +582,6 @@ class AppLocalizationsIt extends AppLocalizations {
   String get licensesSoftwareButton => 'Licenze del software open source';
 
   @override
-  String get licensesDeveloperLevelsNote =>
-      'I rompicapi della modalità sviluppatore provengono da nonogram.org e servono solo per i test interni. Non sono inclusi nella versione dello store.';
-
-  @override
-  String get playModeTitle => 'Scegli una modalità di gioco';
-
-  @override
-  String get playModeSubtitle =>
-      'I progressi vengono salvati separatamente per ogni modalità.';
-
-  @override
-  String get playModeUserTitle => 'Modalità giocatore';
-
-  @override
-  String get playModeUserBody =>
-      'I rompicapi con licenza inclusi nella versione dello store.';
-
-  @override
-  String get playModeDeveloperTitle => 'Modalità sviluppatore';
-
-  @override
-  String get playModeDeveloperBody =>
-      'I rompicapi originali di nonogram.org, per i test interni. Mantiene i tuoi progressi precedenti.';
-
-  @override
-  String get playModeLastUsed => 'Ultima usata';
-
-  @override
   String licensesBy(String author) {
     return 'Di $author';
   }
@@ -620,11 +589,6 @@ class AppLocalizationsIt extends AppLocalizations {
   @override
   String licensesLevelCount(int count) {
     return '$count rompicapi';
-  }
-
-  @override
-  String playModeProgress(int solved, int total) {
-    return '$solved/$total risolti';
   }
 
   @override
