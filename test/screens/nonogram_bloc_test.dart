@@ -1,10 +1,10 @@
 import 'dart:math';
 
-import 'package:nonogram/models/nonogram_cell_state.dart';
+import 'package:nonogram/engine/model/nonogram_cell_state.dart';
 import 'package:nonogram/models/nonogram_completed_progress.dart';
 import 'package:nonogram/models/nonogram_interaction_mode.dart';
 import 'package:nonogram/models/nonogram_board_snapshot.dart';
-import 'package:nonogram/models/nonogram_puzzle.dart';
+import 'package:nonogram/engine/model/nonogram_puzzle.dart';
 import 'package:nonogram/models/power_up_inventory.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:nonogram/screens/play/bloc/nonogram_play_bloc.dart';
@@ -554,12 +554,11 @@ void main() {
       // Tự tô thêm một ô (không phải ô gợi ý) để xem chơi lại có xoá nó.
       final hinted = bloc.state.lockedCells;
       expect(hinted.length, 5);
-      final own =
-          [
-            for (var r = 0; r < 4; r++)
-              for (var c = 0; c < 4; c++)
-                if (!hinted.contains((row: r, col: c))) (row: r, col: c),
-          ].first;
+      final own = [
+        for (var r = 0; r < 4; r++)
+          for (var c = 0; c < 4; c++)
+            if (!hinted.contains((row: r, col: c))) (row: r, col: c),
+      ].first;
       bloc.add(CellLongPressed(row: own.row, col: own.col));
       await bloc.stream.firstWhere(
         (s) => s.gridData[own.row][own.col] != NonogramCellState.empty,

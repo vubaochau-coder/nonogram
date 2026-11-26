@@ -4,7 +4,7 @@ import 'package:lucide_icons/lucide_icons.dart';
 import 'package:nonogram/core/app_route_intent.dart';
 import 'package:nonogram/core/app_theme.dart';
 import 'package:nonogram/core/context_ext.dart';
-import 'package:nonogram/models/nonogram_cell_state.dart';
+import 'package:nonogram/engine/model/nonogram_cell_state.dart';
 import 'package:nonogram/widgets/nonogram_pixel_art.dart';
 import 'package:shimmer/shimmer.dart';
 
@@ -19,15 +19,14 @@ class NonogramDashboardHeroSection extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<NonogramDashboardBloc, NonogramDashboardState>(
-      buildWhen:
-          (p, c) =>
-              p.isLoading != c.isLoading ||
-              p.currentLevel != c.currentLevel ||
-              p.currentPuzzle != c.currentPuzzle ||
-              p.currentProgress != c.currentProgress ||
-              p.hasInProgressSession != c.hasInProgressSession ||
-              p.nextPlayableLevel != c.nextPlayableLevel ||
-              p.totalLevels != c.totalLevels,
+      buildWhen: (p, c) =>
+          p.isLoading != c.isLoading ||
+          p.currentLevel != c.currentLevel ||
+          p.currentPuzzle != c.currentPuzzle ||
+          p.currentProgress != c.currentProgress ||
+          p.hasInProgressSession != c.hasInProgressSession ||
+          p.nextPlayableLevel != c.nextPlayableLevel ||
+          p.totalLevels != c.totalLevels,
       builder: (context, state) {
         final Widget child;
         if (state.isLoading) {
@@ -131,10 +130,9 @@ class _PlayContent extends StatelessWidget {
                 children: [
                   _Pill(
                     icon: isResume ? LucideIcons.pencil : LucideIcons.sparkles,
-                    label:
-                        isResume
-                            ? l10n.nonogramDashboardInProgressBadge
-                            : l10n.nonogramDashboardContinueNext,
+                    label: isResume
+                        ? l10n.nonogramDashboardInProgressBadge
+                        : l10n.nonogramDashboardContinueNext,
                   ),
                   const SizedBox(height: 12),
                   Text(
@@ -179,11 +177,10 @@ class _PlayContent extends StatelessWidget {
               backgroundColor: Colors.white,
               foregroundColor: context.gameColors.heroStart,
             ),
-            onPressed:
-                () => openFromDashboard(
-                  context,
-                  NonogramPlayIntent(initialLevel: level),
-                ),
+            onPressed: () => openFromDashboard(
+              context,
+              NonogramPlayIntent(initialLevel: level),
+            ),
             icon: Icon(isResume ? LucideIcons.play : LucideIcons.playCircle),
             label: Text(
               isResume

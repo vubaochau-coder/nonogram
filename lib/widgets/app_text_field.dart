@@ -186,10 +186,9 @@ class _AppTextFieldState extends State<AppTextField> {
     final shouldShowClearButton = widget.onClear != null && _hasText;
     if (!shouldShowClearButton) {
       if (suffixIcons.isEmpty) return null;
-      final suffixContent =
-          suffixIcons.length == 1
-              ? suffixIcons.first
-              : Row(mainAxisSize: MainAxisSize.min, children: suffixIcons);
+      final suffixContent = suffixIcons.length == 1
+          ? suffixIcons.first
+          : Row(mainAxisSize: MainAxisSize.min, children: suffixIcons);
       return IconTheme(
         data: IconThemeData(color: color.primary),
         child: suffixContent,
@@ -206,10 +205,9 @@ class _AppTextFieldState extends State<AppTextField> {
       icon: Icon(Icons.cancel, size: 18, color: color.primary),
     );
     suffixIcons.add(clearButton);
-    final suffixContent =
-        suffixIcons.length == 1
-            ? suffixIcons.first
-            : Row(mainAxisSize: MainAxisSize.min, children: suffixIcons);
+    final suffixContent = suffixIcons.length == 1
+        ? suffixIcons.first
+        : Row(mainAxisSize: MainAxisSize.min, children: suffixIcons);
     return IconTheme(
       data: IconThemeData(color: color.primary),
       child: suffixContent,
@@ -242,12 +240,11 @@ class _AppTextFieldState extends State<AppTextField> {
       textInputAction: widget.textInputAction,
       textCapitalization: widget.textCapitalization,
       inputFormatters: widget.inputFormatters,
-      buildCounter:
-          widget.showCounter
-              ? null
-              : (_, {required currentLength, required isFocused, maxLength}) {
-                return null;
-              },
+      buildCounter: widget.showCounter
+          ? null
+          : (_, {required currentLength, required isFocused, maxLength}) {
+              return null;
+            },
       decoration: InputDecoration(
         labelText: widget.labelText,
         floatingLabelBehavior: FloatingLabelBehavior.always,

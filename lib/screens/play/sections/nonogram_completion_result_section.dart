@@ -3,7 +3,7 @@ import 'package:lucide_icons/lucide_icons.dart';
 import 'package:nonogram/core/app_theme.dart';
 import 'package:nonogram/core/context_ext.dart';
 import 'package:nonogram/core/duration_format.dart';
-import 'package:nonogram/models/nonogram_puzzle.dart';
+import 'package:nonogram/engine/model/nonogram_puzzle.dart';
 import 'package:nonogram/widgets/nonogram_pixel_art.dart';
 
 import '../celebration/solve_celebration.dart';
@@ -96,11 +96,10 @@ class _SolvedBadge extends StatelessWidget {
       tween: Tween(begin: 0, end: 1),
       duration: const Duration(milliseconds: 500),
       curve: Curves.easeOutBack,
-      builder:
-          (context, t, child) => Transform.scale(
-            scale: t,
-            child: Opacity(opacity: t.clamp(0, 1), child: child),
-          ),
+      builder: (context, t, child) => Transform.scale(
+        scale: t,
+        child: Opacity(opacity: t.clamp(0, 1), child: child),
+      ),
       child: Column(
         children: [
           Container(
@@ -205,9 +204,8 @@ class _Picture extends StatelessWidget {
       tween: Tween(begin: 0.9, end: 1),
       duration: const Duration(milliseconds: 600),
       curve: Curves.easeOutCubic,
-      builder:
-          (context, scale, child) =>
-              Transform.scale(scale: scale, child: child),
+      builder: (context, scale, child) =>
+          Transform.scale(scale: scale, child: child),
       child: card,
     );
   }

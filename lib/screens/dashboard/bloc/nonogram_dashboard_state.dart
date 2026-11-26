@@ -2,7 +2,7 @@ import 'package:equatable/equatable.dart';
 import 'package:nonogram/core/wrapper.dart';
 import 'package:nonogram/data/nonogram_repository.dart';
 import 'package:nonogram/models/nonogram_board_snapshot.dart';
-import 'package:nonogram/models/nonogram_puzzle.dart';
+import 'package:nonogram/engine/model/nonogram_puzzle.dart';
 
 class NonogramDashboardState extends Equatable {
   final bool isLoading;

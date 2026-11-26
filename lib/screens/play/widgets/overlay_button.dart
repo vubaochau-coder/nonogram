@@ -37,10 +37,9 @@ class OverlayButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final active = color;
-    final foreground =
-        !enabled || muted
-            ? context.color.onSurfaceVariant.withValues(alpha: 0.45)
-            : (active ?? context.color.onSurface);
+    final foreground = !enabled || muted
+        ? context.color.onSurfaceVariant.withValues(alpha: 0.45)
+        : (active ?? context.color.onSurface);
     final background =
         active?.withValues(alpha: 0.12) ?? context.color.surfaceContainerLow;
     final border =

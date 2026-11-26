@@ -1,7 +1,7 @@
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:nonogram/core/app_sounds.dart';
-import 'package:nonogram/models/nonogram_cell_state.dart';
+import 'package:nonogram/engine/model/nonogram_cell_state.dart';
 
 import 'bloc/nonogram_play_bloc.dart';
 import 'bloc/nonogram_play_state.dart';
@@ -33,9 +33,8 @@ class _NonogramPlaySoundsState extends State<NonogramPlaySounds> {
   @override
   Widget build(BuildContext context) {
     return BlocListener<NonogramPlayBloc, NonogramPlayState>(
-      listenWhen:
-          (p, c) =>
-              !identical(p.gridData, c.gridData) || p.isLoading != c.isLoading,
+      listenWhen: (p, c) =>
+          !identical(p.gridData, c.gridData) || p.isLoading != c.isLoading,
       listener: _onState,
       child: widget.child,
     );
@@ -63,8 +62,13 @@ GameSound? soundFor(PlayTally prev, PlayTally next) {
 
 /// Đếm nhanh bàn chơi: ván nào, bao nhiêu ô tô / ô X, bao nhiêu hàng + cột
 /// đã khớp.
-typedef PlayTally =
-    ({Object? game, int filled, int marked, int lines, int totalLines});
+typedef PlayTally = ({
+  Object? game,
+  int filled,
+  int marked,
+  int lines,
+  int totalLines,
+});
 
 PlayTally _tallyOf(NonogramPlayState state) {
   var filled = 0;

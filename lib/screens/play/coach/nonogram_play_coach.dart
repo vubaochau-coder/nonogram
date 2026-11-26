@@ -44,12 +44,11 @@ Future<void> showNonogramPlayCoach(
   }
 
   entry = OverlayEntry(
-    builder:
-        (_) => NonogramPlayCoachOverlay(
-          steps: steps,
-          targetFor: targetFor,
-          onFinished: finish,
-        ),
+    builder: (_) => NonogramPlayCoachOverlay(
+      steps: steps,
+      targetFor: targetFor,
+      onFinished: finish,
+    ),
   );
   overlay.insert(entry);
   return done.future;
@@ -110,30 +109,28 @@ class _NonogramPlayCoachOverlayState extends State<NonogramPlayCoachOverlay> {
               // TweenAnimationBuilder không nhận đích null (bản release vẽ
               // khối xám của ErrorWidget phủ kín màn): bước không có vùng
               // sáng thì vẽ thẳng lớp tối.
-              child:
-                  target == null
-                      ? CustomPaint(
+              child: target == null
+                  ? CustomPaint(
+                      size: screen,
+                      painter: _SpotlightPainter(
+                        hole: null,
+                        scrim: scrim,
+                        ring: ring,
+                      ),
+                    )
+                  : TweenAnimationBuilder<Rect?>(
+                      tween: RectTween(end: target),
+                      duration: const Duration(milliseconds: 260),
+                      curve: Curves.easeOutCubic,
+                      builder: (context, rect, _) => CustomPaint(
                         size: screen,
                         painter: _SpotlightPainter(
-                          hole: null,
+                          hole: rect,
                           scrim: scrim,
                           ring: ring,
                         ),
-                      )
-                      : TweenAnimationBuilder<Rect?>(
-                        tween: RectTween(end: target),
-                        duration: const Duration(milliseconds: 260),
-                        curve: Curves.easeOutCubic,
-                        builder:
-                            (context, rect, _) => CustomPaint(
-                              size: screen,
-                              painter: _SpotlightPainter(
-                                hole: rect,
-                                scrim: scrim,
-                                ring: ring,
-                              ),
-                            ),
                       ),
+                    ),
             ),
           ),
           _CoachCard(

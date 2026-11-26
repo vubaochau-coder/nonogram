@@ -72,7 +72,7 @@ class CheckInService extends ChangeNotifier with WidgetsBindingObserver {
   final GameClock clock;
   final bool Function() _isPremium;
   final Map<int, List<CheckInReward>> _history;
-  final int _startDay;
+  int _startDay;
 
   /// Các mốc chuỗi đã nhận, theo tháng ([monthKeyOf]).
   final Map<int, Set<int>> _claims;
@@ -209,7 +209,7 @@ class CheckInService extends ChangeNotifier with WidgetsBindingObserver {
     notifyListeners();
   }
 
-  /// Kho tiến độ và lượt gợi ý / gậy phép của người chơi.
+  /// Kho của chế độ chơi đang mở.
   void attach(NonogramRepository repository) => _repository = repository;
 
   void _onDayMaybeChanged() {
@@ -368,6 +368,40 @@ class CheckInService extends ChangeNotifier with WidgetsBindingObserver {
     startDay: _startDay,
     checkedDays: _history.keys.toSet(),
   );
+
+  // --- Công cụ tester (chỉ bản `dev`) ---
+
+  /// Xoá toàn bộ lịch sử điểm danh và các mốc chuỗi đã nhận, coi như hôm nay
+  /// mới bắt đầu dùng app. Không thu hồi quà đã phát vào kho.
+  Future<void> debugReset() async {
+    _history.clear();
+    _claims.clear();
+    _doubled.clear();
+    await _saveClaims();
+    await _box?.put(_doubledKey, const <String, List<int>>{});
+    _startDay = today;
+    _maxSeenDay = today;
+    await _saveHistory();
+    await _box?.put(_startKey, _startDay);
+    await _box?.put(_maxSeenKey, _maxSeenDay);
+    notifyListeners();
+  }
+
+  /// Sau khi lùi giờ của game (công cụ tester): bỏ những lần điểm danh "trong
+  /// tương lai" và hạ bánh cóc về hôm nay, để điểm danh lại được. Người chơi
+  /// thật lùi giờ thì vẫn bị bánh cóc chặn.
+  Future<void> debugRewindToToday() async {
+    final t = today;
+    _history.removeWhere((day, _) => day > t);
+    if (_startDay > t) {
+      _startDay = t;
+      await _box?.put(_startKey, _startDay);
+    }
+    _maxSeenDay = t;
+    await _saveHistory();
+    await _box?.put(_maxSeenKey, t);
+    notifyListeners();
+  }
 
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {

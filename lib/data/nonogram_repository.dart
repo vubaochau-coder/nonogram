@@ -5,7 +5,7 @@ import 'package:nonogram/data/nonogram_local_service.dart';
 import 'package:nonogram/data/nonogram_puzzle_source.dart';
 import 'package:nonogram/models/nonogram_board_snapshot.dart';
 import 'package:nonogram/models/nonogram_completed_progress.dart';
-import 'package:nonogram/models/nonogram_puzzle.dart';
+import 'package:nonogram/engine/model/nonogram_puzzle.dart';
 import 'package:nonogram/models/power_up_inventory.dart';
 
 /// Gom dữ liệu màn chơi (assets) và tiến độ người chơi (lưu trên máy).
@@ -122,10 +122,9 @@ class NonogramRepository {
     return NonogramCompletionSummary(
       recent: recent,
       totalPlayMs: completed.fold(0, (sum, e) => sum + e.bestCompletionMs),
-      bestMs:
-          completed.isEmpty
-              ? null
-              : completed.map((e) => e.bestCompletionMs).reduce(min),
+      bestMs: completed.isEmpty
+          ? null
+          : completed.map((e) => e.bestCompletionMs).reduce(min),
     );
   }
 
@@ -171,8 +170,8 @@ class NonogramRepository {
     // Snapshot của màn đã hoàn thành là "stale", không được resume.
     final inProgressSnapshot =
         snapshot != null && !completedLevels.contains(snapshot.level)
-            ? snapshot
-            : null;
+        ? snapshot
+        : null;
 
     final nextPlayableLevel = await getNextPlayableLevel();
     final currentLevel = inProgressSnapshot?.level ?? nextPlayableLevel ?? 1;
@@ -187,8 +186,10 @@ class NonogramRepository {
   }
 }
 
-typedef NonogramSolvedPuzzle =
-    ({NonogramCompletedProgress record, NonogramPuzzle puzzle});
+typedef NonogramSolvedPuzzle = ({
+  NonogramCompletedProgress record,
+  NonogramPuzzle puzzle,
+});
 
 class NonogramCompletionSummary {
   const NonogramCompletionSummary({

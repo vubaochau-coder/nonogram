@@ -6,24 +6,18 @@ import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:nonogram/core/app_haptics.dart';
-import 'package:nonogram/core/app_theme.dart';
-import 'package:nonogram/core/context_ext.dart';
-import 'package:nonogram/models/nonogram_grid_equality.dart';
+import 'package:nonogram/engine/model/nonogram_grid_equality.dart';
 
-import '../../painters/nonogram_cells_painter.dart';
-import '../../painters/nonogram_clue_overflow_painter.dart';
-import '../../painters/nonogram_grid_painter.dart';
-import '../../painters/nonogram_left_clues_painter.dart';
-import '../../painters/nonogram_top_clues_painter.dart';
 import '../bloc/nonogram_play_bloc.dart';
-import '../celebration/solve_celebration.dart';
 import '../bloc/nonogram_play_event.dart';
 import '../bloc/nonogram_play_state.dart';
-import '../engine/clue_overflow.dart';
-import '../engine/nonogram_board_layout.dart';
+import '../layout/nonogram_board_layout.dart';
 import '../nonogram_transformation_controller_provider.dart';
 import '../views/drag_tip.dart';
-import '../views/wand_action.dart';
+import 'board/nonogram_board_paint.dart';
+
+part 'nonogram_board_viewport_drawing.dart';
+part 'nonogram_board_viewport_gestures.dart';
 
 /// Bàn chơi: lưới kéo được, hai dải gợi ý dính mép.
 ///
@@ -48,7 +42,9 @@ class NonogramBoardViewport extends StatefulWidget {
 
 enum _GestureKind { none, draw, navigate, leftStrip, topStrip }
 
-class _NonogramBoardViewportState extends State<NonogramBoardViewport>
+/// State shared by the viewport and its gesture mixins
+/// ([_BoardGestures], [_BoardDrawing]).
+abstract class _BoardViewportBase extends State<NonogramBoardViewport>
     with TickerProviderStateMixin {
   late final AnimationController _hintPulse = AnimationController(
     vsync: this,
@@ -85,29 +81,6 @@ class _NonogramBoardViewportState extends State<NonogramBoardViewport>
   /// Ván nào đã được đặt vị trí ban đầu (puzzle + thời điểm bắt đầu).
   Object? _placedFor;
 
-  /// Lần đầu thấy một ván (màn mới, chơi lại, hoặc khôi phục ván dở): đặt
-  /// lưới ở vị trí đã lưu, hoặc ở vị trí mở màn (sát hai dải gợi ý).
-  void _placeIfNewGame(NonogramPlayState state, NonogramBoardLayout layout) {
-    final key = (state.puzzle?.id, state.startTime);
-    if (key == _placedFor) return;
-    _placedFor = key;
-    final saved = _bloc.takePendingViewport();
-    final target = layout.clamp(saved ?? layout.startOffset);
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      if (!mounted) return;
-      _setOffset(target);
-      _clueScroll.value = Offset.zero;
-    });
-  }
-
-  @override
-  void dispose() {
-    _autoScroll.dispose();
-    _hintPulse.dispose();
-    _clueScroll.dispose();
-    super.dispose();
-  }
-
   TransformationController get _controller =>
       NonogramTransformationControllerProvider.of(context);
 
@@ -122,284 +95,11 @@ class _NonogramBoardViewportState extends State<NonogramBoardViewport>
 
   NonogramPlayBloc get _bloc => context.read<NonogramPlayBloc>();
 
-  // --- Chạm / nhấn giữ ---
-
   /// Đang chọn hàng / cột cho gậy phép: chạm, nhấn giữ hay kéo trên lưới
   /// đều không tô (kéo thì chuyển sang kéo bàn để tìm hàng cần chọn).
   bool get _wandActive => _bloc.state.isWandActive;
 
-  void _onTapUp(TapUpDetails details) {
-    final layout = _layout;
-    if (layout == null) return;
-    if (_wandActive) {
-      final line = layout.clueLineAt(details.localPosition, _offset);
-      if (line == null) return;
-      final o = _offset;
-      HapticFeedback.lightImpact();
-      _bloc.add(
-        WandLineSelected(
-          isRow: line.isRow,
-          index: line.index,
-          offsetX: o.dx,
-          offsetY: o.dy,
-        ),
-      );
-      return;
-    }
-    final cell = layout.cellAt(details.localPosition, _offset);
-    if (cell == null) return;
-    if (_rejectLocked(cell)) return;
-    final o = _offset;
-    _bloc.add(CellTapped(cell.row, cell.col, offsetX: o.dx, offsetY: o.dy));
-    DragTip.maybeOf(context)?.cellTapped();
-  }
-
-  void _onLongPressStart(LongPressStartDetails details) {
-    final layout = _layout;
-    if (layout == null || _wandActive) return;
-    final cell = layout.cellAt(details.localPosition, _offset);
-    if (cell == null) return;
-    if (_rejectLocked(cell)) return;
-    // Rung ngay lúc nhấn giữ được nhận, để người chơi biết đã có thể nhấc
-    // tay (khó đoán phải giữ bao lâu).
-    AppHaptics.longPress();
-    final o = _offset;
-    _bloc.add(
-      CellLongPressed(
-        row: cell.row,
-        col: cell.col,
-        offsetX: o.dx,
-        offsetY: o.dy,
-      ),
-    );
-  }
-
-  /// Chạm / nhấn giữ vào ô khoá: không đổi gì, chỉ rung nhẹ và nháy ô đó
-  /// để báo ô đã khoá.
-  bool _rejectLocked(({int row, int col}) cell) {
-    if (!_bloc.state.isLocked(cell.row, cell.col)) return false;
-    HapticFeedback.lightImpact();
-    _showHint(cells: [cell]);
-    return true;
-  }
-
-  // --- Kéo để tô / kéo bàn / cuộn dải gợi ý ---
-
-  void _onScaleStart(ScaleStartDetails details) {
-    final layout = _layout;
-    if (layout == null) return;
-
-    if (details.pointerCount > 1) {
-      _startNavigate(details.localFocalPoint);
-      return;
-    }
-
-    // Xét chỗ ngón tay chạm xuống, không phải chỗ đã trượt qua ngưỡng nhận
-    // cử chỉ.
-    final start = _pointerDownPosition ?? details.localFocalPoint;
-    switch (layout.regionAt(start, _offset)) {
-      case NonogramBoardRegion.grid when !_wandActive:
-        final cell = layout.cellAt(start, _offset)!;
-        _gesture = _GestureKind.draw;
-        _lastDragCell = cell;
-        _drawStartPoint = start;
-        _lastDrawPoint = details.localFocalPoint;
-        _bloc.add(DragStarted(cell.row, cell.col));
-        _dragTo(details.localFocalPoint);
-        _autoScrollLast = Duration.zero;
-        if (!_autoScroll.isActive) _autoScroll.start();
-      case NonogramBoardRegion.leftStrip when layout.leftClueOverflow > 0:
-        _gesture = _GestureKind.leftStrip;
-      case NonogramBoardRegion.topStrip when layout.topClueOverflow > 0:
-        _gesture = _GestureKind.topStrip;
-      default:
-        // Chỗ trống hoặc dải không bị cắt: kéo bàn.
-        _startNavigate(details.localFocalPoint);
-    }
-  }
-
-  void _startNavigate(Offset focal) {
-    _gesture = _GestureKind.navigate;
-    _navStartOffset = _offset;
-    _navStartFocal = focal;
-  }
-
-  void _onScaleUpdate(ScaleUpdateDetails details) {
-    switch (_gesture) {
-      case _GestureKind.draw:
-        if (details.pointerCount > 1) {
-          // Thêm ngón thứ hai giữa chừng: dừng tô, chuyển sang kéo bàn.
-          _endDraw();
-          _startNavigate(details.localFocalPoint);
-          return;
-        }
-        _lastDrawPoint = details.localFocalPoint;
-        _dragTo(details.localFocalPoint);
-      case _GestureKind.navigate:
-        _navigate(details.localFocalPoint);
-      case _GestureKind.leftStrip || _GestureKind.topStrip:
-        if (details.pointerCount > 1) {
-          _endStripDrag();
-          _startNavigate(details.localFocalPoint);
-          return;
-        }
-        _dragStrip(details.focalPointDelta);
-      case _GestureKind.none:
-        break;
-    }
-  }
-
-  void _onScaleEnd(ScaleEndDetails details) {
-    switch (_gesture) {
-      case _GestureKind.draw:
-        _endDraw();
-      case _GestureKind.navigate:
-        _endNavigate();
-      case _GestureKind.leftStrip || _GestureKind.topStrip:
-        _endStripDrag();
-      case _GestureKind.none:
-        break;
-    }
-    _gesture = _GestureKind.none;
-  }
-
-  void _dragTo(Offset position) {
-    final layout = _layout;
-    if (layout == null) return;
-    final cell = layout.cellAt(position, _offset);
-    final last = _lastDragCell;
-    if (cell == null || last == null || cell == last) return;
-
-    // Tô cả các ô nằm giữa nếu ngón tay lướt nhanh qua nhiều ô.
-    for (final step in _cellsBetween(last, cell)) {
-      _bloc.add(DragUpdated(step.row, step.col));
-      _drawCells++;
-    }
-    _lastDragCell = cell;
-  }
-
-  void _endDraw() {
-    // Đã kéo qua nhiều ô: người chơi biết kéo, không cần mẹo nữa.
-    if (_drawCells > 0) DragTip.maybeOf(context)?.dragged();
-    _drawCells = 0;
-    _autoScroll.stop();
-    _drawStartPoint = null;
-    _lastDrawPoint = null;
-    _lastDragCell = null;
-    final o = _offset;
-    _bloc.add(DragEnded(offsetX: o.dx, offsetY: o.dy));
-  }
-
-  /// Một ngón kéo trên dải gợi ý: theo chiều dọc lưới thì kéo bàn, theo
-  /// chiều vuông góc thì cuộn các số bị cắt.
-  void _dragStrip(Offset delta) {
-    final layout = _layout;
-    if (layout == null) return;
-    final scroll = _clueScroll.value;
-    if (_gesture == _GestureKind.leftStrip) {
-      _clueScroll.value = Offset(
-        (scroll.dx + delta.dx).clamp(0, layout.leftClueOverflow),
-        scroll.dy,
-      );
-      _setOffset(layout.clamp(_offset + Offset(0, delta.dy)));
-    } else {
-      _clueScroll.value = Offset(
-        scroll.dx,
-        (scroll.dy + delta.dy).clamp(0, layout.topClueOverflow),
-      );
-      _setOffset(layout.clamp(_offset + Offset(delta.dx, 0)));
-    }
-  }
-
-  void _endStripDrag() {
-    // Dừng ở ranh giới cột/hàng số để không có số nào bị che một nửa.
-    final layout = _layout;
-    if (layout != null) {
-      double snap(double v, double depth, double max) =>
-          depth <= 0 ? v : ((v / depth).round() * depth).clamp(0, max);
-      final scroll = _clueScroll.value;
-      _clueScroll.value = Offset(
-        snap(scroll.dx, layout.leftClueDepth, layout.leftClueOverflow),
-        snap(scroll.dy, layout.topClueDepth, layout.topClueOverflow),
-      );
-    }
-    final o = _offset;
-    _bloc.add(ViewportChanged(o.dx, o.dy));
-  }
-
-  // --- Tự cuộn khi tô sát mép ---
-
-  static const double _edgeZone = 40;
-
-  /// Hệ số -1..1 cho một trục: dương = bàn trôi về phía tăng toạ độ (lộ các
-  /// ô phía trước), âm = ngược lại. Chỉ bật cạnh mà ngón tay đã đi về phía
-  /// đó, để bắt đầu tô ngay sát dải gợi ý không làm bàn trôi.
-  static double _edgeFactor(double p, double start, double lo, double hi) {
-    const armed = 12.0;
-    if (p < lo + _edgeZone && p < start - armed) {
-      return ((lo + _edgeZone - p) / _edgeZone).clamp(0.0, 1.0);
-    }
-    if (p > hi - _edgeZone && p > start + armed) {
-      return -((p - (hi - _edgeZone)) / _edgeZone).clamp(0.0, 1.0);
-    }
-    return 0;
-  }
-
-  void _onAutoScrollTick(Duration elapsed) {
-    final dt = (elapsed - _autoScrollLast).inMicroseconds / 1e6;
-    _autoScrollLast = elapsed;
-    final layout = _layout;
-    final point = _lastDrawPoint;
-    final start = _drawStartPoint;
-    if (layout == null || point == null || start == null || dt <= 0) return;
-    if (_gesture != _GestureKind.draw) return;
-
-    final o = _offset;
-    final area = layout.gridArea(o);
-    final fx = _edgeFactor(point.dx, start.dx, area.left, area.right);
-    final fy = _edgeFactor(point.dy, start.dy, area.top, area.bottom);
-    if (fx == 0 && fy == 0) return;
-
-    final speed = (layout.cellSize * 14).clamp(320.0, 1100.0);
-    final next = layout.clamp(o + Offset(fx, fy) * speed * dt);
-    if (next == o) return;
-    _setOffset(next);
-    _dragTo(point);
-  }
-
-  // --- Kéo bàn ---
-
-  void _navigate(Offset focal) {
-    final layout = _layout;
-    if (layout == null) return;
-    _setOffset(layout.clamp(_navStartOffset + (focal - _navStartFocal)));
-  }
-
-  void _endNavigate() {
-    final o = _offset;
-    _bloc.add(ViewportChanged(o.dx, o.dy));
-  }
-
-  // --- Chuột / trackpad: lăn để kéo ---
-
-  void _onPointerSignal(PointerSignalEvent event) {
-    final layout = _layout;
-    if (layout == null || event is! PointerScrollEvent) return;
-    _setOffset(layout.clamp(_offset - event.scrollDelta));
-    _scheduleViewportSave();
-  }
-
-  bool _saveScheduled = false;
-  void _scheduleViewportSave() {
-    if (_saveScheduled) return;
-    _saveScheduled = true;
-    Future.delayed(const Duration(milliseconds: 400), () {
-      _saveScheduled = false;
-      if (!mounted) return;
-      final o = _offset;
-      _bloc.add(ViewportChanged(o.dx, o.dy));
-    });
-  }
+  void _onAutoScrollTick(Duration elapsed);
 
   // --- Gợi ý (hint) ---
 
@@ -423,14 +123,39 @@ class _NonogramBoardViewportState extends State<NonogramBoardViewport>
       }
     });
   }
+}
+
+class _NonogramBoardViewportState extends _BoardViewportBase
+    with _BoardDrawing, _BoardGestures {
+  /// Lần đầu thấy một ván (màn mới, chơi lại, hoặc khôi phục ván dở): đặt
+  /// lưới ở vị trí đã lưu, hoặc ở vị trí mở màn (sát hai dải gợi ý).
+  void _placeIfNewGame(NonogramPlayState state, NonogramBoardLayout layout) {
+    final key = (state.puzzle?.id, state.startTime);
+    if (key == _placedFor) return;
+    _placedFor = key;
+    final saved = _bloc.takePendingViewport();
+    final target = layout.clamp(saved ?? layout.startOffset);
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!mounted) return;
+      _setOffset(target);
+      _clueScroll.value = Offset.zero;
+    });
+  }
+
+  @override
+  void dispose() {
+    _autoScroll.dispose();
+    _hintPulse.dispose();
+    _clueScroll.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
     return BlocListener<NonogramPlayBloc, NonogramPlayState>(
-      listenWhen:
-          (p, c) =>
-              c is NonogramPlayHintAppliedState ||
-              c is NonogramPlayHintCellsAppliedState,
+      listenWhen: (p, c) =>
+          c is NonogramPlayHintAppliedState ||
+          c is NonogramPlayHintCellsAppliedState,
       listener: (context, state) {
         if (state is NonogramPlayHintAppliedState) {
           _showHint(axis: state.axis, index: state.lineIndex);
@@ -439,17 +164,16 @@ class _NonogramBoardViewportState extends State<NonogramBoardViewport>
         }
       },
       child: BlocBuilder<NonogramPlayBloc, NonogramPlayState>(
-        buildWhen:
-            (p, c) =>
-                p.puzzle != c.puzzle ||
-                p.cellSize != c.cellSize ||
-                p.satisfiedRows != c.satisfiedRows ||
-                p.satisfiedCols != c.satisfiedCols ||
-                p.isLoading != c.isLoading ||
-                p.startTime != c.startTime ||
-                p.isWandActive != c.isWandActive ||
-                p.lockedCells != c.lockedCells ||
-                !NonogramGridEquality.equals(p.gridData, c.gridData),
+        buildWhen: (p, c) =>
+            p.puzzle != c.puzzle ||
+            p.cellSize != c.cellSize ||
+            p.satisfiedRows != c.satisfiedRows ||
+            p.satisfiedCols != c.satisfiedCols ||
+            p.isLoading != c.isLoading ||
+            p.startTime != c.startTime ||
+            p.isWandActive != c.isWandActive ||
+            p.lockedCells != c.lockedCells ||
+            !NonogramGridEquality.equals(p.gridData, c.gridData),
         builder: (context, state) {
           final puzzle = state.puzzle;
           if (puzzle == null) return const SizedBox.shrink();
@@ -489,7 +213,7 @@ class _NonogramBoardViewportState extends State<NonogramBoardViewport>
                           });
                         }
                         final scroll = _clueScroll.value;
-                        return _BoardPaint(
+                        return NonogramBoardPaint(
                           state: state,
                           layout: layout,
                           offset: offset,
@@ -514,723 +238,6 @@ class _NonogramBoardViewportState extends State<NonogramBoardViewport>
             },
           );
         },
-      ),
-    );
-  }
-}
-
-/// Các ô nằm trên đoạn thẳng từ [a] tới [b] (không gồm [a]).
-List<({int row, int col})> _cellsBetween(
-  ({int row, int col}) a,
-  ({int row, int col}) b,
-) {
-  final dr = b.row - a.row;
-  final dc = b.col - a.col;
-  final steps = max(dr.abs(), dc.abs());
-  return [
-    for (var i = 1; i <= steps; i++)
-      (
-        row: a.row + (dr * i / steps).round(),
-        col: a.col + (dc * i / steps).round(),
-      ),
-  ];
-}
-
-class _BoardPaint extends StatelessWidget {
-  const _BoardPaint({
-    required this.state,
-    required this.layout,
-    required this.offset,
-    required this.leftClueScroll,
-    required this.topClueScroll,
-    required this.hintAxis,
-    required this.hintIndex,
-    required this.hintCells,
-    required this.hintPulse,
-  });
-
-  final NonogramPlayState state;
-  final NonogramBoardLayout layout;
-  final Offset offset;
-  final double leftClueScroll;
-  final double topClueScroll;
-  final Axis? hintAxis;
-  final int? hintIndex;
-  final List<({int row, int col})> hintCells;
-  final Animation<double> hintPulse;
-
-  @override
-  Widget build(BuildContext context) {
-    final puzzle = state.puzzle!;
-    final game = context.gameColors;
-    final colors = context.color;
-    final cell = layout.cellSize;
-    final gridW = layout.gridWidth;
-    final gridH = layout.gridHeight;
-    final leftW = layout.leftStripWidth;
-    final topH = layout.topStripHeight;
-    final leftContent = layout.leftStripContent;
-    final topContent = layout.topStripContent;
-    final stickyLeft = layout.stickyLeft(offset);
-    final stickyTop = layout.stickyTop(offset);
-    final rightReserve = layout.rightReserve;
-
-    // Vùng được vẽ lưới. Khi lưới nằm sát dải (chưa trôi vào dưới dải) thì
-    // chừa thêm 2px cho nét viền ngoài.
-    final area = layout.gridArea(offset);
-    final clipLeft = offset.dx >= area.left - 0.5 ? offset.dx - 2 : area.left;
-    final clipTop = offset.dy >= area.top - 0.5 ? offset.dy - 2 : area.top;
-
-    // Hai dải dùng chung một cỡ chữ, theo dải có ô số mỏng hơn.
-    double fontFor(double depth) => depth == 0 ? double.infinity : depth * 0.6;
-    final clueFont = min(
-      cell * 0.5,
-      min(fontFor(layout.leftClueDepth), fontFor(layout.topClueDepth)),
-    ).clamp(7.0, 16.0);
-    final clueStyle = context.labelSmall.copyWith(
-      fontSize: clueFont,
-      fontWeight: FontWeight.w800,
-      color: colors.onSurface,
-      height: 1,
-    );
-    final solvedStyle = clueStyle.copyWith(
-      color: game.success.withValues(alpha: 0.75),
-    );
-
-    // Hàng / cột nào còn số khuất (phía xa hay phía sát lưới): chip "+n".
-    List<ClueOverflow> overflows(
-      List<List<int>> clues,
-      double visible,
-      double scroll,
-      double depth,
-    ) => [
-      for (final line in clues)
-        ClueOverflow.of(
-          count: line.length,
-          depth: depth,
-          visibleExtent: visible,
-          scroll: scroll,
-        ),
-    ];
-    final chipTextStyle = clueStyle.copyWith(color: const Color(0xFF2B1A00));
-    final celebration = SolveCelebration.maybeOf(context);
-    final waving = celebration != null && celebration.holdsBoard;
-    // Tranh đang bay sang màn kết quả: lưới trên bàn (đang mờ dần) để trống.
-    final flying = celebration != null && celebration.isFlying;
-    final revealing = waving || flying;
-    final Widget cellsPaint = CustomPaint(
-      painter: NonogramCellsPainter(
-        rows: puzzle.rows,
-        cols: puzzle.cols,
-        gridData: state.gridData,
-        satisfiedRows: state.satisfiedRows,
-        satisfiedCols: state.satisfiedCols,
-        cellSize: cell,
-        backgroundColor: colors.surfaceContainerLow,
-        filledColor: colors.onSurface,
-        markedMarkerColor: colors.primary,
-        markerColor: colors.onSurfaceVariant.withValues(alpha: 0.7),
-        lockedCells: state.lockedCells,
-        lockedStarColor: game.lockedStar,
-        lockedMarkStarColor: game.lockedMarkStar,
-        pinnedCells: puzzle.pinnedCells,
-        pinColor: colors.surfaceContainerLow,
-      ),
-      foregroundPainter: NonogramGridPainter(
-        rows: puzzle.rows,
-        cols: puzzle.cols,
-        cellSize: cell,
-        themeColor: colors.primary,
-        lineColor: colors.outlineVariant,
-        majorLineColor: colors.outline,
-      ),
-    );
-
-    // Lúc giải xong hai dải số mờ đi để lộ trọn tranh.
-    Widget strip(Widget child) =>
-        revealing
-            ? FadeTransition(opacity: celebration.cluesOpacity, child: child)
-            : child;
-
-    return Stack(
-      clipBehavior: Clip.hardEdge,
-      children: [
-        // 1. Lưới, chỉ vẽ trong phần nằm phải / dưới hai dải gợi ý: phần trôi
-        // xuống dưới dải không được lộ ra ở góc bo tròn hay mép dải (nét viền
-        // ngoài của lưới dày hơn mép lưới một chút).
-        Positioned(
-          left: clipLeft,
-          top: clipTop,
-          right: 0,
-          bottom: 0,
-          child: ClipRect(
-            child: Stack(
-              clipBehavior: Clip.none,
-              children: [
-                // Đang có hiệu ứng giải xong: lưới chuyển sang lớp sân khấu
-                // (8) để lùi lại cho thấy trọn tranh.
-                if (!revealing)
-                  Positioned(
-                    left: offset.dx - clipLeft,
-                    top: offset.dy - clipTop,
-                    width: gridW,
-                    height: gridH,
-                    child: RepaintBoundary(
-                      key: celebration?.gridKey,
-                      child: cellsPaint,
-                    ),
-                  ),
-                // Ô vừa được gợi ý tô giúp: nháy sáng (nằm trong vùng cắt
-                // nên không đè lên dải số).
-                for (final c in hintCells)
-                  _HintBand(
-                    rect: Rect.fromLTWH(
-                      offset.dx - clipLeft + c.col * cell,
-                      offset.dy - clipTop + c.row * cell,
-                      cell,
-                      cell,
-                    ).inflate(1),
-                    pulse: hintPulse,
-                    strong: true,
-                  ),
-              ],
-            ),
-          ),
-        ),
-
-        // 2. Dải gợi ý trái (dính mép trái, cuộn ngang khi bị cắt).
-        if (leftW > 0)
-          Positioned(
-            left: stickyLeft,
-            top: offset.dy,
-            width: leftW,
-            height: gridH,
-            child: strip(
-              Stack(
-                clipBehavior: Clip.hardEdge,
-                children: [
-                  Positioned(
-                    left: leftW - leftContent + leftClueScroll,
-                    top: 0,
-                    width: leftContent,
-                    height: gridH,
-                    child: CustomPaint(
-                      painter: NonogramLeftCluesPainter(
-                        clues: puzzle.leftClues,
-                        satisfiedRows: state.satisfiedRows,
-                        cellSize: cell,
-                        clueDepth: layout.leftClueDepth,
-                        lineColor: colors.surface,
-                        majorLineColor: colors.outline,
-                        backgroundColor: game.clueBackground,
-                        bandColor: game.clueBand,
-                        textStyle: clueStyle,
-                        satisfiedTextStyle: solvedStyle,
-                      ),
-                    ),
-                  ),
-                  Positioned.fill(
-                    child: IgnorePointer(
-                      child: CustomPaint(
-                        key: const ValueKey('left-clue-overflow'),
-                        painter: NonogramClueOverflowPainter(
-                          overflows: overflows(
-                            puzzle.leftClues,
-                            leftW,
-                            leftClueScroll,
-                            layout.leftClueDepth,
-                          ),
-                          axis: Axis.horizontal,
-                          cellSize: cell,
-                          clueDepth: layout.leftClueDepth,
-                          chipColor: game.reward,
-                          textStyle: chipTextStyle,
-                        ),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ),
-
-        // 3. Dải gợi ý trên (dính ngay dưới hàng nút công cụ, cuộn dọc khi
-        // bị cắt).
-        if (topH > 0)
-          Positioned(
-            left: offset.dx,
-            top: stickyTop,
-            width: gridW,
-            height: topH,
-            child: strip(
-              Stack(
-                clipBehavior: Clip.hardEdge,
-                children: [
-                  Positioned(
-                    left: 0,
-                    top: topH - topContent + topClueScroll,
-                    width: gridW,
-                    height: topContent,
-                    child: CustomPaint(
-                      painter: NonogramTopCluesPainter(
-                        clues: puzzle.topClues,
-                        satisfiedColumns: state.satisfiedCols,
-                        cellSize: cell,
-                        clueDepth: layout.topClueDepth,
-                        lineColor: colors.surface,
-                        majorLineColor: colors.outline,
-                        backgroundColor: game.clueBackground,
-                        bandColor: game.clueBand,
-                        textStyle: clueStyle,
-                        satisfiedTextStyle: solvedStyle,
-                      ),
-                    ),
-                  ),
-                  Positioned.fill(
-                    child: IgnorePointer(
-                      child: CustomPaint(
-                        key: const ValueKey('top-clue-overflow'),
-                        painter: NonogramClueOverflowPainter(
-                          overflows: overflows(
-                            puzzle.topClues,
-                            topH,
-                            topClueScroll,
-                            layout.topClueDepth,
-                          ),
-                          axis: Axis.vertical,
-                          cellSize: cell,
-                          clueDepth: layout.topClueDepth,
-                          chipColor: game.reward,
-                          textStyle: chipTextStyle,
-                        ),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ),
-
-        // 4. Che mọi thứ trôi ra ngoài vùng bàn chơi: phía trên, bên trái
-        // (vẽ sau cả hai dải để dải trên không lòi sang trái ô góc), và
-        // dưới cột nút công cụ khi màn ngang.
-        Positioned(
-          left: 0,
-          top: 0,
-          right: 0,
-          height: stickyTop,
-          child: ColoredBox(color: colors.surface),
-        ),
-        Positioned(
-          left: 0,
-          top: 0,
-          bottom: 0,
-          width: stickyLeft,
-          child: ColoredBox(color: colors.surface),
-        ),
-        if (rightReserve > 0)
-          Positioned(
-            right: 0,
-            top: 0,
-            bottom: 0,
-            width: rightReserve,
-            child: ColoredBox(color: colors.surface),
-          ),
-
-        // 5. Ô góc: che chỗ hai dải giao nhau.
-        // Lấn thêm 1px lên trên / sang trái để không lộ khe mép dải (khử
-        // răng cưa) giữa ô góc và lớp che.
-        Positioned(
-          left: stickyLeft - 1,
-          top: stickyTop - 1,
-          width: leftW + 1,
-          height: topH + 1,
-          child: ColoredBox(color: colors.surface),
-        ),
-
-        // 6. Đang chọn hàng / cột cho gậy phép: lưới mờ đi, các dãy số cùng
-        // nhấp nháy vàng để người chơi biết chạm vào đâu.
-        if (state.isWandActive)
-          Positioned.fill(
-            child: IgnorePointer(
-              child: _WandSelectOverlay(
-                rows: puzzle.rows,
-                cols: puzzle.cols,
-                cell: cell,
-                grid: Rect.fromLTWH(offset.dx, offset.dy, gridW, gridH),
-                area: area,
-                leftStrip: Rect.fromLTRB(
-                  stickyLeft,
-                  max(offset.dy, stickyTop + topH),
-                  stickyLeft + leftW,
-                  min(offset.dy + gridH, area.bottom),
-                ),
-                topStrip: Rect.fromLTRB(
-                  max(offset.dx, stickyLeft + leftW),
-                  stickyTop,
-                  min(offset.dx + gridW, area.right),
-                  stickyTop + topH,
-                ),
-              ),
-            ),
-          ),
-
-        // 7. Dải sáng khi dùng gợi ý (cả lưới lẫn dải số của hàng/cột đó).
-        if (hintAxis != null && hintIndex != null)
-          _HintBand(
-            rect:
-                hintAxis == Axis.vertical
-                    ? Rect.fromLTWH(
-                      offset.dx + hintIndex! * cell,
-                      stickyTop,
-                      cell,
-                      offset.dy + gridH - stickyTop,
-                    )
-                    : Rect.fromLTWH(
-                      stickyLeft,
-                      offset.dy + hintIndex! * cell,
-                      offset.dx + gridW - stickyLeft,
-                      cell,
-                    ),
-            pulse: hintPulse,
-          ),
-
-        // 8. Vừa giải xong: lưới lùi lại cho trọn tranh nằm giữa khung (vùng
-        // cắt nới dần ra cả khung nhìn trong lúc dải số mờ đi), rồi sóng
-        // lan trên tranh. Lúc tranh bay sang màn kết quả thì để trống.
-        if (revealing)
-          Positioned.fill(
-            child: IgnorePointer(
-              child: Opacity(
-                opacity: flying ? 0 : 1,
-                child: _SolveStage(
-                  fit: celebration.fit,
-                  clipFrom: Rect.fromLTRB(
-                    clipLeft,
-                    clipTop,
-                    layout.viewport.width,
-                    layout.viewport.height,
-                  ),
-                  clipTo: Rect.fromLTRB(
-                    0,
-                    layout.topReserve,
-                    layout.viewport.width - rightReserve,
-                    layout.viewport.height,
-                  ),
-                  gridFrom: Rect.fromLTWH(offset.dx, offset.dy, gridW, gridH),
-                  gridTo: SolveCelebration.fitRect(
-                    grid: Size(gridW, gridH),
-                    area: layout.celebrationArea,
-                  ),
-                  child: SizedBox(
-                    width: gridW,
-                    height: gridH,
-                    child: Stack(
-                      children: [
-                        Positioned.fill(
-                          child: RepaintBoundary(
-                            key: celebration.gridKey,
-                            child: cellsPaint,
-                          ),
-                        ),
-                        // Sóng lan từ góc trái dưới lên góc phải trên, từng ô
-                        // tô nổi lên rồi hạ xuống, dấu X mờ dần.
-                        if (waving)
-                          Positioned.fill(
-                            child: CustomPaint(
-                              key: const ValueKey('solve-wave'),
-                              painter: SolveWavePainter(
-                                progress: celebration.wave,
-                                solution: puzzle.solution,
-                                cellSize: cell,
-                                filledColor: colors.onSurface,
-                                backgroundColor: colors.surfaceContainerLow,
-                              ),
-                            ),
-                          ),
-                      ],
-                    ),
-                  ),
-                ),
-              ),
-            ),
-          ),
-      ],
-    );
-  }
-}
-
-/// Lớp sân khấu lúc giải xong: lưới đi từ [gridFrom] (chỗ đang chơi) tới
-/// [gridTo] (trọn tranh giữa khung), vùng cắt nới từ [clipFrom] (phần lưới
-/// đang lộ ra) tới [clipTo], theo [fit].
-class _SolveStage extends StatelessWidget {
-  const _SolveStage({
-    required this.fit,
-    required this.clipFrom,
-    required this.clipTo,
-    required this.gridFrom,
-    required this.gridTo,
-    required this.child,
-  });
-
-  final Animation<double> fit;
-  final Rect clipFrom;
-  final Rect clipTo;
-  final Rect gridFrom;
-  final Rect gridTo;
-
-  /// Lưới ở cỡ thật; được thu phóng cho khớp khung đang đi.
-  final Widget child;
-
-  @override
-  Widget build(BuildContext context) {
-    return AnimatedBuilder(
-      animation: fit,
-      child: child,
-      builder: (context, child) {
-        final t = fit.value;
-        final clip = Rect.lerp(clipFrom, clipTo, t)!;
-        final grid = Rect.lerp(gridFrom, gridTo, t)!;
-        return Stack(
-          children: [
-            Positioned.fromRect(
-              rect: clip,
-              child: ClipRect(
-                child: Stack(
-                  clipBehavior: Clip.none,
-                  children: [
-                    Positioned.fromRect(
-                      rect: grid.shift(-clip.topLeft),
-                      child: FittedBox(fit: BoxFit.fill, child: child),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-          ],
-        );
-      },
-    );
-  }
-}
-
-/// Lớp phủ khi đang chọn hàng / cột cho gậy phép: lưới mờ đi để mắt dồn vào
-/// hai dải số, và mọi dãy số cùng nhấp nháy vàng theo nhịp của nút gậy
-/// phép.
-class _WandSelectOverlay extends StatefulWidget {
-  const _WandSelectOverlay({
-    required this.rows,
-    required this.cols,
-    required this.cell,
-    required this.grid,
-    required this.area,
-    required this.leftStrip,
-    required this.topStrip,
-  });
-
-  final int rows;
-  final int cols;
-  final double cell;
-
-  /// Toàn bộ lưới (có thể trôi ra ngoài vùng nhìn thấy).
-  final Rect grid;
-
-  /// Phần lưới đang nhìn thấy (dưới / phải hai dải số).
-  final Rect area;
-
-  /// Phần nhìn thấy của dải số trái / trên.
-  final Rect leftStrip;
-  final Rect topStrip;
-
-  @override
-  State<_WandSelectOverlay> createState() => _WandSelectOverlayState();
-}
-
-class _WandSelectOverlayState extends State<_WandSelectOverlay>
-    with SingleTickerProviderStateMixin {
-  late final AnimationController _wave = AnimationController(
-    vsync: this,
-    duration: wandPulsePeriod,
-  );
-
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    if (MediaQuery.disableAnimationsOf(context)) {
-      _wave
-        ..stop()
-        ..value = 0;
-    } else if (!_wave.isAnimating) {
-      _wave.repeat();
-    }
-  }
-
-  @override
-  void dispose() {
-    _wave.dispose();
-    super.dispose();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return CustomPaint(
-      painter: _WandSelectPainter(
-        wave: _wave,
-        animate: !MediaQuery.disableAnimationsOf(context),
-        rows: widget.rows,
-        cols: widget.cols,
-        cell: widget.cell,
-        grid: widget.grid,
-        area: widget.area,
-        leftStrip: widget.leftStrip,
-        topStrip: widget.topStrip,
-        accent: context.gameColors.reward,
-        scrim: context.color.surface,
-      ),
-    );
-  }
-}
-
-class _WandSelectPainter extends CustomPainter {
-  _WandSelectPainter({
-    required this.wave,
-    required this.animate,
-    required this.rows,
-    required this.cols,
-    required this.cell,
-    required this.grid,
-    required this.area,
-    required this.leftStrip,
-    required this.topStrip,
-    required this.accent,
-    required this.scrim,
-  }) : super(repaint: wave);
-
-  final Animation<double> wave;
-  final bool animate;
-  final int rows;
-  final int cols;
-  final double cell;
-  final Rect grid;
-  final Rect area;
-  final Rect leftStrip;
-  final Rect topStrip;
-  final Color accent;
-  final Color scrim;
-
-  /// Độ sáng hiện tại, chung cho mọi dãy số: sáng lên rồi tắt dần trong một
-  /// chu kỳ, cùng nhịp với nút gậy phép.
-  double get _intensity {
-    if (!animate) return 0.5;
-    return 0.5 - 0.5 * cos(2 * pi * wave.value);
-  }
-
-  void _line(Canvas canvas, Rect rect, double t) {
-    final r = RRect.fromRectAndRadius(
-      rect.deflate(1),
-      const Radius.circular(4),
-    );
-    canvas.drawRRect(
-      r,
-      Paint()..color = accent.withValues(alpha: 0.07 + 0.3 * t),
-    );
-    canvas.drawRRect(
-      r,
-      Paint()
-        ..style = PaintingStyle.stroke
-        ..strokeWidth = 1 + t
-        ..color = accent.withValues(alpha: 0.35 + 0.6 * t),
-    );
-  }
-
-  @override
-  void paint(Canvas canvas, Size size) {
-    final dim = grid.intersect(area);
-    if (dim.width > 0 && dim.height > 0) {
-      canvas.drawRect(dim, Paint()..color = scrim.withValues(alpha: 0.55));
-    }
-    if (topStrip.width > 0 && topStrip.height > 0) {
-      canvas.save();
-      canvas.clipRect(topStrip);
-      for (var c = 0; c < cols; c++) {
-        final rect = Rect.fromLTWH(
-          grid.left + c * cell,
-          topStrip.top,
-          cell,
-          topStrip.height,
-        );
-        if (rect.overlaps(topStrip)) _line(canvas, rect, _intensity);
-      }
-      canvas.restore();
-    }
-    if (leftStrip.width > 0 && leftStrip.height > 0) {
-      canvas.save();
-      canvas.clipRect(leftStrip);
-      for (var r = 0; r < rows; r++) {
-        final rect = Rect.fromLTWH(
-          leftStrip.left,
-          grid.top + r * cell,
-          leftStrip.width,
-          cell,
-        );
-        if (rect.overlaps(leftStrip)) _line(canvas, rect, _intensity);
-      }
-      canvas.restore();
-    }
-  }
-
-  @override
-  bool shouldRepaint(_WandSelectPainter old) =>
-      old.animate != animate ||
-      old.rows != rows ||
-      old.cols != cols ||
-      old.cell != cell ||
-      old.grid != grid ||
-      old.area != area ||
-      old.leftStrip != leftStrip ||
-      old.topStrip != topStrip ||
-      old.accent != accent ||
-      old.scrim != scrim;
-}
-
-class _HintBand extends StatelessWidget {
-  const _HintBand({
-    required this.rect,
-    required this.pulse,
-    this.strong = false,
-  });
-
-  final Rect rect;
-  final Animation<double> pulse;
-
-  /// Ô đơn lẻ: thêm viền để dễ thấy trên ô đã tô màu đậm.
-  final bool strong;
-
-  @override
-  Widget build(BuildContext context) {
-    return Positioned.fromRect(
-      rect: rect,
-      child: IgnorePointer(
-        child: AnimatedBuilder(
-          animation: pulse,
-          builder: (context, _) {
-            final opacity = (1 - pulse.value).clamp(0.0, 1.0);
-            final primary = context.color.primary;
-            return DecoratedBox(
-              decoration: BoxDecoration(
-                color: primary.withValues(alpha: 0.28 * opacity),
-                borderRadius: BorderRadius.circular(4),
-                border:
-                    strong
-                        ? Border.all(
-                          color: primary.withValues(alpha: opacity),
-                          width: 2.5,
-                        )
-                        : null,
-              ),
-            );
-          },
-        ),
       ),
     );
   }

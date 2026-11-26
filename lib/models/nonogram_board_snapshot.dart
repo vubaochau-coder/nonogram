@@ -1,4 +1,4 @@
-import 'package:nonogram/models/nonogram_cell_state.dart';
+import 'package:nonogram/engine/model/nonogram_cell_state.dart';
 import 'package:nonogram/models/nonogram_interaction_mode.dart';
 
 /// Represents a persistent save state of the nonogram grid and all runtime session info.
@@ -32,8 +32,9 @@ class NonogramBoardSnapshot {
     return {
       'puzzleId': puzzleId,
       'level': level,
-      'gridData':
-          gridData.map((row) => row.map((e) => e.index).toList()).toList(),
+      'gridData': gridData
+          .map((row) => row.map((e) => e.index).toList())
+          .toList(),
       'startTime': startTime.toIso8601String(),
       'interactionMode': interactionMode.storageCode,
       'viewportOffsetX': viewportOffsetX,
@@ -49,12 +50,11 @@ class NonogramBoardSnapshot {
     return NonogramBoardSnapshot(
       puzzleId: map['puzzleId'] as String,
       level: map['level'] as int,
-      gridData:
-          (map['gridData'] as List).map((row) {
-            return (row as List)
-                .map((e) => NonogramCellState.values[e as int])
-                .toList();
-          }).toList(),
+      gridData: (map['gridData'] as List).map((row) {
+        return (row as List)
+            .map((e) => NonogramCellState.values[e as int])
+            .toList();
+      }).toList(),
       startTime: DateTime.parse(map['startTime'] as String),
       interactionMode: NonogramInteractionMode.fromStorageCode(
         map['interactionMode'] as int?,

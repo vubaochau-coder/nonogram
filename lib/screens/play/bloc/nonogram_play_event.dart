@@ -1,5 +1,5 @@
 import 'package:nonogram/models/power_up_inventory.dart';
-import 'package:nonogram/models/nonogram_puzzle.dart';
+import 'package:nonogram/engine/model/nonogram_puzzle.dart';
 import 'package:nonogram/models/nonogram_board_snapshot.dart';
 import 'nonogram_play_state.dart';
 
@@ -155,6 +155,11 @@ class PowerUpsChanged extends NonogramPlayEvent {
   final PowerUpInventory inventory;
 
   const PowerUpsChanged(this.inventory);
+}
+
+/// Công cụ tester (bản `dev`): tô đúng đáp án và hoàn thành màn ngay.
+class DebugSolveRequested extends NonogramPlayEvent {
+  const DebugSolveRequested();
 }
 
 // --- Internal/Refactor Events (Phase 4.2+) ---

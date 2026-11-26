@@ -1,7 +1,7 @@
 name: Store build
 
-# Bản phát hành lên Google Play. Chỉ chạy tay từ tab Actions, trên nhánh `main`
-# (nhánh không có code kiểm thử, chỉ có bộ màn có bản quyền);
+# Bản phát hành lên Google Play: flavor `store` (không có công cụ tester, ID
+# quảng cáo thật). Chỉ chạy tay từ tab Actions, trên nhánh `main`;
 # kết quả là file .aab đã ký ở mục Artifacts của lần chạy, tải về rồi tự đưa
 # lên Play Console. Nhánh main không có CI tự động nên workflow này chạy
 # format / analyze / test trước khi build.
@@ -94,27 +94,30 @@ jobs:
           EOF
 
       - run: flutter pub get --enforce-lockfile
-      - run: dart format --output=none --set-exit-if-changed lib test
+      - run: dart format --output=none --set-exit-if-changed lib test tools
       - run: flutter analyze
+      - run: dart run tools/check_conventions.dart
       - run: flutter test
 
-      - run: flutter build appbundle --release --build-number=${{ github.event.inputs.build_number }} --obfuscate --split-debug-info=build/symbols
-
-      # Bộ màn của chế độ nhà phát triển (lấy từ nonogram.org, chỉ có ở nhánh
-      # develop) không được có trong bản store.
-      - name: Check developer levels are not bundled
+      - name: Check build number
+        env:
+          BUILD_NUMBER: ${{ github.event.inputs.build_number }}
         run: |
-          aab=build/app/outputs/bundle/release/app-release.aab
-          if unzip -l "$aab" | grep -q "assets/levels_dev/"; then
-            echo "::error::Bản store đang chứa assets/levels_dev/"
-            exit 1
-          fi
+          case "$BUILD_NUMBER" in
+            ''|*[!0-9]*) echo "::error::Số build phải là số nguyên dương"; exit 1 ;;
+          esac
+
+      - run: flutter build appbundle --release --flavor store --build-number=${{ github.event.inputs.build_number }} --obfuscate --split-debug-info=build/symbols
+
+      - name: Check levels are bundled
+        run: |
+          aab=build/app/outputs/bundle/storeRelease/app-store-release.aab
           unzip -l "$aab" | grep -q "assets/levels/index.json"
 
       - uses: actions/upload-artifact@v4
         with:
           name: pixel-nonogram-store-${{ github.event.inputs.build_number }}
-          path: build/app/outputs/bundle/release/app-release.aab
+          path: build/app/outputs/bundle/storeRelease/app-store-release.aab
           if-no-files-found: error
 
       # Symbols để giải mã (de-obfuscate) stack trace của bản đã --obfuscate.

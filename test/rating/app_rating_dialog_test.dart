@@ -34,13 +34,11 @@ void main() {
           ],
           supportedLocales: AppLocalizations.supportedLocales,
           home: Builder(
-            builder:
-                (context) => TextButton(
-                  onPressed:
-                      () async =>
-                          asked = await maybeAskForRating(context, solved),
-                  child: const Text('leave'),
-                ),
+            builder: (context) => TextButton(
+              onPressed: () async =>
+                  asked = await maybeAskForRating(context, solved),
+              child: const Text('leave'),
+            ),
           ),
         ),
       ),

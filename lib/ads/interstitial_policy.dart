@@ -10,19 +10,26 @@ class InterstitialPolicy {
   InterstitialPolicy({
     InterstitialPolicyConfig config = const InterstitialPolicyConfig(),
     DateTime Function()? clock,
+    bool Function()? ignoreInterval,
   }) : minInterval = config.minInterval,
-       _clock = clock ?? DateTime.now {
+       _clock = clock ?? DateTime.now,
+       _ignoreInterval = ignoreInterval {
     _since = _clock();
   }
 
   final Duration minInterval;
   final DateTime Function() _clock;
 
+  /// Công cụ tester: bỏ giãn cách, rời màn nào cũng hiện quảng cáo xen kẽ.
+  final bool Function()? _ignoreInterval;
+
   /// Lúc mở app, hoặc lúc hiện quảng cáo xen kẽ gần nhất.
   late DateTime _since;
 
   /// Người chơi vừa rời màn hoàn thành: có nên hiện quảng cáo xen kẽ không.
-  bool shouldShowOnLevelExit() => _clock().difference(_since) >= minInterval;
+  bool shouldShowOnLevelExit() =>
+      (_ignoreInterval?.call() ?? false) ||
+      _clock().difference(_since) >= minInterval;
 
   /// Ghi nhận vừa hiện một quảng cáo xen kẽ.
   void recordInterstitialShown() => _since = _clock();

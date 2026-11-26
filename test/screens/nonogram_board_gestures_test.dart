@@ -12,14 +12,14 @@ import 'package:nonogram/core/onboarding_preferences.dart';
 import 'package:nonogram/data/nonogram_puzzle_source.dart';
 import 'package:nonogram/data/nonogram_repository.dart';
 import 'package:nonogram/l10n/app_localizations.dart';
-import 'package:nonogram/models/nonogram_cell_state.dart';
+import 'package:nonogram/engine/model/nonogram_cell_state.dart';
 import 'package:nonogram/models/nonogram_interaction_mode.dart';
-import 'package:nonogram/models/nonogram_puzzle.dart';
+import 'package:nonogram/engine/model/nonogram_puzzle.dart';
 import 'package:nonogram/screens/play/bloc/nonogram_play_bloc.dart';
 import 'package:nonogram/screens/play/bloc/nonogram_play_event.dart';
 import 'package:nonogram/screens/play/coach/nonogram_play_coach.dart';
-import 'package:nonogram/screens/play/engine/nonogram_board_layout.dart';
-import 'package:nonogram/screens/play/nonogram_play_page.dart';
+import 'package:nonogram/screens/play/layout/nonogram_board_layout.dart';
+import 'package:nonogram/screens/play/nonogram_play_screen.dart';
 import 'package:nonogram/screens/play/nonogram_transformation_controller_provider.dart';
 import 'package:nonogram/screens/play/sections/nonogram_board_shell_section.dart';
 import 'package:nonogram/screens/play/sections/nonogram_board_viewport.dart';
@@ -84,7 +84,7 @@ Future<void> _pumpPlay(
           GlobalCupertinoLocalizations.delegate,
         ],
         supportedLocales: AppLocalizations.supportedLocales,
-        home: const NonogramPlayPage(),
+        home: const NonogramPlayScreen(),
       ),
     ),
   );
@@ -96,21 +96,19 @@ Future<void> _pumpPlay(
 
 Offset _gridOffset(WidgetTester tester) {
   final element = tester.element(find.byType(NonogramBoardViewport));
-  final t =
-      NonogramTransformationControllerProvider.of(
-        element,
-      ).value.getTranslation();
+  final t = NonogramTransformationControllerProvider.of(
+    element,
+  ).value.getTranslation();
   return Offset(t.x, t.y);
 }
 
 NonogramPlayBloc _bloc(WidgetTester tester) =>
     tester.element(find.byType(NonogramBoardViewport)).read<NonogramPlayBloc>();
 
-int _filledCount(WidgetTester tester) =>
-    _bloc(tester).state.gridData
-        .expand((r) => r)
-        .where((c) => c == NonogramCellState.filled)
-        .length;
+int _filledCount(WidgetTester tester) => _bloc(tester).state.gridData
+    .expand((r) => r)
+    .where((c) => c == NonogramCellState.filled)
+    .length;
 
 /// Toạ độ toàn cục của góc trên-trái bàn chơi.
 Offset _boardOrigin(WidgetTester tester) =>

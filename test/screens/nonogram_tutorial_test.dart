@@ -5,11 +5,11 @@ import 'package:nonogram/ads/ad_service.dart';
 import 'package:nonogram/core/app_sounds.dart';
 import 'package:nonogram/core/app_theme.dart';
 import 'package:nonogram/l10n/app_localizations.dart';
-import 'package:nonogram/models/nonogram_cell_state.dart';
+import 'package:nonogram/engine/model/nonogram_cell_state.dart';
 import 'package:nonogram/models/nonogram_interaction_mode.dart';
-import 'package:nonogram/models/nonogram_puzzle.dart';
+import 'package:nonogram/engine/model/nonogram_puzzle.dart';
 import 'package:nonogram/screens/tutorial/nonogram_tutorial_controller.dart';
-import 'package:nonogram/screens/tutorial/nonogram_tutorial_page.dart';
+import 'package:nonogram/screens/tutorial/nonogram_tutorial_screen.dart';
 import 'package:provider/provider.dart';
 
 import '../mocks/fake_ad_service.dart';
@@ -339,10 +339,9 @@ void main() {
           final placements = controller.ghostPlacements;
           counts[step.message] = placements.length;
           expect(controller.showGhost, isTrue);
-          TutorialCell cellAt(int i) =>
-              line.isRow
-                  ? (row: line.index, col: i)
-                  : (row: i, col: line.index);
+          TutorialCell cellAt(int i) => line.isRow
+              ? (row: line.index, col: i)
+              : (row: i, col: line.index);
           final onLine = {
             for (final cell in step.targets)
               if (line.isRow ? cell.row == line.index : cell.col == line.index)
@@ -385,7 +384,7 @@ void main() {
     });
   });
 
-  group('NonogramTutorialPage', () {
+  group('NonogramTutorialScreen', () {
     Widget buildPage(GlobalKey<NavigatorState> navigatorKey) {
       return MaterialApp(
         navigatorKey: navigatorKey,
@@ -425,7 +424,7 @@ void main() {
       await tester.pumpWidget(buildPage(navigatorKey));
 
       final result = navigatorKey.currentState!.push<bool>(
-        MaterialPageRoute(builder: (_) => const NonogramTutorialPage()),
+        MaterialPageRoute(builder: (_) => const NonogramTutorialScreen()),
       );
       await tester.pump();
       await tester.pump(const Duration(milliseconds: 500));
@@ -601,7 +600,7 @@ void main() {
         ),
       );
       navigatorKey.currentState!.push<bool>(
-        MaterialPageRoute(builder: (_) => const NonogramTutorialPage()),
+        MaterialPageRoute(builder: (_) => const NonogramTutorialScreen()),
       );
       await tester.pump();
       await tester.pump(const Duration(milliseconds: 500));
@@ -629,7 +628,7 @@ void main() {
       final navigatorKey = GlobalKey<NavigatorState>();
       await tester.pumpWidget(buildPage(navigatorKey));
       navigatorKey.currentState!.push<bool>(
-        MaterialPageRoute(builder: (_) => const NonogramTutorialPage()),
+        MaterialPageRoute(builder: (_) => const NonogramTutorialScreen()),
       );
       await tester.pump();
       await tester.pump(const Duration(milliseconds: 500));
@@ -647,7 +646,7 @@ void main() {
       final navigatorKey = GlobalKey<NavigatorState>();
       await tester.pumpWidget(buildPage(navigatorKey));
       navigatorKey.currentState!.push<bool>(
-        MaterialPageRoute(builder: (_) => const NonogramTutorialPage()),
+        MaterialPageRoute(builder: (_) => const NonogramTutorialScreen()),
       );
       await tester.pump();
       await tester.pump(const Duration(milliseconds: 500));
@@ -661,7 +660,7 @@ void main() {
         ),
       );
       navigatorKey.currentState!.push<bool>(
-        MaterialPageRoute(builder: (_) => const NonogramTutorialPage()),
+        MaterialPageRoute(builder: (_) => const NonogramTutorialScreen()),
       );
       await tester.pump();
       await tester.pump(const Duration(milliseconds: 500));
@@ -675,7 +674,7 @@ void main() {
       await tester.pumpWidget(buildPage(navigatorKey));
 
       final result = navigatorKey.currentState!.push<bool>(
-        MaterialPageRoute(builder: (_) => const NonogramTutorialPage()),
+        MaterialPageRoute(builder: (_) => const NonogramTutorialScreen()),
       );
       await tester.pump();
       await tester.pump(const Duration(milliseconds: 500));
@@ -700,13 +699,12 @@ List<int?> _forcedLine(List<int> clue, List<int?> known) {
       for (var i = 0; i < length; i++) {
         if (known[i] != null && known[i] != line[i]) return;
       }
-      result =
-          result == null
-              ? List<int?>.of(line)
-              : [
-                for (var i = 0; i < length; i++)
-                  result![i] == line[i] ? line[i] : null,
-              ];
+      result = result == null
+          ? List<int?>.of(line)
+          : [
+              for (var i = 0; i < length; i++)
+                result![i] == line[i] ? line[i] : null,
+            ];
       return;
     }
     final rest = blocks.skip(index + 1).fold(0, (sum, b) => sum + b + 1);

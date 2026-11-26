@@ -23,14 +23,12 @@ class NonogramGridPainter extends CustomPainter {
 
   @override
   void paint(Canvas canvas, Size size) {
-    final minor =
-        Paint()
-          ..color = lineColor
-          ..strokeWidth = 1;
-    final major =
-        Paint()
-          ..color = majorLineColor
-          ..strokeWidth = 1.6;
+    final minor = Paint()
+      ..color = lineColor
+      ..strokeWidth = 1;
+    final major = Paint()
+      ..color = majorLineColor
+      ..strokeWidth = 1.6;
 
     for (var i = 1; i < cols; i++) {
       final x = i * cellSize;
@@ -49,11 +47,10 @@ class NonogramGridPainter extends CustomPainter {
       );
     }
 
-    final outer =
-        Paint()
-          ..color = themeColor
-          ..style = PaintingStyle.stroke
-          ..strokeWidth = 2;
+    final outer = Paint()
+      ..color = themeColor
+      ..style = PaintingStyle.stroke
+      ..strokeWidth = 2;
     canvas.drawRect(Offset.zero & size, outer);
   }
 

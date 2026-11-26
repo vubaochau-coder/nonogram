@@ -76,10 +76,9 @@ class _AppRatingDialogState extends State<AppRatingDialog> {
                           ? Icons.star_rounded
                           : Icons.star_outline_rounded,
                       size: 36,
-                      color:
-                          i <= _stars
-                              ? const Color(0xFFFFB400)
-                              : colors.outline,
+                      color: i <= _stars
+                          ? const Color(0xFFFFB400)
+                          : colors.outline,
                     ),
                   ),
                 ),

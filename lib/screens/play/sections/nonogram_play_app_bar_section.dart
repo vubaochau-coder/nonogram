@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:lucide_icons/lucide_icons.dart';
 import 'package:nonogram/core/context_ext.dart';
+import 'package:nonogram/tester/tester_solve_button.dart';
 import '../bloc/nonogram_play_bloc.dart';
 import '../bloc/nonogram_play_state.dart';
 
@@ -17,11 +18,10 @@ class NonogramPlayAppBarSection extends StatelessWidget
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<NonogramPlayBloc, NonogramPlayState>(
-      buildWhen:
-          (p, c) =>
-              p.isFullscreen != c.isFullscreen ||
-              p.isSolved != c.isSolved ||
-              p.puzzle != c.puzzle,
+      buildWhen: (p, c) =>
+          p.isFullscreen != c.isFullscreen ||
+          p.isSolved != c.isSolved ||
+          p.puzzle != c.puzzle,
       builder: (context, state) {
         if (state.isFullscreen) return const SizedBox.shrink();
 
@@ -56,6 +56,7 @@ class NonogramPlayAppBarSection extends StatelessWidget
             ],
           ),
           actions: [
+            if (!state.isSolved) const TesterSolveButton(),
             if (!state.isSolved)
               IconButton(
                 icon: const Icon(LucideIcons.settings, size: 20),

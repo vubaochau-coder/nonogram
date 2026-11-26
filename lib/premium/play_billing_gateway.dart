@@ -72,8 +72,8 @@ class PlayBillingGateway implements PurchaseGateway {
   @override
   Future<Set<String>?> ownedProducts() async {
     try {
-      final addition =
-          _iap.getPlatformAddition<InAppPurchaseAndroidPlatformAddition>();
+      final addition = _iap
+          .getPlatformAddition<InAppPurchaseAndroidPlatformAddition>();
       final response = await addition.queryPastPurchases();
       if (response.error != null) return null;
       final owned = <String>{};

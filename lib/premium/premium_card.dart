@@ -5,7 +5,7 @@ import 'package:nonogram/core/context_ext.dart';
 import 'package:nonogram/core/toast_utils.dart';
 import 'package:provider/provider.dart';
 
-import 'premium_benefits_page.dart';
+import 'premium_benefits_screen.dart';
 import 'premium_controller.dart';
 import 'purchase_gateway.dart';
 
@@ -79,13 +79,12 @@ class _OfferCard extends StatelessWidget {
               child: FilledButton(
                 key: const ValueKey('premium-buy'),
                 onPressed: premium.isBusy ? null : () => _buy(context),
-                child:
-                    premium.isBusy
-                        ? const SizedBox.square(
-                          dimension: 18,
-                          child: CircularProgressIndicator(strokeWidth: 2),
-                        )
-                        : Text(l10n.premiumBuy(premium.price ?? '')),
+                child: premium.isBusy
+                    ? const SizedBox.square(
+                        dimension: 18,
+                        child: CircularProgressIndicator(strokeWidth: 2),
+                      )
+                    : Text(l10n.premiumBuy(premium.price ?? '')),
               ),
             ),
             const SizedBox(height: 6),
@@ -105,7 +104,7 @@ class _OfferCard extends StatelessWidget {
   }
 }
 
-/// Nút chữ "Xem chi tiết quyền lợi": mở [PremiumBenefitsPage].
+/// Nút chữ "Xem chi tiết quyền lợi": mở [PremiumBenefitsScreen].
 class _ViewBenefitsButton extends StatelessWidget {
   const _ViewBenefitsButton({this.divider = false});
 
@@ -127,12 +126,11 @@ class _ViewBenefitsButton extends StatelessWidget {
               padding: const EdgeInsets.symmetric(horizontal: 8),
               minimumSize: const Size(0, 32),
             ),
-            onPressed:
-                () => Navigator.of(context).push(
-                  MaterialPageRoute<void>(
-                    builder: (_) => const PremiumBenefitsPage(),
-                  ),
-                ),
+            onPressed: () => Navigator.of(context).push(
+              MaterialPageRoute<void>(
+                builder: (_) => const PremiumBenefitsScreen(),
+              ),
+            ),
             icon: const Icon(LucideIcons.sparkles, size: 16),
             label: Text(l10n.premiumViewBenefits),
           ),

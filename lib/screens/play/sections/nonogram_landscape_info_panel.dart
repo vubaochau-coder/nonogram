@@ -3,11 +3,12 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:lucide_icons/lucide_icons.dart';
 import 'package:nonogram/core/context_ext.dart';
+import 'package:nonogram/tester/tester_solve_button.dart';
 
 import '../bloc/nonogram_play_bloc.dart';
 import '../bloc/nonogram_play_state.dart';
 import '../coach/nonogram_play_coach.dart';
-import '../engine/nonogram_board_layout.dart';
+import '../layout/nonogram_board_layout.dart';
 import '../modals/nonogram_settings_dialog.dart';
 import '../views/rotate_screen_action.dart';
 import '../widgets/overlay_button.dart';
@@ -172,6 +173,8 @@ class _NonogramLandscapeLeftRailState extends State<NonogramLandscapeLeftRail>
                   Column(
                     mainAxisSize: MainAxisSize.min,
                     children: [
+                      // Chỉ bản `dev` (công cụ tester).
+                      const TesterSolveButton(),
                       if (RotateScreenAction.isSupported) ...[
                         KeyedSubtree(
                           key: _coachRotateKey(context),

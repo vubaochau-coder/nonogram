@@ -9,22 +9,22 @@ import 'package:lucide_icons/lucide_icons.dart';
 import 'package:nonogram/checkin/check_in_service.dart';
 import 'package:nonogram/checkin/game_clock.dart';
 import 'package:nonogram/core/app_sounds.dart';
-import 'package:nonogram/screens/home/app_home_page.dart';
+import 'package:nonogram/screens/home/app_home_screen.dart';
 import 'package:nonogram/core/app_locale.dart';
 import 'package:nonogram/core/app_theme.dart';
 import 'package:nonogram/core/app_theme_mode.dart';
 import 'package:nonogram/data/nonogram_repository.dart';
 import 'package:nonogram/l10n/app_localizations.dart';
 import 'package:nonogram/models/nonogram_completed_progress.dart';
-import 'package:nonogram/models/nonogram_puzzle.dart';
+import 'package:nonogram/engine/model/nonogram_puzzle.dart';
 import 'package:nonogram/rating/app_rating_dialog.dart';
-import 'package:nonogram/screens/dashboard/nonogram_dashboard_page.dart';
-import 'package:nonogram/screens/guide/nonogram_guide_page.dart';
-import 'package:nonogram/screens/history/nonogram_history_detail_page.dart';
-import 'package:nonogram/screens/history/nonogram_history_page.dart';
-import 'package:nonogram/screens/play/nonogram_play_page.dart';
+import 'package:nonogram/screens/dashboard/nonogram_dashboard_screen.dart';
+import 'package:nonogram/screens/guide/nonogram_guide_screen.dart';
+import 'package:nonogram/screens/history/nonogram_history_detail_screen.dart';
+import 'package:nonogram/screens/history/nonogram_history_screen.dart';
+import 'package:nonogram/screens/play/nonogram_play_screen.dart';
 import 'package:nonogram/screens/play/sections/nonogram_completion_result_section.dart';
-import 'package:nonogram/screens/tutorial/nonogram_tutorial_page.dart';
+import 'package:nonogram/screens/tutorial/nonogram_tutorial_screen.dart';
 import 'package:provider/provider.dart';
 
 import '../mocks/fake_purchase_gateway.dart';
@@ -80,10 +80,9 @@ void main() {
       trusted: FakeTrustedClock(null),
       device: () => DateTime(2026, 11, 13, 9),
     );
-    final checkIn =
-        withCheckIn
-            ? (CheckInService.inMemory(clock: clock)..attach(repository))
-            : null;
+    final checkIn = withCheckIn
+        ? (CheckInService.inMemory(clock: clock)..attach(repository))
+        : null;
     if (checkIn != null) addTearDown(checkIn.dispose);
     await tester.pumpWidget(
       MultiRepositoryProvider(
@@ -122,12 +121,12 @@ void main() {
     final locale = language.locale;
     group(language.tag, () {
       testWidgets('dashboard', (tester) async {
-        await pump(tester, locale, const NonogramDashboardPage());
+        await pump(tester, locale, const NonogramDashboardScreen());
         expect(tester.takeException(), isNull);
       });
 
       testWidgets('home tabs: check-in and me', (tester) async {
-        await pump(tester, locale, const AppHomePage(), withCheckIn: true);
+        await pump(tester, locale, const AppHomeScreen(), withCheckIn: true);
         expect(tester.takeException(), isNull);
         await tester.tap(find.byKey(const ValueKey('home-tab-checkIn')));
         await tester.pump();
@@ -138,7 +137,7 @@ void main() {
       });
 
       testWidgets('play page, settings and language picker', (tester) async {
-        await pump(tester, locale, const NonogramPlayPage());
+        await pump(tester, locale, const NonogramPlayScreen());
         expect(tester.takeException(), isNull);
         await tester.tap(find.byIcon(LucideIcons.settings));
         await tester.pumpAndSettle();
@@ -152,7 +151,7 @@ void main() {
         await pump(
           tester,
           locale,
-          const NonogramPlayPage(),
+          const NonogramPlayScreen(),
           size: const Size(640, 360),
         );
         expect(tester.takeException(), isNull);
@@ -162,21 +161,21 @@ void main() {
         await pump(
           tester,
           locale,
-          const NonogramDashboardPage(),
+          const NonogramDashboardScreen(),
           withHistory: true,
         );
         expect(tester.takeException(), isNull);
         await pump(
           tester,
           locale,
-          const NonogramHistoryPage(),
+          const NonogramHistoryScreen(),
           withHistory: true,
         );
         expect(tester.takeException(), isNull);
         await pump(
           tester,
           locale,
-          const NonogramHistoryDetailPage(level: 2),
+          const NonogramHistoryDetailScreen(level: 2),
           withHistory: true,
         );
         expect(tester.takeException(), isNull);
@@ -222,9 +221,9 @@ void main() {
       });
 
       testWidgets('tutorial and guide', (tester) async {
-        await pump(tester, locale, const NonogramTutorialPage());
+        await pump(tester, locale, const NonogramTutorialScreen());
         expect(tester.takeException(), isNull);
-        await pump(tester, locale, const NonogramGuidePage());
+        await pump(tester, locale, const NonogramGuideScreen());
         expect(tester.takeException(), isNull);
       });
     });

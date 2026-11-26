@@ -1,7 +1,7 @@
 import 'package:nonogram/core/app_spacing.dart';
 import 'package:nonogram/core/app_theme.dart';
 import 'package:nonogram/core/context_ext.dart';
-import 'package:nonogram/models/nonogram_puzzle.dart';
+import 'package:nonogram/engine/model/nonogram_puzzle.dart';
 import 'package:flutter/material.dart';
 import '../../painters/nonogram_left_clues_painter.dart';
 import '../../painters/nonogram_solution_painter.dart';

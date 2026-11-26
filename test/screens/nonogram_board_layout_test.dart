@@ -1,7 +1,7 @@
 import 'dart:ui';
 
 import 'package:flutter_test/flutter_test.dart';
-import 'package:nonogram/screens/play/engine/nonogram_board_layout.dart';
+import 'package:nonogram/screens/play/layout/nonogram_board_layout.dart';
 
 NonogramBoardLayout _layout({
   int rows = 45,

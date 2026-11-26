@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:lucide_icons/lucide_icons.dart';
-import 'package:nonogram/checkin/check_in_page.dart';
+import 'package:nonogram/checkin/check_in_screen.dart';
 import 'package:nonogram/checkin/check_in_service.dart';
 import 'package:nonogram/checkin/game_clock.dart';
 import 'package:nonogram/core/app_theme.dart';
@@ -10,7 +10,7 @@ import 'package:nonogram/core/app_theme_mode.dart';
 import 'package:nonogram/data/nonogram_repository.dart';
 import 'package:nonogram/l10n/app_localizations.dart';
 import 'package:nonogram/models/power_up_inventory.dart';
-import 'package:nonogram/screens/dashboard/nonogram_dashboard_page.dart';
+import 'package:nonogram/screens/dashboard/nonogram_dashboard_screen.dart';
 import 'package:provider/provider.dart';
 
 import '../mocks/fake_nonogram_repository.dart';
@@ -45,7 +45,7 @@ void main() {
             GlobalCupertinoLocalizations.delegate,
           ],
           supportedLocales: AppLocalizations.supportedLocales,
-          home: NonogramDashboardPage(showTutorialOnStart: showTutorial),
+          home: NonogramDashboardScreen(showTutorialOnStart: showTutorial),
         ),
       ),
     );
@@ -70,7 +70,7 @@ void main() {
     tester,
   ) async {
     await pump(tester);
-    expect(find.byType(CheckInTab), findsNothing);
+    expect(find.byType(CheckInScreen), findsNothing);
     expect(find.byKey(const ValueKey('dashboard-check-in')), findsNothing);
   });
 

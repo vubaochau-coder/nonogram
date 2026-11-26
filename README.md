@@ -12,32 +12,37 @@ tiến độ lưu trên máy, không cần tài khoản. Mạng chỉ dùng đ�
 
 ```bash
 flutter pub get
-flutter run
+flutter run --flavor dev      # Android: luôn phải chọn flavor
 ```
 
-Nhánh `main` là mã nguồn của bản store: không có flavor, công cụ tester hay
-chế độ nhà phát triển (các thứ đó nằm ở nhánh `develop`, xem
-[Nhánh và phát hành](#nhánh-và-phát-hành)).
+### Flavor
 
-- Build bản store: `flutter build appbundle --release --obfuscate --split-debug-info=build/symbols`.
+| Flavor | Dùng cho | Công cụ tester | ID quảng cáo |
+|---|---|---|---|
+| `dev` | Bản thử nội bộ, build từ nhánh `develop` (workflow Distribute) | Có ([docs/tester_tools.md](docs/tester_tools.md)) | Thử nghiệm của Google |
+| `store` | Bản phát hành lên store (workflow "Store build", chạy tay trên `main`) | Không | Thật |
+
+- Hai flavor dùng chung code và bộ màn `assets/levels/`; khác nhau ở công cụ
+  tester và ID quảng cáo.
+- Build bản store: `flutter build appbundle --release --flavor store --obfuscate --split-debug-info=build/symbols`.
   Bản release Android bật R8 (làm rối + rút gọn, keep rules ở
   `android/app/proguard-rules.pro`) và `--obfuscate` làm rối mã Dart. Lưu lại
   thư mục `build/symbols` (và `mapping.txt` của R8) để giải mã stack trace.
-- Tiến độ người chơi lưu trong box Hive `nonogram_offline_user_v1`: không đổi
-  tên box này.
+- iOS và web chưa cấu hình flavor: build không có `--flavor` chạy như bản
+  `store`.
 
 Hỗ trợ Android, iOS và Web.
 
 ## Điều hướng
 
-Thanh điều hướng dưới có 3 tab (`lib/screens/home/app_home_page.dart`):
+Thanh điều hướng dưới có 3 tab (`lib/screens/home/app_home_screen.dart`):
 
-- **Chính** (`NonogramDashboardPage`): màn tiếp theo kèm nút Chơi, tiến trình,
+- **Chính** (`NonogramDashboardScreen`): màn tiếp theo kèm nút Chơi, tiến trình,
   vừa giải xong.
-- **Điểm danh** (`CheckInTab`): xem [Điểm danh hằng ngày](#điểm-danh-hằng-ngày).
-- **Tôi** (`MePage`): gói không quảng cáo; cài đặt (giao diện: bấm là đổi
+- **Điểm danh** (`CheckInScreen`): xem [Điểm danh hằng ngày](#điểm-danh-hằng-ngày).
+- **Tôi** (`MeScreen`): gói không quảng cáo; cài đặt (giao diện: bấm là đổi
   Sáng ⇄ Tối, ngôn ngữ, âm thanh); trợ giúp (cách chơi, kỹ thuật giải); quyền
-  riêng tư quảng cáo (khi bắt buộc), giấy phép.
+  riêng tư quảng cáo (khi bắt buộc), giấy phép, đổi chế độ chơi (bản `dev`).
 
 ## Ngôn ngữ
 
@@ -138,10 +143,11 @@ lib/
     nonogram_puzzle_source.dart   Đọc màn chơi từ assets/levels/
     hive_nonogram_local_service.dart  Lưu ván dở + màn đã hoàn thành
     nonogram_repository.dart      Gom dữ liệu màn chơi + tiến độ, logic campaign
-  models/                    Puzzle, snapshot ván dở, kết quả hoàn thành
+  engine/                    Lõi game, Dart thuần (không import Flutter): puzzle, trạng thái ô, luật, solver
+  models/                    Snapshot ván dở, kết quả hoàn thành, kho gợi ý / gậy phép
   screens/
     dashboard/               Màn chính: chơi tiếp / thử thách tiếp theo, thống kê
-    play/                    Gameplay (bloc, engine, solver, bố cục bàn chơi, UI)
+    play/                    Gameplay (bloc, bố cục bàn chơi trong layout/, UI)
     history/                 Danh sách + chi tiết màn đã hoàn thành
     guide/                   Hướng dẫn cách giải (lý thuyết, có lối vào bài tập)
     tutorial/                Bài hướng dẫn tương tác 5×5 ("Cách chơi")
@@ -159,6 +165,7 @@ docs/
   level_format.md            Định dạng dữ liệu màn chơi
   credits.md                 Ghi công + giấy phép hình dùng làm màn chơi
   gameplay_rules.md          Quy tắc campaign, snapshot, hint
+  conventions.md             Quy ước code và quy trình Git
 ```
 
 - Sửa chuỗi dịch trong `lib/l10n/*.arb` rồi chạy `flutter gen-l10n`.
@@ -167,18 +174,22 @@ docs/
 ## Kiểm tra
 
 ```bash
-dart format --output=none --set-exit-if-changed lib test
+dart format --output=none --set-exit-if-changed lib test tools
 flutter analyze
+dart run tools/check_conventions.dart
 flutter test
 ```
+
+Quy ước code (độ dài file, đặt tên, cách kiểm tra) xem
+[docs/conventions.md](docs/conventions.md).
 
 `test/data/level_assets_test.dart` kiểm tra toàn bộ dữ liệu trong
 `assets/levels/` (đủ level, đúng định dạng, mỗi màn có đúng một nghiệm).
 
 ## Quảng cáo (AdMob)
 
-Có quảng cáo trên **Android** (bản debug / profile luôn dùng ID thử
-nghiệm). iOS, web và test không có (`createAdService` trong
+Có quảng cáo trên **Android** (cả `store` và `dev`; bản `dev` luôn dùng ID
+thử nghiệm). iOS, web và test không có (`createAdService` trong
 `lib/main.dart`).
 
 | Loại | Khi nào |
@@ -216,13 +227,13 @@ Game ──AdPlacement──▶ AdService (ad_service.dart)
   nối Firebase Analytics / AppsFlyer bằng một sink mới.
 - **Cấu hình** (`AdConfig`, `InterstitialPolicyConfig`) tách khỏi code, sẵn
   sàng đọc từ Remote Config.
-- **ID quảng cáo:** bản release dùng ID thật của Pixel Nonogram, bản debug / profile
-  dùng ID thử nghiệm của Google (luôn hiện quảng cáo mẫu, không ra tiền):
-  `AdConfig.forBuild` trong `lib/ads/ad_config.dart`. App ID ở
-  `android/app/build.gradle.kts`.
-- Thử quảng cáo trên máy: `flutter run` (quảng cáo mẫu). Chạy `--release` là
-  **quảng cáo thật**: đừng bấm vào, AdMob sẽ khoá tài khoản vì lượt bấm
-  không hợp lệ; muốn thử bản release thì thêm máy vào **Cài đặt → Thiết bị thử
+- **ID quảng cáo:** bản `store` dùng ID thật của Pixel Nonogram, bản `dev` dùng ID
+  thử nghiệm của Google (luôn hiện quảng cáo mẫu, không ra tiền). ID đơn vị
+  quảng cáo ở `lib/ads/ad_config.dart`, App ID ở `android/app/build.gradle.kts`
+  (theo flavor).
+- Thử quảng cáo trên máy: `flutter run --flavor dev`. Chạy `--flavor store`
+  là **quảng cáo thật**: đừng bấm vào, AdMob sẽ khoá tài khoản vì lượt bấm
+  không hợp lệ; muốn thử bản store thì thêm máy vào **Cài đặt → Thiết bị thử
   nghiệm** trong AdMob trước.
 
 - **Privacy policy:** nằm ở repo
@@ -298,8 +309,13 @@ quảng cáo xen kẽ.
 
 | Nhánh | Dùng cho | GitHub Actions |
 |---|---|---|
-| `develop` | Phát triển và thử nội bộ: có flavor `dev` / `store`, công cụ tester, chế độ nhà phát triển | `CI` tự chạy cho mỗi push / pull request vào develop; CI xanh thì `Distribute` đẩy bản thử lên Firebase App Distribution |
-| `main` | Mã nguồn của bản store: không có flavor và code kiểm thử | Không tự chạy gì. Khi cần phát hành thì chạy tay `Store build` |
+| `develop` | Phát triển và thử nội bộ (flavor `dev`) | `CI` tự chạy cho mỗi push / pull request vào develop; CI xanh thì `Distribute` đẩy bản thử lên Firebase App Distribution |
+| `main` | Bản phát hành (flavor `store`) | Không tự chạy gì. Khi cần phát hành thì chạy tay `Store build` |
+
+Hai nhánh có cùng code; bản store khác bản thử ở flavor, không ở nhánh.
+Phát hành: mở pull request `develop` → `main` và merge bằng **Create a merge
+commit** (không squash / rebase, để lần sau merge không bị xung đột). Sửa gấp
+trên `main` thì merge ngược `main` → `develop` ngay sau đó.
 
 App Android `com.chauvb.nonogram` (**Pixel Nonogram**) nằm chung project Firebase
 với app chess (`chess-app-chauvb`).
@@ -309,8 +325,8 @@ với app chess (`chess-app-chauvb`).
   lần chạy của workflow, tự tăng mỗi lần phát hành.
 - `Store build` chạy format / analyze / test rồi build `.aab` đã ký; số build
   nhập tay khi chạy.
-- File workflow giống nhau ở cả hai nhánh: GitHub đọc trigger của
-  `Distribute` từ nhánh mặc định (`main`), nên sửa workflow thì sửa cả hai.
+- GitHub đọc trigger của `Distribute` từ nhánh mặc định (`main`): sửa
+  workflow thì chỉ có hiệu lực sau khi đã merge sang `main`.
 
 Secrets/variables cần cấu hình được mô tả ở đầu
 `.github/workflows/distribute.yml`.
