@@ -10,7 +10,6 @@ lib/screens/guide/illustrations/guide_diagram_view.dart 330
 lib/screens/guide/nonogram_guide_screen.dart 363
 lib/screens/history/nonogram_history_screen.dart 305
 lib/screens/me/me_screen.dart 308
-lib/screens/play/bloc/nonogram_play_bloc.dart 961
 lib/screens/play/bloc/nonogram_play_state.dart 425
 lib/screens/play/celebration/solve_celebration.dart 586
 lib/screens/play/coach/nonogram_play_coach.dart 445
