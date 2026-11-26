@@ -562,9 +562,6 @@ class AppLocalizationsTr extends AppLocalizations {
   String get settingsLicenses => 'Lisanslar';
 
   @override
-  String get settingsSwitchPlayMode => 'Oyun modunu değiştir';
-
-  @override
   String get licensesTitle => 'Lisanslar';
 
   @override
@@ -581,33 +578,6 @@ class AppLocalizationsTr extends AppLocalizations {
   String get licensesSoftwareButton => 'Açık kaynak yazılım lisansları';
 
   @override
-  String get licensesDeveloperLevelsNote =>
-      'Geliştirici modu bulmacaları nonogram.org\'dan alınmıştır ve yalnızca iç testler içindir. Mağaza sürümünde yer almazlar.';
-
-  @override
-  String get playModeTitle => 'Bir oyun modu seç';
-
-  @override
-  String get playModeSubtitle => 'İlerleme her mod için ayrı kaydedilir.';
-
-  @override
-  String get playModeUserTitle => 'Oyuncu modu';
-
-  @override
-  String get playModeUserBody =>
-      'Mağaza sürümünde bulunan lisanslı bulmacalar.';
-
-  @override
-  String get playModeDeveloperTitle => 'Geliştirici modu';
-
-  @override
-  String get playModeDeveloperBody =>
-      'İç testler için nonogram.org\'daki orijinal bulmacalar. Önceki ilerlemeni korur.';
-
-  @override
-  String get playModeLastUsed => 'Son kullanılan';
-
-  @override
   String licensesBy(String author) {
     return 'Hazırlayan: $author';
   }
@@ -615,11 +585,6 @@ class AppLocalizationsTr extends AppLocalizations {
   @override
   String licensesLevelCount(int count) {
     return '$count bulmaca';
-  }
-
-  @override
-  String playModeProgress(int solved, int total) {
-    return '$solved/$total çözüldü';
   }
 
   @override

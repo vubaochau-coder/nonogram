@@ -561,9 +561,6 @@ class AppLocalizationsId extends AppLocalizations {
   String get settingsLicenses => 'Lisensi';
 
   @override
-  String get settingsSwitchPlayMode => 'Ganti mode bermain';
-
-  @override
   String get licensesTitle => 'Lisensi';
 
   @override
@@ -580,32 +577,6 @@ class AppLocalizationsId extends AppLocalizations {
   String get licensesSoftwareButton => 'Lisensi perangkat lunak sumber terbuka';
 
   @override
-  String get licensesDeveloperLevelsNote =>
-      'Teka-teki mode pengembang berasal dari nonogram.org dan hanya untuk pengujian internal. Teka-teki ini tidak disertakan di versi toko.';
-
-  @override
-  String get playModeTitle => 'Pilih mode bermain';
-
-  @override
-  String get playModeSubtitle => 'Progres disimpan terpisah untuk setiap mode.';
-
-  @override
-  String get playModeUserTitle => 'Mode pemain';
-
-  @override
-  String get playModeUserBody => 'Teka-teki berlisensi yang ada di versi toko.';
-
-  @override
-  String get playModeDeveloperTitle => 'Mode pengembang';
-
-  @override
-  String get playModeDeveloperBody =>
-      'Teka-teki asli dari nonogram.org, untuk pengujian internal. Progres lamamu tetap tersimpan.';
-
-  @override
-  String get playModeLastUsed => 'Terakhir dipakai';
-
-  @override
   String licensesBy(String author) {
     return 'Oleh $author';
   }
@@ -613,11 +584,6 @@ class AppLocalizationsId extends AppLocalizations {
   @override
   String licensesLevelCount(int count) {
     return '$count teka-teki';
-  }
-
-  @override
-  String playModeProgress(int solved, int total) {
-    return '$solved/$total selesai';
   }
 
   @override

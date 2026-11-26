@@ -1,7 +1,7 @@
 name: Store build
 
-# Bản phát hành lên Google Play: flavor `store` (không có màn chọn chế độ chơi,
-# chỉ có bộ màn có bản quyền). Chỉ chạy tay từ tab Actions, trên nhánh `main`;
+# Bản phát hành lên Google Play: flavor `store` (không có công cụ tester, ID
+# quảng cáo thật). Chỉ chạy tay từ tab Actions, trên nhánh `main`;
 # kết quả là file .aab đã ký ở mục Artifacts của lần chạy, tải về rồi tự đưa
 # lên Play Console. Nhánh main không có CI tự động nên workflow này chạy
 # format / analyze / test trước khi build.
@@ -109,15 +109,9 @@ jobs:
 
       - run: flutter build appbundle --release --flavor store --build-number=${{ github.event.inputs.build_number }} --obfuscate --split-debug-info=build/symbols
 
-      # Bộ màn của chế độ nhà phát triển (lấy từ nonogram.org) không được có
-      # trong bản store.
-      - name: Check developer levels are not bundled
+      - name: Check levels are bundled
         run: |
           aab=build/app/outputs/bundle/storeRelease/app-store-release.aab
-          if unzip -l "$aab" | grep -q "assets/levels_dev/"; then
-            echo "::error::Bản store đang chứa assets/levels_dev/"
-            exit 1
-          fi
           unzip -l "$aab" | grep -q "assets/levels/index.json"
 
       - uses: actions/upload-artifact@v4

@@ -549,9 +549,6 @@ class AppLocalizationsKo extends AppLocalizations {
   String get settingsLicenses => '라이선스';
 
   @override
-  String get settingsSwitchPlayMode => '플레이 모드 전환';
-
-  @override
   String get licensesTitle => '라이선스';
 
   @override
@@ -568,32 +565,6 @@ class AppLocalizationsKo extends AppLocalizations {
   String get licensesSoftwareButton => '오픈소스 소프트웨어 라이선스';
 
   @override
-  String get licensesDeveloperLevelsNote =>
-      '개발자 모드 퍼즐은 nonogram.org에서 가져온 것으로 내부 테스트 전용입니다. 스토어 버전에는 포함되지 않습니다.';
-
-  @override
-  String get playModeTitle => '플레이 모드 선택';
-
-  @override
-  String get playModeSubtitle => '진행 상황은 모드별로 따로 저장됩니다.';
-
-  @override
-  String get playModeUserTitle => '플레이어 모드';
-
-  @override
-  String get playModeUserBody => '스토어 버전에 들어 있는 라이선스 퍼즐입니다.';
-
-  @override
-  String get playModeDeveloperTitle => '개발자 모드';
-
-  @override
-  String get playModeDeveloperBody =>
-      '내부 테스트용 nonogram.org 원본 퍼즐입니다. 이전 진행 상황이 유지됩니다.';
-
-  @override
-  String get playModeLastUsed => '최근 사용';
-
-  @override
   String licensesBy(String author) {
     return '제작: $author';
   }
@@ -601,11 +572,6 @@ class AppLocalizationsKo extends AppLocalizations {
   @override
   String licensesLevelCount(int count) {
     return '퍼즐 $count개';
-  }
-
-  @override
-  String playModeProgress(int solved, int total) {
-    return '$solved/$total 완료';
   }
 
   @override

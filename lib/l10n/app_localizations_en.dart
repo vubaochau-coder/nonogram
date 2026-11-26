@@ -563,9 +563,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String get settingsLicenses => 'Licenses';
 
   @override
-  String get settingsSwitchPlayMode => 'Switch play mode';
-
-  @override
   String get licensesTitle => 'Licenses';
 
   @override
@@ -582,33 +579,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String get licensesSoftwareButton => 'Open-source software licenses';
 
   @override
-  String get licensesDeveloperLevelsNote =>
-      'Developer mode puzzles come from nonogram.org and are for internal testing only. They are not included in the store version.';
-
-  @override
-  String get playModeTitle => 'Choose a play mode';
-
-  @override
-  String get playModeSubtitle => 'Progress is saved separately for each mode.';
-
-  @override
-  String get playModeUserTitle => 'Player mode';
-
-  @override
-  String get playModeUserBody =>
-      'The licensed puzzles that ship in the store version.';
-
-  @override
-  String get playModeDeveloperTitle => 'Developer mode';
-
-  @override
-  String get playModeDeveloperBody =>
-      'The original puzzles from nonogram.org, for internal testing. Keeps your earlier progress.';
-
-  @override
-  String get playModeLastUsed => 'Last used';
-
-  @override
   String licensesBy(String author) {
     return 'By $author';
   }
@@ -616,11 +586,6 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String licensesLevelCount(int count) {
     return '$count puzzles';
-  }
-
-  @override
-  String playModeProgress(int solved, int total) {
-    return '$solved/$total solved';
   }
 
   @override

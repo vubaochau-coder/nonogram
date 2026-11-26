@@ -2,7 +2,7 @@
 
 > Chuyển từ `docs/features/nonogram_closeout_notes.md` của Nexora. Bản offline
 > không còn tài khoản/đồng bộ; mọi tiến độ chỉ nằm trên máy (Hive box
-> `nonogram_offline_v1`), màn chơi đọc từ `assets/levels/`.
+> `nonogram_offline_user_v1`), màn chơi đọc từ `assets/levels/`.
 
 Tài liệu này chốt lại các rule vận hành hiện tại của Nonogram sau giai đoạn polish gần nhất. Mục tiêu là để vài tháng sau quay lại vẫn hiểu nhanh feature đang hoạt động theo logic nào, phần nào là cố ý, và phần nào không nên phá vỡ khi mở rộng.
 

@@ -9,7 +9,6 @@ import 'package:nonogram/ads/ad_service.dart';
 import 'package:nonogram/core/app_theme.dart';
 import 'package:nonogram/core/app_theme_mode.dart';
 import 'package:nonogram/core/onboarding_preferences.dart';
-import 'package:nonogram/core/play_mode.dart';
 import 'package:nonogram/data/nonogram_puzzle_source.dart';
 import 'package:nonogram/data/nonogram_repository.dart';
 import 'package:nonogram/l10n/app_localizations.dart';
@@ -56,7 +55,6 @@ Future<void> _pumpPlay(
   WidgetTester tester,
   Size size, {
   OnboardingPreferences? onboarding,
-  PlayModeSwitcher? playModeSwitcher,
   AdService? ads,
 }) async {
   tester.view.physicalSize = size;
@@ -74,7 +72,6 @@ Future<void> _pumpPlay(
         ),
         ChangeNotifierProvider.value(value: AppThemeModeController.inMemory()),
         if (onboarding != null) Provider.value(value: onboarding),
-        if (playModeSwitcher != null) Provider.value(value: playModeSwitcher),
         if (ads != null) Provider<AdService>.value(value: ads),
       ],
       child: MaterialApp(
@@ -822,11 +819,6 @@ void main() {
     await tester.tap(find.byIcon(LucideIcons.settings));
     await tester.pumpAndSettle();
     expect(find.byKey(const ValueKey('nonogram-licenses')), findsNothing);
-    // Bản store (và test): không có lối đổi chế độ chơi.
-    expect(
-      find.byKey(const ValueKey('nonogram-switch-play-mode')),
-      findsNothing,
-    );
   });
 
   testWidgets('the controls guide has a step about dragging', (tester) async {
@@ -845,23 +837,6 @@ void main() {
     }
     expect(find.text('4/7'), findsOneWidget);
     expect(find.text('Drag to fill many squares'), findsOneWidget);
-  });
-
-  testWidgets('dev flavor settings can switch the play mode', (tester) async {
-    var switched = 0;
-    await _pumpPlay(
-      tester,
-      phone,
-      playModeSwitcher: PlayModeSwitcher(
-        current: PlayMode.user,
-        switchMode: () => switched++,
-      ),
-    );
-    await tester.tap(find.byIcon(LucideIcons.settings));
-    await tester.pumpAndSettle();
-    await tester.tap(find.byKey(const ValueKey('nonogram-switch-play-mode')));
-    await tester.pumpAndSettle();
-    expect(switched, 1);
   });
 
   testWidgets('cells opened by the wand cannot be changed', (tester) async {

@@ -17,23 +17,19 @@ flutter run --flavor dev      # Android: luôn phải chọn flavor
 
 ### Flavor
 
-| Flavor | Dùng cho | Màn chọn chế độ chơi | Bộ màn |
+| Flavor | Dùng cho | Công cụ tester | ID quảng cáo |
 |---|---|---|---|
-| `dev` | Bản thử nội bộ, build từ nhánh `develop` (workflow Distribute) | Có | Chế độ người dùng (`assets/levels/`) + chế độ nhà phát triển (`assets/levels_dev/`) |
-| `store` | Bản phát hành lên store (workflow "Store build", chạy tay) | Không | Chỉ `assets/levels/` |
+| `dev` | Bản thử nội bộ, build từ nhánh `develop` (workflow Distribute) | Có ([docs/tester_tools.md](docs/tester_tools.md)) | Thử nghiệm của Google |
+| `store` | Bản phát hành lên store (workflow "Store build", chạy tay trên `main`) | Không | Thật |
 
-- Mỗi chế độ chơi lưu tiến độ riêng. Chế độ nhà phát triển dùng lại box tiến
-  độ cũ (`nonogram_offline_v1`), nên tiến độ của các bản thử trước đây vẫn còn.
-- `assets/levels_dev/` (574 màn lấy từ nonogram.org, không được dùng thương
-  mại) chỉ được đóng gói khi build `--flavor dev`.
+- Hai flavor dùng chung code và bộ màn `assets/levels/`; khác nhau ở công cụ
+  tester và ID quảng cáo.
 - Build bản store: `flutter build appbundle --release --flavor store --obfuscate --split-debug-info=build/symbols`.
   Bản release Android bật R8 (làm rối + rút gọn, keep rules ở
   `android/app/proguard-rules.pro`) và `--obfuscate` làm rối mã Dart. Lưu lại
   thư mục `build/symbols` (và `mapping.txt` của R8) để giải mã stack trace.
 - iOS và web chưa cấu hình flavor: build không có `--flavor` chạy như bản
-  `store` (không có chế độ nhà phát triển).
-- Nhánh `beta` giữ nguyên trạng thái `main` trước khi đổi bộ màn (vẫn dùng bộ
-  màn crawl).
+  `store`.
 
 Hỗ trợ Android, iOS và Web.
 
@@ -159,7 +155,6 @@ lib/
   l10n/                      Chuỗi dịch (app_<mã>.arb, 15 ngôn ngữ) + code sinh từ đó
 assets/
   levels/                    1.061 màn chơi có bản quyền (sinh bằng tools/build_levels.dart)
-  levels_dev/                574 màn crawl, chỉ có ở flavor dev (chế độ nhà phát triển)
   licenses/                  Văn bản giấy phép hình màn chơi (hiện ở Cài đặt → Giấy phép)
   fonts/                     Font Nunito (giấy phép OFL, xem Nunito-OFL.txt)
 tools/
@@ -314,8 +309,13 @@ quảng cáo xen kẽ.
 
 | Nhánh | Dùng cho | GitHub Actions |
 |---|---|---|
-| `develop` | Phát triển và thử nội bộ: có flavor `dev`, công cụ tester, chế độ nhà phát triển | `CI` tự chạy cho mỗi push / pull request vào develop; CI xanh thì `Distribute` đẩy bản thử lên Firebase App Distribution |
-| `main` | Mã nguồn của bản store, không có code kiểm thử | Không tự chạy gì. Khi cần phát hành thì chạy tay `Store build` |
+| `develop` | Phát triển và thử nội bộ (flavor `dev`) | `CI` tự chạy cho mỗi push / pull request vào develop; CI xanh thì `Distribute` đẩy bản thử lên Firebase App Distribution |
+| `main` | Bản phát hành (flavor `store`) | Không tự chạy gì. Khi cần phát hành thì chạy tay `Store build` |
+
+Hai nhánh có cùng code; bản store khác bản thử ở flavor, không ở nhánh.
+Phát hành: mở pull request `develop` → `main` và merge bằng **Create a merge
+commit** (không squash / rebase, để lần sau merge không bị xung đột). Sửa gấp
+trên `main` thì merge ngược `main` → `develop` ngay sau đó.
 
 App Android `com.chauvb.nonogram` (**Pixel Nonogram**) nằm chung project Firebase
 với app chess (`chess-app-chauvb`).
@@ -325,8 +325,8 @@ với app chess (`chess-app-chauvb`).
   lần chạy của workflow, tự tăng mỗi lần phát hành.
 - `Store build` chạy format / analyze / test rồi build `.aab` đã ký; số build
   nhập tay khi chạy.
-- File workflow giống nhau ở cả hai nhánh: GitHub đọc trigger của
-  `Distribute` từ nhánh mặc định (`main`), nên sửa workflow thì sửa cả hai.
+- GitHub đọc trigger của `Distribute` từ nhánh mặc định (`main`): sửa
+  workflow thì chỉ có hiệu lực sau khi đã merge sang `main`.
 
 Secrets/variables cần cấu hình được mô tả ở đầu
 `.github/workflows/distribute.yml`.

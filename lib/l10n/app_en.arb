@@ -260,20 +260,11 @@
   "nonogramPlayHintNothingToFill": "Every square that should be filled already is. Check for extra filled squares.",
   "settingsSound": "Sound",
   "settingsLicenses": "Licenses",
-  "settingsSwitchPlayMode": "Switch play mode",
   "licensesTitle": "Licenses",
   "licensesLevelArtHeading": "Puzzles",
   "licensesLevelArtIntro": "The puzzles come from these sources. Icon sets were scaled down, converted to black and white and edited so every puzzle can be solved; the nonogram collections are used as they are.",
   "licensesFontHeading": "Font",
   "licensesSoftwareButton": "Open-source software licenses",
-  "licensesDeveloperLevelsNote": "Developer mode puzzles come from nonogram.org and are for internal testing only. They are not included in the store version.",
-  "playModeTitle": "Choose a play mode",
-  "playModeSubtitle": "Progress is saved separately for each mode.",
-  "playModeUserTitle": "Player mode",
-  "playModeUserBody": "The licensed puzzles that ship in the store version.",
-  "playModeDeveloperTitle": "Developer mode",
-  "playModeDeveloperBody": "The original puzzles from nonogram.org, for internal testing. Keeps your earlier progress.",
-  "playModeLastUsed": "Last used",
   "licensesBy": "By {author}",
   "@licensesBy": {
     "placeholders": {
@@ -286,17 +277,6 @@
   "@licensesLevelCount": {
     "placeholders": {
       "count": {
-        "type": "int"
-      }
-    }
-  },
-  "playModeProgress": "{solved}/{total} solved",
-  "@playModeProgress": {
-    "placeholders": {
-      "solved": {
-        "type": "int"
-      },
-      "total": {
         "type": "int"
       }
     }

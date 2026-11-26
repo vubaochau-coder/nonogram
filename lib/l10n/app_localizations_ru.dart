@@ -563,9 +563,6 @@ class AppLocalizationsRu extends AppLocalizations {
   String get settingsLicenses => 'Лицензии';
 
   @override
-  String get settingsSwitchPlayMode => 'Сменить режим игры';
-
-  @override
   String get licensesTitle => 'Лицензии';
 
   @override
@@ -582,34 +579,6 @@ class AppLocalizationsRu extends AppLocalizations {
   String get licensesSoftwareButton => 'Лицензии открытого ПО';
 
   @override
-  String get licensesDeveloperLevelsNote =>
-      'Головоломки режима разработчика взяты с nonogram.org и предназначены только для внутреннего тестирования. В версию для магазина они не входят.';
-
-  @override
-  String get playModeTitle => 'Выберите режим игры';
-
-  @override
-  String get playModeSubtitle =>
-      'Прогресс сохраняется отдельно для каждого режима.';
-
-  @override
-  String get playModeUserTitle => 'Режим игрока';
-
-  @override
-  String get playModeUserBody =>
-      'Лицензированные головоломки из версии для магазина.';
-
-  @override
-  String get playModeDeveloperTitle => 'Режим разработчика';
-
-  @override
-  String get playModeDeveloperBody =>
-      'Оригинальные головоломки с nonogram.org для внутреннего тестирования. Сохраняет ваш прежний прогресс.';
-
-  @override
-  String get playModeLastUsed => 'Последний';
-
-  @override
   String licensesBy(String author) {
     return 'Автор: $author';
   }
@@ -617,11 +586,6 @@ class AppLocalizationsRu extends AppLocalizations {
   @override
   String licensesLevelCount(int count) {
     return 'Головоломок: $count';
-  }
-
-  @override
-  String playModeProgress(int solved, int total) {
-    return 'Решено $solved/$total';
   }
 
   @override

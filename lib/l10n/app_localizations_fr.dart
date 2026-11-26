@@ -566,9 +566,6 @@ class AppLocalizationsFr extends AppLocalizations {
   String get settingsLicenses => 'Licences';
 
   @override
-  String get settingsSwitchPlayMode => 'Changer de mode de jeu';
-
-  @override
   String get licensesTitle => 'Licences';
 
   @override
@@ -585,34 +582,6 @@ class AppLocalizationsFr extends AppLocalizations {
   String get licensesSoftwareButton => 'Licences des logiciels open source';
 
   @override
-  String get licensesDeveloperLevelsNote =>
-      'Les grilles du mode développeur proviennent de nonogram.org et servent uniquement aux tests internes. Elles ne sont pas incluses dans la version du store.';
-
-  @override
-  String get playModeTitle => 'Choisissez un mode de jeu';
-
-  @override
-  String get playModeSubtitle =>
-      'La progression est enregistrée séparément pour chaque mode.';
-
-  @override
-  String get playModeUserTitle => 'Mode joueur';
-
-  @override
-  String get playModeUserBody =>
-      'Les grilles sous licence incluses dans la version du store.';
-
-  @override
-  String get playModeDeveloperTitle => 'Mode développeur';
-
-  @override
-  String get playModeDeveloperBody =>
-      'Les grilles d\'origine de nonogram.org, pour les tests internes. Conserve votre progression précédente.';
-
-  @override
-  String get playModeLastUsed => 'Dernier utilisé';
-
-  @override
   String licensesBy(String author) {
     return 'Par $author';
   }
@@ -620,11 +589,6 @@ class AppLocalizationsFr extends AppLocalizations {
   @override
   String licensesLevelCount(int count) {
     return '$count grilles';
-  }
-
-  @override
-  String playModeProgress(int solved, int total) {
-    return '$solved/$total résolues';
   }
 
   @override
