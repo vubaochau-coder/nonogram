@@ -98,9 +98,10 @@ nó). Nút gạt **Tô / X** chọn việc một lần chạm sẽ làm:
 - Không có zoom: cỡ ô luôn là cỡ lớn nhất vừa màn hình trong khoảng
   28–44px (tính lại khi xoay màn hình); lưới lớn hơn thì kéo để xem.
 - Nút xoay màn hình (điện thoại / máy tính bảng) chuyển dọc ⇄ ngang và khoá
-  ở hướng đó; rời trang chơi thì bỏ khoá. Icon (`RotateScreenIcon`) luôn vẽ
-  máy dọc ở trên trái, máy ngang ở dưới phải và hai vệt cong ở góc trên phải;
-  hướng đang dùng mờ, hướng sẽ xoay tới đậm.
+  ở hướng đó; rời trang chơi thì bỏ khoá. Icon (`RotateScreenIcon`): máy dọc và
+  máy ngang chung góc trái dưới, một mũi tên cong ở góc trên phải; hướng đang
+  dùng mờ (khoét quanh máy kia để hai khung không đè nét), hướng sẽ xoay tới
+  đậm, mũi tên quay từ máy mờ sang máy đậm.
 - Màn hình ngang tự ẩn thanh hệ thống, không có app bar. Cột trái: quay
   lại và ⓘ ở góc trên, xoay màn hình và cài đặt ở góc dưới. Bấm ⓘ thì bảng
   thông tin màn (tên, số màn, kích thước, độ khó) trượt ra từ trái, phủ lên

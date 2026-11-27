@@ -1,12 +1,13 @@
-import 'dart:math' as math;
-
 import 'package:flutter/material.dart';
 
-/// Icon of the rotate button: a portrait phone (top left) and a landscape
-/// phone (bottom right) always in the same place, with two concentric
-/// motion arcs in the top right corner. The orientation in use is drawn
-/// faint, the one the button switches to is drawn bold, so the icon keeps
-/// its shape and only swaps emphasis when the screen turns.
+/// Icon of the rotate button: a portrait and a landscape phone sharing their
+/// bottom left corner, and one curved arrow in the free top right corner.
+/// The orientation in use is drawn faint (cut away around the other phone so
+/// the outlines never cross), the one the button switches to is drawn bold,
+/// and the arrow turns from the faint phone towards the bold one.
+///
+/// Kept to two ideas in 24 units so the arrow stays long enough to read
+/// (about 5 stroke widths) at button size.
 class RotateScreenIcon extends StatelessWidget {
   const RotateScreenIcon({
     super.key,
@@ -39,48 +40,91 @@ class RotateScreenIconPainter extends CustomPainter {
   /// The orientation in use.
   static const fadedAlpha = 0.32;
 
-  /// The outer motion arc.
-  static const trailAlpha = 0.45;
+  static const _frameStroke = 1.8;
+  static const _arrowStroke = 1.45;
+
+  /// Gap cut around the bold phone in the faint one.
+  static const _cutout = 1.8;
 
   static final _portrait = RRect.fromRectAndRadius(
-    const Rect.fromLTWH(2.5, 2, 8, 13),
-    const Radius.circular(1.6),
+    const Rect.fromLTWH(3.25, 5.75, 8.5, 15),
+    const Radius.circular(2),
   );
   static final _landscape = RRect.fromRectAndRadius(
-    const Rect.fromLTWH(8, 12, 13.5, 8.5),
-    const Radius.circular(1.6),
+    const Rect.fromLTWH(3.25, 12.25, 15, 8.5),
+    const Radius.circular(2),
   );
-  static const _arcCenter = Offset(12.5, 10.5);
-  static const _arcStart = -80 * math.pi / 180;
-  static const _arcSweep = 70 * math.pi / 180;
+
+  /// Arrow body (from, to; clockwise) and head for portrait now (turning
+  /// right, to landscape) and landscape now (turning back, to portrait).
+  static const _toLandscape = (
+    from: Offset(14.27, 5.19),
+    to: Offset(18.24, 8.07),
+    clockwise: true,
+    head: [Offset(19.19, 9.94), Offset(16.63, 8.55), Offset(19.57, 7.05)],
+  );
+  static const _toPortrait = (
+    from: Offset(18.81, 9.73),
+    to: Offset(15.93, 5.76),
+    clockwise: false,
+    head: [Offset(14.06, 4.81), Offset(15.45, 7.37), Offset(16.95, 4.43)],
+  );
 
   @override
   void paint(Canvas canvas, Size size) {
     canvas.save();
     canvas.scale(size.width / 24, size.height / 24);
-    Paint stroke(double width, double alpha) => Paint()
-      ..style = PaintingStyle.stroke
-      ..strokeWidth = width
-      ..strokeCap = StrokeCap.round
-      ..strokeJoin = StrokeJoin.round
-      ..color = color.withValues(alpha: color.a * alpha);
-
     final faded = landscape ? _landscape : _portrait;
     final bold = landscape ? _portrait : _landscape;
-    canvas.drawRRect(faded, stroke(1.6, fadedAlpha));
-    for (final (radius, width, alpha) in [
-      (5.5, 2.0, 1.0),
-      (8.5, 1.6, trailAlpha),
-    ]) {
-      canvas.drawArc(
-        Rect.fromCircle(center: _arcCenter, radius: radius),
-        _arcStart,
-        _arcSweep,
-        false,
-        stroke(width, alpha),
+    final ink = Paint()
+      ..color = color
+      ..strokeCap = StrokeCap.round
+      ..strokeJoin = StrokeJoin.round;
+
+    // Faint phone, with the bold phone and a gap around it cut away.
+    canvas.saveLayer(const Rect.fromLTWH(0, 0, 24, 24), Paint());
+    canvas.drawRRect(
+      faded,
+      Paint()
+        ..style = PaintingStyle.stroke
+        ..strokeWidth = _frameStroke
+        ..color = color.withValues(alpha: color.a * fadedAlpha),
+    );
+    canvas.drawRRect(
+      bold.inflate(_cutout),
+      Paint()..blendMode = BlendMode.clear,
+    );
+    canvas.restore();
+
+    canvas.drawRRect(
+      bold,
+      Paint.from(ink)
+        ..style = PaintingStyle.stroke
+        ..strokeWidth = _frameStroke,
+    );
+
+    final arrow = landscape ? _toPortrait : _toLandscape;
+    canvas.drawPath(
+      Path()
+        ..moveTo(arrow.from.dx, arrow.from.dy)
+        ..arcToPoint(
+          arrow.to,
+          radius: const Radius.circular(5.6),
+          clockwise: arrow.clockwise,
+        ),
+      Paint.from(ink)
+        ..style = PaintingStyle.stroke
+        ..strokeWidth = _arrowStroke,
+    );
+    final head = Path()..addPolygon(arrow.head, true);
+    canvas
+      ..drawPath(head, Paint.from(ink)..style = PaintingStyle.fill)
+      ..drawPath(
+        head,
+        Paint.from(ink)
+          ..style = PaintingStyle.stroke
+          ..strokeWidth = 0.4,
       );
-    }
-    canvas.drawRRect(bold, stroke(2, 1));
     canvas.restore();
   }
 
