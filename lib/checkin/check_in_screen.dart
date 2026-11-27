@@ -52,7 +52,6 @@ class _CheckInScreenState extends State<CheckInScreen>
   void dispose() {
     _celebration?.dispose();
     _bar.dispose();
-    _scroll.dispose();
     super.dispose();
   }
 
@@ -117,9 +116,13 @@ class _CheckInScreenState extends State<CheckInScreen>
       child: Scaffold(
         body: SafeArea(
           child: ListView(
-            key: _listKey,
-            controller: _scroll,
-            padding: const EdgeInsets.fromLTRB(16, 12, 16, 120),
+            // Room for the floating button only while it is shown.
+            padding: EdgeInsets.fromLTRB(
+              16,
+              12,
+              16,
+              service.canCheckIn ? 96 : 16,
+            ),
             children: [
               Card(
                 child: Padding(

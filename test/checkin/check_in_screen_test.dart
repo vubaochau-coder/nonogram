@@ -107,6 +107,14 @@ void main() {
     expect(find.byKey(const ValueKey('check-in-button')), findsNothing);
     expect(find.text('Điểm danh hôm nay'), findsNothing);
     expect(find.text('Chuỗi 1 ngày'), findsOneWidget);
+    // No room kept for the gone button: a tall screen does not scroll.
+    final list = tester.widget<ListView>(find.byType(ListView));
+    expect(list.padding!.resolve(TextDirection.ltr).bottom, 16);
+    final position = tester
+        .state<ScrollableState>(find.byType(Scrollable).first)
+        .position;
+    expect(position.pixels, 0, reason: 'no auto-scroll during the animation');
+    expect(position.maxScrollExtent, 0);
   });
 
   testWidgets('reduced motion checks in at once', (tester) async {
@@ -218,16 +226,16 @@ void main() {
     await run(tester, 1000);
   });
 
-  testWidgets('calendar: checked, missed, today and locked days', (
-    tester,
-  ) async {
+  testWidgets('calendar: missed, today and future days; days before install '
+      'in this month can be made up', (tester) async {
     // Bắt đầu 8/11; điểm danh 8–11, bỏ lỡ 12; hôm nay 13 chưa điểm danh.
     final service = await pump(tester, daysSinceStart: 5);
-    expect(day(7, 'beforeStart'), findsOneWidget);
+    expect(day(7, 'missed'), findsOneWidget, reason: 'before install');
+    expect(day(1, 'missed'), findsOneWidget);
     expect(day(8, 'missed'), findsOneWidget);
     expect(day(13, 'today'), findsOneWidget);
     expect(day(14, 'future'), findsOneWidget);
-    expect(service.streak(2026, 11).missed, hasLength(5));
+    expect(service.streak(2026, 11).missed, hasLength(12));
     // Nhắc bù ngày: chuỗi có thể nối thành 5 ngày.
     expect(
       find.byKey(const ValueKey('check-in-streak-make-up')),

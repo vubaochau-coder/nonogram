@@ -97,7 +97,8 @@ void main() {
     // Hôm nay 28/11, chưa điểm danh.
     final missed = dayNumberOf(DateTime(2026, 11, 20));
     expect(s.streak(2026, 11).longest, 7);
-    expect(s.streak(2026, 11).potential, 15);
+    // 1–12/11 (before install, same month) can be made up too.
+    expect(s.streak(2026, 11).potential, 27);
     expect(s.canMakeUp(missed), isTrue);
 
     final outcome = await s.makeUp(missed);
@@ -143,15 +144,19 @@ void main() {
     expect(await s.doubleGift(day: clock.today, milestone: 14), isFalse);
   });
 
-  test('cannot make up today, future days or days before install', () async {
+  test('cannot make up today, future days or days before install in an '
+      'earlier month', () async {
     final s = service();
     nextDay();
     nextDay();
     final today = clock.today;
     expect(s.canMakeUp(today), isFalse);
     expect(s.canMakeUp(today + 1), isFalse);
-    expect(s.canMakeUp(s.startDay - 1), isFalse);
     expect(s.canMakeUp(s.startDay), isTrue);
+    // Installed on 13/11: 1/11 can be made up, 31/10 cannot.
+    final first = dayNumberOf(DateTime(2026, 11));
+    expect(s.canMakeUp(first), isTrue);
+    expect(s.canMakeUp(first - 1), isFalse);
   });
 
   test('premium: 2 hints and 1 wand for the day, not stacking', () async {
