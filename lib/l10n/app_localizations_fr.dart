@@ -911,4 +911,20 @@ class AppLocalizationsFr extends AppLocalizations {
   String dashboardDailyReminderBoth(String hints, String wands) {
     return '$hints et $wands';
   }
+
+  @override
+  String get playClockPause => 'Mettre le chrono en pause';
+
+  @override
+  String get playClockResume => 'Reprendre';
+
+  @override
+  String get playClockPausedTitle => 'En pause';
+
+  @override
+  String get playClockPausedBody =>
+      'La grille est masquée pendant la pause. Le chrono s\'arrête aussi tout seul quand vous quittez la grille ou fermez l\'app.';
+
+  @override
+  String get settingsShowClock => 'Afficher le chrono';
 }

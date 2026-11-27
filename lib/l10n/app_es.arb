@@ -240,5 +240,10 @@
   "powerUpSpendDaily": "Usos diarios",
   "powerUpSpendPermanent": "Usos permanentes",
   "premiumBenefitsFootnote": "Los usos diarios no pasan al día siguiente. Las recompensas de hito son usos permanentes y se acumulan con normalidad.",
-  "dashboardDailyReminderBoth": "{hints} y {wands}"
+  "dashboardDailyReminderBoth": "{hints} y {wands}",
+  "playClockPause": "Pausar el cronómetro",
+  "playClockResume": "Continuar",
+  "playClockPausedTitle": "En pausa",
+  "playClockPausedBody": "El tablero se oculta mientras el cronómetro está en pausa. El cronómetro también se detiene solo al salir del puzle o cerrar la app.",
+  "settingsShowClock": "Mostrar cronómetro"
 }

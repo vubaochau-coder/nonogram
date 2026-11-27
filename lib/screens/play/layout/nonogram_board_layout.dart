@@ -72,7 +72,7 @@ class NonogramBoardLayout {
   static const double railReserve = 60;
 
   /// Màn dọc: chừa đáy cho cụm hoàn tác + Tô / X (lưới vẽ tràn bên dưới).
-  static const double dockReserve = 156;
+  static const double dockReserve = 70;
 
   /// Khoảng cách tối thiểu từ mép trái và mép phải/dưới.
   static const double edgeInset = 8;

@@ -240,5 +240,10 @@
   "powerUpSpendDaily": "Utilisations quotidiennes",
   "powerUpSpendPermanent": "Utilisations permanentes",
   "premiumBenefitsFootnote": "Les utilisations quotidiennes ne sont pas reportées au lendemain. Les récompenses de palier sont des utilisations permanentes et s'accumulent normalement.",
-  "dashboardDailyReminderBoth": "{hints} et {wands}"
+  "dashboardDailyReminderBoth": "{hints} et {wands}",
+  "playClockPause": "Mettre le chrono en pause",
+  "playClockResume": "Reprendre",
+  "playClockPausedTitle": "En pause",
+  "playClockPausedBody": "La grille est masquée pendant la pause. Le chrono s'arrête aussi tout seul quand vous quittez la grille ou fermez l'app.",
+  "settingsShowClock": "Afficher le chrono"
 }

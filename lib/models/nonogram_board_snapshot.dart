@@ -16,6 +16,10 @@ class NonogramBoardSnapshot {
   /// Ô mở bằng gợi ý / gậy phép (không đổi được, giữ khi chơi lại).
   final Set<({int row, int col})> lockedCells;
 
+  /// Time actually played on this game so far (the clock stops while the
+  /// level is left, the app is closed or the player pauses).
+  final int elapsedMs;
+
   const NonogramBoardSnapshot({
     required this.puzzleId,
     required this.level,
@@ -26,6 +30,7 @@ class NonogramBoardSnapshot {
     this.viewportOffsetY = 0,
     this.cellSize = 40.0,
     this.lockedCells = const {},
+    this.elapsedMs = 0,
   });
 
   Map<String, dynamic> toMap() {
@@ -43,6 +48,7 @@ class NonogramBoardSnapshot {
       'lockedCells': [
         for (final cell in lockedCells) [cell.row, cell.col],
       ],
+      'elapsedMs': elapsedMs,
     };
   }
 
@@ -67,6 +73,9 @@ class NonogramBoardSnapshot {
         for (final cell in (map['lockedCells'] as List?) ?? const [])
           (row: (cell as List)[0] as int, col: cell[1] as int),
       },
+      // Saved before the clock existed: its start time also counted the time
+      // the app was closed, so the game restarts from 0.
+      elapsedMs: (map['elapsedMs'] as num?)?.toInt() ?? 0,
     );
   }
 }

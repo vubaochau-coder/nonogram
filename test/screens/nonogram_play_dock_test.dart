@@ -49,8 +49,8 @@ RotateScreenIcon _rotateIcon(WidgetTester tester) =>
     tester.widget<RotateScreenIcon>(find.byType(RotateScreenIcon));
 
 void main() {
-  testWidgets('portrait: undo and Fill / X sit in the bottom right corner, '
-      'the other buttons stay in the top row', (tester) async {
+  testWidgets('portrait: undo and Fill / X sit side by side at the bottom '
+      'centre, the other buttons stay in the top row', (tester) async {
     const size = Size(400, 800);
     await _pumpPlay(tester, size);
     Offset at(Finder finder) => tester.getCenter(finder);
@@ -58,10 +58,11 @@ void main() {
     final undo = at(find.byKey(const ValueKey('nonogram-undo')));
     final mark = at(find.byKey(const ValueKey('nonogram-mode-mark')));
     for (final p in [undo, mark]) {
-      expect(p.dx, greaterThan(size.width - 80));
-      expect(p.dy, greaterThan(size.height / 2));
+      expect(p.dx, inInclusiveRange(size.width / 4, size.width * 3 / 4));
+      expect(p.dy, greaterThan(size.height - 100));
     }
-    expect(undo.dy, lessThan(mark.dy));
+    expect(undo.dx, lessThan(mark.dx));
+    expect(undo.dy, closeTo(mark.dy, 2));
     expect(find.byType(NonogramPlayDock), findsOneWidget);
 
     final top = [

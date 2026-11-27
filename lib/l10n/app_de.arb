@@ -240,5 +240,10 @@
   "powerUpSpendDaily": "Tägliche Nutzungen",
   "powerUpSpendPermanent": "Dauerhafte Nutzungen",
   "premiumBenefitsFootnote": "Tägliche Nutzungen werden nicht auf den nächsten Tag übertragen. Meilenstein-Belohnungen sind dauerhafte Nutzungen und sammeln sich wie gewohnt an.",
-  "dashboardDailyReminderBoth": "{hints} und {wands}"
+  "dashboardDailyReminderBoth": "{hints} und {wands}",
+  "playClockPause": "Timer pausieren",
+  "playClockResume": "Weiter",
+  "playClockPausedTitle": "Pausiert",
+  "playClockPausedBody": "Das Spielfeld ist ausgeblendet, solange der Timer pausiert. Der Timer stoppt auch von selbst, wenn du das Rätsel verlässt oder die App schließt.",
+  "settingsShowClock": "Timer anzeigen"
 }

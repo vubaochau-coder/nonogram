@@ -12,7 +12,6 @@ import '../bloc/nonogram_play_state.dart';
 import '../coach/nonogram_play_coach.dart';
 import '../layout/nonogram_board_layout.dart';
 import '../nonogram_transformation_controller_provider.dart';
-import '../views/fullscreen_toggle_action.dart';
 import '../views/hint_action.dart';
 import '../views/mode_toggle_action.dart';
 import '../views/rotate_screen_action.dart';
@@ -20,12 +19,17 @@ import '../views/drag_tip.dart';
 import '../views/undo_action.dart';
 import '../views/wand_action.dart';
 import '../widgets/nonogram_fullscreen_action_dock.dart';
+import '../clock/clock_paused_lock.dart';
+import '../clock/nonogram_play_clock.dart';
+import '../clock/play_clock_driver.dart';
 import '../widgets/nonogram_bottom_banner.dart';
+import '../widgets/nonogram_pause_overlay.dart';
+import '../widgets/nonogram_portrait_toolbar.dart';
 import '../widgets/nonogram_play_dock.dart';
 import 'nonogram_board_viewport.dart';
 
 /// Bàn chơi + nút công cụ: màn dọc có hàng nút ở góc trên-phải và cụm hoàn
-/// tác + Tô / X ở góc dưới-phải; màn ngang có cột nút dọc mép phải.
+/// tác + Tô / X ở giữa đáy; màn ngang có cột nút dọc mép phải.
 ///
 /// Cũng là nơi hiện hướng dẫn thao tác (lần đầu vào màn chơi, hoặc khi mở
 /// lại từ cài đặt) và mẹo kéo bàn chơi ở màn lớn đầu tiên.
@@ -145,7 +149,9 @@ class _NonogramBoardShellSectionState extends State<NonogramBoardShellSection> {
     final bloc = context.read<NonogramPlayBloc>();
     if (bloc.state.isWandActive) bloc.add(const WandToggled());
     _coachShowing = true;
+    bloc.clock.hold(ClockHold.coach);
     await showNonogramPlayCoach(context, steps: steps, targetFor: _targetFor);
+    bloc.clock.release(ClockHold.coach);
     _coachShowing = false;
   }
 
@@ -186,44 +192,6 @@ class _NonogramBoardShellSectionState extends State<NonogramBoardShellSection> {
       NonogramCoachStep.longPress ||
       NonogramCoachStep.scroll => _visibleGridRect(),
     };
-  }
-
-  Widget _buildOverlayActions({required bool compactHint}) {
-    // Chừa phía trên cho huy hiệu số lượt (nhô lên khỏi nút): hàng nút nằm
-    // sát mép trên vùng bàn chơi, và khung dock toàn màn hình cắt phần tràn.
-    // Hàng nút dồn về bên phải; máy quá hẹp thì co cả hàng lại cho vừa,
-    // không để nút nào bị đẩy ra ngoài màn hình.
-    return Padding(
-      padding: const EdgeInsets.only(top: 6),
-      child: Align(
-        alignment: Alignment.centerRight,
-        child: FittedBox(
-          fit: BoxFit.scaleDown,
-          alignment: Alignment.centerRight,
-          child: _overlayActionsRow(compactHint: compactHint),
-        ),
-      ),
-    );
-  }
-
-  Widget _overlayActionsRow({required bool compactHint}) {
-    return Row(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        KeyedSubtree(
-          key: _hintKey,
-          child: HintAction(compact: compactHint),
-        ),
-        const SizedBox(width: 8),
-        KeyedSubtree(key: _wandKey, child: const WandAction()),
-        if (RotateScreenAction.isSupported) ...[
-          const SizedBox(width: 8),
-          KeyedSubtree(key: _rotateKey, child: const RotateScreenAction()),
-        ],
-        const SizedBox(width: 8),
-        const FullscreenToggleAction(),
-      ],
-    );
   }
 
   /// Màn ngang: mép phải chỉ giữ các thao tác chơi, ở góc trên (thẳng hàng
@@ -290,13 +258,15 @@ class _NonogramBoardShellSectionState extends State<NonogramBoardShellSection> {
             final compactHint = constraints.maxWidth < 480;
             return Stack(
               children: [
+                const Positioned(left: 0, top: 0, child: PlayClockDriver()),
                 const Positioned.fill(child: NonogramBoardViewport()),
+                const Positioned.fill(child: NonogramPauseOverlay()),
                 if (landscape)
                   Positioned(
                     top: 0,
                     right: 0,
                     width: NonogramBoardLayout.railReserve,
-                    child: _buildRail(),
+                    child: ClockPausedLock(child: _buildRail()),
                   )
                 else
                   Positioned(
@@ -307,7 +277,10 @@ class _NonogramBoardShellSectionState extends State<NonogramBoardShellSection> {
                         BlocSelector<NonogramPlayBloc, NonogramPlayState, bool>(
                           selector: (state) => state.isFullscreen,
                           builder: (context, isFullscreen) {
-                            final actions = _buildOverlayActions(
+                            final actions = NonogramPortraitToolbar(
+                              hintKey: _hintKey,
+                              wandKey: _wandKey,
+                              rotateKey: _rotateKey,
                               compactHint: compactHint,
                             );
                             return SafeArea(
@@ -326,7 +299,8 @@ class _NonogramBoardShellSectionState extends State<NonogramBoardShellSection> {
                   ),
                 if (!landscape)
                   Positioned(
-                    right: NonogramPlayDock.margin,
+                    left: 0,
+                    right: 0,
                     bottom: NonogramPlayDock.margin,
                     child: NonogramPlayDock(
                       undoKey: _undoKey,
@@ -336,10 +310,8 @@ class _NonogramBoardShellSectionState extends State<NonogramBoardShellSection> {
                 // Đang chọn hàng / cột cho gậy phép: dải hướng dẫn ở mép dưới.
                 Positioned(
                   left: 16,
-                  right: landscape
-                      ? NonogramBoardLayout.railReserve + 8
-                      : NonogramPlayDock.margin * 2 + NonogramPlayDock.width,
-                  bottom: 16,
+                  right: landscape ? NonogramBoardLayout.railReserve + 8 : 16,
+                  bottom: landscape ? 16 : NonogramPlayDock.bannerInset,
                   child: const NonogramBottomBanner(),
                 ),
               ],

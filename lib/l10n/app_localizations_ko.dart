@@ -853,4 +853,20 @@ class AppLocalizationsKo extends AppLocalizations {
   String dashboardDailyReminderBoth(String hints, String wands) {
     return '$hints와 $wands';
   }
+
+  @override
+  String get playClockPause => '타이머 일시정지';
+
+  @override
+  String get playClockResume => '계속하기';
+
+  @override
+  String get playClockPausedTitle => '일시정지됨';
+
+  @override
+  String get playClockPausedBody =>
+      '타이머가 멈춘 동안에는 보드가 가려집니다. 퍼즐을 나가거나 앱을 닫아도 타이머는 자동으로 멈춥니다.';
+
+  @override
+  String get settingsShowClock => '타이머 표시';
 }

@@ -910,4 +910,20 @@ class AppLocalizationsDe extends AppLocalizations {
   String dashboardDailyReminderBoth(String hints, String wands) {
     return '$hints und $wands';
   }
+
+  @override
+  String get playClockPause => 'Timer pausieren';
+
+  @override
+  String get playClockResume => 'Weiter';
+
+  @override
+  String get playClockPausedTitle => 'Pausiert';
+
+  @override
+  String get playClockPausedBody =>
+      'Das Spielfeld ist ausgeblendet, solange der Timer pausiert. Der Timer stoppt auch von selbst, wenn du das Rätsel verlässt oder die App schließt.';
+
+  @override
+  String get settingsShowClock => 'Timer anzeigen';
 }

@@ -912,4 +912,20 @@ class AppLocalizationsRu extends AppLocalizations {
   String dashboardDailyReminderBoth(String hints, String wands) {
     return '$hints и $wands';
   }
+
+  @override
+  String get playClockPause => 'Приостановить таймер';
+
+  @override
+  String get playClockResume => 'Продолжить';
+
+  @override
+  String get playClockPausedTitle => 'Пауза';
+
+  @override
+  String get playClockPausedBody =>
+      'Пока таймер на паузе, поле скрыто. Таймер также останавливается сам, когда вы выходите из головоломки или закрываете приложение.';
+
+  @override
+  String get settingsShowClock => 'Показывать таймер';
 }

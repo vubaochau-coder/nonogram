@@ -873,4 +873,20 @@ class AppLocalizationsTr extends AppLocalizations {
   String dashboardDailyReminderBoth(String hints, String wands) {
     return '$hints ve $wands';
   }
+
+  @override
+  String get playClockPause => 'Zamanlayıcıyı duraklat';
+
+  @override
+  String get playClockResume => 'Devam et';
+
+  @override
+  String get playClockPausedTitle => 'Duraklatıldı';
+
+  @override
+  String get playClockPausedBody =>
+      'Zamanlayıcı duraklatılmışken tahta gizlenir. Bulmacadan çıktığında veya uygulamayı kapattığında zamanlayıcı kendiliğinden de durur.';
+
+  @override
+  String get settingsShowClock => 'Zamanlayıcıyı göster';
 }

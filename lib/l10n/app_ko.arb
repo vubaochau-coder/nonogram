@@ -240,5 +240,10 @@
   "powerUpSpendDaily": "매일 사용",
   "powerUpSpendPermanent": "무기한 사용",
   "premiumBenefitsFootnote": "매일 사용은 다음 날로 넘어가지 않습니다. 마일스톤 출석 보상은 무기한 사용이며 평소대로 쌓입니다.",
-  "dashboardDailyReminderBoth": "{hints}와 {wands}"
+  "dashboardDailyReminderBoth": "{hints}와 {wands}",
+  "playClockPause": "타이머 일시정지",
+  "playClockResume": "계속하기",
+  "playClockPausedTitle": "일시정지됨",
+  "playClockPausedBody": "타이머가 멈춘 동안에는 보드가 가려집니다. 퍼즐을 나가거나 앱을 닫아도 타이머는 자동으로 멈춥니다.",
+  "settingsShowClock": "타이머 표시"
 }

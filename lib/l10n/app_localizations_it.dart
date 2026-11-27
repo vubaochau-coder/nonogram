@@ -910,4 +910,20 @@ class AppLocalizationsIt extends AppLocalizations {
   String dashboardDailyReminderBoth(String hints, String wands) {
     return '$hints e $wands';
   }
+
+  @override
+  String get playClockPause => 'Metti in pausa il timer';
+
+  @override
+  String get playClockResume => 'Riprendi';
+
+  @override
+  String get playClockPausedTitle => 'In pausa';
+
+  @override
+  String get playClockPausedBody =>
+      'Lo schema è nascosto mentre il timer è in pausa. Il timer si ferma anche da solo quando esci dal puzzle o chiudi l\'app.';
+
+  @override
+  String get settingsShowClock => 'Mostra timer';
 }

@@ -827,6 +827,21 @@ class AppLocalizationsZh extends AppLocalizations {
   String dashboardDailyReminderBoth(String hints, String wands) {
     return '$hints和$wands';
   }
+
+  @override
+  String get playClockPause => '暂停计时';
+
+  @override
+  String get playClockResume => '继续';
+
+  @override
+  String get playClockPausedTitle => '已暂停';
+
+  @override
+  String get playClockPausedBody => '计时暂停时棋盘会被隐藏。离开谜题或关闭应用时，计时也会自动停止。';
+
+  @override
+  String get settingsShowClock => '显示计时';
 }
 
 /// The translations for Chinese, using the Han script (`zh_Hant`).
@@ -1653,4 +1668,19 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
   String dashboardDailyReminderBoth(String hints, String wands) {
     return '$hints和$wands';
   }
+
+  @override
+  String get playClockPause => '暫停計時';
+
+  @override
+  String get playClockResume => '繼續';
+
+  @override
+  String get playClockPausedTitle => '已暫停';
+
+  @override
+  String get playClockPausedBody => '計時暫停時棋盤會被隱藏。離開謎題或關閉 App 時，計時也會自動停止。';
+
+  @override
+  String get settingsShowClock => '顯示計時';
 }

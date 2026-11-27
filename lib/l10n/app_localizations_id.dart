@@ -875,4 +875,20 @@ class AppLocalizationsId extends AppLocalizations {
   String dashboardDailyReminderBoth(String hints, String wands) {
     return '$hints dan $wands';
   }
+
+  @override
+  String get playClockPause => 'Jeda pengatur waktu';
+
+  @override
+  String get playClockResume => 'Lanjutkan';
+
+  @override
+  String get playClockPausedTitle => 'Dijeda';
+
+  @override
+  String get playClockPausedBody =>
+      'Papan disembunyikan selama pengatur waktu dijeda. Pengatur waktu juga berhenti sendiri saat kamu keluar dari teka-teki atau menutup aplikasi.';
+
+  @override
+  String get settingsShowClock => 'Tampilkan pengatur waktu';
 }
