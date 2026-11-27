@@ -11,6 +11,7 @@ import 'package:nonogram/screens/play/bloc/nonogram_play_bloc.dart';
 import 'package:nonogram/screens/play/clock/nonogram_play_clock.dart';
 import 'package:nonogram/screens/play/clock/play_clock_visibility.dart';
 import 'package:nonogram/screens/play/nonogram_play_screen.dart';
+import 'package:nonogram/screens/play/sections/landscape_info_panel_visibility.dart';
 import 'package:nonogram/screens/play/sections/nonogram_board_viewport.dart';
 import 'package:provider/provider.dart';
 
@@ -163,8 +164,35 @@ void main() {
     expect(find.byKey(_clock), findsNothing);
   });
 
-  testWidgets('landscape shows the clock in the left rail', (tester) async {
+  testWidgets('landscape: the clock sits in the info card, and under the '
+      'info button once the card is folded', (tester) async {
+    LandscapeInfoPanelVisibility.notifier.value = true;
+    addTearDown(() => LandscapeInfoPanelVisibility.notifier.value = true);
     await _pumpPlay(tester, const Size(900, 400));
-    expect(tester.getCenter(find.byKey(_clock)).dx, lessThan(60));
+    final card = find.byKey(const ValueKey('nonogram-landscape-info-panel'));
+    expect(
+      find.descendant(of: card, matching: find.byKey(_clock)),
+      findsOneWidget,
+    );
+    expect(find.byKey(_clock), findsOneWidget, reason: 'not twice');
+
+    await tester.tap(
+      find.byKey(const ValueKey('nonogram-landscape-info-hide')),
+    );
+    await tester.pumpAndSettle();
+    final clock = tester.getCenter(find.byKey(_clock));
+    final info = tester.getCenter(
+      find.byKey(const ValueKey('nonogram-landscape-info')),
+    );
+    expect(clock.dx, lessThan(60));
+    expect(
+      clock.dy,
+      greaterThan(info.dy),
+      reason: 'just below the info button',
+    );
+    expect(
+      clock.dy,
+      lessThan(tester.getCenter(find.byIcon(LucideIcons.settings)).dy),
+    );
   });
 }
