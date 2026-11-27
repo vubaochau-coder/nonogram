@@ -183,7 +183,6 @@
   "premiumFailed": "La compra no se completó. Inténtalo de nuevo.",
   "checkInTitle": "Registro diario",
   "checkInAction": "Registrarme",
-  "checkInDoneToday": "Ya te registraste hoy",
   "checkInCheckedIn": "¡Registrado!",
   "checkInReceived": "Recibiste {rewards}.",
   "rewardHints": "{count, plural, =1{1 pista} other{{count} pistas}}",

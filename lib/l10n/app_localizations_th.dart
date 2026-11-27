@@ -661,9 +661,6 @@ class AppLocalizationsTh extends AppLocalizations {
   String get checkInAction => 'เช็กอิน';
 
   @override
-  String get checkInDoneToday => 'วันนี้เช็กอินแล้ว';
-
-  @override
   String get checkInCheckedIn => 'เช็กอินแล้ว!';
 
   @override

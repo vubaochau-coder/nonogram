@@ -668,9 +668,6 @@ class AppLocalizationsFr extends AppLocalizations {
   String get checkInAction => 'Valider ma présence';
 
   @override
-  String get checkInDoneToday => 'Présence validée aujourd\'hui';
-
-  @override
   String get checkInCheckedIn => 'Présence validée !';
 
   @override

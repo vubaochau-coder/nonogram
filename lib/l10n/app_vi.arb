@@ -228,7 +228,6 @@
   "premiumFailed": "Chưa mua được. Bạn thử lại nhé.",
   "checkInTitle": "Điểm danh hằng ngày",
   "checkInAction": "Điểm danh",
-  "checkInDoneToday": "Hôm nay đã điểm danh",
   "checkInCheckedIn": "Đã điểm danh!",
   "checkInReceived": "Bạn nhận được {rewards}.",
   "rewardHints": "{count} gợi ý",

@@ -663,9 +663,6 @@ class AppLocalizationsId extends AppLocalizations {
   String get checkInAction => 'Absen';
 
   @override
-  String get checkInDoneToday => 'Sudah absen hari ini';
-
-  @override
   String get checkInCheckedIn => 'Berhasil absen!';
 
   @override

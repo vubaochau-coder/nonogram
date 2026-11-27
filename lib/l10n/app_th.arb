@@ -183,7 +183,6 @@
   "premiumFailed": "ซื้อไม่สำเร็จ โปรดลองอีกครั้ง",
   "checkInTitle": "เช็กอินรายวัน",
   "checkInAction": "เช็กอิน",
-  "checkInDoneToday": "วันนี้เช็กอินแล้ว",
   "checkInCheckedIn": "เช็กอินแล้ว!",
   "checkInReceived": "คุณได้รับ {rewards}",
   "rewardHints": "คำใบ้ {count} ครั้ง",

@@ -89,7 +89,7 @@ void main() {
       find.byKey(ValueKey('check-in-milestone-$m-$state'));
   final collect = find.byKey(const ValueKey('check-in-gift-collect'));
 
-  testWidgets('check in: the stamp lands on today, then the button is done', (
+  testWidgets('check in: the stamp lands on today, then the button goes', (
     tester,
   ) async {
     final service = await pump(tester);
@@ -103,7 +103,9 @@ void main() {
 
     await run(tester, 2000);
     expect(day(13, 'checked'), findsOneWidget);
-    expect(find.text('Hôm nay đã điểm danh'), findsOneWidget);
+    // Checked in: no button left (no grey "done" state to flicker).
+    expect(find.byKey(const ValueKey('check-in-button')), findsNothing);
+    expect(find.text('Điểm danh hôm nay'), findsNothing);
     expect(find.text('Chuỗi 1 ngày'), findsOneWidget);
   });
 

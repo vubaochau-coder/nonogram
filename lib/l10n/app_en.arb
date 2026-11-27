@@ -317,7 +317,6 @@
   "premiumFailed": "The purchase didn't go through. Please try again.",
   "checkInTitle": "Daily check-in",
   "checkInAction": "Check in",
-  "checkInDoneToday": "Checked in today",
   "checkInCheckedIn": "Checked in!",
   "checkInReceived": "You got {rewards}.",
   "@checkInReceived": {

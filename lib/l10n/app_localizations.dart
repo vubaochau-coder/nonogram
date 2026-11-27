@@ -1221,12 +1221,6 @@ abstract class AppLocalizations {
   /// **'Check in'**
   String get checkInAction;
 
-  /// No description provided for @checkInDoneToday.
-  ///
-  /// In en, this message translates to:
-  /// **'Checked in today'**
-  String get checkInDoneToday;
-
   /// No description provided for @checkInCheckedIn.
   ///
   /// In en, this message translates to:

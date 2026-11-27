@@ -183,7 +183,6 @@
   "premiumFailed": "A compra não foi concluída. Tente novamente.",
   "checkInTitle": "Presença diária",
   "checkInAction": "Marcar presença",
-  "checkInDoneToday": "Presença marcada hoje",
   "checkInCheckedIn": "Presença marcada!",
   "checkInReceived": "Você recebeu {rewards}.",
   "rewardHints": "{count, plural, =1{1 dica} other{{count} dicas}}",

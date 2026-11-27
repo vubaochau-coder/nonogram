@@ -183,7 +183,6 @@
   "premiumFailed": "Der Kauf hat nicht geklappt. Bitte versuche es erneut.",
   "checkInTitle": "Tägliches Einchecken",
   "checkInAction": "Einchecken",
-  "checkInDoneToday": "Heute eingecheckt",
   "checkInCheckedIn": "Eingecheckt!",
   "checkInReceived": "Du hast {rewards} erhalten.",
   "rewardHints": "{count, plural, =1{1 Tipp} other{{count} Tipps}}",

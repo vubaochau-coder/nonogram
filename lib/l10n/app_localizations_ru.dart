@@ -663,9 +663,6 @@ class AppLocalizationsRu extends AppLocalizations {
   String get checkInAction => 'Отметиться';
 
   @override
-  String get checkInDoneToday => 'Сегодня вы уже отметились';
-
-  @override
   String get checkInCheckedIn => 'Вы отметились!';
 
   @override
