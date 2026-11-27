@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 import '../views/mode_toggle_action.dart';
 import '../views/undo_action.dart';
 
-/// Portrait play screen: undo and the Fill / X toggle stacked in the bottom
-/// right corner, within reach of the thumb. The board keeps
+/// Portrait play screen: undo and the Fill / X toggle side by side, centred
+/// at the bottom within reach of either thumb. The board keeps
 /// `NonogramBoardLayout.dockReserve` free above the bottom edge for it.
 class NonogramPlayDock extends StatelessWidget {
   const NonogramPlayDock({
@@ -17,23 +17,24 @@ class NonogramPlayDock extends StatelessWidget {
   final GlobalKey undoKey;
   final GlobalKey modeKey;
 
-  /// Width of the dock (the vertical toggle), for insets beside it.
-  static const double width = 42;
+  /// Height of the dock (the horizontal toggle), for insets above it.
+  static const double height = 42;
 
-  /// Gap between the dock and the screen edges.
+  /// Gap between the dock and the bottom edge.
   static const double margin = 16;
+
+  /// Bottom inset of the banner shown just above the dock (wand, drag tip).
+  static const double bannerInset = margin + height + 10;
 
   @override
   Widget build(BuildContext context) {
-    return Column(
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
       mainAxisSize: MainAxisSize.min,
       children: [
         KeyedSubtree(key: undoKey, child: const UndoAction()),
-        const SizedBox(height: 12),
-        KeyedSubtree(
-          key: modeKey,
-          child: const ModeToggleAction(vertical: true),
-        ),
+        const SizedBox(width: 12),
+        KeyedSubtree(key: modeKey, child: const ModeToggleAction()),
       ],
     );
   }

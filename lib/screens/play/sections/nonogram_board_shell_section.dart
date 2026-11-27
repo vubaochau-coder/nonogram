@@ -25,7 +25,7 @@ import '../widgets/nonogram_play_dock.dart';
 import 'nonogram_board_viewport.dart';
 
 /// Bàn chơi + nút công cụ: màn dọc có hàng nút ở góc trên-phải và cụm hoàn
-/// tác + Tô / X ở góc dưới-phải; màn ngang có cột nút dọc mép phải.
+/// tác + Tô / X ở giữa đáy; màn ngang có cột nút dọc mép phải.
 ///
 /// Cũng là nơi hiện hướng dẫn thao tác (lần đầu vào màn chơi, hoặc khi mở
 /// lại từ cài đặt) và mẹo kéo bàn chơi ở màn lớn đầu tiên.
@@ -326,7 +326,8 @@ class _NonogramBoardShellSectionState extends State<NonogramBoardShellSection> {
                   ),
                 if (!landscape)
                   Positioned(
-                    right: NonogramPlayDock.margin,
+                    left: 0,
+                    right: 0,
                     bottom: NonogramPlayDock.margin,
                     child: NonogramPlayDock(
                       undoKey: _undoKey,
@@ -336,10 +337,8 @@ class _NonogramBoardShellSectionState extends State<NonogramBoardShellSection> {
                 // Đang chọn hàng / cột cho gậy phép: dải hướng dẫn ở mép dưới.
                 Positioned(
                   left: 16,
-                  right: landscape
-                      ? NonogramBoardLayout.railReserve + 8
-                      : NonogramPlayDock.margin * 2 + NonogramPlayDock.width,
-                  bottom: 16,
+                  right: landscape ? NonogramBoardLayout.railReserve + 8 : 16,
+                  bottom: landscape ? 16 : NonogramPlayDock.bannerInset,
                   child: const NonogramBottomBanner(),
                 ),
               ],

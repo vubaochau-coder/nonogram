@@ -74,8 +74,8 @@ flutter build web --no-web-resources-cdn
 ## Điều khiển
 
 Màn dọc: hàng nút ở góc trên bên phải có gợi ý, gậy phép, xoay màn hình và
-toàn màn hình; **hoàn tác** và nút gạt **Tô / X** xếp dọc ở góc dưới bên phải,
-trong tầm ngón cái (bàn chơi chừa đáy cho cụm này, lưới vẫn kéo được lên khỏi
+toàn màn hình; **hoàn tác** và nút gạt **Tô / X** nằm cạnh nhau ở giữa đáy màn
+hình, trong tầm ngón cái của cả hai tay (bàn chơi chừa đáy cho cụm này, lưới vẫn kéo được lên khỏi
 nó). Nút gạt **Tô / X** chọn việc một lần chạm sẽ làm:
 
 | Thao tác | Chế độ Tô (■) | Chế độ X (✕) |
