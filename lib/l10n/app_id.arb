@@ -240,5 +240,10 @@
   "powerUpSpendDaily": "Penggunaan harian",
   "powerUpSpendPermanent": "Penggunaan permanen",
   "premiumBenefitsFootnote": "Penggunaan harian tidak dibawa ke hari berikutnya. Hadiah tonggak adalah penggunaan permanen dan terkumpul seperti biasa.",
-  "dashboardDailyReminderBoth": "{hints} dan {wands}"
+  "dashboardDailyReminderBoth": "{hints} dan {wands}",
+  "playClockPause": "Jeda pengatur waktu",
+  "playClockResume": "Lanjutkan",
+  "playClockPausedTitle": "Dijeda",
+  "playClockPausedBody": "Papan disembunyikan selama pengatur waktu dijeda. Pengatur waktu juga berhenti sendiri saat kamu keluar dari teka-teki atau menutup aplikasi.",
+  "settingsShowClock": "Tampilkan pengatur waktu"
 }

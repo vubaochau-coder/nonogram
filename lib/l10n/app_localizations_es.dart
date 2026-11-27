@@ -911,4 +911,20 @@ class AppLocalizationsEs extends AppLocalizations {
   String dashboardDailyReminderBoth(String hints, String wands) {
     return '$hints y $wands';
   }
+
+  @override
+  String get playClockPause => 'Pausar el cronómetro';
+
+  @override
+  String get playClockResume => 'Continuar';
+
+  @override
+  String get playClockPausedTitle => 'En pausa';
+
+  @override
+  String get playClockPausedBody =>
+      'El tablero se oculta mientras el cronómetro está en pausa. El cronómetro también se detiene solo al salir del puzle o cerrar la app.';
+
+  @override
+  String get settingsShowClock => 'Mostrar cronómetro';
 }

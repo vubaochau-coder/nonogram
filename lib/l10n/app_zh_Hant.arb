@@ -240,5 +240,10 @@
   "powerUpSpendDaily": "每日次數",
   "powerUpSpendPermanent": "永久次數",
   "premiumBenefitsFootnote": "每日次數不會累積到第二天。里程碑簽到獎勵屬於永久次數，照常累積。",
-  "dashboardDailyReminderBoth": "{hints}和{wands}"
+  "dashboardDailyReminderBoth": "{hints}和{wands}",
+  "playClockPause": "暫停計時",
+  "playClockResume": "繼續",
+  "playClockPausedTitle": "已暫停",
+  "playClockPausedBody": "計時暫停時棋盤會被隱藏。離開謎題或關閉 App 時，計時也會自動停止。",
+  "settingsShowClock": "顯示計時"
 }

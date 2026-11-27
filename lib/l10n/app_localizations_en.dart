@@ -904,4 +904,20 @@ class AppLocalizationsEn extends AppLocalizations {
   String dashboardDailyReminderBoth(String hints, String wands) {
     return '$hints and $wands';
   }
+
+  @override
+  String get playClockPause => 'Pause timer';
+
+  @override
+  String get playClockResume => 'Resume';
+
+  @override
+  String get playClockPausedTitle => 'Paused';
+
+  @override
+  String get playClockPausedBody =>
+      'The board is hidden while the timer is paused. The timer also stops on its own when you leave the puzzle or close the app.';
+
+  @override
+  String get settingsShowClock => 'Show timer';
 }

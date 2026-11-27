@@ -240,5 +240,10 @@
   "powerUpSpendDaily": "Ежедневные использования",
   "powerUpSpendPermanent": "Бессрочные использования",
   "premiumBenefitsFootnote": "Ежедневные использования не переносятся на следующий день. Награды за рубежи — это бессрочные использования, и они накапливаются как обычно.",
-  "dashboardDailyReminderBoth": "{hints} и {wands}"
+  "dashboardDailyReminderBoth": "{hints} и {wands}",
+  "playClockPause": "Приостановить таймер",
+  "playClockResume": "Продолжить",
+  "playClockPausedTitle": "Пауза",
+  "playClockPausedBody": "Пока таймер на паузе, поле скрыто. Таймер также останавливается сам, когда вы выходите из головоломки или закрываете приложение.",
+  "settingsShowClock": "Показывать таймер"
 }

@@ -240,5 +240,10 @@
   "powerUpSpendDaily": "毎日の回数",
   "powerUpSpendPermanent": "無期限の回数",
   "premiumBenefitsFootnote": "毎日の回数は翌日に繰り越されません。マイルストーンのチェックイン報酬は無期限の回数で、通常どおり貯まります。",
-  "dashboardDailyReminderBoth": "{hints}と{wands}"
+  "dashboardDailyReminderBoth": "{hints}と{wands}",
+  "playClockPause": "タイマーを一時停止",
+  "playClockResume": "再開",
+  "playClockPausedTitle": "一時停止中",
+  "playClockPausedBody": "一時停止中は盤面が隠れます。パズルを離れたりアプリを閉じたりしたときも、タイマーは自動で止まります。",
+  "settingsShowClock": "タイマーを表示"
 }

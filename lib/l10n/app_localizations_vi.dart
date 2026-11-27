@@ -872,4 +872,20 @@ class AppLocalizationsVi extends AppLocalizations {
   String dashboardDailyReminderBoth(String hints, String wands) {
     return '$hints và $wands';
   }
+
+  @override
+  String get playClockPause => 'Tạm dừng đồng hồ';
+
+  @override
+  String get playClockResume => 'Tiếp tục';
+
+  @override
+  String get playClockPausedTitle => 'Đang tạm dừng';
+
+  @override
+  String get playClockPausedBody =>
+      'Bàn chơi được che khi đồng hồ dừng. Đồng hồ cũng tự dừng khi bạn rời màn hoặc tắt app.';
+
+  @override
+  String get settingsShowClock => 'Hiện đồng hồ';
 }

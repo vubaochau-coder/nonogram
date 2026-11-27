@@ -871,4 +871,20 @@ class AppLocalizationsTh extends AppLocalizations {
   String dashboardDailyReminderBoth(String hints, String wands) {
     return '$hintsและ$wands';
   }
+
+  @override
+  String get playClockPause => 'หยุดตัวจับเวลาชั่วคราว';
+
+  @override
+  String get playClockResume => 'เล่นต่อ';
+
+  @override
+  String get playClockPausedTitle => 'หยุดชั่วคราว';
+
+  @override
+  String get playClockPausedBody =>
+      'กระดานจะถูกซ่อนไว้ขณะหยุดตัวจับเวลา ตัวจับเวลาจะหยุดเองด้วยเมื่อคุณออกจากปริศนาหรือปิดแอป';
+
+  @override
+  String get settingsShowClock => 'แสดงตัวจับเวลา';
 }

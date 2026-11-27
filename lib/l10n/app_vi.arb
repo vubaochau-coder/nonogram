@@ -285,5 +285,10 @@
   "powerUpSpendDaily": "Lượt trong ngày",
   "powerUpSpendPermanent": "Lượt vĩnh viễn",
   "premiumBenefitsFootnote": "Lượt trong ngày không cộng dồn sang hôm sau. Quà mốc điểm danh là lượt vĩnh viễn và cộng dồn bình thường.",
-  "dashboardDailyReminderBoth": "{hints} và {wands}"
+  "dashboardDailyReminderBoth": "{hints} và {wands}",
+  "playClockPause": "Tạm dừng đồng hồ",
+  "playClockResume": "Tiếp tục",
+  "playClockPausedTitle": "Đang tạm dừng",
+  "playClockPausedBody": "Bàn chơi được che khi đồng hồ dừng. Đồng hồ cũng tự dừng khi bạn rời màn hoặc tắt app.",
+  "settingsShowClock": "Hiện đồng hồ"
 }

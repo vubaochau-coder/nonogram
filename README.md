@@ -122,6 +122,24 @@ nó). Nút gạt **Tô / X** chọn việc một lần chạm sẽ làm:
 - Kịch bản (bài 5×5, các bước) nằm trong
   `lib/screens/tutorial/nonogram_tutorial_controller.dart`.
 
+## Đồng hồ
+
+- Màn chơi hiện thời gian đã chơi màn đó (`NonogramPlayClock`): màn dọc ở
+  đầu trái hàng nút trên, màn ngang ở cột trái (trên nút xoay). Chỉ đếm lúc
+  đang thật sự chơi.
+- Tự dừng khi app xuống nền / tắt màn hình / tắt app, khi rời màn, khi có
+  màn hình, hộp thoại hay sheet khác che màn chơi (Cài đặt, quảng cáo...) và
+  khi đang hiện hướng dẫn thao tác; tự chạy lại khi quay về.
+- Bấm vào đồng hồ để tạm dừng: bàn chơi bị che và các nút công cụ khoá lại
+  cho tới khi bấm **Tiếp tục** (để không nhìn bàn khi đồng hồ đứng).
+- Thời gian đã chơi lưu cùng ván dở (`elapsedMs`) và là thời gian hoàn thành
+  / kỷ lục. Ván lưu từ bản cũ (chỉ có giờ bắt đầu, nên tính cả lúc app đóng)
+  được đếm lại từ 0.
+- Cài đặt → **Hiện đồng hồ** để ẩn; khi ẩn vẫn đếm để ghi kỷ lục.
+- Hàng nút trên màn dọc không bao giờ tràn: đồng hồ rộng tối đa 120 px (chữ
+  co lại bên trong khi quá 1 giờ hoặc cỡ chữ hệ thống lớn), cụm nút chiếm
+  phần còn lại và chỉ co khi không đủ chỗ (ở 320 dp cả hai vừa nguyên cỡ).
+
 ## Giải xong màn và âm thanh
 
 - Giải xong một màn: sóng lan trên lưới từ góc trái dưới lên góc phải trên,

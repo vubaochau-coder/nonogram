@@ -7,6 +7,7 @@ class NonogramSnapshotMapper {
     NonogramPlayState state, {
     double? viewportOffsetX,
     double? viewportOffsetY,
+    int elapsedMs = 0,
   }) {
     final puzzle = state.puzzle;
     if (puzzle == null) return null;
@@ -25,6 +26,7 @@ class NonogramSnapshotMapper {
       viewportOffsetY: viewportOffsetY ?? 0,
       cellSize: state.cellSize,
       lockedCells: state.lockedCells,
+      elapsedMs: elapsedMs,
     );
   }
 }

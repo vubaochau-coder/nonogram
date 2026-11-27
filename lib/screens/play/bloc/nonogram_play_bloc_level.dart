@@ -87,6 +87,7 @@ mixin _LevelHandlers on _PlayBlocBase {
 
     final offsetX = snapshot?.viewportOffsetX ?? 0.0;
     final offsetY = snapshot?.viewportOffsetY ?? 0.0;
+    _lastOffset = Offset(offsetX, offsetY);
     // Ván dở: vị trí đã lưu. Màn mới: null = bàn chơi tự đặt ở vị trí đầu.
     _pendingViewport = snapshot != null ? Offset(offsetX, offsetY) : null;
     final satisfied = _engine.deriveSatisfiedLines(
@@ -120,6 +121,9 @@ mixin _LevelHandlers on _PlayBlocBase {
       },
     );
 
+    readyState.isSolved
+        ? clock.finish()
+        : clock.start(snapshot?.elapsedMs ?? 0);
     if (snapshot != null) {
       emit(
         NonogramPlayRestoredState.fromState(
@@ -201,6 +205,7 @@ mixin _LevelHandlers on _PlayBlocBase {
       isSolved: false,
     ).copyWith(canUndo: false);
 
+    clock.start(0);
     emit(nextState);
 
     add(
@@ -229,10 +234,12 @@ mixin _LevelHandlers on _PlayBlocBase {
     CurrentProgressSaveRequested event,
     Emitter emit,
   ) async {
+    _lastOffset = Offset(event.offsetX, event.offsetY);
     final snapshot = NonogramSnapshotMapper.fromState(
       event.sourceState,
       viewportOffsetX: event.offsetX,
       viewportOffsetY: event.offsetY,
+      elapsedMs: clock.elapsed.inMilliseconds,
     );
     if (snapshot != null) {
       await _repository.saveCurrentProgress(snapshot);
@@ -250,8 +257,8 @@ mixin _LevelHandlers on _PlayBlocBase {
   Future<void> _onPuzzleSolved(PuzzleSolved event, Emitter emit) async {
     final puzzle = state.puzzle!;
     final now = DateTime.now();
-    final duration = now.difference(state.startTime);
-    final completionMs = duration.inMilliseconds;
+    clock.finish();
+    final completionMs = clock.elapsed.inMilliseconds;
 
     // Persist completed progress
     final existing = await _repository.getCompletedProgress();

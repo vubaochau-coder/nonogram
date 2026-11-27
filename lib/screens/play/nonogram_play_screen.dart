@@ -268,7 +268,7 @@ class _NonogramCompletionView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final puzzle = state.puzzle!;
-    final duration = DateTime.now().difference(state.startTime);
+    final duration = context.read<NonogramPlayBloc>().clock.elapsed;
 
     return Scaffold(
       appBar: state.isFullscreen ? null : const NonogramPlayAppBarSection(),

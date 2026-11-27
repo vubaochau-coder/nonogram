@@ -851,4 +851,20 @@ class AppLocalizationsJa extends AppLocalizations {
   String dashboardDailyReminderBoth(String hints, String wands) {
     return '$hintsと$wands';
   }
+
+  @override
+  String get playClockPause => 'タイマーを一時停止';
+
+  @override
+  String get playClockResume => '再開';
+
+  @override
+  String get playClockPausedTitle => '一時停止中';
+
+  @override
+  String get playClockPausedBody =>
+      '一時停止中は盤面が隠れます。パズルを離れたりアプリを閉じたりしたときも、タイマーは自動で止まります。';
+
+  @override
+  String get settingsShowClock => 'タイマーを表示';
 }

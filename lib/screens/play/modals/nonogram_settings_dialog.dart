@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:lucide_icons/lucide_icons.dart';
@@ -10,6 +11,7 @@ import 'package:nonogram/widgets/app_theme_mode_selector.dart';
 import 'package:nonogram/widgets/dialogs/app_dialog.dart';
 
 import '../bloc/nonogram_play_bloc.dart';
+import '../clock/play_clock_visibility.dart';
 import '../coach/nonogram_play_coach.dart';
 import '../bloc/nonogram_play_event.dart';
 import '../nonogram_transformation_controller_provider.dart';
@@ -111,8 +113,22 @@ class NonogramSettingsDialog extends StatelessWidget {
           // AppSoundController.
           if (AppSoundController.maybeOf(context) case final sounds?) ...[
             const SizedBox(height: 12),
-            _SoundToggle(controller: sounds),
+            _SettingToggle(
+              switchKey: const ValueKey('nonogram-sound-toggle'),
+              value: sounds,
+              iconFor: (on) => on ? LucideIcons.volume2 : LucideIcons.volumeX,
+              label: l10n.settingsSound,
+              onChanged: sounds.setEnabled,
+            ),
           ],
+          const SizedBox(height: 12),
+          _SettingToggle(
+            switchKey: const ValueKey('nonogram-clock-toggle'),
+            value: PlayClockVisibility.notifier,
+            iconFor: (on) => on ? LucideIcons.timer : LucideIcons.timerOff,
+            label: l10n.settingsShowClock,
+            onChanged: PlayClockVisibility.set,
+          ),
           const SizedBox(height: 20),
           // Không có trong test dựng trang chơi mà không cấp AppLocaleController.
           if (_hasLocaleController(context)) ...[
@@ -185,46 +201,52 @@ class NonogramSettingsDialog extends StatelessWidget {
   }
 }
 
-/// Bật / tắt âm thanh trong game.
-class _SoundToggle extends StatelessWidget {
-  const _SoundToggle({required this.controller});
+/// An on / off setting row (sound, clock).
+class _SettingToggle extends StatelessWidget {
+  const _SettingToggle({
+    required this.switchKey,
+    required this.value,
+    required this.iconFor,
+    required this.label,
+    required this.onChanged,
+  });
 
-  final AppSoundController controller;
+  final Key switchKey;
+  final ValueListenable<bool> value;
+  final IconData Function(bool on) iconFor;
+  final String label;
+  final ValueChanged<bool> onChanged;
 
   @override
   Widget build(BuildContext context) {
     return ValueListenableBuilder<bool>(
-      valueListenable: controller,
+      valueListenable: value,
       builder: (context, enabled, _) {
         return Material(
           color: context.color.surfaceContainer,
           borderRadius: BorderRadius.circular(14),
           child: InkWell(
             borderRadius: BorderRadius.circular(14),
-            onTap: () => controller.setEnabled(!enabled),
+            onTap: () => onChanged(!enabled),
             child: Padding(
               padding: const EdgeInsets.fromLTRB(14, 4, 6, 4),
               child: Row(
                 children: [
                   Icon(
-                    enabled ? LucideIcons.volume2 : LucideIcons.volumeX,
+                    iconFor(enabled),
                     size: 20,
                     color: context.color.onSurfaceVariant,
                   ),
                   const SizedBox(width: 12),
                   Expanded(
                     child: Text(
-                      context.l10n.settingsSound,
+                      label,
                       style: context.titleSmall.copyWith(
                         fontWeight: FontWeight.bold,
                       ),
                     ),
                   ),
-                  Switch(
-                    key: const ValueKey('nonogram-sound-toggle'),
-                    value: enabled,
-                    onChanged: controller.setEnabled,
-                  ),
+                  Switch(key: switchKey, value: enabled, onChanged: onChanged),
                 ],
               ),
             ),

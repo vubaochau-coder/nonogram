@@ -240,5 +240,10 @@
   "powerUpSpendDaily": "สิทธิ์รายวัน",
   "powerUpSpendPermanent": "สิทธิ์ถาวร",
   "premiumBenefitsFootnote": "สิทธิ์รายวันไม่ยกยอดไปวันถัดไป รางวัลหมุดหมายเป็นสิทธิ์ถาวรและสะสมได้ตามปกติ",
-  "dashboardDailyReminderBoth": "{hints}และ{wands}"
+  "dashboardDailyReminderBoth": "{hints}และ{wands}",
+  "playClockPause": "หยุดตัวจับเวลาชั่วคราว",
+  "playClockResume": "เล่นต่อ",
+  "playClockPausedTitle": "หยุดชั่วคราว",
+  "playClockPausedBody": "กระดานจะถูกซ่อนไว้ขณะหยุดตัวจับเวลา ตัวจับเวลาจะหยุดเองด้วยเมื่อคุณออกจากปริศนาหรือปิดแอป",
+  "settingsShowClock": "แสดงตัวจับเวลา"
 }

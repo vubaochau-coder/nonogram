@@ -19,6 +19,7 @@ import 'package:nonogram/core/list_ext.dart';
 import 'nonogram_play_event.dart';
 import 'nonogram_play_state.dart';
 import 'nonogram_snapshot_mapper.dart';
+import '../clock/nonogram_play_clock.dart';
 
 part 'nonogram_play_bloc_cells.dart';
 part 'nonogram_play_bloc_level.dart';
@@ -33,13 +34,16 @@ class NonogramPlayBloc extends _PlayBlocBase
     required NonogramRepository repository,
     NonogramEngine? engine,
     Random? random,
+    NonogramPlayClock? clock,
     int initialLevel = 1,
   }) : super(
          NonogramPlayState.initial(initialLevel: initialLevel),
          repository: repository,
          engine: engine,
          random: random,
+         clock: clock,
        ) {
+    this.clock.onHeld = _saveOnClockHold;
     // --- System & Lifecycle Events ---
     on<InitialRequested>(_onInitialRequested, transformer: sequential());
     on<LevelLoadRequested>(_onLevelLoadRequested, transformer: sequential());
@@ -93,9 +97,31 @@ abstract class _PlayBlocBase
     required NonogramRepository repository,
     NonogramEngine? engine,
     Random? random,
+    NonogramPlayClock? clock,
   }) : _repository = repository,
        _engine = engine ?? const NonogramEngine(),
-       _random = random ?? Random();
+       _random = random ?? Random(),
+       clock = clock ?? NonogramPlayClock();
+
+  /// Time played on the current level; the play screen shows and pauses it.
+  final NonogramPlayClock clock;
+
+  /// Grid position of the last save, reused when the clock stops on its own.
+  Offset _lastOffset = Offset.zero;
+
+  /// The clock stopped (app in the background, screen covered...): save the
+  /// game now so the time played survives the app being closed.
+  void _saveOnClockHold() {
+    if (isClosed || state.puzzle == null || state.isSolved) return;
+    if (state.isLoading) return;
+    add(
+      CurrentProgressSaveRequested(
+        sourceState: state,
+        offsetX: _lastOffset.dx,
+        offsetY: _lastOffset.dy,
+      ),
+    );
+  }
 
   Size? _viewportSize;
   Offset? _pendingViewport;
@@ -162,6 +188,16 @@ abstract class _PlayBlocBase
   @override
   Future<void> close() async {
     await _powerUpsSub?.cancel();
+    // Leaving the level: keep the time played with the game in progress.
+    clock.onHeld = null;
+    final snapshot = NonogramSnapshotMapper.fromState(
+      state,
+      viewportOffsetX: _lastOffset.dx,
+      viewportOffsetY: _lastOffset.dy,
+      elapsedMs: clock.elapsed.inMilliseconds,
+    );
+    clock.finish();
+    if (snapshot != null) await _repository.saveCurrentProgress(snapshot);
     return super.close();
   }
 

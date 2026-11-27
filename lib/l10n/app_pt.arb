@@ -240,5 +240,10 @@
   "powerUpSpendDaily": "Usos diários",
   "powerUpSpendPermanent": "Usos permanentes",
   "premiumBenefitsFootnote": "Os usos diários não passam para o dia seguinte. As recompensas de marco são usos permanentes e se acumulam normalmente.",
-  "dashboardDailyReminderBoth": "{hints} e {wands}"
+  "dashboardDailyReminderBoth": "{hints} e {wands}",
+  "playClockPause": "Pausar cronômetro",
+  "playClockResume": "Continuar",
+  "playClockPausedTitle": "Pausado",
+  "playClockPausedBody": "O tabuleiro fica oculto enquanto o cronômetro está pausado. O cronômetro também para sozinho quando você sai do quebra-cabeça ou fecha o app.",
+  "settingsShowClock": "Mostrar cronômetro"
 }

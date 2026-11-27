@@ -1568,6 +1568,36 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'{hints} and {wands}'**
   String dashboardDailyReminderBoth(String hints, String wands);
+
+  /// No description provided for @playClockPause.
+  ///
+  /// In en, this message translates to:
+  /// **'Pause timer'**
+  String get playClockPause;
+
+  /// No description provided for @playClockResume.
+  ///
+  /// In en, this message translates to:
+  /// **'Resume'**
+  String get playClockResume;
+
+  /// No description provided for @playClockPausedTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Paused'**
+  String get playClockPausedTitle;
+
+  /// No description provided for @playClockPausedBody.
+  ///
+  /// In en, this message translates to:
+  /// **'The board is hidden while the timer is paused. The timer also stops on its own when you leave the puzzle or close the app.'**
+  String get playClockPausedBody;
+
+  /// No description provided for @settingsShowClock.
+  ///
+  /// In en, this message translates to:
+  /// **'Show timer'**
+  String get settingsShowClock;
 }
 
 class _AppLocalizationsDelegate

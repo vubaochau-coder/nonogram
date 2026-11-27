@@ -240,5 +240,10 @@
   "powerUpSpendDaily": "Utilizzi giornalieri",
   "powerUpSpendPermanent": "Utilizzi permanenti",
   "premiumBenefitsFootnote": "Gli utilizzi giornalieri non passano al giorno successivo. Le ricompense dei traguardi sono utilizzi permanenti e si accumulano normalmente.",
-  "dashboardDailyReminderBoth": "{hints} e {wands}"
+  "dashboardDailyReminderBoth": "{hints} e {wands}",
+  "playClockPause": "Metti in pausa il timer",
+  "playClockResume": "Riprendi",
+  "playClockPausedTitle": "In pausa",
+  "playClockPausedBody": "Lo schema è nascosto mentre il timer è in pausa. Il timer si ferma anche da solo quando esci dal puzzle o chiudi l'app.",
+  "settingsShowClock": "Mostra timer"
 }

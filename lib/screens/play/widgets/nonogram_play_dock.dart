@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../clock/clock_paused_lock.dart';
 import '../views/mode_toggle_action.dart';
 import '../views/undo_action.dart';
 
@@ -28,6 +29,10 @@ class NonogramPlayDock extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    return ClockPausedLock(child: _row());
+  }
+
+  Widget _row() {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       mainAxisSize: MainAxisSize.min,

@@ -240,5 +240,10 @@
   "powerUpSpendDaily": "Günlük haklar",
   "powerUpSpendPermanent": "Kalıcı haklar",
   "premiumBenefitsFootnote": "Günlük haklar ertesi güne devredilmez. Kilometre taşı ödülleri kalıcı haklardır ve her zamanki gibi birikir.",
-  "dashboardDailyReminderBoth": "{hints} ve {wands}"
+  "dashboardDailyReminderBoth": "{hints} ve {wands}",
+  "playClockPause": "Zamanlayıcıyı duraklat",
+  "playClockResume": "Devam et",
+  "playClockPausedTitle": "Duraklatıldı",
+  "playClockPausedBody": "Zamanlayıcı duraklatılmışken tahta gizlenir. Bulmacadan çıktığında veya uygulamayı kapattığında zamanlayıcı kendiliğinden de durur.",
+  "settingsShowClock": "Zamanlayıcıyı göster"
 }

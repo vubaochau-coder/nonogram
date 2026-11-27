@@ -474,5 +474,10 @@
         "type": "String"
       }
     }
-  }
+  },
+  "playClockPause": "Pause timer",
+  "playClockResume": "Resume",
+  "playClockPausedTitle": "Paused",
+  "playClockPausedBody": "The board is hidden while the timer is paused. The timer also stops on its own when you leave the puzzle or close the app.",
+  "settingsShowClock": "Show timer"
 }

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:hive_flutter/hive_flutter.dart';
 import 'package:lucide_icons/lucide_icons.dart';
 import 'package:nonogram/core/context_ext.dart';
 import 'package:nonogram/tester/tester_solve_button.dart';
@@ -10,35 +9,12 @@ import '../bloc/nonogram_play_state.dart';
 import '../coach/nonogram_play_coach.dart';
 import '../layout/nonogram_board_layout.dart';
 import '../modals/nonogram_settings_dialog.dart';
+import '../views/clock_action.dart';
 import '../views/rotate_screen_action.dart';
 import '../widgets/overlay_button.dart';
+import 'landscape_info_panel_visibility.dart';
 
-/// Màn ngang: bảng thông tin màn chơi đang mở hay thu gọn. Nhớ trên máy (box
-/// tuỳ chọn mở sẵn lúc khởi động); test không có box thì mặc định mở.
-abstract final class LandscapeInfoPanelVisibility {
-  static const _boxName = 'nonogram_preferences_v1';
-  static const _key = 'landscape_info_visible';
-
-  static final ValueNotifier<bool> notifier = ValueNotifier(_read());
-
-  static bool _read() {
-    try {
-      if (!Hive.isBoxOpen(_boxName)) return true;
-      return Hive.box<dynamic>(_boxName).get(_key) != false;
-    } catch (_) {
-      return true;
-    }
-  }
-
-  static void toggle() {
-    notifier.value = !notifier.value;
-    try {
-      if (Hive.isBoxOpen(_boxName)) {
-        Hive.box<dynamic>(_boxName).put(_key, notifier.value);
-      }
-    } catch (_) {}
-  }
-}
+export 'landscape_info_panel_visibility.dart';
 
 /// Màn ngang: cột trái của bàn chơi. Góc trên: quay lại, thông tin màn; góc
 /// dưới: xoay màn hình, cài đặt (đều ít dùng, để tay phải chỉ lo gợi ý và
@@ -173,6 +149,8 @@ class _NonogramLandscapeLeftRailState extends State<NonogramLandscapeLeftRail>
                   Column(
                     mainAxisSize: MainAxisSize.min,
                     children: [
+                      const ClockAction(vertical: true),
+                      gap,
                       // Chỉ bản `dev` (công cụ tester).
                       const TesterSolveButton(),
                       if (RotateScreenAction.isSupported) ...[
