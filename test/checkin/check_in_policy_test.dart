@@ -74,7 +74,7 @@ void main() {
     );
   });
 
-  test('make-up: only past days since install that were missed', () {
+  test('make-up: missed past days since install or in this month', () {
     bool can(int day, {bool checked = false, int? maxSeen}) =>
         CheckInPolicy.canMakeUp(
           day: nov(day),
@@ -88,7 +88,9 @@ void main() {
     expect(can(10, checked: true), isFalse);
     expect(can(22), isFalse, reason: 'hôm nay: điểm danh, không bù');
     expect(can(25), isFalse, reason: 'chưa tới');
-    expect(can(4), isFalse, reason: 'trước ngày bắt đầu dùng app');
+    expect(can(4), isTrue, reason: 'trước khi tải app nhưng cùng tháng');
+    expect(can(1), isTrue);
+    expect(can(0), isFalse, reason: '31/10: trước khi tải app, tháng trước');
     expect(can(10, maxSeen: nov(24)), isFalse, reason: 'lùi giờ');
   });
 
@@ -135,10 +137,17 @@ void main() {
       expect(october.longest, 31);
     });
 
-    test('days before install cannot be made up', () {
+    test('days before install in this month can be made up', () {
       final s = stats(days(range(10, 21)), startDay: 10);
+      expect(s.missed, range(1, 9).map(nov));
+      expect(s.potential, 21);
+    });
+
+    test('days before install in an earlier month cannot', () {
+      // Tải app 25/11, xem lại tháng 11 từ 3/12.
+      final s = stats(days(range(25, 30)), today: 33, startDay: 25);
       expect(s.missed, isEmpty);
-      expect(s.potential, 12);
+      expect(s.potential, 6);
     });
   });
 
@@ -152,11 +161,26 @@ void main() {
     );
     CheckInDayStatus at(int d) => month.days[d - 1].status;
     expect(month.days, hasLength(30));
-    expect(at(1), CheckInDayStatus.beforeStart);
+    expect(at(1), CheckInDayStatus.missed, reason: 'cùng tháng: bù được');
     expect(at(3), CheckInDayStatus.checked);
     expect(at(10), CheckInDayStatus.missed);
     expect(at(22), CheckInDayStatus.today);
     expect(month.days[21].isToday, isTrue);
     expect(at(23), CheckInDayStatus.future);
   });
+
+  test(
+    'month calendar: days before install in an earlier month stay locked',
+    () {
+      final month = CheckInPolicy.buildMonth(
+        year: 2026,
+        month: 11,
+        today: nov(33),
+        startDay: nov(25),
+        checkedDays: days([25]),
+      );
+      expect(month.days[23].status, CheckInDayStatus.beforeStart);
+      expect(month.days[25].status, CheckInDayStatus.missed);
+    },
+  );
 }

@@ -183,7 +183,6 @@
   "premiumFailed": "Покупка не удалась. Попробуйте ещё раз.",
   "checkInTitle": "Ежедневная отметка",
   "checkInAction": "Отметиться",
-  "checkInDoneToday": "Сегодня вы уже отметились",
   "checkInCheckedIn": "Вы отметились!",
   "checkInReceived": "Вы получили: {rewards}.",
   "rewardHints": "{count, plural, one{{count} подсказка} few{{count} подсказки} many{{count} подсказок} other{{count} подсказки}}",

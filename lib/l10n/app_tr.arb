@@ -183,7 +183,6 @@
   "premiumFailed": "Satın alma gerçekleşmedi. Lütfen tekrar dene.",
   "checkInTitle": "Günlük giriş",
   "checkInAction": "Giriş yap",
-  "checkInDoneToday": "Bugün giriş yapıldı",
   "checkInCheckedIn": "Giriş yapıldı!",
   "checkInReceived": "{rewards} kazandın.",
   "rewardHints": "{count} ipucu",

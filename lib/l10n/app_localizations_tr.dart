@@ -664,9 +664,6 @@ class AppLocalizationsTr extends AppLocalizations {
   String get checkInAction => 'Giriş yap';
 
   @override
-  String get checkInDoneToday => 'Bugün giriş yapıldı';
-
-  @override
   String get checkInCheckedIn => 'Giriş yapıldı!';
 
   @override

@@ -183,7 +183,6 @@
   "premiumFailed": "購入できませんでした。もう一度お試しください。",
   "checkInTitle": "毎日チェックイン",
   "checkInAction": "チェックイン",
-  "checkInDoneToday": "今日はチェックイン済み",
   "checkInCheckedIn": "チェックインしました！",
   "checkInReceived": "{rewards}を受け取りました。",
   "rewardHints": "ヒント{count}回",

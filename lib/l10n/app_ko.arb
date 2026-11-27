@@ -183,7 +183,6 @@
   "premiumFailed": "구매하지 못했습니다. 다시 시도해 주세요.",
   "checkInTitle": "매일 출석 체크",
   "checkInAction": "출석 체크",
-  "checkInDoneToday": "오늘 출석 완료",
   "checkInCheckedIn": "출석 완료!",
   "checkInReceived": "{rewards}을(를) 받았습니다.",
   "rewardHints": "힌트 {count}개",

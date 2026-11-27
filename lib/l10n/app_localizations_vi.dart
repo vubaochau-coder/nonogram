@@ -663,9 +663,6 @@ class AppLocalizationsVi extends AppLocalizations {
   String get checkInAction => 'Điểm danh';
 
   @override
-  String get checkInDoneToday => 'Hôm nay đã điểm danh';
-
-  @override
   String get checkInCheckedIn => 'Đã điểm danh!';
 
   @override

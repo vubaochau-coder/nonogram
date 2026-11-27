@@ -667,9 +667,6 @@ class AppLocalizationsPt extends AppLocalizations {
   String get checkInAction => 'Marcar presença';
 
   @override
-  String get checkInDoneToday => 'Presença marcada hoje';
-
-  @override
   String get checkInCheckedIn => 'Presença marcada!';
 
   @override

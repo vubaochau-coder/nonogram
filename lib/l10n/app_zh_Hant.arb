@@ -183,7 +183,6 @@
   "premiumFailed": "購買未成功，請再試一次。",
   "checkInTitle": "每日簽到",
   "checkInAction": "簽到",
-  "checkInDoneToday": "今天已簽到",
   "checkInCheckedIn": "簽到成功！",
   "checkInReceived": "你獲得了 {rewards}。",
   "rewardHints": "{count} 次提示",

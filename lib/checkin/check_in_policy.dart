@@ -101,7 +101,9 @@ class CheckInPolicy {
       (lastCheckInDay == null || today > lastCheckInDay) &&
       (maxSeenDay == null || today >= maxSeenDay);
 
-  /// Bù được ngày [day]: đã qua, từ ngày bắt đầu dùng app, chưa điểm danh.
+  /// Bù được ngày [day]: đã qua, chưa điểm danh, và từ ngày bắt đầu dùng app
+  /// hoặc cùng tháng với hôm nay (ngày trước khi tải app trong tháng này vẫn
+  /// bù được).
   static bool canMakeUp({
     required int day,
     required int today,
@@ -110,9 +112,18 @@ class CheckInPolicy {
     required int? maxSeenDay,
   }) =>
       !checked &&
-      day >= startDay &&
+      _inPlay(day, today: today, startDay: startDay) &&
       day < today &&
       (maxSeenDay == null || today >= maxSeenDay);
+
+  /// [day] counts for the player: from the first day of play, or in the
+  /// current month.
+  static bool _inPlay(int day, {required int today, required int startDay}) {
+    if (day >= startDay) return true;
+    final date = dateOfDayNumber(day);
+    final now = dateOfDayNumber(today);
+    return date.year == now.year && date.month == now.month;
+  }
 
   /// Chuỗi trong tháng [month] / [year], tính tới hôm nay.
   static StreakStats streakStats({
@@ -131,7 +142,8 @@ class CheckInPolicy {
     final missed = <int>[];
     for (var d = first; d <= last; d++) {
       final checked = checkedDays.contains(d);
-      final makeUp = !checked && d >= startDay && d < today;
+      final makeUp =
+          !checked && d < today && _inPlay(d, today: today, startDay: startDay);
       if (makeUp) missed.add(d);
       if (checked) {
         run++;
@@ -186,7 +198,8 @@ class CheckInPolicy {
               _ when checkedDays.contains(d) => CheckInDayStatus.checked,
               _ when d == today => CheckInDayStatus.today,
               _ when d > today => CheckInDayStatus.future,
-              _ when d < startDay => CheckInDayStatus.beforeStart,
+              _ when !_inPlay(d, today: today, startDay: startDay) =>
+                CheckInDayStatus.beforeStart,
               _ => CheckInDayStatus.missed,
             },
             isToday: d == today,

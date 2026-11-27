@@ -183,7 +183,6 @@
   "premiumFailed": "Pembelian gagal. Silakan coba lagi.",
   "checkInTitle": "Absen harian",
   "checkInAction": "Absen",
-  "checkInDoneToday": "Sudah absen hari ini",
   "checkInCheckedIn": "Berhasil absen!",
   "checkInReceived": "Kamu mendapat {rewards}.",
   "rewardHints": "{count} petunjuk",

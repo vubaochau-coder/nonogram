@@ -645,9 +645,6 @@ class AppLocalizationsKo extends AppLocalizations {
   String get checkInAction => '출석 체크';
 
   @override
-  String get checkInDoneToday => '오늘 출석 완료';
-
-  @override
   String get checkInCheckedIn => '출석 완료!';
 
   @override

@@ -6,8 +6,6 @@ part of 'check_in_screen.dart';
 mixin _CheckInFlow on State<CheckInScreen>, TickerProvider {
   late DateTime _month;
   bool _busy = false;
-  final _scroll = ScrollController();
-  final _listKey = GlobalKey(debugLabel: 'check-in-list');
   final _buttonKey = GlobalKey(debugLabel: 'check-in-button');
   final _stampKey = GlobalKey(debugLabel: 'check-in-stamp');
   final _streakKey = GlobalKey(debugLabel: 'check-in-streak');
@@ -49,23 +47,6 @@ mixin _CheckInFlow on State<CheckInScreen>, TickerProvider {
     final box = key.currentContext?.findRenderObject();
     if (box is! RenderBox || !box.attached || !box.hasSize) return null;
     return box.localToGlobal(Offset.zero) & box.size;
-  }
-
-  /// Cuộn cho [key] nằm trọn trong vùng nhìn, phía trên nút điểm danh.
-  Future<void> _reveal(GlobalKey key) async {
-    final rect = _rectOf(key);
-    final view = _scroll.hasClients ? _rectOf(_listKey) : null;
-    final target = key.currentContext;
-    if (rect == null || view == null || target == null || !target.mounted) {
-      return;
-    }
-    if (rect.top >= view.top && rect.bottom <= view.bottom - 110) return;
-    await Scrollable.ensureVisible(
-      target,
-      alignment: 0.5,
-      duration: const Duration(milliseconds: 250),
-      curve: Curves.easeOutCubic,
-    );
   }
 
   Future<void> _checkIn(CheckInService service) =>
@@ -114,8 +95,6 @@ mixin _CheckInFlow on State<CheckInScreen>, TickerProvider {
       _stampDay = day;
     });
     await WidgetsBinding.instance.endOfFrame;
-    if (!mounted) return;
-    await _reveal(_stampKey);
     if (!mounted) return;
     final button = withButton ? _rectOf(_buttonKey) : null;
     final cell = _rectOf(_stampKey);
@@ -185,8 +164,6 @@ mixin _CheckInFlow on State<CheckInScreen>, TickerProvider {
 
     // 2. Thanh chuỗi chạy tới chuỗi dài nhất mới.
     if (outcome.longestAfter > outcome.longestBefore) {
-      await _reveal(_streakKey);
-      if (!mounted) return;
       final from = outcome.longestBefore.toDouble();
       final to = math.min(outcome.longestAfter, 28).toDouble();
       _bar.value = from;

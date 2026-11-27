@@ -627,9 +627,6 @@ class AppLocalizationsZh extends AppLocalizations {
   String get checkInAction => '签到';
 
   @override
-  String get checkInDoneToday => '今天已签到';
-
-  @override
   String get checkInCheckedIn => '签到成功！';
 
   @override
@@ -1466,9 +1463,6 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
 
   @override
   String get checkInAction => '簽到';
-
-  @override
-  String get checkInDoneToday => '今天已簽到';
 
   @override
   String get checkInCheckedIn => '簽到成功！';

@@ -52,7 +52,6 @@ class _CheckInScreenState extends State<CheckInScreen>
   void dispose() {
     _celebration?.dispose();
     _bar.dispose();
-    _scroll.dispose();
     super.dispose();
   }
 
@@ -87,7 +86,6 @@ class _CheckInScreenState extends State<CheckInScreen>
     );
     return CheckInButton(
       key: onPressed == null ? null : _buttonKey,
-      done: !service.canCheckIn && !_busy,
       daysLeft: next == null ? null : next - stats.current,
       onPressed: onPressed,
     );
@@ -118,9 +116,13 @@ class _CheckInScreenState extends State<CheckInScreen>
       child: Scaffold(
         body: SafeArea(
           child: ListView(
-            key: _listKey,
-            controller: _scroll,
-            padding: const EdgeInsets.fromLTRB(16, 12, 16, 120),
+            // Room for the floating button only while it is shown.
+            padding: EdgeInsets.fromLTRB(
+              16,
+              12,
+              16,
+              service.canCheckIn ? 96 : 16,
+            ),
             children: [
               Card(
                 child: Padding(
@@ -160,17 +162,18 @@ class _CheckInScreenState extends State<CheckInScreen>
           ),
         ),
         floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
-        floatingActionButton: Visibility(
-          // Lúc hiệu ứng chạy, bản sao của nút được vẽ trên lớp phủ.
-          visible: !_hideButton,
-          maintainSize: true,
-          maintainAnimation: true,
-          maintainState: true,
-          child: _buttonFor(
-            service,
-            onPressed: service.canCheckIn ? () => _checkIn(service) : () {},
-          ),
-        ),
+        // Chỉ hiện khi hôm nay chưa điểm danh: điểm danh xong thì nút biến mất
+        // (số ngày còn tới quà vẫn xem ở thẻ chuỗi).
+        floatingActionButton: service.canCheckIn
+            ? Visibility(
+                // Lúc hiệu ứng chạy, bản sao của nút được vẽ trên lớp phủ.
+                visible: !_hideButton,
+                maintainSize: true,
+                maintainAnimation: true,
+                maintainState: true,
+                child: _buttonFor(service, onPressed: () => _checkIn(service)),
+              )
+            : null,
       ),
     );
   }

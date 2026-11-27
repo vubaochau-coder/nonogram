@@ -126,7 +126,8 @@ nó). Nút gạt **Tô / X** chọn việc một lần chạm sẽ làm:
 ## Đồng hồ
 
 - Màn chơi hiện thời gian đã chơi màn đó (`NonogramPlayClock`): màn dọc ở
-  đầu trái hàng nút trên, màn ngang ở cột trái (trên nút xoay). Chỉ đếm lúc
+  đầu trái hàng nút trên, màn ngang trong thẻ thông tin màn (thu gọn thẻ thì
+  hiện dạng gọn ở cột trái, ngay dưới nút ⓘ). Chỉ đếm lúc
   đang thật sự chơi.
 - Tự dừng khi app xuống nền / tắt màn hình / tắt app, khi rời màn, khi có
   màn hình, hộp thoại hay sheet khác che màn chơi (Cài đặt, quảng cáo...) và

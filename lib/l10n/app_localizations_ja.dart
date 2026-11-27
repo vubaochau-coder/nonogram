@@ -644,9 +644,6 @@ class AppLocalizationsJa extends AppLocalizations {
   String get checkInAction => 'チェックイン';
 
   @override
-  String get checkInDoneToday => '今日はチェックイン済み';
-
-  @override
   String get checkInCheckedIn => 'チェックインしました！';
 
   @override

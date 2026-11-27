@@ -15,7 +15,6 @@ lib/screens/play/coach/nonogram_play_coach.dart 445
 lib/screens/play/nonogram_play_screen.dart 305
 lib/screens/play/sections/nonogram_board_shell_section.dart 324
 lib/screens/play/sections/nonogram_completion_result_section.dart 330
-lib/screens/play/sections/nonogram_landscape_info_panel.dart 310
 lib/screens/play/views/wand_action.dart 338
 lib/screens/tutorial/nonogram_tutorial_controller.dart 824
 lib/tester/tester_tools_screen.dart 672

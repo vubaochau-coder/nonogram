@@ -183,7 +183,6 @@
   "premiumFailed": "L'achat n'a pas abouti. Réessaie.",
   "checkInTitle": "Connexion quotidienne",
   "checkInAction": "Valider ma présence",
-  "checkInDoneToday": "Présence validée aujourd'hui",
   "checkInCheckedIn": "Présence validée !",
   "checkInReceived": "Tu as reçu {rewards}.",
   "rewardHints": "{count, plural, =1{1 indice} other{{count} indices}}",

@@ -667,9 +667,6 @@ class AppLocalizationsDe extends AppLocalizations {
   String get checkInAction => 'Einchecken';
 
   @override
-  String get checkInDoneToday => 'Heute eingecheckt';
-
-  @override
   String get checkInCheckedIn => 'Eingecheckt!';
 
   @override
