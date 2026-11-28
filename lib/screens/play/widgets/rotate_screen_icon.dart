@@ -46,6 +46,12 @@ class RotateScreenIconPainter extends CustomPainter {
   /// Gap cut around the bold phone in the faint one.
   static const _cutout = 1.8;
 
+  /// Moves the drawing so its inked bounds (about x 2.35–19.8,
+  /// y 4.25–21.65 with strokes) sit at the centre of the 24-unit grid.
+  /// 1.2 units is one logical pixel at the default 20 px size, so the
+  /// strokes keep their pixel alignment instead of blurring.
+  static const _centring = Offset(1.2, -1.2);
+
   static final _portrait = RRect.fromRectAndRadius(
     const Rect.fromLTWH(3.25, 5.75, 8.5, 15),
     const Radius.circular(2),
@@ -74,6 +80,7 @@ class RotateScreenIconPainter extends CustomPainter {
   void paint(Canvas canvas, Size size) {
     canvas.save();
     canvas.scale(size.width / 24, size.height / 24);
+    canvas.translate(_centring.dx, _centring.dy);
     final faded = landscape ? _landscape : _portrait;
     final bold = landscape ? _portrait : _landscape;
     final ink = Paint()
@@ -82,7 +89,7 @@ class RotateScreenIconPainter extends CustomPainter {
       ..strokeJoin = StrokeJoin.round;
 
     // Faint phone, with the bold phone and a gap around it cut away.
-    canvas.saveLayer(const Rect.fromLTWH(0, 0, 24, 24), Paint());
+    canvas.saveLayer(const Rect.fromLTWH(-2, -2, 28, 28), Paint());
     canvas.drawRRect(
       faded,
       Paint()
